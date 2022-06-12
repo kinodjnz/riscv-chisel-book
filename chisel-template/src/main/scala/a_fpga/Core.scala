@@ -110,6 +110,7 @@ class Core(startAddress: BigInt = 0) extends Module {
   val exe_br_target = Wire(UInt(WORD_LEN.W))
   val exe_jmp_flg   = Wire(Bool())
   val exe_alu_out   = Wire(UInt(WORD_LEN.W))
+  io.imem.predictNext := !stall_flg
 
   val if_pc_plus4 = if_reg_pc + 4.U(WORD_LEN.W)
   val if_pc_next = MuxCase(if_pc_plus4, Seq(
@@ -414,5 +415,6 @@ class Core(startAddress: BigInt = 0) extends Module {
   printf(p"mem_reg_wb_addr  : 0x${Hexadecimal(mem_reg_wb_addr)}\n")
   printf(p"wb_reg_wb_addr   : 0x${Hexadecimal(wb_reg_wb_addr)}\n")
   printf(p"wb_reg_wb_data   : 0x${Hexadecimal(wb_reg_wb_data)}\n")
+  printf(p"cycle_counter    : ${io.debug_signal.cycle_counter}\n")
   printf("---------\n")
 }

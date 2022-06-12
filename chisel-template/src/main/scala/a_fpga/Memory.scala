@@ -11,6 +11,7 @@ class ImemPortIo extends Bundle {
   val addr = Input(UInt(WORD_LEN.W))
   val inst = Output(UInt(WORD_LEN.W))
   val valid = Output(Bool())
+  val predictNext = Input(Bool())
 }
 
 class DmemPortIo extends Bundle {
@@ -44,7 +45,10 @@ class Memory(dataMemoryPath: String = null, imemSizeInBytes: Int = 16384, dmemSi
   instIsFirst := false.B
   io.imem.inst := instData
   io.imem.valid := instValid
-  instFetchingAddr := Mux(instValid, instFetchedAddr + 1.U, instAddr)
+  instFetchingAddr := MuxCase(instAddr, Seq(
+    (instValid && io.imem.predictNext) -> (instFetchedAddr + 1.U),
+    (instValid && !io.imem.predictNext) -> instFetchedAddr,
+  ))
   instData := io.imemReadPort.data
   instFetchedAddr := instFetchingAddr
   io.imemReadPort.address := instFetchingAddr
