@@ -225,7 +225,7 @@ class Core(startAddress: BigInt = 0) extends Module {
       ECALL -> List(ALU_X    , OP1_X  , OP2_X  , MEN_X, REN_X, WB_X  , CSR_E, MW_X)
 		)
 	)
-  val id_exe_fun :: id_op1_sel :: id_op2_sel :: id_mem_wen :: id_rf_wen :: id_wb_sel :: id_csr_cmd :: id_mem_w :: Nil = csignals
+  val List(id_exe_fun, id_op1_sel, id_op2_sel, id_mem_wen, id_rf_wen, id_wb_sel, id_csr_cmd, id_mem_w) = csignals
 
   val id_op1_data = MuxCase(0.U(WORD_LEN.W), Seq(
     (id_op1_sel === OP1_RS1) -> id_rs1_data,
