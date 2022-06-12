@@ -101,16 +101,28 @@ class Core(startAddress: BigInt = 0) extends Module {
   // Instruction Fetch (IF) Stage
 
   val if_reg_pc = RegInit(startAddress.U(WORD_LEN.W))
-  io.imem.addr := if_reg_pc
-  val if_inst = Mux(io.imem.valid, io.imem.inst, BUBBLE)
-  printf(p"addr: ${Hexadecimal(io.imem.addr)}, valid: ${io.imem.valid}\n")
+  val if_reg_inst_cache = RegInit(0.U(WORD_LEN.W))
+  val if_is_refill = RegInit((if ((startAddress & 2) == 0) false else true).B)
+  val if_is_half = if_reg_pc(1).asBool
+  io.imem.addr := Mux(
+    if_is_refill,
+    Cat(if_reg_pc(WORD_LEN-1, 2), Fill(2, 0.U)),
+    Cat((if_reg_pc + 2.U(WORD_LEN.W))(WORD_LEN-1, 2), Fill(2, 0.U))
+  )
+  val if_inst = MuxCase(BUBBLE, Seq(
+    (io.imem.valid && !if_is_refill && !if_is_half) -> io.imem.inst,
+    (io.imem.valid && !if_is_refill && if_is_half) -> Cat(io.imem.inst(WORD_LEN/2-1, 0), if_reg_inst_cache(WORD_LEN-1, WORD_LEN/2))
+  ))
   val stall_flg     = Wire(Bool())
+  if_reg_inst_cache := Mux(io.imem.valid && !stall_flg, io.imem.inst, if_reg_inst_cache)
+  printf(p"addr: ${Hexadecimal(io.imem.addr)}, valid: ${io.imem.valid}, inst: ${Hexadecimal(io.imem.inst)}\n")
+  printf(p"inst: ${Hexadecimal(if_inst)}, if_is_refill: ${if_is_refill}, cache: ${Hexadecimal(if_reg_inst_cache)}\n")
   val mem_stall_flg = Wire(Bool())
   val exe_br_flg    = Wire(Bool())
   val exe_br_target = Wire(UInt(WORD_LEN.W))
   val exe_jmp_flg   = Wire(Bool())
   val exe_alu_out   = Wire(UInt(WORD_LEN.W))
-  io.imem.predictNext := !stall_flg
+  io.imem.predictNext := !stall_flg // TODO halfかつ16bit命令だった場合次に進まない
 
   val if_pc_plus4 = if_reg_pc + 4.U(WORD_LEN.W)
   val if_pc_next = MuxCase(if_pc_plus4, Seq(
@@ -118,9 +130,14 @@ class Core(startAddress: BigInt = 0) extends Module {
     exe_br_flg         -> exe_br_target,
     exe_jmp_flg         -> exe_alu_out,
     (if_inst === ECALL) -> csr_trap_vector, // go to trap_vector
-    (stall_flg || !io.imem.valid)  -> if_reg_pc, // stall
+    (stall_flg || !io.imem.valid || if_is_refill)  -> if_reg_pc, // stall
   ))
   if_reg_pc := if_pc_next
+  if_is_refill := (MuxCase(false.B, Seq(
+    exe_br_flg -> true.B,
+    exe_jmp_flg -> true.B,
+    (if_inst === ECALL) -> true.B,
+  )) && if_pc_next(1).asBool) || (if_is_refill && !io.imem.valid)
 
 
   //**********************************
