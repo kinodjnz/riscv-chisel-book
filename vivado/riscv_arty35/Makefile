@@ -10,6 +10,8 @@ SDK_DIR := project/$(PROJECT_NAME).sdk
 HARDWARE_DEF := $(SDK_DIR)/$(BD_NAME)_wrapper.xsa
 BOOTROM := src/bootrom.hex
 PACKAGE := fpga
+SCALA_DIR := ../../chisel-template/src/main/scala/a_fpga
+SCALA_SRCS := $(wildcard $(SCALA_DIR)/*.scala)
 
 BASH := /bin/bash
 RISCV_CORE_DIR := ../../chisel-template/rtl/riscv_arty_a7
@@ -46,7 +48,7 @@ $(BITSTREAM) $(HARDWARE_DEF): project/$(PROJECT_NAME).xpr $(SRCS) project/$(PROJ
 $(BOOTROM): src/sw/bootrom.c src/sw/link.ld src/sw/Makefile
 	cd src/sw; make all
 
-$(RISCV_CORE_DIR)/riscv.v:
+$(RISCV_CORE_DIR)/riscv.v: $(SCALA_SRCS)
 	cd ../../chisel-template; sbt "runMain $(PACKAGE).ElaborateArtyA7"
 
 src/riscv.v: $(RISCV_CORE_DIR)/riscv.v
