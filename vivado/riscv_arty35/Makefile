@@ -9,9 +9,10 @@ BITSTREAM_BIN := $(BD_NAME)_wrapper.bit.bin
 SDK_DIR := project/$(PROJECT_NAME).sdk
 HARDWARE_DEF := $(SDK_DIR)/$(BD_NAME)_wrapper.xsa
 BOOTROM := src/bootrom.hex
+PACKAGE := fpga
 
 BASH := /bin/bash
-RISCV_CORE_DIR := ../../chisel-template/rtl/riscv
+RISCV_CORE_DIR := ../../chisel-template/rtl/riscv_arty_a7
 RISCV_CORE := $(RISCV_CORE_DIR)/riscv.v
 VIVADO ?= vivado
 HSI ?= hsi
@@ -46,6 +47,6 @@ $(BOOTROM): src/sw/bootrom.c src/sw/link.ld src/sw/Makefile
 	cd src/sw; make all
 
 $(RISCV_CORE_DIR)/riscv.v:
-	cd ../../chisel-template; sbt "runMain fpga.Elaborate"
+	cd ../../chisel-template; sbt "runMain $(PACKAGE).ElaborateArtyA7"
 
 src/riscv.v: $(RISCV_CORE_DIR)/riscv.v

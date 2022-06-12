@@ -2,11 +2,11 @@ package fpga
 
 import chiseltest._
 import scala.util.control.Breaks
-import org.scalatest.FlatSpec
+import org.scalatest.flatspec.AnyFlatSpec
 import chisel3._
 import chisel3.util._
 
-class RiscvTest extends FlatSpec with ChiselScalatestTester {
+class RiscvTest extends AnyFlatSpec with ChiselScalatestTester {
     val dutName = "RiscV"
     behavior of dutName
 
