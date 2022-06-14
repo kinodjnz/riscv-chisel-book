@@ -107,10 +107,10 @@ class Core(startAddress: BigInt = 0) extends Module {
   val if_reg_refill = RegInit((if ((startAddress & 2) == 0) false else true).B)
   val stall_flg     = Wire(Bool())
   val mem_stall_flg = Wire(Bool())
-  val exe_br_flg    = Wire(Bool())
-  val exe_br_target = Wire(UInt(WORD_LEN.W))
-  val exe_jmp_flg   = Wire(Bool())
-  val exe_alu_out   = Wire(UInt(WORD_LEN.W))
+  val exe_reg_br_flg     = RegInit(false.B)
+  val exe_reg_br_target  = RegInit(0.U(WORD_LEN.W))
+  val exe_reg_jmp_flg    = RegInit(false.B)
+  val exe_reg_jmp_target = RegInit(0.U(WORD_LEN.W))
 
   if_reg_inst_valid := true.B
   val if_is_half = if_reg_pc(1).asBool
@@ -125,15 +125,15 @@ class Core(startAddress: BigInt = 0) extends Module {
   val if_pc_plus4 = if_reg_pc + 4.U(WORD_LEN.W)
   val if_pc_next = MuxCase(if_pc_plus4, Seq(
 	  // 優先順位重要！ジャンプ成立とストールが同時発生した場合、ジャンプ処理を優先
-    exe_br_flg          -> exe_br_target,
-    exe_jmp_flg         -> exe_alu_out,
+    exe_reg_br_flg      -> exe_reg_br_target,
+    exe_reg_jmp_flg     -> exe_reg_jmp_target,
     (if_inst === ECALL) -> csr_trap_vector, // go to trap_vector
     (stall_flg || !if_reg_inst_valid || if_reg_refill) -> if_reg_pc, // stall
   ))
   if_reg_pc := if_pc_next
   val if_is_jump = MuxCase(false.B, Seq(
-    exe_br_flg -> true.B,
-    exe_jmp_flg -> true.B,
+    exe_reg_br_flg      -> true.B,
+    exe_reg_jmp_flg     -> true.B,
     (if_inst === ECALL) -> true.B,
   ))
   val if_need_advance = !stall_flg && if_reg_inst_valid // TODO halfかつ16bit命令だった場合次に進まない
@@ -150,7 +150,7 @@ class Core(startAddress: BigInt = 0) extends Module {
   id_reg_pc   := Mux(stall_flg, id_reg_pc, if_reg_pc)
   id_reg_inst := MuxCase(if_inst, Seq(
 	  // 優先順位重要！ジャンプ成立とストールが同時発生した場合、ジャンプ処理を優先
-    (exe_br_flg || exe_jmp_flg) -> BUBBLE,
+    (exe_reg_br_flg || exe_reg_jmp_flg) -> BUBBLE,
     stall_flg -> id_reg_inst, 
   ))
 
@@ -168,7 +168,7 @@ class Core(startAddress: BigInt = 0) extends Module {
   stall_flg := id_rs1_data_hazard || id_rs2_data_hazard || mem_stall_flg
 
   // branch,jump,stall時にIDをBUBBLE化
-  val id_inst = Mux((exe_br_flg || exe_jmp_flg || stall_flg), BUBBLE, id_reg_inst)  
+  val id_inst = Mux((exe_reg_br_flg || exe_reg_jmp_flg || stall_flg), BUBBLE, id_reg_inst)  
 
   val id_rs1_addr = id_inst(19, 15)
   val id_rs2_addr = id_inst(24, 20)
@@ -291,7 +291,7 @@ class Core(startAddress: BigInt = 0) extends Module {
   //**********************************
   // Execute (EX) Stage
 
-  exe_alu_out := MuxCase(0.U(WORD_LEN.W), Seq(
+  val exe_alu_out = MuxCase(0.U(WORD_LEN.W), Seq(
     (exe_reg_exe_fun === ALU_ADD)   -> (exe_reg_op1_data + exe_reg_op2_data),
     (exe_reg_exe_fun === ALU_SUB)   -> (exe_reg_op1_data - exe_reg_op2_data),
     (exe_reg_exe_fun === ALU_AND)   -> (exe_reg_op1_data & exe_reg_op2_data),
@@ -307,7 +307,9 @@ class Core(startAddress: BigInt = 0) extends Module {
   ))
 
   // branch
-  exe_br_flg := MuxCase(false.B, Seq(
+  val exe_is_branch = exe_reg_br_flg || exe_reg_jmp_flg
+  exe_reg_br_flg := MuxCase(false.B, Seq(
+    exe_is_branch -> false.B,
     (exe_reg_exe_fun === BR_BEQ)  ->  (exe_reg_op1_data === exe_reg_op2_data),
     (exe_reg_exe_fun === BR_BNE)  -> !(exe_reg_op1_data === exe_reg_op2_data),
     (exe_reg_exe_fun === BR_BLT)  ->  (exe_reg_op1_data.asSInt() < exe_reg_op2_data.asSInt()),
@@ -315,9 +317,10 @@ class Core(startAddress: BigInt = 0) extends Module {
     (exe_reg_exe_fun === BR_BLTU) ->  (exe_reg_op1_data < exe_reg_op2_data),
     (exe_reg_exe_fun === BR_BGEU) -> !(exe_reg_op1_data < exe_reg_op2_data)
   ))
-  exe_br_target := exe_reg_pc + exe_reg_imm_b_sext
+  exe_reg_br_target := exe_reg_pc + exe_reg_imm_b_sext
 
-  exe_jmp_flg := (exe_reg_wb_sel === WB_PC)
+  exe_reg_jmp_flg := (exe_reg_wb_sel === WB_PC && !exe_is_branch)
+  exe_reg_jmp_target := exe_alu_out
 
 
   //**********************************
@@ -328,12 +331,12 @@ class Core(startAddress: BigInt = 0) extends Module {
     mem_reg_rs2_data   := exe_reg_rs2_data
     mem_reg_wb_addr    := exe_reg_wb_addr
     mem_reg_alu_out    := exe_alu_out
-    mem_reg_rf_wen     := exe_reg_rf_wen
-    mem_reg_wb_sel     := exe_reg_wb_sel
+    mem_reg_rf_wen     := Mux(exe_is_branch, REN_X, exe_reg_rf_wen)
+    mem_reg_wb_sel     := Mux(exe_is_branch, WB_X, exe_reg_wb_sel)
     mem_reg_csr_addr   := exe_reg_csr_addr
-    mem_reg_csr_cmd    := exe_reg_csr_cmd
+    mem_reg_csr_cmd    := Mux(exe_is_branch, CSR_X, exe_reg_csr_cmd)
     mem_reg_imm_z_uext := exe_reg_imm_z_uext
-    mem_reg_mem_wen    := exe_reg_mem_wen
+    mem_reg_mem_wen    := Mux(exe_is_branch, MEN_X, exe_reg_mem_wen)
     mem_reg_mem_w      := exe_reg_mem_w
     mem_reg_mem_wstrb  := (MuxCase("b1111".U, Seq(
       (exe_reg_mem_w === MW_B) -> "b0001".U,
