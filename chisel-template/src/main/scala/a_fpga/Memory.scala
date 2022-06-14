@@ -10,8 +10,6 @@ import chisel3.util.experimental.loadMemoryFromFile
 class ImemPortIo extends Bundle {
   val addr = Input(UInt(WORD_LEN.W))
   val inst = Output(UInt(WORD_LEN.W))
-  val valid = Output(Bool())
-  val predictNext = Input(Bool())
 }
 
 class DmemPortIo extends Bundle {
@@ -34,24 +32,8 @@ class Memory(dataMemoryPath: String = null, imemSizeInBytes: Int = 16384, dmemSi
     val imemReadPort = new MemoryReadPort(imemSizeInBytes/4, UInt(32.W))
   })
 
-  
-  val instIsFirst = RegInit(true.B)
-  val instAddr = io.imem.addr(WORD_LEN-1, 2)
-  val instData = Wire(UInt(WORD_LEN.W))
-  val instFetchedAddr = RegInit(0.U((WORD_LEN - 2).W))
-  val instFetchingAddr = Wire(UInt((WORD_LEN - 2).W))
-  val instValid = instFetchedAddr === instAddr && !instIsFirst
-
-  instIsFirst := false.B
-  io.imem.inst := instData
-  io.imem.valid := instValid
-  instFetchingAddr := MuxCase(instAddr, Seq(
-    (instValid && io.imem.predictNext) -> (instFetchedAddr + 1.U),
-    (instValid && !io.imem.predictNext) -> instFetchedAddr,
-  ))
-  instData := io.imemReadPort.data
-  instFetchedAddr := instFetchingAddr
-  io.imemReadPort.address := instFetchingAddr
+  io.imem.inst := io.imemReadPort.data
+  io.imemReadPort.address := io.imem.addr(WORD_LEN-1, 2)
   io.imemReadPort.enable := true.B
 
   val dataMem = Mem(dmemSizeInBytes/4, Vec(WORD_LEN/8, UInt(8.W)))
