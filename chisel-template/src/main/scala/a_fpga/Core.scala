@@ -422,7 +422,9 @@ class Core(startAddress: BigInt = 0) extends Module {
   // IO & Debug
   io.gp := regfile(3)
   //io.exit := (mem_reg_pc === 0x44.U(WORD_LEN.W))
-  io.exit := exe_is_ecall
+  val do_exit = RegInit(false.B)
+  do_exit := exe_is_ecall
+  io.exit := do_exit
   printf(p"if_reg_pc        : 0x${Hexadecimal(if_reg_pc)}\n")
   printf(p"id_reg_pc        : 0x${Hexadecimal(id_reg_pc)}\n")
   printf(p"id_reg_inst      : 0x${Hexadecimal(id_reg_inst)}\n")
@@ -440,6 +442,6 @@ class Core(startAddress: BigInt = 0) extends Module {
   printf(p"mem_reg_wb_addr  : 0x${Hexadecimal(mem_reg_wb_addr)}\n")
   printf(p"wb_reg_wb_addr   : 0x${Hexadecimal(wb_reg_wb_addr)}\n")
   printf(p"wb_reg_wb_data   : 0x${Hexadecimal(wb_reg_wb_data)}\n")
-  printf(p"cycle_counter    : ${io.debug_signal.cycle_counter}\n")
+  printf(p"cycle_counter(${exe_is_ecall}) : ${io.debug_signal.cycle_counter}\n")
   printf("---------\n")
 }
