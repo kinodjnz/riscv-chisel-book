@@ -43,9 +43,6 @@ class RiscV(clockHz: Int) extends Module {
     val gpio = Output(UInt(8.W))
     val uart_tx = Output(Bool())
     val exit = Output(Bool())
-    val imem = new MemoryReadPort(imemSizeInBytes/4, UInt(32.W))
-    val imemRead = new MemoryReadPort(imemSizeInBytes/4, UInt(32.W))
-    val imemWrite = new MemoryWritePort(imemSizeInBytes/4, UInt(32.W))
     val debugSignals = new RiscVDebugSignals()
   })
   val core = Module(new Core(startAddress))
@@ -69,12 +66,26 @@ class RiscV(clockHz: Int) extends Module {
   decoder.io.targets(3) <> uart.io.mem
   decoder.io.targets(4) <> config.io.mem
 
+  val imem_rdata = RegInit(0.U(WORD_LEN.W))
+  val imem_rdata2 = RegInit(0.U(WORD_LEN.W))
+  memory.io.imemReadPort.data := imem_rdata
+  imem_dbus.io.read.data := imem_rdata2
+
+  val imem = Mem(imemSizeInBytes/4, UInt(WORD_LEN.W))
+  when (memory.io.imemReadPort.enable) {
+    imem_rdata := imem.read(memory.io.imemReadPort.address)
+  }
+  val rwaddr = Mux(imem_dbus.io.write.enable, imem_dbus.io.write.address, imem_dbus.io.read.address)
+  when (imem_dbus.io.write.enable) {
+    imem.write(rwaddr, imem_dbus.io.write.data)
+  }
+  when (!imem_dbus.io.write.enable && imem_dbus.io.read.enable) {
+    imem_rdata2 := imem.read(rwaddr)
+  }
+
   core.io.imem <> memory.io.imem
-  memory.io.imemReadPort <> io.imem
   // core.io.dmem <> memory.io.dmem
   core.io.dmem <> decoder.io.initiator
-  imem_dbus.io.read <> io.imemRead
-  imem_dbus.io.write <> io.imemWrite
 
   // Debug signals
   io.debugSignals.core <> core.io.debug_signal
