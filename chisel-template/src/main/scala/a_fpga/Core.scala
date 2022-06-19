@@ -98,8 +98,8 @@ class Core(startAddress: BigInt = 0) extends Module {
   val wb_reg_rf_wen         = RegInit(0.U(REN_LEN.W))
   val wb_reg_wb_data        = RegInit(0.U(WORD_LEN.W))
 
-  val stall_flg     = Wire(Bool())
-  val mem_stall_flg = Wire(Bool())
+  val id_stall           = Wire(Bool())
+  val mem_stall          = Wire(Bool())
   val exe_reg_br_flg     = RegInit(false.B)
   val exe_reg_br_target  = RegInit(0.U(WORD_LEN.W))
   val exe_reg_jmp_flg    = RegInit(false.B)
@@ -175,32 +175,32 @@ class Core(startAddress: BigInt = 0) extends Module {
   printf(p"inst: ${Hexadecimal(if2_inst)}, refill: ${if2_reg_refill}, inst_half: ${Hexadecimal(if2_reg_inst_half)}\n")
 
   //**********************************
-  // IF/ID Register
+  // IF2/ID Register
   id_reg_pc   := MuxCase(if2_reg_pc, Seq(
-    stall_flg -> id_reg_pc,
+    id_stall     -> id_reg_pc,
     id_reg_stall -> id_reg_pc_cache,
   ))
   id_reg_pc_cache := if2_reg_pc
   id_reg_inst := MuxCase(if2_inst, Seq(
-    (stall_flg && !exe_reg_br_flg && !exe_reg_jmp_flg) -> id_reg_inst,
+    (id_stall && !exe_reg_br_flg && !exe_reg_jmp_flg) -> id_reg_inst,
   ))
 
 
   //**********************************
   // Instruction Decode (ID) Stage
 
-  // stall_flg検出用にアドレスのみ一旦デコード
+  // id_stall検出用にアドレスのみ一旦デコード
   val id_rs1_addr_b = id_reg_inst(19, 15)
   val id_rs2_addr_b = id_reg_inst(24, 20)
 
   // EXとのデータハザード→stall
   val id_rs1_data_hazard = (exe_reg_rf_wen === REN_S) && (id_rs1_addr_b =/= 0.U) && (id_rs1_addr_b === exe_reg_wb_addr)
   val id_rs2_data_hazard = (exe_reg_rf_wen === REN_S) && (id_rs2_addr_b =/= 0.U) && (id_rs2_addr_b === exe_reg_wb_addr)
-  stall_flg := id_rs1_data_hazard || id_rs2_data_hazard || mem_stall_flg
-  id_reg_stall := stall_flg
+  id_stall := id_rs1_data_hazard || id_rs2_data_hazard || mem_stall
+  id_reg_stall := id_stall
 
   // branch,jump,stall時にIDをBUBBLE化
-  val id_inst = Mux((exe_reg_br_flg || exe_reg_jmp_flg || stall_flg), BUBBLE, id_reg_inst)  
+  val id_inst = Mux((exe_reg_br_flg || exe_reg_jmp_flg || id_stall), BUBBLE, id_reg_inst)  
 
   val id_rs1_addr = id_inst(19, 15)
   val id_rs2_addr = id_inst(24, 20)
@@ -300,7 +300,7 @@ class Core(startAddress: BigInt = 0) extends Module {
 
   //**********************************
   // ID/EX register
-  when( !mem_stall_flg ) {
+  when( !mem_stall ) {
     exe_reg_pc            := id_reg_pc
     exe_reg_op1_data      := id_op1_data
     exe_reg_op2_data      := id_op2_data
@@ -357,7 +357,7 @@ class Core(startAddress: BigInt = 0) extends Module {
 
   //**********************************
   // EX/MEM register
-  when( !mem_stall_flg ) {  // MEMステージがストールしていない場合のみMEMのパイプラインレジスタを更新する。
+  when( !mem_stall ) {  // MEMステージがストールしていない場合のみMEMのパイプラインレジスタを更新する。
     mem_reg_pc         := exe_reg_pc
     mem_reg_op1_data   := exe_reg_op1_data
     mem_reg_rs2_data   := exe_reg_rs2_data
@@ -385,7 +385,7 @@ class Core(startAddress: BigInt = 0) extends Module {
   io.dmem.wen   := mem_reg_mem_wen
   io.dmem.wstrb := mem_reg_mem_wstrb
   io.dmem.wdata := (mem_reg_rs2_data << (8.U * mem_reg_alu_out(1, 0)))(WORD_LEN-1, 0)
-  mem_stall_flg := io.dmem.ren && !io.dmem.rvalid
+  mem_stall := io.dmem.ren && !io.dmem.rvalid
 
   // CSR
   val csr_rdata = MuxLookup(mem_reg_csr_addr, 0.U(WORD_LEN.W), Seq(
@@ -433,7 +433,7 @@ class Core(startAddress: BigInt = 0) extends Module {
   //**********************************
   // MEM/WB regsiter
   wb_reg_wb_addr := mem_reg_wb_addr
-  wb_reg_rf_wen  := Mux(!mem_stall_flg, mem_reg_rf_wen, REN_X)
+  wb_reg_rf_wen  := Mux(!mem_stall, mem_reg_rf_wen, REN_X)
   wb_reg_wb_data := mem_wb_data 
 
 
@@ -462,7 +462,7 @@ class Core(startAddress: BigInt = 0) extends Module {
   printf(p"if2_inst         : 0x${Hexadecimal(if2_inst)}\n")
   printf(p"id_reg_pc        : 0x${Hexadecimal(id_reg_pc)}\n")
   printf(p"id_reg_inst      : 0x${Hexadecimal(id_reg_inst)}\n")
-  printf(p"stall_flg        : 0x${Hexadecimal(stall_flg)}\n")
+  printf(p"id_stall         : 0x${Hexadecimal(id_stall)}\n")
   printf(p"id_inst          : 0x${Hexadecimal(id_inst)}\n")
   printf(p"id_rs1_data      : 0x${Hexadecimal(id_rs1_data)}\n")
   printf(p"id_rs2_data      : 0x${Hexadecimal(id_rs2_data)}\n")
