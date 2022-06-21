@@ -62,6 +62,10 @@ class Core(startAddress: BigInt = 0) extends Module {
   // ID/EX State
   val exe_reg_pc            = RegInit(0.U(WORD_LEN.W))
   val exe_reg_wb_addr       = RegInit(0.U(ADDR_LEN.W))
+  val exe_reg_op1_sel       = RegInit(0.U(OP1_LEN.W))
+  val exe_reg_op2_sel       = RegInit(0.U(OP2_LEN.W))
+  val exe_reg_rs1_addr      = RegInit(0.U(ADDR_LEN.W))
+  val exe_reg_rs2_addr      = RegInit(0.U(ADDR_LEN.W))
   val exe_reg_op1_data      = RegInit(0.U(WORD_LEN.W))
   val exe_reg_op2_data      = RegInit(0.U(WORD_LEN.W))
   val exe_reg_rs2_data      = RegInit(0.U(WORD_LEN.W))
@@ -100,13 +104,11 @@ class Core(startAddress: BigInt = 0) extends Module {
 
   val id_stall           = Wire(Bool())
   val mem_stall          = Wire(Bool())
+  val exe_read_stall     = Wire(Bool())
   val exe_reg_br_flg     = RegInit(false.B)
   val exe_reg_br_target  = RegInit(0.U(WORD_LEN.W))
   val exe_reg_jmp_flg    = RegInit(false.B)
   val exe_reg_jmp_target = RegInit(0.U(WORD_LEN.W))
-
-  val if2_reg_pc = RegInit(startAddress.U(WORD_LEN.W))
-  val if2_reg_inst = RegInit(0.U(WORD_LEN.W))
 
   //**********************************
   // Instruction Cache Controller
@@ -170,6 +172,9 @@ class Core(startAddress: BigInt = 0) extends Module {
   //**********************************
   // Instruction Fetch (IF) 2 Stage
 
+  val if2_reg_pc   = RegInit(startAddress.U(WORD_LEN.W))
+  val if2_reg_inst = RegInit(0.U(WORD_LEN.W))
+
   ic_read_en2 := false.B
   ic_read_en4 := !id_reg_stall
   val if2_pc = Mux(id_reg_stall || !ic_reg_read_rdy,
@@ -201,14 +206,7 @@ class Core(startAddress: BigInt = 0) extends Module {
   //**********************************
   // Instruction Decode (ID) Stage
 
-  // id_stall検出用にアドレスのみ一旦デコード
-  val id_rs1_addr_b = id_reg_inst(19, 15)
-  val id_rs2_addr_b = id_reg_inst(24, 20)
-
-  // EXとのデータハザード→stall
-  val id_rs1_data_hazard = (exe_reg_rf_wen === REN_S) && (id_rs1_addr_b =/= 0.U) && (id_rs1_addr_b === exe_reg_wb_addr)
-  val id_rs2_data_hazard = (exe_reg_rf_wen === REN_S) && (id_rs2_addr_b =/= 0.U) && (id_rs2_addr_b === exe_reg_wb_addr)
-  id_stall := id_rs1_data_hazard || id_rs2_data_hazard || mem_stall
+  id_stall := exe_read_stall || mem_stall
   id_reg_stall := id_stall
 
   // branch,jump,stall時にIDをBUBBLE化
@@ -221,13 +219,9 @@ class Core(startAddress: BigInt = 0) extends Module {
   val mem_wb_data = Wire(UInt(WORD_LEN.W))
   val id_rs1_data = MuxCase(regfile(id_rs1_addr), Seq(
     (id_rs1_addr === 0.U) -> 0.U(WORD_LEN.W),
-    ((id_rs1_addr === mem_reg_wb_addr) && (mem_reg_rf_wen === REN_S)) -> mem_wb_data,   // MEMからフォワーディング
-    ((id_rs1_addr === wb_reg_wb_addr ) && (wb_reg_rf_wen  === REN_S)) -> wb_reg_wb_data // WBからフォワーディング
   ))
-  val id_rs2_data = MuxCase(regfile(id_rs2_addr),  Seq(
+  val id_rs2_data = MuxCase(regfile(id_rs2_addr), Seq(
     (id_rs2_addr === 0.U) -> 0.U(WORD_LEN.W),
-    ((id_rs2_addr === mem_reg_wb_addr) && (mem_reg_rf_wen === REN_S)) -> mem_wb_data,   // MEMからフォワーディング
-    ((id_rs2_addr === wb_reg_wb_addr ) && (wb_reg_rf_wen  === REN_S)) -> wb_reg_wb_data // WBからフォワーディング
   ))
 
   val id_imm_i = id_inst(31, 20)
@@ -312,8 +306,12 @@ class Core(startAddress: BigInt = 0) extends Module {
 
   //**********************************
   // ID/EX register
-  when( !mem_stall ) {
+  when( !exe_read_stall && !mem_stall ) {
     exe_reg_pc            := id_reg_pc
+    exe_reg_op1_sel       := id_op1_sel
+    exe_reg_op2_sel       := id_op2_sel
+    exe_reg_rs1_addr      := id_rs1_addr
+    exe_reg_rs2_addr      := id_rs2_addr
     exe_reg_op1_data      := id_op1_data
     exe_reg_op2_data      := id_op2_data
     exe_reg_rs2_data      := id_rs2_data
@@ -335,52 +333,115 @@ class Core(startAddress: BigInt = 0) extends Module {
   //**********************************
   // Execute (EX) Stage
 
+  val exe_reg_fw_en        = RegInit(false.B)
+  val exe_reg_hazard       = RegInit(false.B)
+  val exe_reg_fw_data      = RegInit(0.U(WORD_LEN.W))
+  val mem_reg_rf_wen_delay = RegInit(0.U(REN_LEN.W))
+  val mem_wb_addr_delay    = Wire(UInt(ADDR_LEN.W))
+  val mem_wb_data_delay    = Wire(UInt(WORD_LEN.W))
+  val wb_reg_rf_wen_delay  = RegInit(0.U(REN_LEN.W))
+  val wb_reg_wb_addr_delay = RegInit(0.U(ADDR_LEN.W))
+  val wb_reg_wb_data_delay = RegInit(0.U(WORD_LEN.W))
+
+  exe_read_stall :=
+    (exe_reg_hazard &&
+     (exe_reg_op1_sel === OP1_RS1) &&
+     (exe_reg_rs1_addr =/= 0.U) &&
+     (exe_reg_rs1_addr === mem_reg_wb_addr)) ||
+    (exe_reg_hazard &&
+     (exe_reg_op2_sel === OP2_RS2) &&
+     (exe_reg_rs2_addr =/= 0.U) &&
+     (exe_reg_rs2_addr === mem_reg_wb_addr))
+
+  val exe_op1_data = MuxCase(exe_reg_op1_data, Seq(
+    (exe_reg_fw_en &&
+     (exe_reg_op1_sel === OP1_RS1) &&
+     (exe_reg_rs1_addr === mem_reg_wb_addr)) -> exe_reg_fw_data,
+    ((mem_reg_rf_wen_delay === REN_S) &&
+     (exe_reg_op1_sel === OP1_RS1) &&
+     (exe_reg_rs1_addr =/= 0.U) &&
+     (exe_reg_rs1_addr === mem_wb_addr_delay)) -> mem_wb_data_delay,
+    ((wb_reg_rf_wen_delay === REN_S) &&
+     (exe_reg_op1_sel === OP1_RS1) &&
+     (exe_reg_rs1_addr =/= 0.U) &&
+     (exe_reg_rs1_addr === wb_reg_wb_addr_delay)) -> wb_reg_wb_data_delay,
+  ))
+  val exe_op2_data = MuxCase(exe_reg_op2_data, Seq(
+    (exe_reg_fw_en &&
+     (exe_reg_op2_sel === OP2_RS2) &&
+     (exe_reg_rs2_addr === mem_reg_wb_addr)) -> exe_reg_fw_data,
+    ((mem_reg_rf_wen_delay === REN_S) &&
+     (exe_reg_op2_sel === OP2_RS2) &&
+     (exe_reg_rs2_addr =/= 0.U) &&
+     (exe_reg_rs2_addr === mem_wb_addr_delay)) -> mem_wb_data_delay,
+    ((wb_reg_rf_wen_delay === REN_S) &&
+     (exe_reg_op2_sel === OP2_RS2) &&
+     (exe_reg_rs2_addr =/= 0.U) &&
+     (exe_reg_rs2_addr === wb_reg_wb_addr_delay)) -> wb_reg_wb_data_delay,
+  ))
+  val exe_rs2_data = MuxCase(exe_reg_rs2_data, Seq(
+    (exe_reg_fw_en &&
+     (exe_reg_rs2_addr === mem_reg_wb_addr)) -> exe_reg_fw_data,
+    ((mem_reg_rf_wen_delay === REN_S) &&
+     (exe_reg_rs2_addr =/= 0.U) &&
+     (exe_reg_rs2_addr === mem_wb_addr_delay)) -> mem_wb_data_delay,
+    ((wb_reg_rf_wen_delay === REN_S) &&
+     (exe_reg_rs2_addr =/= 0.U) &&
+     (exe_reg_rs2_addr === wb_reg_wb_addr_delay)) -> wb_reg_wb_data_delay,
+  ))
+
   val exe_alu_out = MuxCase(0.U(WORD_LEN.W), Seq(
-    (exe_reg_exe_fun === ALU_ADD)   -> (exe_reg_op1_data + exe_reg_op2_data),
-    (exe_reg_exe_fun === ALU_SUB)   -> (exe_reg_op1_data - exe_reg_op2_data),
-    (exe_reg_exe_fun === ALU_AND)   -> (exe_reg_op1_data & exe_reg_op2_data),
-    (exe_reg_exe_fun === ALU_OR)    -> (exe_reg_op1_data | exe_reg_op2_data),
-    (exe_reg_exe_fun === ALU_XOR)   -> (exe_reg_op1_data ^ exe_reg_op2_data),
-    (exe_reg_exe_fun === ALU_SLL)   -> (exe_reg_op1_data << exe_reg_op2_data(4, 0))(31, 0),
-    (exe_reg_exe_fun === ALU_SRL)   -> (exe_reg_op1_data >> exe_reg_op2_data(4, 0)).asUInt(),
-    (exe_reg_exe_fun === ALU_SRA)   -> (exe_reg_op1_data.asSInt() >> exe_reg_op2_data(4, 0)).asUInt(),
-    (exe_reg_exe_fun === ALU_SLT)   -> (exe_reg_op1_data.asSInt() < exe_reg_op2_data.asSInt()).asUInt(),
-    (exe_reg_exe_fun === ALU_SLTU)  -> (exe_reg_op1_data < exe_reg_op2_data).asUInt(),
-    (exe_reg_exe_fun === ALU_JALR)  -> ((exe_reg_op1_data + exe_reg_op2_data) & ~1.U(WORD_LEN.W)),
-    (exe_reg_exe_fun === ALU_COPY1) -> exe_reg_op1_data
+    (exe_reg_exe_fun === ALU_ADD)   -> (exe_op1_data + exe_op2_data),
+    (exe_reg_exe_fun === ALU_SUB)   -> (exe_op1_data - exe_op2_data),
+    (exe_reg_exe_fun === ALU_AND)   -> (exe_op1_data & exe_op2_data),
+    (exe_reg_exe_fun === ALU_OR)    -> (exe_op1_data | exe_op2_data),
+    (exe_reg_exe_fun === ALU_XOR)   -> (exe_op1_data ^ exe_op2_data),
+    (exe_reg_exe_fun === ALU_SLL)   -> (exe_op1_data << exe_op2_data(4, 0))(31, 0),
+    (exe_reg_exe_fun === ALU_SRL)   -> (exe_op1_data >> exe_op2_data(4, 0)).asUInt(),
+    (exe_reg_exe_fun === ALU_SRA)   -> (exe_op1_data.asSInt() >> exe_op2_data(4, 0)).asUInt(),
+    (exe_reg_exe_fun === ALU_SLT)   -> (exe_op1_data.asSInt() < exe_op2_data.asSInt()).asUInt(),
+    (exe_reg_exe_fun === ALU_SLTU)  -> (exe_op1_data < exe_op2_data).asUInt(),
+    (exe_reg_exe_fun === ALU_JALR)  -> ((exe_op1_data + exe_op2_data) & ~1.U(WORD_LEN.W)),
+    (exe_reg_exe_fun === ALU_COPY1) -> exe_op1_data
   ))
 
   // branch
-  val exe_is_branch = exe_reg_br_flg || exe_reg_jmp_flg
+  val exe_stall = exe_reg_br_flg || exe_reg_jmp_flg || exe_read_stall
   exe_reg_br_flg := MuxCase(false.B, Seq(
-    exe_is_branch -> false.B,
-    (exe_reg_exe_fun === BR_BEQ)  ->  (exe_reg_op1_data === exe_reg_op2_data),
-    (exe_reg_exe_fun === BR_BNE)  -> !(exe_reg_op1_data === exe_reg_op2_data),
-    (exe_reg_exe_fun === BR_BLT)  ->  (exe_reg_op1_data.asSInt() < exe_reg_op2_data.asSInt()),
-    (exe_reg_exe_fun === BR_BGE)  -> !(exe_reg_op1_data.asSInt() < exe_reg_op2_data.asSInt()),
-    (exe_reg_exe_fun === BR_BLTU) ->  (exe_reg_op1_data < exe_reg_op2_data),
-    (exe_reg_exe_fun === BR_BGEU) -> !(exe_reg_op1_data < exe_reg_op2_data)
+    exe_stall -> false.B,
+    (exe_reg_exe_fun === BR_BEQ)  ->  (exe_op1_data === exe_op2_data),
+    (exe_reg_exe_fun === BR_BNE)  -> !(exe_op1_data === exe_op2_data),
+    (exe_reg_exe_fun === BR_BLT)  ->  (exe_op1_data.asSInt() < exe_op2_data.asSInt()),
+    (exe_reg_exe_fun === BR_BGE)  -> !(exe_op1_data.asSInt() < exe_op2_data.asSInt()),
+    (exe_reg_exe_fun === BR_BLTU) ->  (exe_op1_data < exe_op2_data),
+    (exe_reg_exe_fun === BR_BGEU) -> !(exe_op1_data < exe_op2_data)
   ))
   exe_reg_br_target := exe_reg_pc + exe_reg_imm_b_sext
 
-  exe_reg_jmp_flg := (exe_reg_wb_sel === WB_PC && !exe_is_branch)
+  exe_reg_jmp_flg := (exe_reg_wb_sel === WB_PC && !exe_stall)
   exe_reg_jmp_target := exe_alu_out
 
+  exe_reg_fw_data := MuxCase(exe_alu_out, Seq(
+    (exe_reg_wb_sel === WB_PC) -> (exe_reg_pc + 4.U(WORD_LEN.W)),
+  ))
+  val exe_hazard = (exe_reg_rf_wen === REN_S) && (exe_reg_wb_addr =/= 0.U) && !exe_stall && !mem_stall
+  exe_reg_fw_en := exe_hazard && (exe_reg_wb_sel =/= WB_MEM) && (exe_reg_wb_sel =/= WB_CSR)
+  exe_reg_hazard := exe_hazard && ((exe_reg_wb_sel === WB_MEM) || (exe_reg_wb_sel === WB_CSR))
 
   //**********************************
   // EX/MEM register
   when( !mem_stall ) {  // MEMステージがストールしていない場合のみMEMのパイプラインレジスタを更新する。
     mem_reg_pc         := exe_reg_pc
     mem_reg_op1_data   := exe_reg_op1_data
-    mem_reg_rs2_data   := exe_reg_rs2_data
+    mem_reg_rs2_data   := exe_rs2_data
     mem_reg_wb_addr    := exe_reg_wb_addr
     mem_reg_alu_out    := exe_alu_out
-    mem_reg_rf_wen     := Mux(exe_is_branch, REN_X, exe_reg_rf_wen)
-    mem_reg_wb_sel     := Mux(exe_is_branch, WB_X, exe_reg_wb_sel)
+    mem_reg_rf_wen     := Mux(exe_stall, REN_X, exe_reg_rf_wen)
+    mem_reg_wb_sel     := Mux(exe_stall, WB_X, exe_reg_wb_sel)
     mem_reg_csr_addr   := exe_reg_csr_addr
-    mem_reg_csr_cmd    := Mux(exe_is_branch, CSR_X, exe_reg_csr_cmd)
+    mem_reg_csr_cmd    := Mux(exe_stall, CSR_X, exe_reg_csr_cmd)
     mem_reg_imm_z_uext := exe_reg_imm_z_uext
-    mem_reg_mem_wen    := Mux(exe_is_branch, MEN_X, exe_reg_mem_wen)
+    mem_reg_mem_wen    := Mux(exe_stall, MEN_X, exe_reg_mem_wen)
     mem_reg_mem_w      := exe_reg_mem_w
     mem_reg_mem_wstrb  := (MuxCase("b1111".U, Seq(
       (exe_reg_mem_w === MW_B) -> "b0001".U,
@@ -441,6 +502,9 @@ class Core(startAddress: BigInt = 0) extends Module {
     (mem_reg_wb_sel === WB_CSR) -> csr_rdata
   ))
 
+  mem_reg_rf_wen_delay := mem_reg_rf_wen
+  mem_wb_addr_delay    := wb_reg_wb_addr
+  mem_wb_data_delay    := Mux(mem_reg_wb_sel === WB_MEM, mem_wb_data_load, wb_reg_wb_data)
   
   //**********************************
   // MEM/WB regsiter
@@ -455,6 +519,10 @@ class Core(startAddress: BigInt = 0) extends Module {
   when(wb_reg_rf_wen === REN_S) {
     regfile(wb_reg_wb_addr) := wb_reg_wb_data
   }
+
+  wb_reg_rf_wen_delay  := wb_reg_rf_wen
+  wb_reg_wb_addr_delay := wb_reg_wb_addr
+  wb_reg_wb_data_delay := wb_reg_wb_data
 
   // Debug signals
   io.debug_signal.cycle_counter := cycle_counter.io.value
@@ -479,10 +547,12 @@ class Core(startAddress: BigInt = 0) extends Module {
   printf(p"id_rs1_data      : 0x${Hexadecimal(id_rs1_data)}\n")
   printf(p"id_rs2_data      : 0x${Hexadecimal(id_rs2_data)}\n")
   printf(p"exe_reg_pc       : 0x${Hexadecimal(exe_reg_pc)}\n")
-  printf(p"exe_reg_op1_data : 0x${Hexadecimal(exe_reg_op1_data)}\n")
-  printf(p"exe_reg_op2_data : 0x${Hexadecimal(exe_reg_op2_data)}\n")
+  printf(p"exe_read_stall   : 0x${Hexadecimal(exe_read_stall)}\n")
+  printf(p"exe_op1_data     : 0x${Hexadecimal(exe_op1_data)}\n")
+  printf(p"exe_op2_data     : 0x${Hexadecimal(exe_op2_data)}\n")
   printf(p"exe_alu_out      : 0x${Hexadecimal(exe_alu_out)}\n")
   printf(p"mem_reg_pc       : 0x${Hexadecimal(mem_reg_pc)}\n")
+  printf(p"mem_stall        : 0x${Hexadecimal(mem_stall)}\n")
   printf(p"mem_wb_data      : 0x${Hexadecimal(mem_wb_data)}\n")
   printf(p"mem_reg_mem_w    : 0x${Hexadecimal(mem_reg_mem_w)}\n")
   printf(p"mem_reg_wb_addr  : 0x${Hexadecimal(mem_reg_wb_addr)}\n")
