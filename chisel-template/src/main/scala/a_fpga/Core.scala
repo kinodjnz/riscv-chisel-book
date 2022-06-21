@@ -163,8 +163,6 @@ class Core(startAddress: BigInt = 0) extends Module {
 
   ic_addr_en  := if1_is_jump
   ic_addr     := if1_jump_addr
-  ic_read_en2 := false.B
-  ic_read_en4 := !id_reg_stall
 
   //**********************************
   // IF1/IF2 Register
@@ -172,6 +170,8 @@ class Core(startAddress: BigInt = 0) extends Module {
   //**********************************
   // Instruction Fetch (IF) 2 Stage
 
+  ic_read_en2 := false.B
+  ic_read_en4 := !id_reg_stall
   val if2_pc = Mux(id_reg_stall || !ic_reg_read_rdy,
     if2_reg_pc,
     ic_reg_addr_out,
@@ -195,9 +195,7 @@ class Core(startAddress: BigInt = 0) extends Module {
     id_reg_stall -> id_reg_pc_cache,
   ))
   id_reg_pc_cache := if2_pc
-  id_reg_inst := MuxCase(if2_inst, Seq(
-    (id_stall && !exe_reg_br_flg && !exe_reg_jmp_flg) -> id_reg_inst,
-  ))
+  id_reg_inst := Mux(id_stall && !exe_reg_br_flg && !exe_reg_jmp_flg, id_reg_inst, if2_inst)
 
 
   //**********************************
