@@ -105,82 +105,96 @@ class Core(startAddress: BigInt = 0) extends Module {
   val exe_reg_jmp_flg    = RegInit(false.B)
   val exe_reg_jmp_target = RegInit(0.U(WORD_LEN.W))
 
-  val if1_reg_pc = RegInit(startAddress.U(WORD_LEN.W))
-  val if1_reg_inst_addr = RegInit((startAddress & ~3).U(WORD_LEN.W))
   val if2_reg_pc = RegInit(startAddress.U(WORD_LEN.W))
-  val if2_reg_inst_half = RegInit(0.U((WORD_LEN / 2).W))
-  val if2_reg_inst_valid = RegInit(false.B)
   val if2_reg_inst = RegInit(0.U(WORD_LEN.W))
-  val if2_reg_refill = RegInit((if ((startAddress & 2) == 0) false else true).B)
-  val if2_stall = Wire(Bool())
+
+  //**********************************
+  // Instruction Cache Controller
+
+  val if1_addr_en      = Wire(Bool())
+  val if1_addr         = Wire(UInt(WORD_LEN.W))
+  val if1_read_en2     = Wire(Bool())
+  val if1_read_en4     = Wire(Bool())
+  val if1_reg_read_rdy = RegInit(false.B)
+  val if1_reg_half_rdy = RegInit(false.B)
+  val if1_data_out     = Wire(UInt(WORD_LEN.W))
+  val if1_reg_addr_out = RegInit(0.U(WORD_LEN.W))
+
+  val if1_reg_mem_addr  = RegInit(0.U(WORD_LEN.W))
+  val if1_reg_inst_addr = RegInit(0.U(WORD_LEN.W))
+  val if1_reg_half      = RegInit(0.U((WORD_LEN/2).W))
+
+  val if1_next_addr = MuxCase(if1_reg_addr_out, Seq(
+    if1_addr_en -> if1_addr,
+    ((if1_reg_half_rdy || if1_reg_read_rdy) && if1_read_en2) -> (if1_reg_addr_out + 2.U(WORD_LEN.W)),
+    (if1_reg_read_rdy && if1_read_en4) -> (if1_reg_addr_out + 4.U(WORD_LEN.W)),
+  ))
+  val if1_fill_half = if1_addr_en && if1_addr(1).asBool
+  val if1_mem_addr = Mux(if1_fill_half,
+    Cat(if1_next_addr(WORD_LEN-1, 2), Fill(2, 0.U)),
+    Cat((if1_next_addr + 2.U(WORD_LEN.W))(WORD_LEN-1, 2), Fill(2, 0.U)),
+  )
+  if1_reg_half_rdy := true.B
+  if1_reg_read_rdy := !(if1_addr_en && if1_addr(1).asBool)
+  io.imem.addr := if1_mem_addr
+  if1_reg_addr_out := if1_next_addr
+
+  if1_reg_half := MuxCase(if1_reg_half, Seq(
+    (!if1_reg_read_rdy || if1_read_en2 || if1_read_en4) -> io.imem.inst(WORD_LEN-1, WORD_LEN/2),
+  ))
+  if1_data_out := MuxCase(io.imem.inst, Seq(
+    (if1_reg_addr_out(1).asBool && if1_reg_read_rdy) -> Cat(io.imem.inst(WORD_LEN/2-1, 0), if1_reg_half),
+    (if1_reg_addr_out(1).asBool && !if1_reg_read_rdy) -> Cat(Fill(WORD_LEN/2, 0.U), io.imem.inst(WORD_LEN-1, WORD_LEN/2)),
+  ))
 
   //**********************************
   // Instruction Fetch (IF) 1 Stage
 
-  val if1_need_advance = !id_reg_stall && if2_reg_inst_valid // TODO halfかつ16bit命令だった場合次に進まない
-  val if1_inst_addr = MuxCase(if1_reg_inst_addr, Seq(
-    exe_reg_br_flg      -> Cat(exe_reg_br_target(WORD_LEN-1, 2), Fill(2, 0.U)),
-    exe_reg_jmp_flg     -> Cat(exe_reg_jmp_target(WORD_LEN-1, 2), Fill(2, 0.U)),
-    (id_reg_inst === ECALL) -> Cat(csr_trap_vector(WORD_LEN-1, 2), Fill(2, 0.U)),
-    if1_need_advance -> (if1_reg_inst_addr + 4.U(WORD_LEN.W))
-  ))
+  val if1_reg_first = RegInit(true.B)
+  if1_reg_first := false.B
 
-  val if1_pc_plus4 = if1_reg_pc + 4.U(WORD_LEN.W)
-  val if1_pc_next = MuxCase(if1_pc_plus4, Seq(
-	  // 優先順位重要！ジャンプ成立とストールが同時発生した場合、ジャンプ処理を優先
-    exe_reg_br_flg      -> exe_reg_br_target,
-    exe_reg_jmp_flg     -> exe_reg_jmp_target,
-    (id_reg_inst === ECALL) -> csr_trap_vector, // go to trap_vector
-    (id_reg_stall || if2_stall) -> if1_reg_pc, // stall
+  val if1_jump_addr = MuxCase(DontCare, Seq(
+    exe_reg_br_flg          -> exe_reg_br_target,
+    exe_reg_jmp_flg         -> exe_reg_jmp_target,
+    (id_reg_inst === ECALL) -> csr_trap_vector,
+    if1_reg_first           -> startAddress.U,
   ))
-  val if1_is_jump = MuxCase(false.B, Seq(
-    exe_reg_br_flg      -> true.B,
-    exe_reg_jmp_flg     -> true.B,
-    (id_reg_inst === ECALL) -> true.B,
-  ))
-  val if1_refill = if1_is_jump && if1_pc_next(1).asBool
+  val if1_is_jump = exe_reg_br_flg || exe_reg_jmp_flg || (id_reg_inst === ECALL) || if1_reg_first
 
-  if1_reg_inst_addr := if1_inst_addr
-  io.imem.addr := if1_inst_addr
-  if1_reg_pc := if1_pc_next
+  if1_addr_en  := if1_is_jump
+  if1_addr     := if1_jump_addr
+  if1_read_en2 := false.B
+  if1_read_en4 := !id_reg_stall
 
   //**********************************
   // IF1/IF2 Register
 
-  if2_reg_pc := Mux(id_reg_stall,
-    if2_reg_pc,
-    if1_pc_next,
-  )
-  if2_reg_inst_valid := true.B
-  if2_reg_refill := if1_refill || (if2_reg_refill && !if2_reg_inst_valid)
-
   //**********************************
   // Instruction Fetch (IF) 2 Stage
 
-  val if2_is_half = if2_reg_pc(1).asBool
+  val if2_pc = Mux(id_reg_stall || !if1_reg_read_rdy,
+    if2_reg_pc,
+    if1_reg_addr_out,
+  )
+  if2_reg_pc := if2_pc
   val if2_inst = MuxCase(BUBBLE, Seq(
 	  // 優先順位重要！ジャンプ成立とストールが同時発生した場合、ジャンプ処理を優先
     (exe_reg_br_flg || exe_reg_jmp_flg) -> BUBBLE,
-    if2_stall -> BUBBLE,
-    id_reg_stall -> if2_reg_inst,
-    !if2_is_half -> io.imem.inst,
-    if2_is_half -> Cat(io.imem.inst(WORD_LEN/2-1, 0), if2_reg_inst_half),
+    id_reg_stall                        -> if2_reg_inst,
+    if1_reg_read_rdy                    -> if1_data_out,
   ))
-
-  if2_stall := !if2_reg_inst_valid || if2_reg_refill
   if2_reg_inst := if2_inst
-  if2_reg_inst_half := Mux(if2_reg_inst_valid && !id_reg_stall, io.imem.inst(WORD_LEN-1, WORD_LEN/2), if2_reg_inst_half)
 
-  printf(p"io.mem.addr: ${Hexadecimal(io.imem.addr)}, io.imem.inst: ${Hexadecimal(io.imem.inst)}\n")
-  printf(p"inst: ${Hexadecimal(if2_inst)}, refill: ${if2_reg_refill}, inst_half: ${Hexadecimal(if2_reg_inst_half)}\n")
+  printf(p"if1_reg_addr_out: ${Hexadecimal(if1_reg_addr_out)}, if1_data_out: ${Hexadecimal(if1_data_out)}\n")
+  printf(p"inst: ${Hexadecimal(if2_inst)}, if1_reg_read_rdy: ${if1_reg_read_rdy}, if1_reg_half_rdy: ${if1_reg_half_rdy}\n")
 
   //**********************************
   // IF2/ID Register
-  id_reg_pc   := MuxCase(if2_reg_pc, Seq(
+  id_reg_pc   := MuxCase(if2_pc, Seq(
     id_stall     -> id_reg_pc,
     id_reg_stall -> id_reg_pc_cache,
   ))
-  id_reg_pc_cache := if2_reg_pc
+  id_reg_pc_cache := if2_pc
   id_reg_inst := MuxCase(if2_inst, Seq(
     (id_stall && !exe_reg_br_flg && !exe_reg_jmp_flg) -> id_reg_inst,
   ))
@@ -457,7 +471,7 @@ class Core(startAddress: BigInt = 0) extends Module {
   val do_exit = RegInit(false.B)
   do_exit := exe_is_ecall
   io.exit := do_exit
-  printf(p"if1_reg_pc       : 0x${Hexadecimal(if1_reg_pc)}\n")
+  //printf(p"if1_reg_pc       : 0x${Hexadecimal(if1_reg_pc)}\n")
   printf(p"if2_reg_pc       : 0x${Hexadecimal(if2_reg_pc)}\n")
   printf(p"if2_inst         : 0x${Hexadecimal(if2_inst)}\n")
   printf(p"id_reg_pc        : 0x${Hexadecimal(id_reg_pc)}\n")
