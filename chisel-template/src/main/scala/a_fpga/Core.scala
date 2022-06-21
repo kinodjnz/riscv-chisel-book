@@ -111,40 +111,40 @@ class Core(startAddress: BigInt = 0) extends Module {
   //**********************************
   // Instruction Cache Controller
 
-  val if1_addr_en      = Wire(Bool())
-  val if1_addr         = Wire(UInt(WORD_LEN.W))
-  val if1_read_en2     = Wire(Bool())
-  val if1_read_en4     = Wire(Bool())
-  val if1_reg_read_rdy = RegInit(false.B)
-  val if1_reg_half_rdy = RegInit(false.B)
-  val if1_data_out     = Wire(UInt(WORD_LEN.W))
-  val if1_reg_addr_out = RegInit(0.U(WORD_LEN.W))
+  val ic_addr_en      = Wire(Bool())
+  val ic_addr         = Wire(UInt(WORD_LEN.W))
+  val ic_read_en2     = Wire(Bool())
+  val ic_read_en4     = Wire(Bool())
+  val ic_reg_read_rdy = RegInit(false.B)
+  val ic_reg_half_rdy = RegInit(false.B)
+  val ic_data_out     = Wire(UInt(WORD_LEN.W))
+  val ic_reg_addr_out = RegInit(0.U(WORD_LEN.W))
 
-  val if1_reg_mem_addr  = RegInit(0.U(WORD_LEN.W))
-  val if1_reg_inst_addr = RegInit(0.U(WORD_LEN.W))
-  val if1_reg_half      = RegInit(0.U((WORD_LEN/2).W))
+  val ic_reg_mem_addr  = RegInit(0.U(WORD_LEN.W))
+  val ic_reg_inst_addr = RegInit(0.U(WORD_LEN.W))
+  val ic_reg_half      = RegInit(0.U((WORD_LEN/2).W))
 
-  val if1_next_addr = MuxCase(if1_reg_addr_out, Seq(
-    if1_addr_en -> if1_addr,
-    ((if1_reg_half_rdy || if1_reg_read_rdy) && if1_read_en2) -> (if1_reg_addr_out + 2.U(WORD_LEN.W)),
-    (if1_reg_read_rdy && if1_read_en4) -> (if1_reg_addr_out + 4.U(WORD_LEN.W)),
+  val ic_next_addr = MuxCase(ic_reg_addr_out, Seq(
+    ic_addr_en -> ic_addr,
+    ((ic_reg_half_rdy || ic_reg_read_rdy) && ic_read_en2) -> (ic_reg_addr_out + 2.U(WORD_LEN.W)),
+    (ic_reg_read_rdy && ic_read_en4) -> (ic_reg_addr_out + 4.U(WORD_LEN.W)),
   ))
-  val if1_fill_half = if1_addr_en && if1_addr(1).asBool
-  val if1_mem_addr = Mux(if1_fill_half,
-    Cat(if1_next_addr(WORD_LEN-1, 2), Fill(2, 0.U)),
-    Cat((if1_next_addr + 2.U(WORD_LEN.W))(WORD_LEN-1, 2), Fill(2, 0.U)),
+  val ic_fill_half = ic_addr_en && ic_addr(1).asBool
+  val ic_mem_addr = Mux(ic_fill_half,
+    Cat(ic_next_addr(WORD_LEN-1, 2), Fill(2, 0.U)),
+    Cat((ic_next_addr + 2.U(WORD_LEN.W))(WORD_LEN-1, 2), Fill(2, 0.U)),
   )
-  if1_reg_half_rdy := true.B
-  if1_reg_read_rdy := !(if1_addr_en && if1_addr(1).asBool)
-  io.imem.addr := if1_mem_addr
-  if1_reg_addr_out := if1_next_addr
+  ic_reg_half_rdy := true.B
+  ic_reg_read_rdy := !(ic_addr_en && ic_addr(1).asBool)
+  io.imem.addr := ic_mem_addr
+  ic_reg_addr_out := ic_next_addr
 
-  if1_reg_half := MuxCase(if1_reg_half, Seq(
-    (!if1_reg_read_rdy || if1_read_en2 || if1_read_en4) -> io.imem.inst(WORD_LEN-1, WORD_LEN/2),
+  ic_reg_half := MuxCase(ic_reg_half, Seq(
+    (!ic_reg_read_rdy || ic_read_en2 || ic_read_en4) -> io.imem.inst(WORD_LEN-1, WORD_LEN/2),
   ))
-  if1_data_out := MuxCase(io.imem.inst, Seq(
-    (if1_reg_addr_out(1).asBool && if1_reg_read_rdy) -> Cat(io.imem.inst(WORD_LEN/2-1, 0), if1_reg_half),
-    (if1_reg_addr_out(1).asBool && !if1_reg_read_rdy) -> Cat(Fill(WORD_LEN/2, 0.U), io.imem.inst(WORD_LEN-1, WORD_LEN/2)),
+  ic_data_out := MuxCase(io.imem.inst, Seq(
+    (ic_reg_addr_out(1).asBool && ic_reg_read_rdy) -> Cat(io.imem.inst(WORD_LEN/2-1, 0), ic_reg_half),
+    (ic_reg_addr_out(1).asBool && !ic_reg_read_rdy) -> Cat(Fill(WORD_LEN/2, 0.U), io.imem.inst(WORD_LEN-1, WORD_LEN/2)),
   ))
 
   //**********************************
@@ -161,10 +161,10 @@ class Core(startAddress: BigInt = 0) extends Module {
   ))
   val if1_is_jump = exe_reg_br_flg || exe_reg_jmp_flg || (id_reg_inst === ECALL) || if1_reg_first
 
-  if1_addr_en  := if1_is_jump
-  if1_addr     := if1_jump_addr
-  if1_read_en2 := false.B
-  if1_read_en4 := !id_reg_stall
+  ic_addr_en  := if1_is_jump
+  ic_addr     := if1_jump_addr
+  ic_read_en2 := false.B
+  ic_read_en4 := !id_reg_stall
 
   //**********************************
   // IF1/IF2 Register
@@ -172,21 +172,21 @@ class Core(startAddress: BigInt = 0) extends Module {
   //**********************************
   // Instruction Fetch (IF) 2 Stage
 
-  val if2_pc = Mux(id_reg_stall || !if1_reg_read_rdy,
+  val if2_pc = Mux(id_reg_stall || !ic_reg_read_rdy,
     if2_reg_pc,
-    if1_reg_addr_out,
+    ic_reg_addr_out,
   )
   if2_reg_pc := if2_pc
   val if2_inst = MuxCase(BUBBLE, Seq(
 	  // 優先順位重要！ジャンプ成立とストールが同時発生した場合、ジャンプ処理を優先
     (exe_reg_br_flg || exe_reg_jmp_flg) -> BUBBLE,
     id_reg_stall                        -> if2_reg_inst,
-    if1_reg_read_rdy                    -> if1_data_out,
+    ic_reg_read_rdy                     -> ic_data_out,
   ))
   if2_reg_inst := if2_inst
 
-  printf(p"if1_reg_addr_out: ${Hexadecimal(if1_reg_addr_out)}, if1_data_out: ${Hexadecimal(if1_data_out)}\n")
-  printf(p"inst: ${Hexadecimal(if2_inst)}, if1_reg_read_rdy: ${if1_reg_read_rdy}, if1_reg_half_rdy: ${if1_reg_half_rdy}\n")
+  printf(p"ic_reg_addr_out: ${Hexadecimal(ic_reg_addr_out)}, ic_data_out: ${Hexadecimal(ic_data_out)}\n")
+  printf(p"inst: ${Hexadecimal(if2_inst)}, ic_reg_read_rdy: ${ic_reg_read_rdy}, ic_reg_half_rdy: ${ic_reg_half_rdy}\n")
 
   //**********************************
   // IF2/ID Register
