@@ -75,11 +75,11 @@ class Core(startAddress: BigInt = 0) extends Module {
   val exe_reg_wb_sel        = RegInit(0.U(WB_SEL_LEN.W))
   val exe_reg_csr_addr      = RegInit(0.U(CSR_ADDR_LEN.W))
   val exe_reg_csr_cmd       = RegInit(0.U(CSR_LEN.W))
-  val exe_reg_imm_i_sext    = RegInit(0.U(WORD_LEN.W))
-  val exe_reg_imm_s_sext    = RegInit(0.U(WORD_LEN.W))
+  //val exe_reg_imm_i_sext    = RegInit(0.U(WORD_LEN.W))
+  //val exe_reg_imm_s_sext    = RegInit(0.U(WORD_LEN.W))
   val exe_reg_imm_b_sext    = RegInit(0.U(WORD_LEN.W))
-  val exe_reg_imm_u_shifted = RegInit(0.U(WORD_LEN.W))
-  val exe_reg_imm_z_uext    = RegInit(0.U(WORD_LEN.W))
+  //val exe_reg_imm_u_shifted = RegInit(0.U(WORD_LEN.W))
+  //val exe_reg_imm_z_uext    = RegInit(0.U(WORD_LEN.W))
   val exe_reg_mem_w         = RegInit(0.U(WORD_LEN.W))
   val exe_is_ecall          = RegInit(false.B)
 
@@ -93,7 +93,7 @@ class Core(startAddress: BigInt = 0) extends Module {
   val mem_reg_wb_sel        = RegInit(0.U(WB_SEL_LEN.W))
   val mem_reg_csr_addr      = RegInit(0.U(CSR_ADDR_LEN.W))
   val mem_reg_csr_cmd       = RegInit(0.U(CSR_LEN.W))
-  val mem_reg_imm_z_uext    = RegInit(0.U(WORD_LEN.W))
+  //val mem_reg_imm_z_uext    = RegInit(0.U(WORD_LEN.W))
   val mem_reg_alu_out       = RegInit(0.U(WORD_LEN.W))
   val mem_reg_mem_w         = RegInit(0.U(WORD_LEN.W))
   val mem_reg_mem_wstrb     = RegInit(0.U((WORD_LEN/8).W))
@@ -196,11 +196,10 @@ class Core(startAddress: BigInt = 0) extends Module {
   //**********************************
   // IF2/ID Register
   id_reg_pc   := MuxCase(if2_pc, Seq(
-    id_stall     -> id_reg_pc,
-    id_reg_stall -> id_reg_pc_cache,
+    id_reg_stall -> id_reg_pc,
   ))
   id_reg_pc_cache := if2_pc
-  id_reg_inst := Mux(id_stall && !exe_reg_br_flg && !exe_reg_jmp_flg, id_reg_inst, if2_inst)
+  id_reg_inst := if2_inst
 
 
   //**********************************
@@ -210,7 +209,7 @@ class Core(startAddress: BigInt = 0) extends Module {
   id_reg_stall := id_stall
 
   // branch,jump,stall時にIDをBUBBLE化
-  val id_inst = Mux((exe_reg_br_flg || exe_reg_jmp_flg || id_stall), BUBBLE, id_reg_inst)  
+  val id_inst = Mux((exe_reg_br_flg || exe_reg_jmp_flg), BUBBLE, id_reg_inst)  
 
   val id_rs1_addr = id_inst(19, 15)
   val id_rs2_addr = id_inst(24, 20)
@@ -303,32 +302,104 @@ class Core(startAddress: BigInt = 0) extends Module {
 
   val id_csr_addr = Mux(id_csr_cmd === CSR_E, 0x342.U(CSR_ADDR_LEN.W), id_inst(31,20))
 
+  val id_reg_pc_delay         = RegInit(0.U(WORD_LEN.W))
+  val id_reg_wb_addr_delay    = RegInit(0.U(ADDR_LEN.W))
+  val id_reg_op1_sel_delay    = RegInit(0.U(OP1_LEN.W))
+  val id_reg_op2_sel_delay    = RegInit(0.U(OP2_LEN.W))
+  val id_reg_rs1_addr_delay   = RegInit(0.U(ADDR_LEN.W))
+  val id_reg_rs2_addr_delay   = RegInit(0.U(ADDR_LEN.W))
+  val id_reg_op1_data_delay   = RegInit(0.U(WORD_LEN.W))
+  val id_reg_op2_data_delay   = RegInit(0.U(WORD_LEN.W))
+  val id_reg_rs2_data_delay   = RegInit(0.U(WORD_LEN.W))
+  val id_reg_exe_fun_delay    = RegInit(0.U(EXE_FUN_LEN.W))
+  val id_reg_mem_wen_delay    = RegInit(0.U(MEN_LEN.W))
+  val id_reg_rf_wen_delay     = RegInit(0.U(REN_LEN.W))
+  val id_reg_wb_sel_delay     = RegInit(0.U(WB_SEL_LEN.W))
+  val id_reg_csr_addr_delay   = RegInit(0.U(CSR_ADDR_LEN.W))
+  val id_reg_csr_cmd_delay    = RegInit(0.U(CSR_LEN.W))
+  //val id_reg_imm_i_sext     = RegInit(0.U(WORD_LEN.W))
+  //val id_reg_imm_s_sext     = RegInit(0.U(WORD_LEN.W))
+  val id_reg_imm_b_sext_delay = RegInit(0.U(WORD_LEN.W))
+  //val id_reg_imm_u_shifted  = RegInit(0.U(WORD_LEN.W))
+  //val id_reg_imm_z_uext     = RegInit(0.U(WORD_LEN.W))
+  val id_reg_mem_w_delay      = RegInit(0.U(WORD_LEN.W))
+  val id_reg_is_ecall_delay   = RegInit(false.B)
+
+  when(!id_reg_stall) {
+    id_reg_pc_delay         := id_reg_pc
+    id_reg_op1_sel_delay    := id_op1_sel
+    id_reg_op2_sel_delay    := id_op2_sel
+    id_reg_rs1_addr_delay   := id_rs1_addr
+    id_reg_rs2_addr_delay   := id_rs2_addr
+    id_reg_op1_data_delay   := id_op1_data
+    id_reg_op2_data_delay   := id_op2_data
+    id_reg_rs2_data_delay   := id_rs2_data
+    id_reg_wb_addr_delay    := id_wb_addr
+    id_reg_rf_wen_delay     := id_rf_wen
+    id_reg_exe_fun_delay    := id_exe_fun
+    id_reg_wb_sel_delay     := id_wb_sel
+    //id_reg_imm_i_sext     := id_imm_i_sext
+    //id_reg_imm_s_sext     := id_imm_s_sext
+    id_reg_imm_b_sext_delay := id_imm_b_sext
+    //id_reg_imm_u_shifted  := id_imm_u_shifted
+    //id_reg_imm_z_uext     := id_imm_z_uext
+    id_reg_csr_addr_delay   := id_csr_addr
+    id_reg_csr_cmd_delay    := id_csr_cmd
+    id_reg_mem_wen_delay    := id_mem_wen
+    id_reg_mem_w_delay      := id_mem_w
+    id_reg_is_ecall_delay   := id_inst === ECALL
+  }
 
   //**********************************
   // ID/EX register
   when( !exe_read_stall && !mem_stall ) {
-    exe_reg_pc            := id_reg_pc
-    exe_reg_op1_sel       := id_op1_sel
-    exe_reg_op2_sel       := id_op2_sel
-    exe_reg_rs1_addr      := id_rs1_addr
-    exe_reg_rs2_addr      := id_rs2_addr
-    exe_reg_op1_data      := id_op1_data
-    exe_reg_op2_data      := id_op2_data
-    exe_reg_rs2_data      := id_rs2_data
-    exe_reg_wb_addr       := id_wb_addr
-    exe_reg_rf_wen        := id_rf_wen
-    exe_reg_exe_fun       := id_exe_fun
-    exe_reg_wb_sel        := id_wb_sel
-    exe_reg_imm_i_sext    := id_imm_i_sext
-    exe_reg_imm_s_sext    := id_imm_s_sext
-    exe_reg_imm_b_sext    := id_imm_b_sext
-    exe_reg_imm_u_shifted := id_imm_u_shifted
-    exe_reg_imm_z_uext    := id_imm_z_uext
-    exe_reg_csr_addr      := id_csr_addr
-    exe_reg_csr_cmd       := id_csr_cmd
-    exe_reg_mem_wen       := id_mem_wen
-    exe_reg_mem_w         := id_mem_w
-    exe_is_ecall          := id_inst === ECALL
+    when(id_reg_stall) {
+      exe_reg_pc            := id_reg_pc_delay
+      exe_reg_op1_sel       := id_reg_op1_sel_delay
+      exe_reg_op2_sel       := id_reg_op2_sel_delay
+      exe_reg_rs1_addr      := id_reg_rs1_addr_delay
+      exe_reg_rs2_addr      := id_reg_rs2_addr_delay
+      exe_reg_op1_data      := id_reg_op1_data_delay
+      exe_reg_op2_data      := id_reg_op2_data_delay
+      exe_reg_rs2_data      := id_reg_rs2_data_delay
+      exe_reg_wb_addr       := id_reg_wb_addr_delay
+      exe_reg_rf_wen        := id_reg_rf_wen_delay
+      exe_reg_exe_fun       := id_reg_exe_fun_delay
+      exe_reg_wb_sel        := id_reg_wb_sel_delay
+      //exe_reg_imm_i_sext    := id_imm_i_sext
+      //exe_reg_imm_s_sext    := id_imm_s_sext
+      exe_reg_imm_b_sext    := id_reg_imm_b_sext_delay
+      //exe_reg_imm_u_shifted := id_imm_u_shifted
+      //exe_reg_imm_z_uext    := id_imm_z_uext
+      exe_reg_csr_addr      := id_reg_csr_addr_delay
+      exe_reg_csr_cmd       := id_reg_csr_cmd_delay
+      exe_reg_mem_wen       := id_reg_mem_wen_delay
+      exe_reg_mem_w         := id_reg_mem_w_delay
+      exe_is_ecall          := id_reg_is_ecall_delay
+    }.otherwise {
+      exe_reg_pc            := id_reg_pc
+      exe_reg_op1_sel       := id_op1_sel
+      exe_reg_op2_sel       := id_op2_sel
+      exe_reg_rs1_addr      := id_rs1_addr
+      exe_reg_rs2_addr      := id_rs2_addr
+      exe_reg_op1_data      := id_op1_data
+      exe_reg_op2_data      := id_op2_data
+      exe_reg_rs2_data      := id_rs2_data
+      exe_reg_wb_addr       := id_wb_addr
+      exe_reg_rf_wen        := id_rf_wen
+      exe_reg_exe_fun       := id_exe_fun
+      exe_reg_wb_sel        := id_wb_sel
+      //exe_reg_imm_i_sext    := id_imm_i_sext
+      //exe_reg_imm_s_sext    := id_imm_s_sext
+      exe_reg_imm_b_sext    := id_imm_b_sext
+      //exe_reg_imm_u_shifted := id_imm_u_shifted
+      //exe_reg_imm_z_uext    := id_imm_z_uext
+      exe_reg_csr_addr      := id_csr_addr
+      exe_reg_csr_cmd       := id_csr_cmd
+      exe_reg_mem_wen       := id_mem_wen
+      exe_reg_mem_w         := id_mem_w
+      exe_is_ecall          := id_inst === ECALL
+    }
   }
   //**********************************
   // Execute (EX) Stage
@@ -354,39 +425,38 @@ class Core(startAddress: BigInt = 0) extends Module {
      (exe_reg_rs2_addr === mem_reg_wb_addr))
 
   val exe_op1_data = MuxCase(exe_reg_op1_data, Seq(
+    (exe_reg_op1_sel === OP1_RS1 && exe_reg_rs1_addr === 0.U) -> 0.U(WORD_LEN.W),
     (exe_reg_fw_en &&
      (exe_reg_op1_sel === OP1_RS1) &&
      (exe_reg_rs1_addr === mem_reg_wb_addr)) -> exe_reg_fw_data,
     ((mem_reg_rf_wen_delay === REN_S) &&
      (exe_reg_op1_sel === OP1_RS1) &&
-     (exe_reg_rs1_addr =/= 0.U) &&
      (exe_reg_rs1_addr === mem_wb_addr_delay)) -> mem_wb_data_delay,
     ((wb_reg_rf_wen_delay === REN_S) &&
      (exe_reg_op1_sel === OP1_RS1) &&
-     (exe_reg_rs1_addr =/= 0.U) &&
      (exe_reg_rs1_addr === wb_reg_wb_addr_delay)) -> wb_reg_wb_data_delay,
+    (exe_reg_op1_sel === OP1_RS1) -> regfile(exe_reg_rs1_addr),
   ))
   val exe_op2_data = MuxCase(exe_reg_op2_data, Seq(
+    (exe_reg_op2_sel === OP2_RS2 && exe_reg_rs2_addr === 0.U) -> 0.U(WORD_LEN.W),
     (exe_reg_fw_en &&
      (exe_reg_op2_sel === OP2_RS2) &&
      (exe_reg_rs2_addr === mem_reg_wb_addr)) -> exe_reg_fw_data,
     ((mem_reg_rf_wen_delay === REN_S) &&
      (exe_reg_op2_sel === OP2_RS2) &&
-     (exe_reg_rs2_addr =/= 0.U) &&
      (exe_reg_rs2_addr === mem_wb_addr_delay)) -> mem_wb_data_delay,
     ((wb_reg_rf_wen_delay === REN_S) &&
      (exe_reg_op2_sel === OP2_RS2) &&
-     (exe_reg_rs2_addr =/= 0.U) &&
      (exe_reg_rs2_addr === wb_reg_wb_addr_delay)) -> wb_reg_wb_data_delay,
+    (exe_reg_op2_sel === OP2_RS2) -> regfile(exe_reg_rs2_addr),
   ))
-  val exe_rs2_data = MuxCase(exe_reg_rs2_data, Seq(
+  val exe_rs2_data = MuxCase(regfile(exe_reg_rs2_addr), Seq(
+    (exe_reg_rs2_addr === 0.U) -> 0.U(WORD_LEN.W),
     (exe_reg_fw_en &&
      (exe_reg_rs2_addr === mem_reg_wb_addr)) -> exe_reg_fw_data,
     ((mem_reg_rf_wen_delay === REN_S) &&
-     (exe_reg_rs2_addr =/= 0.U) &&
      (exe_reg_rs2_addr === mem_wb_addr_delay)) -> mem_wb_data_delay,
     ((wb_reg_rf_wen_delay === REN_S) &&
-     (exe_reg_rs2_addr =/= 0.U) &&
      (exe_reg_rs2_addr === wb_reg_wb_addr_delay)) -> wb_reg_wb_data_delay,
   ))
 
@@ -440,7 +510,7 @@ class Core(startAddress: BigInt = 0) extends Module {
     mem_reg_wb_sel     := Mux(exe_stall, WB_X, exe_reg_wb_sel)
     mem_reg_csr_addr   := exe_reg_csr_addr
     mem_reg_csr_cmd    := Mux(exe_stall, CSR_X, exe_reg_csr_cmd)
-    mem_reg_imm_z_uext := exe_reg_imm_z_uext
+    //mem_reg_imm_z_uext := exe_reg_imm_z_uext
     mem_reg_mem_wen    := Mux(exe_stall, MEN_X, exe_reg_mem_wen)
     mem_reg_mem_w      := exe_reg_mem_w
     mem_reg_mem_wstrb  := (MuxCase("b1111".U, Seq(
