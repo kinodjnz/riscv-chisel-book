@@ -5,12 +5,12 @@ import chisel3.util._
 import common.Consts._
 import chisel3.util.experimental.loadMemoryFromFile
 
-class SimTop(memoryPath: String) extends Module {
+class SimTop(memoryPath: String, bpTagInitPath: String) extends Module {
   val io = IO(new Bundle {
     val gp = Output(UInt(WORD_LEN.W))
     val exit = Output(Bool())
   })
-  val core = Module(new Core())
+  val core = Module(new Core(0, bpTagInitPath))
   val memory = Module(new Memory(memoryPath))
   val imem = Mem(16384, UInt(32.W))
   loadMemoryFromFile(imem, memoryPath)

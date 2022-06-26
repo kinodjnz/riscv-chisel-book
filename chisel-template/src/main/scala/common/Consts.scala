@@ -92,4 +92,10 @@ object Consts {
 
   val CSR_ADDR_CYCLE = 0xc00.U(12.W)
   val CSR_ADDR_CYCLEH = 0xc80.U(12.W)
+
+  val BP_HIST_LEN   = 2
+  val BP_INDEX_LEN  = 8
+  val BP_TAG_LEN    = 23
+  val BP_BRANCH_LEN = WORD_LEN
+  val BP_CACHE_LEN  = 256
 }
