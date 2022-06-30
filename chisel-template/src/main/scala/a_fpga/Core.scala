@@ -176,74 +176,7 @@ class Core(startAddress: BigInt = 0, bpTagInitPath: String = null) extends Modul
   //**********************************
   // Branch Prediction Controller
 
-  // val bp_cache = RegInit(VecInit((0 to BP_CACHE_LEN - 1).map(index => Cat(
-  //   1.U(BP_HIST_LEN.W),
-  //   0xdeadbeL.U(BP_TAG_LEN.W),
-  //   (0xdeadbe04L + index).U(BP_BRANCH_LEN.W),
-  // ))))
-  val bp_inst_pc    = Wire(UInt(WORD_LEN.W))
-  val bp_br_hit     = Wire(Bool())
-  val bp_br_pos     = Wire(Bool())
-  val bp_br_addr    = Wire(UInt(WORD_LEN.W))
-
-  val bp_cache_hist = Mem(BP_CACHE_LEN, UInt(BP_HIST_LEN.W))
-  val bp_cache_tag  = Mem(BP_CACHE_LEN, UInt(BP_TAG_LEN.W))
-  val bp_cache_br   = Mem(BP_CACHE_LEN, UInt(BP_BRANCH_LEN.W))
-  if (bpTagInitPath != null ) {
-    loadMemoryFromFile(bp_cache_tag, bpTagInitPath)
-  }
-
-  val bp_reg_rd_hist = RegInit(0.U(BP_HIST_LEN.W))
-  val bp_reg_rd_tag  = RegInit(0.U(BP_TAG_LEN.W))
-  val bp_reg_rd_br   = RegInit(0.U((BP_BRANCH_LEN.W)))
-  val bp_reg_tag     = RegInit(0.U(BP_TAG_LEN.W))
-
-  bp_reg_tag := bp_inst_pc(WORD_LEN-1, BP_INDEX_LEN+1)
-  val bp_index = bp_inst_pc(BP_INDEX_LEN, 1)
-  bp_reg_rd_hist := bp_cache_hist.read(bp_index)
-  bp_reg_rd_tag := bp_cache_tag.read(bp_index)
-  bp_reg_rd_br := bp_cache_br.read(bp_index)
-  val bp_cache_do_br = bp_reg_rd_hist(BP_HIST_LEN-1, BP_HIST_LEN-1).asBool()
-  bp_br_hit := bp_reg_tag === bp_reg_rd_tag
-  bp_br_pos := bp_cache_do_br && bp_br_hit
-  bp_br_addr := Mux(bp_br_pos, bp_reg_rd_br, DontCare)
-
-  val bp_update_en      = Wire(Bool())
-  val bp_update_pc      = Wire(UInt(WORD_LEN.W))
-  val bp_reg_update_pos     = RegInit(false.B)
-  val bp_reg_update_br_addr = RegInit(0.U(WORD_LEN.W))
-
-  val bp_reg_update_rd_hist = RegInit(0.U(BP_HIST_LEN.W))
-  val bp_reg_update_rd_tag  = RegInit(0.U(BP_TAG_LEN.W))
-  val bp_reg_update_rd_br   = RegInit(0.U(BP_BRANCH_LEN.W))
-  val bp_reg_update_write   = RegInit(false.B)
-  val bp_reg_update_tag     = RegInit(0.U((BP_TAG_LEN).W))
-  val bp_reg_update_index   = RegInit(0.U(BP_INDEX_LEN.W))
-  bp_reg_update_write := bp_update_en // TODO en/write競合
-
-  bp_reg_update_tag := bp_update_pc(WORD_LEN-1, BP_INDEX_LEN+1)
-  val bp_update_index = bp_update_pc(BP_INDEX_LEN, 1)
-  bp_reg_update_index := bp_update_index
-  val bp_update_hist = Mux(bp_reg_update_rd_tag === bp_reg_update_tag,
-    MuxCase(0.U(BP_HIST_LEN.W), Seq(
-      (bp_reg_update_pos && bp_reg_update_rd_hist === 3.U)  -> 3.U(BP_HIST_LEN.W),
-      bp_reg_update_pos                                     -> (bp_reg_update_rd_hist + 1.U(BP_HIST_LEN.W)),
-      (!bp_reg_update_pos && bp_reg_update_rd_hist === 0.U) -> 0.U(BP_HIST_LEN.W),
-      !bp_reg_update_pos                                    -> (bp_reg_update_rd_hist - 1.U(BP_HIST_LEN.W)),
-    )),
-    Mux(bp_reg_update_pos, 2.U(BP_HIST_LEN.W), 1.U(BP_HIST_LEN.W)),
-  )
-  val bp_update_next_br_addr = Mux(bp_reg_update_pos, bp_reg_update_br_addr, bp_reg_update_rd_br)
-  when(bp_update_en) {
-    bp_reg_update_rd_hist := bp_cache_hist.read(bp_update_index)
-    bp_reg_update_rd_tag  := bp_cache_tag.read(bp_update_index)
-    bp_reg_update_rd_br   := bp_cache_br.read(bp_update_index)
-  }
-  when(!bp_update_en && bp_reg_update_write) {
-    bp_cache_hist.write(bp_reg_update_index, bp_update_hist)
-    bp_cache_tag.write(bp_reg_update_index, bp_reg_update_tag)
-    bp_cache_br.write(bp_reg_update_index, bp_update_next_br_addr)
-  }
+  val bp = Module(new BranchPredictor(BP_CACHE_LEN, bpTagInitPath))
 
   //**********************************
   // Instruction Fetch (IF) 1 Stage
@@ -266,7 +199,7 @@ class Core(startAddress: BigInt = 0, bpTagInitPath: String = null) extends Modul
   val if1_next_pc = Mux(if1_is_jump, if1_jump_addr, if1_reg_next_pc)
   val if1_next_pc_4 = if1_next_pc + 4.U(WORD_LEN.W)
   if1_reg_next_pc := Mux(id_reg_stall, if1_next_pc, if1_next_pc_4)
-  bp_inst_pc := if1_next_pc
+  bp.io.lu.inst_pc := if1_next_pc
 
   //**********************************
   // IF1/IF2 Register
@@ -302,18 +235,18 @@ class Core(startAddress: BigInt = 0, bpTagInitPath: String = null) extends Modul
   if2_is_bp_pos := Mux(id_reg_stall,
     if2_reg_is_bp_pos,
     //(if2_is_cond_br || if2_is_jal) && (!bp_br_hit || bp_br_pos),
-    (if2_is_bp_br && bp_br_pos) ||
-      (if2_is_cond_br && !bp_br_hit && if2_imm_b_sext(31).asBool()) ||
+    (if2_is_bp_br && bp.io.lu.br_pos) ||
+      (if2_is_cond_br && !bp.io.lu.br_hit && if2_imm_b_sext(31).asBool()) ||
       if2_is_jal,
   )
   if2_reg_is_bp_pos := if2_is_bp_pos
   val if2_cond_br_addr = if2_pc + if2_imm_b_sext
   val if2_jal_addr = if2_pc + if2_imm_j_sext
   if2_bp_addr := MuxCase(DontCare, Seq(
-    id_reg_stall                   -> if2_reg_bp_addr,
-    (if2_is_bp_br && bp_br_pos)    -> bp_br_addr,
-    (!bp_br_hit && if2_is_cond_br) -> if2_cond_br_addr,
-    if2_is_jal                     -> if2_jal_addr,
+    id_reg_stall                         -> if2_reg_bp_addr,
+    (if2_is_bp_br && bp.io.lu.br_pos)    -> bp.io.lu.br_addr,
+    (!bp.io.lu.br_hit && if2_is_cond_br) -> if2_cond_br_addr,
+    if2_is_jal                           -> if2_jal_addr,
   ))
   if2_reg_bp_addr := if2_bp_addr
   
@@ -699,10 +632,10 @@ class Core(startAddress: BigInt = 0, bpTagInitPath: String = null) extends Modul
   ))
   ex2_reg_is_br := ex2_cond_bp_fail || ex2_cond_nbp_fail || ex2_uncond_bp_fail
 
-  bp_update_en := !ex2_stall && (ex2_is_cond_br_inst || ex2_reg_exe_fun === ALU_JALR)
-  bp_update_pc := ex2_reg_pc
-  bp_reg_update_pos := ex2_is_cond_br || ex2_is_uncond_br
-  bp_reg_update_br_addr := MuxCase(DontCare, Seq(
+  bp.io.up.update_en := !ex2_stall && (ex2_is_cond_br_inst || ex2_reg_exe_fun === ALU_JALR)
+  bp.io.up.inst_pc := ex2_reg_pc
+  bp.io.up.br_pos := ex2_is_cond_br || ex2_is_uncond_br
+  bp.io.up.br_addr := MuxCase(DontCare, Seq(
     ex2_is_cond_br   -> ex2_cond_br_target,
     ex2_is_uncond_br -> ex2_uncond_br_target,
   ))
@@ -829,8 +762,8 @@ class Core(startAddress: BigInt = 0, bpTagInitPath: String = null) extends Modul
   //printf(p"if1_reg_pc       : 0x${Hexadecimal(if1_reg_pc)}\n")
   printf(p"if2_reg_pc       : 0x${Hexadecimal(if2_reg_pc)}\n")
   printf(p"if2_inst         : 0x${Hexadecimal(if2_inst)}\n")
-  printf(p"bp_br_hit        : 0x${Hexadecimal(bp_br_hit)}\n")
-  printf(p"bp_br_pos        : 0x${Hexadecimal(bp_br_pos)}\n")
+  printf(p"bp.io.lu.br_hit  : 0x${Hexadecimal(bp.io.lu.br_hit)}\n")
+  printf(p"bp.io.lu.br_pos  : 0x${Hexadecimal(bp.io.lu.br_pos)}\n")
   printf(p"id_reg_pc        : 0x${Hexadecimal(id_reg_pc)}\n")
   printf(p"id_reg_inst      : 0x${Hexadecimal(id_reg_inst)}\n")
   printf(p"id_stall         : 0x${Hexadecimal(id_stall)}\n")
