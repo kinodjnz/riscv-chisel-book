@@ -125,8 +125,12 @@ class Core(startAddress: BigInt = 0, bpTagInitPath: String = null) extends Modul
   val wb_reg_rf_wen         = RegInit(0.U(REN_LEN.W))
   val wb_reg_wb_data        = RegInit(0.U(WORD_LEN.W))
 
-  val if2_is_bp_pos      = Wire(Bool())
-  val if2_bp_addr        = Wire(UInt(WORD_LEN.W))
+  val if2_reg_is_bp_pos  = RegInit(false.B)
+  val if2_reg_bp_addr    = RegInit(0.U(WORD_LEN.W))
+  val if2_is_uncond_br   = Wire(Bool())
+  val if2_uncond_br_addr = Wire(UInt(WORD_LEN.W))
+  val if2_reg_is_uncond_br   = RegInit(false.B)
+  val if2_reg_uncond_br_addr = RegInit(0.U(WORD_LEN.W))
   val id_stall           = Wire(Bool())
   val ex1_stall          = Wire(Bool())
   val ex2_stall          = Wire(Bool())
@@ -187,10 +191,11 @@ class Core(startAddress: BigInt = 0, bpTagInitPath: String = null) extends Modul
   val if1_jump_addr = MuxCase(0.U(WORD_LEN.W), Seq(
     ex2_reg_is_br           -> ex2_reg_br_target,
     (id_reg_inst === ECALL) -> csr_trap_vector,
-    if2_is_bp_pos           -> if2_bp_addr,
+    if2_reg_is_bp_pos       -> if2_reg_bp_addr,
+    if2_reg_is_uncond_br    -> if2_reg_uncond_br_addr,
     if1_reg_first           -> startAddress.U,
   ))
-  val if1_is_jump = ex2_reg_is_br || (id_reg_inst === ECALL) || if2_is_bp_pos || if1_reg_first
+  val if1_is_jump = ex2_reg_is_br || (id_reg_inst === ECALL) || if2_reg_is_bp_pos || if2_reg_is_uncond_br || if1_reg_first
 
   ic_addr_en  := if1_is_jump
   ic_addr     := if1_jump_addr
@@ -209,8 +214,6 @@ class Core(startAddress: BigInt = 0, bpTagInitPath: String = null) extends Modul
 
   val if2_reg_pc   = RegInit(startAddress.U(WORD_LEN.W))
   val if2_reg_inst = RegInit(0.U(WORD_LEN.W))
-  val if2_reg_is_bp_pos = RegInit(false.B)
-  val if2_reg_bp_addr   = RegInit(0.U(WORD_LEN.W))
 
   ic_read_en2 := false.B
   ic_read_en4 := !id_reg_stall
@@ -221,9 +224,11 @@ class Core(startAddress: BigInt = 0, bpTagInitPath: String = null) extends Modul
   if2_reg_pc := if2_pc
   val if2_inst = MuxCase(BUBBLE, Seq(
 	  // 優先順位重要！ジャンプ成立とストールが同時発生した場合、ジャンプ処理を優先
-    ex2_reg_is_br   -> BUBBLE,
-    id_reg_stall    -> if2_reg_inst,
-    ic_reg_read_rdy -> ic_data_out,
+    ex2_reg_is_br     -> BUBBLE,
+    id_reg_stall      -> if2_reg_inst,
+    if2_reg_is_bp_pos -> BUBBLE,
+    if2_reg_is_uncond_br -> BUBBLE,
+    ic_reg_read_rdy   -> ic_data_out,
   ))
   if2_reg_inst := if2_inst
   val if2_is_cond_br = (if2_inst(6, 0) === 0x63.U)
@@ -232,21 +237,28 @@ class Core(startAddress: BigInt = 0, bpTagInitPath: String = null) extends Modul
   val if2_is_bp_br = if2_is_cond_br || if2_is_jalr
   val if2_imm_b_sext = Cat(Fill(20, if2_inst(31)), if2_inst(7), if2_inst(30, 25), if2_inst(11, 8), 0.U(1.U))
   val if2_imm_j_sext = Cat(Fill(12, if2_inst(31)), if2_inst(19, 12), if2_inst(20), if2_inst(30, 21), 0.U(1.U))
-  if2_is_bp_pos := Mux(id_reg_stall,
+  if2_is_uncond_br := Mux(id_reg_stall,
+    if2_reg_is_uncond_br,
+    if2_is_jal,
+  )
+  if2_reg_is_uncond_br := if2_is_uncond_br
+  val if2_jal_addr = if2_pc + if2_imm_j_sext
+  if2_uncond_br_addr := MuxCase(DontCare, Seq(
+    id_reg_stall -> if2_reg_uncond_br_addr,
+    if2_is_jal   -> if2_jal_addr,
+  ))
+  if2_reg_uncond_br_addr := if2_uncond_br_addr
+  val if2_is_bp_pos = Mux(id_reg_stall,
     if2_reg_is_bp_pos,
-    //(if2_is_cond_br || if2_is_jal) && (!bp_br_hit || bp_br_pos),
     (if2_is_bp_br && bp.io.lu.br_pos) ||
-      (if2_is_cond_br && !bp.io.lu.br_hit && if2_imm_b_sext(31).asBool()) ||
-      if2_is_jal,
+      (if2_is_cond_br && !bp.io.lu.br_hit && if2_imm_b_sext(31).asBool()),
   )
   if2_reg_is_bp_pos := if2_is_bp_pos
   val if2_cond_br_addr = if2_pc + if2_imm_b_sext
-  val if2_jal_addr = if2_pc + if2_imm_j_sext
-  if2_bp_addr := MuxCase(DontCare, Seq(
+  val if2_bp_addr = MuxCase(DontCare, Seq(
     id_reg_stall                         -> if2_reg_bp_addr,
     (if2_is_bp_br && bp.io.lu.br_pos)    -> bp.io.lu.br_addr,
     (!bp.io.lu.br_hit && if2_is_cond_br) -> if2_cond_br_addr,
-    if2_is_jal                           -> if2_jal_addr,
   ))
   if2_reg_bp_addr := if2_bp_addr
   
@@ -613,7 +625,7 @@ class Core(startAddress: BigInt = 0, bpTagInitPath: String = null) extends Modul
     (ex2_reg_exe_fun === BR_BLTU) ||
     (ex2_reg_exe_fun === BR_BGEU)
   )
-  val ex2_is_uncond_br = ex2_reg_wb_sel === WB_PC
+  val ex2_is_uncond_br = ex2_reg_exe_fun === ALU_JALR
   val ex2_cond_br_target = ex2_reg_pc + ex2_reg_imm_b_sext
   val ex2_uncond_br_target = ex2_alu_out
   val ex2_cond_bp_fail = !ex2_stall && (
@@ -777,6 +789,7 @@ class Core(startAddress: BigInt = 0, bpTagInitPath: String = null) extends Modul
   printf(p"ex2_reg_op2_data : 0x${Hexadecimal(ex2_reg_op2_data)}\n")
   printf(p"ex2_stall        : 0x${Hexadecimal(ex2_stall)}\n")
   printf(p"ex2_alu_out      : 0x${Hexadecimal(ex2_alu_out)}\n")
+  printf(p"ex2_reg_exe_fun  : 0x${Hexadecimal(ex2_reg_exe_fun)}\n")
   printf(p"ex2_reg_wb_sel   : 0x${Hexadecimal(ex2_reg_wb_sel)}\n")
   printf(p"ex2_reg_is_bp_pos : 0x${Hexadecimal(ex2_reg_is_bp_pos)}\n")
   printf(p"ex2_reg_bp_addr  : 0x${Hexadecimal(ex2_reg_bp_addr)}\n")
