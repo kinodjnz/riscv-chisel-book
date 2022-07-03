@@ -57,6 +57,11 @@ class BranchPredictor(tableLen: Int, bpTagInitPath: String = null) extends Modul
   val bp_reg_update_write   = RegInit(false.B)
   val bp_reg_update_tag     = RegInit(0.U((BP_TAG_LEN).W))
   val bp_reg_update_index   = RegInit(0.U(BP_INDEX_LEN.W))
+  val bp_reg_write_en       = RegInit(false.B)
+  val bp_reg_write_index    = RegInit(0.U(BP_INDEX_LEN.W))
+  val bp_reg_write_hist     = RegInit(0.U(BP_HIST_LEN.W))
+  val bp_reg_write_tag      = RegInit(0.U((BP_TAG_LEN).W))
+  val bp_reg_write_br_addr  = RegInit(0.U(WORD_LEN.W))
   bp_reg_update_write := io.up.update_en // TODO en/write競合
   bp_reg_update_pos := io.up.br_pos
   bp_reg_update_br_addr := io.up.br_addr
@@ -74,14 +79,20 @@ class BranchPredictor(tableLen: Int, bpTagInitPath: String = null) extends Modul
     Mux(bp_reg_update_pos, 2.U(BP_HIST_LEN.W), 1.U(BP_HIST_LEN.W)),
   )
   val bp_update_next_br_addr = Mux(bp_reg_update_pos, bp_reg_update_br_addr, bp_reg_update_rd_br)
+  bp_reg_write_en      := bp_reg_update_write
+  bp_reg_write_index   := bp_reg_update_index
+  bp_reg_write_hist    := bp_update_hist
+  bp_reg_write_tag     := bp_reg_update_tag
+  bp_reg_write_br_addr := bp_update_next_br_addr
+  val bp_update_rw_index = Mux(io.up.update_en, bp_update_index, bp_reg_write_index)
   when(io.up.update_en) {
-    bp_reg_update_rd_hist := bp_cache_hist.read(bp_update_index)
-    bp_reg_update_rd_tag  := bp_cache_tag.read(bp_update_index)
-    bp_reg_update_rd_br   := bp_cache_br.read(bp_update_index)
+    bp_reg_update_rd_hist := bp_cache_hist.read(bp_update_rw_index)
+    bp_reg_update_rd_tag  := bp_cache_tag.read(bp_update_rw_index)
+    bp_reg_update_rd_br   := bp_cache_br.read(bp_update_rw_index)
   }
-  when(!io.up.update_en && bp_reg_update_write) {
-    bp_cache_hist.write(bp_reg_update_index, bp_update_hist)
-    bp_cache_tag.write(bp_reg_update_index, bp_reg_update_tag)
-    bp_cache_br.write(bp_reg_update_index, bp_update_next_br_addr)
+  when(!io.up.update_en && bp_reg_write_en) {
+    bp_cache_hist.write(bp_update_rw_index, bp_reg_write_hist)
+    bp_cache_tag.write(bp_update_rw_index, bp_reg_write_tag)
+    bp_cache_br.write(bp_update_rw_index, bp_reg_write_br_addr)
   }
 }
