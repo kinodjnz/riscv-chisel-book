@@ -61,6 +61,7 @@ object Consts {
   val OP2_C_IMI16 = 8.U(OP2_LEN.W)
   val OP2_C_IMI   = 9.U(OP2_LEN.W)
   val OP2_C_IMLS  = 10.U(OP2_LEN.W)
+  val OP2_C_IMIU  = 11.U(OP2_LEN.W)
 
   val MEN_LEN = 2
   val MEN_X   = 0.U(MEN_LEN.W)
@@ -85,7 +86,8 @@ object Consts {
   val WBA_LEN = 2
   val WBA_RD  = 0.U(WBA_LEN.W)
   val WBA_C   = 1.U(WBA_LEN.W)
-  val WBA_CP  = 2.U(WBA_LEN.W)
+  val WBA_CP1 = 2.U(WBA_LEN.W)
+  val WBA_CP2 = 3.U(WBA_LEN.W)
 
   val MW_LEN = 3
   val MW_X   = 0.U(MW_LEN.W)
