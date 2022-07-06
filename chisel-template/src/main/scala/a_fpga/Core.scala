@@ -135,6 +135,7 @@ class Core(startAddress: BigInt = 0, bpTagInitPath: String = null) extends Modul
   val mem_reg_alu_out       = RegInit(0.U(WORD_LEN.W))
   val mem_reg_mem_w         = RegInit(0.U(WORD_LEN.W))
   val mem_reg_mem_wstrb     = RegInit(0.U((WORD_LEN/8).W))
+  val mem_reg_is_half       = RegInit(false.B)
   // MEM/WB State
   val wb_reg_wb_addr        = RegInit(0.U(ADDR_LEN.W))
   val wb_reg_rf_wen         = RegInit(0.U(REN_LEN.W))
@@ -433,6 +434,8 @@ class Core(startAddress: BigInt = 0, bpTagInitPath: String = null) extends Modul
       C_J        -> List(ALU_ADD  , OP1_PC    , OP2_C_IMJ  , MEN_X, REN_S, WB_X  , WBA_C  , CSR_X, MW_X),
       C_BEQZ     -> List(BR_BEQ   , OP1_C_RS1P, OP2_Z      , MEN_X, REN_X, WB_X  , WBA_C  , CSR_X, MW_X),
       C_BNEZ     -> List(BR_BNE   , OP1_C_RS1P, OP2_Z      , MEN_X, REN_X, WB_X  , WBA_C  , CSR_X, MW_X),
+      C_JR       -> List(ALU_JALR , OP1_C_RS1 , OP2_Z      , MEN_X, REN_S, WB_X  , WBA_C  , CSR_X, MW_X),
+      C_JALR     -> List(ALU_JALR , OP1_C_RS1 , OP2_Z      , MEN_X, REN_S, WB_PC , WBA_RA , CSR_X, MW_X),
 		)
 	)
   val List(id_exe_fun, id_op1_sel, id_op2_sel, id_mem_wen, id_rf_wen, id_wb_sel, id_wba, id_csr_cmd, id_mem_w) = csignals
@@ -756,7 +759,10 @@ class Core(startAddress: BigInt = 0, bpTagInitPath: String = null) extends Modul
   val ex2_uncond_br_target = ex2_alu_out
 
   ex1_fw_data := MuxCase(ex2_alu_out, Seq(
-    (ex2_reg_wb_sel === WB_PC) -> (ex2_reg_pc + 4.U(WORD_LEN.W)),
+    (ex2_reg_wb_sel === WB_PC) -> Mux(ex2_reg_is_half,
+      ex2_reg_pc + 2.U(WORD_LEN.W),
+      ex2_reg_pc + 4.U(WORD_LEN.W)
+    ),
   ))
   ex2_reg_fw_data := ex1_fw_data
   when(!mem_stall) {
@@ -827,6 +833,7 @@ class Core(startAddress: BigInt = 0, bpTagInitPath: String = null) extends Modul
       (ex2_reg_mem_w === MW_H) -> "b0011".U,
       (ex2_reg_mem_w === MW_W) -> "b1111".U,
     )) << (ex2_alu_out(1, 0)))(3, 0)
+    mem_reg_is_half    := ex2_reg_is_half
   }
 
   //**********************************
@@ -884,7 +891,7 @@ class Core(startAddress: BigInt = 0, bpTagInitPath: String = null) extends Modul
 
   mem_wb_data := MuxCase(mem_reg_alu_out, Seq(
     (mem_wb_sel === WB_MEM) -> mem_wb_data_load,
-    (mem_wb_sel === WB_PC)  -> (mem_reg_pc + 4.U(WORD_LEN.W)),
+    (mem_wb_sel === WB_PC)  -> Mux(mem_reg_is_half, mem_reg_pc + 2.U(WORD_LEN.W), mem_reg_pc + 4.U(WORD_LEN.W)),
     (mem_wb_sel === WB_CSR) -> csr_rdata
   ))
 
