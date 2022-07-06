@@ -44,6 +44,7 @@ object Consts {
   val OP1_RS1    = 0.U(OP1_LEN.W)
   val OP1_PC     = 1.U(OP1_LEN.W)
   val OP1_X      = 2.U(OP1_LEN.W)
+  val OP1_Z      = 2.U(OP1_LEN.W)
   val OP1_IMZ    = 3.U(OP1_LEN.W)
   val OP1_C_RS1  = 4.U(OP1_LEN.W)
   val OP1_C_SP   = 5.U(OP1_LEN.W)
