@@ -362,7 +362,8 @@ class Core(startAddress: BigInt = 0, bpTagInitPath: String = null) extends Modul
   val id_c_imm_i = Cat(Fill(27, id_inst(12)), id_inst(6, 2))
   val id_c_imm_iu = Cat(Fill(15, id_inst(12)), id_inst(6, 2), Fill(12, 0.U))
   val id_c_imm_i16 = Cat(Fill(23, id_inst(12)), id_inst(4, 3), id_inst(5), id_inst(2), id_inst(6), Fill(4, 0.U))
-  val id_c_imm_ss = id_inst(12, 7) // TODO
+  val id_c_imm_sl = Cat(Fill(24, 0.U), id_inst(3, 2), id_inst(12), id_inst(6, 4), Fill(2, 0.U))
+  val id_c_imm_ss = Cat(Fill(24, 0.U), id_inst(8, 7), id_inst(12, 9), Fill(2, 0.U))
   val id_c_imm_iw = Cat(Fill(22, 0.U), id_inst(10, 7), id_inst(12, 11), id_inst(5), id_inst(6), Fill(2, 0.U))
   val id_c_imm_ls = Cat(Fill(25, 0.U), id_inst(5), id_inst(12, 10), id_inst(6), Fill(2, 0.U))
   val id_c_imm_b = Cat(Fill(24, id_inst(12)), id_inst(6, 5), id_inst(2), id_inst(11, 10), id_inst(4, 3), 0.U(1.W))
@@ -436,6 +437,9 @@ class Core(startAddress: BigInt = 0, bpTagInitPath: String = null) extends Modul
       C_BNEZ     -> List(BR_BNE   , OP1_C_RS1P, OP2_Z      , MEN_X, REN_X, WB_X  , WBA_C  , CSR_X, MW_X),
       C_JR       -> List(ALU_JALR , OP1_C_RS1 , OP2_Z      , MEN_X, REN_S, WB_X  , WBA_C  , CSR_X, MW_X),
       C_JALR     -> List(ALU_JALR , OP1_C_RS1 , OP2_Z      , MEN_X, REN_S, WB_PC , WBA_RA , CSR_X, MW_X),
+      C_JAL      -> List(ALU_ADD  , OP1_PC    , OP2_C_IMJ  , MEN_X, REN_S, WB_PC , WBA_RA , CSR_X, MW_X),
+      C_LWSP     -> List(ALU_ADD  , OP1_C_SP  , OP2_C_IMSL , MEN_X, REN_S, WB_MEM, WBA_C  , CSR_X, MW_W),
+      C_SWSP     -> List(ALU_ADD  , OP1_C_SP  , OP2_C_IMSS , MEN_S, REN_X, WB_X  , WBA_C  , CSR_X, MW_W),
 		)
 	)
   val List(id_exe_fun, id_op1_sel, id_op2_sel, id_mem_wen, id_rf_wen, id_wb_sel, id_wba, id_csr_cmd, id_mem_w) = csignals
@@ -469,6 +473,8 @@ class Core(startAddress: BigInt = 0, bpTagInitPath: String = null) extends Modul
     (id_op2_sel === OP2_C_IMLS)  -> id_c_imm_ls,
     (id_op2_sel === OP2_C_IMIU)  -> id_c_imm_iu,
     (id_op2_sel === OP2_C_IMJ)   -> id_c_imm_j,
+    (id_op2_sel === OP2_C_IMSL)  -> id_c_imm_sl,
+    (id_op2_sel === OP2_C_IMSS)  -> id_c_imm_ss,
   ))
 
   val id_csr_addr = Mux(id_csr_cmd === CSR_E, 0x342.U(CSR_ADDR_LEN.W), id_inst(31,20))
@@ -491,9 +497,11 @@ class Core(startAddress: BigInt = 0, bpTagInitPath: String = null) extends Modul
     (id_op2_sel === OP2_C_RS2)  -> id_c_rs2_addr,
     (id_op2_sel === OP2_C_RS2P) -> id_c_rs2p_addr,
     (id_op2_sel === OP2_C_IMLS) -> id_c_rs2p_addr,
+    (id_op2_sel === OP2_C_IMSS) -> id_c_rs2_addr,
   ))
   val id_m_rs2_data = MuxCase(id_rs2_data, Seq(
     (id_op2_sel === OP2_C_IMLS) -> id_c_rs2p_data,
+    (id_op2_sel === OP2_C_IMSS) -> id_c_rs2_data,
   ))
   val id_m_imm_b_sext = MuxCase(id_imm_b_sext, Seq(
     (id_wba === WBA_C) -> id_c_imm_b,
