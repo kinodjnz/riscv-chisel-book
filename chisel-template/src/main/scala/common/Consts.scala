@@ -40,13 +40,14 @@ object Consts {
   val VSET        = 20.U(EXE_FUN_LEN.W)
   val ALU_PCNT    = 21.U(EXE_FUN_LEN.W)
 
-  val OP1_LEN   = 3
-  val OP1_RS1   = 0.U(OP1_LEN.W)
-  val OP1_PC    = 1.U(OP1_LEN.W)
-  val OP1_X     = 2.U(OP1_LEN.W)
-  val OP1_IMZ   = 3.U(OP1_LEN.W)
-  val OP1_C_RS1 = 4.U(OP1_LEN.W)
-  val OP1_C_SP  = 5.U(OP1_LEN.W)
+  val OP1_LEN    = 3
+  val OP1_RS1    = 0.U(OP1_LEN.W)
+  val OP1_PC     = 1.U(OP1_LEN.W)
+  val OP1_X      = 2.U(OP1_LEN.W)
+  val OP1_IMZ    = 3.U(OP1_LEN.W)
+  val OP1_C_RS1  = 4.U(OP1_LEN.W)
+  val OP1_C_SP   = 5.U(OP1_LEN.W)
+  val OP1_C_RS1P = 6.U(OP1_LEN.W)
 
   val OP2_LEN     = 4
   val OP2_X       = 0.U(OP2_LEN.W)
@@ -59,6 +60,7 @@ object Consts {
   val OP2_C_IMIW  = 7.U(OP2_LEN.W)
   val OP2_C_IMI16 = 8.U(OP2_LEN.W)
   val OP2_C_IMI   = 9.U(OP2_LEN.W)
+  val OP2_C_IMLS  = 10.U(OP2_LEN.W)
 
   val MEN_LEN = 2
   val MEN_X   = 0.U(MEN_LEN.W)

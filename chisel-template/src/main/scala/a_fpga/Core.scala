@@ -326,8 +326,8 @@ class Core(startAddress: BigInt = 0, bpTagInitPath: String = null) extends Modul
   val id_c_rs2_data = MuxCase(regfile(id_c_rs2_addr), Seq(
     (id_c_rs2_addr === 0.U) -> 0.U(WORD_LEN.W),
   ))
-  val id_c_id1p_data = regfile(id_c_rs1p_addr)
-  val id_c_id2p_data = regfile(id_c_rs2p_addr)
+  val id_c_rs1p_data = regfile(id_c_rs1p_addr)
+  val id_c_rs2p_data = regfile(id_c_rs2p_addr)
   val id_sp_data = regfile(2.U(ADDR_LEN.W))
 
   val id_imm_i = id_inst(31, 20)
@@ -347,7 +347,7 @@ class Core(startAddress: BigInt = 0, bpTagInitPath: String = null) extends Modul
   val id_c_imm_i16 = Cat(Fill(23, id_inst(12)), id_inst(4, 3), id_inst(5), id_inst(2), id_inst(6), Fill(4, 0.U)) // ok
   val id_c_imm_ss = id_inst(12, 7) // TODO
   val id_c_imm_iw = Cat(Fill(22, 0.U), id_inst(10, 7), id_inst(12, 11), id_inst(5), id_inst(6), Fill(2, 0.U)) // ok
-  val id_c_imm_ls = Cat(id_inst(12, 10), id_inst(6, 5)) // TODO
+  val id_c_imm_ls = Cat(Fill(25, 0.U), id_inst(5), id_inst(12, 10), id_inst(6), Fill(2, 0.U)) // ok
   val id_c_imm_b = Cat(id_inst(12, 10), id_inst(6, 2)) // TODO
   val id_c_imm_j = id_inst(12, 2) // TODO
 
@@ -398,10 +398,12 @@ class Core(startAddress: BigInt = 0, bpTagInitPath: String = null) extends Modul
       CSRRC -> List(ALU_COPY1, OP1_RS1, OP2_X  , MEN_X, REN_S, WB_CSR, WBA_RD, CSR_C, MW_X),
       CSRRCI-> List(ALU_COPY1, OP1_IMZ, OP2_X  , MEN_X, REN_S, WB_CSR, WBA_RD, CSR_C, MW_X),
       ECALL -> List(ALU_X    , OP1_X  , OP2_X  , MEN_X, REN_X, WB_X  , WBA_RD, CSR_E, MW_X),
-      C_ILL      -> List(ALU_X    , OP1_C_RS1, OP2_C_RS2  , MEN_X, REN_X, WB_X  , WBA_C , CSR_X, MW_X),
-      C_ADDI4SPN -> List(ALU_ADD  , OP1_C_SP , OP2_C_IMIW , MEN_X, REN_S, WB_ALU, WBA_CP, CSR_X, MW_X),
-      C_ADDI16SP -> List(ALU_ADD  , OP1_C_RS1, OP2_C_IMI16, MEN_X, REN_S, WB_ALU, WBA_C , CSR_X, MW_X),
-      C_ADDI     -> List(ALU_ADD  , OP1_C_RS1, OP2_C_IMI  , MEN_X, REN_S, WB_ALU, WBA_C , CSR_X, MW_X),
+      C_ILL      -> List(ALU_X    , OP1_C_RS1 , OP2_C_RS2  , MEN_X, REN_X, WB_X  , WBA_C , CSR_X, MW_X),
+      C_ADDI4SPN -> List(ALU_ADD  , OP1_C_SP  , OP2_C_IMIW , MEN_X, REN_S, WB_ALU, WBA_CP, CSR_X, MW_X),
+      C_ADDI16SP -> List(ALU_ADD  , OP1_C_RS1 , OP2_C_IMI16, MEN_X, REN_S, WB_ALU, WBA_C , CSR_X, MW_X),
+      C_ADDI     -> List(ALU_ADD  , OP1_C_RS1 , OP2_C_IMI  , MEN_X, REN_S, WB_ALU, WBA_C , CSR_X, MW_X),
+      C_LW       -> List(ALU_ADD  , OP1_C_RS1P, OP2_C_IMLS , MEN_X, REN_S, WB_MEM, WBA_CP, CSR_X, MW_W),
+      C_SW       -> List(ALU_ADD  , OP1_C_RS1P, OP2_C_IMLS , MEN_S, REN_X, WB_X  , WBA_C , CSR_X, MW_W),
 		)
 	)
   val List(id_exe_fun, id_op1_sel, id_op2_sel, id_mem_wen, id_rf_wen, id_wb_sel, id_wba, id_csr_cmd, id_mem_w) = csignals
@@ -412,11 +414,12 @@ class Core(startAddress: BigInt = 0, bpTagInitPath: String = null) extends Modul
   ))
 
   val id_op1_data = MuxCase(0.U(WORD_LEN.W), Seq(
-    (id_op1_sel === OP1_RS1)   -> id_rs1_data,
-    (id_op1_sel === OP1_PC)    -> id_reg_pc,
-    (id_op1_sel === OP1_IMZ)   -> id_imm_z_uext,
-    (id_op1_sel === OP1_C_RS1) -> id_c_rs1_data,
-    (id_op1_sel === OP1_C_SP)  -> id_sp_data,
+    (id_op1_sel === OP1_RS1)    -> id_rs1_data,
+    (id_op1_sel === OP1_PC)     -> id_reg_pc,
+    (id_op1_sel === OP1_IMZ)    -> id_imm_z_uext,
+    (id_op1_sel === OP1_C_RS1)  -> id_c_rs1_data,
+    (id_op1_sel === OP1_C_SP)   -> id_sp_data,
+    (id_op1_sel === OP1_C_RS1P) -> id_c_rs1p_data,
   ))
   val id_op2_data = MuxCase(0.U(WORD_LEN.W), Seq(
     (id_op2_sel === OP2_RS2)     -> id_rs2_data,
@@ -428,23 +431,30 @@ class Core(startAddress: BigInt = 0, bpTagInitPath: String = null) extends Modul
     (id_op2_sel === OP2_C_IMIW)  -> id_c_imm_iw,
     (id_op2_sel === OP2_C_IMI16) -> id_c_imm_i16,
     (id_op2_sel === OP2_C_IMI)   -> id_c_imm_i,
+    (id_op2_sel === OP2_C_IMLS)  -> id_c_imm_ls,
   ))
 
   val id_csr_addr = Mux(id_csr_cmd === CSR_E, 0x342.U(CSR_ADDR_LEN.W), id_inst(31,20))
 
   val id_m_op1_sel = MuxCase(id_op1_sel, Seq(
-    (id_op1_sel === OP1_C_RS1) -> OP1_RS1,
-    (id_op1_sel === OP1_C_SP)  -> OP1_RS1,
+    (id_op1_sel === OP1_C_RS1)  -> OP1_RS1,
+    (id_op1_sel === OP1_C_SP)   -> OP1_RS1,
+    (id_op1_sel === OP1_C_RS1P) -> OP1_RS1,
   ))
   val id_m_op2_sel = MuxCase(id_op2_sel, Seq(
     (id_op2_sel === OP2_C_RS2) -> OP2_RS2,
   ))
   val id_m_rs1_addr = MuxCase(id_rs1_addr, Seq(
-    (id_op1_sel === OP1_C_RS1) -> id_c_rs1_addr,
-    (id_op1_sel === OP1_C_SP)  -> 2.U(ADDR_LEN.W),
+    (id_op1_sel === OP1_C_RS1)  -> id_c_rs1_addr,
+    (id_op1_sel === OP1_C_SP)   -> 2.U(ADDR_LEN.W),
+    (id_op1_sel === OP1_C_RS1P) -> id_c_rs1p_addr,
   ))
   val id_m_rs2_addr = MuxCase(id_rs2_addr, Seq(
-    (id_op2_sel === OP2_C_RS2) -> id_c_rs2_addr,
+    (id_op2_sel === OP2_C_RS2)  -> id_c_rs2_addr,
+    (id_op2_sel === OP2_C_IMLS) -> id_c_rs2p_addr,
+  ))
+  val id_m_rs2_data = MuxCase(id_rs2_data, Seq(
+    (id_op2_sel === OP2_C_IMLS) -> id_c_rs2p_data,
   ))
 
   val id_reg_pc_delay         = RegInit(0.U(WORD_LEN.W))
@@ -480,7 +490,7 @@ class Core(startAddress: BigInt = 0, bpTagInitPath: String = null) extends Modul
     id_reg_rs2_addr_delay   := id_m_rs2_addr
     id_reg_op1_data_delay   := id_op1_data
     id_reg_op2_data_delay   := id_op2_data
-    id_reg_rs2_data_delay   := id_rs2_data
+    id_reg_rs2_data_delay   := id_m_rs2_data
     id_reg_wb_addr_delay    := id_wb_addr
     id_reg_rf_wen_delay     := id_rf_wen
     id_reg_exe_fun_delay    := id_exe_fun
@@ -536,7 +546,7 @@ class Core(startAddress: BigInt = 0, bpTagInitPath: String = null) extends Modul
       ex1_reg_rs2_addr      := id_m_rs2_addr
       ex1_reg_op1_data      := id_op1_data
       ex1_reg_op2_data      := id_op2_data
-      ex1_reg_rs2_data      := id_rs2_data
+      ex1_reg_rs2_data      := id_m_rs2_data
       ex1_reg_wb_addr       := id_wb_addr
       ex1_reg_rf_wen        := id_rf_wen
       ex1_reg_exe_fun       := id_exe_fun
@@ -579,10 +589,10 @@ class Core(startAddress: BigInt = 0, bpTagInitPath: String = null) extends Modul
      (ex1_reg_op1_sel === OP1_RS1) &&
      (ex1_reg_rs1_addr === mem_reg_wb_addr)) ||
     (ex1_reg_hazard &&
-     (ex1_reg_op2_sel === OP2_RS2) &&
+     (ex1_reg_op2_sel === OP2_RS2 || ex1_reg_mem_wen === MEN_S) &&
      (ex1_reg_rs2_addr === ex2_reg_wb_addr)) ||
     (ex2_reg_hazard &&
-     (ex1_reg_op2_sel === OP2_RS2) &&
+     (ex1_reg_op2_sel === OP2_RS2 || ex1_reg_mem_wen === MEN_S) &&
      (ex1_reg_rs2_addr === mem_reg_wb_addr))
 
   val ex1_op1_data = MuxCase(ex1_reg_op1_data, Seq(
@@ -629,9 +639,15 @@ class Core(startAddress: BigInt = 0, bpTagInitPath: String = null) extends Modul
      (ex1_reg_rs2_addr === wb_reg_wb_addr_delay)) -> wb_reg_wb_data_delay,
   ))
 
+  // when(ex1_stall || mem_stall) {
+  //   ex1_reg_op1_data := ex1_op1_data
+  //   ex1_reg_op2_data := ex1_op2_data
+  //   ex1_reg_rs2_data := ex1_rs2_data
+  // }
+
   when(!mem_stall) {
     val ex1_hazard = (ex1_reg_rf_wen === REN_S) && (ex1_reg_wb_addr =/= 0.U) && !ex3_reg_is_br
-    ex1_reg_fw_en := ex1_hazard && (ex1_reg_wb_sel =/= WB_MEM) && (ex1_reg_wb_sel =/= WB_CSR)
+    ex1_reg_fw_en := !ex1_stall && ex1_hazard && (ex1_reg_wb_sel =/= WB_MEM) && (ex1_reg_wb_sel =/= WB_CSR)
     ex1_reg_hazard := ex1_hazard && ((ex1_reg_wb_sel === WB_MEM) || (ex1_reg_wb_sel === WB_CSR))
   }
 
@@ -876,6 +892,10 @@ class Core(startAddress: BigInt = 0, bpTagInitPath: String = null) extends Modul
   printf(p"id_wb_addr       : 0x${Hexadecimal(id_wb_addr)}\n")
   printf(p"ex1_reg_pc       : 0x${Hexadecimal(ex1_reg_pc)}\n")
   printf(p"ex1_stall        : 0x${Hexadecimal(ex1_stall)}\n")
+  printf(p"ex1_op1_data     : 0x${Hexadecimal(ex1_op1_data)}\n")
+  printf(p"ex1_op2_data     : 0x${Hexadecimal(ex1_op2_data)}\n")
+  // printf(p"ex1_reg_op1_sel   : 0x${Hexadecimal(ex1_reg_op1_sel)}\n")
+  // printf(p"ex1_reg_rs1_addr  : 0x${Hexadecimal(ex1_reg_rs1_addr)}\n")
   printf(p"ex2_reg_pc       : 0x${Hexadecimal(ex2_reg_pc)}\n")
   printf(p"ex2_reg_op1_data : 0x${Hexadecimal(ex2_reg_op1_data)}\n")
   printf(p"ex2_reg_op2_data : 0x${Hexadecimal(ex2_reg_op2_data)}\n")
@@ -892,6 +912,9 @@ class Core(startAddress: BigInt = 0, bpTagInitPath: String = null) extends Modul
   printf(p"mem_wb_data      : 0x${Hexadecimal(mem_wb_data)}\n")
   printf(p"mem_reg_mem_w    : 0x${Hexadecimal(mem_reg_mem_w)}\n")
   printf(p"mem_reg_wb_addr  : 0x${Hexadecimal(mem_reg_wb_addr)}\n")
+  // printf(p"mem_reg_rf_wen_delay : 0x${Hexadecimal(mem_reg_rf_wen_delay)}\n")
+  // printf(p"mem_wb_addr_delay : 0x${Hexadecimal(mem_wb_addr_delay)}\n")
+  // printf(p"mem_wb_data_delay : 0x${Hexadecimal(mem_wb_data_delay)}\n")
   printf(p"wb_reg_wb_addr   : 0x${Hexadecimal(wb_reg_wb_addr)}\n")
   printf(p"wb_reg_wb_data   : 0x${Hexadecimal(wb_reg_wb_data)}\n")
   printf(p"cycle_counter(${ex2_reg_is_ecall}) : ${io.debug_signal.cycle_counter}\n")
