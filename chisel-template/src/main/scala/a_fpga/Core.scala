@@ -431,6 +431,8 @@ class Core(startAddress: BigInt = 0, bpTagInitPath: String = null) extends Modul
       C_AND      -> List(ALU_AND  , OP1_C_RS1P, OP2_C_RS2P , MEN_X, REN_S, WB_ALU, WBA_CP1, CSR_X, MW_X),
       C_SLLI     -> List(ALU_SLL  , OP1_C_RS1 , OP2_C_IMI  , MEN_X, REN_S, WB_ALU, WBA_C  , CSR_X, MW_X),
       C_J        -> List(ALU_ADD  , OP1_PC    , OP2_C_IMJ  , MEN_X, REN_S, WB_X  , WBA_C  , CSR_X, MW_X),
+      C_BEQZ     -> List(BR_BEQ   , OP1_C_RS1P, OP2_Z      , MEN_X, REN_X, WB_X  , WBA_C  , CSR_X, MW_X),
+      C_BNEZ     -> List(BR_BNE   , OP1_C_RS1P, OP2_Z      , MEN_X, REN_X, WB_X  , WBA_C  , CSR_X, MW_X),
 		)
 	)
   val List(id_exe_fun, id_op1_sel, id_op2_sel, id_mem_wen, id_rf_wen, id_wb_sel, id_wba, id_csr_cmd, id_mem_w) = csignals
@@ -490,6 +492,9 @@ class Core(startAddress: BigInt = 0, bpTagInitPath: String = null) extends Modul
   val id_m_rs2_data = MuxCase(id_rs2_data, Seq(
     (id_op2_sel === OP2_C_IMLS) -> id_c_rs2p_data,
   ))
+  val id_m_imm_b_sext = MuxCase(id_imm_b_sext, Seq(
+    (id_wba === WBA_C) -> id_c_imm_b,
+  ))
 
   val id_reg_pc_delay         = RegInit(0.U(WORD_LEN.W))
   val id_reg_wb_addr_delay    = RegInit(0.U(ADDR_LEN.W))
@@ -532,7 +537,7 @@ class Core(startAddress: BigInt = 0, bpTagInitPath: String = null) extends Modul
     id_reg_wb_sel_delay     := id_wb_sel
     //id_reg_imm_i_sext     := id_imm_i_sext
     //id_reg_imm_s_sext     := id_imm_s_sext
-    id_reg_imm_b_sext_delay := id_imm_b_sext
+    id_reg_imm_b_sext_delay := id_m_imm_b_sext
     //id_reg_imm_u_shifted  := id_imm_u_shifted
     //id_reg_imm_z_uext     := id_imm_z_uext
     id_reg_csr_addr_delay   := id_csr_addr
@@ -590,7 +595,7 @@ class Core(startAddress: BigInt = 0, bpTagInitPath: String = null) extends Modul
       ex1_reg_wb_sel        := id_wb_sel
       //ex1_reg_imm_i_sext    := id_imm_i_sext
       //ex1_reg_imm_s_sext    := id_imm_s_sext
-      ex1_reg_imm_b_sext    := id_imm_b_sext
+      ex1_reg_imm_b_sext    := id_m_imm_b_sext
       //ex1_reg_imm_u_shifted := id_imm_u_shifted
       //ex1_reg_imm_z_uext    := id_imm_z_uext
       ex1_reg_csr_addr      := id_csr_addr
