@@ -404,6 +404,7 @@ class Core(startAddress: BigInt = 0, bpTagInitPath: String = null) extends Modul
       C_ADDI     -> List(ALU_ADD  , OP1_C_RS1 , OP2_C_IMI  , MEN_X, REN_S, WB_ALU, WBA_C , CSR_X, MW_X),
       C_LW       -> List(ALU_ADD  , OP1_C_RS1P, OP2_C_IMLS , MEN_X, REN_S, WB_MEM, WBA_CP, CSR_X, MW_W),
       C_SW       -> List(ALU_ADD  , OP1_C_RS1P, OP2_C_IMLS , MEN_S, REN_X, WB_X  , WBA_C , CSR_X, MW_W),
+      C_LI       -> List(ALU_ADD  , OP1_X     , OP2_C_IMI  , MEN_X, REN_S, WB_ALU, WBA_C , CSR_X, MW_X),
 		)
 	)
   val List(id_exe_fun, id_op1_sel, id_op2_sel, id_mem_wen, id_rf_wen, id_wb_sel, id_wba, id_csr_cmd, id_mem_w) = csignals
