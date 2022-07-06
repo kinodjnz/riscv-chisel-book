@@ -57,11 +57,12 @@ object Consts {
   val OP2_IMJ     = 4.U(OP2_LEN.W)
   val OP2_IMU     = 5.U(OP2_LEN.W)
   val OP2_C_RS2   = 6.U(OP2_LEN.W)
-  val OP2_C_IMIW  = 7.U(OP2_LEN.W)
-  val OP2_C_IMI16 = 8.U(OP2_LEN.W)
-  val OP2_C_IMI   = 9.U(OP2_LEN.W)
-  val OP2_C_IMLS  = 10.U(OP2_LEN.W)
-  val OP2_C_IMIU  = 11.U(OP2_LEN.W)
+  val OP2_C_RS2P  = 7.U(OP2_LEN.W)
+  val OP2_C_IMIW  = 8.U(OP2_LEN.W)
+  val OP2_C_IMI16 = 9.U(OP2_LEN.W)
+  val OP2_C_IMI   = 10.U(OP2_LEN.W)
+  val OP2_C_IMLS  = 11.U(OP2_LEN.W)
+  val OP2_C_IMIU  = 12.U(OP2_LEN.W)
 
   val MEN_LEN = 2
   val MEN_X   = 0.U(MEN_LEN.W)
