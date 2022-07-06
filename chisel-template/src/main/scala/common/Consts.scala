@@ -48,15 +48,17 @@ object Consts {
   val OP1_C_RS1 = 4.U(OP1_LEN.W)
   val OP1_C_SP  = 5.U(OP1_LEN.W)
 
-  val OP2_LEN    = 3
-  val OP2_X      = 0.U(OP2_LEN.W)
-  val OP2_RS2    = 1.U(OP2_LEN.W)
-  val OP2_IMI    = 2.U(OP2_LEN.W)
-  val OP2_IMS    = 3.U(OP2_LEN.W)
-  val OP2_IMJ    = 4.U(OP2_LEN.W)
-  val OP2_IMU    = 5.U(OP2_LEN.W)
-  val OP2_C_RS2  = 6.U(OP2_LEN.W)
-  val OP2_C_IMIW = 7.U(OP2_LEN.W)
+  val OP2_LEN     = 4
+  val OP2_X       = 0.U(OP2_LEN.W)
+  val OP2_RS2     = 1.U(OP2_LEN.W)
+  val OP2_IMI     = 2.U(OP2_LEN.W)
+  val OP2_IMS     = 3.U(OP2_LEN.W)
+  val OP2_IMJ     = 4.U(OP2_LEN.W)
+  val OP2_IMU     = 5.U(OP2_LEN.W)
+  val OP2_C_RS2   = 6.U(OP2_LEN.W)
+  val OP2_C_IMIW  = 7.U(OP2_LEN.W)
+  val OP2_C_IMI16 = 8.U(OP2_LEN.W)
+  val OP2_C_IMI   = 9.U(OP2_LEN.W)
 
   val MEN_LEN = 2
   val MEN_X   = 0.U(MEN_LEN.W)
