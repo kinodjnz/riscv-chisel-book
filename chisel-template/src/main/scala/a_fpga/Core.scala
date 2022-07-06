@@ -87,6 +87,7 @@ class Core(startAddress: BigInt = 0, bpTagInitPath: String = null) extends Modul
   val ex1_reg_is_ecall      = RegInit(false.B)
   val ex1_reg_is_bp_pos      = RegInit(false.B)
   val ex1_reg_bp_addr        = RegInit(0.U(WORD_LEN.W))
+  val ex1_reg_is_half        = RegInit(false.B)
 
   // EX1/EX2 State
   val ex2_reg_pc            = RegInit(0.U(WORD_LEN.W))
@@ -105,6 +106,7 @@ class Core(startAddress: BigInt = 0, bpTagInitPath: String = null) extends Modul
   val ex2_reg_is_ecall      = RegInit(false.B)
   val ex2_reg_is_bp_pos      = RegInit(false.B)
   val ex2_reg_bp_addr        = RegInit(0.U(WORD_LEN.W))
+  val ex2_reg_is_half        = RegInit(false.B)
 
   // EX2/EX3 State
   val ex3_reg_bp_en            = RegInit(false.B)
@@ -116,6 +118,7 @@ class Core(startAddress: BigInt = 0, bpTagInitPath: String = null) extends Modul
   val ex3_reg_uncond_br_target = RegInit(0.U(WORD_LEN.W))
   val ex3_reg_is_bp_pos        = RegInit(false.B)
   val ex3_reg_bp_addr          = RegInit(0.U(WORD_LEN.W))
+  val ex3_reg_is_half          = RegInit(false.B)
 
   // EX2/MEM State
   val mem_reg_en            = RegInit(false.B)
@@ -229,7 +232,7 @@ class Core(startAddress: BigInt = 0, bpTagInitPath: String = null) extends Modul
   val is_half_inst = (ic_data_out(1, 0) =/= 3.U)
   ic_read_en2 := !id_reg_stall && is_half_inst
   ic_read_en4 := !id_reg_stall && !is_half_inst
-  val if2_pc = Mux(id_reg_stall || !ic_reg_read_rdy,
+  val if2_pc = Mux(id_reg_stall || !(ic_reg_read_rdy || (ic_reg_half_rdy && is_half_inst)),
     if2_reg_pc,
     ic_reg_addr_out,
   )
@@ -241,14 +244,23 @@ class Core(startAddress: BigInt = 0, bpTagInitPath: String = null) extends Modul
     if2_reg_is_bp_pos -> BUBBLE,
     if2_reg_is_uncond_br -> BUBBLE,
     ic_reg_read_rdy   -> ic_data_out,
+    (ic_reg_half_rdy && is_half_inst) -> ic_data_out,
   ))
   if2_reg_inst := if2_inst
-  val if2_is_cond_br = (if2_inst(6, 0) === 0x63.U)
-  val if2_is_jal = (if2_inst(6, 0) === 0x6f.U)
-  val if2_is_jalr = (if2_inst(6, 0) === 0x67.U)
+  val if2_is_cond_br_w = (if2_inst(6, 0) === 0x63.U)
+  val if2_is_cond_br_c = (if2_inst(15, 14) === 3.U && if2_inst(1, 0) === 1.U)
+  val if2_is_cond_br = if2_is_cond_br_w || if2_is_cond_br_c
+  val if2_is_jal_w = (if2_inst(6, 0) === 0x6f.U)
+  val if2_is_jal_c = (if2_inst(14, 13) === 1.U && if2_inst(1, 0) === 1.U)
+  val if2_is_jal = if2_is_jal_w || if2_is_jal_c
+  val if2_is_jalr = ((if2_inst(6, 0) === 0x67.U) || (if2_inst(15, 13) === 4.U && if2_inst(6, 0) === 2.U))
   val if2_is_bp_br = if2_is_cond_br || if2_is_jalr
-  val if2_imm_b_sext = Cat(Fill(20, if2_inst(31)), if2_inst(7), if2_inst(30, 25), if2_inst(11, 8), 0.U(1.W))
-  val if2_imm_j_sext = Cat(Fill(12, if2_inst(31)), if2_inst(19, 12), if2_inst(20), if2_inst(30, 21), 0.U(1.W))
+  val if2_w_imm_b = Cat(Fill(20, if2_inst(31)), if2_inst(7), if2_inst(30, 25), if2_inst(11, 8), 0.U(1.W))
+  val if2_c_imm_b = Cat(Fill(24, if2_inst(12)), if2_inst(6, 5), if2_inst(2), if2_inst(11, 10), if2_inst(4, 3), 0.U(1.W))
+  val if2_w_imm_j = Cat(Fill(12, if2_inst(31)), if2_inst(19, 12), if2_inst(20), if2_inst(30, 21), 0.U(1.W))
+  val if2_c_imm_j = Cat(Fill(21, if2_inst(12)), if2_inst(8), if2_inst(10, 9), if2_inst(6), if2_inst(7), if2_inst(2), if2_inst(11), if2_inst(5, 3), 0.U(1.W))
+  val if2_imm_b_sext = Mux(if2_is_cond_br_w, if2_w_imm_b, if2_c_imm_b)
+  val if2_imm_j_sext = Mux(if2_is_jal_w, if2_w_imm_j, if2_c_imm_j)
   if2_is_uncond_br := Mux(id_reg_stall,
     if2_reg_is_uncond_br,
     if2_is_jal,
@@ -301,6 +313,8 @@ class Core(startAddress: BigInt = 0, bpTagInitPath: String = null) extends Modul
   // branch,jump時にIDをBUBBLE化
   val id_inst = Mux(ex3_reg_is_br, BUBBLE, id_reg_inst)
 
+  val id_is_half = (id_inst(1, 0) =/= 3.U)
+
   val id_rs1_addr = id_inst(19, 15)
   val id_rs2_addr = id_inst(24, 20)
   val id_w_wb_addr  = id_inst(11, 7)
@@ -350,8 +364,8 @@ class Core(startAddress: BigInt = 0, bpTagInitPath: String = null) extends Modul
   val id_c_imm_ss = id_inst(12, 7) // TODO
   val id_c_imm_iw = Cat(Fill(22, 0.U), id_inst(10, 7), id_inst(12, 11), id_inst(5), id_inst(6), Fill(2, 0.U))
   val id_c_imm_ls = Cat(Fill(25, 0.U), id_inst(5), id_inst(12, 10), id_inst(6), Fill(2, 0.U))
-  val id_c_imm_b = Cat(id_inst(12, 10), id_inst(6, 2)) // TODO
-  val id_c_imm_j = id_inst(12, 2) // TODO
+  val id_c_imm_b = Cat(Fill(24, id_inst(12)), id_inst(6, 5), id_inst(2), id_inst(11, 10), id_inst(4, 3), 0.U(1.W))
+  val id_c_imm_j = Cat(Fill(21, id_inst(12)), id_inst(8), id_inst(10, 9), id_inst(6), id_inst(7), id_inst(2), id_inst(11), id_inst(5, 3), 0.U(1.W))
 
   val csignals = ListLookup(id_inst,
                List(ALU_X    , OP1_RS1, OP2_RS2, MEN_X, REN_X, WB_X  , WBA_RD, CSR_X, MW_X),
@@ -412,6 +426,11 @@ class Core(startAddress: BigInt = 0, bpTagInitPath: String = null) extends Modul
       C_SRLI     -> List(ALU_SRL  , OP1_C_RS1P, OP2_C_IMI  , MEN_X, REN_S, WB_ALU, WBA_CP1, CSR_X, MW_X),
       C_ANDI     -> List(ALU_AND  , OP1_C_RS1P, OP2_C_IMI  , MEN_X, REN_S, WB_ALU, WBA_CP1, CSR_X, MW_X),
       C_SUB      -> List(ALU_SUB  , OP1_C_RS1P, OP2_C_RS2P , MEN_X, REN_S, WB_ALU, WBA_CP1, CSR_X, MW_X),
+      C_XOR      -> List(ALU_XOR  , OP1_C_RS1P, OP2_C_RS2P , MEN_X, REN_S, WB_ALU, WBA_CP1, CSR_X, MW_X),
+      C_OR       -> List(ALU_OR   , OP1_C_RS1P, OP2_C_RS2P , MEN_X, REN_S, WB_ALU, WBA_CP1, CSR_X, MW_X),
+      C_AND      -> List(ALU_AND  , OP1_C_RS1P, OP2_C_RS2P , MEN_X, REN_S, WB_ALU, WBA_CP1, CSR_X, MW_X),
+      C_SLLI     -> List(ALU_SLL  , OP1_C_RS1 , OP2_C_IMI  , MEN_X, REN_S, WB_ALU, WBA_C  , CSR_X, MW_X),
+      C_J        -> List(ALU_ADD  , OP1_PC    , OP2_C_IMJ  , MEN_X, REN_S, WB_X  , WBA_C  , CSR_X, MW_X),
 		)
 	)
   val List(id_exe_fun, id_op1_sel, id_op2_sel, id_mem_wen, id_rf_wen, id_wb_sel, id_wba, id_csr_cmd, id_mem_w) = csignals
@@ -420,6 +439,7 @@ class Core(startAddress: BigInt = 0, bpTagInitPath: String = null) extends Modul
     (id_wba === WBA_C)   -> id_c_wb_addr,
     (id_wba === WBA_CP1) -> id_c_wb1p_addr,
     (id_wba === WBA_CP2) -> id_c_wb2p_addr,
+    (id_wba === WBA_RA)  -> 1.U(ADDR_LEN.W),
   ))
 
   val id_op1_data = MuxCase(0.U(WORD_LEN.W), Seq(
@@ -443,6 +463,7 @@ class Core(startAddress: BigInt = 0, bpTagInitPath: String = null) extends Modul
     (id_op2_sel === OP2_C_IMI)   -> id_c_imm_i,
     (id_op2_sel === OP2_C_IMLS)  -> id_c_imm_ls,
     (id_op2_sel === OP2_C_IMIU)  -> id_c_imm_iu,
+    (id_op2_sel === OP2_C_IMJ)   -> id_c_imm_j,
   ))
 
   val id_csr_addr = Mux(id_csr_cmd === CSR_E, 0x342.U(CSR_ADDR_LEN.W), id_inst(31,20))
@@ -494,6 +515,7 @@ class Core(startAddress: BigInt = 0, bpTagInitPath: String = null) extends Modul
   val id_reg_is_ecall_delay   = RegInit(false.B)
   val id_reg_is_bp_pos_delay  = RegInit(false.B)
   val id_reg_bp_addr_delay    = RegInit(0.U(WORD_LEN.W))
+  val id_reg_is_half_delay    = RegInit(false.B)
 
   when(!id_reg_stall) {
     id_reg_pc_delay         := id_reg_pc
@@ -520,6 +542,7 @@ class Core(startAddress: BigInt = 0, bpTagInitPath: String = null) extends Modul
     id_reg_is_ecall_delay   := id_inst === ECALL
     id_reg_is_bp_pos_delay  := id_reg_is_bp_pos
     id_reg_bp_addr_delay    := id_reg_bp_addr
+    id_reg_is_half_delay    := id_is_half
   }
 
   //**********************************
@@ -551,6 +574,7 @@ class Core(startAddress: BigInt = 0, bpTagInitPath: String = null) extends Modul
       ex1_reg_is_ecall      := id_reg_is_ecall_delay
       ex1_reg_is_bp_pos     := id_reg_is_bp_pos_delay
       ex1_reg_bp_addr       := id_reg_bp_addr_delay
+      ex1_reg_is_half       := id_reg_is_half_delay
     }.otherwise {
       ex1_reg_pc            := id_reg_pc
       ex1_reg_op1_sel       := id_m_op1_sel
@@ -576,6 +600,7 @@ class Core(startAddress: BigInt = 0, bpTagInitPath: String = null) extends Modul
       ex1_reg_is_ecall      := id_inst === ECALL
       ex1_reg_is_bp_pos     := id_reg_is_bp_pos
       ex1_reg_bp_addr       := id_reg_bp_addr
+      ex1_reg_is_half       := id_is_half
     }
   }
   //**********************************
@@ -683,6 +708,7 @@ class Core(startAddress: BigInt = 0, bpTagInitPath: String = null) extends Modul
     ex2_reg_is_ecall      := ex1_reg_is_ecall
     ex2_reg_is_bp_pos     := ex1_reg_is_bp_pos
     ex2_reg_bp_addr       := ex1_reg_bp_addr
+    ex2_reg_is_half       := ex1_reg_is_half
   }
 
   //**********************************
@@ -745,6 +771,7 @@ class Core(startAddress: BigInt = 0, bpTagInitPath: String = null) extends Modul
   ex3_reg_uncond_br_target := ex2_uncond_br_target
   ex3_reg_is_bp_pos        := ex2_reg_is_bp_pos
   ex3_reg_bp_addr          := ex2_reg_bp_addr
+  ex3_reg_is_half          := ex2_reg_is_half
 
   //**********************************
   // Execute (EX3) Stage
@@ -761,7 +788,7 @@ class Core(startAddress: BigInt = 0, bpTagInitPath: String = null) extends Modul
   )
   ex3_reg_br_target := MuxCase(DontCare, Seq(
     ex3_cond_bp_fail   -> ex3_reg_cond_br_target,
-    ex3_cond_nbp_fail  -> (ex3_reg_pc + 4.U(WORD_LEN.W)), // TODO inst width
+    ex3_cond_nbp_fail  -> Mux(ex3_reg_is_half, ex3_reg_pc + 2.U(WORD_LEN.W), ex3_reg_pc + 4.U(WORD_LEN.W)),
     ex3_uncond_bp_fail -> ex3_reg_uncond_br_target,
   ))
   ex3_reg_is_br := ex3_cond_bp_fail || ex3_cond_nbp_fail || ex3_uncond_bp_fail
