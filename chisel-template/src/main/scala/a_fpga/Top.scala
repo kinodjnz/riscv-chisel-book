@@ -4,6 +4,9 @@ import chisel3._
 import chisel3.util._
 import common.Consts._
 import chisel3.stage.ChiselStage
+import chisel3.util.experimental.loadMemoryFromFileInline
+import chisel3.experimental.{annotate, ChiselAnnotation}
+import firrtl.annotations.MemorySynthInit
 
 
 class Config(clockHz: Int) extends Module {
@@ -71,9 +74,15 @@ class RiscV(clockHz: Int) extends Module {
   memory.io.imemReadPort.data := imem_rdata
   imem_dbus.io.read.data := imem_rdata2
 
+  annotate(new ChiselAnnotation {
+    override def toFirrtl =
+      MemorySynthInit
+  })
+
   val imem = Mem(imemSizeInBytes/4, UInt(WORD_LEN.W))
+  loadMemoryFromFileInline(imem, "bootrom.hex")
   when (memory.io.imemReadPort.enable) {
-    imem_rdata := imem.read(memory.io.imemReadPort.address)
+    imem_rdata := imem.read(memory.io.imemReadPort.address(8, 0))
   }
   val rwaddr = Mux(imem_dbus.io.write.enable, imem_dbus.io.write.address, imem_dbus.io.read.address)
   when (imem_dbus.io.write.enable) {
@@ -105,7 +114,7 @@ class RiscV(clockHz: Int) extends Module {
 }
 
 object ElaborateArtyA7 extends App {
-  (new ChiselStage).emitVerilog(new RiscV(80000000), Array(
+  (new ChiselStage).emitVerilog(new RiscV(100000000), Array(
     "-o", "riscv.v",
     "--target-dir", "rtl/riscv_arty_a7",
   ))

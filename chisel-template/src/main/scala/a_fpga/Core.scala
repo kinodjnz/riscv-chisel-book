@@ -32,6 +32,7 @@ class CoreDebugSignals extends Bundle {
   val mem_reg_pc = Output(UInt(WORD_LEN.W))
   val csr_rdata = Output(UInt(WORD_LEN.W))
   val mem_reg_csr_addr = Output(UInt(WORD_LEN.W))
+  val id_reg_inst = Output(UInt(WORD_LEN.W))
   val cycle_counter = Output(UInt(64.W))
 }
 
@@ -932,6 +933,7 @@ class Core(startAddress: BigInt = 0, bpTagInitPath: String = null) extends Modul
   io.debug_signal.csr_rdata := csr_rdata
   io.debug_signal.mem_reg_csr_addr := mem_reg_csr_addr
   io.debug_signal.mem_reg_pc := mem_reg_pc
+  io.debug_signal.id_reg_inst := id_reg_inst
 
   //**********************************
   // IO & Debug
