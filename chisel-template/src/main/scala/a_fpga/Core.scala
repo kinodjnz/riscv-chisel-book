@@ -34,6 +34,7 @@ class CoreDebugSignals extends Bundle {
   val mem_reg_csr_addr = Output(UInt(WORD_LEN.W))
   val id_reg_inst = Output(UInt(WORD_LEN.W))
   val cycle_counter = Output(UInt(64.W))
+  val instret = Output(UInt(64.W))
 }
 
 class Core(startAddress: BigInt = 0, bpTagInitPath: String = null) extends Module {
@@ -51,6 +52,7 @@ class Core(startAddress: BigInt = 0, bpTagInitPath: String = null) extends Modul
   //val csr_regfile = Mem(4096, UInt(WORD_LEN.W)) 
   val csr_trap_vector = RegInit(0.U(WORD_LEN.W))
   val cycle_counter = Module(new LongCounter(8, 8)) // 64-bit cycle counter for CYCLE[H] CSR
+  val instret = RegInit(0.U(64.W))
 
   //**********************************
   // Pipeline State Registers
@@ -89,6 +91,7 @@ class Core(startAddress: BigInt = 0, bpTagInitPath: String = null) extends Modul
   val ex1_reg_is_bp_pos      = RegInit(false.B)
   val ex1_reg_bp_addr        = RegInit(0.U(WORD_LEN.W))
   val ex1_reg_is_half        = RegInit(false.B)
+  val ex1_reg_is_valid_inst  = RegInit(false.B)
 
   // EX1/EX2 State
   val ex2_reg_pc            = RegInit(0.U(WORD_LEN.W))
@@ -105,9 +108,10 @@ class Core(startAddress: BigInt = 0, bpTagInitPath: String = null) extends Modul
   val ex2_reg_imm_b_sext    = RegInit(0.U(WORD_LEN.W))
   val ex2_reg_mem_w         = RegInit(0.U(WORD_LEN.W))
   val ex2_reg_is_ecall      = RegInit(false.B)
-  val ex2_reg_is_bp_pos      = RegInit(false.B)
-  val ex2_reg_bp_addr        = RegInit(0.U(WORD_LEN.W))
-  val ex2_reg_is_half        = RegInit(false.B)
+  val ex2_reg_is_bp_pos     = RegInit(false.B)
+  val ex2_reg_bp_addr       = RegInit(0.U(WORD_LEN.W))
+  val ex2_reg_is_half       = RegInit(false.B)
+  val ex2_reg_is_valid_inst = RegInit(false.B)
 
   // EX2/EX3 State
   val ex3_reg_bp_en            = RegInit(false.B)
@@ -137,10 +141,13 @@ class Core(startAddress: BigInt = 0, bpTagInitPath: String = null) extends Modul
   val mem_reg_mem_w         = RegInit(0.U(WORD_LEN.W))
   val mem_reg_mem_wstrb     = RegInit(0.U((WORD_LEN/8).W))
   val mem_reg_is_half       = RegInit(false.B)
+  val mem_reg_is_valid_inst = RegInit(false.B)
+
   // MEM/WB State
   val wb_reg_wb_addr        = RegInit(0.U(ADDR_LEN.W))
   val wb_reg_rf_wen         = RegInit(0.U(REN_LEN.W))
   val wb_reg_wb_data        = RegInit(0.U(WORD_LEN.W))
+  val wb_reg_is_valid_inst  = RegInit(false.B)
 
   val if2_reg_is_bp_pos  = RegInit(false.B)
   val if2_reg_bp_addr    = RegInit(0.U(WORD_LEN.W))
@@ -535,6 +542,7 @@ class Core(startAddress: BigInt = 0, bpTagInitPath: String = null) extends Modul
   val id_reg_is_bp_pos_delay  = RegInit(false.B)
   val id_reg_bp_addr_delay    = RegInit(0.U(WORD_LEN.W))
   val id_reg_is_half_delay    = RegInit(false.B)
+  val id_reg_is_valid_inst_delay = RegInit(false.B)
 
   when(!id_reg_stall) {
     id_reg_pc_delay         := id_reg_pc
@@ -562,6 +570,7 @@ class Core(startAddress: BigInt = 0, bpTagInitPath: String = null) extends Modul
     id_reg_is_bp_pos_delay  := id_reg_is_bp_pos
     id_reg_bp_addr_delay    := id_reg_bp_addr
     id_reg_is_half_delay    := id_is_half
+    id_reg_is_valid_inst_delay := id_inst =/= BUBBLE
   }
 
   //**********************************
@@ -594,6 +603,7 @@ class Core(startAddress: BigInt = 0, bpTagInitPath: String = null) extends Modul
       ex1_reg_is_bp_pos     := id_reg_is_bp_pos_delay
       ex1_reg_bp_addr       := id_reg_bp_addr_delay
       ex1_reg_is_half       := id_reg_is_half_delay
+      ex1_reg_is_valid_inst := id_reg_is_valid_inst_delay
     }.otherwise {
       ex1_reg_pc            := id_reg_pc
       ex1_reg_op1_sel       := id_m_op1_sel
@@ -620,6 +630,7 @@ class Core(startAddress: BigInt = 0, bpTagInitPath: String = null) extends Modul
       ex1_reg_is_bp_pos     := id_reg_is_bp_pos
       ex1_reg_bp_addr       := id_reg_bp_addr
       ex1_reg_is_half       := id_is_half
+      ex1_reg_is_valid_inst := id_inst =/= BUBBLE
     }
   }
   //**********************************
@@ -728,6 +739,7 @@ class Core(startAddress: BigInt = 0, bpTagInitPath: String = null) extends Modul
     ex2_reg_is_bp_pos     := ex1_reg_is_bp_pos
     ex2_reg_bp_addr       := ex1_reg_bp_addr
     ex2_reg_is_half       := ex1_reg_is_half
+    ex2_reg_is_valid_inst := ex1_reg_is_valid_inst && !ex1_stall && !ex3_reg_is_br
   }
 
   //**********************************
@@ -845,6 +857,7 @@ class Core(startAddress: BigInt = 0, bpTagInitPath: String = null) extends Modul
       (ex2_reg_mem_w === MW_W) -> "b1111".U,
     )) << (ex2_alu_out(1, 0)))(3, 0)
     mem_reg_is_half    := ex2_reg_is_half
+    mem_reg_is_valid_inst := ex2_reg_is_valid_inst
   }
 
   //**********************************
@@ -867,8 +880,10 @@ class Core(startAddress: BigInt = 0, bpTagInitPath: String = null) extends Modul
   // CSR
   val csr_rdata = MuxLookup(mem_reg_csr_addr, 0.U(WORD_LEN.W), Seq(
     0x305.U -> csr_trap_vector,
-    CSR_ADDR_CYCLE  -> cycle_counter.io.value(31, 0),
-    CSR_ADDR_CYCLEH -> cycle_counter.io.value(63, 32),
+    CSR_ADDR_CYCLE    -> cycle_counter.io.value(31, 0),
+    CSR_ADDR_INSTRET  -> instret(31, 0),
+    CSR_ADDR_CYCLEH   -> cycle_counter.io.value(63, 32),
+    CSR_ADDR_INSTRETH -> instret(63, 32),
   ))
 
   val csr_wdata = MuxCase(0.U(WORD_LEN.W), Seq(
@@ -915,6 +930,7 @@ class Core(startAddress: BigInt = 0, bpTagInitPath: String = null) extends Modul
   wb_reg_wb_addr := mem_reg_wb_addr
   wb_reg_rf_wen  := Mux(!mem_stall, mem_rf_wen, REN_X)
   wb_reg_wb_data := mem_wb_data 
+  wb_reg_is_valid_inst := mem_reg_is_valid_inst && !mem_stall
 
 
   //**********************************
@@ -928,8 +944,13 @@ class Core(startAddress: BigInt = 0, bpTagInitPath: String = null) extends Modul
   wb_reg_wb_addr_delay := wb_reg_wb_addr
   wb_reg_wb_data_delay := wb_reg_wb_data
 
+  when (wb_reg_is_valid_inst) {
+    instret := instret + 1.U
+  }
+
   // Debug signals
   io.debug_signal.cycle_counter := cycle_counter.io.value
+  io.debug_signal.instret := instret
   io.debug_signal.csr_rdata := csr_rdata
   io.debug_signal.mem_reg_csr_addr := mem_reg_csr_addr
   io.debug_signal.mem_reg_pc := mem_reg_pc
@@ -981,6 +1002,7 @@ class Core(startAddress: BigInt = 0, bpTagInitPath: String = null) extends Modul
   // printf(p"mem_wb_data_delay : 0x${Hexadecimal(mem_wb_data_delay)}\n")
   printf(p"wb_reg_wb_addr   : 0x${Hexadecimal(wb_reg_wb_addr)}\n")
   printf(p"wb_reg_wb_data   : 0x${Hexadecimal(wb_reg_wb_data)}\n")
+  printf(p"instret          : ${instret}\n")
   printf(p"cycle_counter(${ex2_reg_is_ecall}) : ${io.debug_signal.cycle_counter}\n")
   printf("---------\n")
 }

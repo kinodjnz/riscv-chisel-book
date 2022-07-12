@@ -112,8 +112,10 @@ object Consts {
   val CSR_E   = 4.U(CSR_LEN.W)
   val CSR_V   = 5.U(CSR_LEN.W)
 
-  val CSR_ADDR_CYCLE = 0xc00.U(12.W)
-  val CSR_ADDR_CYCLEH = 0xc80.U(12.W)
+  val CSR_ADDR_CYCLE    = 0xc00.U(12.W)
+  val CSR_ADDR_INSTRET  = 0xc02.U(12.W)
+  val CSR_ADDR_CYCLEH   = 0xc80.U(12.W)
+  val CSR_ADDR_INSTRETH = 0xc82.U(12.W)
 
   val BP_HIST_LEN   = 2
   val BP_INDEX_LEN  = 8
