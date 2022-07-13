@@ -440,6 +440,7 @@ class Core(startAddress: BigInt = 0, bpTagInitPath: String = null) extends Modul
       CSRRC -> List(ALU_COPY1, OP1_RS1, OP2_X  , MEN_X, REN_S, WB_CSR, WBA_RD, CSR_C, MW_X),
       CSRRCI-> List(ALU_COPY1, OP1_IMZ, OP2_X  , MEN_X, REN_S, WB_CSR, WBA_RD, CSR_C, MW_X),
       ECALL -> List(ALU_X    , OP1_X  , OP2_X  , MEN_X, REN_X, WB_X  , WBA_RD, CSR_E, MW_X),
+      MRET  -> List(ALU_X    , OP1_X  , OP2_X  , MEN_X, REN_X, WB_X  , WBA_RD, CSR_R, MW_X),
       C_ILL      -> List(ALU_X    , OP1_C_RS1 , OP2_C_RS2  , MEN_X, REN_X, WB_X  , WBA_C  , CSR_X, MW_X),
       C_ADDI4SPN -> List(ALU_ADD  , OP1_C_SP  , OP2_C_IMIW , MEN_X, REN_S, WB_ALU, WBA_CP2, CSR_X, MW_X),
       C_ADDI16SP -> List(ALU_ADD  , OP1_C_RS1 , OP2_C_IMI16, MEN_X, REN_S, WB_ALU, WBA_C  , CSR_X, MW_X),
@@ -929,7 +930,7 @@ class Core(startAddress: BigInt = 0, bpTagInitPath: String = null) extends Modul
     (mem_csr_cmd === CSR_C) -> (csr_rdata & ~mem_reg_op1_data),
   ))
   
-  when (mem_csr_cmd > 0.U) {
+  when (mem_csr_cmd === CSR_W || mem_csr_cmd === CSR_S || mem_csr_cmd === CSR_C) {
     when (mem_reg_csr_addr === CSR_ADDR_MTVEC) {
       csr_trap_vector := csr_wdata
     }.elsewhen (mem_reg_csr_addr === CSR_ADDR_MEPC) {
@@ -941,8 +942,11 @@ class Core(startAddress: BigInt = 0, bpTagInitPath: String = null) extends Modul
     csr_mcause      := mem_reg_mcause
     csr_mtval       := mem_reg_mtval
     csr_mepc        := mem_reg_pc
-    mem_reg_is_br   := mem_reg_is_trap
+    mem_reg_is_br   := true.B
     mem_reg_br_addr := csr_trap_vector
+  }.elsewhen (mem_csr_cmd === CSR_R) {
+    mem_reg_is_br   := true.B
+    mem_reg_br_addr := csr_mepc
   }.otherwise {
     mem_reg_is_br   := false.B
   }
@@ -978,7 +982,7 @@ class Core(startAddress: BigInt = 0, bpTagInitPath: String = null) extends Modul
   wb_reg_wb_addr := mem_reg_wb_addr
   wb_reg_rf_wen  := Mux(!mem_stall, mem_rf_wen, REN_X)
   wb_reg_wb_data := mem_wb_data 
-  wb_reg_is_valid_inst := mem_reg_is_valid_inst && !mem_stall
+  wb_reg_is_valid_inst := mem_reg_is_valid_inst && !mem_stall && !mem_reg_is_trap
 
 
   //**********************************

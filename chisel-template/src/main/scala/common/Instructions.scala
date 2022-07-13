@@ -71,6 +71,7 @@ object Instructions {
 
   // 例外
   val ECALL   = BitPat("b00000000000000000000000001110011")
+  val MRET    = BitPat("b00110000001000000000000001110011")
 
   // ベクトル
   val VSETVLI = BitPat("b?????????????????111?????1010111")

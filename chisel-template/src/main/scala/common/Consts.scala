@@ -111,6 +111,7 @@ object Consts {
   val CSR_C   = 3.U(CSR_LEN.W)
   val CSR_E   = 4.U(CSR_LEN.W)
   val CSR_V   = 5.U(CSR_LEN.W)
+  val CSR_R   = 6.U(CSR_LEN.W)
 
   val CSR_ADDR_MTVEC    = 0x305.U(CSR_ADDR_LEN.W)
   val CSR_ADDR_MEPC     = 0x341.U(CSR_ADDR_LEN.W)
