@@ -42,6 +42,8 @@ class Core(startAddress: BigInt = 0, bpTagInitPath: String = null) extends Modul
     new Bundle {
       val imem = Flipped(new ImemPortIo())
       val dmem = Flipped(new DmemPortIo())
+      val mtimer_mem = new DmemPortIo()
+      val intr = Input(Bool())
       val gp   = Output(UInt(WORD_LEN.W))
       val exit = Output(Bool())
       val debug_signal = new CoreDebugSignals()
@@ -52,10 +54,17 @@ class Core(startAddress: BigInt = 0, bpTagInitPath: String = null) extends Modul
   //val csr_regfile = Mem(4096, UInt(WORD_LEN.W)) 
   val csr_trap_vector = RegInit(0.U(WORD_LEN.W))
   val cycle_counter = Module(new LongCounter(8, 8)) // 64-bit cycle counter for CYCLE[H] CSR
+  val mtimer = Module(new MachineTimer)
   val instret = RegInit(0.U(64.W))
-  val csr_mcause = RegInit(0.U(WORD_LEN.W))
-  val csr_mtval  = RegInit(0.U(WORD_LEN.W))
-  val csr_mepc   = RegInit(0.U(WORD_LEN.W))
+  val csr_mcause   = RegInit(0.U(WORD_LEN.W))
+  val csr_mtval    = RegInit(0.U(WORD_LEN.W))
+  val csr_mepc     = RegInit(0.U(WORD_LEN.W))
+  val csr_mstatus  = RegInit(0.U(WORD_LEN.W))
+  val csr_mscratch = RegInit(0.U(WORD_LEN.W))
+  val csr_mie      = RegInit(0.U(WORD_LEN.W))
+  val csr_mip      = RegInit(0.U(WORD_LEN.W))
+
+  io.mtimer_mem <> mtimer.io.mem
 
   //**********************************
   // Pipeline State Registers
@@ -898,7 +907,9 @@ class Core(startAddress: BigInt = 0, bpTagInitPath: String = null) extends Modul
   //**********************************
   // Memory Access Stage
 
-  val mem_en = mem_reg_en && !mem_reg_is_br && !ex3_reg_is_br && !mem_reg_is_trap
+  val mem_is_meintr = csr_mstatus(3).asBool && (io.intr && csr_mie(11))
+  val mem_is_mtintr = csr_mstatus(3).asBool && (mtimer.io.intr && csr_mie(7))
+  val mem_en = mem_reg_en && !mem_reg_is_br && !ex3_reg_is_br && !mem_reg_is_trap && !mem_is_meintr && !mem_is_mtintr
   val mem_rf_wen = Mux(mem_en, mem_reg_rf_wen, REN_X)
   val mem_wb_sel = Mux(mem_en, mem_reg_wb_sel, WB_X)
   val mem_csr_cmd = Mux(mem_en, mem_reg_csr_cmd, CSR_X)
@@ -915,13 +926,19 @@ class Core(startAddress: BigInt = 0, bpTagInitPath: String = null) extends Modul
   // CSR
   val csr_rdata = MuxLookup(mem_reg_csr_addr, 0.U(WORD_LEN.W), Seq(
     CSR_ADDR_MTVEC    -> csr_trap_vector,
+    CSR_ADDR_TIME     -> mtimer.io.mtime(31, 0),
     CSR_ADDR_CYCLE    -> cycle_counter.io.value(31, 0),
     CSR_ADDR_INSTRET  -> instret(31, 0),
     CSR_ADDR_CYCLEH   -> cycle_counter.io.value(63, 32),
+    CSR_ADDR_TIMEH    -> mtimer.io.mtime(63, 32),
     CSR_ADDR_INSTRETH -> instret(63, 32),
     CSR_ADDR_MEPC     -> csr_mepc,
     CSR_ADDR_MCAUSE   -> csr_mcause,
     CSR_ADDR_MTVAL    -> csr_mtval,
+    CSR_ADDR_MSTATUS  -> csr_mstatus,
+    CSR_ADDR_MSCRATCH -> csr_mscratch,
+    CSR_ADDR_MIE      -> csr_mie,
+    CSR_ADDR_MIP      -> csr_mip,
   ))
 
   val csr_wdata = MuxCase(0.U(WORD_LEN.W), Seq(
@@ -935,16 +952,40 @@ class Core(startAddress: BigInt = 0, bpTagInitPath: String = null) extends Modul
       csr_trap_vector := csr_wdata
     }.elsewhen (mem_reg_csr_addr === CSR_ADDR_MEPC) {
       csr_mepc := csr_wdata
+    }.elsewhen (mem_reg_csr_addr === CSR_ADDR_MSTATUS) {
+      csr_mstatus := csr_wdata
+    }.elsewhen (mem_reg_csr_addr === CSR_ADDR_MSCRATCH) {
+      csr_mscratch := csr_wdata
+    }.elsewhen (mem_reg_csr_addr === CSR_ADDR_MIE) {
+      csr_mie := csr_wdata
     }
   }
 
-  when (mem_reg_is_trap) {
+  csr_mip := Cat(csr_mip(31, 12), io.intr.asUInt, csr_mip(10, 8), mtimer.io.intr.asUInt, csr_mip(6, 0))
+
+  when (mem_is_meintr) {
+    csr_mcause      := CSR_MCAUSE_MEI
+    csr_mtval       := 0.U(WORD_LEN.W)
+    csr_mepc        := mem_reg_pc
+    csr_mstatus     := Cat(csr_mstatus(31, 8), csr_mstatus(3), csr_mstatus(6, 4), 0.U(1.W), csr_mstatus(2, 0))
+    mem_reg_is_br   := true.B
+    mem_reg_br_addr := csr_trap_vector
+  }.elsewhen (mem_is_mtintr) {
+    csr_mcause      := CSR_MCAUSE_MTI
+    csr_mtval       := 0.U(WORD_LEN.W)
+    csr_mepc        := mem_reg_pc
+    csr_mstatus     := Cat(csr_mstatus(31, 8), csr_mstatus(3), csr_mstatus(6, 4), 0.U(1.W), csr_mstatus(2, 0))
+    mem_reg_is_br   := true.B
+    mem_reg_br_addr := csr_trap_vector
+  }.elsewhen (mem_reg_is_trap) {
     csr_mcause      := mem_reg_mcause
     csr_mtval       := mem_reg_mtval
     csr_mepc        := mem_reg_pc
+    csr_mstatus     := Cat(csr_mstatus(31, 8), csr_mstatus(3), csr_mstatus(6, 4), 0.U(1.W), csr_mstatus(2, 0))
     mem_reg_is_br   := true.B
     mem_reg_br_addr := csr_trap_vector
   }.elsewhen (mem_csr_cmd === CSR_R) {
+    csr_mstatus     := Cat(csr_mstatus(31, 8), 1.U(1.W), csr_mstatus(6, 4), csr_mstatus(7), csr_mstatus(2, 0))
     mem_reg_is_br   := true.B
     mem_reg_br_addr := csr_mepc
   }.otherwise {
@@ -982,7 +1023,7 @@ class Core(startAddress: BigInt = 0, bpTagInitPath: String = null) extends Modul
   wb_reg_wb_addr := mem_reg_wb_addr
   wb_reg_rf_wen  := Mux(!mem_stall, mem_rf_wen, REN_X)
   wb_reg_wb_data := mem_wb_data 
-  wb_reg_is_valid_inst := mem_reg_is_valid_inst && !mem_stall && !mem_reg_is_trap
+  wb_reg_is_valid_inst := mem_reg_is_valid_inst && !mem_stall && !mem_reg_is_trap && !mem_is_meintr && !mem_is_mtintr
 
 
   //**********************************
@@ -1050,6 +1091,8 @@ class Core(startAddress: BigInt = 0, bpTagInitPath: String = null) extends Modul
   printf(p"mem_wb_data      : 0x${Hexadecimal(mem_wb_data)}\n")
   printf(p"mem_reg_mem_w    : 0x${Hexadecimal(mem_reg_mem_w)}\n")
   printf(p"mem_reg_wb_addr  : 0x${Hexadecimal(mem_reg_wb_addr)}\n")
+  printf(p"mem_is_meintr    : 0x${mem_is_meintr}\n")
+  printf(p"mem_is_mtintr    : 0x${mem_is_mtintr}\n")
   // printf(p"mem_reg_rf_wen_delay : 0x${Hexadecimal(mem_reg_rf_wen_delay)}\n")
   // printf(p"mem_wb_addr_delay : 0x${Hexadecimal(mem_wb_addr_delay)}\n")
   // printf(p"mem_wb_data_delay : 0x${Hexadecimal(mem_wb_data_delay)}\n")

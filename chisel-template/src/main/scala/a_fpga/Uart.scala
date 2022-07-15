@@ -2,6 +2,7 @@ package fpga
 
 import chisel3._
 import chisel3.util._
+import common.Consts._
 
 class UartTx(numberOfBits: Int, baudDivider: Int) extends Module {
     val io = IO(new Bundle{
@@ -93,29 +94,51 @@ class UartRx(numberOfBits: Int, baudDivider: Int, rxSyncStages: Int) extends Mod
 class Uart(clockHz: Int, baudRate: Int = 115200) extends Module {
   val io = IO(new Bundle {
     val mem = new DmemPortIo
+    val intr = Output(Bool())
     val tx = Output(Bool())
   })
 
   val tx = Module(new UartTx(8, clockHz/baudRate))
-  val txValid = RegInit(false.B)
-  val txReady = WireDefault(tx.io.in.ready)
-  val txData = RegInit(0.U(8.W))
-  tx.io.in.valid := txValid
-  tx.io.in.bits := txData
+  val tx_empty = RegInit(true.B)
+  val tx_ready = WireDefault(tx.io.in.ready)
+  val tx_data = RegInit(0.U(8.W))
+  val tx_intr_en = RegInit(false.B)
+  val tx_pending = RegInit(false.B)
+  tx.io.in.valid := !tx_empty
+  tx.io.in.bits := tx_data
 
-  when(txValid && txReady) {
-    txValid := false.B
+  when (io.mem.ren) {
+    when (io.mem.raddr === 0.U) {
+      io.mem.rdata := Cat(0.U(29.W), !tx_pending.asUInt, 0.U(1.W), tx_intr_en.asUInt)
+    }.elsewhen (io.mem.raddr === 4.U) {
+      io.mem.rdata := Cat(0.U(31.W), (!tx_empty).asUInt)
+    }.otherwise {
+      io.mem.rdata := 0.U(WORD_LEN.W)
+    }
+    io.mem.rvalid := true.B
+  }.otherwise {
+    io.mem.rdata := 0.U(WORD_LEN.W)
+    io.mem.rvalid := false.B
   }
 
-  io.mem.rdata := Cat(0.U(31.W), txValid.asUInt)
-  io.mem.rvalid := true.B
-  io.mem.wready := true.B
-  when(io.mem.wen) {
-    when( !txValid ) {  //Send TX Data if not busy.
-      txValid := true.B
-      txData := io.mem.wdata
+  when (io.mem.wen) {
+    when (io.mem.waddr === 0.U) {
+      tx_intr_en := io.mem.wdata(0).asBool
+      tx_pending := tx_pending && !io.mem.wdata(2).asBool
+    }.elsewhen (io.mem.waddr === 4.U) {
+      when (tx_empty) {  //Send TX Data if not busy.
+        tx_empty := false.B
+        tx_data := io.mem.wdata
+      }
     }
   }
+  io.mem.wready := true.B
 
+  when(!tx_empty && tx_ready) {
+    tx_empty := true.B
+    tx_pending := tx_intr_en
+  }
+
+  io.intr := tx_pending
   io.tx <> tx.io.tx // Connect UART TX signal.
 }

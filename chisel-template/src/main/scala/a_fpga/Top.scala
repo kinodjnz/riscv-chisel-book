@@ -61,13 +61,15 @@ class RiscV(clockHz: Int) extends Module {
     (BigInt(0x20000000L), BigInt(dmemSizeInBytes)),
     (BigInt(0x30000000L), BigInt(64)),  // GPIO
     (BigInt(0x30001000L), BigInt(64)),  // UART
+    (BigInt(0x30002000L), BigInt(64)),  // mtimer
     (BigInt(0x40000000L), BigInt(64)),  // CONFIG
   )))
   decoder.io.targets(0) <> imem_dbus.io.mem
   decoder.io.targets(1) <> memory.io.dmem
   decoder.io.targets(2) <> gpio.io.mem
   decoder.io.targets(3) <> uart.io.mem
-  decoder.io.targets(4) <> config.io.mem
+  decoder.io.targets(4) <> core.io.mtimer_mem
+  decoder.io.targets(5) <> config.io.mem
 
   val imem_rdata = RegInit(0.U(WORD_LEN.W))
   val imem_rdata2 = RegInit(0.U(WORD_LEN.W))
