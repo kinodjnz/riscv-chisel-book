@@ -914,6 +914,7 @@ class Core(startAddress: BigInt = 0, bpTagInitPath: String = null) extends Modul
   val mem_wb_sel = Mux(mem_en, mem_reg_wb_sel, WB_X)
   val mem_csr_cmd = Mux(mem_en, mem_reg_csr_cmd, CSR_X)
   val mem_mem_wen = Mux(mem_en, mem_reg_mem_wen, MEN_X)
+  val mem_stall_delay = RegInit(false.B)
 
   io.dmem.raddr := mem_reg_alu_out
   io.dmem.waddr := mem_reg_alu_out
@@ -921,7 +922,8 @@ class Core(startAddress: BigInt = 0, bpTagInitPath: String = null) extends Modul
   io.dmem.wen   := mem_mem_wen
   io.dmem.wstrb := mem_reg_mem_wstrb
   io.dmem.wdata := (mem_reg_rs2_data << (8.U * mem_reg_alu_out(1, 0)))(WORD_LEN-1, 0)
-  mem_stall := io.dmem.ren && !io.dmem.rvalid
+  mem_stall := io.dmem.ren && (!io.dmem.rvalid || mem_stall_delay)
+  mem_stall_delay := io.dmem.ren && io.dmem.rvalid && !mem_stall // 読めた直後はストール
 
   // CSR
   val csr_rdata = MuxLookup(mem_reg_csr_addr, 0.U(WORD_LEN.W), Seq(
@@ -1091,8 +1093,8 @@ class Core(startAddress: BigInt = 0, bpTagInitPath: String = null) extends Modul
   printf(p"mem_wb_data      : 0x${Hexadecimal(mem_wb_data)}\n")
   printf(p"mem_reg_mem_w    : 0x${Hexadecimal(mem_reg_mem_w)}\n")
   printf(p"mem_reg_wb_addr  : 0x${Hexadecimal(mem_reg_wb_addr)}\n")
-  printf(p"mem_is_meintr    : 0x${mem_is_meintr}\n")
-  printf(p"mem_is_mtintr    : 0x${mem_is_mtintr}\n")
+  printf(p"mem_is_meintr    : ${mem_is_meintr}\n")
+  printf(p"mem_is_mtintr    : ${mem_is_mtintr}\n")
   // printf(p"mem_reg_rf_wen_delay : 0x${Hexadecimal(mem_reg_rf_wen_delay)}\n")
   // printf(p"mem_wb_addr_delay : 0x${Hexadecimal(mem_wb_addr_delay)}\n")
   // printf(p"mem_wb_data_delay : 0x${Hexadecimal(mem_wb_data_delay)}\n")
