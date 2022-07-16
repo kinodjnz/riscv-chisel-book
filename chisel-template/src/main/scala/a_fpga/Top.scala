@@ -113,6 +113,7 @@ class RiscV(clockHz: Int) extends Module {
   io.exit := core.io.exit
   io.gpio <> gpio.io.gpio
   io.uart_tx <> uart.io.tx
+  core.io.intr <> uart.io.intr
 }
 
 object ElaborateArtyA7 extends App {
