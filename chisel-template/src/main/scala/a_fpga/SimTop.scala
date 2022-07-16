@@ -15,7 +15,7 @@ class SimTop(memoryPath: String, bpTagInitPath: String) extends Module {
     val exit = Output(Bool())
   })
   val core = Module(new Core(startAddress, bpTagInitPath))
-  val memory = Module(new Memory(memoryPath, imemSizeInBytes, dmemSizeInBytes))
+  val memory = Module(new Memory(null, imemSizeInBytes, dmemSizeInBytes))
   val imem_dbus = Module(new SingleCycleMem(imemSizeInBytes))
 
   val decoder = Module(new DMemDecoder(Seq(

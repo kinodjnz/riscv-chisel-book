@@ -17,7 +17,8 @@ class RiscvTest extends AnyFlatSpec with ChiselScalatestTester {
     )
 
     val tests = Array(
-      // ("fizzbuzz", 5000, -1),
+      ("fizzbuzz", 5000, -1),
+      ("mtimer", 1000, -1),
       ("rv32ui-p-add", 1000, -1),
       ("rv32ui-p-addi", 1000, -1),
       ("rv32ui-p-and", 1000, -1),

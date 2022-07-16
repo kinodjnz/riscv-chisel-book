@@ -1,0 +1,104 @@
+
+bootrom.elf:     file format elf32-littleriscv
+
+
+Disassembly of section .isr_vector:
+
+08000000 <isr_vector>:
+#include <stdint.h>
+
+extern void __attribute__((naked)) __attribute__((section(".isr_vector"))) isr_vector(void)
+{
+    asm volatile ("j _start");
+ 8000000:	0080006f          	j	8000008 <_start>
+    asm volatile ("j _start");
+ 8000004:	0040006f          	j	8000008 <_start>
+
+Disassembly of section .text:
+
+08000008 <_start>:
+
+void __attribute__((noreturn)) main(void);
+
+extern void __attribute__((naked)) _start(void)
+{
+    asm volatile ("la sp, ramend");
+ 8000008:	18000117          	auipc	sp,0x18000
+ 800000c:	1f810113          	addi	sp,sp,504 # 20000200 <ramend>
+    main();
+ 8000010:	004000ef          	jal	ra,8000014 <main>
+
+Disassembly of section .text.startup:
+
+08000014 <main>:
+}
+
+void __attribute__((noreturn)) main(void)
+{
+    uint32_t led_out = 1;
+    uint32_t clock_hz = *REG_CONFIG_CLOCK_HZ;
+ 8000014:	400007b7          	lui	a5,0x40000
+ 8000018:	0047a603          	lw	a2,4(a5) # 40000004 <ramend+0x1ffffe04>
+    while(1) {
+        uart_puts("Hello, RISC-V\r\n");
+        *REG_GPIO_OUT = led_out;
+        led_out = (led_out << 1) | ((led_out >> 7) & 1);
+        wait_cycles(clock_hz >> 1);
+ 800001c:	00000313          	li	t1,0
+    uint32_t led_out = 1;
+ 8000020:	00100793          	li	a5,1
+        wait_cycles(clock_hz >> 1);
+ 8000024:	00165613          	srli	a2,a2,0x1
+    uint32_t led_out = 1;
+ 8000028:	080008b7          	lui	a7,0x8000
+    while((*REG_UART_STATUS & 0b01) != 0);
+ 800002c:	300015b7          	lui	a1,0x30001
+        *REG_GPIO_OUT = led_out;
+ 8000030:	30000e37          	lui	t3,0x30000
+    uint32_t led_out = 1;
+ 8000034:	0a888713          	addi	a4,a7,168 # 80000a8 <main+0x94>
+    while(*s) {
+ 8000038:	00074503          	lbu	a0,0(a4)
+ 800003c:	04051a63          	bnez	a0,8000090 <main+0x7c>
+        led_out = (led_out << 1) | ((led_out >> 7) & 1);
+ 8000040:	00179713          	slli	a4,a5,0x1
+        *REG_GPIO_OUT = led_out;
+ 8000044:	00fe2023          	sw	a5,0(t3) # 30000000 <ramend+0xffffe00>
+        led_out = (led_out << 1) | ((led_out >> 7) & 1);
+ 8000048:	0077d793          	srli	a5,a5,0x7
+ 800004c:	0017f793          	andi	a5,a5,1
+ 8000050:	00f767b3          	or	a5,a4,a5
+        asm volatile ("rdcycleh %0" : "=r" (h));
+ 8000054:	c8002873          	rdcycleh	a6
+        asm volatile ("rdcycle  %0" : "=r" (l));
+ 8000058:	c0002ef3          	rdcycle	t4
+        asm volatile ("rdcycleh %0" : "=r" (hv));
+ 800005c:	c8002773          	rdcycleh	a4
+    } while(h != hv);
+ 8000060:	fee81ae3          	bne	a6,a4,8000054 <main+0x40>
+        asm volatile ("rdcycleh %0" : "=r" (h));
+ 8000064:	c8002773          	rdcycleh	a4
+        asm volatile ("rdcycle  %0" : "=r" (l));
+ 8000068:	c00026f3          	rdcycle	a3
+        asm volatile ("rdcycleh %0" : "=r" (hv));
+ 800006c:	c8002573          	rdcycleh	a0
+    } while(h != hv);
+ 8000070:	fea71ae3          	bne	a4,a0,8000064 <main+0x50>
+    while(read_cycle() - start < cycles);
+ 8000074:	41d68533          	sub	a0,a3,t4
+ 8000078:	00a6b6b3          	sltu	a3,a3,a0
+ 800007c:	41070733          	sub	a4,a4,a6
+ 8000080:	40d70733          	sub	a4,a4,a3
+ 8000084:	fae318e3          	bne	t1,a4,8000034 <main+0x20>
+ 8000088:	fcc56ee3          	bltu	a0,a2,8000064 <main+0x50>
+ 800008c:	fa9ff06f          	j	8000034 <main+0x20>
+        uart_tx((uint8_t)*(s++));
+ 8000090:	00170713          	addi	a4,a4,1
+    while((*REG_UART_STATUS & 0b01) != 0);
+ 8000094:	0005a683          	lw	a3,0(a1) # 30001000 <ramend+0x10000e00>
+ 8000098:	0016f693          	andi	a3,a3,1
+ 800009c:	fe069ce3          	bnez	a3,8000094 <main+0x80>
+    *REG_UART_DATA = value;
+ 80000a0:	00a5a023          	sw	a0,0(a1)
+}
+ 80000a4:	f95ff06f          	j	8000038 <main+0x24>

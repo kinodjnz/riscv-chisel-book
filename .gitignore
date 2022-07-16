@@ -2,3 +2,7 @@
 !.gitignore
 .vscode
 .idea
+target
+vivado.jou
+vivado.log
+*.bin
