@@ -2,8 +2,7 @@ extern int main();
 
 __attribute__((naked)) void _start()
 {
-    asm volatile ("auipc sp, 2");
-    //asm volatile ("addi sp, sp, -24");
+    asm volatile ("lui sp, 0x20002");
     int res = main();
     asm volatile("mv gp, a0");
     asm volatile("li a7, 93");
