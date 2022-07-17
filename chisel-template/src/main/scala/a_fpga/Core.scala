@@ -674,18 +674,18 @@ class Core(startAddress: BigInt = 0, bpTagInitPath: String = null) extends Modul
   //**********************************
   // Execute (EX1) Stage
 
-  val ex1_reg_fw_en        = RegInit(false.B)
-  val ex1_reg_hazard       = RegInit(false.B)
-  val ex1_fw_data          = Wire(UInt(WORD_LEN.W))
-  val ex2_reg_fw_en        = RegInit(false.B)
-  val ex2_reg_hazard       = RegInit(false.B)
-  val ex2_reg_fw_data      = RegInit(0.U(WORD_LEN.W))
-  val mem_reg_rf_wen_delay = RegInit(0.U(REN_LEN.W))
-  val mem_wb_addr_delay    = Wire(UInt(ADDR_LEN.W))
-  val mem_wb_data_delay    = Wire(UInt(WORD_LEN.W))
-  val wb_reg_rf_wen_delay  = RegInit(0.U(REN_LEN.W))
-  val wb_reg_wb_addr_delay = RegInit(0.U(ADDR_LEN.W))
-  val wb_reg_wb_data_delay = RegInit(0.U(WORD_LEN.W))
+  val ex1_reg_fw_en         = RegInit(false.B)
+  val ex1_reg_hazard        = RegInit(false.B)
+  val ex1_fw_data           = Wire(UInt(WORD_LEN.W))
+  val ex2_reg_fw_en         = RegInit(false.B)
+  val ex2_reg_hazard        = RegInit(false.B)
+  val ex2_reg_fw_data       = RegInit(0.U(WORD_LEN.W))
+  val mem_reg_rf_wen_delay  = RegInit(0.U(REN_LEN.W))
+  val mem_wb_addr_delay     = Wire(UInt(ADDR_LEN.W))
+  val mem_reg_wb_data_delay = RegInit(0.U(WORD_LEN.W))
+  val wb_reg_rf_wen_delay   = RegInit(0.U(REN_LEN.W))
+  val wb_reg_wb_addr_delay  = RegInit(0.U(ADDR_LEN.W))
+  val wb_reg_wb_data_delay  = RegInit(0.U(WORD_LEN.W))
 
   ex1_stall :=
     (ex1_reg_hazard &&
@@ -711,7 +711,7 @@ class Core(startAddress: BigInt = 0, bpTagInitPath: String = null) extends Modul
      (ex1_reg_rs1_addr === mem_reg_wb_addr)) -> ex2_reg_fw_data,
     ((mem_reg_rf_wen_delay === REN_S) &&
      (ex1_reg_op1_sel === OP1_RS1) &&
-     (ex1_reg_rs1_addr === mem_wb_addr_delay)) -> mem_wb_data_delay,
+     (ex1_reg_rs1_addr === mem_wb_addr_delay)) -> mem_reg_wb_data_delay,
     ((wb_reg_rf_wen_delay === REN_S) &&
      (ex1_reg_op1_sel === OP1_RS1) &&
      (ex1_reg_rs1_addr === wb_reg_wb_addr_delay)) -> wb_reg_wb_data_delay,
@@ -727,7 +727,7 @@ class Core(startAddress: BigInt = 0, bpTagInitPath: String = null) extends Modul
      (ex1_reg_rs2_addr === mem_reg_wb_addr)) -> ex2_reg_fw_data,
     ((mem_reg_rf_wen_delay === REN_S) &&
      (ex1_reg_op2_sel === OP2_RS2) &&
-     (ex1_reg_rs2_addr === mem_wb_addr_delay)) -> mem_wb_data_delay,
+     (ex1_reg_rs2_addr === mem_wb_addr_delay)) -> mem_reg_wb_data_delay,
     ((wb_reg_rf_wen_delay === REN_S) &&
      (ex1_reg_op2_sel === OP2_RS2) &&
      (ex1_reg_rs2_addr === wb_reg_wb_addr_delay)) -> wb_reg_wb_data_delay,
@@ -740,7 +740,7 @@ class Core(startAddress: BigInt = 0, bpTagInitPath: String = null) extends Modul
     (ex2_reg_fw_en &&
      (ex1_reg_rs2_addr === mem_reg_wb_addr)) -> ex2_reg_fw_data,
     ((mem_reg_rf_wen_delay === REN_S) &&
-     (ex1_reg_rs2_addr === mem_wb_addr_delay)) -> mem_wb_data_delay,
+     (ex1_reg_rs2_addr === mem_wb_addr_delay)) -> mem_reg_wb_data_delay,
     ((wb_reg_rf_wen_delay === REN_S) &&
      (ex1_reg_rs2_addr === wb_reg_wb_addr_delay)) -> wb_reg_wb_data_delay,
   ))
@@ -1016,9 +1016,9 @@ class Core(startAddress: BigInt = 0, bpTagInitPath: String = null) extends Modul
     (mem_wb_sel === WB_CSR) -> csr_rdata
   ))
 
-  mem_reg_rf_wen_delay := mem_rf_wen
-  mem_wb_addr_delay    := wb_reg_wb_addr
-  mem_wb_data_delay    := Mux(mem_wb_sel === WB_MEM, mem_wb_data_load, wb_reg_wb_data)
+  mem_reg_rf_wen_delay  := mem_rf_wen
+  mem_wb_addr_delay     := wb_reg_wb_addr
+  mem_reg_wb_data_delay := Mux(mem_wb_sel === WB_MEM, mem_wb_data_load, mem_wb_data)
   
   //**********************************
   // MEM/WB regsiter
@@ -1095,9 +1095,9 @@ class Core(startAddress: BigInt = 0, bpTagInitPath: String = null) extends Modul
   printf(p"mem_reg_wb_addr  : 0x${Hexadecimal(mem_reg_wb_addr)}\n")
   printf(p"mem_is_meintr    : ${mem_is_meintr}\n")
   printf(p"mem_is_mtintr    : ${mem_is_mtintr}\n")
-  // printf(p"mem_reg_rf_wen_delay : 0x${Hexadecimal(mem_reg_rf_wen_delay)}\n")
-  // printf(p"mem_wb_addr_delay : 0x${Hexadecimal(mem_wb_addr_delay)}\n")
-  // printf(p"mem_wb_data_delay : 0x${Hexadecimal(mem_wb_data_delay)}\n")
+  printf(p"mem_reg_rf_wen_delay : 0x${Hexadecimal(mem_reg_rf_wen_delay)}\n")
+  printf(p"mem_wb_addr_delay : 0x${Hexadecimal(mem_wb_addr_delay)}\n")
+  printf(p"mem_reg_wb_data_delay : 0x${Hexadecimal(mem_reg_wb_data_delay)}\n")
   printf(p"wb_reg_wb_addr   : 0x${Hexadecimal(wb_reg_wb_addr)}\n")
   printf(p"wb_reg_wb_data   : 0x${Hexadecimal(wb_reg_wb_data)}\n")
   printf(p"instret          : ${instret}\n")
