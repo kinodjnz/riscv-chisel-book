@@ -10,95 +10,176 @@ Disassembly of section .isr_vector:
 extern void __attribute__((naked)) __attribute__((section(".isr_vector"))) isr_vector(void)
 {
     asm volatile ("j _start");
- 8000000:	0080006f          	j	8000008 <_start>
+ 8000000:	0c80006f          	j	80000c8 <_start>
     asm volatile ("j _start");
- 8000004:	0040006f          	j	8000008 <_start>
+ 8000004:	0c40006f          	j	80000c8 <_start>
 
 Disassembly of section .text:
 
-08000008 <_start>:
+08000008 <intr_handler>:
 
-void __attribute__((noreturn)) main(void);
+static volatile uint32_t uart_tx_waiting = 0;
+static volatile uint8_t uart_tx_data = 0;
 
-extern void __attribute__((naked)) _start(void)
-{
+void __attribute__((naked)) intr_handler(void) {
+    INTR_PROLOGUE();
+ 8000008:	fc010113          	addi	sp,sp,-64
+ 800000c:	00112023          	sw	ra,0(sp)
+ 8000010:	00a12223          	sw	a0,4(sp)
+ 8000014:	00b12423          	sw	a1,8(sp)
+ 8000018:	00c12623          	sw	a2,12(sp)
+ 800001c:	00d12823          	sw	a3,16(sp)
+ 8000020:	00e12a23          	sw	a4,20(sp)
+ 8000024:	00f12c23          	sw	a5,24(sp)
+ 8000028:	01012e23          	sw	a6,28(sp)
+ 800002c:	03112023          	sw	a7,32(sp)
+ 8000030:	02512223          	sw	t0,36(sp)
+ 8000034:	02612423          	sw	t1,40(sp)
+ 8000038:	02712623          	sw	t2,44(sp)
+ 800003c:	03c12823          	sw	t3,48(sp)
+ 8000040:	03d12a23          	sw	t4,52(sp)
+ 8000044:	03e12c23          	sw	t5,56(sp)
+ 8000048:	03f12e23          	sw	t6,60(sp)
+    if (uart_tx_waiting) {
+ 800004c:	200006b7          	lui	a3,0x20000
+ 8000050:	0046a783          	lw	a5,4(a3) # 20000004 <uart_tx_waiting>
+ 8000054:	02078663          	beqz	a5,8000080 <intr_handler+0x78>
+        if (!((*REG_UART_STATUS) & 4)) {
+ 8000058:	300017b7          	lui	a5,0x30001
+ 800005c:	0007a703          	lw	a4,0(a5) # 30001000 <ramend+0x10000e00>
+ 8000060:	00477713          	andi	a4,a4,4
+ 8000064:	00071e63          	bnez	a4,8000080 <intr_handler+0x78>
+            *REG_UART_DATA = uart_tx_data;
+ 8000068:	20000737          	lui	a4,0x20000
+ 800006c:	00074703          	lbu	a4,0(a4) # 20000000 <uart_tx_data>
+ 8000070:	0ff77713          	zext.b	a4,a4
+ 8000074:	00e7a223          	sw	a4,4(a5)
+            uart_tx_waiting = 0;
+ 8000078:	0006a223          	sw	zero,4(a3)
+            *REG_UART_STATUS = 0;
+ 800007c:	0007a023          	sw	zero,0(a5)
+        }
+    }
+    INTR_EPILOGUE();
+ 8000080:	03c12f83          	lw	t6,60(sp)
+ 8000084:	03812f03          	lw	t5,56(sp)
+ 8000088:	03412e83          	lw	t4,52(sp)
+ 800008c:	03012e03          	lw	t3,48(sp)
+ 8000090:	02c12383          	lw	t2,44(sp)
+ 8000094:	02812303          	lw	t1,40(sp)
+ 8000098:	02412283          	lw	t0,36(sp)
+ 800009c:	02012883          	lw	a7,32(sp)
+ 80000a0:	01c12803          	lw	a6,28(sp)
+ 80000a4:	01812783          	lw	a5,24(sp)
+ 80000a8:	01412703          	lw	a4,20(sp)
+ 80000ac:	01012683          	lw	a3,16(sp)
+ 80000b0:	00c12603          	lw	a2,12(sp)
+ 80000b4:	00812583          	lw	a1,8(sp)
+ 80000b8:	00412503          	lw	a0,4(sp)
+ 80000bc:	00012083          	lw	ra,0(sp)
+ 80000c0:	04010113          	addi	sp,sp,64
+ 80000c4:	30200073          	mret
+
+080000c8 <_start>:
     asm volatile ("la sp, ramend");
- 8000008:	18000117          	auipc	sp,0x18000
- 800000c:	1f810113          	addi	sp,sp,504 # 20000200 <ramend>
+ 80000c8:	18000117          	auipc	sp,0x18000
+ 80000cc:	13810113          	addi	sp,sp,312 # 20000200 <ramend>
     main();
- 8000010:	004000ef          	jal	ra,8000014 <main>
+ 80000d0:	004000ef          	jal	ra,80000d4 <main>
 
 Disassembly of section .text.startup:
 
-08000014 <main>:
+080000d4 <main>:
 }
 
 void __attribute__((noreturn)) main(void)
 {
     uint32_t led_out = 1;
     uint32_t clock_hz = *REG_CONFIG_CLOCK_HZ;
- 8000014:	400007b7          	lui	a5,0x40000
- 8000018:	0047a603          	lw	a2,4(a5) # 40000004 <ramend+0x1ffffe04>
+ 80000d4:	400007b7          	lui	a5,0x40000
+ 80000d8:	0047a603          	lw	a2,4(a5) # 40000004 <ramend+0x1ffffe04>
+    asm volatile ("la %0, intr_handler" : "=r" (intr_addr));
+ 80000dc:	00000797          	auipc	a5,0x0
+ 80000e0:	f2c78793          	addi	a5,a5,-212 # 8000008 <intr_handler>
+    asm volatile ("csrw mtvec, %0" : "=r" (intr_addr));
+ 80000e4:	30579073          	csrw	mtvec,a5
+    asm volatile("csrsi mstatus, 8");
+ 80000e8:	30046073          	csrsi	mstatus,8
+	asm volatile("li %0, 0x800" : "=r" (mask));
+ 80000ec:	000017b7          	lui	a5,0x1
+ 80000f0:	80078793          	addi	a5,a5,-2048 # 800 <isr_vector-0x7fff800>
+	asm volatile("csrs mie, %0" : "=r" (mask));
+ 80000f4:	3047a073          	csrs	mie,a5
+    init_csr();
     while(1) {
         uart_puts("Hello, RISC-V\r\n");
         *REG_GPIO_OUT = led_out;
         led_out = (led_out << 1) | ((led_out >> 7) & 1);
         wait_cycles(clock_hz >> 1);
- 800001c:	00000313          	li	t1,0
+ 80000f8:	00000313          	li	t1,0
+ 80000fc:	00165613          	srli	a2,a2,0x1
     uint32_t led_out = 1;
- 8000020:	00100793          	li	a5,1
-        wait_cycles(clock_hz >> 1);
- 8000024:	00165613          	srli	a2,a2,0x1
-    uint32_t led_out = 1;
- 8000028:	080008b7          	lui	a7,0x8000
-    while((*REG_UART_STATUS & 0b01) != 0);
- 800002c:	300015b7          	lui	a1,0x30001
+ 8000100:	00100793          	li	a5,1
+ 8000104:	080008b7          	lui	a7,0x8000
+    while (uart_tx_waiting);
+ 8000108:	200005b7          	lui	a1,0x20000
+    uart_tx_data = value;
+ 800010c:	20000e37          	lui	t3,0x20000
+    uart_tx_waiting = 1;
+ 8000110:	00100e93          	li	t4,1
+    *REG_UART_STATUS = 1;
+ 8000114:	30001f37          	lui	t5,0x30001
+    uart_tx_waiting = 1;
+ 8000118:	00100f93          	li	t6,1
         *REG_GPIO_OUT = led_out;
- 8000030:	30000e37          	lui	t3,0x30000
+ 800011c:	300002b7          	lui	t0,0x30000
     uint32_t led_out = 1;
- 8000034:	0a888713          	addi	a4,a7,168 # 80000a8 <main+0x94>
+ 8000120:	19888713          	addi	a4,a7,408 # 8000198 <main+0xc4>
     while(*s) {
- 8000038:	00074503          	lbu	a0,0(a4)
- 800003c:	04051a63          	bnez	a0,8000090 <main+0x7c>
+ 8000124:	00074683          	lbu	a3,0(a4)
+ 8000128:	04069a63          	bnez	a3,800017c <main+0xa8>
         led_out = (led_out << 1) | ((led_out >> 7) & 1);
- 8000040:	00179713          	slli	a4,a5,0x1
+ 800012c:	00179713          	slli	a4,a5,0x1
         *REG_GPIO_OUT = led_out;
- 8000044:	00fe2023          	sw	a5,0(t3) # 30000000 <ramend+0xffffe00>
+ 8000130:	00f2a023          	sw	a5,0(t0) # 30000000 <ramend+0xffffe00>
         led_out = (led_out << 1) | ((led_out >> 7) & 1);
- 8000048:	0077d793          	srli	a5,a5,0x7
- 800004c:	0017f793          	andi	a5,a5,1
- 8000050:	00f767b3          	or	a5,a4,a5
+ 8000134:	0077d793          	srli	a5,a5,0x7
+ 8000138:	0017f793          	andi	a5,a5,1
+ 800013c:	00f767b3          	or	a5,a4,a5
         asm volatile ("rdcycleh %0" : "=r" (h));
- 8000054:	c8002873          	rdcycleh	a6
+ 8000140:	c8002873          	rdcycleh	a6
         asm volatile ("rdcycle  %0" : "=r" (l));
- 8000058:	c0002ef3          	rdcycle	t4
+ 8000144:	c00023f3          	rdcycle	t2
         asm volatile ("rdcycleh %0" : "=r" (hv));
- 800005c:	c8002773          	rdcycleh	a4
+ 8000148:	c8002773          	rdcycleh	a4
     } while(h != hv);
- 8000060:	fee81ae3          	bne	a6,a4,8000054 <main+0x40>
+ 800014c:	fee81ae3          	bne	a6,a4,8000140 <main+0x6c>
         asm volatile ("rdcycleh %0" : "=r" (h));
- 8000064:	c8002773          	rdcycleh	a4
+ 8000150:	c8002773          	rdcycleh	a4
         asm volatile ("rdcycle  %0" : "=r" (l));
- 8000068:	c00026f3          	rdcycle	a3
+ 8000154:	c00026f3          	rdcycle	a3
         asm volatile ("rdcycleh %0" : "=r" (hv));
- 800006c:	c8002573          	rdcycleh	a0
+ 8000158:	c8002573          	rdcycleh	a0
     } while(h != hv);
- 8000070:	fea71ae3          	bne	a4,a0,8000064 <main+0x50>
+ 800015c:	fea71ae3          	bne	a4,a0,8000150 <main+0x7c>
     while(read_cycle() - start < cycles);
- 8000074:	41d68533          	sub	a0,a3,t4
- 8000078:	00a6b6b3          	sltu	a3,a3,a0
- 800007c:	41070733          	sub	a4,a4,a6
- 8000080:	40d70733          	sub	a4,a4,a3
- 8000084:	fae318e3          	bne	t1,a4,8000034 <main+0x20>
- 8000088:	fcc56ee3          	bltu	a0,a2,8000064 <main+0x50>
- 800008c:	fa9ff06f          	j	8000034 <main+0x20>
+ 8000160:	40768533          	sub	a0,a3,t2
+ 8000164:	00a6b6b3          	sltu	a3,a3,a0
+ 8000168:	41070733          	sub	a4,a4,a6
+ 800016c:	40d70733          	sub	a4,a4,a3
+ 8000170:	fae318e3          	bne	t1,a4,8000120 <main+0x4c>
+ 8000174:	fcc56ee3          	bltu	a0,a2,8000150 <main+0x7c>
+ 8000178:	fa9ff06f          	j	8000120 <main+0x4c>
         uart_tx((uint8_t)*(s++));
- 8000090:	00170713          	addi	a4,a4,1
-    while((*REG_UART_STATUS & 0b01) != 0);
- 8000094:	0005a683          	lw	a3,0(a1) # 30001000 <ramend+0x10000e00>
- 8000098:	0016f693          	andi	a3,a3,1
- 800009c:	fe069ce3          	bnez	a3,8000094 <main+0x80>
-    *REG_UART_DATA = value;
- 80000a0:	00a5a023          	sw	a0,0(a1)
+ 800017c:	00170713          	addi	a4,a4,1
+    while (uart_tx_waiting);
+ 8000180:	0045a503          	lw	a0,4(a1) # 20000004 <uart_tx_waiting>
+ 8000184:	fe051ee3          	bnez	a0,8000180 <main+0xac>
+    uart_tx_data = value;
+ 8000188:	00de0023          	sb	a3,0(t3) # 20000000 <uart_tx_data>
+    uart_tx_waiting = 1;
+ 800018c:	01f5a223          	sw	t6,4(a1)
+    *REG_UART_STATUS = 1;
+ 8000190:	01df2023          	sw	t4,0(t5) # 30001000 <ramend+0x10000e00>
 }
- 80000a4:	f95ff06f          	j	8000038 <main+0x24>
+ 8000194:	f91ff06f          	j	8000124 <main+0x50>
