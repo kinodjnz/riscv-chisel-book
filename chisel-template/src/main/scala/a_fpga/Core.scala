@@ -32,6 +32,7 @@ class CoreDebugSignals extends Bundle {
   val mem_reg_pc = Output(UInt(WORD_LEN.W))
   val csr_rdata = Output(UInt(WORD_LEN.W))
   val mem_reg_csr_addr = Output(UInt(WORD_LEN.W))
+  val me_intr = Output(Bool())
   val id_reg_inst = Output(UInt(WORD_LEN.W))
   val cycle_counter = Output(UInt(64.W))
   val instret = Output(UInt(64.W))
@@ -609,8 +610,60 @@ class Core(startAddress: BigInt = 0, bpTagInitPath: String = null) extends Modul
 
   //**********************************
   // ID/EX1 register
-  // ジャンプ命令(ex3_reg_is_br)のときはIDのBUBBLEを受け取るためにステージ更新する
-  when(!ex1_stall && !mem_stall) {
+  when (mem_reg_is_br || ex3_reg_is_br) {
+    when(id_reg_stall) {
+      ex1_reg_pc            := id_reg_pc_delay
+      ex1_reg_op1_sel       := id_reg_op1_sel_delay
+      ex1_reg_op2_sel       := id_reg_op2_sel_delay
+      ex1_reg_rs1_addr      := id_reg_rs1_addr_delay
+      ex1_reg_rs2_addr      := id_reg_rs2_addr_delay
+      ex1_reg_op1_data      := id_reg_op1_data_delay
+      ex1_reg_op2_data      := id_reg_op2_data_delay
+      ex1_reg_rs2_data      := id_reg_rs2_data_delay
+      ex1_reg_wb_addr       := id_reg_wb_addr_delay
+      ex1_reg_rf_wen        := REN_X
+      ex1_reg_exe_fun       := ALU_ADD
+      ex1_reg_wb_sel        := WB_X
+      ex1_reg_imm_b_sext    := id_reg_imm_b_sext_delay
+      ex1_reg_csr_addr      := id_reg_csr_addr_delay
+      ex1_reg_csr_cmd       := CSR_X
+      ex1_reg_mem_wen       := MEN_X
+      ex1_reg_mem_w         := MW_X
+      ex1_reg_is_bp_pos     := false.B
+      ex1_reg_bp_addr       := id_reg_bp_addr_delay
+      ex1_reg_is_half       := id_reg_is_half_delay
+      ex1_reg_is_valid_inst := false.B
+      ex1_reg_is_trap       := false.B
+      ex1_reg_mcause        := id_reg_mcause_delay
+      ex1_reg_mtval         := id_reg_mtval_delay
+    }.otherwise {
+      ex1_reg_pc            := id_reg_pc
+      ex1_reg_op1_sel       := id_m_op1_sel
+      ex1_reg_op2_sel       := id_m_op2_sel
+      ex1_reg_rs1_addr      := id_m_rs1_addr
+      ex1_reg_rs2_addr      := id_m_rs2_addr
+      ex1_reg_op1_data      := id_op1_data
+      ex1_reg_op2_data      := id_op2_data
+      ex1_reg_rs2_data      := id_m_rs2_data
+      ex1_reg_wb_addr       := id_wb_addr
+      ex1_reg_rf_wen        := REN_X
+      ex1_reg_exe_fun       := ALU_ADD
+      ex1_reg_wb_sel        := WB_X
+      ex1_reg_imm_b_sext    := id_m_imm_b_sext
+      ex1_reg_csr_addr      := id_csr_addr
+      ex1_reg_csr_cmd       := CSR_X
+      ex1_reg_mem_wen       := MEN_X
+      ex1_reg_mem_w         := MW_X
+      ex1_reg_is_bp_pos     := false.B
+      ex1_reg_bp_addr       := id_reg_bp_addr
+      ex1_reg_is_half       := id_is_half
+      ex1_reg_is_valid_inst := false.B
+      ex1_reg_is_trap       := false.B
+      ex1_reg_mcause        := id_mcause
+      ex1_reg_mtval         := id_mtval
+    }
+  }.elsewhen(!ex1_stall && !mem_stall) {
+  //when(!ex1_stall && !mem_stall) {
     when(id_reg_stall) {
       ex1_reg_pc            := id_reg_pc_delay
       ex1_reg_op1_sel       := id_reg_op1_sel_delay
@@ -1049,6 +1102,7 @@ class Core(startAddress: BigInt = 0, bpTagInitPath: String = null) extends Modul
   io.debug_signal.csr_rdata := csr_rdata
   io.debug_signal.mem_reg_csr_addr := mem_reg_csr_addr
   io.debug_signal.mem_reg_pc := mem_reg_pc
+  io.debug_signal.me_intr := mem_is_meintr
   io.debug_signal.id_reg_inst := id_reg_inst
 
   //**********************************

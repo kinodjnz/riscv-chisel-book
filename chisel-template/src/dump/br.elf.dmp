@@ -1,0 +1,111 @@
+
+br:     file format elf32-littleriscv
+
+
+Disassembly of section .text:
+
+00000000 <_start>:
+   0:	20002137          	lui	sp,0x20002
+   4:	020000ef          	jal	ra,24 <main>
+   8:	00050193          	mv	gp,a0
+   c:	05d00893          	li	a7,93
+  10:	00000013          	nop
+  14:	00000013          	nop
+  18:	00000013          	nop
+  1c:	00000013          	nop
+  20:	00000073          	ecall
+
+Disassembly of section .text.startup:
+
+00000024 <main>:
+  24:	00200513          	li	a0,2
+  28:	00000013          	nop
+  2c:	00000013          	nop
+  30:	00000393          	li	t2,0
+  34:	00000293          	li	t0,0
+  38:	fff00713          	li	a4,-1
+  3c:	00000013          	nop
+  40:	02028663          	beqz	t0,6c <main+0x48>
+  44:	c0002873          	rdcycle	a6
+  48:	05071063          	bne	a4,a6,88 <fail>
+  4c:	00138393          	addi	t2,t2,1
+  50:	00138393          	addi	t2,t2,1
+  54:	00138393          	addi	t2,t2,1
+  58:	00138393          	addi	t2,t2,1
+  5c:	00138393          	addi	t2,t2,1
+  60:	00138393          	addi	t2,t2,1
+  64:	00138393          	addi	t2,t2,1
+  68:	0200006f          	j	88 <fail>
+  6c:	00138393          	addi	t2,t2,1
+  70:	00138393          	addi	t2,t2,1
+  74:	00138393          	addi	t2,t2,1
+  78:	00138393          	addi	t2,t2,1
+  7c:	00100513          	li	a0,1
+  80:	00008067          	ret
+  84:	00000013          	nop
+
+00000088 <fail>:
+  88:	00500513          	li	a0,5
+  8c:	00008067          	ret
+
+Disassembly of section .comment:
+
+00000000 <.comment>:
+   0:	3a434347          	fmsub.d	ft6,ft6,ft4,ft7,rmm
+   4:	2820                	vmsge.vx	v16,v0,zero,v0.t
+   6:	2029                	.2byte	0x2029
+   8:	3131                	.2byte	0x3131
+   a:	312e                	.2byte	0x312e
+   c:	302e                	.2byte	0x302e
+	...
+
+Disassembly of section .riscv.attributes:
+
+00000000 <.riscv.attributes>:
+   0:	7b41                	vmsge.vx	v22,v0,zero,v0.t
+   2:	0000                	vmsge.vx	v0,v0,zero,v0.t
+   4:	7200                	vmsge.vx	v4,v0,zero,v0.t
+   6:	7369                	.2byte	0x7369
+   8:	01007663          	bgeu	zero,a6,14 <_start+0x14>
+   c:	0071                	.2byte	0x71
+   e:	0000                	vmsge.vx	v0,v0,zero,v0.t
+  10:	1004                	.2byte	0x1004
+  12:	7205                	.2byte	0x7205
+  14:	3376                	.2byte	0x3376
+  16:	6932                	.2byte	0x6932
+  18:	7032                	.2byte	0x7032
+  1a:	5f30                	.2byte	0x5f30
+  1c:	3266                	.2byte	0x3266
+  1e:	3070                	.2byte	0x3070
+  20:	645f 7032 5f30      	.byte	0x5f, 0x64, 0x32, 0x70, 0x30, 0x5f
+  26:	3176                	.2byte	0x3176
+  28:	3070                	.2byte	0x3070
+  2a:	7a5f 6576 3233      	.byte	0x5f, 0x7a, 0x76, 0x65, 0x33, 0x32
+  30:	3166                	.2byte	0x3166
+  32:	3070                	.2byte	0x3070
+  34:	7a5f 6576 3233      	.byte	0x5f, 0x7a, 0x76, 0x65, 0x33, 0x32
+  3a:	3178                	.2byte	0x3178
+  3c:	3070                	.2byte	0x3070
+  3e:	7a5f 6576 3436      	.byte	0x5f, 0x7a, 0x76, 0x65, 0x36, 0x34
+  44:	3164                	.2byte	0x3164
+  46:	3070                	.2byte	0x3070
+  48:	7a5f 6576 3436      	.byte	0x5f, 0x7a, 0x76, 0x65, 0x36, 0x34
+  4e:	3166                	.2byte	0x3166
+  50:	3070                	.2byte	0x3070
+  52:	7a5f 6576 3436      	.byte	0x5f, 0x7a, 0x76, 0x65, 0x36, 0x34
+  58:	3178                	.2byte	0x3178
+  5a:	3070                	.2byte	0x3070
+  5c:	7a5f 6c76 3231      	.byte	0x5f, 0x7a, 0x76, 0x6c, 0x31, 0x32
+  62:	6238                	.2byte	0x6238
+  64:	7031                	.2byte	0x7031
+  66:	5f30                	.2byte	0x5f30
+  68:	767a                	.2byte	0x767a
+  6a:	336c                	.2byte	0x336c
+  6c:	6232                	.2byte	0x6232
+  6e:	7031                	.2byte	0x7031
+  70:	5f30                	.2byte	0x5f30
+  72:	767a                	.2byte	0x767a
+  74:	366c                	.2byte	0x366c
+  76:	6234                	.2byte	0x6234
+  78:	7031                	.2byte	0x7031
+  7a:	0030                	.2byte	0x30
