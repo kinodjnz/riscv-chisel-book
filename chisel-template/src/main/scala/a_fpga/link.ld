@@ -25,13 +25,19 @@ SECTIONS
       . = ALIGN(4);
   } >imem
   .data : {
+      __data_start = .;
       . = ALIGN(4);
       *(.data)
       . = ALIGN(4);
+      __data_end = .;
   } >dmem AT>imem
   .bss : { 
-      *(.bss) 
       . = ALIGN(4);
+      __bss_start = .;
+      *(.bss) 
+      *(.sbss);
+      . = ALIGN(4);
+      __bss_end = .;
   } >dmem
   PROVIDE(stack_bottom = .);
   PROVIDE(_end = .);

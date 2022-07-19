@@ -1,4 +1,5 @@
 #include <stdint.h>
+#include <string.h>
 
 extern void __attribute__((naked)) __attribute__((section(".isr_vector"))) isr_vector(void)
 {
@@ -59,16 +60,19 @@ static volatile uint32_t* const REG_CONFIG_CLOCK_HZ = (volatile uint32_t*)0x4000
     asm volatile ("addi sp, sp, 64"); \
     asm volatile ("mret")
 
-static volatile uint32_t uart_tx_waiting = 0;
-static volatile uint8_t uart_tx_data = 0;
+#define UART_TX_BUF_SIZE 16
+static volatile uint32_t uart_tx_write = 0;
+static volatile uint32_t uart_tx_read = 0;
+static volatile uint8_t uart_tx_buf[UART_TX_BUF_SIZE] = {};
 
 void __attribute__((naked)) intr_handler(void) {
     INTR_PROLOGUE();
-    if (uart_tx_waiting) {
+    if (uart_tx_read != uart_tx_write) {
         if (!((*REG_UART_STATUS) & 4)) {
-            *REG_UART_DATA = uart_tx_data;
-            uart_tx_waiting = 0;
-            *REG_UART_STATUS = 0;
+            *REG_UART_DATA = uart_tx_buf[uart_tx_read];
+            uart_tx_read = (uart_tx_read + 1) & (UART_TX_BUF_SIZE - 1);
+            if (uart_tx_read == uart_tx_write)
+                *REG_UART_STATUS = 0;
         }
     }
     INTR_EPILOGUE();
@@ -83,21 +87,19 @@ static uint64_t read_cycle(void)
         asm volatile ("rdcycleh %0" : "=r" (hv));
     } while(h != hv);
     return ((uint64_t)h << 32) | l;
-} 
+}
 
 static void uart_tx(uint8_t value) 
 {
-    while (uart_tx_waiting);
-    uart_tx_data = value;
-    uart_tx_waiting = 1;
+    uint32_t next = (uart_tx_write + 1) & (UART_TX_BUF_SIZE - 1);
+    //*REG_GPIO_OUT = led_out | 1;
+    while (uart_tx_read == next)
+        ;
+    //*REG_GPIO_OUT = led_out;
+    uart_tx_buf[uart_tx_write] = value;
+    uart_tx_write = next;
     *REG_UART_STATUS = 1;
 }
-
-// static uint8_t uart_rx() 
-// {
-//     while((*REG_UART_STATUS & 0b10) == 0);
-//     return *REG_UART_DATA;
-// }
 
 static void uart_puts(const char* s)
 {
@@ -105,7 +107,6 @@ static void uart_puts(const char* s)
         uart_tx((uint8_t)*(s++));
     }
 }
-
 
 static void wait_cycles(uint64_t cycles)
 {
@@ -134,11 +135,25 @@ static void init_csr(void)
     enable_machine_external_interrupt();
 }
 
+static inline void init_bss() {
+    extern uint32_t __bss_start[];
+    extern uint32_t __bss_end[];
+    uint32_t *p = __bss_start;
+    uint32_t *q = __bss_end;
+
+    do {
+        *(volatile uint32_t *)p = 0;
+    } while (++p < q);
+}
+
 void __attribute__((noreturn)) main(void)
 {
+    init_bss();
     uint32_t led_out = 1;
     uint32_t clock_hz = *REG_CONFIG_CLOCK_HZ;
+    *REG_UART_STATUS = 0;
     init_csr();
+    uint32_t i = 0;
     while(1) {
         uart_puts("Hello, RISC-V\r\n");
         *REG_GPIO_OUT = led_out;
