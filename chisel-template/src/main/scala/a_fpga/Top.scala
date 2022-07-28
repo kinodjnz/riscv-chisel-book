@@ -3,6 +3,7 @@ package fpga
 import chisel3._
 import chisel3.util._
 import common.Consts._
+import DramConsts._
 import chisel3.stage.ChiselStage
 import chisel3.util.experimental.loadMemoryFromFileInline
 import chisel3.experimental.{annotate, ChiselAnnotation}
@@ -35,6 +36,10 @@ class RiscVDebugSignals extends Bundle {
   val wready = Output(Bool())
   val wstrb = Output(UInt(4.W))
   val wdata = Output(UInt(WORD_LEN.W))
+
+  val dram_init_calib_complete = Output(Bool())
+  val dram_rdata_valid         = Output(Bool())
+  val dram_busy                = Output(Bool())
 }
 
 class RiscV(clockHz: Int) extends Module {
@@ -43,6 +48,7 @@ class RiscV(clockHz: Int) extends Module {
   val startAddress = 0x08000000L
 
   val io = IO(new Bundle {
+    val dram = Flipped(new DramIo())
     val gpio = Output(UInt(8.W))
     val uart_tx = Output(Bool())
     val exit = Output(Bool())
@@ -98,6 +104,14 @@ class RiscV(clockHz: Int) extends Module {
   // core.io.dmem <> memory.io.dmem
   core.io.dmem <> decoder.io.initiator
 
+  // dram
+  io.dram.ren := false.B
+  io.dram.wen := false.B
+  io.dram.addr := 0.U(APP_ADDR_WIDTH.W)
+  io.dram.wdata := 0.U(APP_DATA_WIDTH.W)
+  io.dram.wmask := 0.U(APP_MASK_WIDTH.W)
+  io.dram.user_busy := false.B
+
   // Debug signals
   io.debugSignals.core <> core.io.debug_signal
   io.debugSignals.raddr  := core.io.dmem.raddr  
@@ -110,6 +124,10 @@ class RiscV(clockHz: Int) extends Module {
   io.debugSignals.wready := decoder.io.initiator.wready 
   io.debugSignals.wstrb  := core.io.dmem.wstrb
 
+  io.debugSignals.dram_init_calib_complete := io.dram.init_calib_complete
+  io.debugSignals.dram_rdata_valid         := io.dram.rdata_valid
+  io.debugSignals.dram_busy                := io.dram.busy
+
   io.exit := core.io.exit
   io.gpio <> gpio.io.gpio
   io.uart_tx <> uart.io.tx
@@ -117,7 +135,7 @@ class RiscV(clockHz: Int) extends Module {
 }
 
 object ElaborateArtyA7 extends App {
-  (new ChiselStage).emitVerilog(new RiscV(100000000), Array(
+  (new ChiselStage).emitVerilog(new RiscV(100038910), Array(
     "-o", "riscv.v",
     "--target-dir", "rtl/riscv_arty_a7",
   ))
