@@ -18,13 +18,6 @@
   },
   {
     "class":"firrtl.transforms.CombinationalPath",
-    "sink":"~RiscV|RiscV>io_debugSignals_dram_busy",
-    "sources":[
-      "~RiscV|RiscV>io_dram_busy"
-    ]
-  },
-  {
-    "class":"firrtl.transforms.CombinationalPath",
     "sink":"~RiscV|RiscV>io_debugSignals_dram_init_calib_complete",
     "sources":[
       "~RiscV|RiscV>io_dram_init_calib_complete"
@@ -32,9 +25,98 @@
   },
   {
     "class":"firrtl.transforms.CombinationalPath",
+    "sink":"~RiscV|RiscV>io_dram_addr",
+    "sources":[
+      "~RiscV|RiscV>io_dram_init_calib_complete",
+      "~RiscV|RiscV>io_dram_busy"
+    ]
+  },
+  {
+    "class":"firrtl.transforms.CombinationalPath",
+    "sink":"~RiscV|RiscV>io_debugSignals_dram_busy",
+    "sources":[
+      "~RiscV|RiscV>io_dram_busy"
+    ]
+  },
+  {
+    "class":"firrtl.transforms.CombinationalPath",
+    "sink":"~RiscV|RiscV>io_debugSignals_ren",
+    "sources":[
+      "~RiscV|RiscV>io_dram_init_calib_complete",
+      "~RiscV|RiscV>io_dram_busy"
+    ]
+  },
+  {
+    "class":"firrtl.transforms.CombinationalPath",
+    "sink":"~RiscV|RiscV>io_debugSignals_rvalid",
+    "sources":[
+      "~RiscV|RiscV>io_dram_rdata_valid",
+      "~RiscV|RiscV>io_dram_init_calib_complete",
+      "~RiscV|RiscV>io_dram_busy"
+    ]
+  },
+  {
+    "class":"firrtl.transforms.CombinationalPath",
+    "sink":"~RiscV|RiscV>io_debugSignals_rdata",
+    "sources":[
+      "~RiscV|RiscV>io_dram_rdata",
+      "~RiscV|RiscV>io_dram_init_calib_complete",
+      "~RiscV|RiscV>io_dram_busy"
+    ]
+  },
+  {
+    "class":"firrtl.transforms.CombinationalPath",
+    "sink":"~RiscV|RiscV>io_debugSignals_wen",
+    "sources":[
+      "~RiscV|RiscV>io_dram_init_calib_complete",
+      "~RiscV|RiscV>io_dram_busy"
+    ]
+  },
+  {
+    "class":"firrtl.transforms.CombinationalPath",
+    "sink":"~RiscV|RiscV>io_dram_ren",
+    "sources":[
+      "~RiscV|RiscV>io_dram_init_calib_complete",
+      "~RiscV|RiscV>io_dram_busy"
+    ]
+  },
+  {
+    "class":"firrtl.transforms.CombinationalPath",
+    "sink":"~RiscV|RiscV>io_debugSignals_wready",
+    "sources":[
+      "~RiscV|RiscV>io_dram_init_calib_complete",
+      "~RiscV|RiscV>io_dram_busy"
+    ]
+  },
+  {
+    "class":"firrtl.transforms.CombinationalPath",
     "sink":"~RiscV|RiscV>io_debugSignals_dram_rdata_valid",
     "sources":[
       "~RiscV|RiscV>io_dram_rdata_valid"
+    ]
+  },
+  {
+    "class":"firrtl.transforms.CombinationalPath",
+    "sink":"~RiscV|RiscV>io_dram_wdata",
+    "sources":[
+      "~RiscV|RiscV>io_dram_init_calib_complete",
+      "~RiscV|RiscV>io_dram_busy"
+    ]
+  },
+  {
+    "class":"firrtl.transforms.CombinationalPath",
+    "sink":"~RiscV|RiscV>io_dram_wen",
+    "sources":[
+      "~RiscV|RiscV>io_dram_init_calib_complete",
+      "~RiscV|RiscV>io_dram_busy"
+    ]
+  },
+  {
+    "class":"firrtl.transforms.CombinationalPath",
+    "sink":"~RiscV|RiscV>io_dram_wmask",
+    "sources":[
+      "~RiscV|RiscV>io_dram_init_calib_complete",
+      "~RiscV|RiscV>io_dram_busy"
     ]
   }
 ]

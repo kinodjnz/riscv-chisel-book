@@ -92,8 +92,8 @@ module MachineTimer(
   wire [63:0] _mtime_T_5 = {io_mem_wdata,mtime[31:0]}; // @[Cat.scala 31:58]
   wire [63:0] _mtimecmp_T_1 = {mtimecmp[63:32],io_mem_wdata}; // @[Cat.scala 31:58]
   wire [63:0] _mtimecmp_T_3 = {io_mem_wdata,mtimecmp[31:0]}; // @[Cat.scala 31:58]
-  wire [63:0] _GEN_6 = io_mem_waddr == 32'hc ? _mtimecmp_T_3 : mtimecmp; // @[MachineTimer.scala 48:40 49:16 15:25]
-  wire [63:0] _GEN_7 = io_mem_waddr == 32'h8 ? _mtimecmp_T_1 : _GEN_6; // @[MachineTimer.scala 46:39 47:16]
+  wire [63:0] _GEN_6 = io_mem_waddr == 32'hc ? _mtimecmp_T_3 : mtimecmp; // @[MachineTimer.scala 49:40 50:16 15:25]
+  wire [63:0] _GEN_7 = io_mem_waddr == 32'h8 ? _mtimecmp_T_1 : _GEN_6; // @[MachineTimer.scala 47:39 48:16]
   assign io_mem_rdata = io_mem_ren ? _GEN_3 : 32'h0; // @[MachineTimer.scala 23:21 37:18]
   assign io_mem_rvalid = io_mem_ren; // @[MachineTimer.scala 23:21 35:19 38:19]
   assign io_intr = intr; // @[MachineTimer.scala 20:11]
@@ -101,11 +101,11 @@ module MachineTimer(
   always @(posedge clock) begin
     if (reset) begin // @[MachineTimer.scala 14:22]
       mtime <= 64'h0; // @[MachineTimer.scala 14:22]
-    end else if (io_mem_wen) begin // @[MachineTimer.scala 41:21]
-      if (io_mem_waddr == 32'h0) begin // @[MachineTimer.scala 42:33]
-        mtime <= _mtime_T_3; // @[MachineTimer.scala 43:13]
-      end else if (io_mem_waddr == 32'h4) begin // @[MachineTimer.scala 44:39]
-        mtime <= _mtime_T_5; // @[MachineTimer.scala 45:13]
+    end else if (io_mem_wen) begin // @[MachineTimer.scala 42:21]
+      if (io_mem_waddr == 32'h0) begin // @[MachineTimer.scala 43:33]
+        mtime <= _mtime_T_3; // @[MachineTimer.scala 44:13]
+      end else if (io_mem_waddr == 32'h4) begin // @[MachineTimer.scala 45:39]
+        mtime <= _mtime_T_5; // @[MachineTimer.scala 46:13]
       end else begin
         mtime <= _mtime_T_1; // @[MachineTimer.scala 18:9]
       end
@@ -114,9 +114,9 @@ module MachineTimer(
     end
     if (reset) begin // @[MachineTimer.scala 15:25]
       mtimecmp <= 64'hffffffff; // @[MachineTimer.scala 15:25]
-    end else if (io_mem_wen) begin // @[MachineTimer.scala 41:21]
-      if (!(io_mem_waddr == 32'h0)) begin // @[MachineTimer.scala 42:33]
-        if (!(io_mem_waddr == 32'h4)) begin // @[MachineTimer.scala 44:39]
+    end else if (io_mem_wen) begin // @[MachineTimer.scala 42:21]
+      if (!(io_mem_waddr == 32'h0)) begin // @[MachineTimer.scala 43:33]
+        if (!(io_mem_waddr == 32'h4)) begin // @[MachineTimer.scala 45:39]
           mtimecmp <= _GEN_7;
         end
       end
@@ -512,8 +512,10 @@ module Core(
   input  [31:0] io_dmem_rdata,
   output        io_dmem_ren,
   input         io_dmem_rvalid,
+  input         io_dmem_rready,
   output [31:0] io_dmem_waddr,
   output        io_dmem_wen,
+  input         io_dmem_wready,
   output [3:0]  io_dmem_wstrb,
   output [31:0] io_dmem_wdata,
   input  [31:0] io_mtimer_mem_raddr,
@@ -931,8 +933,21 @@ module Core(
   wire  _ex1_stall_T_20 = ex1_reg_rs2_addr == mem_reg_wb_addr; // @[Core.scala 755:24]
   wire  _ex1_stall_T_21 = _ex1_stall_T_19 & _ex1_stall_T_20; // @[Core.scala 754:65]
   wire  ex1_stall = _ex1_stall_T_15 | _ex1_stall_T_21; // @[Core.scala 752:46]
+  wire  _mem_en_T = ~mem_reg_is_br; // @[Core.scala 965:30]
+  wire  _mem_en_T_2 = ~ex3_reg_is_br; // @[Core.scala 965:48]
+  wire  _mem_en_T_4 = ~mem_reg_is_trap; // @[Core.scala 965:66]
+  wire  mem_is_meintr = csr_mstatus[3] & (io_intr & csr_mie[11]); // @[Core.scala 963:45]
+  wire  _mem_en_T_6 = ~mem_is_meintr; // @[Core.scala 965:86]
+  wire  mem_is_mtintr = csr_mstatus[3] & (mtimer_io_intr & csr_mie[7]); // @[Core.scala 964:45]
+  wire  _mem_en_T_8 = ~mem_is_mtintr; // @[Core.scala 965:104]
+  wire  mem_en = mem_reg_en & ~mem_reg_is_br & ~ex3_reg_is_br & ~mem_reg_is_trap & ~mem_is_meintr & ~mem_is_mtintr; // @[Core.scala 965:101]
+  wire [2:0] mem_wb_sel = mem_en ? mem_reg_wb_sel : 3'h0; // @[Core.scala 967:23]
+  wire  _mem_stall_T = mem_wb_sel == 3'h1; // @[Core.scala 979:29]
   reg  mem_stall_delay; // @[Core.scala 970:32]
-  wire  mem_stall = io_dmem_ren & (~io_dmem_rvalid | mem_stall_delay); // @[Core.scala 978:28]
+  wire [1:0] mem_mem_wen = mem_en ? mem_reg_mem_wen : 2'h0; // @[Core.scala 969:24]
+  wire  _mem_stall_T_6 = mem_mem_wen == 2'h1; // @[Core.scala 979:118]
+  wire  mem_stall = mem_wb_sel == 3'h1 & (~io_dmem_rvalid | ~io_dmem_rready | mem_stall_delay) | mem_mem_wen == 2'h1 & ~
+    io_dmem_wready; // @[Core.scala 979:101]
   wire  id_stall = ex1_stall | mem_stall; // @[Core.scala 345:25]
   wire [31:0] id_inst = _if1_is_jump_T ? 32'h13 : id_reg_inst; // @[Core.scala 349:20]
   wire  id_is_half = id_inst[1:0] != 2'h3; // @[Core.scala 351:35]
@@ -1863,9 +1878,7 @@ module Core(
   wire [31:0] _ex1_rs2_data_T_11 = _ex1_rs2_data_T_10 ? wb_reg_wb_data_delay : regfile_ex1_rs2_data_MPORT_data; // @[Mux.scala 101:16]
   wire [31:0] _ex1_rs2_data_T_12 = _ex1_rs2_data_T_7 ? mem_reg_wb_data_delay : _ex1_rs2_data_T_11; // @[Mux.scala 101:16]
   wire [31:0] _ex1_rs2_data_T_13 = _ex1_rs2_data_T_4 ? ex2_reg_fw_data : _ex1_rs2_data_T_12; // @[Mux.scala 101:16]
-  wire  _ex1_hazard_T_3 = ~mem_reg_is_br; // @[Core.scala 808:81]
-  wire  _ex1_hazard_T_5 = ~ex3_reg_is_br; // @[Core.scala 808:99]
-  wire  ex1_hazard = ex1_reg_rf_wen == 2'h1 & ex1_reg_wb_addr != 5'h0 & ~mem_reg_is_br & ~ex3_reg_is_br; // @[Core.scala 808:96]
+  wire  ex1_hazard = ex1_reg_rf_wen == 2'h1 & ex1_reg_wb_addr != 5'h0 & _mem_en_T & _mem_en_T_2; // @[Core.scala 808:96]
   wire  ex_is_bubble = ex1_stall | mem_reg_is_br | ex3_reg_is_br; // @[Core.scala 816:51]
   wire  _ex2_is_cond_br_T = ex2_reg_exe_fun == 5'hb; // @[Core.scala 859:22]
   wire  _ex2_is_cond_br_T_1 = ex2_reg_op1_data == ex2_reg_op2_data; // @[Core.scala 859:57]
@@ -1885,9 +1898,9 @@ module Core(
   wire  _ex2_is_cond_br_inst_T_8 = _ex2_is_cond_br_inst_T_6 | _ex2_is_cond_br_T_14; // @[Core.scala 870:34]
   wire  ex2_is_cond_br_inst = _ex2_is_cond_br_inst_T_8 | _ex2_is_cond_br_T_16; // @[Core.scala 871:35]
   wire [31:0] ex2_cond_br_target = ex2_reg_pc + ex2_reg_imm_b_sext; // @[Core.scala 875:39]
-  wire  ex2_hazard = ex2_reg_rf_wen == 2'h1 & ex2_reg_wb_addr != 5'h0 & _ex1_hazard_T_3 & _ex1_hazard_T_5; // @[Core.scala 886:96]
-  wire  _ex3_reg_bp_en_T_2 = _ex1_hazard_T_3 & _ex1_hazard_T_5; // @[Core.scala 893:46]
-  wire  ex3_bp_en = ex3_reg_bp_en & _ex1_hazard_T_3 & _ex1_hazard_T_5; // @[Core.scala 907:51]
+  wire  ex2_hazard = ex2_reg_rf_wen == 2'h1 & ex2_reg_wb_addr != 5'h0 & _mem_en_T & _mem_en_T_2; // @[Core.scala 886:96]
+  wire  _ex3_reg_bp_en_T_2 = _mem_en_T & _mem_en_T_2; // @[Core.scala 893:46]
+  wire  ex3_bp_en = ex3_reg_bp_en & _mem_en_T & _mem_en_T_2; // @[Core.scala 907:51]
   wire  _ex3_cond_bp_fail_T = ~ex3_reg_is_bp_pos; // @[Core.scala 909:6]
   wire  _ex3_cond_bp_fail_T_4 = ex3_reg_is_bp_pos & ex3_reg_is_cond_br & ex3_reg_bp_addr != ex3_reg_cond_br_target; // @[Core.scala 910:46]
   wire  _ex3_cond_bp_fail_T_5 = ~ex3_reg_is_bp_pos & ex3_reg_is_cond_br | _ex3_cond_bp_fail_T_4; // @[Core.scala 909:48]
@@ -1905,19 +1918,10 @@ module Core(
   wire [3:0] _mem_reg_mem_wstrb_T_5 = _mem_reg_mem_wstrb_T ? 4'h1 : _mem_reg_mem_wstrb_T_4; // @[Mux.scala 101:16]
   wire [6:0] _GEN_23 = {{3'd0}, _mem_reg_mem_wstrb_T_5}; // @[Core.scala 952:8]
   wire [6:0] _mem_reg_mem_wstrb_T_7 = _GEN_23 << ex2_alu_out[1:0]; // @[Core.scala 952:8]
-  wire  mem_is_meintr = csr_mstatus[3] & (io_intr & csr_mie[11]); // @[Core.scala 963:45]
-  wire  mem_is_mtintr = csr_mstatus[3] & (mtimer_io_intr & csr_mie[7]); // @[Core.scala 964:45]
-  wire  _mem_en_T_4 = ~mem_reg_is_trap; // @[Core.scala 965:66]
-  wire  _mem_en_T_6 = ~mem_is_meintr; // @[Core.scala 965:86]
-  wire  _mem_en_T_8 = ~mem_is_mtintr; // @[Core.scala 965:104]
-  wire  mem_en = mem_reg_en & _ex1_hazard_T_3 & _ex1_hazard_T_5 & ~mem_reg_is_trap & ~mem_is_meintr & ~mem_is_mtintr; // @[Core.scala 965:101]
-  wire [2:0] mem_wb_sel = mem_en ? mem_reg_wb_sel : 3'h0; // @[Core.scala 967:23]
   wire [2:0] mem_csr_cmd = mem_en ? mem_reg_csr_cmd : 3'h0; // @[Core.scala 968:24]
-  wire [1:0] mem_mem_wen = mem_en ? mem_reg_mem_wen : 2'h0; // @[Core.scala 969:24]
-  wire  _io_dmem_ren_T = mem_wb_sel == 3'h1; // @[Core.scala 974:31]
-  wire [5:0] _io_dmem_wdata_T_1 = 4'h8 * mem_reg_alu_out[1:0]; // @[Core.scala 977:46]
-  wire [94:0] _GEN_31 = {{63'd0}, mem_reg_rs2_data}; // @[Core.scala 977:38]
-  wire [94:0] _io_dmem_wdata_T_2 = _GEN_31 << _io_dmem_wdata_T_1; // @[Core.scala 977:38]
+  wire [5:0] _io_dmem_wdata_T_1 = 4'h8 * mem_reg_alu_out[1:0]; // @[Core.scala 978:46]
+  wire [94:0] _GEN_31 = {{63'd0}, mem_reg_rs2_data}; // @[Core.scala 978:38]
+  wire [94:0] _io_dmem_wdata_T_2 = _GEN_31 << _io_dmem_wdata_T_1; // @[Core.scala 978:38]
   wire [31:0] _csr_rdata_T_7 = 12'h305 == mem_reg_csr_addr ? csr_trap_vector : 32'h0; // @[Mux.scala 81:58]
   wire [31:0] _csr_rdata_T_9 = 12'hc01 == mem_reg_csr_addr ? mtimer_io_mtime[31:0] : _csr_rdata_T_7; // @[Mux.scala 81:58]
   wire [31:0] _csr_rdata_T_11 = 12'hc00 == mem_reg_csr_addr ? cycle_counter_io_value[31:0] : _csr_rdata_T_9; // @[Mux.scala 81:58]
@@ -1932,62 +1936,62 @@ module Core(
   wire [31:0] _csr_rdata_T_29 = 12'h340 == mem_reg_csr_addr ? csr_mscratch : _csr_rdata_T_27; // @[Mux.scala 81:58]
   wire [31:0] _csr_rdata_T_31 = 12'h304 == mem_reg_csr_addr ? csr_mie : _csr_rdata_T_29; // @[Mux.scala 81:58]
   wire [31:0] csr_rdata = 12'h344 == mem_reg_csr_addr ? csr_mip : _csr_rdata_T_31; // @[Mux.scala 81:58]
-  wire  _csr_wdata_T = mem_csr_cmd == 3'h1; // @[Core.scala 1000:18]
-  wire  _csr_wdata_T_1 = mem_csr_cmd == 3'h2; // @[Core.scala 1001:18]
-  wire [31:0] _csr_wdata_T_2 = csr_rdata | mem_reg_op1_data; // @[Core.scala 1001:43]
-  wire  _csr_wdata_T_3 = mem_csr_cmd == 3'h3; // @[Core.scala 1002:18]
-  wire [31:0] _csr_wdata_T_4 = ~mem_reg_op1_data; // @[Core.scala 1002:45]
-  wire [31:0] _csr_wdata_T_5 = csr_rdata & _csr_wdata_T_4; // @[Core.scala 1002:43]
+  wire  _csr_wdata_T = mem_csr_cmd == 3'h1; // @[Core.scala 1002:18]
+  wire  _csr_wdata_T_1 = mem_csr_cmd == 3'h2; // @[Core.scala 1003:18]
+  wire [31:0] _csr_wdata_T_2 = csr_rdata | mem_reg_op1_data; // @[Core.scala 1003:43]
+  wire  _csr_wdata_T_3 = mem_csr_cmd == 3'h3; // @[Core.scala 1004:18]
+  wire [31:0] _csr_wdata_T_4 = ~mem_reg_op1_data; // @[Core.scala 1004:45]
+  wire [31:0] _csr_wdata_T_5 = csr_rdata & _csr_wdata_T_4; // @[Core.scala 1004:43]
   wire [31:0] _csr_wdata_T_6 = _csr_wdata_T_3 ? _csr_wdata_T_5 : 32'h0; // @[Mux.scala 101:16]
   wire [31:0] _csr_wdata_T_7 = _csr_wdata_T_1 ? _csr_wdata_T_2 : _csr_wdata_T_6; // @[Mux.scala 101:16]
   wire [31:0] csr_wdata = _csr_wdata_T ? mem_reg_op1_data : _csr_wdata_T_7; // @[Mux.scala 101:16]
-  wire [31:0] _GEN_142 = mem_reg_csr_addr == 12'h304 ? csr_wdata : csr_mie; // @[Core.scala 1014:52 1015:15 65:29]
-  wire [31:0] _GEN_143 = mem_reg_csr_addr == 12'h340 ? csr_wdata : csr_mscratch; // @[Core.scala 1012:57 1013:20 64:29]
-  wire [31:0] _GEN_144 = mem_reg_csr_addr == 12'h340 ? csr_mie : _GEN_142; // @[Core.scala 1012:57 65:29]
-  wire [31:0] _GEN_145 = mem_reg_csr_addr == 12'h300 ? csr_wdata : csr_mstatus; // @[Core.scala 1010:56 1011:19 63:29]
-  wire [31:0] _GEN_146 = mem_reg_csr_addr == 12'h300 ? csr_mscratch : _GEN_143; // @[Core.scala 1010:56 64:29]
-  wire [31:0] _GEN_147 = mem_reg_csr_addr == 12'h300 ? csr_mie : _GEN_144; // @[Core.scala 1010:56 65:29]
-  wire [31:0] _GEN_148 = mem_reg_csr_addr == 12'h341 ? csr_wdata : csr_mepc; // @[Core.scala 1008:53 1009:16 62:29]
-  wire [31:0] _GEN_149 = mem_reg_csr_addr == 12'h341 ? csr_mstatus : _GEN_145; // @[Core.scala 1008:53 63:29]
-  wire [31:0] _GEN_153 = mem_reg_csr_addr == 12'h305 ? csr_mepc : _GEN_148; // @[Core.scala 1006:48 62:29]
-  wire [31:0] _GEN_154 = mem_reg_csr_addr == 12'h305 ? csr_mstatus : _GEN_149; // @[Core.scala 1006:48 63:29]
-  wire [31:0] _GEN_158 = _csr_wdata_T | _csr_wdata_T_1 | _csr_wdata_T_3 ? _GEN_153 : csr_mepc; // @[Core.scala 1005:82 62:29]
-  wire [31:0] _GEN_159 = _csr_wdata_T | _csr_wdata_T_1 | _csr_wdata_T_3 ? _GEN_154 : csr_mstatus; // @[Core.scala 1005:82 63:29]
+  wire [31:0] _GEN_142 = mem_reg_csr_addr == 12'h304 ? csr_wdata : csr_mie; // @[Core.scala 1016:52 1017:15 65:29]
+  wire [31:0] _GEN_143 = mem_reg_csr_addr == 12'h340 ? csr_wdata : csr_mscratch; // @[Core.scala 1014:57 1015:20 64:29]
+  wire [31:0] _GEN_144 = mem_reg_csr_addr == 12'h340 ? csr_mie : _GEN_142; // @[Core.scala 1014:57 65:29]
+  wire [31:0] _GEN_145 = mem_reg_csr_addr == 12'h300 ? csr_wdata : csr_mstatus; // @[Core.scala 1012:56 1013:19 63:29]
+  wire [31:0] _GEN_146 = mem_reg_csr_addr == 12'h300 ? csr_mscratch : _GEN_143; // @[Core.scala 1012:56 64:29]
+  wire [31:0] _GEN_147 = mem_reg_csr_addr == 12'h300 ? csr_mie : _GEN_144; // @[Core.scala 1012:56 65:29]
+  wire [31:0] _GEN_148 = mem_reg_csr_addr == 12'h341 ? csr_wdata : csr_mepc; // @[Core.scala 1010:53 1011:16 62:29]
+  wire [31:0] _GEN_149 = mem_reg_csr_addr == 12'h341 ? csr_mstatus : _GEN_145; // @[Core.scala 1010:53 63:29]
+  wire [31:0] _GEN_153 = mem_reg_csr_addr == 12'h305 ? csr_mepc : _GEN_148; // @[Core.scala 1008:48 62:29]
+  wire [31:0] _GEN_154 = mem_reg_csr_addr == 12'h305 ? csr_mstatus : _GEN_149; // @[Core.scala 1008:48 63:29]
+  wire [31:0] _GEN_158 = _csr_wdata_T | _csr_wdata_T_1 | _csr_wdata_T_3 ? _GEN_153 : csr_mepc; // @[Core.scala 1007:82 62:29]
+  wire [31:0] _GEN_159 = _csr_wdata_T | _csr_wdata_T_1 | _csr_wdata_T_3 ? _GEN_154 : csr_mstatus; // @[Core.scala 1007:82 63:29]
   wire [31:0] _csr_mip_T_3 = {csr_mip[31:12],io_intr,csr_mip[10:8],mtimer_io_intr,csr_mip[6:0]}; // @[Cat.scala 31:58]
   wire [31:0] _csr_mstatus_T_4 = {csr_mstatus[31:8],csr_mstatus[3],csr_mstatus[6:4],1'h0,csr_mstatus[2:0]}; // @[Cat.scala 31:58]
-  wire  _T_23 = mem_csr_cmd == 3'h6; // @[Core.scala 1042:27]
+  wire  _T_23 = mem_csr_cmd == 3'h6; // @[Core.scala 1044:27]
   wire [31:0] _csr_mstatus_T_19 = {csr_mstatus[31:8],1'h1,csr_mstatus[6:4],csr_mstatus[7],csr_mstatus[2:0]}; // @[Cat.scala 31:58]
-  wire [31:0] _GEN_162 = mem_csr_cmd == 3'h6 ? _csr_mstatus_T_19 : _GEN_159; // @[Core.scala 1042:38 1043:21]
-  wire [31:0] _GEN_164 = mem_csr_cmd == 3'h6 ? csr_mepc : mem_reg_br_addr; // @[Core.scala 1042:38 1045:21 187:35]
-  wire  _GEN_169 = mem_reg_is_trap | _T_23; // @[Core.scala 1035:32 1040:21]
-  wire  _GEN_175 = mem_is_mtintr | _GEN_169; // @[Core.scala 1028:30 1033:21]
-  wire  _GEN_181 = mem_is_meintr | _GEN_175; // @[Core.scala 1021:24 1026:21]
-  wire [31:0] mem_wb_rdata = io_dmem_rdata >> _io_dmem_wdata_T_1; // @[Core.scala 1058:36]
-  wire  _mem_wb_data_load_T = mem_reg_mem_w == 32'h3; // @[Core.scala 1060:20]
+  wire [31:0] _GEN_162 = mem_csr_cmd == 3'h6 ? _csr_mstatus_T_19 : _GEN_159; // @[Core.scala 1044:38 1045:21]
+  wire [31:0] _GEN_164 = mem_csr_cmd == 3'h6 ? csr_mepc : mem_reg_br_addr; // @[Core.scala 1044:38 1047:21 187:35]
+  wire  _GEN_169 = mem_reg_is_trap | _T_23; // @[Core.scala 1037:32 1042:21]
+  wire  _GEN_175 = mem_is_mtintr | _GEN_169; // @[Core.scala 1030:30 1035:21]
+  wire  _GEN_181 = mem_is_meintr | _GEN_175; // @[Core.scala 1023:24 1028:21]
+  wire [31:0] mem_wb_rdata = io_dmem_rdata >> _io_dmem_wdata_T_1; // @[Core.scala 1060:36]
+  wire  _mem_wb_data_load_T = mem_reg_mem_w == 32'h3; // @[Core.scala 1062:20]
   wire [23:0] _mem_wb_data_load_T_3 = mem_wb_rdata[7] ? 24'hffffff : 24'h0; // @[Bitwise.scala 74:12]
-  wire [31:0] _mem_wb_data_load_T_5 = {_mem_wb_data_load_T_3,mem_wb_rdata[7:0]}; // @[Core.scala 1051:40]
-  wire  _mem_wb_data_load_T_6 = mem_reg_mem_w == 32'h2; // @[Core.scala 1061:20]
+  wire [31:0] _mem_wb_data_load_T_5 = {_mem_wb_data_load_T_3,mem_wb_rdata[7:0]}; // @[Core.scala 1053:40]
+  wire  _mem_wb_data_load_T_6 = mem_reg_mem_w == 32'h2; // @[Core.scala 1063:20]
   wire [15:0] _mem_wb_data_load_T_9 = mem_wb_rdata[15] ? 16'hffff : 16'h0; // @[Bitwise.scala 74:12]
-  wire [31:0] _mem_wb_data_load_T_11 = {_mem_wb_data_load_T_9,mem_wb_rdata[15:0]}; // @[Core.scala 1051:40]
-  wire  _mem_wb_data_load_T_12 = mem_reg_mem_w == 32'h5; // @[Core.scala 1062:20]
-  wire [31:0] _mem_wb_data_load_T_15 = {24'h0,mem_wb_rdata[7:0]}; // @[Core.scala 1054:31]
-  wire  _mem_wb_data_load_T_16 = mem_reg_mem_w == 32'h4; // @[Core.scala 1063:20]
-  wire [31:0] _mem_wb_data_load_T_19 = {16'h0,mem_wb_rdata[15:0]}; // @[Core.scala 1054:31]
+  wire [31:0] _mem_wb_data_load_T_11 = {_mem_wb_data_load_T_9,mem_wb_rdata[15:0]}; // @[Core.scala 1053:40]
+  wire  _mem_wb_data_load_T_12 = mem_reg_mem_w == 32'h5; // @[Core.scala 1064:20]
+  wire [31:0] _mem_wb_data_load_T_15 = {24'h0,mem_wb_rdata[7:0]}; // @[Core.scala 1056:31]
+  wire  _mem_wb_data_load_T_16 = mem_reg_mem_w == 32'h4; // @[Core.scala 1065:20]
+  wire [31:0] _mem_wb_data_load_T_19 = {16'h0,mem_wb_rdata[15:0]}; // @[Core.scala 1056:31]
   wire [31:0] _mem_wb_data_load_T_20 = _mem_wb_data_load_T_16 ? _mem_wb_data_load_T_19 : mem_wb_rdata; // @[Mux.scala 101:16]
   wire [31:0] _mem_wb_data_load_T_21 = _mem_wb_data_load_T_12 ? _mem_wb_data_load_T_15 : _mem_wb_data_load_T_20; // @[Mux.scala 101:16]
   wire [31:0] _mem_wb_data_load_T_22 = _mem_wb_data_load_T_6 ? _mem_wb_data_load_T_11 : _mem_wb_data_load_T_21; // @[Mux.scala 101:16]
   wire [31:0] mem_wb_data_load = _mem_wb_data_load_T ? _mem_wb_data_load_T_5 : _mem_wb_data_load_T_22; // @[Mux.scala 101:16]
-  wire  _mem_wb_data_T_1 = mem_wb_sel == 3'h2; // @[Core.scala 1068:17]
-  wire [31:0] _mem_wb_data_T_3 = mem_reg_pc + 32'h2; // @[Core.scala 1068:64]
-  wire [31:0] _mem_wb_data_T_5 = mem_reg_pc + 32'h4; // @[Core.scala 1068:94]
-  wire [31:0] _mem_wb_data_T_6 = mem_reg_is_half ? _mem_wb_data_T_3 : _mem_wb_data_T_5; // @[Core.scala 1068:35]
-  wire  _mem_wb_data_T_7 = mem_wb_sel == 3'h3; // @[Core.scala 1069:17]
+  wire  _mem_wb_data_T_1 = mem_wb_sel == 3'h2; // @[Core.scala 1070:17]
+  wire [31:0] _mem_wb_data_T_3 = mem_reg_pc + 32'h2; // @[Core.scala 1070:64]
+  wire [31:0] _mem_wb_data_T_5 = mem_reg_pc + 32'h4; // @[Core.scala 1070:94]
+  wire [31:0] _mem_wb_data_T_6 = mem_reg_is_half ? _mem_wb_data_T_3 : _mem_wb_data_T_5; // @[Core.scala 1070:35]
+  wire  _mem_wb_data_T_7 = mem_wb_sel == 3'h3; // @[Core.scala 1071:17]
   wire [31:0] _mem_wb_data_T_8 = _mem_wb_data_T_7 ? csr_rdata : mem_reg_alu_out; // @[Mux.scala 101:16]
   wire [31:0] _mem_wb_data_T_9 = _mem_wb_data_T_1 ? _mem_wb_data_T_6 : _mem_wb_data_T_8; // @[Mux.scala 101:16]
-  wire [31:0] mem_wb_data = _io_dmem_ren_T ? mem_wb_data_load : _mem_wb_data_T_9; // @[Mux.scala 101:16]
-  wire [63:0] _instret_T_1 = instret + 64'h1; // @[Core.scala 1096:24]
-  reg  do_exit; // @[Core.scala 1111:24]
-  reg  do_exit_delay; // @[Core.scala 1112:30]
+  wire [31:0] mem_wb_data = _mem_stall_T ? mem_wb_data_load : _mem_wb_data_T_9; // @[Mux.scala 101:16]
+  wire [63:0] _instret_T_1 = instret + 64'h1; // @[Core.scala 1098:24]
+  reg  do_exit; // @[Core.scala 1113:24]
+  reg  do_exit_delay; // @[Core.scala 1114:30]
   LongCounter cycle_counter ( // @[Core.scala 57:29]
     .clock(cycle_counter_clock),
     .reset(cycle_counter_reset),
@@ -2059,22 +2063,22 @@ module Core(
   assign regfile_MPORT_mask = 1'h1;
   assign regfile_MPORT_en = wb_reg_rf_wen == 2'h1;
   assign io_imem_addr = ic_fill_half ? _ic_mem_addr_T_2 : _ic_mem_addr_T_7; // @[Core.scala 211:24]
-  assign io_dmem_raddr = mem_reg_alu_out; // @[Core.scala 972:17]
-  assign io_dmem_ren = mem_wb_sel == 3'h1; // @[Core.scala 974:31]
-  assign io_dmem_waddr = mem_reg_alu_out; // @[Core.scala 973:17]
-  assign io_dmem_wen = mem_mem_wen[0]; // @[Core.scala 975:17]
-  assign io_dmem_wstrb = mem_reg_mem_wstrb; // @[Core.scala 976:17]
-  assign io_dmem_wdata = _io_dmem_wdata_T_2[31:0]; // @[Core.scala 977:71]
+  assign io_dmem_raddr = mem_reg_alu_out; // @[Core.scala 973:17]
+  assign io_dmem_ren = io_dmem_rready & _mem_stall_T; // @[Core.scala 975:35]
+  assign io_dmem_waddr = mem_reg_alu_out; // @[Core.scala 974:17]
+  assign io_dmem_wen = io_dmem_wready & _mem_stall_T_6; // @[Core.scala 976:35]
+  assign io_dmem_wstrb = mem_reg_mem_wstrb; // @[Core.scala 977:17]
+  assign io_dmem_wdata = _io_dmem_wdata_T_2[31:0]; // @[Core.scala 978:71]
   assign io_mtimer_mem_rdata = mtimer_io_mem_rdata; // @[Core.scala 68:17]
   assign io_mtimer_mem_rvalid = mtimer_io_mem_rvalid; // @[Core.scala 68:17]
-  assign io_exit = do_exit_delay; // @[Core.scala 1115:11]
-  assign io_debug_signal_mem_reg_pc = mem_reg_pc; // @[Core.scala 1104:30]
+  assign io_exit = do_exit_delay; // @[Core.scala 1117:11]
+  assign io_debug_signal_mem_reg_pc = mem_reg_pc; // @[Core.scala 1106:30]
   assign io_debug_signal_csr_rdata = 12'h344 == mem_reg_csr_addr ? csr_mip : _csr_rdata_T_31; // @[Mux.scala 81:58]
-  assign io_debug_signal_mem_reg_csr_addr = {{20'd0}, mem_reg_csr_addr}; // @[Core.scala 1103:36]
+  assign io_debug_signal_mem_reg_csr_addr = {{20'd0}, mem_reg_csr_addr}; // @[Core.scala 1105:36]
   assign io_debug_signal_me_intr = csr_mstatus[3] & (io_intr & csr_mie[11]); // @[Core.scala 963:45]
-  assign io_debug_signal_id_reg_inst = id_reg_inst; // @[Core.scala 1106:31]
-  assign io_debug_signal_cycle_counter = cycle_counter_io_value; // @[Core.scala 1100:33]
-  assign io_debug_signal_instret = instret; // @[Core.scala 1101:27]
+  assign io_debug_signal_id_reg_inst = id_reg_inst; // @[Core.scala 1108:31]
+  assign io_debug_signal_cycle_counter = cycle_counter_io_value; // @[Core.scala 1102:33]
+  assign io_debug_signal_instret = instret; // @[Core.scala 1103:27]
   assign cycle_counter_clock = clock;
   assign cycle_counter_reset = reset;
   assign mtimer_clock = clock;
@@ -2097,8 +2101,8 @@ module Core(
     end
     if (reset) begin // @[Core.scala 56:32]
       csr_trap_vector <= 32'h0; // @[Core.scala 56:32]
-    end else if (_csr_wdata_T | _csr_wdata_T_1 | _csr_wdata_T_3) begin // @[Core.scala 1005:82]
-      if (mem_reg_csr_addr == 12'h305) begin // @[Core.scala 1006:48]
+    end else if (_csr_wdata_T | _csr_wdata_T_1 | _csr_wdata_T_3) begin // @[Core.scala 1007:82]
+      if (mem_reg_csr_addr == 12'h305) begin // @[Core.scala 1008:48]
         if (_csr_wdata_T) begin // @[Mux.scala 101:16]
           csr_trap_vector <= mem_reg_op1_data;
         end else begin
@@ -2108,54 +2112,54 @@ module Core(
     end
     if (reset) begin // @[Core.scala 59:24]
       instret <= 64'h0; // @[Core.scala 59:24]
-    end else if (wb_reg_is_valid_inst) begin // @[Core.scala 1095:31]
-      instret <= _instret_T_1; // @[Core.scala 1096:13]
+    end else if (wb_reg_is_valid_inst) begin // @[Core.scala 1097:31]
+      instret <= _instret_T_1; // @[Core.scala 1098:13]
     end
     if (reset) begin // @[Core.scala 60:29]
       csr_mcause <= 32'h0; // @[Core.scala 60:29]
-    end else if (mem_is_meintr) begin // @[Core.scala 1021:24]
-      csr_mcause <= 32'h8000000b; // @[Core.scala 1022:21]
-    end else if (mem_is_mtintr) begin // @[Core.scala 1028:30]
-      csr_mcause <= 32'h80000007; // @[Core.scala 1029:21]
-    end else if (mem_reg_is_trap) begin // @[Core.scala 1035:32]
-      csr_mcause <= mem_reg_mcause; // @[Core.scala 1036:21]
+    end else if (mem_is_meintr) begin // @[Core.scala 1023:24]
+      csr_mcause <= 32'h8000000b; // @[Core.scala 1024:21]
+    end else if (mem_is_mtintr) begin // @[Core.scala 1030:30]
+      csr_mcause <= 32'h80000007; // @[Core.scala 1031:21]
+    end else if (mem_reg_is_trap) begin // @[Core.scala 1037:32]
+      csr_mcause <= mem_reg_mcause; // @[Core.scala 1038:21]
     end
     if (reset) begin // @[Core.scala 62:29]
       csr_mepc <= 32'h0; // @[Core.scala 62:29]
-    end else if (mem_is_meintr) begin // @[Core.scala 1021:24]
-      csr_mepc <= mem_reg_pc; // @[Core.scala 1024:21]
-    end else if (mem_is_mtintr) begin // @[Core.scala 1028:30]
-      csr_mepc <= mem_reg_pc; // @[Core.scala 1031:21]
-    end else if (mem_reg_is_trap) begin // @[Core.scala 1035:32]
-      csr_mepc <= mem_reg_pc; // @[Core.scala 1038:21]
+    end else if (mem_is_meintr) begin // @[Core.scala 1023:24]
+      csr_mepc <= mem_reg_pc; // @[Core.scala 1026:21]
+    end else if (mem_is_mtintr) begin // @[Core.scala 1030:30]
+      csr_mepc <= mem_reg_pc; // @[Core.scala 1033:21]
+    end else if (mem_reg_is_trap) begin // @[Core.scala 1037:32]
+      csr_mepc <= mem_reg_pc; // @[Core.scala 1040:21]
     end else begin
       csr_mepc <= _GEN_158;
     end
     if (reset) begin // @[Core.scala 63:29]
       csr_mstatus <= 32'h0; // @[Core.scala 63:29]
-    end else if (mem_is_meintr) begin // @[Core.scala 1021:24]
-      csr_mstatus <= _csr_mstatus_T_4; // @[Core.scala 1025:21]
-    end else if (mem_is_mtintr) begin // @[Core.scala 1028:30]
-      csr_mstatus <= _csr_mstatus_T_4; // @[Core.scala 1032:21]
-    end else if (mem_reg_is_trap) begin // @[Core.scala 1035:32]
-      csr_mstatus <= _csr_mstatus_T_4; // @[Core.scala 1039:21]
+    end else if (mem_is_meintr) begin // @[Core.scala 1023:24]
+      csr_mstatus <= _csr_mstatus_T_4; // @[Core.scala 1027:21]
+    end else if (mem_is_mtintr) begin // @[Core.scala 1030:30]
+      csr_mstatus <= _csr_mstatus_T_4; // @[Core.scala 1034:21]
+    end else if (mem_reg_is_trap) begin // @[Core.scala 1037:32]
+      csr_mstatus <= _csr_mstatus_T_4; // @[Core.scala 1041:21]
     end else begin
       csr_mstatus <= _GEN_162;
     end
     if (reset) begin // @[Core.scala 64:29]
       csr_mscratch <= 32'h0; // @[Core.scala 64:29]
-    end else if (_csr_wdata_T | _csr_wdata_T_1 | _csr_wdata_T_3) begin // @[Core.scala 1005:82]
-      if (!(mem_reg_csr_addr == 12'h305)) begin // @[Core.scala 1006:48]
-        if (!(mem_reg_csr_addr == 12'h341)) begin // @[Core.scala 1008:53]
+    end else if (_csr_wdata_T | _csr_wdata_T_1 | _csr_wdata_T_3) begin // @[Core.scala 1007:82]
+      if (!(mem_reg_csr_addr == 12'h305)) begin // @[Core.scala 1008:48]
+        if (!(mem_reg_csr_addr == 12'h341)) begin // @[Core.scala 1010:53]
           csr_mscratch <= _GEN_146;
         end
       end
     end
     if (reset) begin // @[Core.scala 65:29]
       csr_mie <= 32'h0; // @[Core.scala 65:29]
-    end else if (_csr_wdata_T | _csr_wdata_T_1 | _csr_wdata_T_3) begin // @[Core.scala 1005:82]
-      if (!(mem_reg_csr_addr == 12'h305)) begin // @[Core.scala 1006:48]
-        if (!(mem_reg_csr_addr == 12'h341)) begin // @[Core.scala 1008:53]
+    end else if (_csr_wdata_T | _csr_wdata_T_1 | _csr_wdata_T_3) begin // @[Core.scala 1007:82]
+      if (!(mem_reg_csr_addr == 12'h305)) begin // @[Core.scala 1008:48]
+        if (!(mem_reg_csr_addr == 12'h341)) begin // @[Core.scala 1010:53]
           csr_mie <= _GEN_147;
         end
       end
@@ -2163,7 +2167,7 @@ module Core(
     if (reset) begin // @[Core.scala 66:29]
       csr_mip <= 32'h0; // @[Core.scala 66:29]
     end else begin
-      csr_mip <= _csr_mip_T_3; // @[Core.scala 1019:11]
+      csr_mip <= _csr_mip_T_3; // @[Core.scala 1021:11]
     end
     if (reset) begin // @[Core.scala 74:38]
       id_reg_pc <= 32'h0; // @[Core.scala 74:38]
@@ -2540,7 +2544,7 @@ module Core(
     if (reset) begin // @[Core.scala 137:41]
       ex3_reg_bp_en <= 1'h0; // @[Core.scala 137:41]
     end else begin
-      ex3_reg_bp_en <= _ex1_hazard_T_3 & _ex1_hazard_T_5; // @[Core.scala 893:28]
+      ex3_reg_bp_en <= _mem_en_T & _mem_en_T_2; // @[Core.scala 893:28]
     end
     if (reset) begin // @[Core.scala 138:41]
       ex3_reg_pc <= 32'h0; // @[Core.scala 138:41]
@@ -2693,11 +2697,11 @@ module Core(
     if (reset) begin // @[Core.scala 170:38]
       wb_reg_wb_addr <= 5'h0; // @[Core.scala 170:38]
     end else begin
-      wb_reg_wb_addr <= mem_reg_wb_addr; // @[Core.scala 1078:18]
+      wb_reg_wb_addr <= mem_reg_wb_addr; // @[Core.scala 1080:18]
     end
     if (reset) begin // @[Core.scala 171:38]
       wb_reg_rf_wen <= 2'h0; // @[Core.scala 171:38]
-    end else if (_T_7) begin // @[Core.scala 1079:24]
+    end else if (_T_7) begin // @[Core.scala 1081:24]
       if (mem_en) begin // @[Core.scala 966:23]
         wb_reg_rf_wen <= mem_reg_rf_wen;
       end else begin
@@ -2708,7 +2712,7 @@ module Core(
     end
     if (reset) begin // @[Core.scala 172:38]
       wb_reg_wb_data <= 32'h0; // @[Core.scala 172:38]
-    end else if (_io_dmem_ren_T) begin // @[Mux.scala 101:16]
+    end else if (_mem_stall_T) begin // @[Mux.scala 101:16]
       if (_mem_wb_data_load_T) begin // @[Mux.scala 101:16]
         wb_reg_wb_data <= _mem_wb_data_load_T_5;
       end else if (_mem_wb_data_load_T_6) begin // @[Mux.scala 101:16]
@@ -2717,7 +2721,7 @@ module Core(
         wb_reg_wb_data <= _mem_wb_data_load_T_21;
       end
     end else if (_mem_wb_data_T_1) begin // @[Mux.scala 101:16]
-      if (mem_reg_is_half) begin // @[Core.scala 1068:35]
+      if (mem_reg_is_half) begin // @[Core.scala 1070:35]
         wb_reg_wb_data <= _mem_wb_data_T_3;
       end else begin
         wb_reg_wb_data <= _mem_wb_data_T_5;
@@ -2730,7 +2734,7 @@ module Core(
     if (reset) begin // @[Core.scala 173:38]
       wb_reg_is_valid_inst <= 1'h0; // @[Core.scala 173:38]
     end else begin
-      wb_reg_is_valid_inst <= mem_reg_is_valid_inst & _T_7 & _mem_en_T_4 & _mem_en_T_6 & _mem_en_T_8; // @[Core.scala 1081:24]
+      wb_reg_is_valid_inst <= mem_reg_is_valid_inst & _T_7 & _mem_en_T_4 & _mem_en_T_6 & _mem_en_T_8; // @[Core.scala 1083:24]
     end
     if (reset) begin // @[Core.scala 175:35]
       if2_reg_is_bp_pos <= 1'h0; // @[Core.scala 175:35]
@@ -2789,12 +2793,12 @@ module Core(
     end
     if (reset) begin // @[Core.scala 187:35]
       mem_reg_br_addr <= 32'h0; // @[Core.scala 187:35]
-    end else if (mem_is_meintr) begin // @[Core.scala 1021:24]
-      mem_reg_br_addr <= csr_trap_vector; // @[Core.scala 1027:21]
-    end else if (mem_is_mtintr) begin // @[Core.scala 1028:30]
-      mem_reg_br_addr <= csr_trap_vector; // @[Core.scala 1034:21]
-    end else if (mem_reg_is_trap) begin // @[Core.scala 1035:32]
-      mem_reg_br_addr <= csr_trap_vector; // @[Core.scala 1041:21]
+    end else if (mem_is_meintr) begin // @[Core.scala 1023:24]
+      mem_reg_br_addr <= csr_trap_vector; // @[Core.scala 1029:21]
+    end else if (mem_is_mtintr) begin // @[Core.scala 1030:30]
+      mem_reg_br_addr <= csr_trap_vector; // @[Core.scala 1036:21]
+    end else if (mem_reg_is_trap) begin // @[Core.scala 1037:32]
+      mem_reg_br_addr <= csr_trap_vector; // @[Core.scala 1043:21]
     end else begin
       mem_reg_br_addr <= _GEN_164;
     end
@@ -2869,7 +2873,7 @@ module Core(
     if (reset) begin // @[Core.scala 970:32]
       mem_stall_delay <= 1'h0; // @[Core.scala 970:32]
     end else begin
-      mem_stall_delay <= io_dmem_ren & io_dmem_rvalid & _T_7; // @[Core.scala 979:19]
+      mem_stall_delay <= _mem_stall_T & io_dmem_rvalid & _T_7; // @[Core.scala 980:19]
     end
     if (reset) begin // @[Core.scala 551:40]
       id_reg_pc_delay <= 32'h0; // @[Core.scala 551:40]
@@ -3103,9 +3107,9 @@ module Core(
     end
     if (reset) begin // @[Core.scala 738:38]
       mem_reg_wb_data_delay <= 32'h0; // @[Core.scala 738:38]
-    end else if (_io_dmem_ren_T) begin // @[Core.scala 1074:31]
+    end else if (_mem_stall_T) begin // @[Core.scala 1076:31]
       mem_reg_wb_data_delay <= mem_wb_data_load;
-    end else if (_io_dmem_ren_T) begin // @[Mux.scala 101:16]
+    end else if (_mem_stall_T) begin // @[Mux.scala 101:16]
       mem_reg_wb_data_delay <= mem_wb_data_load;
     end else if (_mem_wb_data_T_1) begin // @[Mux.scala 101:16]
       mem_reg_wb_data_delay <= _mem_wb_data_T_6;
@@ -3115,27 +3119,27 @@ module Core(
     if (reset) begin // @[Core.scala 739:38]
       wb_reg_rf_wen_delay <= 2'h0; // @[Core.scala 739:38]
     end else begin
-      wb_reg_rf_wen_delay <= wb_reg_rf_wen; // @[Core.scala 1091:24]
+      wb_reg_rf_wen_delay <= wb_reg_rf_wen; // @[Core.scala 1093:24]
     end
     if (reset) begin // @[Core.scala 740:38]
       wb_reg_wb_addr_delay <= 5'h0; // @[Core.scala 740:38]
     end else begin
-      wb_reg_wb_addr_delay <= wb_reg_wb_addr; // @[Core.scala 1092:24]
+      wb_reg_wb_addr_delay <= wb_reg_wb_addr; // @[Core.scala 1094:24]
     end
     if (reset) begin // @[Core.scala 741:38]
       wb_reg_wb_data_delay <= 32'h0; // @[Core.scala 741:38]
     end else begin
-      wb_reg_wb_data_delay <= wb_reg_wb_data; // @[Core.scala 1093:24]
+      wb_reg_wb_data_delay <= wb_reg_wb_data; // @[Core.scala 1095:24]
     end
-    if (reset) begin // @[Core.scala 1111:24]
-      do_exit <= 1'h0; // @[Core.scala 1111:24]
+    if (reset) begin // @[Core.scala 1113:24]
+      do_exit <= 1'h0; // @[Core.scala 1113:24]
     end else begin
-      do_exit <= mem_reg_is_trap & mem_reg_mcause == 32'hb & regfile_do_exit_MPORT_data == 32'h5d; // @[Core.scala 1113:11]
+      do_exit <= mem_reg_is_trap & mem_reg_mcause == 32'hb & regfile_do_exit_MPORT_data == 32'h5d; // @[Core.scala 1115:11]
     end
-    if (reset) begin // @[Core.scala 1112:30]
-      do_exit_delay <= 1'h0; // @[Core.scala 1112:30]
+    if (reset) begin // @[Core.scala 1114:30]
+      do_exit_delay <= 1'h0; // @[Core.scala 1114:30]
     end else begin
-      do_exit_delay <= do_exit; // @[Core.scala 1114:17]
+      do_exit_delay <= do_exit; // @[Core.scala 1116:17]
     end
     `ifndef SYNTHESIS
     `ifdef PRINTF_COND
@@ -3165,7 +3169,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_1) begin
-          $fwrite(32'h80000002,"if2_reg_pc       : 0x%x\n",if2_reg_pc); // @[Core.scala 1117:9]
+          $fwrite(32'h80000002,"if2_reg_pc       : 0x%x\n",if2_reg_pc); // @[Core.scala 1119:9]
         end
     `ifdef PRINTF_COND
       end
@@ -3176,7 +3180,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_1) begin
-          $fwrite(32'h80000002,"if2_inst         : 0x%x\n",if2_inst); // @[Core.scala 1118:9]
+          $fwrite(32'h80000002,"if2_inst         : 0x%x\n",if2_inst); // @[Core.scala 1120:9]
         end
     `ifdef PRINTF_COND
       end
@@ -3187,7 +3191,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_1) begin
-          $fwrite(32'h80000002,"bp.io.lu.br_hit  : 0x%x\n",bp_io_lu_br_hit); // @[Core.scala 1119:9]
+          $fwrite(32'h80000002,"bp.io.lu.br_hit  : 0x%x\n",bp_io_lu_br_hit); // @[Core.scala 1121:9]
         end
     `ifdef PRINTF_COND
       end
@@ -3198,7 +3202,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_1) begin
-          $fwrite(32'h80000002,"bp.io.lu.br_pos  : 0x%x\n",bp_io_lu_br_pos); // @[Core.scala 1120:9]
+          $fwrite(32'h80000002,"bp.io.lu.br_pos  : 0x%x\n",bp_io_lu_br_pos); // @[Core.scala 1122:9]
         end
     `ifdef PRINTF_COND
       end
@@ -3209,7 +3213,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_1) begin
-          $fwrite(32'h80000002,"id_reg_pc        : 0x%x\n",id_reg_pc); // @[Core.scala 1121:9]
+          $fwrite(32'h80000002,"id_reg_pc        : 0x%x\n",id_reg_pc); // @[Core.scala 1123:9]
         end
     `ifdef PRINTF_COND
       end
@@ -3220,7 +3224,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_1) begin
-          $fwrite(32'h80000002,"id_reg_inst      : 0x%x\n",id_reg_inst); // @[Core.scala 1122:9]
+          $fwrite(32'h80000002,"id_reg_inst      : 0x%x\n",id_reg_inst); // @[Core.scala 1124:9]
         end
     `ifdef PRINTF_COND
       end
@@ -3231,7 +3235,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_1) begin
-          $fwrite(32'h80000002,"id_stall         : 0x%x\n",id_stall); // @[Core.scala 1123:9]
+          $fwrite(32'h80000002,"id_stall         : 0x%x\n",id_stall); // @[Core.scala 1125:9]
         end
     `ifdef PRINTF_COND
       end
@@ -3242,7 +3246,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_1) begin
-          $fwrite(32'h80000002,"id_inst          : 0x%x\n",id_inst); // @[Core.scala 1124:9]
+          $fwrite(32'h80000002,"id_inst          : 0x%x\n",id_inst); // @[Core.scala 1126:9]
         end
     `ifdef PRINTF_COND
       end
@@ -3253,7 +3257,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_1) begin
-          $fwrite(32'h80000002,"id_rs1_data      : 0x%x\n",id_rs1_data); // @[Core.scala 1125:9]
+          $fwrite(32'h80000002,"id_rs1_data      : 0x%x\n",id_rs1_data); // @[Core.scala 1127:9]
         end
     `ifdef PRINTF_COND
       end
@@ -3264,7 +3268,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_1) begin
-          $fwrite(32'h80000002,"id_rs2_data      : 0x%x\n",id_rs2_data); // @[Core.scala 1126:9]
+          $fwrite(32'h80000002,"id_rs2_data      : 0x%x\n",id_rs2_data); // @[Core.scala 1128:9]
         end
     `ifdef PRINTF_COND
       end
@@ -3275,7 +3279,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_1) begin
-          $fwrite(32'h80000002,"id_wb_addr       : 0x%x\n",id_wb_addr); // @[Core.scala 1127:9]
+          $fwrite(32'h80000002,"id_wb_addr       : 0x%x\n",id_wb_addr); // @[Core.scala 1129:9]
         end
     `ifdef PRINTF_COND
       end
@@ -3286,7 +3290,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_1) begin
-          $fwrite(32'h80000002,"ex1_reg_pc       : 0x%x\n",ex1_reg_pc); // @[Core.scala 1128:9]
+          $fwrite(32'h80000002,"ex1_reg_pc       : 0x%x\n",ex1_reg_pc); // @[Core.scala 1130:9]
         end
     `ifdef PRINTF_COND
       end
@@ -3297,7 +3301,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_1) begin
-          $fwrite(32'h80000002,"ex1_stall        : 0x%x\n",ex1_stall); // @[Core.scala 1129:9]
+          $fwrite(32'h80000002,"ex1_stall        : 0x%x\n",ex1_stall); // @[Core.scala 1131:9]
         end
     `ifdef PRINTF_COND
       end
@@ -3308,7 +3312,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_1) begin
-          $fwrite(32'h80000002,"ex1_op1_data     : 0x%x\n",ex1_op1_data); // @[Core.scala 1130:9]
+          $fwrite(32'h80000002,"ex1_op1_data     : 0x%x\n",ex1_op1_data); // @[Core.scala 1132:9]
         end
     `ifdef PRINTF_COND
       end
@@ -3319,7 +3323,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_1) begin
-          $fwrite(32'h80000002,"ex1_op2_data     : 0x%x\n",ex1_op2_data); // @[Core.scala 1131:9]
+          $fwrite(32'h80000002,"ex1_op2_data     : 0x%x\n",ex1_op2_data); // @[Core.scala 1133:9]
         end
     `ifdef PRINTF_COND
       end
@@ -3330,7 +3334,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_1) begin
-          $fwrite(32'h80000002,"ex2_reg_pc       : 0x%x\n",ex2_reg_pc); // @[Core.scala 1134:9]
+          $fwrite(32'h80000002,"ex2_reg_pc       : 0x%x\n",ex2_reg_pc); // @[Core.scala 1136:9]
         end
     `ifdef PRINTF_COND
       end
@@ -3341,7 +3345,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_1) begin
-          $fwrite(32'h80000002,"ex2_reg_op1_data : 0x%x\n",ex2_reg_op1_data); // @[Core.scala 1135:9]
+          $fwrite(32'h80000002,"ex2_reg_op1_data : 0x%x\n",ex2_reg_op1_data); // @[Core.scala 1137:9]
         end
     `ifdef PRINTF_COND
       end
@@ -3352,7 +3356,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_1) begin
-          $fwrite(32'h80000002,"ex2_reg_op2_data : 0x%x\n",ex2_reg_op2_data); // @[Core.scala 1136:9]
+          $fwrite(32'h80000002,"ex2_reg_op2_data : 0x%x\n",ex2_reg_op2_data); // @[Core.scala 1138:9]
         end
     `ifdef PRINTF_COND
       end
@@ -3363,7 +3367,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_1) begin
-          $fwrite(32'h80000002,"ex2_alu_out      : 0x%x\n",ex2_alu_out); // @[Core.scala 1137:9]
+          $fwrite(32'h80000002,"ex2_alu_out      : 0x%x\n",ex2_alu_out); // @[Core.scala 1139:9]
         end
     `ifdef PRINTF_COND
       end
@@ -3374,7 +3378,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_1) begin
-          $fwrite(32'h80000002,"ex2_reg_exe_fun  : 0x%x\n",ex2_reg_exe_fun); // @[Core.scala 1138:9]
+          $fwrite(32'h80000002,"ex2_reg_exe_fun  : 0x%x\n",ex2_reg_exe_fun); // @[Core.scala 1140:9]
         end
     `ifdef PRINTF_COND
       end
@@ -3385,7 +3389,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_1) begin
-          $fwrite(32'h80000002,"ex2_reg_wb_sel   : 0x%x\n",ex2_reg_wb_sel); // @[Core.scala 1139:9]
+          $fwrite(32'h80000002,"ex2_reg_wb_sel   : 0x%x\n",ex2_reg_wb_sel); // @[Core.scala 1141:9]
         end
     `ifdef PRINTF_COND
       end
@@ -3396,7 +3400,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_1) begin
-          $fwrite(32'h80000002,"ex2_reg_is_bp_pos : 0x%x\n",ex2_reg_is_bp_pos); // @[Core.scala 1140:9]
+          $fwrite(32'h80000002,"ex2_reg_is_bp_pos : 0x%x\n",ex2_reg_is_bp_pos); // @[Core.scala 1142:9]
         end
     `ifdef PRINTF_COND
       end
@@ -3407,7 +3411,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_1) begin
-          $fwrite(32'h80000002,"ex2_reg_bp_addr  : 0x%x\n",ex2_reg_bp_addr); // @[Core.scala 1141:9]
+          $fwrite(32'h80000002,"ex2_reg_bp_addr  : 0x%x\n",ex2_reg_bp_addr); // @[Core.scala 1143:9]
         end
     `ifdef PRINTF_COND
       end
@@ -3418,7 +3422,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_1) begin
-          $fwrite(32'h80000002,"ex3_reg_pc       : 0x%x\n",ex3_reg_pc); // @[Core.scala 1142:9]
+          $fwrite(32'h80000002,"ex3_reg_pc       : 0x%x\n",ex3_reg_pc); // @[Core.scala 1144:9]
         end
     `ifdef PRINTF_COND
       end
@@ -3429,7 +3433,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_1) begin
-          $fwrite(32'h80000002,"ex3_reg_is_br    : 0x%x\n",ex3_reg_is_br); // @[Core.scala 1143:9]
+          $fwrite(32'h80000002,"ex3_reg_is_br    : 0x%x\n",ex3_reg_is_br); // @[Core.scala 1145:9]
         end
     `ifdef PRINTF_COND
       end
@@ -3440,7 +3444,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_1) begin
-          $fwrite(32'h80000002,"ex3_reg_br_target : 0x%x\n",ex3_reg_br_target); // @[Core.scala 1144:9]
+          $fwrite(32'h80000002,"ex3_reg_br_target : 0x%x\n",ex3_reg_br_target); // @[Core.scala 1146:9]
         end
     `ifdef PRINTF_COND
       end
@@ -3451,7 +3455,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_1) begin
-          $fwrite(32'h80000002,"mem_reg_pc       : 0x%x\n",mem_reg_pc); // @[Core.scala 1145:9]
+          $fwrite(32'h80000002,"mem_reg_pc       : 0x%x\n",mem_reg_pc); // @[Core.scala 1147:9]
         end
     `ifdef PRINTF_COND
       end
@@ -3462,7 +3466,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_1) begin
-          $fwrite(32'h80000002,"mem_stall        : 0x%x\n",mem_stall); // @[Core.scala 1146:9]
+          $fwrite(32'h80000002,"mem_stall        : 0x%x\n",mem_stall); // @[Core.scala 1148:9]
         end
     `ifdef PRINTF_COND
       end
@@ -3473,7 +3477,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_1) begin
-          $fwrite(32'h80000002,"mem_wb_data      : 0x%x\n",mem_wb_data); // @[Core.scala 1147:9]
+          $fwrite(32'h80000002,"mem_wb_data      : 0x%x\n",mem_wb_data); // @[Core.scala 1149:9]
         end
     `ifdef PRINTF_COND
       end
@@ -3484,7 +3488,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_1) begin
-          $fwrite(32'h80000002,"mem_reg_mem_w    : 0x%x\n",mem_reg_mem_w); // @[Core.scala 1148:9]
+          $fwrite(32'h80000002,"mem_reg_mem_w    : 0x%x\n",mem_reg_mem_w); // @[Core.scala 1150:9]
         end
     `ifdef PRINTF_COND
       end
@@ -3495,7 +3499,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_1) begin
-          $fwrite(32'h80000002,"mem_reg_wb_addr  : 0x%x\n",mem_reg_wb_addr); // @[Core.scala 1149:9]
+          $fwrite(32'h80000002,"mem_reg_wb_addr  : 0x%x\n",mem_reg_wb_addr); // @[Core.scala 1151:9]
         end
     `ifdef PRINTF_COND
       end
@@ -3506,7 +3510,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_1) begin
-          $fwrite(32'h80000002,"mem_is_meintr    : %d\n",mem_is_meintr); // @[Core.scala 1150:9]
+          $fwrite(32'h80000002,"mem_is_meintr    : %d\n",mem_is_meintr); // @[Core.scala 1152:9]
         end
     `ifdef PRINTF_COND
       end
@@ -3517,7 +3521,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_1) begin
-          $fwrite(32'h80000002,"mem_is_mtintr    : %d\n",mem_is_mtintr); // @[Core.scala 1151:9]
+          $fwrite(32'h80000002,"mem_is_mtintr    : %d\n",mem_is_mtintr); // @[Core.scala 1153:9]
         end
     `ifdef PRINTF_COND
       end
@@ -3528,7 +3532,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_1) begin
-          $fwrite(32'h80000002,"mem_reg_rf_wen_delay : 0x%x\n",mem_reg_rf_wen_delay); // @[Core.scala 1152:9]
+          $fwrite(32'h80000002,"mem_reg_rf_wen_delay : 0x%x\n",mem_reg_rf_wen_delay); // @[Core.scala 1154:9]
         end
     `ifdef PRINTF_COND
       end
@@ -3539,7 +3543,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_1) begin
-          $fwrite(32'h80000002,"mem_wb_addr_delay : 0x%x\n",wb_reg_wb_addr); // @[Core.scala 1153:9]
+          $fwrite(32'h80000002,"mem_wb_addr_delay : 0x%x\n",wb_reg_wb_addr); // @[Core.scala 1155:9]
         end
     `ifdef PRINTF_COND
       end
@@ -3550,7 +3554,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_1) begin
-          $fwrite(32'h80000002,"mem_reg_wb_data_delay : 0x%x\n",mem_reg_wb_data_delay); // @[Core.scala 1154:9]
+          $fwrite(32'h80000002,"mem_reg_wb_data_delay : 0x%x\n",mem_reg_wb_data_delay); // @[Core.scala 1156:9]
         end
     `ifdef PRINTF_COND
       end
@@ -3561,7 +3565,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_1) begin
-          $fwrite(32'h80000002,"wb_reg_wb_addr   : 0x%x\n",wb_reg_wb_addr); // @[Core.scala 1155:9]
+          $fwrite(32'h80000002,"wb_reg_wb_addr   : 0x%x\n",wb_reg_wb_addr); // @[Core.scala 1157:9]
         end
     `ifdef PRINTF_COND
       end
@@ -3572,7 +3576,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_1) begin
-          $fwrite(32'h80000002,"wb_reg_wb_data   : 0x%x\n",wb_reg_wb_data); // @[Core.scala 1156:9]
+          $fwrite(32'h80000002,"wb_reg_wb_data   : 0x%x\n",wb_reg_wb_data); // @[Core.scala 1158:9]
         end
     `ifdef PRINTF_COND
       end
@@ -3583,7 +3587,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_1) begin
-          $fwrite(32'h80000002,"instret          : %d\n",instret); // @[Core.scala 1157:9]
+          $fwrite(32'h80000002,"instret          : %d\n",instret); // @[Core.scala 1159:9]
         end
     `ifdef PRINTF_COND
       end
@@ -3594,7 +3598,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_1) begin
-          $fwrite(32'h80000002,"cycle_counter(%d) : %d\n",do_exit,io_debug_signal_cycle_counter); // @[Core.scala 1158:9]
+          $fwrite(32'h80000002,"cycle_counter(%d) : %d\n",do_exit,io_debug_signal_cycle_counter); // @[Core.scala 1160:9]
         end
     `ifdef PRINTF_COND
       end
@@ -3605,7 +3609,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_1) begin
-          $fwrite(32'h80000002,"---------\n"); // @[Core.scala 1159:9]
+          $fwrite(32'h80000002,"---------\n"); // @[Core.scala 1161:9]
         end
     `ifdef PRINTF_COND
       end
@@ -3934,186 +3938,54 @@ end // initial
 `endif // SYNTHESIS
 endmodule
 module Memory(
-  input         clock,
-  input         reset,
-  input  [31:0] io_imem_addr,
-  output [31:0] io_imem_inst,
-  input  [31:0] io_dmem_raddr,
-  output [31:0] io_dmem_rdata,
-  input         io_dmem_ren,
-  output        io_dmem_rvalid,
-  input  [31:0] io_dmem_waddr,
-  input         io_dmem_wen,
-  input  [3:0]  io_dmem_wstrb,
-  input  [31:0] io_dmem_wdata,
-  output [8:0]  io_imemReadPort_address,
-  input  [31:0] io_imemReadPort_data
+  input  [31:0]  io_imem_addr,
+  output [31:0]  io_imem_inst,
+  input  [31:0]  io_dmem_raddr,
+  output [31:0]  io_dmem_rdata,
+  input          io_dmem_ren,
+  output         io_dmem_rvalid,
+  output         io_dmem_rready,
+  input  [31:0]  io_dmem_waddr,
+  input          io_dmem_wen,
+  output         io_dmem_wready,
+  input  [3:0]   io_dmem_wstrb,
+  input  [31:0]  io_dmem_wdata,
+  output [8:0]   io_imemReadPort_address,
+  input  [31:0]  io_imemReadPort_data,
+  output         io_dramPort_ren,
+  output         io_dramPort_wen,
+  output [27:0]  io_dramPort_addr,
+  output [127:0] io_dramPort_wdata,
+  output [15:0]  io_dramPort_wmask,
+  input          io_dramPort_init_calib_complete,
+  input  [127:0] io_dramPort_rdata,
+  input          io_dramPort_rdata_valid,
+  input          io_dramPort_busy
 );
-`ifdef RANDOMIZE_MEM_INIT
-  reg [31:0] _RAND_0;
-  reg [31:0] _RAND_1;
-  reg [31:0] _RAND_2;
-  reg [31:0] _RAND_3;
-`endif // RANDOMIZE_MEM_INIT
-`ifdef RANDOMIZE_REG_INIT
-  reg [31:0] _RAND_4;
-  reg [31:0] _RAND_5;
-`endif // RANDOMIZE_REG_INIT
-  reg [7:0] dataMem_0 [0:127]; // @[Memory.scala 39:20]
-  wire  dataMem_0_rdata_MPORT_en; // @[Memory.scala 39:20]
-  wire [6:0] dataMem_0_rdata_MPORT_addr; // @[Memory.scala 39:20]
-  wire [7:0] dataMem_0_rdata_MPORT_data; // @[Memory.scala 39:20]
-  wire [7:0] dataMem_0_MPORT_data; // @[Memory.scala 39:20]
-  wire [6:0] dataMem_0_MPORT_addr; // @[Memory.scala 39:20]
-  wire  dataMem_0_MPORT_mask; // @[Memory.scala 39:20]
-  wire  dataMem_0_MPORT_en; // @[Memory.scala 39:20]
-  reg [7:0] dataMem_1 [0:127]; // @[Memory.scala 39:20]
-  wire  dataMem_1_rdata_MPORT_en; // @[Memory.scala 39:20]
-  wire [6:0] dataMem_1_rdata_MPORT_addr; // @[Memory.scala 39:20]
-  wire [7:0] dataMem_1_rdata_MPORT_data; // @[Memory.scala 39:20]
-  wire [7:0] dataMem_1_MPORT_data; // @[Memory.scala 39:20]
-  wire [6:0] dataMem_1_MPORT_addr; // @[Memory.scala 39:20]
-  wire  dataMem_1_MPORT_mask; // @[Memory.scala 39:20]
-  wire  dataMem_1_MPORT_en; // @[Memory.scala 39:20]
-  reg [7:0] dataMem_2 [0:127]; // @[Memory.scala 39:20]
-  wire  dataMem_2_rdata_MPORT_en; // @[Memory.scala 39:20]
-  wire [6:0] dataMem_2_rdata_MPORT_addr; // @[Memory.scala 39:20]
-  wire [7:0] dataMem_2_rdata_MPORT_data; // @[Memory.scala 39:20]
-  wire [7:0] dataMem_2_MPORT_data; // @[Memory.scala 39:20]
-  wire [6:0] dataMem_2_MPORT_addr; // @[Memory.scala 39:20]
-  wire  dataMem_2_MPORT_mask; // @[Memory.scala 39:20]
-  wire  dataMem_2_MPORT_en; // @[Memory.scala 39:20]
-  reg [7:0] dataMem_3 [0:127]; // @[Memory.scala 39:20]
-  wire  dataMem_3_rdata_MPORT_en; // @[Memory.scala 39:20]
-  wire [6:0] dataMem_3_rdata_MPORT_addr; // @[Memory.scala 39:20]
-  wire [7:0] dataMem_3_rdata_MPORT_data; // @[Memory.scala 39:20]
-  wire [7:0] dataMem_3_MPORT_data; // @[Memory.scala 39:20]
-  wire [6:0] dataMem_3_MPORT_addr; // @[Memory.scala 39:20]
-  wire  dataMem_3_MPORT_mask; // @[Memory.scala 39:20]
-  wire  dataMem_3_MPORT_en; // @[Memory.scala 39:20]
-  reg [31:0] rdata; // @[Memory.scala 44:22]
-  reg  rvalid; // @[Memory.scala 45:23]
-  wire  _T = ~io_dmem_wen; // @[Memory.scala 50:9]
-  wire  _T_1 = ~io_dmem_wen & io_dmem_ren; // @[Memory.scala 50:22]
-  wire [31:0] _rdata_T_2 = {dataMem_3_rdata_MPORT_data,dataMem_2_rdata_MPORT_data,dataMem_1_rdata_MPORT_data,
-    dataMem_0_rdata_MPORT_data}; // @[Cat.scala 31:58]
-  assign dataMem_0_rdata_MPORT_en = _T & io_dmem_ren;
-  assign dataMem_0_rdata_MPORT_addr = io_dmem_raddr[8:2];
-  assign dataMem_0_rdata_MPORT_data = dataMem_0[dataMem_0_rdata_MPORT_addr]; // @[Memory.scala 39:20]
-  assign dataMem_0_MPORT_data = io_dmem_wdata[7:0];
-  assign dataMem_0_MPORT_addr = io_dmem_waddr[8:2];
-  assign dataMem_0_MPORT_mask = io_dmem_wstrb[0];
-  assign dataMem_0_MPORT_en = io_dmem_wen;
-  assign dataMem_1_rdata_MPORT_en = _T & io_dmem_ren;
-  assign dataMem_1_rdata_MPORT_addr = io_dmem_raddr[8:2];
-  assign dataMem_1_rdata_MPORT_data = dataMem_1[dataMem_1_rdata_MPORT_addr]; // @[Memory.scala 39:20]
-  assign dataMem_1_MPORT_data = io_dmem_wdata[15:8];
-  assign dataMem_1_MPORT_addr = io_dmem_waddr[8:2];
-  assign dataMem_1_MPORT_mask = io_dmem_wstrb[1];
-  assign dataMem_1_MPORT_en = io_dmem_wen;
-  assign dataMem_2_rdata_MPORT_en = _T & io_dmem_ren;
-  assign dataMem_2_rdata_MPORT_addr = io_dmem_raddr[8:2];
-  assign dataMem_2_rdata_MPORT_data = dataMem_2[dataMem_2_rdata_MPORT_addr]; // @[Memory.scala 39:20]
-  assign dataMem_2_MPORT_data = io_dmem_wdata[23:16];
-  assign dataMem_2_MPORT_addr = io_dmem_waddr[8:2];
-  assign dataMem_2_MPORT_mask = io_dmem_wstrb[2];
-  assign dataMem_2_MPORT_en = io_dmem_wen;
-  assign dataMem_3_rdata_MPORT_en = _T & io_dmem_ren;
-  assign dataMem_3_rdata_MPORT_addr = io_dmem_raddr[8:2];
-  assign dataMem_3_rdata_MPORT_data = dataMem_3[dataMem_3_rdata_MPORT_addr]; // @[Memory.scala 39:20]
-  assign dataMem_3_MPORT_data = io_dmem_wdata[31:24];
-  assign dataMem_3_MPORT_addr = io_dmem_waddr[8:2];
-  assign dataMem_3_MPORT_mask = io_dmem_wstrb[3];
-  assign dataMem_3_MPORT_en = io_dmem_wen;
-  assign io_imem_inst = io_imemReadPort_data; // @[Memory.scala 35:16]
-  assign io_dmem_rdata = rdata; // @[Memory.scala 46:17]
-  assign io_dmem_rvalid = rvalid; // @[Memory.scala 47:18]
-  assign io_imemReadPort_address = io_imem_addr[10:2]; // @[Memory.scala 36:27]
-  always @(posedge clock) begin
-    if (dataMem_0_MPORT_en & dataMem_0_MPORT_mask) begin
-      dataMem_0[dataMem_0_MPORT_addr] <= dataMem_0_MPORT_data; // @[Memory.scala 39:20]
-    end
-    if (dataMem_1_MPORT_en & dataMem_1_MPORT_mask) begin
-      dataMem_1[dataMem_1_MPORT_addr] <= dataMem_1_MPORT_data; // @[Memory.scala 39:20]
-    end
-    if (dataMem_2_MPORT_en & dataMem_2_MPORT_mask) begin
-      dataMem_2[dataMem_2_MPORT_addr] <= dataMem_2_MPORT_data; // @[Memory.scala 39:20]
-    end
-    if (dataMem_3_MPORT_en & dataMem_3_MPORT_mask) begin
-      dataMem_3[dataMem_3_MPORT_addr] <= dataMem_3_MPORT_data; // @[Memory.scala 39:20]
-    end
-    if (reset) begin // @[Memory.scala 44:22]
-      rdata <= 32'h0; // @[Memory.scala 44:22]
-    end else if (~io_dmem_wen & io_dmem_ren) begin // @[Memory.scala 50:39]
-      rdata <= _rdata_T_2; // @[Memory.scala 51:11]
-    end
-    if (reset) begin // @[Memory.scala 45:23]
-      rvalid <= 1'h0; // @[Memory.scala 45:23]
-    end else begin
-      rvalid <= _T_1;
-    end
-  end
-// Register and memory initialization
-`ifdef RANDOMIZE_GARBAGE_ASSIGN
-`define RANDOMIZE
-`endif
-`ifdef RANDOMIZE_INVALID_ASSIGN
-`define RANDOMIZE
-`endif
-`ifdef RANDOMIZE_REG_INIT
-`define RANDOMIZE
-`endif
-`ifdef RANDOMIZE_MEM_INIT
-`define RANDOMIZE
-`endif
-`ifndef RANDOM
-`define RANDOM $random
-`endif
-`ifdef RANDOMIZE_MEM_INIT
-  integer initvar;
-`endif
-`ifndef SYNTHESIS
-`ifdef FIRRTL_BEFORE_INITIAL
-`FIRRTL_BEFORE_INITIAL
-`endif
-initial begin
-  `ifdef RANDOMIZE
-    `ifdef INIT_RANDOM
-      `INIT_RANDOM
-    `endif
-    `ifndef VERILATOR
-      `ifdef RANDOMIZE_DELAY
-        #`RANDOMIZE_DELAY begin end
-      `else
-        #0.002 begin end
-      `endif
-    `endif
-`ifdef RANDOMIZE_MEM_INIT
-  _RAND_0 = {1{`RANDOM}};
-  for (initvar = 0; initvar < 128; initvar = initvar+1)
-    dataMem_0[initvar] = _RAND_0[7:0];
-  _RAND_1 = {1{`RANDOM}};
-  for (initvar = 0; initvar < 128; initvar = initvar+1)
-    dataMem_1[initvar] = _RAND_1[7:0];
-  _RAND_2 = {1{`RANDOM}};
-  for (initvar = 0; initvar < 128; initvar = initvar+1)
-    dataMem_2[initvar] = _RAND_2[7:0];
-  _RAND_3 = {1{`RANDOM}};
-  for (initvar = 0; initvar < 128; initvar = initvar+1)
-    dataMem_3[initvar] = _RAND_3[7:0];
-`endif // RANDOMIZE_MEM_INIT
-`ifdef RANDOMIZE_REG_INIT
-  _RAND_4 = {1{`RANDOM}};
-  rdata = _RAND_4[31:0];
-  _RAND_5 = {1{`RANDOM}};
-  rvalid = _RAND_5[0:0];
-`endif // RANDOMIZE_REG_INIT
-  `endif // RANDOMIZE
-end // initial
-`ifdef FIRRTL_AFTER_INITIAL
-`FIRRTL_AFTER_INITIAL
-`endif
-`endif // SYNTHESIS
+  wire [31:0] addr = io_dmem_ren ? io_dmem_raddr : io_dmem_waddr; // @[Memory.scala 44:17]
+  wire [26:0] _io_dramPort_addr_T_1 = {addr[27:4],3'h0}; // @[Cat.scala 31:58]
+  wire [127:0] _io_dramPort_wdata_T = {96'h0,io_dmem_wdata}; // @[Cat.scala 31:58]
+  wire [6:0] _io_dramPort_wdata_T_2 = {addr[3:2],5'h0}; // @[Cat.scala 31:58]
+  wire [254:0] _GEN_0 = {{127'd0}, _io_dramPort_wdata_T}; // @[Memory.scala 46:78]
+  wire [254:0] _io_dramPort_wdata_T_3 = _GEN_0 << _io_dramPort_wdata_T_2; // @[Memory.scala 46:78]
+  wire [3:0] _io_dramPort_wmask_T_1 = ~io_dmem_wstrb; // @[Memory.scala 47:66]
+  wire [15:0] _io_dramPort_wmask_T_2 = {12'hfff,_io_dramPort_wmask_T_1}; // @[Cat.scala 31:58]
+  wire [3:0] _io_dramPort_wmask_T_4 = {addr[3:2],2'h0}; // @[Cat.scala 31:58]
+  wire [30:0] _GEN_1 = {{15'd0}, _io_dramPort_wmask_T_2}; // @[Memory.scala 47:82]
+  wire [30:0] _io_dramPort_wmask_T_5 = _GEN_1 << _io_dramPort_wmask_T_4; // @[Memory.scala 47:82]
+  wire  _io_dmem_wready_T = ~io_dramPort_busy; // @[Memory.scala 50:56]
+  wire [127:0] _io_dmem_rdata_T_2 = io_dramPort_rdata >> _io_dramPort_wdata_T_2; // @[Memory.scala 52:39]
+  assign io_imem_inst = io_imemReadPort_data; // @[Memory.scala 38:16]
+  assign io_dmem_rdata = _io_dmem_rdata_T_2[31:0]; // @[Memory.scala 52:68]
+  assign io_dmem_rvalid = io_dramPort_rdata_valid; // @[Memory.scala 53:18]
+  assign io_dmem_rready = io_dramPort_init_calib_complete & _io_dmem_wready_T; // @[Memory.scala 51:53]
+  assign io_dmem_wready = io_dramPort_init_calib_complete & ~io_dramPort_busy; // @[Memory.scala 50:53]
+  assign io_imemReadPort_address = io_imem_addr[10:2]; // @[Memory.scala 39:27]
+  assign io_dramPort_ren = io_dmem_ren; // @[Memory.scala 42:19]
+  assign io_dramPort_wen = io_dmem_wen; // @[Memory.scala 43:19]
+  assign io_dramPort_addr = {{1'd0}, _io_dramPort_addr_T_1}; // @[Memory.scala 45:20]
+  assign io_dramPort_wdata = _io_dramPort_wdata_T_3[127:0]; // @[Memory.scala 46:21]
+  assign io_dramPort_wmask = _io_dramPort_wmask_T_5[15:0]; // @[Memory.scala 47:21]
 endmodule
 module SingleCycleMem(
   input         clock,
@@ -4140,9 +4012,9 @@ module SingleCycleMem(
   assign io_mem_rvalid = io_mem_rvalid_REG; // @[SingleCycleMem.scala 18:17]
   assign io_read_address = io_mem_raddr[10:2]; // @[SingleCycleMem.scala 15:19]
   assign io_read_enable = io_mem_ren; // @[SingleCycleMem.scala 16:18]
-  assign io_write_address = io_mem_waddr[10:2]; // @[SingleCycleMem.scala 20:20]
-  assign io_write_data = io_mem_wdata; // @[SingleCycleMem.scala 22:17]
-  assign io_write_enable = io_mem_wen; // @[SingleCycleMem.scala 21:19]
+  assign io_write_address = io_mem_waddr[10:2]; // @[SingleCycleMem.scala 21:20]
+  assign io_write_data = io_mem_wdata; // @[SingleCycleMem.scala 23:17]
+  assign io_write_enable = io_mem_wen; // @[SingleCycleMem.scala 22:19]
   always @(posedge clock) begin
     if (reset) begin // @[SingleCycleMem.scala 18:27]
       io_mem_rvalid_REG <= 1'h0; // @[SingleCycleMem.scala 18:27]
@@ -4211,8 +4083,8 @@ module Gpio(
   always @(posedge clock) begin
     if (reset) begin // @[Gpio.scala 14:23]
       output_ <= 32'hff; // @[Gpio.scala 14:23]
-    end else if (io_mem_wen) begin // @[Gpio.scala 20:20]
-      output_ <= io_mem_wdata; // @[Gpio.scala 21:12]
+    end else if (io_mem_wen) begin // @[Gpio.scala 21:20]
+      output_ <= io_mem_wdata; // @[Gpio.scala 22:12]
     end
   end
 // Register and memory initialization
@@ -4516,16 +4388,16 @@ module Uart(
   wire  _tx_io_in_valid_T = ~tx_empty; // @[Uart.scala 106:21]
   wire [31:0] _io_mem_rdata_T_1 = {29'h0,_tx_io_in_valid_T,1'h0,tx_intr_en}; // @[Cat.scala 31:58]
   wire [31:0] _GEN_0 = io_mem_raddr == 32'h0 ? _io_mem_rdata_T_1 : 32'h0; // @[Uart.scala 110:33 111:20 113:20]
-  wire  _GEN_3 = tx_empty ? 1'h0 : tx_empty; // @[Uart.scala 125:23 126:18 102:25]
-  wire [31:0] _GEN_4 = tx_empty ? io_mem_wdata : {{24'd0}, tx_data}; // @[Uart.scala 125:23 127:17 104:24]
-  wire  _GEN_5 = io_mem_waddr == 32'h4 ? _GEN_3 : tx_empty; // @[Uart.scala 102:25 124:39]
-  wire [31:0] _GEN_6 = io_mem_waddr == 32'h4 ? _GEN_4 : {{24'd0}, tx_data}; // @[Uart.scala 104:24 124:39]
-  wire  _GEN_8 = io_mem_waddr == 32'h0 ? tx_empty : _GEN_5; // @[Uart.scala 102:25 122:33]
-  wire [31:0] _GEN_9 = io_mem_waddr == 32'h0 ? {{24'd0}, tx_data} : _GEN_6; // @[Uart.scala 104:24 122:33]
-  wire  _GEN_11 = io_mem_wen ? _GEN_8 : tx_empty; // @[Uart.scala 121:21 102:25]
-  wire [31:0] _GEN_12 = io_mem_wen ? _GEN_9 : {{24'd0}, tx_data}; // @[Uart.scala 121:21 104:24]
+  wire  _GEN_3 = tx_empty ? 1'h0 : tx_empty; // @[Uart.scala 126:23 127:18 102:25]
+  wire [31:0] _GEN_4 = tx_empty ? io_mem_wdata : {{24'd0}, tx_data}; // @[Uart.scala 126:23 128:17 104:24]
+  wire  _GEN_5 = io_mem_waddr == 32'h4 ? _GEN_3 : tx_empty; // @[Uart.scala 102:25 125:39]
+  wire [31:0] _GEN_6 = io_mem_waddr == 32'h4 ? _GEN_4 : {{24'd0}, tx_data}; // @[Uart.scala 104:24 125:39]
+  wire  _GEN_8 = io_mem_waddr == 32'h0 ? tx_empty : _GEN_5; // @[Uart.scala 102:25 123:33]
+  wire [31:0] _GEN_9 = io_mem_waddr == 32'h0 ? {{24'd0}, tx_data} : _GEN_6; // @[Uart.scala 104:24 123:33]
+  wire  _GEN_11 = io_mem_wen ? _GEN_8 : tx_empty; // @[Uart.scala 122:21 102:25]
+  wire [31:0] _GEN_12 = io_mem_wen ? _GEN_9 : {{24'd0}, tx_data}; // @[Uart.scala 122:21 104:24]
   wire  tx_ready = tx_io_in_ready;
-  wire  _GEN_13 = _tx_io_in_valid_T & tx_ready | _GEN_11; // @[Uart.scala 133:31 134:14]
+  wire  _GEN_13 = _tx_io_in_valid_T & tx_ready | _GEN_11; // @[Uart.scala 134:31 135:14]
   wire [31:0] _GEN_14 = reset ? 32'h0 : _GEN_12; // @[Uart.scala 104:{24,24}]
   UartTx tx ( // @[Uart.scala 101:18]
     .clock(tx_clock),
@@ -4537,8 +4409,8 @@ module Uart(
   );
   assign io_mem_rdata = io_mem_ren ? _GEN_0 : 32'h0; // @[Uart.scala 109:21 117:18]
   assign io_mem_rvalid = io_mem_ren; // @[Uart.scala 109:21 115:19 118:19]
-  assign io_intr = tx_empty & tx_intr_en; // @[Uart.scala 137:23]
-  assign io_tx = tx_io_tx; // @[Uart.scala 138:9]
+  assign io_intr = tx_empty & tx_intr_en; // @[Uart.scala 138:23]
+  assign io_tx = tx_io_tx; // @[Uart.scala 139:9]
   assign tx_clock = clock;
   assign tx_reset = reset;
   assign tx_io_in_valid = ~tx_empty; // @[Uart.scala 106:21]
@@ -4548,9 +4420,9 @@ module Uart(
     tx_data <= _GEN_14[7:0]; // @[Uart.scala 104:{24,24}]
     if (reset) begin // @[Uart.scala 105:27]
       tx_intr_en <= 1'h0; // @[Uart.scala 105:27]
-    end else if (io_mem_wen) begin // @[Uart.scala 121:21]
-      if (io_mem_waddr == 32'h0) begin // @[Uart.scala 122:33]
-        tx_intr_en <= io_mem_wdata[0]; // @[Uart.scala 123:18]
+    end else if (io_mem_wen) begin // @[Uart.scala 122:21]
+      if (io_mem_waddr == 32'h0) begin // @[Uart.scala 123:33]
+        tx_intr_en <= io_mem_wdata[0]; // @[Uart.scala 124:18]
       end
     end
   end
@@ -4616,6 +4488,7 @@ module DMemDecoder(
   output [31:0] io_initiator_rdata,
   input         io_initiator_ren,
   output        io_initiator_rvalid,
+  output        io_initiator_rready,
   input  [31:0] io_initiator_waddr,
   input         io_initiator_wen,
   output        io_initiator_wready,
@@ -4632,8 +4505,10 @@ module DMemDecoder(
   input  [31:0] io_targets_1_rdata,
   output        io_targets_1_ren,
   input         io_targets_1_rvalid,
+  input         io_targets_1_rready,
   output [31:0] io_targets_1_waddr,
   output        io_targets_1_wen,
+  input         io_targets_1_wready,
   output [3:0]  io_targets_1_wstrb,
   output [31:0] io_targets_1_wdata,
   output        io_targets_2_wen,
@@ -4655,75 +4530,82 @@ module DMemDecoder(
   output [31:0] io_targets_5_raddr,
   input  [31:0] io_targets_5_rdata
 );
-  wire [31:0] _raddr_T_1 = io_initiator_raddr - 32'h8000000; // @[Decoder.scala 40:35]
-  wire  _GEN_2 = 32'h8000000 <= io_initiator_raddr & io_initiator_raddr < 32'h8000800 ? io_targets_0_rvalid : 1'h1; // @[Decoder.scala 39:85 42:14]
+  wire [31:0] _raddr_T_1 = io_initiator_raddr - 32'h8000000; // @[Decoder.scala 42:35]
+  wire  _GEN_2 = 32'h8000000 <= io_initiator_raddr & io_initiator_raddr < 32'h8000800 ? io_targets_0_rvalid : 1'h1; // @[Decoder.scala 41:85 44:14]
   wire [31:0] _GEN_3 = 32'h8000000 <= io_initiator_raddr & io_initiator_raddr < 32'h8000800 ? io_targets_0_rdata : 32'hdeadbeef
-    ; // @[Decoder.scala 39:85 43:13]
-  wire [31:0] _waddr_T_1 = io_initiator_waddr - 32'h8000000; // @[Decoder.scala 46:35]
-  wire [31:0] _raddr_T_3 = io_initiator_raddr - 32'h20000000; // @[Decoder.scala 40:35]
-  wire  _GEN_11 = 32'h20000000 <= io_initiator_raddr & io_initiator_raddr < 32'h20000200 ? io_targets_1_rvalid : _GEN_2; // @[Decoder.scala 39:85 42:14]
-  wire [31:0] _GEN_12 = 32'h20000000 <= io_initiator_raddr & io_initiator_raddr < 32'h20000200 ? io_targets_1_rdata :
-    _GEN_3; // @[Decoder.scala 39:85 43:13]
-  wire [31:0] _waddr_T_3 = io_initiator_waddr - 32'h20000000; // @[Decoder.scala 46:35]
-  wire [31:0] _GEN_21 = 32'h30000000 <= io_initiator_raddr & io_initiator_raddr < 32'h30000040 ? 32'hdeadbeef : _GEN_12; // @[Decoder.scala 39:85 43:13]
-  wire [31:0] _raddr_T_7 = io_initiator_raddr - 32'h30001000; // @[Decoder.scala 40:35]
-  wire  _GEN_29 = 32'h30001000 <= io_initiator_raddr & io_initiator_raddr < 32'h30001040 ? io_targets_3_rvalid : 32'h30000000
-     <= io_initiator_raddr & io_initiator_raddr < 32'h30000040 | _GEN_11; // @[Decoder.scala 39:85 42:14]
-  wire [31:0] _GEN_30 = 32'h30001000 <= io_initiator_raddr & io_initiator_raddr < 32'h30001040 ? io_targets_3_rdata :
-    _GEN_21; // @[Decoder.scala 39:85 43:13]
-  wire [31:0] _waddr_T_7 = io_initiator_waddr - 32'h30001000; // @[Decoder.scala 46:35]
-  wire [31:0] _raddr_T_9 = io_initiator_raddr - 32'h30002000; // @[Decoder.scala 40:35]
-  wire  _GEN_38 = 32'h30002000 <= io_initiator_raddr & io_initiator_raddr < 32'h30002040 ? io_targets_4_rvalid : _GEN_29
-    ; // @[Decoder.scala 39:85 42:14]
-  wire [31:0] _GEN_39 = 32'h30002000 <= io_initiator_raddr & io_initiator_raddr < 32'h30002040 ? io_targets_4_rdata :
-    _GEN_30; // @[Decoder.scala 39:85 43:13]
-  wire [31:0] _waddr_T_9 = io_initiator_waddr - 32'h30002000; // @[Decoder.scala 46:35]
-  wire [31:0] _raddr_T_11 = io_initiator_raddr - 32'h40000000; // @[Decoder.scala 40:35]
+    ; // @[Decoder.scala 41:85 45:13]
+  wire [31:0] _waddr_T_1 = io_initiator_waddr - 32'h8000000; // @[Decoder.scala 49:35]
+  wire [31:0] _raddr_T_3 = io_initiator_raddr - 32'h20000000; // @[Decoder.scala 42:35]
+  wire  _GEN_12 = 32'h20000000 <= io_initiator_raddr & io_initiator_raddr < 32'h20000200 ? io_targets_1_rvalid : _GEN_2; // @[Decoder.scala 41:85 44:14]
+  wire [31:0] _GEN_13 = 32'h20000000 <= io_initiator_raddr & io_initiator_raddr < 32'h20000200 ? io_targets_1_rdata :
+    _GEN_3; // @[Decoder.scala 41:85 45:13]
+  wire  _GEN_14 = 32'h20000000 <= io_initiator_raddr & io_initiator_raddr < 32'h20000200 ? io_targets_1_rready : 32'h8000000
+     <= io_initiator_raddr & io_initiator_raddr < 32'h8000800; // @[Decoder.scala 41:85 46:14]
+  wire [31:0] _waddr_T_3 = io_initiator_waddr - 32'h20000000; // @[Decoder.scala 49:35]
+  wire  _GEN_19 = 32'h20000000 <= io_initiator_waddr & io_initiator_waddr < 32'h20000200 ? io_targets_1_wready : 32'h8000000
+     <= io_initiator_waddr & io_initiator_waddr < 32'h8000800; // @[Decoder.scala 48:85 53:14]
+  wire [31:0] _GEN_23 = 32'h30000000 <= io_initiator_raddr & io_initiator_raddr < 32'h30000040 ? 32'hdeadbeef : _GEN_13; // @[Decoder.scala 41:85 45:13]
+  wire [31:0] _raddr_T_7 = io_initiator_raddr - 32'h30001000; // @[Decoder.scala 42:35]
+  wire  _GEN_32 = 32'h30001000 <= io_initiator_raddr & io_initiator_raddr < 32'h30001040 ? io_targets_3_rvalid : 32'h30000000
+     <= io_initiator_raddr & io_initiator_raddr < 32'h30000040 | _GEN_12; // @[Decoder.scala 41:85 44:14]
+  wire [31:0] _GEN_33 = 32'h30001000 <= io_initiator_raddr & io_initiator_raddr < 32'h30001040 ? io_targets_3_rdata :
+    _GEN_23; // @[Decoder.scala 41:85 45:13]
+  wire [31:0] _waddr_T_7 = io_initiator_waddr - 32'h30001000; // @[Decoder.scala 49:35]
+  wire [31:0] _raddr_T_9 = io_initiator_raddr - 32'h30002000; // @[Decoder.scala 42:35]
+  wire  _GEN_42 = 32'h30002000 <= io_initiator_raddr & io_initiator_raddr < 32'h30002040 ? io_targets_4_rvalid : _GEN_32
+    ; // @[Decoder.scala 41:85 44:14]
+  wire [31:0] _GEN_43 = 32'h30002000 <= io_initiator_raddr & io_initiator_raddr < 32'h30002040 ? io_targets_4_rdata :
+    _GEN_33; // @[Decoder.scala 41:85 45:13]
+  wire [31:0] _waddr_T_9 = io_initiator_waddr - 32'h30002000; // @[Decoder.scala 49:35]
+  wire [31:0] _raddr_T_11 = io_initiator_raddr - 32'h40000000; // @[Decoder.scala 42:35]
   assign io_initiator_rdata = 32'h40000000 <= io_initiator_raddr & io_initiator_raddr < 32'h40000040 ?
-    io_targets_5_rdata : _GEN_39; // @[Decoder.scala 39:85 43:13]
-  assign io_initiator_rvalid = 32'h40000000 <= io_initiator_raddr & io_initiator_raddr < 32'h40000040 | _GEN_38; // @[Decoder.scala 39:85 42:14]
+    io_targets_5_rdata : _GEN_43; // @[Decoder.scala 41:85 45:13]
+  assign io_initiator_rvalid = 32'h40000000 <= io_initiator_raddr & io_initiator_raddr < 32'h40000040 | _GEN_42; // @[Decoder.scala 41:85 44:14]
+  assign io_initiator_rready = 32'h40000000 <= io_initiator_raddr & io_initiator_raddr < 32'h40000040 | (32'h30002000
+     <= io_initiator_raddr & io_initiator_raddr < 32'h30002040 | (32'h30001000 <= io_initiator_raddr &
+    io_initiator_raddr < 32'h30001040 | (32'h30000000 <= io_initiator_raddr & io_initiator_raddr < 32'h30000040 |
+    _GEN_14))); // @[Decoder.scala 41:85 46:14]
   assign io_initiator_wready = 32'h40000000 <= io_initiator_waddr & io_initiator_waddr < 32'h40000040 | (32'h30002000
      <= io_initiator_waddr & io_initiator_waddr < 32'h30002040 | (32'h30001000 <= io_initiator_waddr &
-    io_initiator_waddr < 32'h30001040 | (32'h30000000 <= io_initiator_waddr & io_initiator_waddr < 32'h30000040 | (32'h20000000
-     <= io_initiator_waddr & io_initiator_waddr < 32'h20000200 | 32'h8000000 <= io_initiator_waddr & io_initiator_waddr
-     < 32'h8000800)))); // @[Decoder.scala 45:85 50:14]
-  assign io_targets_0_raddr = 32'h8000000 <= io_initiator_raddr & io_initiator_raddr < 32'h8000800 ? _raddr_T_1 : 32'h0; // @[Decoder.scala 39:85 40:13]
-  assign io_targets_0_ren = 32'h8000000 <= io_initiator_raddr & io_initiator_raddr < 32'h8000800 & io_initiator_ren; // @[Decoder.scala 39:85 41:11]
-  assign io_targets_0_waddr = 32'h8000000 <= io_initiator_waddr & io_initiator_waddr < 32'h8000800 ? _waddr_T_1 : 32'h0; // @[Decoder.scala 45:85 46:13]
-  assign io_targets_0_wen = 32'h8000000 <= io_initiator_waddr & io_initiator_waddr < 32'h8000800 & io_initiator_wen; // @[Decoder.scala 45:85 47:11]
+    io_initiator_waddr < 32'h30001040 | (32'h30000000 <= io_initiator_waddr & io_initiator_waddr < 32'h30000040 |
+    _GEN_19))); // @[Decoder.scala 48:85 53:14]
+  assign io_targets_0_raddr = 32'h8000000 <= io_initiator_raddr & io_initiator_raddr < 32'h8000800 ? _raddr_T_1 : 32'h0; // @[Decoder.scala 41:85 42:13]
+  assign io_targets_0_ren = 32'h8000000 <= io_initiator_raddr & io_initiator_raddr < 32'h8000800 & io_initiator_ren; // @[Decoder.scala 41:85 43:11]
+  assign io_targets_0_waddr = 32'h8000000 <= io_initiator_waddr & io_initiator_waddr < 32'h8000800 ? _waddr_T_1 : 32'h0; // @[Decoder.scala 48:85 49:13]
+  assign io_targets_0_wen = 32'h8000000 <= io_initiator_waddr & io_initiator_waddr < 32'h8000800 & io_initiator_wen; // @[Decoder.scala 48:85 50:11]
   assign io_targets_0_wdata = 32'h8000000 <= io_initiator_waddr & io_initiator_waddr < 32'h8000800 ? io_initiator_wdata
-     : 32'hdeadbeef; // @[Decoder.scala 45:85 48:13]
+     : 32'hdeadbeef; // @[Decoder.scala 48:85 51:13]
   assign io_targets_1_raddr = 32'h20000000 <= io_initiator_raddr & io_initiator_raddr < 32'h20000200 ? _raddr_T_3 : 32'h0
-    ; // @[Decoder.scala 39:85 40:13]
-  assign io_targets_1_ren = 32'h20000000 <= io_initiator_raddr & io_initiator_raddr < 32'h20000200 & io_initiator_ren; // @[Decoder.scala 39:85 41:11]
+    ; // @[Decoder.scala 41:85 42:13]
+  assign io_targets_1_ren = 32'h20000000 <= io_initiator_raddr & io_initiator_raddr < 32'h20000200 & io_initiator_ren; // @[Decoder.scala 41:85 43:11]
   assign io_targets_1_waddr = 32'h20000000 <= io_initiator_waddr & io_initiator_waddr < 32'h20000200 ? _waddr_T_3 : 32'h0
-    ; // @[Decoder.scala 45:85 46:13]
-  assign io_targets_1_wen = 32'h20000000 <= io_initiator_waddr & io_initiator_waddr < 32'h20000200 & io_initiator_wen; // @[Decoder.scala 45:85 47:11]
+    ; // @[Decoder.scala 48:85 49:13]
+  assign io_targets_1_wen = 32'h20000000 <= io_initiator_waddr & io_initiator_waddr < 32'h20000200 & io_initiator_wen; // @[Decoder.scala 48:85 50:11]
   assign io_targets_1_wstrb = 32'h20000000 <= io_initiator_waddr & io_initiator_waddr < 32'h20000200 ?
-    io_initiator_wstrb : 4'hf; // @[Decoder.scala 45:85 49:13]
+    io_initiator_wstrb : 4'hf; // @[Decoder.scala 48:85 52:13]
   assign io_targets_1_wdata = 32'h20000000 <= io_initiator_waddr & io_initiator_waddr < 32'h20000200 ?
-    io_initiator_wdata : 32'hdeadbeef; // @[Decoder.scala 45:85 48:13]
-  assign io_targets_2_wen = 32'h30000000 <= io_initiator_waddr & io_initiator_waddr < 32'h30000040 & io_initiator_wen; // @[Decoder.scala 45:85 47:11]
+    io_initiator_wdata : 32'hdeadbeef; // @[Decoder.scala 48:85 51:13]
+  assign io_targets_2_wen = 32'h30000000 <= io_initiator_waddr & io_initiator_waddr < 32'h30000040 & io_initiator_wen; // @[Decoder.scala 48:85 50:11]
   assign io_targets_2_wdata = 32'h30000000 <= io_initiator_waddr & io_initiator_waddr < 32'h30000040 ?
-    io_initiator_wdata : 32'hdeadbeef; // @[Decoder.scala 45:85 48:13]
+    io_initiator_wdata : 32'hdeadbeef; // @[Decoder.scala 48:85 51:13]
   assign io_targets_3_raddr = 32'h30001000 <= io_initiator_raddr & io_initiator_raddr < 32'h30001040 ? _raddr_T_7 : 32'h0
-    ; // @[Decoder.scala 39:85 40:13]
-  assign io_targets_3_ren = 32'h30001000 <= io_initiator_raddr & io_initiator_raddr < 32'h30001040 & io_initiator_ren; // @[Decoder.scala 39:85 41:11]
+    ; // @[Decoder.scala 41:85 42:13]
+  assign io_targets_3_ren = 32'h30001000 <= io_initiator_raddr & io_initiator_raddr < 32'h30001040 & io_initiator_ren; // @[Decoder.scala 41:85 43:11]
   assign io_targets_3_waddr = 32'h30001000 <= io_initiator_waddr & io_initiator_waddr < 32'h30001040 ? _waddr_T_7 : 32'h0
-    ; // @[Decoder.scala 45:85 46:13]
-  assign io_targets_3_wen = 32'h30001000 <= io_initiator_waddr & io_initiator_waddr < 32'h30001040 & io_initiator_wen; // @[Decoder.scala 45:85 47:11]
+    ; // @[Decoder.scala 48:85 49:13]
+  assign io_targets_3_wen = 32'h30001000 <= io_initiator_waddr & io_initiator_waddr < 32'h30001040 & io_initiator_wen; // @[Decoder.scala 48:85 50:11]
   assign io_targets_3_wdata = 32'h30001000 <= io_initiator_waddr & io_initiator_waddr < 32'h30001040 ?
-    io_initiator_wdata : 32'hdeadbeef; // @[Decoder.scala 45:85 48:13]
+    io_initiator_wdata : 32'hdeadbeef; // @[Decoder.scala 48:85 51:13]
   assign io_targets_4_raddr = 32'h30002000 <= io_initiator_raddr & io_initiator_raddr < 32'h30002040 ? _raddr_T_9 : 32'h0
-    ; // @[Decoder.scala 39:85 40:13]
-  assign io_targets_4_ren = 32'h30002000 <= io_initiator_raddr & io_initiator_raddr < 32'h30002040 & io_initiator_ren; // @[Decoder.scala 39:85 41:11]
+    ; // @[Decoder.scala 41:85 42:13]
+  assign io_targets_4_ren = 32'h30002000 <= io_initiator_raddr & io_initiator_raddr < 32'h30002040 & io_initiator_ren; // @[Decoder.scala 41:85 43:11]
   assign io_targets_4_waddr = 32'h30002000 <= io_initiator_waddr & io_initiator_waddr < 32'h30002040 ? _waddr_T_9 : 32'h0
-    ; // @[Decoder.scala 45:85 46:13]
-  assign io_targets_4_wen = 32'h30002000 <= io_initiator_waddr & io_initiator_waddr < 32'h30002040 & io_initiator_wen; // @[Decoder.scala 45:85 47:11]
+    ; // @[Decoder.scala 48:85 49:13]
+  assign io_targets_4_wen = 32'h30002000 <= io_initiator_waddr & io_initiator_waddr < 32'h30002040 & io_initiator_wen; // @[Decoder.scala 48:85 50:11]
   assign io_targets_4_wdata = 32'h30002000 <= io_initiator_waddr & io_initiator_waddr < 32'h30002040 ?
-    io_initiator_wdata : 32'hdeadbeef; // @[Decoder.scala 45:85 48:13]
+    io_initiator_wdata : 32'hdeadbeef; // @[Decoder.scala 48:85 51:13]
   assign io_targets_5_raddr = 32'h40000000 <= io_initiator_raddr & io_initiator_raddr < 32'h40000040 ? _raddr_T_11 : 32'h0
-    ; // @[Decoder.scala 39:85 40:13]
+    ; // @[Decoder.scala 41:85 42:13]
 endmodule
 module RiscV(
   input          clock,
@@ -4765,139 +4647,153 @@ module RiscV(
   reg [31:0] _RAND_0;
   reg [31:0] _RAND_1;
 `endif // RANDOMIZE_REG_INIT
-  wire  core_clock; // @[Top.scala 57:20]
-  wire  core_reset; // @[Top.scala 57:20]
-  wire [31:0] core_io_imem_addr; // @[Top.scala 57:20]
-  wire [31:0] core_io_imem_inst; // @[Top.scala 57:20]
-  wire [31:0] core_io_dmem_raddr; // @[Top.scala 57:20]
-  wire [31:0] core_io_dmem_rdata; // @[Top.scala 57:20]
-  wire  core_io_dmem_ren; // @[Top.scala 57:20]
-  wire  core_io_dmem_rvalid; // @[Top.scala 57:20]
-  wire [31:0] core_io_dmem_waddr; // @[Top.scala 57:20]
-  wire  core_io_dmem_wen; // @[Top.scala 57:20]
-  wire [3:0] core_io_dmem_wstrb; // @[Top.scala 57:20]
-  wire [31:0] core_io_dmem_wdata; // @[Top.scala 57:20]
-  wire [31:0] core_io_mtimer_mem_raddr; // @[Top.scala 57:20]
-  wire [31:0] core_io_mtimer_mem_rdata; // @[Top.scala 57:20]
-  wire  core_io_mtimer_mem_ren; // @[Top.scala 57:20]
-  wire  core_io_mtimer_mem_rvalid; // @[Top.scala 57:20]
-  wire [31:0] core_io_mtimer_mem_waddr; // @[Top.scala 57:20]
-  wire  core_io_mtimer_mem_wen; // @[Top.scala 57:20]
-  wire [31:0] core_io_mtimer_mem_wdata; // @[Top.scala 57:20]
-  wire  core_io_intr; // @[Top.scala 57:20]
-  wire  core_io_exit; // @[Top.scala 57:20]
-  wire [31:0] core_io_debug_signal_mem_reg_pc; // @[Top.scala 57:20]
-  wire [31:0] core_io_debug_signal_csr_rdata; // @[Top.scala 57:20]
-  wire [31:0] core_io_debug_signal_mem_reg_csr_addr; // @[Top.scala 57:20]
-  wire  core_io_debug_signal_me_intr; // @[Top.scala 57:20]
-  wire [31:0] core_io_debug_signal_id_reg_inst; // @[Top.scala 57:20]
-  wire [63:0] core_io_debug_signal_cycle_counter; // @[Top.scala 57:20]
-  wire [63:0] core_io_debug_signal_instret; // @[Top.scala 57:20]
-  wire  memory_clock; // @[Top.scala 59:22]
-  wire  memory_reset; // @[Top.scala 59:22]
-  wire [31:0] memory_io_imem_addr; // @[Top.scala 59:22]
-  wire [31:0] memory_io_imem_inst; // @[Top.scala 59:22]
-  wire [31:0] memory_io_dmem_raddr; // @[Top.scala 59:22]
-  wire [31:0] memory_io_dmem_rdata; // @[Top.scala 59:22]
-  wire  memory_io_dmem_ren; // @[Top.scala 59:22]
-  wire  memory_io_dmem_rvalid; // @[Top.scala 59:22]
-  wire [31:0] memory_io_dmem_waddr; // @[Top.scala 59:22]
-  wire  memory_io_dmem_wen; // @[Top.scala 59:22]
-  wire [3:0] memory_io_dmem_wstrb; // @[Top.scala 59:22]
-  wire [31:0] memory_io_dmem_wdata; // @[Top.scala 59:22]
-  wire [8:0] memory_io_imemReadPort_address; // @[Top.scala 59:22]
-  wire [31:0] memory_io_imemReadPort_data; // @[Top.scala 59:22]
-  wire  imem_dbus_clock; // @[Top.scala 60:25]
-  wire  imem_dbus_reset; // @[Top.scala 60:25]
-  wire [31:0] imem_dbus_io_mem_raddr; // @[Top.scala 60:25]
-  wire [31:0] imem_dbus_io_mem_rdata; // @[Top.scala 60:25]
-  wire  imem_dbus_io_mem_ren; // @[Top.scala 60:25]
-  wire  imem_dbus_io_mem_rvalid; // @[Top.scala 60:25]
-  wire [31:0] imem_dbus_io_mem_waddr; // @[Top.scala 60:25]
-  wire  imem_dbus_io_mem_wen; // @[Top.scala 60:25]
-  wire [31:0] imem_dbus_io_mem_wdata; // @[Top.scala 60:25]
-  wire [8:0] imem_dbus_io_read_address; // @[Top.scala 60:25]
-  wire [31:0] imem_dbus_io_read_data; // @[Top.scala 60:25]
-  wire  imem_dbus_io_read_enable; // @[Top.scala 60:25]
-  wire [8:0] imem_dbus_io_write_address; // @[Top.scala 60:25]
-  wire [31:0] imem_dbus_io_write_data; // @[Top.scala 60:25]
-  wire  imem_dbus_io_write_enable; // @[Top.scala 60:25]
-  wire  gpio_clock; // @[Top.scala 61:20]
-  wire  gpio_reset; // @[Top.scala 61:20]
-  wire  gpio_io_mem_wen; // @[Top.scala 61:20]
-  wire [31:0] gpio_io_mem_wdata; // @[Top.scala 61:20]
-  wire [31:0] gpio_io_gpio; // @[Top.scala 61:20]
-  wire  uart_clock; // @[Top.scala 62:20]
-  wire  uart_reset; // @[Top.scala 62:20]
-  wire [31:0] uart_io_mem_raddr; // @[Top.scala 62:20]
-  wire [31:0] uart_io_mem_rdata; // @[Top.scala 62:20]
-  wire  uart_io_mem_ren; // @[Top.scala 62:20]
-  wire  uart_io_mem_rvalid; // @[Top.scala 62:20]
-  wire [31:0] uart_io_mem_waddr; // @[Top.scala 62:20]
-  wire  uart_io_mem_wen; // @[Top.scala 62:20]
-  wire [31:0] uart_io_mem_wdata; // @[Top.scala 62:20]
-  wire  uart_io_intr; // @[Top.scala 62:20]
-  wire  uart_io_tx; // @[Top.scala 62:20]
-  wire [31:0] config__io_mem_raddr; // @[Top.scala 63:22]
-  wire [31:0] config__io_mem_rdata; // @[Top.scala 63:22]
-  wire [31:0] decoder_io_initiator_raddr; // @[Top.scala 65:23]
-  wire [31:0] decoder_io_initiator_rdata; // @[Top.scala 65:23]
-  wire  decoder_io_initiator_ren; // @[Top.scala 65:23]
-  wire  decoder_io_initiator_rvalid; // @[Top.scala 65:23]
-  wire [31:0] decoder_io_initiator_waddr; // @[Top.scala 65:23]
-  wire  decoder_io_initiator_wen; // @[Top.scala 65:23]
-  wire  decoder_io_initiator_wready; // @[Top.scala 65:23]
-  wire [3:0] decoder_io_initiator_wstrb; // @[Top.scala 65:23]
-  wire [31:0] decoder_io_initiator_wdata; // @[Top.scala 65:23]
-  wire [31:0] decoder_io_targets_0_raddr; // @[Top.scala 65:23]
-  wire [31:0] decoder_io_targets_0_rdata; // @[Top.scala 65:23]
-  wire  decoder_io_targets_0_ren; // @[Top.scala 65:23]
-  wire  decoder_io_targets_0_rvalid; // @[Top.scala 65:23]
-  wire [31:0] decoder_io_targets_0_waddr; // @[Top.scala 65:23]
-  wire  decoder_io_targets_0_wen; // @[Top.scala 65:23]
-  wire [31:0] decoder_io_targets_0_wdata; // @[Top.scala 65:23]
-  wire [31:0] decoder_io_targets_1_raddr; // @[Top.scala 65:23]
-  wire [31:0] decoder_io_targets_1_rdata; // @[Top.scala 65:23]
-  wire  decoder_io_targets_1_ren; // @[Top.scala 65:23]
-  wire  decoder_io_targets_1_rvalid; // @[Top.scala 65:23]
-  wire [31:0] decoder_io_targets_1_waddr; // @[Top.scala 65:23]
-  wire  decoder_io_targets_1_wen; // @[Top.scala 65:23]
-  wire [3:0] decoder_io_targets_1_wstrb; // @[Top.scala 65:23]
-  wire [31:0] decoder_io_targets_1_wdata; // @[Top.scala 65:23]
-  wire  decoder_io_targets_2_wen; // @[Top.scala 65:23]
-  wire [31:0] decoder_io_targets_2_wdata; // @[Top.scala 65:23]
-  wire [31:0] decoder_io_targets_3_raddr; // @[Top.scala 65:23]
-  wire [31:0] decoder_io_targets_3_rdata; // @[Top.scala 65:23]
-  wire  decoder_io_targets_3_ren; // @[Top.scala 65:23]
-  wire  decoder_io_targets_3_rvalid; // @[Top.scala 65:23]
-  wire [31:0] decoder_io_targets_3_waddr; // @[Top.scala 65:23]
-  wire  decoder_io_targets_3_wen; // @[Top.scala 65:23]
-  wire [31:0] decoder_io_targets_3_wdata; // @[Top.scala 65:23]
-  wire [31:0] decoder_io_targets_4_raddr; // @[Top.scala 65:23]
-  wire [31:0] decoder_io_targets_4_rdata; // @[Top.scala 65:23]
-  wire  decoder_io_targets_4_ren; // @[Top.scala 65:23]
-  wire  decoder_io_targets_4_rvalid; // @[Top.scala 65:23]
-  wire [31:0] decoder_io_targets_4_waddr; // @[Top.scala 65:23]
-  wire  decoder_io_targets_4_wen; // @[Top.scala 65:23]
-  wire [31:0] decoder_io_targets_4_wdata; // @[Top.scala 65:23]
-  wire [31:0] decoder_io_targets_5_raddr; // @[Top.scala 65:23]
-  wire [31:0] decoder_io_targets_5_rdata; // @[Top.scala 65:23]
-  reg [31:0] imem [0:511]; // @[Top.scala 90:17]
-  wire  imem_imem_rdata_MPORT_en; // @[Top.scala 90:17]
-  wire [8:0] imem_imem_rdata_MPORT_addr; // @[Top.scala 90:17]
-  wire [31:0] imem_imem_rdata_MPORT_data; // @[Top.scala 90:17]
-  wire  imem_imem_rdata2_MPORT_en; // @[Top.scala 90:17]
-  wire [8:0] imem_imem_rdata2_MPORT_addr; // @[Top.scala 90:17]
-  wire [31:0] imem_imem_rdata2_MPORT_data; // @[Top.scala 90:17]
-  wire [31:0] imem_MPORT_data; // @[Top.scala 90:17]
-  wire [8:0] imem_MPORT_addr; // @[Top.scala 90:17]
-  wire  imem_MPORT_mask; // @[Top.scala 90:17]
-  wire  imem_MPORT_en; // @[Top.scala 90:17]
-  reg [31:0] imem_rdata; // @[Top.scala 80:27]
-  reg [31:0] imem_rdata2; // @[Top.scala 81:28]
-  wire [31:0] _GEN_3 = imem_imem_rdata_MPORT_data; // @[Top.scala 92:40 93:16 80:27]
-  wire  _T = ~imem_dbus_io_write_enable; // @[Top.scala 99:9]
-  Core core ( // @[Top.scala 57:20]
+  wire  core_clock; // @[Top.scala 58:20]
+  wire  core_reset; // @[Top.scala 58:20]
+  wire [31:0] core_io_imem_addr; // @[Top.scala 58:20]
+  wire [31:0] core_io_imem_inst; // @[Top.scala 58:20]
+  wire [31:0] core_io_dmem_raddr; // @[Top.scala 58:20]
+  wire [31:0] core_io_dmem_rdata; // @[Top.scala 58:20]
+  wire  core_io_dmem_ren; // @[Top.scala 58:20]
+  wire  core_io_dmem_rvalid; // @[Top.scala 58:20]
+  wire  core_io_dmem_rready; // @[Top.scala 58:20]
+  wire [31:0] core_io_dmem_waddr; // @[Top.scala 58:20]
+  wire  core_io_dmem_wen; // @[Top.scala 58:20]
+  wire  core_io_dmem_wready; // @[Top.scala 58:20]
+  wire [3:0] core_io_dmem_wstrb; // @[Top.scala 58:20]
+  wire [31:0] core_io_dmem_wdata; // @[Top.scala 58:20]
+  wire [31:0] core_io_mtimer_mem_raddr; // @[Top.scala 58:20]
+  wire [31:0] core_io_mtimer_mem_rdata; // @[Top.scala 58:20]
+  wire  core_io_mtimer_mem_ren; // @[Top.scala 58:20]
+  wire  core_io_mtimer_mem_rvalid; // @[Top.scala 58:20]
+  wire [31:0] core_io_mtimer_mem_waddr; // @[Top.scala 58:20]
+  wire  core_io_mtimer_mem_wen; // @[Top.scala 58:20]
+  wire [31:0] core_io_mtimer_mem_wdata; // @[Top.scala 58:20]
+  wire  core_io_intr; // @[Top.scala 58:20]
+  wire  core_io_exit; // @[Top.scala 58:20]
+  wire [31:0] core_io_debug_signal_mem_reg_pc; // @[Top.scala 58:20]
+  wire [31:0] core_io_debug_signal_csr_rdata; // @[Top.scala 58:20]
+  wire [31:0] core_io_debug_signal_mem_reg_csr_addr; // @[Top.scala 58:20]
+  wire  core_io_debug_signal_me_intr; // @[Top.scala 58:20]
+  wire [31:0] core_io_debug_signal_id_reg_inst; // @[Top.scala 58:20]
+  wire [63:0] core_io_debug_signal_cycle_counter; // @[Top.scala 58:20]
+  wire [63:0] core_io_debug_signal_instret; // @[Top.scala 58:20]
+  wire [31:0] memory_io_imem_addr; // @[Top.scala 60:22]
+  wire [31:0] memory_io_imem_inst; // @[Top.scala 60:22]
+  wire [31:0] memory_io_dmem_raddr; // @[Top.scala 60:22]
+  wire [31:0] memory_io_dmem_rdata; // @[Top.scala 60:22]
+  wire  memory_io_dmem_ren; // @[Top.scala 60:22]
+  wire  memory_io_dmem_rvalid; // @[Top.scala 60:22]
+  wire  memory_io_dmem_rready; // @[Top.scala 60:22]
+  wire [31:0] memory_io_dmem_waddr; // @[Top.scala 60:22]
+  wire  memory_io_dmem_wen; // @[Top.scala 60:22]
+  wire  memory_io_dmem_wready; // @[Top.scala 60:22]
+  wire [3:0] memory_io_dmem_wstrb; // @[Top.scala 60:22]
+  wire [31:0] memory_io_dmem_wdata; // @[Top.scala 60:22]
+  wire [8:0] memory_io_imemReadPort_address; // @[Top.scala 60:22]
+  wire [31:0] memory_io_imemReadPort_data; // @[Top.scala 60:22]
+  wire  memory_io_dramPort_ren; // @[Top.scala 60:22]
+  wire  memory_io_dramPort_wen; // @[Top.scala 60:22]
+  wire [27:0] memory_io_dramPort_addr; // @[Top.scala 60:22]
+  wire [127:0] memory_io_dramPort_wdata; // @[Top.scala 60:22]
+  wire [15:0] memory_io_dramPort_wmask; // @[Top.scala 60:22]
+  wire  memory_io_dramPort_init_calib_complete; // @[Top.scala 60:22]
+  wire [127:0] memory_io_dramPort_rdata; // @[Top.scala 60:22]
+  wire  memory_io_dramPort_rdata_valid; // @[Top.scala 60:22]
+  wire  memory_io_dramPort_busy; // @[Top.scala 60:22]
+  wire  imem_dbus_clock; // @[Top.scala 61:25]
+  wire  imem_dbus_reset; // @[Top.scala 61:25]
+  wire [31:0] imem_dbus_io_mem_raddr; // @[Top.scala 61:25]
+  wire [31:0] imem_dbus_io_mem_rdata; // @[Top.scala 61:25]
+  wire  imem_dbus_io_mem_ren; // @[Top.scala 61:25]
+  wire  imem_dbus_io_mem_rvalid; // @[Top.scala 61:25]
+  wire [31:0] imem_dbus_io_mem_waddr; // @[Top.scala 61:25]
+  wire  imem_dbus_io_mem_wen; // @[Top.scala 61:25]
+  wire [31:0] imem_dbus_io_mem_wdata; // @[Top.scala 61:25]
+  wire [8:0] imem_dbus_io_read_address; // @[Top.scala 61:25]
+  wire [31:0] imem_dbus_io_read_data; // @[Top.scala 61:25]
+  wire  imem_dbus_io_read_enable; // @[Top.scala 61:25]
+  wire [8:0] imem_dbus_io_write_address; // @[Top.scala 61:25]
+  wire [31:0] imem_dbus_io_write_data; // @[Top.scala 61:25]
+  wire  imem_dbus_io_write_enable; // @[Top.scala 61:25]
+  wire  gpio_clock; // @[Top.scala 62:20]
+  wire  gpio_reset; // @[Top.scala 62:20]
+  wire  gpio_io_mem_wen; // @[Top.scala 62:20]
+  wire [31:0] gpio_io_mem_wdata; // @[Top.scala 62:20]
+  wire [31:0] gpio_io_gpio; // @[Top.scala 62:20]
+  wire  uart_clock; // @[Top.scala 63:20]
+  wire  uart_reset; // @[Top.scala 63:20]
+  wire [31:0] uart_io_mem_raddr; // @[Top.scala 63:20]
+  wire [31:0] uart_io_mem_rdata; // @[Top.scala 63:20]
+  wire  uart_io_mem_ren; // @[Top.scala 63:20]
+  wire  uart_io_mem_rvalid; // @[Top.scala 63:20]
+  wire [31:0] uart_io_mem_waddr; // @[Top.scala 63:20]
+  wire  uart_io_mem_wen; // @[Top.scala 63:20]
+  wire [31:0] uart_io_mem_wdata; // @[Top.scala 63:20]
+  wire  uart_io_intr; // @[Top.scala 63:20]
+  wire  uart_io_tx; // @[Top.scala 63:20]
+  wire [31:0] config__io_mem_raddr; // @[Top.scala 64:22]
+  wire [31:0] config__io_mem_rdata; // @[Top.scala 64:22]
+  wire [31:0] decoder_io_initiator_raddr; // @[Top.scala 66:23]
+  wire [31:0] decoder_io_initiator_rdata; // @[Top.scala 66:23]
+  wire  decoder_io_initiator_ren; // @[Top.scala 66:23]
+  wire  decoder_io_initiator_rvalid; // @[Top.scala 66:23]
+  wire  decoder_io_initiator_rready; // @[Top.scala 66:23]
+  wire [31:0] decoder_io_initiator_waddr; // @[Top.scala 66:23]
+  wire  decoder_io_initiator_wen; // @[Top.scala 66:23]
+  wire  decoder_io_initiator_wready; // @[Top.scala 66:23]
+  wire [3:0] decoder_io_initiator_wstrb; // @[Top.scala 66:23]
+  wire [31:0] decoder_io_initiator_wdata; // @[Top.scala 66:23]
+  wire [31:0] decoder_io_targets_0_raddr; // @[Top.scala 66:23]
+  wire [31:0] decoder_io_targets_0_rdata; // @[Top.scala 66:23]
+  wire  decoder_io_targets_0_ren; // @[Top.scala 66:23]
+  wire  decoder_io_targets_0_rvalid; // @[Top.scala 66:23]
+  wire [31:0] decoder_io_targets_0_waddr; // @[Top.scala 66:23]
+  wire  decoder_io_targets_0_wen; // @[Top.scala 66:23]
+  wire [31:0] decoder_io_targets_0_wdata; // @[Top.scala 66:23]
+  wire [31:0] decoder_io_targets_1_raddr; // @[Top.scala 66:23]
+  wire [31:0] decoder_io_targets_1_rdata; // @[Top.scala 66:23]
+  wire  decoder_io_targets_1_ren; // @[Top.scala 66:23]
+  wire  decoder_io_targets_1_rvalid; // @[Top.scala 66:23]
+  wire  decoder_io_targets_1_rready; // @[Top.scala 66:23]
+  wire [31:0] decoder_io_targets_1_waddr; // @[Top.scala 66:23]
+  wire  decoder_io_targets_1_wen; // @[Top.scala 66:23]
+  wire  decoder_io_targets_1_wready; // @[Top.scala 66:23]
+  wire [3:0] decoder_io_targets_1_wstrb; // @[Top.scala 66:23]
+  wire [31:0] decoder_io_targets_1_wdata; // @[Top.scala 66:23]
+  wire  decoder_io_targets_2_wen; // @[Top.scala 66:23]
+  wire [31:0] decoder_io_targets_2_wdata; // @[Top.scala 66:23]
+  wire [31:0] decoder_io_targets_3_raddr; // @[Top.scala 66:23]
+  wire [31:0] decoder_io_targets_3_rdata; // @[Top.scala 66:23]
+  wire  decoder_io_targets_3_ren; // @[Top.scala 66:23]
+  wire  decoder_io_targets_3_rvalid; // @[Top.scala 66:23]
+  wire [31:0] decoder_io_targets_3_waddr; // @[Top.scala 66:23]
+  wire  decoder_io_targets_3_wen; // @[Top.scala 66:23]
+  wire [31:0] decoder_io_targets_3_wdata; // @[Top.scala 66:23]
+  wire [31:0] decoder_io_targets_4_raddr; // @[Top.scala 66:23]
+  wire [31:0] decoder_io_targets_4_rdata; // @[Top.scala 66:23]
+  wire  decoder_io_targets_4_ren; // @[Top.scala 66:23]
+  wire  decoder_io_targets_4_rvalid; // @[Top.scala 66:23]
+  wire [31:0] decoder_io_targets_4_waddr; // @[Top.scala 66:23]
+  wire  decoder_io_targets_4_wen; // @[Top.scala 66:23]
+  wire [31:0] decoder_io_targets_4_wdata; // @[Top.scala 66:23]
+  wire [31:0] decoder_io_targets_5_raddr; // @[Top.scala 66:23]
+  wire [31:0] decoder_io_targets_5_rdata; // @[Top.scala 66:23]
+  reg [31:0] imem [0:511]; // @[Top.scala 91:17]
+  wire  imem_imem_rdata_MPORT_en; // @[Top.scala 91:17]
+  wire [8:0] imem_imem_rdata_MPORT_addr; // @[Top.scala 91:17]
+  wire [31:0] imem_imem_rdata_MPORT_data; // @[Top.scala 91:17]
+  wire  imem_imem_rdata2_MPORT_en; // @[Top.scala 91:17]
+  wire [8:0] imem_imem_rdata2_MPORT_addr; // @[Top.scala 91:17]
+  wire [31:0] imem_imem_rdata2_MPORT_data; // @[Top.scala 91:17]
+  wire [31:0] imem_MPORT_data; // @[Top.scala 91:17]
+  wire [8:0] imem_MPORT_addr; // @[Top.scala 91:17]
+  wire  imem_MPORT_mask; // @[Top.scala 91:17]
+  wire  imem_MPORT_en; // @[Top.scala 91:17]
+  reg [31:0] imem_rdata; // @[Top.scala 81:27]
+  reg [31:0] imem_rdata2; // @[Top.scala 82:28]
+  wire [31:0] _GEN_3 = imem_imem_rdata_MPORT_data; // @[Top.scala 93:40 94:16 81:27]
+  wire  _T = ~imem_dbus_io_write_enable; // @[Top.scala 100:9]
+  Core core ( // @[Top.scala 58:20]
     .clock(core_clock),
     .reset(core_reset),
     .io_imem_addr(core_io_imem_addr),
@@ -4906,8 +4802,10 @@ module RiscV(
     .io_dmem_rdata(core_io_dmem_rdata),
     .io_dmem_ren(core_io_dmem_ren),
     .io_dmem_rvalid(core_io_dmem_rvalid),
+    .io_dmem_rready(core_io_dmem_rready),
     .io_dmem_waddr(core_io_dmem_waddr),
     .io_dmem_wen(core_io_dmem_wen),
+    .io_dmem_wready(core_io_dmem_wready),
     .io_dmem_wstrb(core_io_dmem_wstrb),
     .io_dmem_wdata(core_io_dmem_wdata),
     .io_mtimer_mem_raddr(core_io_mtimer_mem_raddr),
@@ -4927,23 +4825,32 @@ module RiscV(
     .io_debug_signal_cycle_counter(core_io_debug_signal_cycle_counter),
     .io_debug_signal_instret(core_io_debug_signal_instret)
   );
-  Memory memory ( // @[Top.scala 59:22]
-    .clock(memory_clock),
-    .reset(memory_reset),
+  Memory memory ( // @[Top.scala 60:22]
     .io_imem_addr(memory_io_imem_addr),
     .io_imem_inst(memory_io_imem_inst),
     .io_dmem_raddr(memory_io_dmem_raddr),
     .io_dmem_rdata(memory_io_dmem_rdata),
     .io_dmem_ren(memory_io_dmem_ren),
     .io_dmem_rvalid(memory_io_dmem_rvalid),
+    .io_dmem_rready(memory_io_dmem_rready),
     .io_dmem_waddr(memory_io_dmem_waddr),
     .io_dmem_wen(memory_io_dmem_wen),
+    .io_dmem_wready(memory_io_dmem_wready),
     .io_dmem_wstrb(memory_io_dmem_wstrb),
     .io_dmem_wdata(memory_io_dmem_wdata),
     .io_imemReadPort_address(memory_io_imemReadPort_address),
-    .io_imemReadPort_data(memory_io_imemReadPort_data)
+    .io_imemReadPort_data(memory_io_imemReadPort_data),
+    .io_dramPort_ren(memory_io_dramPort_ren),
+    .io_dramPort_wen(memory_io_dramPort_wen),
+    .io_dramPort_addr(memory_io_dramPort_addr),
+    .io_dramPort_wdata(memory_io_dramPort_wdata),
+    .io_dramPort_wmask(memory_io_dramPort_wmask),
+    .io_dramPort_init_calib_complete(memory_io_dramPort_init_calib_complete),
+    .io_dramPort_rdata(memory_io_dramPort_rdata),
+    .io_dramPort_rdata_valid(memory_io_dramPort_rdata_valid),
+    .io_dramPort_busy(memory_io_dramPort_busy)
   );
-  SingleCycleMem imem_dbus ( // @[Top.scala 60:25]
+  SingleCycleMem imem_dbus ( // @[Top.scala 61:25]
     .clock(imem_dbus_clock),
     .reset(imem_dbus_reset),
     .io_mem_raddr(imem_dbus_io_mem_raddr),
@@ -4960,14 +4867,14 @@ module RiscV(
     .io_write_data(imem_dbus_io_write_data),
     .io_write_enable(imem_dbus_io_write_enable)
   );
-  Gpio gpio ( // @[Top.scala 61:20]
+  Gpio gpio ( // @[Top.scala 62:20]
     .clock(gpio_clock),
     .reset(gpio_reset),
     .io_mem_wen(gpio_io_mem_wen),
     .io_mem_wdata(gpio_io_mem_wdata),
     .io_gpio(gpio_io_gpio)
   );
-  Uart uart ( // @[Top.scala 62:20]
+  Uart uart ( // @[Top.scala 63:20]
     .clock(uart_clock),
     .reset(uart_reset),
     .io_mem_raddr(uart_io_mem_raddr),
@@ -4980,15 +4887,16 @@ module RiscV(
     .io_intr(uart_io_intr),
     .io_tx(uart_io_tx)
   );
-  Config config_ ( // @[Top.scala 63:22]
+  Config config_ ( // @[Top.scala 64:22]
     .io_mem_raddr(config__io_mem_raddr),
     .io_mem_rdata(config__io_mem_rdata)
   );
-  DMemDecoder decoder ( // @[Top.scala 65:23]
+  DMemDecoder decoder ( // @[Top.scala 66:23]
     .io_initiator_raddr(decoder_io_initiator_raddr),
     .io_initiator_rdata(decoder_io_initiator_rdata),
     .io_initiator_ren(decoder_io_initiator_ren),
     .io_initiator_rvalid(decoder_io_initiator_rvalid),
+    .io_initiator_rready(decoder_io_initiator_rready),
     .io_initiator_waddr(decoder_io_initiator_waddr),
     .io_initiator_wen(decoder_io_initiator_wen),
     .io_initiator_wready(decoder_io_initiator_wready),
@@ -5005,8 +4913,10 @@ module RiscV(
     .io_targets_1_rdata(decoder_io_targets_1_rdata),
     .io_targets_1_ren(decoder_io_targets_1_ren),
     .io_targets_1_rvalid(decoder_io_targets_1_rvalid),
+    .io_targets_1_rready(decoder_io_targets_1_rready),
     .io_targets_1_waddr(decoder_io_targets_1_waddr),
     .io_targets_1_wen(decoder_io_targets_1_wen),
+    .io_targets_1_wready(decoder_io_targets_1_wready),
     .io_targets_1_wstrb(decoder_io_targets_1_wstrb),
     .io_targets_1_wdata(decoder_io_targets_1_wdata),
     .io_targets_2_wen(decoder_io_targets_2_wen),
@@ -5030,112 +4940,118 @@ module RiscV(
   );
   assign imem_imem_rdata_MPORT_en = 1'h1;
   assign imem_imem_rdata_MPORT_addr = memory_io_imemReadPort_address;
-  assign imem_imem_rdata_MPORT_data = imem[imem_imem_rdata_MPORT_addr]; // @[Top.scala 90:17]
+  assign imem_imem_rdata_MPORT_data = imem[imem_imem_rdata_MPORT_addr]; // @[Top.scala 91:17]
   assign imem_imem_rdata2_MPORT_en = _T & imem_dbus_io_read_enable;
   assign imem_imem_rdata2_MPORT_addr = imem_dbus_io_write_enable ? imem_dbus_io_write_address :
     imem_dbus_io_read_address;
-  assign imem_imem_rdata2_MPORT_data = imem[imem_imem_rdata2_MPORT_addr]; // @[Top.scala 90:17]
+  assign imem_imem_rdata2_MPORT_data = imem[imem_imem_rdata2_MPORT_addr]; // @[Top.scala 91:17]
   assign imem_MPORT_data = imem_dbus_io_write_data;
   assign imem_MPORT_addr = imem_dbus_io_write_enable ? imem_dbus_io_write_address : imem_dbus_io_read_address;
   assign imem_MPORT_mask = 1'h1;
   assign imem_MPORT_en = imem_dbus_io_write_enable;
-  assign io_dram_ren = 1'h0; // @[Top.scala 108:15]
-  assign io_dram_wen = 1'h0; // @[Top.scala 109:15]
-  assign io_dram_addr = 28'h0; // @[Top.scala 110:16]
-  assign io_dram_wdata = 128'h0; // @[Top.scala 111:17]
-  assign io_dram_wmask = 16'h0; // @[Top.scala 112:17]
-  assign io_dram_user_busy = 1'h0; // @[Top.scala 113:21]
-  assign io_gpio = gpio_io_gpio[7:0]; // @[Top.scala 132:11]
-  assign io_uart_tx = uart_io_tx; // @[Top.scala 133:14]
-  assign io_exit = core_io_exit; // @[Top.scala 131:11]
-  assign io_debugSignals_core_mem_reg_pc = core_io_debug_signal_mem_reg_pc; // @[Top.scala 116:24]
-  assign io_debugSignals_core_csr_rdata = core_io_debug_signal_csr_rdata; // @[Top.scala 116:24]
-  assign io_debugSignals_core_mem_reg_csr_addr = core_io_debug_signal_mem_reg_csr_addr; // @[Top.scala 116:24]
-  assign io_debugSignals_core_me_intr = core_io_debug_signal_me_intr; // @[Top.scala 116:24]
-  assign io_debugSignals_core_id_reg_inst = core_io_debug_signal_id_reg_inst; // @[Top.scala 116:24]
-  assign io_debugSignals_core_cycle_counter = core_io_debug_signal_cycle_counter; // @[Top.scala 116:24]
-  assign io_debugSignals_core_instret = core_io_debug_signal_instret; // @[Top.scala 116:24]
-  assign io_debugSignals_raddr = core_io_dmem_raddr; // @[Top.scala 117:26]
-  assign io_debugSignals_rdata = decoder_io_initiator_rdata; // @[Top.scala 118:26]
-  assign io_debugSignals_ren = core_io_dmem_ren; // @[Top.scala 119:26]
-  assign io_debugSignals_rvalid = decoder_io_initiator_rvalid; // @[Top.scala 120:26]
-  assign io_debugSignals_waddr = core_io_dmem_waddr; // @[Top.scala 121:26]
-  assign io_debugSignals_wen = core_io_dmem_wen; // @[Top.scala 123:26]
-  assign io_debugSignals_wready = decoder_io_initiator_wready; // @[Top.scala 124:26]
-  assign io_debugSignals_wstrb = core_io_dmem_wstrb; // @[Top.scala 125:26]
-  assign io_debugSignals_wdata = core_io_dmem_wdata; // @[Top.scala 122:26]
-  assign io_debugSignals_dram_init_calib_complete = io_dram_init_calib_complete; // @[Top.scala 127:44]
-  assign io_debugSignals_dram_rdata_valid = io_dram_rdata_valid; // @[Top.scala 128:44]
-  assign io_debugSignals_dram_busy = io_dram_busy; // @[Top.scala 129:44]
+  assign io_dram_ren = memory_io_dramPort_ren; // @[Top.scala 109:11]
+  assign io_dram_wen = memory_io_dramPort_wen; // @[Top.scala 109:11]
+  assign io_dram_addr = memory_io_dramPort_addr; // @[Top.scala 109:11]
+  assign io_dram_wdata = memory_io_dramPort_wdata; // @[Top.scala 109:11]
+  assign io_dram_wmask = memory_io_dramPort_wmask; // @[Top.scala 109:11]
+  assign io_dram_user_busy = 1'h0; // @[Top.scala 109:11]
+  assign io_gpio = gpio_io_gpio[7:0]; // @[Top.scala 128:11]
+  assign io_uart_tx = uart_io_tx; // @[Top.scala 129:14]
+  assign io_exit = core_io_exit; // @[Top.scala 127:11]
+  assign io_debugSignals_core_mem_reg_pc = core_io_debug_signal_mem_reg_pc; // @[Top.scala 112:24]
+  assign io_debugSignals_core_csr_rdata = core_io_debug_signal_csr_rdata; // @[Top.scala 112:24]
+  assign io_debugSignals_core_mem_reg_csr_addr = core_io_debug_signal_mem_reg_csr_addr; // @[Top.scala 112:24]
+  assign io_debugSignals_core_me_intr = core_io_debug_signal_me_intr; // @[Top.scala 112:24]
+  assign io_debugSignals_core_id_reg_inst = core_io_debug_signal_id_reg_inst; // @[Top.scala 112:24]
+  assign io_debugSignals_core_cycle_counter = core_io_debug_signal_cycle_counter; // @[Top.scala 112:24]
+  assign io_debugSignals_core_instret = core_io_debug_signal_instret; // @[Top.scala 112:24]
+  assign io_debugSignals_raddr = core_io_dmem_raddr; // @[Top.scala 113:26]
+  assign io_debugSignals_rdata = decoder_io_initiator_rdata; // @[Top.scala 114:26]
+  assign io_debugSignals_ren = core_io_dmem_ren; // @[Top.scala 115:26]
+  assign io_debugSignals_rvalid = decoder_io_initiator_rvalid; // @[Top.scala 116:26]
+  assign io_debugSignals_waddr = core_io_dmem_waddr; // @[Top.scala 117:26]
+  assign io_debugSignals_wen = core_io_dmem_wen; // @[Top.scala 119:26]
+  assign io_debugSignals_wready = decoder_io_initiator_wready; // @[Top.scala 120:26]
+  assign io_debugSignals_wstrb = core_io_dmem_wstrb; // @[Top.scala 121:26]
+  assign io_debugSignals_wdata = core_io_dmem_wdata; // @[Top.scala 118:26]
+  assign io_debugSignals_dram_init_calib_complete = io_dram_init_calib_complete; // @[Top.scala 123:44]
+  assign io_debugSignals_dram_rdata_valid = io_dram_rdata_valid; // @[Top.scala 124:44]
+  assign io_debugSignals_dram_busy = io_dram_busy; // @[Top.scala 125:44]
   assign core_clock = clock;
   assign core_reset = reset;
-  assign core_io_imem_inst = memory_io_imem_inst; // @[Top.scala 103:16]
-  assign core_io_dmem_rdata = decoder_io_initiator_rdata; // @[Top.scala 105:16]
-  assign core_io_dmem_rvalid = decoder_io_initiator_rvalid; // @[Top.scala 105:16]
-  assign core_io_mtimer_mem_raddr = decoder_io_targets_4_raddr; // @[Top.scala 77:25]
-  assign core_io_mtimer_mem_ren = decoder_io_targets_4_ren; // @[Top.scala 77:25]
-  assign core_io_mtimer_mem_waddr = decoder_io_targets_4_waddr; // @[Top.scala 77:25]
-  assign core_io_mtimer_mem_wen = decoder_io_targets_4_wen; // @[Top.scala 77:25]
-  assign core_io_mtimer_mem_wdata = decoder_io_targets_4_wdata; // @[Top.scala 77:25]
-  assign core_io_intr = uart_io_intr; // @[Top.scala 134:16]
-  assign memory_clock = clock;
-  assign memory_reset = reset;
-  assign memory_io_imem_addr = core_io_imem_addr; // @[Top.scala 103:16]
-  assign memory_io_dmem_raddr = decoder_io_targets_1_raddr; // @[Top.scala 74:25]
-  assign memory_io_dmem_ren = decoder_io_targets_1_ren; // @[Top.scala 74:25]
-  assign memory_io_dmem_waddr = decoder_io_targets_1_waddr; // @[Top.scala 74:25]
-  assign memory_io_dmem_wen = decoder_io_targets_1_wen; // @[Top.scala 74:25]
-  assign memory_io_dmem_wstrb = decoder_io_targets_1_wstrb; // @[Top.scala 74:25]
-  assign memory_io_dmem_wdata = decoder_io_targets_1_wdata; // @[Top.scala 74:25]
-  assign memory_io_imemReadPort_data = imem_rdata; // @[Top.scala 82:31]
+  assign core_io_imem_inst = memory_io_imem_inst; // @[Top.scala 104:16]
+  assign core_io_dmem_rdata = decoder_io_initiator_rdata; // @[Top.scala 106:16]
+  assign core_io_dmem_rvalid = decoder_io_initiator_rvalid; // @[Top.scala 106:16]
+  assign core_io_dmem_rready = decoder_io_initiator_rready; // @[Top.scala 106:16]
+  assign core_io_dmem_wready = decoder_io_initiator_wready; // @[Top.scala 106:16]
+  assign core_io_mtimer_mem_raddr = decoder_io_targets_4_raddr; // @[Top.scala 78:25]
+  assign core_io_mtimer_mem_ren = decoder_io_targets_4_ren; // @[Top.scala 78:25]
+  assign core_io_mtimer_mem_waddr = decoder_io_targets_4_waddr; // @[Top.scala 78:25]
+  assign core_io_mtimer_mem_wen = decoder_io_targets_4_wen; // @[Top.scala 78:25]
+  assign core_io_mtimer_mem_wdata = decoder_io_targets_4_wdata; // @[Top.scala 78:25]
+  assign core_io_intr = uart_io_intr; // @[Top.scala 130:16]
+  assign memory_io_imem_addr = core_io_imem_addr; // @[Top.scala 104:16]
+  assign memory_io_dmem_raddr = decoder_io_targets_1_raddr; // @[Top.scala 75:25]
+  assign memory_io_dmem_ren = decoder_io_targets_1_ren; // @[Top.scala 75:25]
+  assign memory_io_dmem_waddr = decoder_io_targets_1_waddr; // @[Top.scala 75:25]
+  assign memory_io_dmem_wen = decoder_io_targets_1_wen; // @[Top.scala 75:25]
+  assign memory_io_dmem_wstrb = decoder_io_targets_1_wstrb; // @[Top.scala 75:25]
+  assign memory_io_dmem_wdata = decoder_io_targets_1_wdata; // @[Top.scala 75:25]
+  assign memory_io_imemReadPort_data = imem_rdata; // @[Top.scala 83:31]
+  assign memory_io_dramPort_init_calib_complete = io_dram_init_calib_complete; // @[Top.scala 109:11]
+  assign memory_io_dramPort_rdata = io_dram_rdata; // @[Top.scala 109:11]
+  assign memory_io_dramPort_rdata_valid = io_dram_rdata_valid; // @[Top.scala 109:11]
+  assign memory_io_dramPort_busy = io_dram_busy; // @[Top.scala 109:11]
   assign imem_dbus_clock = clock;
   assign imem_dbus_reset = reset;
-  assign imem_dbus_io_mem_raddr = decoder_io_targets_0_raddr; // @[Top.scala 73:25]
-  assign imem_dbus_io_mem_ren = decoder_io_targets_0_ren; // @[Top.scala 73:25]
-  assign imem_dbus_io_mem_waddr = decoder_io_targets_0_waddr; // @[Top.scala 73:25]
-  assign imem_dbus_io_mem_wen = decoder_io_targets_0_wen; // @[Top.scala 73:25]
-  assign imem_dbus_io_mem_wdata = decoder_io_targets_0_wdata; // @[Top.scala 73:25]
-  assign imem_dbus_io_read_data = imem_rdata2; // @[Top.scala 83:26]
+  assign imem_dbus_io_mem_raddr = decoder_io_targets_0_raddr; // @[Top.scala 74:25]
+  assign imem_dbus_io_mem_ren = decoder_io_targets_0_ren; // @[Top.scala 74:25]
+  assign imem_dbus_io_mem_waddr = decoder_io_targets_0_waddr; // @[Top.scala 74:25]
+  assign imem_dbus_io_mem_wen = decoder_io_targets_0_wen; // @[Top.scala 74:25]
+  assign imem_dbus_io_mem_wdata = decoder_io_targets_0_wdata; // @[Top.scala 74:25]
+  assign imem_dbus_io_read_data = imem_rdata2; // @[Top.scala 84:26]
   assign gpio_clock = clock;
   assign gpio_reset = reset;
-  assign gpio_io_mem_wen = decoder_io_targets_2_wen; // @[Top.scala 75:25]
-  assign gpio_io_mem_wdata = decoder_io_targets_2_wdata; // @[Top.scala 75:25]
+  assign gpio_io_mem_wen = decoder_io_targets_2_wen; // @[Top.scala 76:25]
+  assign gpio_io_mem_wdata = decoder_io_targets_2_wdata; // @[Top.scala 76:25]
   assign uart_clock = clock;
   assign uart_reset = reset;
-  assign uart_io_mem_raddr = decoder_io_targets_3_raddr; // @[Top.scala 76:25]
-  assign uart_io_mem_ren = decoder_io_targets_3_ren; // @[Top.scala 76:25]
-  assign uart_io_mem_waddr = decoder_io_targets_3_waddr; // @[Top.scala 76:25]
-  assign uart_io_mem_wen = decoder_io_targets_3_wen; // @[Top.scala 76:25]
-  assign uart_io_mem_wdata = decoder_io_targets_3_wdata; // @[Top.scala 76:25]
-  assign config__io_mem_raddr = decoder_io_targets_5_raddr; // @[Top.scala 78:25]
-  assign decoder_io_initiator_raddr = core_io_dmem_raddr; // @[Top.scala 105:16]
-  assign decoder_io_initiator_ren = core_io_dmem_ren; // @[Top.scala 105:16]
-  assign decoder_io_initiator_waddr = core_io_dmem_waddr; // @[Top.scala 105:16]
-  assign decoder_io_initiator_wen = core_io_dmem_wen; // @[Top.scala 105:16]
-  assign decoder_io_initiator_wstrb = core_io_dmem_wstrb; // @[Top.scala 105:16]
-  assign decoder_io_initiator_wdata = core_io_dmem_wdata; // @[Top.scala 105:16]
-  assign decoder_io_targets_0_rdata = imem_dbus_io_mem_rdata; // @[Top.scala 73:25]
-  assign decoder_io_targets_0_rvalid = imem_dbus_io_mem_rvalid; // @[Top.scala 73:25]
-  assign decoder_io_targets_1_rdata = memory_io_dmem_rdata; // @[Top.scala 74:25]
-  assign decoder_io_targets_1_rvalid = memory_io_dmem_rvalid; // @[Top.scala 74:25]
-  assign decoder_io_targets_3_rdata = uart_io_mem_rdata; // @[Top.scala 76:25]
-  assign decoder_io_targets_3_rvalid = uart_io_mem_rvalid; // @[Top.scala 76:25]
-  assign decoder_io_targets_4_rdata = core_io_mtimer_mem_rdata; // @[Top.scala 77:25]
-  assign decoder_io_targets_4_rvalid = core_io_mtimer_mem_rvalid; // @[Top.scala 77:25]
-  assign decoder_io_targets_5_rdata = config__io_mem_rdata; // @[Top.scala 78:25]
+  assign uart_io_mem_raddr = decoder_io_targets_3_raddr; // @[Top.scala 77:25]
+  assign uart_io_mem_ren = decoder_io_targets_3_ren; // @[Top.scala 77:25]
+  assign uart_io_mem_waddr = decoder_io_targets_3_waddr; // @[Top.scala 77:25]
+  assign uart_io_mem_wen = decoder_io_targets_3_wen; // @[Top.scala 77:25]
+  assign uart_io_mem_wdata = decoder_io_targets_3_wdata; // @[Top.scala 77:25]
+  assign config__io_mem_raddr = decoder_io_targets_5_raddr; // @[Top.scala 79:25]
+  assign decoder_io_initiator_raddr = core_io_dmem_raddr; // @[Top.scala 106:16]
+  assign decoder_io_initiator_ren = core_io_dmem_ren; // @[Top.scala 106:16]
+  assign decoder_io_initiator_waddr = core_io_dmem_waddr; // @[Top.scala 106:16]
+  assign decoder_io_initiator_wen = core_io_dmem_wen; // @[Top.scala 106:16]
+  assign decoder_io_initiator_wstrb = core_io_dmem_wstrb; // @[Top.scala 106:16]
+  assign decoder_io_initiator_wdata = core_io_dmem_wdata; // @[Top.scala 106:16]
+  assign decoder_io_targets_0_rdata = imem_dbus_io_mem_rdata; // @[Top.scala 74:25]
+  assign decoder_io_targets_0_rvalid = imem_dbus_io_mem_rvalid; // @[Top.scala 74:25]
+  assign decoder_io_targets_1_rdata = memory_io_dmem_rdata; // @[Top.scala 75:25]
+  assign decoder_io_targets_1_rvalid = memory_io_dmem_rvalid; // @[Top.scala 75:25]
+  assign decoder_io_targets_1_rready = memory_io_dmem_rready; // @[Top.scala 75:25]
+  assign decoder_io_targets_1_wready = memory_io_dmem_wready; // @[Top.scala 75:25]
+  assign decoder_io_targets_3_rdata = uart_io_mem_rdata; // @[Top.scala 77:25]
+  assign decoder_io_targets_3_rvalid = uart_io_mem_rvalid; // @[Top.scala 77:25]
+  assign decoder_io_targets_4_rdata = core_io_mtimer_mem_rdata; // @[Top.scala 78:25]
+  assign decoder_io_targets_4_rvalid = core_io_mtimer_mem_rvalid; // @[Top.scala 78:25]
+  assign decoder_io_targets_5_rdata = config__io_mem_rdata; // @[Top.scala 79:25]
   always @(posedge clock) begin
     if (imem_MPORT_en & imem_MPORT_mask) begin
-      imem[imem_MPORT_addr] <= imem_MPORT_data; // @[Top.scala 90:17]
+      imem[imem_MPORT_addr] <= imem_MPORT_data; // @[Top.scala 91:17]
     end
-    if (reset) begin // @[Top.scala 80:27]
-      imem_rdata <= 32'h0; // @[Top.scala 80:27]
+    if (reset) begin // @[Top.scala 81:27]
+      imem_rdata <= 32'h0; // @[Top.scala 81:27]
     end else begin
       imem_rdata <= _GEN_3;
     end
-    if (reset) begin // @[Top.scala 81:28]
-      imem_rdata2 <= 32'h0; // @[Top.scala 81:28]
-    end else if (~imem_dbus_io_write_enable & imem_dbus_io_read_enable) begin // @[Top.scala 99:65]
-      imem_rdata2 <= imem_imem_rdata2_MPORT_data; // @[Top.scala 100:17]
+    if (reset) begin // @[Top.scala 82:28]
+      imem_rdata2 <= 32'h0; // @[Top.scala 82:28]
+    end else if (~imem_dbus_io_write_enable & imem_dbus_io_read_enable) begin // @[Top.scala 100:65]
+      imem_rdata2 <= imem_imem_rdata2_MPORT_data; // @[Top.scala 101:17]
     end
   end
 // Register and memory initialization
