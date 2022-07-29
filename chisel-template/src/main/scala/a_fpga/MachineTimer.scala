@@ -37,6 +37,7 @@ class MachineTimer extends Module {
     io.mem.rdata := 0.U(WORD_LEN.W)
     io.mem.rvalid := false.B
   }
+  io.mem.rready := true.B
 
   when (io.mem.wen) {
     when (io.mem.waddr === 0.U) {

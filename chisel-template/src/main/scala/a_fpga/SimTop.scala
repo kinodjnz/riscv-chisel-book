@@ -45,6 +45,9 @@ class SimTop(memoryPath: String, bpTagInitPath: String) extends Module {
     imem_rdata2 := imem.read(rwaddr)
   }
 
+  val dram = Module(new MockDram(null, dmemSizeInBytes))
+  memory.io.dramPort <> dram.io.dram
+
   core.io.imem <> memory.io.imem
   //core.io.dmem <> memory.io.dmem
   core.io.dmem <> decoder.io.initiator

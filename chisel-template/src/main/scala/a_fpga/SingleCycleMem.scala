@@ -16,6 +16,7 @@ class SingleCycleMem(sizeInBytes: Int) extends Module {
   io.read.enable := io.mem.ren
   io.mem.rdata := io.read.data
   io.mem.rvalid := RegNext(io.mem.ren, false.B)
+  io.mem.rready := true.B
 
   io.write.address := io.mem.waddr(io.read.addressBits+2, 2)
   io.write.enable := io.mem.wen

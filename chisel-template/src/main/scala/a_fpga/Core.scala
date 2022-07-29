@@ -975,7 +975,7 @@ class Core(startAddress: BigInt = 0, bpTagInitPath: String = null) extends Modul
   io.dmem.wen   := mem_mem_wen
   io.dmem.wstrb := mem_reg_mem_wstrb
   io.dmem.wdata := (mem_reg_rs2_data << (8.U * mem_reg_alu_out(1, 0)))(WORD_LEN-1, 0)
-  mem_stall := io.dmem.ren && (!io.dmem.rvalid || mem_stall_delay)
+  mem_stall := (io.dmem.ren && (!io.dmem.rvalid || !io.dmem.rready || mem_stall_delay)) || (io.dmem.wen && !io.dmem.wready)
   mem_stall_delay := io.dmem.ren && io.dmem.rvalid && !mem_stall // 読めた直後はストール
 
   // CSR

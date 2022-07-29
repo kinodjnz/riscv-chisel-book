@@ -56,7 +56,7 @@ class RiscV(clockHz: Int) extends Module {
   })
   val core = Module(new Core(startAddress))
   
-  val memory = Module(new Memory(null, imemSizeInBytes, dmemSizeInBytes, false))
+  val memory = Module(new Memory(null, imemSizeInBytes, dmemSizeInBytes))
   val imem_dbus = Module(new SingleCycleMem(imemSizeInBytes))
   val gpio = Module(new Gpio)
   val uart = Module(new Uart(clockHz))
@@ -105,12 +105,7 @@ class RiscV(clockHz: Int) extends Module {
   core.io.dmem <> decoder.io.initiator
 
   // dram
-  io.dram.ren := false.B
-  io.dram.wen := false.B
-  io.dram.addr := 0.U(APP_ADDR_WIDTH.W)
-  io.dram.wdata := 0.U(APP_DATA_WIDTH.W)
-  io.dram.wmask := 0.U(APP_MASK_WIDTH.W)
-  io.dram.user_busy := false.B
+  io.dram <> memory.io.dramPort
 
   // Debug signals
   io.debugSignals.core <> core.io.debug_signal

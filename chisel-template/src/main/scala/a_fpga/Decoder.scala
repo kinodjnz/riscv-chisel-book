@@ -13,10 +13,12 @@ class DMemDecoder(targetAddressRanges: Seq[(BigInt, BigInt)]) extends Module {
 
   val rvalid = WireDefault(true.B)
   val rdata = WireDefault("xdeadbeef".U(32.W))
+  val rready = WireDefault(false.B)
   val wready = WireDefault(false.B)
 
   io.initiator.rvalid := rvalid
   io.initiator.rdata := rdata
+  io.initiator.rready := rready
   io.initiator.wready := wready
 
   for(((start, length), index) <- targetAddressRanges.zipWithIndex) {
@@ -41,6 +43,7 @@ class DMemDecoder(targetAddressRanges: Seq[(BigInt, BigInt)]) extends Module {
       ren := io.initiator.ren
       rvalid := target.rvalid
       rdata := target.rdata
+      rready := target.rready
     }
     when(start.U <= io.initiator.waddr && io.initiator.waddr < (start + length).U ) {
       waddr := io.initiator.waddr - start.U
