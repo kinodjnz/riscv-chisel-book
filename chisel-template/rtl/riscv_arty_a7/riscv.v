@@ -4608,8 +4608,8 @@ module Config(
   input  [31:0] io_mem_raddr,
   output [31:0] io_mem_rdata
 );
-  wire [26:0] _io_mem_rdata_T_2 = io_mem_raddr[2] ? 27'h5f5e100 : 27'h1234567; // @[Mux.scala 81:58]
-  assign io_mem_rdata = {{5'd0}, _io_mem_rdata_T_2}; // @[Top.scala 17:16]
+  wire [26:0] _io_mem_rdata_T_2 = io_mem_raddr[2] ? 27'h5f678fe : 27'h1234567; // @[Mux.scala 81:58]
+  assign io_mem_rdata = {{5'd0}, _io_mem_rdata_T_2}; // @[Top.scala 18:16]
 endmodule
 module DMemDecoder(
   input  [31:0] io_initiator_raddr,
@@ -4726,165 +4726,178 @@ module DMemDecoder(
     ; // @[Decoder.scala 39:85 40:13]
 endmodule
 module RiscV(
-  input         clock,
-  input         reset,
-  output [7:0]  io_gpio,
-  output        io_uart_tx,
-  output        io_exit,
-  output [31:0] io_debugSignals_core_mem_reg_pc,
-  output [31:0] io_debugSignals_core_csr_rdata,
-  output [31:0] io_debugSignals_core_mem_reg_csr_addr,
-  output        io_debugSignals_core_me_intr,
-  output [31:0] io_debugSignals_core_id_reg_inst,
-  output [63:0] io_debugSignals_core_cycle_counter,
-  output [63:0] io_debugSignals_core_instret,
-  output [31:0] io_debugSignals_raddr,
-  output [31:0] io_debugSignals_rdata,
-  output        io_debugSignals_ren,
-  output        io_debugSignals_rvalid,
-  output [31:0] io_debugSignals_waddr,
-  output        io_debugSignals_wen,
-  output        io_debugSignals_wready,
-  output [3:0]  io_debugSignals_wstrb,
-  output [31:0] io_debugSignals_wdata
+  input          clock,
+  input          reset,
+  output         io_dram_ren,
+  output         io_dram_wen,
+  output [27:0]  io_dram_addr,
+  output [127:0] io_dram_wdata,
+  output [15:0]  io_dram_wmask,
+  output         io_dram_user_busy,
+  input          io_dram_init_calib_complete,
+  input  [127:0] io_dram_rdata,
+  input          io_dram_rdata_valid,
+  input          io_dram_busy,
+  output [7:0]   io_gpio,
+  output         io_uart_tx,
+  output         io_exit,
+  output [31:0]  io_debugSignals_core_mem_reg_pc,
+  output [31:0]  io_debugSignals_core_csr_rdata,
+  output [31:0]  io_debugSignals_core_mem_reg_csr_addr,
+  output         io_debugSignals_core_me_intr,
+  output [31:0]  io_debugSignals_core_id_reg_inst,
+  output [63:0]  io_debugSignals_core_cycle_counter,
+  output [63:0]  io_debugSignals_core_instret,
+  output [31:0]  io_debugSignals_raddr,
+  output [31:0]  io_debugSignals_rdata,
+  output         io_debugSignals_ren,
+  output         io_debugSignals_rvalid,
+  output [31:0]  io_debugSignals_waddr,
+  output         io_debugSignals_wen,
+  output         io_debugSignals_wready,
+  output [3:0]   io_debugSignals_wstrb,
+  output [31:0]  io_debugSignals_wdata,
+  output         io_debugSignals_dram_init_calib_complete,
+  output         io_debugSignals_dram_rdata_valid,
+  output         io_debugSignals_dram_busy
 );
 `ifdef RANDOMIZE_REG_INIT
   reg [31:0] _RAND_0;
   reg [31:0] _RAND_1;
 `endif // RANDOMIZE_REG_INIT
-  wire  core_clock; // @[Top.scala 51:20]
-  wire  core_reset; // @[Top.scala 51:20]
-  wire [31:0] core_io_imem_addr; // @[Top.scala 51:20]
-  wire [31:0] core_io_imem_inst; // @[Top.scala 51:20]
-  wire [31:0] core_io_dmem_raddr; // @[Top.scala 51:20]
-  wire [31:0] core_io_dmem_rdata; // @[Top.scala 51:20]
-  wire  core_io_dmem_ren; // @[Top.scala 51:20]
-  wire  core_io_dmem_rvalid; // @[Top.scala 51:20]
-  wire [31:0] core_io_dmem_waddr; // @[Top.scala 51:20]
-  wire  core_io_dmem_wen; // @[Top.scala 51:20]
-  wire [3:0] core_io_dmem_wstrb; // @[Top.scala 51:20]
-  wire [31:0] core_io_dmem_wdata; // @[Top.scala 51:20]
-  wire [31:0] core_io_mtimer_mem_raddr; // @[Top.scala 51:20]
-  wire [31:0] core_io_mtimer_mem_rdata; // @[Top.scala 51:20]
-  wire  core_io_mtimer_mem_ren; // @[Top.scala 51:20]
-  wire  core_io_mtimer_mem_rvalid; // @[Top.scala 51:20]
-  wire [31:0] core_io_mtimer_mem_waddr; // @[Top.scala 51:20]
-  wire  core_io_mtimer_mem_wen; // @[Top.scala 51:20]
-  wire [31:0] core_io_mtimer_mem_wdata; // @[Top.scala 51:20]
-  wire  core_io_intr; // @[Top.scala 51:20]
-  wire  core_io_exit; // @[Top.scala 51:20]
-  wire [31:0] core_io_debug_signal_mem_reg_pc; // @[Top.scala 51:20]
-  wire [31:0] core_io_debug_signal_csr_rdata; // @[Top.scala 51:20]
-  wire [31:0] core_io_debug_signal_mem_reg_csr_addr; // @[Top.scala 51:20]
-  wire  core_io_debug_signal_me_intr; // @[Top.scala 51:20]
-  wire [31:0] core_io_debug_signal_id_reg_inst; // @[Top.scala 51:20]
-  wire [63:0] core_io_debug_signal_cycle_counter; // @[Top.scala 51:20]
-  wire [63:0] core_io_debug_signal_instret; // @[Top.scala 51:20]
-  wire  memory_clock; // @[Top.scala 53:22]
-  wire  memory_reset; // @[Top.scala 53:22]
-  wire [31:0] memory_io_imem_addr; // @[Top.scala 53:22]
-  wire [31:0] memory_io_imem_inst; // @[Top.scala 53:22]
-  wire [31:0] memory_io_dmem_raddr; // @[Top.scala 53:22]
-  wire [31:0] memory_io_dmem_rdata; // @[Top.scala 53:22]
-  wire  memory_io_dmem_ren; // @[Top.scala 53:22]
-  wire  memory_io_dmem_rvalid; // @[Top.scala 53:22]
-  wire [31:0] memory_io_dmem_waddr; // @[Top.scala 53:22]
-  wire  memory_io_dmem_wen; // @[Top.scala 53:22]
-  wire [3:0] memory_io_dmem_wstrb; // @[Top.scala 53:22]
-  wire [31:0] memory_io_dmem_wdata; // @[Top.scala 53:22]
-  wire [8:0] memory_io_imemReadPort_address; // @[Top.scala 53:22]
-  wire [31:0] memory_io_imemReadPort_data; // @[Top.scala 53:22]
-  wire  imem_dbus_clock; // @[Top.scala 54:25]
-  wire  imem_dbus_reset; // @[Top.scala 54:25]
-  wire [31:0] imem_dbus_io_mem_raddr; // @[Top.scala 54:25]
-  wire [31:0] imem_dbus_io_mem_rdata; // @[Top.scala 54:25]
-  wire  imem_dbus_io_mem_ren; // @[Top.scala 54:25]
-  wire  imem_dbus_io_mem_rvalid; // @[Top.scala 54:25]
-  wire [31:0] imem_dbus_io_mem_waddr; // @[Top.scala 54:25]
-  wire  imem_dbus_io_mem_wen; // @[Top.scala 54:25]
-  wire [31:0] imem_dbus_io_mem_wdata; // @[Top.scala 54:25]
-  wire [8:0] imem_dbus_io_read_address; // @[Top.scala 54:25]
-  wire [31:0] imem_dbus_io_read_data; // @[Top.scala 54:25]
-  wire  imem_dbus_io_read_enable; // @[Top.scala 54:25]
-  wire [8:0] imem_dbus_io_write_address; // @[Top.scala 54:25]
-  wire [31:0] imem_dbus_io_write_data; // @[Top.scala 54:25]
-  wire  imem_dbus_io_write_enable; // @[Top.scala 54:25]
-  wire  gpio_clock; // @[Top.scala 55:20]
-  wire  gpio_reset; // @[Top.scala 55:20]
-  wire  gpio_io_mem_wen; // @[Top.scala 55:20]
-  wire [31:0] gpio_io_mem_wdata; // @[Top.scala 55:20]
-  wire [31:0] gpio_io_gpio; // @[Top.scala 55:20]
-  wire  uart_clock; // @[Top.scala 56:20]
-  wire  uart_reset; // @[Top.scala 56:20]
-  wire [31:0] uart_io_mem_raddr; // @[Top.scala 56:20]
-  wire [31:0] uart_io_mem_rdata; // @[Top.scala 56:20]
-  wire  uart_io_mem_ren; // @[Top.scala 56:20]
-  wire  uart_io_mem_rvalid; // @[Top.scala 56:20]
-  wire [31:0] uart_io_mem_waddr; // @[Top.scala 56:20]
-  wire  uart_io_mem_wen; // @[Top.scala 56:20]
-  wire [31:0] uart_io_mem_wdata; // @[Top.scala 56:20]
-  wire  uart_io_intr; // @[Top.scala 56:20]
-  wire  uart_io_tx; // @[Top.scala 56:20]
-  wire [31:0] config__io_mem_raddr; // @[Top.scala 57:22]
-  wire [31:0] config__io_mem_rdata; // @[Top.scala 57:22]
-  wire [31:0] decoder_io_initiator_raddr; // @[Top.scala 59:23]
-  wire [31:0] decoder_io_initiator_rdata; // @[Top.scala 59:23]
-  wire  decoder_io_initiator_ren; // @[Top.scala 59:23]
-  wire  decoder_io_initiator_rvalid; // @[Top.scala 59:23]
-  wire [31:0] decoder_io_initiator_waddr; // @[Top.scala 59:23]
-  wire  decoder_io_initiator_wen; // @[Top.scala 59:23]
-  wire  decoder_io_initiator_wready; // @[Top.scala 59:23]
-  wire [3:0] decoder_io_initiator_wstrb; // @[Top.scala 59:23]
-  wire [31:0] decoder_io_initiator_wdata; // @[Top.scala 59:23]
-  wire [31:0] decoder_io_targets_0_raddr; // @[Top.scala 59:23]
-  wire [31:0] decoder_io_targets_0_rdata; // @[Top.scala 59:23]
-  wire  decoder_io_targets_0_ren; // @[Top.scala 59:23]
-  wire  decoder_io_targets_0_rvalid; // @[Top.scala 59:23]
-  wire [31:0] decoder_io_targets_0_waddr; // @[Top.scala 59:23]
-  wire  decoder_io_targets_0_wen; // @[Top.scala 59:23]
-  wire [31:0] decoder_io_targets_0_wdata; // @[Top.scala 59:23]
-  wire [31:0] decoder_io_targets_1_raddr; // @[Top.scala 59:23]
-  wire [31:0] decoder_io_targets_1_rdata; // @[Top.scala 59:23]
-  wire  decoder_io_targets_1_ren; // @[Top.scala 59:23]
-  wire  decoder_io_targets_1_rvalid; // @[Top.scala 59:23]
-  wire [31:0] decoder_io_targets_1_waddr; // @[Top.scala 59:23]
-  wire  decoder_io_targets_1_wen; // @[Top.scala 59:23]
-  wire [3:0] decoder_io_targets_1_wstrb; // @[Top.scala 59:23]
-  wire [31:0] decoder_io_targets_1_wdata; // @[Top.scala 59:23]
-  wire  decoder_io_targets_2_wen; // @[Top.scala 59:23]
-  wire [31:0] decoder_io_targets_2_wdata; // @[Top.scala 59:23]
-  wire [31:0] decoder_io_targets_3_raddr; // @[Top.scala 59:23]
-  wire [31:0] decoder_io_targets_3_rdata; // @[Top.scala 59:23]
-  wire  decoder_io_targets_3_ren; // @[Top.scala 59:23]
-  wire  decoder_io_targets_3_rvalid; // @[Top.scala 59:23]
-  wire [31:0] decoder_io_targets_3_waddr; // @[Top.scala 59:23]
-  wire  decoder_io_targets_3_wen; // @[Top.scala 59:23]
-  wire [31:0] decoder_io_targets_3_wdata; // @[Top.scala 59:23]
-  wire [31:0] decoder_io_targets_4_raddr; // @[Top.scala 59:23]
-  wire [31:0] decoder_io_targets_4_rdata; // @[Top.scala 59:23]
-  wire  decoder_io_targets_4_ren; // @[Top.scala 59:23]
-  wire  decoder_io_targets_4_rvalid; // @[Top.scala 59:23]
-  wire [31:0] decoder_io_targets_4_waddr; // @[Top.scala 59:23]
-  wire  decoder_io_targets_4_wen; // @[Top.scala 59:23]
-  wire [31:0] decoder_io_targets_4_wdata; // @[Top.scala 59:23]
-  wire [31:0] decoder_io_targets_5_raddr; // @[Top.scala 59:23]
-  wire [31:0] decoder_io_targets_5_rdata; // @[Top.scala 59:23]
-  reg [31:0] imem [0:511]; // @[Top.scala 84:17]
-  wire  imem_imem_rdata_MPORT_en; // @[Top.scala 84:17]
-  wire [8:0] imem_imem_rdata_MPORT_addr; // @[Top.scala 84:17]
-  wire [31:0] imem_imem_rdata_MPORT_data; // @[Top.scala 84:17]
-  wire  imem_imem_rdata2_MPORT_en; // @[Top.scala 84:17]
-  wire [8:0] imem_imem_rdata2_MPORT_addr; // @[Top.scala 84:17]
-  wire [31:0] imem_imem_rdata2_MPORT_data; // @[Top.scala 84:17]
-  wire [31:0] imem_MPORT_data; // @[Top.scala 84:17]
-  wire [8:0] imem_MPORT_addr; // @[Top.scala 84:17]
-  wire  imem_MPORT_mask; // @[Top.scala 84:17]
-  wire  imem_MPORT_en; // @[Top.scala 84:17]
-  reg [31:0] imem_rdata; // @[Top.scala 74:27]
-  reg [31:0] imem_rdata2; // @[Top.scala 75:28]
-  wire [31:0] _GEN_3 = imem_imem_rdata_MPORT_data; // @[Top.scala 86:40 87:16 74:27]
-  wire  _T = ~imem_dbus_io_write_enable; // @[Top.scala 93:9]
-  Core core ( // @[Top.scala 51:20]
+  wire  core_clock; // @[Top.scala 57:20]
+  wire  core_reset; // @[Top.scala 57:20]
+  wire [31:0] core_io_imem_addr; // @[Top.scala 57:20]
+  wire [31:0] core_io_imem_inst; // @[Top.scala 57:20]
+  wire [31:0] core_io_dmem_raddr; // @[Top.scala 57:20]
+  wire [31:0] core_io_dmem_rdata; // @[Top.scala 57:20]
+  wire  core_io_dmem_ren; // @[Top.scala 57:20]
+  wire  core_io_dmem_rvalid; // @[Top.scala 57:20]
+  wire [31:0] core_io_dmem_waddr; // @[Top.scala 57:20]
+  wire  core_io_dmem_wen; // @[Top.scala 57:20]
+  wire [3:0] core_io_dmem_wstrb; // @[Top.scala 57:20]
+  wire [31:0] core_io_dmem_wdata; // @[Top.scala 57:20]
+  wire [31:0] core_io_mtimer_mem_raddr; // @[Top.scala 57:20]
+  wire [31:0] core_io_mtimer_mem_rdata; // @[Top.scala 57:20]
+  wire  core_io_mtimer_mem_ren; // @[Top.scala 57:20]
+  wire  core_io_mtimer_mem_rvalid; // @[Top.scala 57:20]
+  wire [31:0] core_io_mtimer_mem_waddr; // @[Top.scala 57:20]
+  wire  core_io_mtimer_mem_wen; // @[Top.scala 57:20]
+  wire [31:0] core_io_mtimer_mem_wdata; // @[Top.scala 57:20]
+  wire  core_io_intr; // @[Top.scala 57:20]
+  wire  core_io_exit; // @[Top.scala 57:20]
+  wire [31:0] core_io_debug_signal_mem_reg_pc; // @[Top.scala 57:20]
+  wire [31:0] core_io_debug_signal_csr_rdata; // @[Top.scala 57:20]
+  wire [31:0] core_io_debug_signal_mem_reg_csr_addr; // @[Top.scala 57:20]
+  wire  core_io_debug_signal_me_intr; // @[Top.scala 57:20]
+  wire [31:0] core_io_debug_signal_id_reg_inst; // @[Top.scala 57:20]
+  wire [63:0] core_io_debug_signal_cycle_counter; // @[Top.scala 57:20]
+  wire [63:0] core_io_debug_signal_instret; // @[Top.scala 57:20]
+  wire  memory_clock; // @[Top.scala 59:22]
+  wire  memory_reset; // @[Top.scala 59:22]
+  wire [31:0] memory_io_imem_addr; // @[Top.scala 59:22]
+  wire [31:0] memory_io_imem_inst; // @[Top.scala 59:22]
+  wire [31:0] memory_io_dmem_raddr; // @[Top.scala 59:22]
+  wire [31:0] memory_io_dmem_rdata; // @[Top.scala 59:22]
+  wire  memory_io_dmem_ren; // @[Top.scala 59:22]
+  wire  memory_io_dmem_rvalid; // @[Top.scala 59:22]
+  wire [31:0] memory_io_dmem_waddr; // @[Top.scala 59:22]
+  wire  memory_io_dmem_wen; // @[Top.scala 59:22]
+  wire [3:0] memory_io_dmem_wstrb; // @[Top.scala 59:22]
+  wire [31:0] memory_io_dmem_wdata; // @[Top.scala 59:22]
+  wire [8:0] memory_io_imemReadPort_address; // @[Top.scala 59:22]
+  wire [31:0] memory_io_imemReadPort_data; // @[Top.scala 59:22]
+  wire  imem_dbus_clock; // @[Top.scala 60:25]
+  wire  imem_dbus_reset; // @[Top.scala 60:25]
+  wire [31:0] imem_dbus_io_mem_raddr; // @[Top.scala 60:25]
+  wire [31:0] imem_dbus_io_mem_rdata; // @[Top.scala 60:25]
+  wire  imem_dbus_io_mem_ren; // @[Top.scala 60:25]
+  wire  imem_dbus_io_mem_rvalid; // @[Top.scala 60:25]
+  wire [31:0] imem_dbus_io_mem_waddr; // @[Top.scala 60:25]
+  wire  imem_dbus_io_mem_wen; // @[Top.scala 60:25]
+  wire [31:0] imem_dbus_io_mem_wdata; // @[Top.scala 60:25]
+  wire [8:0] imem_dbus_io_read_address; // @[Top.scala 60:25]
+  wire [31:0] imem_dbus_io_read_data; // @[Top.scala 60:25]
+  wire  imem_dbus_io_read_enable; // @[Top.scala 60:25]
+  wire [8:0] imem_dbus_io_write_address; // @[Top.scala 60:25]
+  wire [31:0] imem_dbus_io_write_data; // @[Top.scala 60:25]
+  wire  imem_dbus_io_write_enable; // @[Top.scala 60:25]
+  wire  gpio_clock; // @[Top.scala 61:20]
+  wire  gpio_reset; // @[Top.scala 61:20]
+  wire  gpio_io_mem_wen; // @[Top.scala 61:20]
+  wire [31:0] gpio_io_mem_wdata; // @[Top.scala 61:20]
+  wire [31:0] gpio_io_gpio; // @[Top.scala 61:20]
+  wire  uart_clock; // @[Top.scala 62:20]
+  wire  uart_reset; // @[Top.scala 62:20]
+  wire [31:0] uart_io_mem_raddr; // @[Top.scala 62:20]
+  wire [31:0] uart_io_mem_rdata; // @[Top.scala 62:20]
+  wire  uart_io_mem_ren; // @[Top.scala 62:20]
+  wire  uart_io_mem_rvalid; // @[Top.scala 62:20]
+  wire [31:0] uart_io_mem_waddr; // @[Top.scala 62:20]
+  wire  uart_io_mem_wen; // @[Top.scala 62:20]
+  wire [31:0] uart_io_mem_wdata; // @[Top.scala 62:20]
+  wire  uart_io_intr; // @[Top.scala 62:20]
+  wire  uart_io_tx; // @[Top.scala 62:20]
+  wire [31:0] config__io_mem_raddr; // @[Top.scala 63:22]
+  wire [31:0] config__io_mem_rdata; // @[Top.scala 63:22]
+  wire [31:0] decoder_io_initiator_raddr; // @[Top.scala 65:23]
+  wire [31:0] decoder_io_initiator_rdata; // @[Top.scala 65:23]
+  wire  decoder_io_initiator_ren; // @[Top.scala 65:23]
+  wire  decoder_io_initiator_rvalid; // @[Top.scala 65:23]
+  wire [31:0] decoder_io_initiator_waddr; // @[Top.scala 65:23]
+  wire  decoder_io_initiator_wen; // @[Top.scala 65:23]
+  wire  decoder_io_initiator_wready; // @[Top.scala 65:23]
+  wire [3:0] decoder_io_initiator_wstrb; // @[Top.scala 65:23]
+  wire [31:0] decoder_io_initiator_wdata; // @[Top.scala 65:23]
+  wire [31:0] decoder_io_targets_0_raddr; // @[Top.scala 65:23]
+  wire [31:0] decoder_io_targets_0_rdata; // @[Top.scala 65:23]
+  wire  decoder_io_targets_0_ren; // @[Top.scala 65:23]
+  wire  decoder_io_targets_0_rvalid; // @[Top.scala 65:23]
+  wire [31:0] decoder_io_targets_0_waddr; // @[Top.scala 65:23]
+  wire  decoder_io_targets_0_wen; // @[Top.scala 65:23]
+  wire [31:0] decoder_io_targets_0_wdata; // @[Top.scala 65:23]
+  wire [31:0] decoder_io_targets_1_raddr; // @[Top.scala 65:23]
+  wire [31:0] decoder_io_targets_1_rdata; // @[Top.scala 65:23]
+  wire  decoder_io_targets_1_ren; // @[Top.scala 65:23]
+  wire  decoder_io_targets_1_rvalid; // @[Top.scala 65:23]
+  wire [31:0] decoder_io_targets_1_waddr; // @[Top.scala 65:23]
+  wire  decoder_io_targets_1_wen; // @[Top.scala 65:23]
+  wire [3:0] decoder_io_targets_1_wstrb; // @[Top.scala 65:23]
+  wire [31:0] decoder_io_targets_1_wdata; // @[Top.scala 65:23]
+  wire  decoder_io_targets_2_wen; // @[Top.scala 65:23]
+  wire [31:0] decoder_io_targets_2_wdata; // @[Top.scala 65:23]
+  wire [31:0] decoder_io_targets_3_raddr; // @[Top.scala 65:23]
+  wire [31:0] decoder_io_targets_3_rdata; // @[Top.scala 65:23]
+  wire  decoder_io_targets_3_ren; // @[Top.scala 65:23]
+  wire  decoder_io_targets_3_rvalid; // @[Top.scala 65:23]
+  wire [31:0] decoder_io_targets_3_waddr; // @[Top.scala 65:23]
+  wire  decoder_io_targets_3_wen; // @[Top.scala 65:23]
+  wire [31:0] decoder_io_targets_3_wdata; // @[Top.scala 65:23]
+  wire [31:0] decoder_io_targets_4_raddr; // @[Top.scala 65:23]
+  wire [31:0] decoder_io_targets_4_rdata; // @[Top.scala 65:23]
+  wire  decoder_io_targets_4_ren; // @[Top.scala 65:23]
+  wire  decoder_io_targets_4_rvalid; // @[Top.scala 65:23]
+  wire [31:0] decoder_io_targets_4_waddr; // @[Top.scala 65:23]
+  wire  decoder_io_targets_4_wen; // @[Top.scala 65:23]
+  wire [31:0] decoder_io_targets_4_wdata; // @[Top.scala 65:23]
+  wire [31:0] decoder_io_targets_5_raddr; // @[Top.scala 65:23]
+  wire [31:0] decoder_io_targets_5_rdata; // @[Top.scala 65:23]
+  reg [31:0] imem [0:511]; // @[Top.scala 90:17]
+  wire  imem_imem_rdata_MPORT_en; // @[Top.scala 90:17]
+  wire [8:0] imem_imem_rdata_MPORT_addr; // @[Top.scala 90:17]
+  wire [31:0] imem_imem_rdata_MPORT_data; // @[Top.scala 90:17]
+  wire  imem_imem_rdata2_MPORT_en; // @[Top.scala 90:17]
+  wire [8:0] imem_imem_rdata2_MPORT_addr; // @[Top.scala 90:17]
+  wire [31:0] imem_imem_rdata2_MPORT_data; // @[Top.scala 90:17]
+  wire [31:0] imem_MPORT_data; // @[Top.scala 90:17]
+  wire [8:0] imem_MPORT_addr; // @[Top.scala 90:17]
+  wire  imem_MPORT_mask; // @[Top.scala 90:17]
+  wire  imem_MPORT_en; // @[Top.scala 90:17]
+  reg [31:0] imem_rdata; // @[Top.scala 80:27]
+  reg [31:0] imem_rdata2; // @[Top.scala 81:28]
+  wire [31:0] _GEN_3 = imem_imem_rdata_MPORT_data; // @[Top.scala 92:40 93:16 80:27]
+  wire  _T = ~imem_dbus_io_write_enable; // @[Top.scala 99:9]
+  Core core ( // @[Top.scala 57:20]
     .clock(core_clock),
     .reset(core_reset),
     .io_imem_addr(core_io_imem_addr),
@@ -4914,7 +4927,7 @@ module RiscV(
     .io_debug_signal_cycle_counter(core_io_debug_signal_cycle_counter),
     .io_debug_signal_instret(core_io_debug_signal_instret)
   );
-  Memory memory ( // @[Top.scala 53:22]
+  Memory memory ( // @[Top.scala 59:22]
     .clock(memory_clock),
     .reset(memory_reset),
     .io_imem_addr(memory_io_imem_addr),
@@ -4930,7 +4943,7 @@ module RiscV(
     .io_imemReadPort_address(memory_io_imemReadPort_address),
     .io_imemReadPort_data(memory_io_imemReadPort_data)
   );
-  SingleCycleMem imem_dbus ( // @[Top.scala 54:25]
+  SingleCycleMem imem_dbus ( // @[Top.scala 60:25]
     .clock(imem_dbus_clock),
     .reset(imem_dbus_reset),
     .io_mem_raddr(imem_dbus_io_mem_raddr),
@@ -4947,14 +4960,14 @@ module RiscV(
     .io_write_data(imem_dbus_io_write_data),
     .io_write_enable(imem_dbus_io_write_enable)
   );
-  Gpio gpio ( // @[Top.scala 55:20]
+  Gpio gpio ( // @[Top.scala 61:20]
     .clock(gpio_clock),
     .reset(gpio_reset),
     .io_mem_wen(gpio_io_mem_wen),
     .io_mem_wdata(gpio_io_mem_wdata),
     .io_gpio(gpio_io_gpio)
   );
-  Uart uart ( // @[Top.scala 56:20]
+  Uart uart ( // @[Top.scala 62:20]
     .clock(uart_clock),
     .reset(uart_reset),
     .io_mem_raddr(uart_io_mem_raddr),
@@ -4967,11 +4980,11 @@ module RiscV(
     .io_intr(uart_io_intr),
     .io_tx(uart_io_tx)
   );
-  Config config_ ( // @[Top.scala 57:22]
+  Config config_ ( // @[Top.scala 63:22]
     .io_mem_raddr(config__io_mem_raddr),
     .io_mem_rdata(config__io_mem_rdata)
   );
-  DMemDecoder decoder ( // @[Top.scala 59:23]
+  DMemDecoder decoder ( // @[Top.scala 65:23]
     .io_initiator_raddr(decoder_io_initiator_raddr),
     .io_initiator_rdata(decoder_io_initiator_rdata),
     .io_initiator_ren(decoder_io_initiator_ren),
@@ -5017,103 +5030,112 @@ module RiscV(
   );
   assign imem_imem_rdata_MPORT_en = 1'h1;
   assign imem_imem_rdata_MPORT_addr = memory_io_imemReadPort_address;
-  assign imem_imem_rdata_MPORT_data = imem[imem_imem_rdata_MPORT_addr]; // @[Top.scala 84:17]
+  assign imem_imem_rdata_MPORT_data = imem[imem_imem_rdata_MPORT_addr]; // @[Top.scala 90:17]
   assign imem_imem_rdata2_MPORT_en = _T & imem_dbus_io_read_enable;
   assign imem_imem_rdata2_MPORT_addr = imem_dbus_io_write_enable ? imem_dbus_io_write_address :
     imem_dbus_io_read_address;
-  assign imem_imem_rdata2_MPORT_data = imem[imem_imem_rdata2_MPORT_addr]; // @[Top.scala 84:17]
+  assign imem_imem_rdata2_MPORT_data = imem[imem_imem_rdata2_MPORT_addr]; // @[Top.scala 90:17]
   assign imem_MPORT_data = imem_dbus_io_write_data;
   assign imem_MPORT_addr = imem_dbus_io_write_enable ? imem_dbus_io_write_address : imem_dbus_io_read_address;
   assign imem_MPORT_mask = 1'h1;
   assign imem_MPORT_en = imem_dbus_io_write_enable;
-  assign io_gpio = gpio_io_gpio[7:0]; // @[Top.scala 114:11]
-  assign io_uart_tx = uart_io_tx; // @[Top.scala 115:14]
-  assign io_exit = core_io_exit; // @[Top.scala 113:11]
-  assign io_debugSignals_core_mem_reg_pc = core_io_debug_signal_mem_reg_pc; // @[Top.scala 102:24]
-  assign io_debugSignals_core_csr_rdata = core_io_debug_signal_csr_rdata; // @[Top.scala 102:24]
-  assign io_debugSignals_core_mem_reg_csr_addr = core_io_debug_signal_mem_reg_csr_addr; // @[Top.scala 102:24]
-  assign io_debugSignals_core_me_intr = core_io_debug_signal_me_intr; // @[Top.scala 102:24]
-  assign io_debugSignals_core_id_reg_inst = core_io_debug_signal_id_reg_inst; // @[Top.scala 102:24]
-  assign io_debugSignals_core_cycle_counter = core_io_debug_signal_cycle_counter; // @[Top.scala 102:24]
-  assign io_debugSignals_core_instret = core_io_debug_signal_instret; // @[Top.scala 102:24]
-  assign io_debugSignals_raddr = core_io_dmem_raddr; // @[Top.scala 103:26]
-  assign io_debugSignals_rdata = decoder_io_initiator_rdata; // @[Top.scala 104:26]
-  assign io_debugSignals_ren = core_io_dmem_ren; // @[Top.scala 105:26]
-  assign io_debugSignals_rvalid = decoder_io_initiator_rvalid; // @[Top.scala 106:26]
-  assign io_debugSignals_waddr = core_io_dmem_waddr; // @[Top.scala 107:26]
-  assign io_debugSignals_wen = core_io_dmem_wen; // @[Top.scala 109:26]
-  assign io_debugSignals_wready = decoder_io_initiator_wready; // @[Top.scala 110:26]
-  assign io_debugSignals_wstrb = core_io_dmem_wstrb; // @[Top.scala 111:26]
-  assign io_debugSignals_wdata = core_io_dmem_wdata; // @[Top.scala 108:26]
+  assign io_dram_ren = 1'h0; // @[Top.scala 108:15]
+  assign io_dram_wen = 1'h0; // @[Top.scala 109:15]
+  assign io_dram_addr = 28'h0; // @[Top.scala 110:16]
+  assign io_dram_wdata = 128'h0; // @[Top.scala 111:17]
+  assign io_dram_wmask = 16'h0; // @[Top.scala 112:17]
+  assign io_dram_user_busy = 1'h0; // @[Top.scala 113:21]
+  assign io_gpio = gpio_io_gpio[7:0]; // @[Top.scala 132:11]
+  assign io_uart_tx = uart_io_tx; // @[Top.scala 133:14]
+  assign io_exit = core_io_exit; // @[Top.scala 131:11]
+  assign io_debugSignals_core_mem_reg_pc = core_io_debug_signal_mem_reg_pc; // @[Top.scala 116:24]
+  assign io_debugSignals_core_csr_rdata = core_io_debug_signal_csr_rdata; // @[Top.scala 116:24]
+  assign io_debugSignals_core_mem_reg_csr_addr = core_io_debug_signal_mem_reg_csr_addr; // @[Top.scala 116:24]
+  assign io_debugSignals_core_me_intr = core_io_debug_signal_me_intr; // @[Top.scala 116:24]
+  assign io_debugSignals_core_id_reg_inst = core_io_debug_signal_id_reg_inst; // @[Top.scala 116:24]
+  assign io_debugSignals_core_cycle_counter = core_io_debug_signal_cycle_counter; // @[Top.scala 116:24]
+  assign io_debugSignals_core_instret = core_io_debug_signal_instret; // @[Top.scala 116:24]
+  assign io_debugSignals_raddr = core_io_dmem_raddr; // @[Top.scala 117:26]
+  assign io_debugSignals_rdata = decoder_io_initiator_rdata; // @[Top.scala 118:26]
+  assign io_debugSignals_ren = core_io_dmem_ren; // @[Top.scala 119:26]
+  assign io_debugSignals_rvalid = decoder_io_initiator_rvalid; // @[Top.scala 120:26]
+  assign io_debugSignals_waddr = core_io_dmem_waddr; // @[Top.scala 121:26]
+  assign io_debugSignals_wen = core_io_dmem_wen; // @[Top.scala 123:26]
+  assign io_debugSignals_wready = decoder_io_initiator_wready; // @[Top.scala 124:26]
+  assign io_debugSignals_wstrb = core_io_dmem_wstrb; // @[Top.scala 125:26]
+  assign io_debugSignals_wdata = core_io_dmem_wdata; // @[Top.scala 122:26]
+  assign io_debugSignals_dram_init_calib_complete = io_dram_init_calib_complete; // @[Top.scala 127:44]
+  assign io_debugSignals_dram_rdata_valid = io_dram_rdata_valid; // @[Top.scala 128:44]
+  assign io_debugSignals_dram_busy = io_dram_busy; // @[Top.scala 129:44]
   assign core_clock = clock;
   assign core_reset = reset;
-  assign core_io_imem_inst = memory_io_imem_inst; // @[Top.scala 97:16]
-  assign core_io_dmem_rdata = decoder_io_initiator_rdata; // @[Top.scala 99:16]
-  assign core_io_dmem_rvalid = decoder_io_initiator_rvalid; // @[Top.scala 99:16]
-  assign core_io_mtimer_mem_raddr = decoder_io_targets_4_raddr; // @[Top.scala 71:25]
-  assign core_io_mtimer_mem_ren = decoder_io_targets_4_ren; // @[Top.scala 71:25]
-  assign core_io_mtimer_mem_waddr = decoder_io_targets_4_waddr; // @[Top.scala 71:25]
-  assign core_io_mtimer_mem_wen = decoder_io_targets_4_wen; // @[Top.scala 71:25]
-  assign core_io_mtimer_mem_wdata = decoder_io_targets_4_wdata; // @[Top.scala 71:25]
-  assign core_io_intr = uart_io_intr; // @[Top.scala 116:16]
+  assign core_io_imem_inst = memory_io_imem_inst; // @[Top.scala 103:16]
+  assign core_io_dmem_rdata = decoder_io_initiator_rdata; // @[Top.scala 105:16]
+  assign core_io_dmem_rvalid = decoder_io_initiator_rvalid; // @[Top.scala 105:16]
+  assign core_io_mtimer_mem_raddr = decoder_io_targets_4_raddr; // @[Top.scala 77:25]
+  assign core_io_mtimer_mem_ren = decoder_io_targets_4_ren; // @[Top.scala 77:25]
+  assign core_io_mtimer_mem_waddr = decoder_io_targets_4_waddr; // @[Top.scala 77:25]
+  assign core_io_mtimer_mem_wen = decoder_io_targets_4_wen; // @[Top.scala 77:25]
+  assign core_io_mtimer_mem_wdata = decoder_io_targets_4_wdata; // @[Top.scala 77:25]
+  assign core_io_intr = uart_io_intr; // @[Top.scala 134:16]
   assign memory_clock = clock;
   assign memory_reset = reset;
-  assign memory_io_imem_addr = core_io_imem_addr; // @[Top.scala 97:16]
-  assign memory_io_dmem_raddr = decoder_io_targets_1_raddr; // @[Top.scala 68:25]
-  assign memory_io_dmem_ren = decoder_io_targets_1_ren; // @[Top.scala 68:25]
-  assign memory_io_dmem_waddr = decoder_io_targets_1_waddr; // @[Top.scala 68:25]
-  assign memory_io_dmem_wen = decoder_io_targets_1_wen; // @[Top.scala 68:25]
-  assign memory_io_dmem_wstrb = decoder_io_targets_1_wstrb; // @[Top.scala 68:25]
-  assign memory_io_dmem_wdata = decoder_io_targets_1_wdata; // @[Top.scala 68:25]
-  assign memory_io_imemReadPort_data = imem_rdata; // @[Top.scala 76:31]
+  assign memory_io_imem_addr = core_io_imem_addr; // @[Top.scala 103:16]
+  assign memory_io_dmem_raddr = decoder_io_targets_1_raddr; // @[Top.scala 74:25]
+  assign memory_io_dmem_ren = decoder_io_targets_1_ren; // @[Top.scala 74:25]
+  assign memory_io_dmem_waddr = decoder_io_targets_1_waddr; // @[Top.scala 74:25]
+  assign memory_io_dmem_wen = decoder_io_targets_1_wen; // @[Top.scala 74:25]
+  assign memory_io_dmem_wstrb = decoder_io_targets_1_wstrb; // @[Top.scala 74:25]
+  assign memory_io_dmem_wdata = decoder_io_targets_1_wdata; // @[Top.scala 74:25]
+  assign memory_io_imemReadPort_data = imem_rdata; // @[Top.scala 82:31]
   assign imem_dbus_clock = clock;
   assign imem_dbus_reset = reset;
-  assign imem_dbus_io_mem_raddr = decoder_io_targets_0_raddr; // @[Top.scala 67:25]
-  assign imem_dbus_io_mem_ren = decoder_io_targets_0_ren; // @[Top.scala 67:25]
-  assign imem_dbus_io_mem_waddr = decoder_io_targets_0_waddr; // @[Top.scala 67:25]
-  assign imem_dbus_io_mem_wen = decoder_io_targets_0_wen; // @[Top.scala 67:25]
-  assign imem_dbus_io_mem_wdata = decoder_io_targets_0_wdata; // @[Top.scala 67:25]
-  assign imem_dbus_io_read_data = imem_rdata2; // @[Top.scala 77:26]
+  assign imem_dbus_io_mem_raddr = decoder_io_targets_0_raddr; // @[Top.scala 73:25]
+  assign imem_dbus_io_mem_ren = decoder_io_targets_0_ren; // @[Top.scala 73:25]
+  assign imem_dbus_io_mem_waddr = decoder_io_targets_0_waddr; // @[Top.scala 73:25]
+  assign imem_dbus_io_mem_wen = decoder_io_targets_0_wen; // @[Top.scala 73:25]
+  assign imem_dbus_io_mem_wdata = decoder_io_targets_0_wdata; // @[Top.scala 73:25]
+  assign imem_dbus_io_read_data = imem_rdata2; // @[Top.scala 83:26]
   assign gpio_clock = clock;
   assign gpio_reset = reset;
-  assign gpio_io_mem_wen = decoder_io_targets_2_wen; // @[Top.scala 69:25]
-  assign gpio_io_mem_wdata = decoder_io_targets_2_wdata; // @[Top.scala 69:25]
+  assign gpio_io_mem_wen = decoder_io_targets_2_wen; // @[Top.scala 75:25]
+  assign gpio_io_mem_wdata = decoder_io_targets_2_wdata; // @[Top.scala 75:25]
   assign uart_clock = clock;
   assign uart_reset = reset;
-  assign uart_io_mem_raddr = decoder_io_targets_3_raddr; // @[Top.scala 70:25]
-  assign uart_io_mem_ren = decoder_io_targets_3_ren; // @[Top.scala 70:25]
-  assign uart_io_mem_waddr = decoder_io_targets_3_waddr; // @[Top.scala 70:25]
-  assign uart_io_mem_wen = decoder_io_targets_3_wen; // @[Top.scala 70:25]
-  assign uart_io_mem_wdata = decoder_io_targets_3_wdata; // @[Top.scala 70:25]
-  assign config__io_mem_raddr = decoder_io_targets_5_raddr; // @[Top.scala 72:25]
-  assign decoder_io_initiator_raddr = core_io_dmem_raddr; // @[Top.scala 99:16]
-  assign decoder_io_initiator_ren = core_io_dmem_ren; // @[Top.scala 99:16]
-  assign decoder_io_initiator_waddr = core_io_dmem_waddr; // @[Top.scala 99:16]
-  assign decoder_io_initiator_wen = core_io_dmem_wen; // @[Top.scala 99:16]
-  assign decoder_io_initiator_wstrb = core_io_dmem_wstrb; // @[Top.scala 99:16]
-  assign decoder_io_initiator_wdata = core_io_dmem_wdata; // @[Top.scala 99:16]
-  assign decoder_io_targets_0_rdata = imem_dbus_io_mem_rdata; // @[Top.scala 67:25]
-  assign decoder_io_targets_0_rvalid = imem_dbus_io_mem_rvalid; // @[Top.scala 67:25]
-  assign decoder_io_targets_1_rdata = memory_io_dmem_rdata; // @[Top.scala 68:25]
-  assign decoder_io_targets_1_rvalid = memory_io_dmem_rvalid; // @[Top.scala 68:25]
-  assign decoder_io_targets_3_rdata = uart_io_mem_rdata; // @[Top.scala 70:25]
-  assign decoder_io_targets_3_rvalid = uart_io_mem_rvalid; // @[Top.scala 70:25]
-  assign decoder_io_targets_4_rdata = core_io_mtimer_mem_rdata; // @[Top.scala 71:25]
-  assign decoder_io_targets_4_rvalid = core_io_mtimer_mem_rvalid; // @[Top.scala 71:25]
-  assign decoder_io_targets_5_rdata = config__io_mem_rdata; // @[Top.scala 72:25]
+  assign uart_io_mem_raddr = decoder_io_targets_3_raddr; // @[Top.scala 76:25]
+  assign uart_io_mem_ren = decoder_io_targets_3_ren; // @[Top.scala 76:25]
+  assign uart_io_mem_waddr = decoder_io_targets_3_waddr; // @[Top.scala 76:25]
+  assign uart_io_mem_wen = decoder_io_targets_3_wen; // @[Top.scala 76:25]
+  assign uart_io_mem_wdata = decoder_io_targets_3_wdata; // @[Top.scala 76:25]
+  assign config__io_mem_raddr = decoder_io_targets_5_raddr; // @[Top.scala 78:25]
+  assign decoder_io_initiator_raddr = core_io_dmem_raddr; // @[Top.scala 105:16]
+  assign decoder_io_initiator_ren = core_io_dmem_ren; // @[Top.scala 105:16]
+  assign decoder_io_initiator_waddr = core_io_dmem_waddr; // @[Top.scala 105:16]
+  assign decoder_io_initiator_wen = core_io_dmem_wen; // @[Top.scala 105:16]
+  assign decoder_io_initiator_wstrb = core_io_dmem_wstrb; // @[Top.scala 105:16]
+  assign decoder_io_initiator_wdata = core_io_dmem_wdata; // @[Top.scala 105:16]
+  assign decoder_io_targets_0_rdata = imem_dbus_io_mem_rdata; // @[Top.scala 73:25]
+  assign decoder_io_targets_0_rvalid = imem_dbus_io_mem_rvalid; // @[Top.scala 73:25]
+  assign decoder_io_targets_1_rdata = memory_io_dmem_rdata; // @[Top.scala 74:25]
+  assign decoder_io_targets_1_rvalid = memory_io_dmem_rvalid; // @[Top.scala 74:25]
+  assign decoder_io_targets_3_rdata = uart_io_mem_rdata; // @[Top.scala 76:25]
+  assign decoder_io_targets_3_rvalid = uart_io_mem_rvalid; // @[Top.scala 76:25]
+  assign decoder_io_targets_4_rdata = core_io_mtimer_mem_rdata; // @[Top.scala 77:25]
+  assign decoder_io_targets_4_rvalid = core_io_mtimer_mem_rvalid; // @[Top.scala 77:25]
+  assign decoder_io_targets_5_rdata = config__io_mem_rdata; // @[Top.scala 78:25]
   always @(posedge clock) begin
     if (imem_MPORT_en & imem_MPORT_mask) begin
-      imem[imem_MPORT_addr] <= imem_MPORT_data; // @[Top.scala 84:17]
+      imem[imem_MPORT_addr] <= imem_MPORT_data; // @[Top.scala 90:17]
     end
-    if (reset) begin // @[Top.scala 74:27]
-      imem_rdata <= 32'h0; // @[Top.scala 74:27]
+    if (reset) begin // @[Top.scala 80:27]
+      imem_rdata <= 32'h0; // @[Top.scala 80:27]
     end else begin
       imem_rdata <= _GEN_3;
     end
-    if (reset) begin // @[Top.scala 75:28]
-      imem_rdata2 <= 32'h0; // @[Top.scala 75:28]
-    end else if (~imem_dbus_io_write_enable & imem_dbus_io_read_enable) begin // @[Top.scala 93:65]
-      imem_rdata2 <= imem_imem_rdata2_MPORT_data; // @[Top.scala 94:17]
+    if (reset) begin // @[Top.scala 81:28]
+      imem_rdata2 <= 32'h0; // @[Top.scala 81:28]
+    end else if (~imem_dbus_io_write_enable & imem_dbus_io_read_enable) begin // @[Top.scala 99:65]
+      imem_rdata2 <= imem_imem_rdata2_MPORT_data; // @[Top.scala 100:17]
     end
   end
 // Register and memory initialization
