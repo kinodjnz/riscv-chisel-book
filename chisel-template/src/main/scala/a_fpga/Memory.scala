@@ -44,7 +44,7 @@ class Memory(dataMemoryPath: String = null, imemSizeInBytes: Int = 16384, dmemSi
   val addr = Mux(io.dmem.ren, io.dmem.raddr, io.dmem.waddr)
   io.dramPort.addr := Cat(addr(DRAM_ADDR_WIDTH-1, 4), 0.U(3.W))
   io.dramPort.wdata := Cat(0.U((DRAM_DATA_WIDTH-WORD_LEN).W), io.dmem.wdata) << Cat(addr(3, 2), 0.U(5.W))
-  io.dramPort.wmask := Cat(0.U((DRAM_MASK_WIDTH-WORD_LEN/8).W), io.dmem.wstrb) << Cat(addr(3, 2), 0.U(2.W))
+  io.dramPort.wmask := Cat(~0.U((DRAM_MASK_WIDTH-WORD_LEN/8).W), ~io.dmem.wstrb) << Cat(addr(3, 2), 0.U(2.W))
   io.dramPort.user_busy := false.B
 
   io.dmem.wready := io.dramPort.init_calib_complete && !io.dramPort.busy

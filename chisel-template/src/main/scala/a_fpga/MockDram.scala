@@ -36,7 +36,7 @@ class MockDram(dataMemoryPath: String = null, dmemSizeInBytes: Int = 16384) exte
       dataMem.write(
         io.dram.addr(DRAM_ADDR_WIDTH-1, 3),
         VecInit((0 to DRAM_MASK_WIDTH-1).map(i => wdata(8*(i+1)-1, 8*i))),
-        io.dram.wmask.asBools
+        (~io.dram.wmask).asBools
       )
     }
     // io.dram.user_busy
