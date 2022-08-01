@@ -968,17 +968,15 @@ class Core(startAddress: BigInt = 0, bpTagInitPath: String = null) extends Modul
   val mem_csr_cmd = Mux(mem_en, mem_reg_csr_cmd, CSR_X)
   val mem_mem_wen = Mux(mem_en, mem_reg_mem_wen, MEN_X)
   val mem_stall_delay = RegInit(false.B)
-  val mem_reg_read_wait = RegInit(false.B)
 
   io.dmem.raddr := mem_reg_alu_out
   io.dmem.waddr := mem_reg_alu_out
-  io.dmem.ren   := io.dmem.rready && (mem_wb_sel === WB_MEM) && !mem_reg_read_wait
+  io.dmem.ren   := io.dmem.rready && (mem_wb_sel === WB_MEM)
   io.dmem.wen   := io.dmem.wready && (mem_mem_wen === MEN_S)
   io.dmem.wstrb := mem_reg_mem_wstrb
   io.dmem.wdata := (mem_reg_rs2_data << (8.U * mem_reg_alu_out(1, 0)))(WORD_LEN-1, 0)
   mem_stall := ((mem_wb_sel === WB_MEM) && (!io.dmem.rvalid || !io.dmem.rready || mem_stall_delay)) || ((mem_mem_wen === MEN_S) && !io.dmem.wready)
   mem_stall_delay := (mem_wb_sel === WB_MEM) && io.dmem.rvalid && !mem_stall // 読めた直後はストール
-  mem_reg_read_wait := mem_reg_read_wait && !io.dmem.rvalid
 
   // CSR
   val csr_rdata = MuxLookup(mem_reg_csr_addr, 0.U(WORD_LEN.W), Seq(

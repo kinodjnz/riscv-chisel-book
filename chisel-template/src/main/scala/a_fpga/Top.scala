@@ -41,6 +41,7 @@ class RiscVDebugSignals extends Bundle {
   val dram_init_calib_complete = Output(Bool())
   val dram_rdata_valid         = Output(Bool())
   val dram_busy                = Output(Bool())
+  val dram_ren                 = Output(Bool())
 }
 
 class RiscV(clockHz: Int) extends Module {
@@ -123,6 +124,7 @@ class RiscV(clockHz: Int) extends Module {
   io.debugSignals.dram_init_calib_complete := io.dram.init_calib_complete
   io.debugSignals.dram_rdata_valid         := io.dram.rdata_valid
   io.debugSignals.dram_busy                := io.dram.busy
+  io.debugSignals.dram_ren                 := io.dram.ren
 
   io.exit := core.io.exit
   io.gpio <> gpio.io.gpio

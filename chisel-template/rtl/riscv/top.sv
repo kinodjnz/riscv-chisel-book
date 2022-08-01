@@ -50,6 +50,7 @@ logic io_exit;
 (* mark_debug = "true" *) logic        io_debugSignals_dram_init_calib_complete;
 (* mark_debug = "true" *) logic        io_debugSignals_dram_rdata_valid;
 (* mark_debug = "true" *) logic        io_debugSignals_dram_busy;
+(* mark_debug = "true" *) logic        io_debugSignals_dram_ren;
 
 wire clk;
 wire rst;

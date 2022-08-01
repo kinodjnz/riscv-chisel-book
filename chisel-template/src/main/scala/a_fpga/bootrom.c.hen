@@ -156,7 +156,6 @@ void __attribute__((noreturn)) main(void)
     uint32_t i = 0;
     while(1) {
         uart_puts("Hello, RISC-V\r\n");
-        //uart_puts("A");
         *REG_GPIO_OUT = led_out;
         led_out = (led_out << 1) | ((led_out >> 7) & 1);
         wait_cycles(clock_hz >> 1);
