@@ -56,7 +56,7 @@ class RiscV(clockHz: Int) extends Module {
     val exit = Output(Bool())
     val debugSignals = new RiscVDebugSignals()
   })
-  val core = Module(new Core(startAddress))
+  val core = Module(new Core(startAddress, 0x3FFFFL))
   
   val memory = Module(new Memory(null, imemSizeInBytes, dmemSizeInBytes))
   val imem_dbus = Module(new SingleCycleMem(imemSizeInBytes))
