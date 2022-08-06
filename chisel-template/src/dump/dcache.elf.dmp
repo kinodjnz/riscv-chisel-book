@@ -1,0 +1,141 @@
+
+dcache:     file format elf32-littleriscv
+
+
+Disassembly of section .text:
+
+00000000 <_start>:
+   0:	20002137          	lui	sp,0x20002
+   4:	020000ef          	jal	ra,24 <main>
+   8:	00050193          	mv	gp,a0
+   c:	05d00893          	li	a7,93
+  10:	00000013          	nop
+  14:	00000013          	nop
+  18:	00000013          	nop
+  1c:	00000013          	nop
+  20:	00000073          	ecall
+
+Disassembly of section .text.startup:
+
+00000024 <main>:
+  24:	200017b7          	lui	a5,0x20001
+  28:	00100693          	li	a3,1
+  2c:	10d7a023          	sw	a3,256(a5) # 20001100 <main+0x200010dc>
+  30:	00200713          	li	a4,2
+  34:	10e78ea3          	sb	a4,285(a5)
+  38:	00300613          	li	a2,3
+  3c:	20002737          	lui	a4,0x20002
+  40:	10c71123          	sh	a2,258(a4) # 20002102 <main+0x200020de>
+  44:	00400613          	li	a2,4
+  48:	10c70fa3          	sb	a2,287(a4)
+  4c:	1007a603          	lw	a2,256(a5)
+  50:	00200513          	li	a0,2
+  54:	06d61863          	bne	a2,a3,c4 <main+0xa0>
+  58:	11c7a583          	lw	a1,284(a5)
+  5c:	20000693          	li	a3,512
+  60:	06d59c63          	bne	a1,a3,d8 <main+0xb4>
+  64:	10072503          	lw	a0,256(a4)
+  68:	000306b7          	lui	a3,0x30
+  6c:	04d51e63          	bne	a0,a3,c8 <main+0xa4>
+  70:	11c72883          	lw	a7,284(a4)
+  74:	040006b7          	lui	a3,0x4000
+  78:	06d89463          	bne	a7,a3,e0 <main+0xbc>
+  7c:	200036b7          	lui	a3,0x20003
+  80:	00500813          	li	a6,5
+  84:	1106a023          	sw	a6,256(a3) # 20003100 <main+0x200030dc>
+  88:	00600313          	li	t1,6
+  8c:	1066ae23          	sw	t1,284(a3)
+  90:	1006ae03          	lw	t3,256(a3)
+  94:	050e1a63          	bne	t3,a6,e8 <main+0xc4>
+  98:	11c6a683          	lw	a3,284(a3)
+  9c:	02669a63          	bne	a3,t1,d0 <main+0xac>
+  a0:	1007a683          	lw	a3,256(a5)
+  a4:	04c69a63          	bne	a3,a2,f8 <main+0xd4>
+  a8:	11c7a783          	lw	a5,284(a5)
+  ac:	04b79a63          	bne	a5,a1,100 <main+0xdc>
+  b0:	10072783          	lw	a5,256(a4)
+  b4:	04a79a63          	bne	a5,a0,108 <main+0xe4>
+  b8:	11c72783          	lw	a5,284(a4)
+  bc:	00100513          	li	a0,1
+  c0:	03179863          	bne	a5,a7,f0 <main+0xcc>
+  c4:	00008067          	ret
+  c8:	00400513          	li	a0,4
+  cc:	00008067          	ret
+  d0:	00700513          	li	a0,7
+  d4:	00008067          	ret
+  d8:	00300513          	li	a0,3
+  dc:	00008067          	ret
+  e0:	00500513          	li	a0,5
+  e4:	00008067          	ret
+  e8:	00600513          	li	a0,6
+  ec:	00008067          	ret
+  f0:	00b00513          	li	a0,11
+  f4:	00008067          	ret
+  f8:	00800513          	li	a0,8
+  fc:	00008067          	ret
+ 100:	00900513          	li	a0,9
+ 104:	00008067          	ret
+ 108:	00a00513          	li	a0,10
+ 10c:	00008067          	ret
+
+Disassembly of section .comment:
+
+00000000 <.comment>:
+   0:	3a434347          	fmsub.d	ft6,ft6,ft4,ft7,rmm
+   4:	2820                	vmsge.vx	v16,v0,zero,v0.t
+   6:	2029                	.2byte	0x2029
+   8:	3131                	.2byte	0x3131
+   a:	312e                	.2byte	0x312e
+   c:	302e                	.2byte	0x302e
+	...
+
+Disassembly of section .riscv.attributes:
+
+00000000 <.riscv.attributes>:
+   0:	7b41                	vmsge.vx	v22,v0,zero,v0.t
+   2:	0000                	vmsge.vx	v0,v0,zero,v0.t
+   4:	7200                	vmsge.vx	v4,v0,zero,v0.t
+   6:	7369                	.2byte	0x7369
+   8:	01007663          	bgeu	zero,a6,14 <_start+0x14>
+   c:	0071                	.2byte	0x71
+   e:	0000                	vmsge.vx	v0,v0,zero,v0.t
+  10:	1004                	.2byte	0x1004
+  12:	7205                	.2byte	0x7205
+  14:	3376                	.2byte	0x3376
+  16:	6932                	.2byte	0x6932
+  18:	7032                	.2byte	0x7032
+  1a:	5f30                	.2byte	0x5f30
+  1c:	3266                	.2byte	0x3266
+  1e:	3070                	.2byte	0x3070
+  20:	645f 7032 5f30      	.byte	0x5f, 0x64, 0x32, 0x70, 0x30, 0x5f
+  26:	3176                	.2byte	0x3176
+  28:	3070                	.2byte	0x3070
+  2a:	7a5f 6576 3233      	.byte	0x5f, 0x7a, 0x76, 0x65, 0x33, 0x32
+  30:	3166                	.2byte	0x3166
+  32:	3070                	.2byte	0x3070
+  34:	7a5f 6576 3233      	.byte	0x5f, 0x7a, 0x76, 0x65, 0x33, 0x32
+  3a:	3178                	.2byte	0x3178
+  3c:	3070                	.2byte	0x3070
+  3e:	7a5f 6576 3436      	.byte	0x5f, 0x7a, 0x76, 0x65, 0x36, 0x34
+  44:	3164                	.2byte	0x3164
+  46:	3070                	.2byte	0x3070
+  48:	7a5f 6576 3436      	.byte	0x5f, 0x7a, 0x76, 0x65, 0x36, 0x34
+  4e:	3166                	.2byte	0x3166
+  50:	3070                	.2byte	0x3070
+  52:	7a5f 6576 3436      	.byte	0x5f, 0x7a, 0x76, 0x65, 0x36, 0x34
+  58:	3178                	.2byte	0x3178
+  5a:	3070                	.2byte	0x3070
+  5c:	7a5f 6c76 3231      	.byte	0x5f, 0x7a, 0x76, 0x6c, 0x31, 0x32
+  62:	6238                	.2byte	0x6238
+  64:	7031                	.2byte	0x7031
+  66:	5f30                	.2byte	0x5f30
+  68:	767a                	.2byte	0x767a
+  6a:	336c                	.2byte	0x336c
+  6c:	6232                	.2byte	0x6232
+  6e:	7031                	.2byte	0x7031
+  70:	5f30                	.2byte	0x5f30
+  72:	767a                	.2byte	0x767a
+  74:	366c                	.2byte	0x366c
+  76:	6234                	.2byte	0x6234
+  78:	7031                	.2byte	0x7031
+  7a:	0030                	.2byte	0x30
