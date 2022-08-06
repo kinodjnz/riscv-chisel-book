@@ -590,7 +590,21 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
   val id_reg_mcause_delay     = RegInit(0.U(WORD_LEN.W))
   val id_reg_mtval_delay      = RegInit(0.U(WORD_LEN.W))
 
-  when(!id_reg_stall) {
+  when (mem_reg_is_br || ex3_reg_is_br) {
+    when (!id_reg_stall) {
+      id_reg_pc_delay          := id_reg_pc
+    }
+    id_reg_rf_wen_delay        := REN_X
+    id_reg_exe_fun_delay       := ALU_ADD
+    id_reg_wb_sel_delay        := WB_X
+    id_reg_csr_cmd_delay       := CSR_X
+    id_reg_mem_wen_delay       := MEN_X
+    id_reg_mem_w_delay         := MW_X
+    id_reg_is_j_delay          := false.B
+    id_reg_is_bp_pos_delay     := false.B
+    id_reg_is_valid_inst_delay := false.B
+    id_reg_is_trap_delay       := false.B
+  }.elsewhen (!id_reg_stall) {
     id_reg_pc_delay         := id_reg_pc
     id_reg_op1_sel_delay    := id_m_op1_sel
     id_reg_op2_sel_delay    := id_m_op2_sel

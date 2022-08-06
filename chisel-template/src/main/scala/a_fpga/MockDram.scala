@@ -11,7 +11,7 @@ class MockDram(dataMemoryPath: String = null, dmemSizeInBytes: Int = 16384) exte
   })
 
   val bytesPerWidth = DRAM_DATA_WIDTH / 8
-  val carib_count = RegInit(50.U(8.W))
+  val carib_count = RegInit(20.U(8.W))
   val dataMem = Mem(dmemSizeInBytes/bytesPerWidth, Vec(bytesPerWidth, UInt(8.W)))
   if (dataMemoryPath != null) {
     loadMemoryFromFile(dataMem, dataMemoryPath)
