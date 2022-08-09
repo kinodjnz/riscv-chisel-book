@@ -42,11 +42,22 @@ class RiscVDebugSignals extends Bundle {
   val dram_rdata_valid         = Output(Bool())
   val dram_busy                = Output(Bool())
   val dram_ren                 = Output(Bool())
+
+  val sram1_en = Output(UInt(1.W))
+  val sram1_we = Output(UInt(32.W))
+  val sram1_addr = Output(UInt(7.W))
+  val sram1_rdata = Output(UInt(256.W))
+  val sram1_wdata = Output(UInt(256.W))
+  val sram2_en = Output(UInt(1.W))
+  val sram2_we = Output(UInt(32.W))
+  val sram2_addr = Output(UInt(7.W))
+  val sram2_rdata = Output(UInt(256.W))
+  val sram2_wdata = Output(UInt(256.W))
 }
 
 class RiscV(clockHz: Int) extends Module {
   val imemSizeInBytes = 2048
-  val dmemSizeInBytes = 512
+  val dmemSizeInBytes = 256L * 1024L * 1024L
   val startAddress = 0x08000000L
 
   val io = IO(new Bundle {
@@ -58,8 +69,10 @@ class RiscV(clockHz: Int) extends Module {
   })
   val core = Module(new Core(startAddress, 0x3FFFFL))
   
-  val memory = Module(new Memory(null, imemSizeInBytes, dmemSizeInBytes))
+  val memory = Module(new Memory(null, imemSizeInBytes))
   val imem_dbus = Module(new SingleCycleMem(imemSizeInBytes))
+  val sram1 = Module(new SRAM)
+  val sram2 = Module(new SRAM)
   val gpio = Module(new Gpio)
   val uart = Module(new Uart(clockHz))
   val config = Module(new Config(clockHz))
@@ -109,6 +122,19 @@ class RiscV(clockHz: Int) extends Module {
   // dram
   io.dram <> memory.io.dramPort
 
+  sram1.io.clock := clock
+  sram1.io.en := memory.io.cache_array1.en
+  sram1.io.we := memory.io.cache_array1.we
+  sram1.io.addr := memory.io.cache_array1.addr
+  sram1.io.wdata := memory.io.cache_array1.wdata
+  memory.io.cache_array1.rdata := sram1.io.rdata
+  sram2.io.clock := clock
+  sram2.io.en := memory.io.cache_array2.en
+  sram2.io.we := memory.io.cache_array2.we
+  sram2.io.addr := memory.io.cache_array2.addr
+  sram2.io.wdata := memory.io.cache_array2.wdata
+  memory.io.cache_array2.rdata := sram2.io.rdata
+
   // Debug signals
   io.debugSignals.core <> core.io.debug_signal
   io.debugSignals.raddr  := core.io.dmem.raddr  
@@ -125,6 +151,17 @@ class RiscV(clockHz: Int) extends Module {
   io.debugSignals.dram_rdata_valid         := io.dram.rdata_valid
   io.debugSignals.dram_busy                := io.dram.busy
   io.debugSignals.dram_ren                 := io.dram.ren
+
+  io.debugSignals.sram1_en := memory.io.cache_array1.en
+  io.debugSignals.sram1_we := memory.io.cache_array1.we
+  io.debugSignals.sram1_addr := memory.io.cache_array1.addr
+  io.debugSignals.sram1_rdata := sram1.io.rdata
+  io.debugSignals.sram1_wdata := memory.io.cache_array1.wdata
+  io.debugSignals.sram2_en := memory.io.cache_array2.en
+  io.debugSignals.sram2_we := memory.io.cache_array2.we
+  io.debugSignals.sram2_addr := memory.io.cache_array2.addr
+  io.debugSignals.sram2_rdata := sram2.io.rdata
+  io.debugSignals.sram2_wdata := memory.io.cache_array2.wdata
 
   io.exit := core.io.exit
   io.gpio <> gpio.io.gpio

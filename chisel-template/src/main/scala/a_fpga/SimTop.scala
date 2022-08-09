@@ -15,7 +15,7 @@ class SimTop(memoryPath: String, bpTagInitPath: String) extends Module {
     val exit = Output(Bool())
   })
   val core = Module(new Core(startAddress, 10, bpTagInitPath))
-  val memory = Module(new Memory(null, imemSizeInBytes, dmemSizeInBytes))
+  val memory = Module(new Memory(null, imemSizeInBytes))
   val imem_dbus = Module(new SingleCycleMem(imemSizeInBytes))
 
   val decoder = Module(new DMemDecoder(Seq(
@@ -47,6 +47,10 @@ class SimTop(memoryPath: String, bpTagInitPath: String) extends Module {
 
   val dram = Module(new MockDram(null, dmemSizeInBytes))
   memory.io.dramPort <> dram.io.dram
+
+  val sram = Module(new MockSram())
+  memory.io.cache_array1 <> sram.io.cache_array1
+  memory.io.cache_array2 <> sram.io.cache_array2
 
   core.io.imem <> memory.io.imem
   //core.io.dmem <> memory.io.dmem

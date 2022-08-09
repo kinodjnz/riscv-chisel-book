@@ -33,7 +33,6 @@ class CoreDebugSignals extends Bundle {
   val csr_rdata = Output(UInt(WORD_LEN.W))
   val mem_reg_csr_addr = Output(UInt(WORD_LEN.W))
   val me_intr = Output(Bool())
-  val id_reg_inst = Output(UInt(WORD_LEN.W))
   val cycle_counter = Output(UInt(64.W))
   val instret = Output(UInt(64.W))
 }
@@ -1162,7 +1161,6 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
   io.debug_signal.mem_reg_csr_addr := mem_reg_csr_addr
   io.debug_signal.mem_reg_pc := mem_reg_pc
   io.debug_signal.me_intr := mem_is_meintr
-  io.debug_signal.id_reg_inst := id_reg_inst
 
   //**********************************
   // IO & Debug
