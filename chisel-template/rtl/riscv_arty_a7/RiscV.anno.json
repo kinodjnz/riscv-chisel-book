@@ -1,10 +1,42 @@
 [
   {
+    "class":"firrtl.transforms.DedupedResult",
+    "original":"~RiscV|SRAM",
+    "duplicate":"~RiscV|RiscV/sram1:SRAM",
+    "index":0.46153846153846156
+  },
+  {
+    "class":"firrtl.transforms.DedupedResult",
+    "original":"~RiscV|SRAM_1",
+    "duplicate":"~RiscV|RiscV/sram2:SRAM",
+    "index":0.5384615384615384
+  },
+  {
     "class":"firrtl.EmitCircuitAnnotation",
     "emitter":"firrtl.VerilogEmitter"
   },
   {
     "class":"firrtl.annotations.MemorySynthInit$"
+  },
+  {
+    "class":"chisel3.experimental.EnumAnnotations$EnumDefAnnotation",
+    "typeName":"fpga.DCacheState",
+    "definition":{
+      "Ready":0,
+      "LookupForRead":1,
+      "Read1":4,
+      "WaitingRead1":7,
+      "LookupForWrite":2,
+      "Read2":5,
+      "Read2AndWaiting":6,
+      "WaitingRead2":8,
+      "Flushing":3
+    }
+  },
+  {
+    "class":"chisel3.experimental.EnumAnnotations$EnumComponentAnnotation",
+    "target":"RiscV.Memory.dcache_state",
+    "enumTypeName":"fpga.DCacheState"
   },
   {
     "class":"firrtl.transforms.BlackBoxTargetDirAnno",
@@ -25,34 +57,16 @@
   },
   {
     "class":"firrtl.transforms.CombinationalPath",
-    "sink":"~RiscV|RiscV>io_dram_addr",
+    "sink":"~RiscV|RiscV>io_debugSignals_sram2_we",
     "sources":[
-      "~RiscV|RiscV>io_dram_init_calib_complete",
-      "~RiscV|RiscV>io_dram_busy"
+      "~RiscV|RiscV>io_dram_rdata_valid"
     ]
   },
   {
     "class":"firrtl.transforms.CombinationalPath",
-    "sink":"~RiscV|RiscV>io_debugSignals_dram_busy",
+    "sink":"~RiscV|RiscV>io_debugSignals_wready",
     "sources":[
-      "~RiscV|RiscV>io_dram_busy"
-    ]
-  },
-  {
-    "class":"firrtl.transforms.CombinationalPath",
-    "sink":"~RiscV|RiscV>io_debugSignals_ren",
-    "sources":[
-      "~RiscV|RiscV>io_dram_init_calib_complete",
-      "~RiscV|RiscV>io_dram_busy"
-    ]
-  },
-  {
-    "class":"firrtl.transforms.CombinationalPath",
-    "sink":"~RiscV|RiscV>io_debugSignals_rvalid",
-    "sources":[
-      "~RiscV|RiscV>io_dram_rdata_valid",
-      "~RiscV|RiscV>io_dram_init_calib_complete",
-      "~RiscV|RiscV>io_dram_busy"
+      "~RiscV|RiscV>io_dram_rdata_valid"
     ]
   },
   {
@@ -66,19 +80,53 @@
   },
   {
     "class":"firrtl.transforms.CombinationalPath",
-    "sink":"~RiscV|RiscV>io_debugSignals_rdata",
+    "sink":"~RiscV|RiscV>io_debugSignals_wen",
     "sources":[
-      "~RiscV|RiscV>io_dram_rdata",
+      "~RiscV|RiscV>io_dram_rdata_valid"
+    ]
+  },
+  {
+    "class":"firrtl.transforms.CombinationalPath",
+    "sink":"~RiscV|RiscV>io_debugSignals_sram2_addr",
+    "sources":[
+      "~RiscV|RiscV>io_dram_rdata_valid"
+    ]
+  },
+  {
+    "class":"firrtl.transforms.CombinationalPath",
+    "sink":"~RiscV|RiscV>io_dram_addr",
+    "sources":[
       "~RiscV|RiscV>io_dram_init_calib_complete",
       "~RiscV|RiscV>io_dram_busy"
     ]
   },
   {
     "class":"firrtl.transforms.CombinationalPath",
-    "sink":"~RiscV|RiscV>io_debugSignals_wen",
+    "sink":"~RiscV|RiscV>io_debugSignals_sram2_en",
     "sources":[
-      "~RiscV|RiscV>io_dram_init_calib_complete",
+      "~RiscV|RiscV>io_dram_rdata_valid"
+    ]
+  },
+  {
+    "class":"firrtl.transforms.CombinationalPath",
+    "sink":"~RiscV|RiscV>io_debugSignals_dram_busy",
+    "sources":[
       "~RiscV|RiscV>io_dram_busy"
+    ]
+  },
+  {
+    "class":"firrtl.transforms.CombinationalPath",
+    "sink":"~RiscV|RiscV>io_debugSignals_sram1_addr",
+    "sources":[
+      "~RiscV|RiscV>io_dram_rdata_valid"
+    ]
+  },
+  {
+    "class":"firrtl.transforms.CombinationalPath",
+    "sink":"~RiscV|RiscV>io_debugSignals_rdata",
+    "sources":[
+      "~RiscV|RiscV>io_dram_rdata_valid",
+      "~RiscV|RiscV>io_dram_rdata"
     ]
   },
   {
@@ -91,15 +139,21 @@
   },
   {
     "class":"firrtl.transforms.CombinationalPath",
-    "sink":"~RiscV|RiscV>io_debugSignals_wready",
+    "sink":"~RiscV|RiscV>io_debugSignals_dram_rdata_valid",
     "sources":[
-      "~RiscV|RiscV>io_dram_init_calib_complete",
-      "~RiscV|RiscV>io_dram_busy"
+      "~RiscV|RiscV>io_dram_rdata_valid"
     ]
   },
   {
     "class":"firrtl.transforms.CombinationalPath",
-    "sink":"~RiscV|RiscV>io_debugSignals_dram_rdata_valid",
+    "sink":"~RiscV|RiscV>io_debugSignals_sram1_en",
+    "sources":[
+      "~RiscV|RiscV>io_dram_rdata_valid"
+    ]
+  },
+  {
+    "class":"firrtl.transforms.CombinationalPath",
+    "sink":"~RiscV|RiscV>io_debugSignals_sram1_we",
     "sources":[
       "~RiscV|RiscV>io_dram_rdata_valid"
     ]
@@ -122,10 +176,40 @@
   },
   {
     "class":"firrtl.transforms.CombinationalPath",
+    "sink":"~RiscV|RiscV>io_debugSignals_ren",
+    "sources":[
+      "~RiscV|RiscV>io_dram_rdata_valid"
+    ]
+  },
+  {
+    "class":"firrtl.transforms.CombinationalPath",
+    "sink":"~RiscV|RiscV>io_debugSignals_rvalid",
+    "sources":[
+      "~RiscV|RiscV>io_dram_rdata_valid"
+    ]
+  },
+  {
+    "class":"firrtl.transforms.CombinationalPath",
     "sink":"~RiscV|RiscV>io_dram_wmask",
     "sources":[
       "~RiscV|RiscV>io_dram_init_calib_complete",
       "~RiscV|RiscV>io_dram_busy"
+    ]
+  },
+  {
+    "class":"firrtl.transforms.CombinationalPath",
+    "sink":"~RiscV|RiscV>io_debugSignals_sram2_wdata",
+    "sources":[
+      "~RiscV|RiscV>io_dram_rdata_valid",
+      "~RiscV|RiscV>io_dram_rdata"
+    ]
+  },
+  {
+    "class":"firrtl.transforms.CombinationalPath",
+    "sink":"~RiscV|RiscV>io_debugSignals_sram1_wdata",
+    "sources":[
+      "~RiscV|RiscV>io_dram_rdata_valid",
+      "~RiscV|RiscV>io_dram_rdata"
     ]
   }
 ]
