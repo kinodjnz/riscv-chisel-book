@@ -24,13 +24,14 @@
     "definition":{
       "Ready":0,
       "LookupForRead":1,
-      "Read1":4,
-      "WaitingRead1":7,
+      "Read1":5,
+      "WaitingRead1":8,
       "LookupForWrite":2,
-      "Read2":5,
-      "Read2AndWaiting":6,
-      "WaitingRead2":8,
-      "Flushing":3
+      "Read2":6,
+      "Read2AndWaiting":7,
+      "WaitingRead2":9,
+      "RespondRead":3,
+      "Flushing":4
     }
   },
   {
@@ -194,22 +195,6 @@
     "sources":[
       "~RiscV|RiscV>io_dram_init_calib_complete",
       "~RiscV|RiscV>io_dram_busy"
-    ]
-  },
-  {
-    "class":"firrtl.transforms.CombinationalPath",
-    "sink":"~RiscV|RiscV>io_debugSignals_sram2_wdata",
-    "sources":[
-      "~RiscV|RiscV>io_dram_rdata_valid",
-      "~RiscV|RiscV>io_dram_rdata"
-    ]
-  },
-  {
-    "class":"firrtl.transforms.CombinationalPath",
-    "sink":"~RiscV|RiscV>io_debugSignals_sram1_wdata",
-    "sources":[
-      "~RiscV|RiscV>io_dram_rdata_valid",
-      "~RiscV|RiscV>io_dram_rdata"
     ]
   }
 ]
