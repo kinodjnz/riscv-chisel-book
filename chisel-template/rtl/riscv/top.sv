@@ -54,13 +54,9 @@ logic io_exit;
 (* mark_debug = "true" *) logic        io_debugSignals_sram1_en;
 (* mark_debug = "true" *) logic [31:0] io_debugSignals_sram1_we;
 (* mark_debug = "true" *) logic [6:0]  io_debugSignals_sram1_addr;
-(* mark_debug = "true" *) logic [255:0] io_debugSignals_sram1_rdata;
-(* mark_debug = "true" *) logic [255:0] io_debugSignals_sram1_wdata;
 (* mark_debug = "true" *) logic        io_debugSignals_sram2_en;
 (* mark_debug = "true" *) logic [31:0] io_debugSignals_sram2_we;
 (* mark_debug = "true" *) logic [6:0]  io_debugSignals_sram2_addr;
-(* mark_debug = "true" *) logic [255:0] io_debugSignals_sram2_rdata;
-(* mark_debug = "true" *) logic [255:0] io_debugSignals_sram2_wdata;
 
 wire clk;
 wire rst;

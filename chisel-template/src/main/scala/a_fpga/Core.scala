@@ -999,7 +999,7 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
       (ex2_reg_mem_w === MW_W) -> "b1111".U,
     )) << (ex2_alu_out(1, 0)))(3, 0)
     mem_reg_is_half    := ex2_reg_is_half
-    mem_reg_is_valid_inst := ex2_reg_is_valid_inst
+    mem_reg_is_valid_inst := ex2_reg_is_valid_inst && !mem_reg_is_br && !ex3_reg_is_br
     mem_reg_is_trap    := ex2_reg_is_trap
     mem_reg_mcause     := ex2_reg_mcause
     mem_reg_mtval      := ex2_reg_mtval
@@ -1008,9 +1008,10 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
   //**********************************
   // Memory Access Stage
 
-  val mem_is_meintr = csr_mstatus(3).asBool && (io.intr && csr_mie(11))
-  val mem_is_mtintr = csr_mstatus(3).asBool && (mtimer.io.intr && csr_mie(7))
-  val mem_is_trap = mem_reg_is_trap && !mem_reg_is_br && !ex3_reg_is_br && !mem_is_meintr && !mem_is_mtintr
+  val mem_is_valid_inst = mem_reg_is_valid_inst && (!mem_reg_is_br && !ex3_reg_is_br)
+  val mem_is_meintr = csr_mstatus(3).asBool && (io.intr && csr_mie(11)) && mem_is_valid_inst
+  val mem_is_mtintr = csr_mstatus(3).asBool && (mtimer.io.intr && csr_mie(7)) && mem_is_valid_inst
+  val mem_is_trap = mem_reg_is_trap && mem_is_valid_inst && !mem_is_meintr && !mem_is_mtintr
   val mem_en = mem_reg_en && !mem_reg_is_br && !ex3_reg_is_br && !mem_reg_is_trap && !mem_is_meintr && !mem_is_mtintr
   val mem_rf_wen = Mux(mem_en, mem_reg_rf_wen, REN_X)
   val mem_wb_sel = Mux(mem_en, mem_reg_wb_sel, WB_X)
@@ -1070,30 +1071,36 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
   when (mem_is_meintr) {
     csr_mcause      := CSR_MCAUSE_MEI
     csr_mtval       := 0.U(WORD_LEN.W)
-    csr_mepc        := MuxCase(mem_reg_pc, Seq(
-      ex3_reg_is_br             -> ex3_reg_br_target,
-      ex3_reg_is_br_before_trap -> ex3_reg_trap_pc,
-    ))
+    csr_mepc        := mem_reg_pc
+    // csr_mepc        := MuxCase(mem_reg_pc, Seq(
+    //   ex3_reg_is_br             -> ex3_reg_br_target,
+    //   ex3_reg_is_br_before_trap -> ex3_reg_trap_pc,
+    //   mem_reg_is_br             -> mem_reg_br_addr,
+    // ))
     csr_mstatus     := Cat(csr_mstatus(31, 8), csr_mstatus(3), csr_mstatus(6, 4), 0.U(1.W), csr_mstatus(2, 0))
     mem_reg_is_br   := true.B
     mem_reg_br_addr := csr_trap_vector
   }.elsewhen (mem_is_mtintr) {
     csr_mcause      := CSR_MCAUSE_MTI
     csr_mtval       := 0.U(WORD_LEN.W)
-    csr_mepc        := MuxCase(mem_reg_pc, Seq(
-      ex3_reg_is_br             -> ex3_reg_br_target,
-      ex3_reg_is_br_before_trap -> ex3_reg_trap_pc,
-    ))
+    csr_mepc        := mem_reg_pc
+    // csr_mepc        := MuxCase(mem_reg_pc, Seq(
+    //   ex3_reg_is_br             -> ex3_reg_br_target,
+    //   ex3_reg_is_br_before_trap -> ex3_reg_trap_pc,
+    //   mem_reg_is_br             -> mem_reg_br_addr,
+    // ))
     csr_mstatus     := Cat(csr_mstatus(31, 8), csr_mstatus(3), csr_mstatus(6, 4), 0.U(1.W), csr_mstatus(2, 0))
     mem_reg_is_br   := true.B
     mem_reg_br_addr := csr_trap_vector
   }.elsewhen (mem_is_trap) {
     csr_mcause      := mem_reg_mcause
     csr_mtval       := mem_reg_mtval
-    csr_mepc        := MuxCase(mem_reg_pc, Seq(
-      ex3_reg_is_br             -> ex3_reg_br_target,
-      ex3_reg_is_br_before_trap -> ex3_reg_trap_pc,
-    ))
+    csr_mepc        := mem_reg_pc
+    // csr_mepc        := MuxCase(mem_reg_pc, Seq(
+    //   ex3_reg_is_br             -> ex3_reg_br_target,
+    //   ex3_reg_is_br_before_trap -> ex3_reg_trap_pc,
+    //   mem_reg_is_br             -> mem_reg_br_addr,
+    // ))
     csr_mstatus     := Cat(csr_mstatus(31, 8), csr_mstatus(3), csr_mstatus(6, 4), 0.U(1.W), csr_mstatus(2, 0))
     mem_reg_is_br   := true.B
     mem_reg_br_addr := csr_trap_vector
@@ -1122,14 +1129,15 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
   ))
 
   mem_wb_data := MuxCase(mem_reg_alu_out, Seq(
-    (mem_wb_sel === WB_MEM) -> mem_wb_data_load,
-    (mem_wb_sel === WB_PC)  -> Mux(mem_reg_is_half, mem_reg_pc + 2.U(WORD_LEN.W), mem_reg_pc + 4.U(WORD_LEN.W)),
-    (mem_wb_sel === WB_CSR) -> csr_rdata
+    (mem_reg_wb_sel === WB_MEM) -> mem_wb_data_load,
+    (mem_reg_wb_sel === WB_PC)  -> Mux(mem_reg_is_half, mem_reg_pc + 2.U(WORD_LEN.W), mem_reg_pc + 4.U(WORD_LEN.W)),
+    (mem_reg_wb_sel === WB_CSR) -> csr_rdata
   ))
 
   mem_reg_rf_wen_delay  := mem_rf_wen
   mem_wb_addr_delay     := wb_reg_wb_addr
-  mem_reg_wb_data_delay := Mux(mem_wb_sel === WB_MEM, mem_wb_data_load, mem_wb_data)
+  //mem_reg_wb_data_delay := Mux(mem_reg_wb_sel === WB_MEM, mem_wb_data_load, mem_wb_data)
+  mem_reg_wb_data_delay := mem_wb_data
   
   //**********************************
   // MEM/WB regsiter

@@ -146,6 +146,20 @@ static inline void init_bss() {
     } while (++p < q);
 }
 
+static inline int sum() {
+    uint32_t *p = (uint32_t *)0x20010000;
+    uint32_t *q = p;
+    for (int i = 0; i < 0x8000; i++) {
+        *q++ = i + 1;
+    }
+    uint64_t s = 0;
+    q = p;
+    for (int i = 0; i < 0x8000; i++) {
+        s += *q++;
+    }
+    return (s == 536887296);
+}
+
 void __attribute__((noreturn)) main(void)
 {
     init_bss();
@@ -155,7 +169,11 @@ void __attribute__((noreturn)) main(void)
     init_csr();
     uint32_t i = 0;
     while(1) {
-        uart_puts("Hello, RISC-V\r\n");
+        if (sum()) {
+            uart_puts("Hello, RISC-V\r\n");
+        } else {
+            uart_puts("NG!!\r\n");
+        }
         //uart_puts("A");
         *REG_GPIO_OUT = led_out;
         led_out = (led_out << 1) | ((led_out >> 7) & 1);

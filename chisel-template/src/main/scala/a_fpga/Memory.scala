@@ -33,6 +33,7 @@ object DCacheState extends ChiselEnum {
   val Ready = Value
   val LookupForRead = Value
   val LookupForWrite = Value
+  val RespondRead = Value
   val Flushing = Value
   val Read1 = Value
   val Read2 = Value
@@ -102,6 +103,7 @@ class Memory(dataMemoryPath: String = null, imemSizeInBytes: Int = 16384) extend
   val reg_wstrb = RegInit(0.U(4.W))
   val reg_ren = RegInit(true.B)
   val reg_dcache_read = RegInit(false.B)
+  val reg_read_word = RegInit(0.U(WORD_LEN.W))
 
   io.dmem.rready := false.B
   io.dmem.wready := false.B
@@ -170,17 +172,11 @@ class Memory(dataMemoryPath: String = null, imemSizeInBytes: Int = 16384) extend
       val line1 = Mux(reg_dcache_read, io.cache_array1.rdata, reg_line1)
       val line2 = Mux(reg_dcache_read, io.cache_array2.rdata, reg_line2)
       when (reg_tag(0) === reg_req_addr.tag) {
-        io.dmem.rready := true.B
-        io.dmem.wready := false.B
-        io.dmem.rvalid := true.B
-        io.dmem.rdata := (line1 >> Cat(reg_req_addr.line_off(DCACHE_LINE_BITS-1, 2), 0.U(5.W)))(WORD_LEN-1, 0)
-        dcache_state := DCacheState.Ready
+        reg_read_word := (line1 >> Cat(reg_req_addr.line_off(DCACHE_LINE_BITS-1, 2), 0.U(5.W)))(WORD_LEN-1, 0)
+        dcache_state := DCacheState.RespondRead
       }.elsewhen (reg_tag(1) === reg_req_addr.tag) {
-        io.dmem.rready := true.B
-        io.dmem.wready := false.B
-        io.dmem.rvalid := true.B
-        io.dmem.rdata := (line2 >> Cat(reg_req_addr.line_off(DCACHE_LINE_BITS-1, 2), 0.U(5.W)))(WORD_LEN-1, 0)
-        dcache_state := DCacheState.Ready
+        reg_read_word := (line2 >> Cat(reg_req_addr.line_off(DCACHE_LINE_BITS-1, 2), 0.U(5.W)))(WORD_LEN-1, 0)
+        dcache_state := DCacheState.RespondRead
       }.elsewhen ((reg_lru.way_hot === 1.U && reg_lru.dirty1) || (reg_lru.way_hot === 0.U && reg_lru.dirty2)) {
         when (io.dramPort.init_calib_complete && !io.dramPort.busy) {
           io.dramPort.ren := false.B
@@ -203,6 +199,13 @@ class Memory(dataMemoryPath: String = null, imemSizeInBytes: Int = 16384) extend
           dcache_state := DCacheState.Read2
         }
       }
+    }
+    is (DCacheState.RespondRead) {
+        io.dmem.rready := true.B
+        io.dmem.wready := false.B
+        io.dmem.rvalid := true.B
+        io.dmem.rdata := reg_read_word
+        dcache_state := DCacheState.Ready
     }
     is (DCacheState.LookupForWrite) {
       when (reg_dcache_read) {
@@ -376,7 +379,7 @@ class Memory(dataMemoryPath: String = null, imemSizeInBytes: Int = 16384) extend
   printf(p"reg_tag(0)      : 0x${Hexadecimal(reg_tag(0))}\n")
   printf(p"reg_tag(1)      : 0x${Hexadecimal(reg_tag(1))}\n")
   printf(p"reg_lru         : 0x${Hexadecimal(reg_lru.asUInt)}\n")
-  printf(p"reg_line1       : 0x${Hexadecimal(reg_line1)}\n")
-  printf(p"reg_line2       : 0x${Hexadecimal(reg_line2)}\n")
+  //printf(p"reg_line1       : 0x${Hexadecimal(reg_line1)}\n")
+  //printf(p"reg_line2       : 0x${Hexadecimal(reg_line2)}\n")
   printf(p"dcache_state    : ${dcache_state.asUInt}\n")
 }
