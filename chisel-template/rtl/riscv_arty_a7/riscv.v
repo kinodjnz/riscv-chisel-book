@@ -4226,9 +4226,8 @@ module Memory(
   wire [3:0] _GEN_125 = io_dramPort_rdata_valid ? 4'h9 : dcache_state; // @[Memory.scala 310:38 314:22 96:29]
   wire [31:0] _T_73 = {reg_req_addr_tag,reg_req_addr_index,reg_req_addr_line_off}; // @[Memory.scala 323:72]
   wire  _T_75 = reg_ren & io_dmem_ren & io_dmem_raddr == _T_73; // @[Memory.scala 323:38]
-  wire [255:0] _io_dmem_rdata_T = {io_dramPort_rdata,reg_line1[127:0]}; // @[Memory.scala 325:33]
-  wire [510:0] _GEN_3 = {{255'd0}, _io_dmem_rdata_T}; // @[Memory.scala 325:40]
-  wire [510:0] _io_dmem_rdata_T_3 = _GEN_3 << _reg_read_word_T_1; // @[Memory.scala 325:40]
+  wire [255:0] _io_dmem_rdata_T = {io_dramPort_rdata,reg_line1[127:0]}; // @[Memory.scala 325:34]
+  wire [255:0] _io_dmem_rdata_T_3 = _io_dmem_rdata_T >> _reg_read_word_T_1; // @[Memory.scala 325:41]
   wire  _T_77 = reg_lru_way_hot & reg_ren; // @[Memory.scala 327:39]
   wire [2:0] _T_78 = {2'h0,reg_lru_dirty2}; // @[Cat.scala 31:58]
   wire  _T_83 = _T_11 & reg_ren; // @[Memory.scala 334:45]
@@ -4374,7 +4373,6 @@ module Memory(
   wire  _GEN_652 = 4'h2 == dcache_state ? 1'h0 : _GEN_582; // @[Memory.scala 141:25 93:22]
   wire  _GEN_659 = 4'h3 == dcache_state | _GEN_619; // @[Memory.scala 141:25 204:24]
   wire  _GEN_661 = 4'h3 == dcache_state | _GEN_621; // @[Memory.scala 141:25 206:24]
-  wire [510:0] _GEN_662 = 4'h3 == dcache_state ? {{479'd0}, reg_read_word} : _io_dmem_rdata_T_3; // @[Memory.scala 141:25 207:23]
   wire  _GEN_666 = 4'h3 == dcache_state ? 1'h0 : _GEN_591; // @[Memory.scala 118:25 141:25]
   wire  _GEN_672 = 4'h3 == dcache_state ? 1'h0 : 4'h2 == dcache_state & _T_7; // @[Memory.scala 141:25 94:22]
   wire  _GEN_677 = 4'h3 == dcache_state ? 1'h0 : _GEN_603; // @[Memory.scala 122:25 141:25]
@@ -4521,7 +4519,7 @@ module Memory(
   assign lru_array_dirty2_MPORT_10_mask = 1'h1;
   assign lru_array_dirty2_MPORT_10_en = _T_2 ? 1'h0 : _GEN_793;
   assign io_imem_inst = io_imemReadPort_data; // @[Memory.scala 89:16]
-  assign io_dmem_rdata = _GEN_662[31:0];
+  assign io_dmem_rdata = 4'h3 == dcache_state ? reg_read_word : _io_dmem_rdata_T_3[31:0]; // @[Memory.scala 141:25 207:23]
   assign io_dmem_rvalid = 4'h0 == dcache_state ? 1'h0 : _GEN_740; // @[Memory.scala 110:18 141:25]
   assign io_dmem_rready = 4'h0 == dcache_state | _GEN_738; // @[Memory.scala 141:25 143:22]
   assign io_dmem_wready = 4'h0 == dcache_state; // @[Memory.scala 141:25]
