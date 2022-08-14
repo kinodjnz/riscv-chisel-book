@@ -322,7 +322,7 @@ class Memory(dataMemoryPath: String = null, imemSizeInBytes: Int = 16384) extend
         io.dmem.wready := false.B
         when (reg_ren && io.dmem.ren && io.dmem.raddr === reg_req_addr.asUInt) {
           io.dmem.rvalid := true.B
-          io.dmem.rdata := line.asUInt << Cat(reg_req_addr.line_off(DCACHE_LINE_BITS-1, 2), 0.U(5.W))
+          io.dmem.rdata := (line.asUInt >> Cat(reg_req_addr.line_off(DCACHE_LINE_BITS-1, 2), 0.U(5.W)))(WORD_LEN-1, 0)
         }
         when (reg_lru.way_hot === 1.U && reg_ren) {
           tag_array.write(reg_req_addr.index, VecInit(reg_req_addr.tag, reg_tag(1)))
