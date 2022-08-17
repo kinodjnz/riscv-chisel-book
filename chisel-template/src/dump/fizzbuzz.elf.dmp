@@ -195,12 +195,12 @@ Disassembly of section .text.startup:
 000002b8 <main>:
  2b8:	ff010113          	addi	sp,sp,-16
  2bc:	10000613          	li	a2,256
- 2c0:	000025b7          	lui	a1,0x2
+ 2c0:	200015b7          	lui	a1,0x20001
  2c4:	00a00513          	li	a0,10
  2c8:	00112623          	sw	ra,12(sp)
  2cc:	d59ff0ef          	jal	ra,24 <fizzbuzz>
  2d0:	00c12083          	lw	ra,12(sp)
- 2d4:	ffffe7b7          	lui	a5,0xffffe
+ 2d4:	dffff7b7          	lui	a5,0xdffff
  2d8:	00f50533          	add	a0,a0,a5
  2dc:	fd650513          	addi	a0,a0,-42
  2e0:	01010113          	addi	sp,sp,16
