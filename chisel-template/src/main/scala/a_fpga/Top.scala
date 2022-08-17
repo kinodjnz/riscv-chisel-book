@@ -66,7 +66,7 @@ class RiscV(clockHz: Int) extends Module {
   val core = Module(new Core(startAddress, 0x3FFFFL))
   
   val memory = Module(new Memory(null, imemSizeInBytes))
-  val imem_dbus = Module(new SingleCycleMem(imemSizeInBytes))
+  val boot_rom = Module(new BootRom("bootrom.hex", imemSizeInBytes))
   val sram1 = Module(new SRAM)
   val sram2 = Module(new SRAM)
   val gpio = Module(new Gpio)
@@ -81,39 +81,17 @@ class RiscV(clockHz: Int) extends Module {
     (BigInt(0x30002000L), BigInt(64)),  // mtimer
     (BigInt(0x40000000L), BigInt(64)),  // CONFIG
   )))
-  decoder.io.targets(0) <> imem_dbus.io.mem
+  decoder.io.targets(0) <> boot_rom.io.dmem
   decoder.io.targets(1) <> memory.io.dmem
   decoder.io.targets(2) <> gpio.io.mem
   decoder.io.targets(3) <> uart.io.mem
   decoder.io.targets(4) <> core.io.mtimer_mem
   decoder.io.targets(5) <> config.io.mem
 
-  val imem_rdata = RegInit(0.U(WORD_LEN.W))
-  val imem_rdata2 = RegInit(0.U(WORD_LEN.W))
-  memory.io.imemReadPort.data := imem_rdata
-  imem_dbus.io.read.data := imem_rdata2
-
-  annotate(new ChiselAnnotation {
-    override def toFirrtl =
-      MemorySynthInit
-  })
-
-  val imem = Mem(imemSizeInBytes/4, UInt(WORD_LEN.W))
-  loadMemoryFromFileInline(imem, "bootrom.hex")
-  when (memory.io.imemReadPort.enable) {
-    imem_rdata := imem.read(memory.io.imemReadPort.address(8, 0))
-  }
-  val rwaddr = Mux(imem_dbus.io.write.enable, imem_dbus.io.write.address, imem_dbus.io.read.address)
-  when (imem_dbus.io.write.enable) {
-    imem.write(rwaddr, imem_dbus.io.write.data)
-  }
-  when (!imem_dbus.io.write.enable && imem_dbus.io.read.enable) {
-    imem_rdata2 := imem.read(rwaddr)
-  }
-
-  core.io.imem <> memory.io.imem
-  // core.io.dmem <> memory.io.dmem
+  core.io.imem <> boot_rom.io.imem
   core.io.dmem <> decoder.io.initiator
+
+  memory.io.imem.addr := 0.U
 
   // dram
   io.dram <> memory.io.dramPort
