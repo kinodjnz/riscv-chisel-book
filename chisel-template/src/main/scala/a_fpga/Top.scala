@@ -65,7 +65,7 @@ class RiscV(clockHz: Int) extends Module {
   })
   val core = Module(new Core(startAddress, 0x3FFFFL))
   
-  val memory = Module(new Memory(null, imemSizeInBytes))
+  val memory = Module(new Memory(imemSizeInBytes))
   val boot_rom = Module(new BootRom("bootrom.hex", imemSizeInBytes))
   val sram1 = Module(new SRAM)
   val sram2 = Module(new SRAM)
@@ -73,7 +73,7 @@ class RiscV(clockHz: Int) extends Module {
   val uart = Module(new Uart(clockHz))
   val config = Module(new Config(clockHz))
 
-  val decoder = Module(new DMemDecoder(Seq(
+  val dmem_decoder = Module(new DMemDecoder(Seq(
     (BigInt(startAddress), BigInt(imemSizeInBytes)),
     (BigInt(0x20000000L), BigInt(dmemSizeInBytes)),
     (BigInt(0x30000000L), BigInt(64)),  // GPIO
@@ -81,16 +81,24 @@ class RiscV(clockHz: Int) extends Module {
     (BigInt(0x30002000L), BigInt(64)),  // mtimer
     (BigInt(0x40000000L), BigInt(64)),  // CONFIG
   )))
-  decoder.io.targets(0) <> boot_rom.io.dmem
-  decoder.io.targets(1) <> memory.io.dmem
-  decoder.io.targets(2) <> gpio.io.mem
-  decoder.io.targets(3) <> uart.io.mem
-  decoder.io.targets(4) <> core.io.mtimer_mem
-  decoder.io.targets(5) <> config.io.mem
+  dmem_decoder.io.targets(0) <> boot_rom.io.dmem
+  dmem_decoder.io.targets(1) <> memory.io.dmem
+  dmem_decoder.io.targets(2) <> gpio.io.mem
+  dmem_decoder.io.targets(3) <> uart.io.mem
+  dmem_decoder.io.targets(4) <> core.io.mtimer_mem
+  dmem_decoder.io.targets(5) <> config.io.mem
 
-  core.io.imem <> boot_rom.io.imem
-  core.io.dmem <> decoder.io.initiator
+  val imem_decoder = Module(new IMemDecoder(Seq(
+    (BigInt(startAddress), BigInt(imemSizeInBytes)),
+    (BigInt(0x20000000L), BigInt(dmemSizeInBytes)),
+  )))
+  imem_decoder.io.targets(0) <> boot_rom.io.imem
+  imem_decoder.io.targets(1) <> memory.io.imem
 
+  core.io.imem <> imem_decoder.io.initiator
+  core.io.dmem <> dmem_decoder.io.initiator
+
+  memory.io.imem.en := false.B
   memory.io.imem.addr := 0.U
 
   // dram
@@ -111,14 +119,14 @@ class RiscV(clockHz: Int) extends Module {
 
   // Debug signals
   io.debugSignals.core <> core.io.debug_signal
-  io.debugSignals.raddr  := core.io.dmem.raddr  
-  io.debugSignals.rdata  := decoder.io.initiator.rdata  
-  io.debugSignals.ren    := core.io.dmem.ren    
-  io.debugSignals.rvalid := decoder.io.initiator.rvalid 
-  io.debugSignals.waddr  := core.io.dmem.waddr  
+  io.debugSignals.raddr  := core.io.dmem.raddr
+  io.debugSignals.rdata  := dmem_decoder.io.initiator.rdata
+  io.debugSignals.ren    := core.io.dmem.ren
+  io.debugSignals.rvalid := dmem_decoder.io.initiator.rvalid
+  io.debugSignals.waddr  := core.io.dmem.waddr
   io.debugSignals.wdata  := core.io.dmem.wdata
-  io.debugSignals.wen    := core.io.dmem.wen    
-  io.debugSignals.wready := decoder.io.initiator.wready 
+  io.debugSignals.wen    := core.io.dmem.wen
+  io.debugSignals.wready := dmem_decoder.io.initiator.wready
   io.debugSignals.wstrb  := core.io.dmem.wstrb
 
   io.debugSignals.dram_init_calib_complete := io.dram.init_calib_complete

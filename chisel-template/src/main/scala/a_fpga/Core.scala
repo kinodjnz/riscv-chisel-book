@@ -218,6 +218,7 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
   )
   ic_reg_half_rdy := true.B
   ic_reg_read_rdy := !(ic_addr_en && ic_addr(1).asBool)
+  io.imem.en := true.B
   io.imem.addr := ic_mem_addr
   ic_reg_addr_out := ic_next_addr
 

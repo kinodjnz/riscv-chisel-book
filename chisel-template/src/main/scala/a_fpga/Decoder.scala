@@ -12,7 +12,7 @@ class DMemDecoder(targetAddressRanges: Seq[(BigInt, BigInt)]) extends Module {
   })
 
   val rvalid = WireDefault(true.B)
-  val rdata = WireDefault("xdeadbeef".U(32.W))
+  val rdata = WireDefault("xdeadbeef".U(WORD_LEN.W))
   val rready = WireDefault(false.B)
   val wready = WireDefault(false.B)
 
@@ -28,7 +28,7 @@ class DMemDecoder(targetAddressRanges: Seq[(BigInt, BigInt)]) extends Module {
     val ren = WireDefault(false.B)
     val waddr = WireDefault(0.U(32.W))
     val wen = WireDefault(false.B)
-    val wdata = WireDefault("xdeadbeef".U(32.W))
+    val wdata = WireDefault("xdeadbeef".U(WORD_LEN.W))
     val wstrb = WireDefault("b1111".U)
     
     target.raddr := raddr
@@ -51,6 +51,39 @@ class DMemDecoder(targetAddressRanges: Seq[(BigInt, BigInt)]) extends Module {
       wdata := io.initiator.wdata
       wstrb := io.initiator.wstrb
       wready := target.wready
+    }
+  }
+}
+
+class IMemDecoder(targetAddressRanges: Seq[(BigInt, BigInt)]) extends Module {
+  val io = IO(new Bundle {
+    val initiator = new ImemPortIo()
+    val targets = Vec(targetAddressRanges.size, Flipped(new ImemPortIo))
+  })
+
+  val valid = WireDefault(true.B)
+  val inst = WireDefault("xdeadbeef".U(WORD_LEN.W))
+  val next_addr = RegNext(io.initiator.addr)
+
+  io.initiator.valid := valid
+  io.initiator.inst := inst
+
+  for(((start, length), index) <- targetAddressRanges.zipWithIndex) {
+    val target = io.targets(index)
+
+    val addr = WireDefault(0.U(WORD_LEN.W))
+    val en = WireDefault(false.B)
+
+    target.addr := addr
+    target.en := en
+
+    when(start.U <= io.initiator.addr && io.initiator.addr < (start + length).U ) {
+      addr := io.initiator.addr - start.U
+      en := io.initiator.en
+    }
+    when(start.U <= next_addr && next_addr < (start + length).U ) {
+      valid := target.valid
+      inst := target.inst
     }
   }
 }

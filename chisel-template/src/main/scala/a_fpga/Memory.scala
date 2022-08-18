@@ -11,6 +11,7 @@ import chisel3.experimental.ChiselEnum
 import CacheConsts._
 
 class ImemPortIo extends Bundle {
+  val en = Input(Bool())
   val addr = Input(UInt(WORD_LEN.W))
   val inst = Output(UInt(WORD_LEN.W))
   val valid = Output(Bool())
@@ -87,7 +88,7 @@ object DramState extends ChiselEnum {
   val WaitingRead2 = Value
 }
 
-class Memory(dataMemoryPath: String = null, imemSizeInBytes: Int = 16384) extends Module {
+class Memory(imemSizeInBytes: Int = 16384) extends Module {
   val io = IO(new Bundle {
     val imem = new ImemPortIo()
     val dmem = new DmemPortIo()
@@ -96,8 +97,8 @@ class Memory(dataMemoryPath: String = null, imemSizeInBytes: Int = 16384) extend
     val cache_array2 = Flipped(new DCachePort())
   })
 
-  io.imem.inst := 0.U
-  io.imem.valid := false.B
+  io.imem.inst := "xdeadbeef".U
+  io.imem.valid := true.B
 
   val dram_i_busy  = Wire(Bool())
   val dram_i_ren   = Wire(Bool())

@@ -25,9 +25,12 @@ class BootRom(data_memory_path: String = null, imem_size_in_bytes: Int = 2048) e
 
   val imem = Mem(imem_size_in_bytes/4, UInt(WORD_LEN.W))
   loadMemoryFromFileInline(imem, data_memory_path)
-  imem_inst := imem.read(io.imem.addr(log2Ceil(imem_size_in_bytes) - 1, 2))
+
+  when (io.imem.en) {
+    imem_inst := imem.read(io.imem.addr(log2Ceil(imem_size_in_bytes) - 1, 2))
+  }
   io.imem.inst := imem_inst
-  io.imem.valid := RegNext(true.B, false.B)
+  io.imem.valid := RegNext(io.imem.en, false.B)
 
   val rwaddr = Mux(io.dmem.wen, io.dmem.waddr, io.dmem.raddr)(log2Ceil(imem_size_in_bytes) - 1, 2)
   when (io.dmem.wen) {

@@ -15,21 +15,29 @@ class SimTop(memoryPath: String, bpTagInitPath: String) extends Module {
     val exit = Output(Bool())
   })
   val core = Module(new Core(startAddress, 10, bpTagInitPath))
-  val memory = Module(new Memory(null, imemSizeInBytes))
+  val memory = Module(new Memory(imemSizeInBytes))
   val boot_rom = Module(new BootRom(memoryPath, imemSizeInBytes))
 
-  val decoder = Module(new DMemDecoder(Seq(
+  val dmem_decoder = Module(new DMemDecoder(Seq(
     (BigInt(startAddress), BigInt(imemSizeInBytes)),
     (BigInt(0x20000000L), BigInt(dmemSizeInBytes)),
     (BigInt(0x30002000L), BigInt(64)), // mtimer
   )))
-  decoder.io.targets(0) <> boot_rom.io.dmem
-  decoder.io.targets(1) <> memory.io.dmem
-  decoder.io.targets(2) <> core.io.mtimer_mem
+  dmem_decoder.io.targets(0) <> boot_rom.io.dmem
+  dmem_decoder.io.targets(1) <> memory.io.dmem
+  dmem_decoder.io.targets(2) <> core.io.mtimer_mem
 
-  core.io.imem <> boot_rom.io.imem
-  core.io.dmem <> decoder.io.initiator
+  val imem_decoder = Module(new IMemDecoder(Seq(
+    (BigInt(startAddress), BigInt(imemSizeInBytes)),
+    (BigInt(0x20000000L), BigInt(dmemSizeInBytes)),
+  )))
+  imem_decoder.io.targets(0) <> boot_rom.io.imem
+  imem_decoder.io.targets(1) <> memory.io.imem
 
+  core.io.imem <> imem_decoder.io.initiator
+  core.io.dmem <> dmem_decoder.io.initiator
+
+  memory.io.imem.en := false.B
   memory.io.imem.addr := 0.U
 
   val dram = Module(new MockDram(null, dmemSizeInBytes))
