@@ -5,6 +5,7 @@ import chisel3.util._
 import common.Instructions._
 import common.Consts._
 import chisel3.util.experimental.loadMemoryFromFile
+import chisel3.experimental.ChiselEnum
 
 class LongCounter(unitWidth: Int, unitCount: Int) extends Module {
   val counterWidth = unitWidth * unitCount
@@ -35,6 +36,14 @@ class CoreDebugSignals extends Bundle {
   val me_intr = Output(Bool())
   val cycle_counter = Output(UInt(64.W))
   val instret = Output(UInt(64.W))
+}
+
+object IcState extends ChiselEnum {
+  val Empty = Value     // reg: empty, reg2: empty, imem: this
+  val EmptyHalf = Value // reg: empty, reg2: empty, imem: this, half address
+  val Full = Value      // reg: full,  reg2: empty, imem: next
+  val FullHalf = Value  // reg: full,  reg2: empty, imem: next, half address
+  val Full2Half = Value // reg: full,  reg2: full,  imem: next, half address
 }
 
 class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: String = null) extends Module {
@@ -200,35 +209,109 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
   val ic_reg_read_rdy = RegInit(false.B)
   val ic_reg_half_rdy = RegInit(false.B)
   val ic_data_out     = Wire(UInt(WORD_LEN.W))
+  val ic_reg_imem_addr = RegInit(0.U(WORD_LEN.W))
   val ic_reg_addr_out = RegInit(0.U(WORD_LEN.W))
 
-  val ic_reg_mem_addr  = RegInit(0.U(WORD_LEN.W))
-  val ic_reg_inst_addr = RegInit(0.U(WORD_LEN.W))
-  val ic_reg_half      = RegInit(0.U((WORD_LEN/2).W))
+  val ic_reg_inst       = RegInit(0.U(WORD_LEN.W))
+  val ic_reg_inst_addr  = RegInit(0.U(WORD_LEN.W))
+  val ic_reg_inst2      = RegInit(0.U(WORD_LEN.W))
+  val ic_reg_inst2_addr = RegInit(0.U(WORD_LEN.W))
 
-  val ic_next_addr = MuxCase(ic_reg_addr_out, Seq(
-    ic_addr_en -> ic_addr,
-    ((ic_reg_half_rdy || ic_reg_read_rdy) && ic_read_en2) -> (ic_reg_addr_out + 2.U(WORD_LEN.W)),
-    (ic_reg_read_rdy && ic_read_en4) -> (ic_reg_addr_out + 4.U(WORD_LEN.W)),
-  ))
-  val ic_fill_half = ic_addr_en && ic_addr(1).asBool
-  val ic_mem_addr = Mux(ic_fill_half,
-    Cat(ic_next_addr(WORD_LEN-1, 2), Fill(2, 0.U)),
-    Cat((ic_next_addr + 2.U(WORD_LEN.W))(WORD_LEN-1, 2), Fill(2, 0.U)),
-  )
-  ic_reg_half_rdy := true.B
-  ic_reg_read_rdy := !(ic_addr_en && ic_addr(1).asBool)
+  val ic_state = RegInit(IcState.Empty)
+
+  val ic_imem_addr_2 = Cat(ic_reg_imem_addr(WORD_LEN-1, 2), 1.U(1.W), 0.U(1.W))
+  val ic_imem_addr_4 = ic_reg_imem_addr + 4.U(WORD_LEN.W)
+  val ic_inst_addr_2 = Cat(ic_reg_inst_addr(WORD_LEN-1, 2), 1.U(1.W), 0.U(1.W))
+  io.imem.addr := ic_reg_imem_addr
   io.imem.en := true.B
-  io.imem.addr := ic_mem_addr
-  ic_reg_addr_out := ic_next_addr
+  ic_reg_read_rdy := true.B
+  ic_reg_half_rdy := true.B
+  ic_data_out := BUBBLE
 
-  ic_reg_half := MuxCase(ic_reg_half, Seq(
-    (!ic_reg_read_rdy || ic_read_en2 || ic_read_en4) -> io.imem.inst(WORD_LEN-1, WORD_LEN/2),
-  ))
-  ic_data_out := MuxCase(io.imem.inst, Seq(
-    (ic_reg_addr_out(1).asBool && ic_reg_read_rdy) -> Cat(io.imem.inst(WORD_LEN/2-1, 0), ic_reg_half),
-    (ic_reg_addr_out(1).asBool && !ic_reg_read_rdy) -> Cat(Fill(WORD_LEN/2, 0.U), io.imem.inst(WORD_LEN-1, WORD_LEN/2)),
-  ))
+  when (ic_addr_en) {
+    val ic_next_imem_addr = Cat(ic_addr(WORD_LEN-1, 2), Fill(2, 0.U))
+    io.imem.addr := ic_next_imem_addr
+    ic_reg_imem_addr := ic_next_imem_addr
+    ic_reg_addr_out := ic_addr
+    ic_state := Mux(ic_addr(1).asBool, IcState.EmptyHalf, IcState.Empty)
+    ic_reg_read_rdy := !ic_addr(1).asBool
+  }.otherwise {
+    switch (ic_state) {
+      is (IcState.Empty) {
+        io.imem.addr := ic_imem_addr_4
+        ic_reg_imem_addr := ic_imem_addr_4
+        ic_reg_inst := io.imem.inst
+        ic_reg_inst_addr := ic_reg_imem_addr
+        ic_data_out := io.imem.inst
+        ic_state := IcState.Full
+        when (ic_read_en2) {
+          ic_reg_addr_out := ic_imem_addr_2
+          ic_state := IcState.FullHalf
+        }.elsewhen (ic_read_en4) {
+          ic_reg_addr_out := ic_imem_addr_4
+          ic_state := IcState.Empty
+        }
+      }
+      is (IcState.EmptyHalf) {
+        io.imem.addr := ic_imem_addr_4
+        ic_reg_imem_addr := ic_imem_addr_4
+        ic_reg_inst := io.imem.inst
+        ic_reg_inst_addr := ic_reg_imem_addr
+        ic_data_out := Cat(Fill(WORD_LEN/2-1, 0.U), io.imem.inst(WORD_LEN-1, WORD_LEN/2))
+        ic_reg_addr_out := ic_imem_addr_2
+        ic_state := IcState.FullHalf
+        when (ic_read_en2) {
+          ic_reg_addr_out := ic_imem_addr_4
+          ic_state := IcState.Empty
+        }
+      }
+      is (IcState.Full) {
+        io.imem.addr := ic_reg_imem_addr
+        ic_data_out := ic_reg_inst
+        when (ic_read_en2) {
+          ic_reg_addr_out := ic_inst_addr_2
+          ic_state := IcState.FullHalf
+        }.elsewhen(ic_read_en4) {
+          ic_reg_addr_out := ic_reg_imem_addr
+          ic_state := IcState.Empty
+        }
+      }
+      is (IcState.FullHalf) {
+        io.imem.addr := ic_imem_addr_4
+        ic_reg_imem_addr := ic_imem_addr_4
+        ic_data_out := Cat(io.imem.inst(WORD_LEN/2-1, 0), ic_reg_inst(WORD_LEN-1, WORD_LEN/2))
+        ic_reg_inst2 := io.imem.inst
+        ic_reg_inst2_addr := ic_imem_addr_4
+        ic_state := IcState.Full2Half
+        when (ic_read_en2) {
+          ic_reg_inst := io.imem.inst
+          ic_reg_inst_addr := ic_imem_addr_4
+          ic_reg_addr_out := ic_imem_addr_4
+          ic_state := IcState.Full
+        }.elsewhen(ic_read_en4) {
+          ic_reg_inst := io.imem.inst
+          ic_reg_inst_addr := ic_imem_addr_4
+          ic_reg_addr_out := Cat(ic_imem_addr_4(WORD_LEN-1, 2), 1.U(1.W), 0.U(1.W))
+          ic_state := IcState.FullHalf
+        }
+      }
+      is (IcState.Full2Half) {
+        io.imem.addr := ic_reg_imem_addr
+        ic_data_out := Cat(ic_reg_inst2(WORD_LEN/2-1, 0), ic_reg_inst(WORD_LEN-1, WORD_LEN/2))
+        when (ic_read_en2) {
+          ic_reg_inst := ic_reg_inst2
+          ic_reg_inst_addr := ic_reg_inst2_addr
+          ic_reg_addr_out := ic_reg_inst2_addr
+          ic_state := IcState.Full
+        }.elsewhen(ic_read_en4) {
+          ic_reg_inst := ic_reg_inst2
+          ic_reg_inst_addr := ic_reg_inst2_addr
+          ic_reg_addr_out := Cat(ic_reg_inst2_addr(WORD_LEN-1, 2), 1.U(1.W), 0.U(1.W))
+          ic_state := IcState.FullHalf
+        }
+      }
+    }
+  }
 
   //**********************************
   // Branch Prediction Controller
@@ -333,7 +416,7 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
   if2_reg_bp_addr := if2_bp_addr
   
   printf(p"ic_reg_addr_out: ${Hexadecimal(ic_reg_addr_out)}, ic_data_out: ${Hexadecimal(ic_data_out)}\n")
-  printf(p"inst: ${Hexadecimal(if2_inst)}, ic_reg_read_rdy: ${ic_reg_read_rdy}, ic_reg_half_rdy: ${ic_reg_half_rdy}\n")
+  printf(p"inst: ${Hexadecimal(if2_inst)}, ic_reg_read_rdy: ${ic_reg_read_rdy}, ic_reg_half_rdy: ${ic_reg_half_rdy}, ic_state: ${ic_state.asUInt}\n")
 
   //**********************************
   // IF2/ID Register

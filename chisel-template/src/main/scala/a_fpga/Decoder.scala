@@ -22,6 +22,7 @@ class DMemDecoder(targetAddressRanges: Seq[(BigInt, BigInt)]) extends Module {
   io.initiator.wready := wready
 
   for(((start, length), index) <- targetAddressRanges.zipWithIndex) {
+    val bits: Int = log2Ceil(length)
     val target = io.targets(index)
 
     val raddr = WireDefault(0.U(32.W))
@@ -38,15 +39,15 @@ class DMemDecoder(targetAddressRanges: Seq[(BigInt, BigInt)]) extends Module {
     target.wdata := wdata
     target.wstrb := wstrb
 
-    when(start.U <= io.initiator.raddr && io.initiator.raddr < (start + length).U ) {
-      raddr := io.initiator.raddr - start.U
+    when (start.U(WORD_LEN-1, bits) === io.initiator.raddr(WORD_LEN-1, bits)) {
+      raddr := io.initiator.raddr(bits-1, 0)
       ren := io.initiator.ren
       rvalid := target.rvalid
       rdata := target.rdata
       rready := target.rready
     }
-    when(start.U <= io.initiator.waddr && io.initiator.waddr < (start + length).U ) {
-      waddr := io.initiator.waddr - start.U
+    when (start.U(WORD_LEN-1, bits) === io.initiator.waddr(WORD_LEN-1, bits)) {
+      waddr := io.initiator.waddr(bits-1, 0)
       wen := io.initiator.wen
       wdata := io.initiator.wdata
       wstrb := io.initiator.wstrb
@@ -68,7 +69,8 @@ class IMemDecoder(targetAddressRanges: Seq[(BigInt, BigInt)]) extends Module {
   io.initiator.valid := valid
   io.initiator.inst := inst
 
-  for(((start, length), index) <- targetAddressRanges.zipWithIndex) {
+  for (((start, length), index) <- targetAddressRanges.zipWithIndex) {
+    val bits: Int = log2Ceil(length)
     val target = io.targets(index)
 
     val addr = WireDefault(0.U(WORD_LEN.W))
@@ -77,11 +79,11 @@ class IMemDecoder(targetAddressRanges: Seq[(BigInt, BigInt)]) extends Module {
     target.addr := addr
     target.en := en
 
-    when(start.U <= io.initiator.addr && io.initiator.addr < (start + length).U ) {
-      addr := io.initiator.addr - start.U
+    when (start.U(WORD_LEN-1, bits) === io.initiator.addr(WORD_LEN-1, bits)) {
+      addr := io.initiator.addr(bits-1, 0)
       en := io.initiator.en
     }
-    when(start.U <= next_addr && next_addr < (start + length).U ) {
+    when (start.U(WORD_LEN-1, bits) === next_addr(WORD_LEN-1, bits)) {
       valid := target.valid
       inst := target.inst
     }
