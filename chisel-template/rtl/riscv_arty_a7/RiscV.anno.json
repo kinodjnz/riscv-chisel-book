@@ -3,13 +3,13 @@
     "class":"firrtl.transforms.DedupedResult",
     "original":"~RiscV|SRAM",
     "duplicate":"~RiscV|RiscV/sram1:SRAM",
-    "index":0.46153846153846156
+    "index":0.42857142857142855
   },
   {
     "class":"firrtl.transforms.DedupedResult",
     "original":"~RiscV|SRAM_1",
     "duplicate":"~RiscV|RiscV/sram2:SRAM",
-    "index":0.5384615384615384
+    "index":0.5
   },
   {
     "class":"firrtl.EmitCircuitAnnotation",
@@ -22,16 +22,12 @@
     "class":"chisel3.experimental.EnumAnnotations$EnumDefAnnotation",
     "typeName":"fpga.DCacheState",
     "definition":{
+      "Read":4,
       "Ready":0,
+      "WaitingRead":5,
       "LookupForRead":1,
-      "Read1":5,
-      "WaitingRead1":8,
       "LookupForWrite":2,
-      "Read2":6,
-      "Read2AndWaiting":7,
-      "WaitingRead2":9,
-      "RespondRead":3,
-      "Flushing":4
+      "RespondRead":3
     }
   },
   {
@@ -40,12 +36,58 @@
     "enumTypeName":"fpga.DCacheState"
   },
   {
+    "class":"chisel3.experimental.EnumAnnotations$EnumDefAnnotation",
+    "typeName":"fpga.CacheDataOrInst",
+    "definition":{
+      "Data":0,
+      "Inst":1
+    }
+  },
+  {
+    "class":"chisel3.experimental.EnumAnnotations$EnumComponentAnnotation",
+    "target":"RiscV.Memory.reg_dram_di",
+    "enumTypeName":"fpga.CacheDataOrInst"
+  },
+  {
+    "class":"chisel3.experimental.EnumAnnotations$EnumDefAnnotation",
+    "typeName":"fpga.DramState",
+    "definition":{
+      "Ready":0,
+      "Write2":1,
+      "Read2AfterReceiving1":3,
+      "WaitingRead1":4,
+      "Read2":2,
+      "WaitingRead2":5
+    }
+  },
+  {
+    "class":"chisel3.experimental.EnumAnnotations$EnumComponentAnnotation",
+    "target":"RiscV.Memory.reg_dram_state",
+    "enumTypeName":"fpga.DramState"
+  },
+  {
+    "class":"chisel3.experimental.EnumAnnotations$EnumDefAnnotation",
+    "typeName":"fpga.IcState",
+    "definition":{
+      "Full2Half":4,
+      "Empty":0,
+      "EmptyHalf":1,
+      "Full":2,
+      "FullHalf":3
+    }
+  },
+  {
+    "class":"chisel3.experimental.EnumAnnotations$EnumComponentAnnotation",
+    "target":"RiscV.Core.ic_state",
+    "enumTypeName":"fpga.IcState"
+  },
+  {
     "class":"firrtl.transforms.BlackBoxTargetDirAnno",
     "targetDir":"rtl/riscv_arty_a7"
   },
   {
     "class":"firrtl.annotations.MemoryFileInlineAnnotation",
-    "target":"~RiscV|RiscV>imem",
+    "target":"~RiscV|BootRom>imem",
     "filename":"bootrom.hex",
     "hexOrBinary":"h"
   },
