@@ -73,6 +73,7 @@ object Consts {
   val MEN_X   = 0.U(MEN_LEN.W)
   val MEN_S   = 1.U(MEN_LEN.W) // スカラ命令用
   val MEN_V   = 2.U(MEN_LEN.W) // ベクトル命令用
+  val MEN_FENCE = 3.U(MEN_LEN.W)
 
   val REN_LEN = 2
   val REN_X   = 0.U(REN_LEN.W)

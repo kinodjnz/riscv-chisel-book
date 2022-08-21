@@ -73,6 +73,9 @@ object Instructions {
   val ECALL   = BitPat("b00000000000000000000000001110011")
   val MRET    = BitPat("b00110000001000000000000001110011")
 
+  // FENCE.I
+  val FENCE_I = BitPat("b00000000000000000001000000001111")
+
   // ベクトル
   val VSETVLI = BitPat("b?????????????????111?????1010111")
   val VLE     = BitPat("b000000100000?????????????0000111")

@@ -98,8 +98,7 @@ class RiscV(clockHz: Int) extends Module {
   core.io.imem <> imem_decoder.io.initiator
   core.io.dmem <> dmem_decoder.io.initiator
 
-  memory.io.imem.en := false.B
-  memory.io.imem.addr := 0.U
+  core.io.icache_control <> memory.io.icache_control
 
   // dram
   io.dram <> memory.io.dramPort

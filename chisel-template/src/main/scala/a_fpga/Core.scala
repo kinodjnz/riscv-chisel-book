@@ -42,14 +42,15 @@ object IcState extends ChiselEnum {
   val Empty = Value     // reg: empty, reg2: empty, imem: this
   val EmptyHalf = Value // reg: empty, reg2: empty, imem: this, half address
   val Full = Value      // reg: full,  reg2: empty, imem: next
-  val FullHalf = Value  // reg: full,  reg2: empty, imem: next, half address
   val Full2Half = Value // reg: full,  reg2: full,  imem: next, half address
+  val FullHalf = Value  // reg: full,  reg2: empty, imem: next, half address
 }
 
 class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: String = null) extends Module {
   val io = IO(
     new Bundle {
       val imem = Flipped(new ImemPortIo())
+      val icache_control = Flipped(new ICacheControl())
       val dmem = Flipped(new DmemPortIo())
       val mtimer_mem = new DmemPortIo()
       val intr = Input(Bool())
@@ -235,6 +236,9 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
     ic_reg_addr_out := ic_addr
     ic_state := Mux(ic_addr(1).asBool, IcState.EmptyHalf, IcState.Empty)
     ic_reg_read_rdy := !ic_addr(1).asBool
+  }.elsewhen (ic_state =/= IcState.Full && ic_state =/= IcState.Full2Half && !io.imem.valid) {
+    ic_reg_read_rdy := ic_reg_read_rdy
+    ic_reg_half_rdy := ic_reg_half_rdy
   }.otherwise {
     switch (ic_state) {
       is (IcState.Empty) {
@@ -416,7 +420,7 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
   if2_reg_bp_addr := if2_bp_addr
   
   printf(p"ic_reg_addr_out: ${Hexadecimal(ic_reg_addr_out)}, ic_data_out: ${Hexadecimal(ic_data_out)}\n")
-  printf(p"inst: ${Hexadecimal(if2_inst)}, ic_reg_read_rdy: ${ic_reg_read_rdy}, ic_reg_half_rdy: ${ic_reg_half_rdy}, ic_state: ${ic_state.asUInt}\n")
+  printf(p"inst: ${Hexadecimal(if2_inst)}, ic_reg_read_rdy: ${ic_reg_read_rdy}, ic_state: ${ic_state.asUInt}\n")
 
   //**********************************
   // IF2/ID Register
@@ -545,6 +549,7 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
       CSRRCI-> List(ALU_COPY1, OP1_IMZ, OP2_X  , MEN_X, REN_S, WB_CSR, WBA_RD, CSR_C, MW_X),
       ECALL -> List(ALU_X    , OP1_X  , OP2_X  , MEN_X, REN_X, WB_X  , WBA_RD, CSR_E, MW_X),
       MRET  -> List(ALU_X    , OP1_X  , OP2_X  , MEN_X, REN_X, WB_X  , WBA_RD, CSR_R, MW_X),
+      FENCE_I -> List(ALU_X  , OP1_X  , OP2_X  , MEN_FENCE, REN_X, WB_X  , WBA_RD, CSR_X, MW_X),
       C_ILL      -> List(ALU_X    , OP1_C_RS1 , OP2_C_RS2  , MEN_X, REN_X, WB_X  , WBA_C  , CSR_X, MW_X),
       C_ADDI4SPN -> List(ALU_ADD  , OP1_C_SP  , OP2_C_IMIW , MEN_X, REN_S, WB_ALU, WBA_CP2, CSR_X, MW_X),
       C_ADDI16SP -> List(ALU_ADD  , OP1_C_RS1 , OP2_C_IMI16, MEN_X, REN_S, WB_ALU, WBA_C  , CSR_X, MW_X),
@@ -1109,7 +1114,7 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
   io.dmem.wen   := io.dmem.wready && (mem_mem_wen === MEN_S)
   io.dmem.wstrb := mem_reg_mem_wstrb
   io.dmem.wdata := (mem_reg_rs2_data << (8.U * mem_reg_alu_out(1, 0)))(WORD_LEN-1, 0)
-  mem_stall := ((mem_wb_sel === WB_MEM) && (!io.dmem.rvalid || !io.dmem.rready || mem_stall_delay)) || ((mem_mem_wen === MEN_S) && !io.dmem.wready)
+  mem_stall := ((mem_wb_sel === WB_MEM) && (!io.dmem.rvalid || !io.dmem.rready || mem_stall_delay)) || ((mem_mem_wen === MEN_S) && !io.dmem.wready) || ((mem_mem_wen === MEN_FENCE) && io.icache_control.busy)
   mem_stall_delay := (mem_wb_sel === WB_MEM) && io.dmem.rvalid && !mem_stall // 読めた直後はストール
 
   // CSR
@@ -1195,6 +1200,8 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
   }.otherwise {
     mem_reg_is_br   := false.B
   }
+
+  io.icache_control.invalidate := (mem_mem_wen === MEN_FENCE)
 
   def signExtend(value: UInt, w: Int) = {
       Fill(WORD_LEN - w, value(w - 1)) ## value(w - 1, 0)

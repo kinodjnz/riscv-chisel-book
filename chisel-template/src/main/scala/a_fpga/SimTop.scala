@@ -37,8 +37,7 @@ class SimTop(memoryPath: String, bpTagInitPath: String) extends Module {
   core.io.imem <> imem_decoder.io.initiator
   core.io.dmem <> dmem_decoder.io.initiator
 
-  memory.io.imem.en := false.B
-  memory.io.imem.addr := 0.U
+  core.io.icache_control <> memory.io.icache_control
 
   val dram = Module(new MockDram(null, dmemSizeInBytes))
   memory.io.dramPort <> dram.io.dram
