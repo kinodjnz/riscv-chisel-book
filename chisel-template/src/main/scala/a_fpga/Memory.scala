@@ -41,7 +41,9 @@ object ICacheState extends ChiselEnum {
   val Lookup = Value
   val Read = Value
   val WaitingSnoop = Value
+  val RespondSnoop = Value
   val WaitingRead = Value
+  val RespondRead = Value
 }
 
 object DCacheState extends ChiselEnum {
@@ -246,6 +248,9 @@ class Memory(imemSizeInBytes: Int = 16384) extends Module {
   val i_reg_valid = RegInit(false.B)
   val i_reg_req_addr = RegInit(0.U.asTypeOf(new ICacheAddrBundle()))
   val i_reg_next_addr = RegInit(0.U.asTypeOf(new ICacheAddrBundle()))
+  val i_reg_snoop_inst = RegInit(0.U(WORD_LEN.W))
+  val i_reg_snoop_inst_valid = RegInit(false.B)
+  val i_reg_read_inst = RegInit(0.U(WORD_LEN.W))
 
   val dcache_snoop_en = Wire(Bool())
   val dcache_snoop_addr = Wire(new DCacheAddrBundle())
@@ -278,7 +283,9 @@ class Memory(imemSizeInBytes: Int = 16384) extends Module {
     }
     is (ICacheState.Lookup) {
       when (i_reg_valid && i_reg_tag(0) === i_reg_req_addr.tag) {
+        //i_reg_read_inst := (i_reg_line >> Cat(i_reg_req_addr.line_off(CACHE_LINE_BITS-1, 2), 0.U(5.W)))(WORD_LEN-1, 0)
         io.imem.inst := (i_reg_line >> Cat(i_reg_req_addr.line_off(CACHE_LINE_BITS-1, 2), 0.U(5.W)))(WORD_LEN-1, 0)
+        //io.imem.inst := i_reg_read_inst
         io.imem.valid := true.B
 
         io.icache_control.busy := false.B
@@ -309,25 +316,15 @@ class Memory(imemSizeInBytes: Int = 16384) extends Module {
         }
         is (DCacheSnoopStatus.Found) {
           val line = dcache_snoop_line
-          io.imem.inst := (line >> Cat(i_reg_next_addr.line_off(CACHE_LINE_BITS-1, 2), 0.U(5.W)))(WORD_LEN-1, 0)
-          when (i_reg_req_addr.tag(ICACHE_TAG_BITS-5, 0) === i_reg_next_addr.tag(ICACHE_TAG_BITS-5, 0) &&
-              i_reg_req_addr.index === i_reg_next_addr.index) {
-            io.imem.valid := true.B
-          }
+          i_reg_snoop_inst := (line >> Cat(i_reg_next_addr.line_off(CACHE_LINE_BITS-1, 2), 0.U(5.W)))(WORD_LEN-1, 0)
+          i_reg_snoop_inst_valid := (
+            i_reg_req_addr.tag(ICACHE_TAG_BITS-5, 0) === i_reg_next_addr.tag(ICACHE_TAG_BITS-5, 0) &&
+            i_reg_req_addr.index === i_reg_next_addr.index
+          )
           i_tag_array.write(i_reg_req_addr.index, VecInit(i_reg_req_addr.tag))
           i_cache_array.write(i_reg_req_addr.index, line)
           i_valid_array(i_reg_req_addr.index) := true.B
-
-          val req_addr = io.imem.addr.asTypeOf(new ICacheAddrBundle())
-          i_reg_req_addr := req_addr
-          when (io.imem.en) {
-            i_reg_tag := i_tag_array.read(req_addr.index)
-            i_reg_line := i_cache_array.read(req_addr.index)
-            i_reg_valid := i_valid_array(req_addr.index)
-            icache_state := ICacheState.Lookup
-          }.otherwise {
-            icache_state := ICacheState.Ready
-          }
+          icache_state := ICacheState.RespondSnoop
         }
         is (DCacheSnoopStatus.NotFound) {
           when (!dram_i_busy) {
@@ -338,6 +335,22 @@ class Memory(imemSizeInBytes: Int = 16384) extends Module {
             icache_state := ICacheState.Read
           }
         }
+      }
+    }
+    is (ICacheState.RespondSnoop) {
+      io.imem.inst := i_reg_snoop_inst
+      io.imem.valid := i_reg_snoop_inst_valid
+      i_reg_snoop_inst_valid := false.B
+
+      val req_addr = io.imem.addr.asTypeOf(new ICacheAddrBundle())
+      i_reg_req_addr := req_addr
+      when (io.imem.en) {
+        i_reg_tag := i_tag_array.read(req_addr.index)
+        i_reg_line := i_cache_array.read(req_addr.index)
+        i_reg_valid := i_valid_array(req_addr.index)
+        icache_state := ICacheState.Lookup
+      }.otherwise {
+        icache_state := ICacheState.Ready
       }
     }
     is (ICacheState.Read) {
