@@ -22,18 +22,49 @@
     "class":"chisel3.experimental.EnumAnnotations$EnumDefAnnotation",
     "typeName":"fpga.DCacheState",
     "definition":{
-      "Read":4,
+      "Read":5,
       "Ready":0,
-      "WaitingRead":5,
-      "LookupForRead":1,
-      "LookupForWrite":2,
-      "RespondRead":3
+      "WaitingRead":6,
+      "LookupForRead":2,
+      "LookupForWrite":3,
+      "RespondRead":4,
+      "SnoopRead":1
     }
   },
   {
     "class":"chisel3.experimental.EnumAnnotations$EnumComponentAnnotation",
     "target":"RiscV.Memory.dcache_state",
     "enumTypeName":"fpga.DCacheState"
+  },
+  {
+    "class":"chisel3.experimental.EnumAnnotations$EnumDefAnnotation",
+    "typeName":"fpga.DCacheSnoopStatus",
+    "definition":{
+      "Busy":0,
+      "Found":1,
+      "NotFound":2
+    }
+  },
+  {
+    "class":"chisel3.experimental.EnumAnnotations$EnumComponentAnnotation",
+    "target":"RiscV.Memory.dcache_snoop_status",
+    "enumTypeName":"fpga.DCacheSnoopStatus"
+  },
+  {
+    "class":"chisel3.experimental.EnumAnnotations$EnumDefAnnotation",
+    "typeName":"fpga.ICacheState",
+    "definition":{
+      "Read":2,
+      "Lookup":1,
+      "Ready":0,
+      "WaitingRead":4,
+      "WaitingSnoop":3
+    }
+  },
+  {
+    "class":"chisel3.experimental.EnumAnnotations$EnumComponentAnnotation",
+    "target":"RiscV.Memory.icache_state",
+    "enumTypeName":"fpga.ICacheState"
   },
   {
     "class":"chisel3.experimental.EnumAnnotations$EnumDefAnnotation",
@@ -69,11 +100,11 @@
     "class":"chisel3.experimental.EnumAnnotations$EnumDefAnnotation",
     "typeName":"fpga.IcState",
     "definition":{
-      "Full2Half":4,
+      "Full2Half":3,
       "Empty":0,
       "EmptyHalf":1,
       "Full":2,
-      "FullHalf":3
+      "FullHalf":4
     }
   },
   {
