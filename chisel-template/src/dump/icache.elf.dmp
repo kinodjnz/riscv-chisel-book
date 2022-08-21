@@ -1,0 +1,138 @@
+
+icache:     file format elf32-littleriscv
+
+
+Disassembly of section .text:
+
+00000000 <_start>:
+   0:	20002137          	lui	sp,0x20002
+   4:	040000ef          	jal	ra,44 <main>
+   8:	00050193          	mv	gp,a0
+   c:	05d00893          	li	a7,93
+  10:	00000013          	nop
+  14:	00000013          	nop
+  18:	00000013          	nop
+  1c:	00000013          	nop
+  20:	00000073          	ecall
+
+00000024 <func1>:
+  24:	00400193          	li	gp,4
+  28:	00008067          	ret
+
+0000002c <func2>:
+  2c:	fff18193          	addi	gp,gp,-1
+  30:	00008067          	ret
+
+00000034 <func3>:
+  34:	ffe18193          	addi	gp,gp,-2
+  38:	00008067          	ret
+
+0000003c <func4>:
+  3c:	00c00193          	li	gp,12
+  40:	00008067          	ret
+
+Disassembly of section .text.startup:
+
+00000044 <main>:
+  44:	ffc10113          	addi	sp,sp,-4 # 20001ffc <main+0x20001fb8>
+  48:	00112023          	sw	ra,0(sp)
+  4c:	00300193          	li	gp,3
+  50:	20000437          	lui	s0,0x20000
+  54:	200014b7          	lui	s1,0x20001
+  58:	20002937          	lui	s2,0x20002
+  5c:	00000397          	auipc	t2,0x0
+  60:	fd838393          	addi	t2,t2,-40 # 34 <func3>
+  64:	0003a283          	lw	t0,0(t2)
+  68:	00542023          	sw	t0,0(s0) # 20000000 <main+0x1fffffbc>
+  6c:	0043a283          	lw	t0,4(t2)
+  70:	00542223          	sw	t0,4(s0)
+  74:	00000397          	auipc	t2,0x0
+  78:	fb038393          	addi	t2,t2,-80 # 24 <func1>
+  7c:	0003a283          	lw	t0,0(t2)
+  80:	0054a023          	sw	t0,0(s1) # 20001000 <main+0x20000fbc>
+  84:	0043a283          	lw	t0,4(t2)
+  88:	0054a223          	sw	t0,4(s1)
+  8c:	0000100f          	fence.i
+  90:	000480e7          	jalr	s1
+  94:	00000397          	auipc	t2,0x0
+  98:	f9838393          	addi	t2,t2,-104 # 2c <func2>
+  9c:	0003a283          	lw	t0,0(t2)
+  a0:	0054a023          	sw	t0,0(s1)
+  a4:	0043a283          	lw	t0,4(t2)
+  a8:	0054a223          	sw	t0,4(s1)
+  ac:	0000100f          	fence.i
+  b0:	000480e7          	jalr	s1
+  b4:	00000397          	auipc	t2,0x0
+  b8:	f8838393          	addi	t2,t2,-120 # 3c <func4>
+  bc:	0003a283          	lw	t0,0(t2)
+  c0:	00592023          	sw	t0,0(s2) # 20002000 <main+0x20001fbc>
+  c4:	0043a283          	lw	t0,4(t2)
+  c8:	00592223          	sw	t0,4(s2)
+  cc:	0000100f          	fence.i
+  d0:	000400e7          	jalr	s0
+  d4:	00018513          	mv	a0,gp
+  d8:	00012083          	lw	ra,0(sp)
+  dc:	00410113          	addi	sp,sp,4
+  e0:	00008067          	ret
+
+Disassembly of section .comment:
+
+00000000 <.comment>:
+   0:	3a434347          	fmsub.d	ft6,ft6,ft4,ft7,rmm
+   4:	2820                	vmsge.vx	v16,v0,zero,v0.t
+   6:	2029                	.2byte	0x2029
+   8:	3131                	.2byte	0x3131
+   a:	312e                	.2byte	0x312e
+   c:	302e                	.2byte	0x302e
+	...
+
+Disassembly of section .riscv.attributes:
+
+00000000 <.riscv.attributes>:
+   0:	7b41                	vmsge.vx	v22,v0,zero,v0.t
+   2:	0000                	vmsge.vx	v0,v0,zero,v0.t
+   4:	7200                	vmsge.vx	v4,v0,zero,v0.t
+   6:	7369                	.2byte	0x7369
+   8:	01007663          	bgeu	zero,a6,14 <_start+0x14>
+   c:	0071                	.2byte	0x71
+   e:	0000                	vmsge.vx	v0,v0,zero,v0.t
+  10:	1004                	.2byte	0x1004
+  12:	7205                	.2byte	0x7205
+  14:	3376                	.2byte	0x3376
+  16:	6932                	.2byte	0x6932
+  18:	7032                	.2byte	0x7032
+  1a:	5f30                	.2byte	0x5f30
+  1c:	3266                	.2byte	0x3266
+  1e:	3070                	.2byte	0x3070
+  20:	645f 7032 5f30      	.byte	0x5f, 0x64, 0x32, 0x70, 0x30, 0x5f
+  26:	3176                	.2byte	0x3176
+  28:	3070                	.2byte	0x3070
+  2a:	7a5f 6576 3233      	.byte	0x5f, 0x7a, 0x76, 0x65, 0x33, 0x32
+  30:	3166                	.2byte	0x3166
+  32:	3070                	.2byte	0x3070
+  34:	7a5f 6576 3233      	.byte	0x5f, 0x7a, 0x76, 0x65, 0x33, 0x32
+  3a:	3178                	.2byte	0x3178
+  3c:	3070                	.2byte	0x3070
+  3e:	7a5f 6576 3436      	.byte	0x5f, 0x7a, 0x76, 0x65, 0x36, 0x34
+  44:	3164                	.2byte	0x3164
+  46:	3070                	.2byte	0x3070
+  48:	7a5f 6576 3436      	.byte	0x5f, 0x7a, 0x76, 0x65, 0x36, 0x34
+  4e:	3166                	.2byte	0x3166
+  50:	3070                	.2byte	0x3070
+  52:	7a5f 6576 3436      	.byte	0x5f, 0x7a, 0x76, 0x65, 0x36, 0x34
+  58:	3178                	.2byte	0x3178
+  5a:	3070                	.2byte	0x3070
+  5c:	7a5f 6c76 3231      	.byte	0x5f, 0x7a, 0x76, 0x6c, 0x31, 0x32
+  62:	6238                	.2byte	0x6238
+  64:	7031                	.2byte	0x7031
+  66:	5f30                	.2byte	0x5f30
+  68:	767a                	.2byte	0x767a
+  6a:	336c                	.2byte	0x336c
+  6c:	6232                	.2byte	0x6232
+  6e:	7031                	.2byte	0x7031
+  70:	5f30                	.2byte	0x5f30
+  72:	767a                	.2byte	0x767a
+  74:	366c                	.2byte	0x366c
+  76:	6234                	.2byte	0x6234
+  78:	7031                	.2byte	0x7031
+  7a:	0030                	.2byte	0x30
