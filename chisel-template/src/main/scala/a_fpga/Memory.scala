@@ -303,8 +303,6 @@ class Memory(imemSizeInBytes: Int = 16384) extends Module {
           icache_state := ICacheState.Ready
         }
       }.otherwise {
-        dcache_snoop_en := true.B
-        dcache_snoop_addr := i_reg_req_addr.asUInt.asTypeOf(new DCacheAddrBundle())
         icache_state := ICacheState.WaitingSnoop
       }
     }
