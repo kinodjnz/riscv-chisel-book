@@ -81,7 +81,6 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
 
   // IF/ID State
   val id_reg_pc             = RegInit(0.U(WORD_LEN.W))
-  val id_reg_pc_cache       = RegInit(0.U(WORD_LEN.W))
   val id_reg_inst           = RegInit(0.U(WORD_LEN.W))
   val id_reg_stall          = RegInit(false.B)
   val id_reg_is_bp_pos      = RegInit(false.B)
@@ -185,11 +184,11 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
   val wb_reg_is_valid_inst  = RegInit(false.B)
 
   val if2_reg_is_bp_pos  = RegInit(false.B)
-  val if2_reg_bp_addr    = RegInit(0.U(WORD_LEN.W))
+  //val if2_reg_bp_addr    = RegInit(0.U(WORD_LEN.W))
   val if2_is_uncond_br   = Wire(Bool())
-  val if2_uncond_br_addr = Wire(UInt(WORD_LEN.W))
+  //val if2_uncond_br_addr = Wire(UInt(WORD_LEN.W))
   val if2_reg_is_uncond_br   = RegInit(false.B)
-  val if2_reg_uncond_br_addr = RegInit(0.U(WORD_LEN.W))
+  //val if2_reg_uncond_br_addr = RegInit(0.U(WORD_LEN.W))
   val id_stall           = Wire(Bool())
   val ex1_stall          = Wire(Bool())
   val mem_stall          = Wire(Bool())
@@ -199,6 +198,21 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
   val ex3_reg_trap_pc    = RegInit(0.U(WORD_LEN.W))
   val mem_reg_is_br      = RegInit(false.B)
   val mem_reg_br_addr    = RegInit(0.U(WORD_LEN.W))
+
+  val if3_reg_pc = RegInit(0.U(WORD_LEN.W))
+  val if3_reg_inst = RegInit(0.U(WORD_LEN.W))
+  val if3_reg_is_cond_br_w = RegInit(false.B)
+  val if3_reg_is_jal_w = RegInit(false.B)
+  val if3_reg_is_jal = RegInit(false.B)
+  val if3_reg_is_bp_br = RegInit(false.B)
+  val if3_reg_bp_br_pos = RegInit(false.B)
+  val if3_reg_bp_br_hit = RegInit(false.B)
+  val if3_reg_bp_br_addr = RegInit(0.U(WORD_LEN.W))
+  val if3_reg_is_cond_br = RegInit(false.B)
+  val if3_reg_is_bp_pos = RegInit(false.B)
+  val if3_reg_is_uncond_br = RegInit(false.B)
+  val if3_reg_bp_addr = RegInit(0.U(WORD_LEN.W))
+  val if3_reg_uncond_br_addr = RegInit(0.U(WORD_LEN.W))
 
   //**********************************
   // Instruction Cache Controller
@@ -337,11 +351,11 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
   val if1_jump_addr = MuxCase(0.U(WORD_LEN.W), Seq(
     mem_reg_is_br           -> mem_reg_br_addr,
     ex3_reg_is_br           -> ex3_reg_br_target,
-    if2_reg_is_bp_pos       -> if2_reg_bp_addr,
-    if2_reg_is_uncond_br    -> if2_reg_uncond_br_addr,
+    if3_reg_is_bp_pos       -> if3_reg_bp_addr,
+    if3_reg_is_uncond_br    -> if3_reg_uncond_br_addr,
     if1_reg_first           -> startAddress.U,
   ))
-  val if1_is_jump = mem_reg_is_br || ex3_reg_is_br || if2_reg_is_bp_pos || if2_reg_is_uncond_br || if1_reg_first
+  val if1_is_jump = mem_reg_is_br || ex3_reg_is_br || if3_reg_is_bp_pos || if3_reg_is_uncond_br || if1_reg_first
 
   ic_addr_en  := if1_is_jump
   ic_addr     := if1_jump_addr
@@ -374,8 +388,8 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
     ex3_reg_is_br     -> BUBBLE,
     mem_reg_is_br     -> BUBBLE,
     id_reg_stall      -> if2_reg_inst,
-    if2_reg_is_bp_pos -> BUBBLE,
-    if2_reg_is_uncond_br -> BUBBLE,
+    if3_reg_is_bp_pos -> BUBBLE,
+    if3_reg_is_uncond_br -> BUBBLE,
     ic_reg_read_rdy   -> ic_data_out,
     (ic_reg_half_rdy && is_half_inst) -> ic_data_out,
   ))
@@ -388,51 +402,72 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
   val if2_is_jal = if2_is_jal_w || if2_is_jal_c
   val if2_is_jalr = ((if2_inst(6, 0) === 0x67.U) || (if2_inst(15, 13) === 4.U && if2_inst(6, 0) === 2.U))
   val if2_is_bp_br = if2_is_cond_br || if2_is_jalr
-  val if2_w_imm_b = Cat(Fill(20, if2_inst(31)), if2_inst(7), if2_inst(30, 25), if2_inst(11, 8), 0.U(1.W))
-  val if2_c_imm_b = Cat(Fill(24, if2_inst(12)), if2_inst(6, 5), if2_inst(2), if2_inst(11, 10), if2_inst(4, 3), 0.U(1.W))
-  val if2_w_imm_j = Cat(Fill(12, if2_inst(31)), if2_inst(19, 12), if2_inst(20), if2_inst(30, 21), 0.U(1.W))
-  val if2_c_imm_j = Cat(Fill(21, if2_inst(12)), if2_inst(8), if2_inst(10, 9), if2_inst(6), if2_inst(7), if2_inst(2), if2_inst(11), if2_inst(5, 3), 0.U(1.W))
-  val if2_imm_b_sext = Mux(if2_is_cond_br_w, if2_w_imm_b, if2_c_imm_b)
-  val if2_imm_j_sext = Mux(if2_is_jal_w, if2_w_imm_j, if2_c_imm_j)
+
   if2_is_uncond_br := Mux(id_reg_stall,
     if2_reg_is_uncond_br,
     if2_is_jal,
   )
   if2_reg_is_uncond_br := if2_is_uncond_br
-  val if2_jal_addr = if2_pc + if2_imm_j_sext
-  if2_uncond_br_addr := MuxCase(DontCare, Seq(
-    id_reg_stall -> if2_reg_uncond_br_addr,
-    if2_is_jal   -> if2_jal_addr,
-  ))
-  if2_reg_uncond_br_addr := if2_uncond_br_addr
   val if2_is_bp_pos = Mux(id_reg_stall,
     if2_reg_is_bp_pos,
     (if2_is_bp_br && bp.io.lu.br_pos) ||
-      (if2_is_cond_br && !bp.io.lu.br_hit && if2_imm_b_sext(31).asBool()),
+      (if2_is_cond_br && !bp.io.lu.br_hit /*&& if2_imm_b_sext(31).asBool()*/),
   )
   if2_reg_is_bp_pos := if2_is_bp_pos
-  val if2_cond_br_addr = if2_pc + if2_imm_b_sext
-  val if2_bp_addr = MuxCase(DontCare, Seq(
-    id_reg_stall                         -> if2_reg_bp_addr,
-    (if2_is_bp_br && bp.io.lu.br_pos)    -> bp.io.lu.br_addr,
-    (!bp.io.lu.br_hit && if2_is_cond_br) -> if2_cond_br_addr,
+
+  if3_reg_pc := Mux(id_reg_stall, if3_reg_pc, if2_pc)
+  if3_reg_inst := Mux(id_reg_stall, if3_reg_inst, if2_inst)
+  if3_reg_is_cond_br_w := if2_is_cond_br_w
+  if3_reg_is_jal_w := if2_is_jal_w
+  if3_reg_is_jal := if2_is_jal
+  if3_reg_is_bp_br := if2_is_bp_br
+  if3_reg_bp_br_pos := bp.io.lu.br_pos
+  if3_reg_bp_br_hit := bp.io.lu.br_hit
+  if3_reg_bp_br_addr := bp.io.lu.br_addr
+  if3_reg_is_cond_br := if2_is_cond_br
+  if3_reg_is_bp_pos := if2_reg_is_bp_pos
+  if3_reg_is_uncond_br := if2_reg_is_uncond_br
+
+  val if3_w_imm_b = Cat(Fill(20, if3_reg_inst(31)), if3_reg_inst(7), if3_reg_inst(30, 25), if3_reg_inst(11, 8), 0.U(1.W))
+  val if3_c_imm_b = Cat(Fill(24, if3_reg_inst(12)), if3_reg_inst(6, 5), if3_reg_inst(2), if3_reg_inst(11, 10), if3_reg_inst(4, 3), 0.U(1.W))
+  val if3_w_imm_j = Cat(Fill(12, if3_reg_inst(31)), if3_reg_inst(19, 12), if3_reg_inst(20), if3_reg_inst(30, 21), 0.U(1.W))
+  val if3_c_imm_j = Cat(Fill(21, if3_reg_inst(12)), if3_reg_inst(8), if3_reg_inst(10, 9), if3_reg_inst(6), if3_reg_inst(7), if3_reg_inst(2), if3_reg_inst(11), if3_reg_inst(5, 3), 0.U(1.W))
+  val if3_imm_b_sext = Mux(if3_reg_is_cond_br_w, if3_w_imm_b, if3_c_imm_b)
+  val if3_imm_j_sext = Mux(if3_reg_is_jal_w, if3_w_imm_j, if3_c_imm_j)
+  val if3_jal_addr = if3_reg_pc + if3_imm_j_sext
+  val if3_uncond_br_addr = MuxCase(DontCare, Seq(
+    id_reg_stall -> if3_reg_uncond_br_addr,
+    if3_reg_is_jal -> if3_jal_addr,
   ))
-  if2_reg_bp_addr := if2_bp_addr
-  
+  if3_reg_uncond_br_addr := if3_uncond_br_addr
+  val if3_cond_br_addr = if3_reg_pc + if3_imm_b_sext
+  val if3_bp_addr = MuxCase(DontCare, Seq(
+    id_reg_stall -> if3_reg_bp_addr,
+    (if3_reg_is_bp_br && if3_reg_bp_br_pos)    -> if3_reg_bp_br_addr,
+    (!if3_reg_bp_br_hit && if3_reg_is_cond_br) -> if3_cond_br_addr,
+  ))
+  if3_reg_bp_addr := if3_bp_addr
+
   printf(p"ic_reg_addr_out: ${Hexadecimal(ic_reg_addr_out)}, ic_data_out: ${Hexadecimal(ic_data_out)}\n")
   printf(p"inst: ${Hexadecimal(if2_inst)}, ic_reg_read_rdy: ${ic_reg_read_rdy}, ic_state: ${ic_state.asUInt}\n")
 
   //**********************************
   // IF2/ID Register
-  id_reg_pc   := MuxCase(if2_pc, Seq(
+  id_reg_pc   := MuxCase(if3_reg_pc, Seq(
     id_reg_stall -> id_reg_pc,
   ))
-  id_reg_pc_cache  := if2_pc
-  id_reg_inst      := if2_inst
-  id_reg_is_bp_pos := MuxCase(if2_is_bp_pos, Seq(
+  id_reg_inst := MuxCase(if3_reg_inst, Seq(
+	  // 優先順位重要！ジャンプ成立とストールが同時発生した場合、ジャンプ処理を優先
+    ex3_reg_is_br     -> BUBBLE,
+    mem_reg_is_br     -> BUBBLE,
+    id_reg_stall      -> id_reg_inst,
+    if3_reg_is_bp_pos -> BUBBLE,
+    if3_reg_is_uncond_br -> BUBBLE,
+  ))
+  id_reg_is_bp_pos := MuxCase(if2_reg_is_bp_pos, Seq( // prior register value
     id_reg_stall -> id_reg_is_bp_pos
   ))
-  id_reg_bp_addr   := MuxCase(if2_bp_addr, Seq(
+  id_reg_bp_addr   := MuxCase(if3_bp_addr, Seq(
     id_reg_stall -> id_reg_bp_addr
   ))
 
@@ -1011,7 +1046,7 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
 
   //**********************************
   // EX2/EX3 register
-  ex3_reg_bp_en            := !mem_reg_is_br && !ex3_reg_is_br
+  ex3_reg_bp_en            := ex2_reg_is_valid_inst && !mem_reg_is_br && !ex3_reg_is_br
   ex3_reg_pc               := ex2_reg_pc
   ex3_reg_is_j             := ex2_reg_is_j
   ex3_reg_is_cond_br       := ex2_is_cond_br
@@ -1270,8 +1305,10 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
   do_exit_delay := do_exit
   io.exit := do_exit_delay
   //printf(p"if1_reg_pc       : 0x${Hexadecimal(if1_reg_pc)}\n")
-  printf(p"if2_reg_pc       : 0x${Hexadecimal(if2_reg_pc)}\n")
+  printf(p"if2_pc           : 0x${Hexadecimal(if2_pc)}\n")
   printf(p"if2_inst         : 0x${Hexadecimal(if2_inst)}\n")
+  printf(p"if3_reg_pc       : 0x${Hexadecimal(if3_reg_pc)}\n")
+  printf(p"if3_reg_inst     : 0x${Hexadecimal(if3_reg_inst)}\n")
   printf(p"bp.io.lu.br_hit  : 0x${Hexadecimal(bp.io.lu.br_hit)}\n")
   printf(p"bp.io.lu.br_pos  : 0x${Hexadecimal(bp.io.lu.br_pos)}\n")
   printf(p"id_reg_pc        : 0x${Hexadecimal(id_reg_pc)}\n")
@@ -1282,12 +1319,14 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
   printf(p"id_rs2_data      : 0x${Hexadecimal(id_rs2_data)}\n")
   printf(p"id_wb_addr       : 0x${Hexadecimal(id_wb_addr)}\n")
   printf(p"ex1_reg_pc       : 0x${Hexadecimal(ex1_reg_pc)}\n")
+  printf(p"ex1_reg_is_valid_: 0x${Hexadecimal(ex1_reg_is_valid_inst)}\n")
   printf(p"ex1_stall        : 0x${Hexadecimal(ex1_stall)}\n")
   printf(p"ex1_op1_data     : 0x${Hexadecimal(ex1_op1_data)}\n")
   printf(p"ex1_op2_data     : 0x${Hexadecimal(ex1_op2_data)}\n")
   // printf(p"ex1_reg_op1_sel   : 0x${Hexadecimal(ex1_reg_op1_sel)}\n")
   // printf(p"ex1_reg_rs1_addr  : 0x${Hexadecimal(ex1_reg_rs1_addr)}\n")
   printf(p"ex2_reg_pc       : 0x${Hexadecimal(ex2_reg_pc)}\n")
+  printf(p"ex2_reg_is_valid_: 0x${Hexadecimal(ex2_reg_is_valid_inst)}\n")
   printf(p"ex2_reg_op1_data : 0x${Hexadecimal(ex2_reg_op1_data)}\n")
   printf(p"ex2_reg_op2_data : 0x${Hexadecimal(ex2_reg_op2_data)}\n")
   printf(p"ex2_alu_out      : 0x${Hexadecimal(ex2_alu_out)}\n")
@@ -1296,10 +1335,13 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
   printf(p"ex2_reg_is_bp_pos : 0x${Hexadecimal(ex2_reg_is_bp_pos)}\n")
   printf(p"ex2_reg_bp_addr  : 0x${Hexadecimal(ex2_reg_bp_addr)}\n")
   printf(p"ex3_reg_pc       : 0x${Hexadecimal(ex3_reg_pc)}\n")
+  printf(p"ex3_reg_bp_en    : 0x${Hexadecimal(ex3_reg_bp_en)}\n")
   printf(p"ex3_reg_is_br    : 0x${Hexadecimal(ex3_reg_is_br)}\n")
   printf(p"ex3_reg_br_target : 0x${Hexadecimal(ex3_reg_br_target)}\n")
   printf(p"mem_reg_pc       : 0x${Hexadecimal(mem_reg_pc)}\n")
+  printf(p"mem_reg_is_valid_: 0x${Hexadecimal(mem_reg_is_valid_inst)}\n")
   printf(p"mem_stall        : 0x${Hexadecimal(mem_stall)}\n")
+  printf(p"mem_reg_is_br    : 0x${Hexadecimal(mem_reg_is_br)}\n")
   printf(p"mem_wb_data      : 0x${Hexadecimal(mem_wb_data)}\n")
   printf(p"mem_reg_mem_w    : 0x${Hexadecimal(mem_reg_mem_w)}\n")
   printf(p"mem_reg_wb_addr  : 0x${Hexadecimal(mem_reg_wb_addr)}\n")
@@ -1309,6 +1351,7 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
   printf(p"mem_wb_addr_delay : 0x${Hexadecimal(mem_wb_addr_delay)}\n")
   printf(p"mem_reg_wb_data_delay : 0x${Hexadecimal(mem_reg_wb_data_delay)}\n")
   printf(p"wb_reg_wb_addr   : 0x${Hexadecimal(wb_reg_wb_addr)}\n")
+  printf(p"wb_reg_is_valid_i: 0x${Hexadecimal(wb_reg_is_valid_inst)}\n")
   printf(p"wb_reg_wb_data   : 0x${Hexadecimal(wb_reg_wb_data)}\n")
   printf(p"instret          : ${instret}\n")
   printf(p"cycle_counter(${do_exit}) : ${io.debug_signal.cycle_counter}\n")
