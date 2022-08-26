@@ -3,13 +3,13 @@
     "class":"firrtl.transforms.DedupedResult",
     "original":"~RiscV|SRAM",
     "duplicate":"~RiscV|RiscV/sram1:SRAM",
-    "index":0.42857142857142855
+    "index":0.375
   },
   {
     "class":"firrtl.transforms.DedupedResult",
     "original":"~RiscV|SRAM_1",
     "duplicate":"~RiscV|RiscV/sram2:SRAM",
-    "index":0.5
+    "index":0.4375
   },
   {
     "class":"firrtl.EmitCircuitAnnotation",
@@ -54,11 +54,14 @@
     "class":"chisel3.experimental.EnumAnnotations$EnumDefAnnotation",
     "typeName":"fpga.ICacheState",
     "definition":{
-      "Read":2,
-      "Lookup":1,
+      "Read":3,
+      "Invalidate2":7,
+      "Lookup":2,
+      "WaitingRead":6,
+      "WaitingSnoop":4,
+      "RespondSnoop":5,
       "Ready":0,
-      "WaitingRead":4,
-      "WaitingSnoop":3
+      "Prelookup":1
     }
   },
   {
