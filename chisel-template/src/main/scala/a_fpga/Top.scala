@@ -4,6 +4,7 @@ import chisel3._
 import chisel3.util._
 import common.Consts._
 import DramConsts._
+import CacheConsts._
 import chisel3.stage.ChiselStage
 import chisel3.util.experimental.loadMemoryFromFileInline
 import chisel3.experimental.{annotate, ChiselAnnotation}
@@ -65,10 +66,12 @@ class RiscV(clockHz: Int) extends Module {
   })
   val core = Module(new Core(startAddress, 0x3FFFFL))
   
-  val memory = Module(new Memory(imemSizeInBytes))
+  val memory = Module(new Memory())
   val boot_rom = Module(new BootRom("bootrom.hex", imemSizeInBytes))
   val sram1 = Module(new SRAM)
   val sram2 = Module(new SRAM)
+  val icache = Module(new ICache(log2Ceil(WORD_LEN), ICACHE_INDEX_BITS+(log2Ceil(CACHE_LINE_LEN)-log2Ceil(WORD_LEN)), log2Ceil(CACHE_LINE_LEN), ICACHE_INDEX_BITS))
+  val icache_valid = Module(new ICacheValid(ICACHE_VALID_DATA_BITS, ICACHE_VALID_ADDR_BITS, ICACHE_INVALIDATE_DATA_BITS, ICACHE_INVALIDATE_ADDR_BITS))
   val gpio = Module(new Gpio)
   val uart = Module(new Uart(clockHz))
   val config = Module(new Config(clockHz))
@@ -115,6 +118,25 @@ class RiscV(clockHz: Int) extends Module {
   sram2.io.addr := memory.io.cache_array2.addr
   sram2.io.wdata := memory.io.cache_array2.wdata
   memory.io.cache_array2.rdata := sram2.io.rdata
+
+  icache.io.clock := clock
+  icache.io.ren := memory.io.icache.ren
+  icache.io.wen := memory.io.icache.wen
+  icache.io.raddr := memory.io.icache.raddr
+  memory.io.icache.rdata := icache.io.rdata
+  icache.io.waddr := memory.io.icache.waddr
+  icache.io.wdata := memory.io.icache.wdata
+
+  icache_valid.io.clock := clock
+  icache_valid.io.ren := memory.io.icache_valid.ren
+  icache_valid.io.wen := memory.io.icache_valid.wen
+  icache_valid.io.invalidate := memory.io.icache_valid.invalidate
+  icache_valid.io.addr := memory.io.icache_valid.addr
+  icache_valid.io.iaddr := memory.io.icache_valid.iaddr
+  memory.io.icache_valid.rdata := icache_valid.io.rdata
+  icache_valid.io.wdata := memory.io.icache_valid.wdata
+  icache_valid.io.idata := memory.io.icache_valid.idata
+  icache_valid.io.ien := memory.io.icache_valid.invalidate
 
   // Debug signals
   io.debugSignals.core <> core.io.debug_signal

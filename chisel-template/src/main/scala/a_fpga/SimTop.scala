@@ -15,7 +15,7 @@ class SimTop(memoryPath: String, bpTagInitPath: String) extends Module {
     val exit = Output(Bool())
   })
   val core = Module(new Core(startAddress, 10, bpTagInitPath))
-  val memory = Module(new Memory(imemSizeInBytes))
+  val memory = Module(new Memory())
   val boot_rom = Module(new BootRom(memoryPath, imemSizeInBytes))
 
   val dmem_decoder = Module(new DMemDecoder(Seq(
@@ -45,6 +45,12 @@ class SimTop(memoryPath: String, bpTagInitPath: String) extends Module {
   val sram = Module(new MockSram())
   memory.io.cache_array1 <> sram.io.cache_array1
   memory.io.cache_array2 <> sram.io.cache_array2
+
+  val icache = Module(new MockICache)
+  memory.io.icache <> icache.io.icache
+
+  val icache_valid = Module(new MockICacheValid)
+  memory.io.icache_valid <> icache_valid.io.icache_valid
 
   core.io.intr := false.B
   io.gp   := core.io.gp
