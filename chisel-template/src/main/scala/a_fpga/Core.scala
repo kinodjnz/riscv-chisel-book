@@ -31,8 +31,9 @@ class LongCounter(unitWidth: Int, unitCount: Int) extends Module {
 
 class CoreDebugSignals extends Bundle {
   val mem_reg_pc = Output(UInt(WORD_LEN.W))
+  val mem_is_valid_inst = Output(Bool())
   val csr_rdata = Output(UInt(WORD_LEN.W))
-  val mem_reg_csr_addr = Output(UInt(WORD_LEN.W))
+  val mem_reg_csr_addr = Output(UInt(CSR_ADDR_LEN.W))
   val me_intr = Output(Bool())
   val cycle_counter = Output(UInt(64.W))
   val instret = Output(UInt(64.W))
@@ -1269,7 +1270,7 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
   wb_reg_wb_addr := mem_reg_wb_addr
   wb_reg_rf_wen  := Mux(!mem_stall, mem_rf_wen, REN_X)
   wb_reg_wb_data := mem_wb_data 
-  wb_reg_is_valid_inst := mem_reg_is_valid_inst && !mem_stall && !mem_reg_is_trap && !mem_is_meintr && !mem_is_mtintr
+  wb_reg_is_valid_inst := mem_is_valid_inst && !mem_stall && !mem_reg_is_trap && !mem_is_meintr && !mem_is_mtintr
 
 
   //**********************************
@@ -1293,6 +1294,7 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
   io.debug_signal.csr_rdata := csr_rdata
   io.debug_signal.mem_reg_csr_addr := mem_reg_csr_addr
   io.debug_signal.mem_reg_pc := mem_reg_pc
+  io.debug_signal.mem_is_valid_inst := mem_is_valid_inst
   io.debug_signal.me_intr := mem_is_meintr
 
   //**********************************
