@@ -187,10 +187,6 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
 
   val if2_reg_is_bp_pos  = RegInit(false.B)
   val if2_reg_bp_addr    = RegInit(0.U(WORD_LEN.W))
-  val if2_is_uncond_br   = Wire(Bool())
-  val if2_uncond_br_addr = Wire(UInt(WORD_LEN.W))
-  val if2_reg_is_uncond_br   = RegInit(false.B)
-  val if2_reg_uncond_br_addr = RegInit(0.U(WORD_LEN.W))
   val id_stall           = Wire(Bool())
   val ex1_stall          = Wire(Bool())
   val mem_stall          = Wire(Bool())
@@ -339,10 +335,9 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
     mem_reg_is_br           -> mem_reg_br_addr,
     ex3_reg_is_br           -> ex3_reg_br_target,
     if2_reg_is_bp_pos       -> if2_reg_bp_addr,
-    if2_reg_is_uncond_br    -> if2_reg_uncond_br_addr,
     if1_reg_first           -> startAddress.U,
   ))
-  val if1_is_jump = mem_reg_is_br || ex3_reg_is_br || if2_reg_is_bp_pos || if2_reg_is_uncond_br || if1_reg_first
+  val if1_is_jump = mem_reg_is_br || ex3_reg_is_br || if2_reg_is_bp_pos || if1_reg_first
 
   ic_addr_en  := if1_is_jump
   ic_addr     := if1_jump_addr
@@ -376,7 +371,6 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
     mem_reg_is_br     -> BUBBLE,
     id_reg_stall      -> if2_reg_inst,
     if2_reg_is_bp_pos -> BUBBLE,
-    if2_reg_is_uncond_br -> BUBBLE,
     ic_reg_read_rdy   -> ic_data_out,
     (ic_reg_half_rdy && is_half_inst) -> ic_data_out,
   ))
@@ -388,35 +382,15 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
   val if2_is_jal_c = (if2_inst(14, 13) === 1.U && if2_inst(1, 0) === 1.U)
   val if2_is_jal = if2_is_jal_w || if2_is_jal_c
   val if2_is_jalr = ((if2_inst(6, 0) === 0x67.U) || (if2_inst(15, 13) === 4.U && if2_inst(6, 0) === 2.U))
-  val if2_is_bp_br = if2_is_cond_br || if2_is_jalr
-  val if2_w_imm_b = Cat(Fill(20, if2_inst(31)), if2_inst(7), if2_inst(30, 25), if2_inst(11, 8), 0.U(1.W))
-  val if2_c_imm_b = Cat(Fill(24, if2_inst(12)), if2_inst(6, 5), if2_inst(2), if2_inst(11, 10), if2_inst(4, 3), 0.U(1.W))
-  val if2_w_imm_j = Cat(Fill(12, if2_inst(31)), if2_inst(19, 12), if2_inst(20), if2_inst(30, 21), 0.U(1.W))
-  val if2_c_imm_j = Cat(Fill(21, if2_inst(12)), if2_inst(8), if2_inst(10, 9), if2_inst(6), if2_inst(7), if2_inst(2), if2_inst(11), if2_inst(5, 3), 0.U(1.W))
-  val if2_imm_b_sext = Mux(if2_is_cond_br_w, if2_w_imm_b, if2_c_imm_b)
-  val if2_imm_j_sext = Mux(if2_is_jal_w, if2_w_imm_j, if2_c_imm_j)
-  if2_is_uncond_br := Mux(id_reg_stall,
-    if2_reg_is_uncond_br,
-    if2_is_jal,
-  )
-  if2_reg_is_uncond_br := if2_is_uncond_br
-  val if2_jal_addr = if2_pc + if2_imm_j_sext
-  if2_uncond_br_addr := MuxCase(DontCare, Seq(
-    id_reg_stall -> if2_reg_uncond_br_addr,
-    if2_is_jal   -> if2_jal_addr,
-  ))
-  if2_reg_uncond_br_addr := if2_uncond_br_addr
+  val if2_is_bp_br = if2_is_cond_br || if2_is_jalr || if2_is_jal
   val if2_is_bp_pos = Mux(id_reg_stall,
     if2_reg_is_bp_pos,
-    (if2_is_bp_br && bp.io.lu.br_pos) ||
-      (if2_is_cond_br && !bp.io.lu.br_hit && if2_imm_b_sext(31).asBool()),
+    (if2_is_bp_br && bp.io.lu.br_pos),
   )
   if2_reg_is_bp_pos := if2_is_bp_pos
-  val if2_cond_br_addr = if2_pc + if2_imm_b_sext
   val if2_bp_addr = MuxCase(DontCare, Seq(
     id_reg_stall                         -> if2_reg_bp_addr,
     (if2_is_bp_br && bp.io.lu.br_pos)    -> bp.io.lu.br_addr,
-    (!bp.io.lu.br_hit && if2_is_cond_br) -> if2_cond_br_addr,
   ))
   if2_reg_bp_addr := if2_bp_addr
   
@@ -993,7 +967,7 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
     (ex2_reg_exe_fun === BR_BLTU) ||
     (ex2_reg_exe_fun === BR_BGEU)
   )
-  val ex2_is_uncond_br = ex2_reg_exe_fun === ALU_JALR
+  val ex2_is_uncond_br = ex2_reg_exe_fun === ALU_JALR || ex2_reg_is_j
   val ex2_cond_br_target = ex2_reg_pc + ex2_reg_imm_b_sext
   val ex2_uncond_br_target = ex2_alu_out
 
