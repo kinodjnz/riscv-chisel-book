@@ -1012,7 +1012,7 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
 
   //**********************************
   // EX2/EX3 register
-  ex3_reg_bp_en            := !mem_reg_is_br && !ex3_reg_is_br
+  ex3_reg_bp_en            := ex2_reg_is_valid_inst && !mem_reg_is_br && !ex3_reg_is_br
   ex3_reg_pc               := ex2_reg_pc
   ex3_reg_is_j             := ex2_reg_is_j
   ex3_reg_is_cond_br       := ex2_is_cond_br
@@ -1272,7 +1272,7 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
   do_exit_delay := do_exit
   io.exit := do_exit_delay
   //printf(p"if1_reg_pc       : 0x${Hexadecimal(if1_reg_pc)}\n")
-  printf(p"if2_reg_pc       : 0x${Hexadecimal(if2_reg_pc)}\n")
+  printf(p"if2_pc           : 0x${Hexadecimal(if2_pc)}\n")
   printf(p"if2_inst         : 0x${Hexadecimal(if2_inst)}\n")
   printf(p"bp.io.lu.br_hit  : 0x${Hexadecimal(bp.io.lu.br_hit)}\n")
   printf(p"bp.io.lu.br_pos  : 0x${Hexadecimal(bp.io.lu.br_pos)}\n")
@@ -1284,12 +1284,14 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
   printf(p"id_rs2_data      : 0x${Hexadecimal(id_rs2_data)}\n")
   printf(p"id_wb_addr       : 0x${Hexadecimal(id_wb_addr)}\n")
   printf(p"ex1_reg_pc       : 0x${Hexadecimal(ex1_reg_pc)}\n")
+  printf(p"ex1_reg_is_valid_: 0x${Hexadecimal(ex1_reg_is_valid_inst)}\n")
   printf(p"ex1_stall        : 0x${Hexadecimal(ex1_stall)}\n")
   printf(p"ex1_op1_data     : 0x${Hexadecimal(ex1_op1_data)}\n")
   printf(p"ex1_op2_data     : 0x${Hexadecimal(ex1_op2_data)}\n")
   // printf(p"ex1_reg_op1_sel   : 0x${Hexadecimal(ex1_reg_op1_sel)}\n")
   // printf(p"ex1_reg_rs1_addr  : 0x${Hexadecimal(ex1_reg_rs1_addr)}\n")
   printf(p"ex2_reg_pc       : 0x${Hexadecimal(ex2_reg_pc)}\n")
+  printf(p"ex2_reg_is_valid_: 0x${Hexadecimal(ex2_reg_is_valid_inst)}\n")
   printf(p"ex2_reg_op1_data : 0x${Hexadecimal(ex2_reg_op1_data)}\n")
   printf(p"ex2_reg_op2_data : 0x${Hexadecimal(ex2_reg_op2_data)}\n")
   printf(p"ex2_alu_out      : 0x${Hexadecimal(ex2_alu_out)}\n")
@@ -1301,6 +1303,7 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
   printf(p"ex3_reg_is_br    : 0x${Hexadecimal(ex3_reg_is_br)}\n")
   printf(p"ex3_reg_br_target : 0x${Hexadecimal(ex3_reg_br_target)}\n")
   printf(p"mem_reg_pc       : 0x${Hexadecimal(mem_reg_pc)}\n")
+  printf(p"mem_is_valid_inst: 0x${Hexadecimal(mem_is_valid_inst)}\n")
   printf(p"mem_stall        : 0x${Hexadecimal(mem_stall)}\n")
   printf(p"mem_wb_data      : 0x${Hexadecimal(mem_wb_data)}\n")
   printf(p"mem_reg_mem_w    : 0x${Hexadecimal(mem_reg_mem_w)}\n")
@@ -1311,6 +1314,7 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
   printf(p"mem_wb_addr_delay : 0x${Hexadecimal(mem_wb_addr_delay)}\n")
   printf(p"mem_reg_wb_data_delay : 0x${Hexadecimal(mem_reg_wb_data_delay)}\n")
   printf(p"wb_reg_wb_addr   : 0x${Hexadecimal(wb_reg_wb_addr)}\n")
+  printf(p"wb_reg_is_valid_i: 0x${Hexadecimal(wb_reg_is_valid_inst)}\n")
   printf(p"wb_reg_wb_data   : 0x${Hexadecimal(wb_reg_wb_data)}\n")
   printf(p"instret          : ${instret}\n")
   printf(p"cycle_counter(${do_exit}) : ${io.debug_signal.cycle_counter}\n")
