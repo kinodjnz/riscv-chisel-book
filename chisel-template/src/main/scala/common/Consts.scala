@@ -39,6 +39,10 @@ object Consts {
   val ALU_VADDVV  = 19.U(EXE_FUN_LEN.W)
   val VSET        = 20.U(EXE_FUN_LEN.W)
   val ALU_PCNT    = 21.U(EXE_FUN_LEN.W)
+  val ALU_MUL     = 22.U(EXE_FUN_LEN.W)
+  val ALU_MULH    = 23.U(EXE_FUN_LEN.W)
+  val ALU_MULHU   = 24.U(EXE_FUN_LEN.W)
+  val ALU_MULHSU  = 25.U(EXE_FUN_LEN.W)
 
   val OP1_LEN    = 3
   val OP1_RS1    = 0.U(OP1_LEN.W)
@@ -83,12 +87,13 @@ object Consts {
   val WB_SEL_LEN = 3
   val WB_X       = 0.U(WB_SEL_LEN.W)
   val WB_ALU     = 0.U(WB_SEL_LEN.W)
-  val WB_MEM     = 1.U(WB_SEL_LEN.W)
-  val WB_PC      = 2.U(WB_SEL_LEN.W)
-  val WB_CSR     = 3.U(WB_SEL_LEN.W)
-  val WB_MEM_V   = 4.U(WB_SEL_LEN.W)
-  val WB_ALU_V   = 5.U(WB_SEL_LEN.W)
-  val WB_VL      = 6.U(WB_SEL_LEN.W)
+  val WB_MEM     = 5.U(WB_SEL_LEN.W)
+  val WB_PC      = 4.U(WB_SEL_LEN.W)
+  val WB_CSR     = 7.U(WB_SEL_LEN.W)
+  val WB_MUL     = 6.U(WB_SEL_LEN.W)
+  val WB_MEM_V   = 1.U(WB_SEL_LEN.W)
+  val WB_ALU_V   = 2.U(WB_SEL_LEN.W)
+  val WB_VL      = 3.U(WB_SEL_LEN.W)
 
   val WBA_LEN = 3
   val WBA_RD  = 0.U(WBA_LEN.W)
