@@ -27,7 +27,10 @@ module top #(
     output wire [DDR3_DM_WIDTH-1 : 0]   ddr3_dm,
     output wire [0:0]                   ddr3_odt,
     output logic [7:0] gpio_out,
-    output logic uart_tx
+    output logic uart_tx,
+    output logic sdc_clk,
+    inout  logic sdc_cmd,
+    inout  logic [3:0] sdc_dat
 );
 
 logic io_exit;
@@ -58,6 +61,8 @@ logic io_exit;
 (* mark_debug = "true" *) logic        io_debugSignals_sram2_en;
 (* mark_debug = "true" *) logic [31:0] io_debugSignals_sram2_we;
 (* mark_debug = "true" *) logic [6:0]  io_debugSignals_sram2_addr;
+(* mark_debug = "true" *) logic        io_sdc_port_clk;
+(* mark_debug = "true" *) logic        sdc_cmd;
 
 wire clk;
 wire rst;
@@ -148,11 +153,30 @@ DRAM #(
     .o_busy(io_dram_busy)
 );
 
+wire       sdc_cmd_wrt;
+wire       sdc_cmd_out;
+wire       sdc_res_in;
+wire       sdc_dat_wrt;
+wire [3:0] sdc_dat_out;
+wire [3:0] sdc_dat_in;
+
+assign sdc_cmd = sdc_cmd_wrt ? sdc_cmd_out : 1'bZ;
+assign sdc_res_in = sdc_cmd;
+assign sdc_dat = sdc_dat_wrt ? sdc_dat_out : 4'bZ;
+assign sdc_dat_in = sdc_dat;
+
 RiscV core(
     .clock(clk),
     .reset(rst),
     .io_gpio(gpio_out),
     .io_uart_tx(uart_tx),
+    .io_sdc_port_clk(sdc_clk),
+    .io_sdc_port_cmd_wrt(sdc_cmd_wrt),
+    .io_sdc_port_cmd_out(sdc_cmd_out),
+    .io_sdc_port_res_in(sdc_res_in),
+    .io_sdc_port_dat_wrt(sdc_dat_wrt),
+    .io_sdc_port_dat_out(sdc_dat_out),
+    .io_sdc_port_dat_in(sdc_dat_in),
     .*
 );
 

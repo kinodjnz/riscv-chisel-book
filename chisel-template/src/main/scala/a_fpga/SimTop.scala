@@ -17,15 +17,18 @@ class SimTop(memoryPath: String, bpTagInitPath: String) extends Module {
   val core = Module(new Core(startAddress, 10, bpTagInitPath))
   val memory = Module(new Memory())
   val boot_rom = Module(new BootRom(memoryPath, imemSizeInBytes))
+  val sdc = Module(new Sdc)
 
   val dmem_decoder = Module(new DMemDecoder(Seq(
     (BigInt(startAddress), BigInt(imemSizeInBytes)),
     (BigInt(0x20000000L), BigInt(dmemSizeInBytes)),
-    (BigInt(0x30002000L), BigInt(64)), // mtimer
+    (BigInt(0x30002000L), BigInt(64)),  // mtimer
+    (BigInt(0x30003000L), BigInt(64)),  // SD Controller
   )))
   dmem_decoder.io.targets(0) <> boot_rom.io.dmem
   dmem_decoder.io.targets(1) <> memory.io.dmem
   dmem_decoder.io.targets(2) <> core.io.mtimer_mem
+  dmem_decoder.io.targets(3) <> sdc.io.mem
 
   val imem_decoder = Module(new IMemDecoder(Seq(
     (BigInt(startAddress), BigInt(imemSizeInBytes)),
@@ -51,6 +54,9 @@ class SimTop(memoryPath: String, bpTagInitPath: String) extends Module {
 
   val icache_valid = Module(new MockICacheValid)
   memory.io.icache_valid <> icache_valid.io.icache_valid
+
+  val sd = Module(new MockSd)
+  sdc.io.sdc_port <> sd.io.sdc_port
 
   core.io.intr := false.B
   io.gp   := core.io.gp

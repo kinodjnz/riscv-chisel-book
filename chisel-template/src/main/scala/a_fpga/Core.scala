@@ -289,17 +289,17 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
         ic_reg_imem_addr := ic_imem_addr_4
         ic_data_out := Cat(io.imem.inst(WORD_LEN/2-1, 0), ic_reg_inst(WORD_LEN-1, WORD_LEN/2))
         ic_reg_inst2 := io.imem.inst
-        ic_reg_inst2_addr := ic_imem_addr_4
+        ic_reg_inst2_addr := ic_reg_imem_addr
         ic_state := IcState.Full2Half
         when (ic_read_en2) {
           ic_reg_inst := io.imem.inst
-          ic_reg_inst_addr := ic_imem_addr_4
-          ic_reg_addr_out := ic_imem_addr_4
+          ic_reg_inst_addr := ic_reg_imem_addr
+          ic_reg_addr_out := ic_reg_imem_addr
           ic_state := IcState.Full
         }.elsewhen(ic_read_en4) {
           ic_reg_inst := io.imem.inst
-          ic_reg_inst_addr := ic_imem_addr_4
-          ic_reg_addr_out := Cat(ic_imem_addr_4(WORD_LEN-1, 2), 1.U(1.W), 0.U(1.W))
+          ic_reg_inst_addr := ic_reg_imem_addr
+          ic_reg_addr_out := Cat(ic_reg_imem_addr(WORD_LEN-1, 2), 1.U(1.W), 0.U(1.W))
           ic_state := IcState.FullHalf
         }
       }
@@ -1286,6 +1286,7 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
   //printf(p"if1_reg_pc       : 0x${Hexadecimal(if1_reg_pc)}\n")
   printf(p"if2_pc           : 0x${Hexadecimal(if2_pc)}\n")
   printf(p"if2_inst         : 0x${Hexadecimal(if2_inst)}\n")
+  printf(p"if2_reg_is_bp_pos: 0x${Hexadecimal(if2_reg_is_bp_pos)}\n")
   printf(p"bp.io.lu.br_hit  : 0x${Hexadecimal(bp.io.lu.br_hit)}\n")
   printf(p"bp.io.lu.br_pos  : 0x${Hexadecimal(bp.io.lu.br_pos)}\n")
   printf(p"id_reg_pc        : 0x${Hexadecimal(id_reg_pc)}\n")

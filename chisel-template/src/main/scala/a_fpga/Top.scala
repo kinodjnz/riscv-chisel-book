@@ -61,6 +61,7 @@ class RiscV(clockHz: Int) extends Module {
     val dram = Flipped(new DramIo())
     val gpio = Output(UInt(8.W))
     val uart_tx = Output(Bool())
+    val sdc_port = new SdcPort
     val exit = Output(Bool())
     val debugSignals = new RiscVDebugSignals()
   })
@@ -74,6 +75,7 @@ class RiscV(clockHz: Int) extends Module {
   val icache_valid = Module(new ICacheValid(ICACHE_VALID_DATA_BITS, ICACHE_VALID_ADDR_BITS, ICACHE_INVALIDATE_DATA_BITS, ICACHE_INVALIDATE_ADDR_BITS))
   val gpio = Module(new Gpio)
   val uart = Module(new Uart(clockHz))
+  val sdc = Module(new Sdc)
   val config = Module(new Config(clockHz))
 
   val dmem_decoder = Module(new DMemDecoder(Seq(
@@ -82,6 +84,7 @@ class RiscV(clockHz: Int) extends Module {
     (BigInt(0x30000000L), BigInt(64)),  // GPIO
     (BigInt(0x30001000L), BigInt(64)),  // UART
     (BigInt(0x30002000L), BigInt(64)),  // mtimer
+    (BigInt(0x30003000L), BigInt(64)),  // SD Controller
     (BigInt(0x40000000L), BigInt(64)),  // CONFIG
   )))
   dmem_decoder.io.targets(0) <> boot_rom.io.dmem
@@ -89,7 +92,8 @@ class RiscV(clockHz: Int) extends Module {
   dmem_decoder.io.targets(2) <> gpio.io.mem
   dmem_decoder.io.targets(3) <> uart.io.mem
   dmem_decoder.io.targets(4) <> core.io.mtimer_mem
-  dmem_decoder.io.targets(5) <> config.io.mem
+  dmem_decoder.io.targets(5) <> sdc.io.mem
+  dmem_decoder.io.targets(6) <> config.io.mem
 
   val imem_decoder = Module(new IMemDecoder(Seq(
     (BigInt(startAddress), BigInt(imemSizeInBytes)),
@@ -166,6 +170,7 @@ class RiscV(clockHz: Int) extends Module {
   io.gpio <> gpio.io.gpio
   io.uart_tx <> uart.io.tx
   core.io.intr <> uart.io.intr
+  io.sdc_port <> sdc.io.sdc_port
 }
 
 object ElaborateArtyA7 extends App {
