@@ -3,13 +3,13 @@
     "class":"firrtl.transforms.DedupedResult",
     "original":"~RiscV|SRAM",
     "duplicate":"~RiscV|RiscV/sram1:SRAM",
-    "index":0.375
+    "index":0.35294117647058826
   },
   {
     "class":"firrtl.transforms.DedupedResult",
     "original":"~RiscV|SRAM_1",
     "duplicate":"~RiscV|RiscV/sram2:SRAM",
-    "index":0.4375
+    "index":0.4117647058823529
   },
   {
     "class":"firrtl.EmitCircuitAnnotation",
@@ -127,13 +127,6 @@
   },
   {
     "class":"firrtl.transforms.CombinationalPath",
-    "sink":"~RiscV|RiscV>io_debugSignals_dram_init_calib_complete",
-    "sources":[
-      "~RiscV|RiscV>io_dram_init_calib_complete"
-    ]
-  },
-  {
-    "class":"firrtl.transforms.CombinationalPath",
     "sink":"~RiscV|RiscV>io_debugSignals_sram2_we",
     "sources":[
       "~RiscV|RiscV>io_dram_rdata_valid"
@@ -153,6 +146,13 @@
       "~RiscV|RiscV>io_dram_ren",
       "~RiscV|RiscV>io_dram_init_calib_complete",
       "~RiscV|RiscV>io_dram_busy"
+    ]
+  },
+  {
+    "class":"firrtl.transforms.CombinationalPath",
+    "sink":"~RiscV|RiscV>io_debugSignals_dram_init_calib_complete",
+    "sources":[
+      "~RiscV|RiscV>io_dram_init_calib_complete"
     ]
   },
   {
