@@ -1,0 +1,108 @@
+
+sdc:     file format elf32-littleriscv
+
+
+Disassembly of section .text:
+
+00000000 <_start>:
+   0:	20002137          	lui	sp,0x20002
+   4:	020000ef          	jal	ra,24 <main>
+   8:	00050193          	mv	gp,a0
+   c:	05d00893          	li	a7,93
+  10:	00000013          	nop
+  14:	00000013          	nop
+  18:	00000013          	nop
+  1c:	00000013          	nop
+  20:	00000073          	ecall
+
+Disassembly of section .text.startup:
+
+00000024 <main>:
+  24:	80000737          	lui	a4,0x80000
+  28:	300037b7          	lui	a5,0x30003
+  2c:	0709                	addi	a4,a4,2 # 80000002 <main+0x7fffffde>
+  2e:	c398                	sw	a4,0(a5)
+  30:	1234d737          	lui	a4,0x1234d
+  34:	def70713          	addi	a4,a4,-529 # 1234cdef <main+0x1234cdcb>
+  38:	c798                	sw	a4,8(a5)
+  3a:	6705                	lui	a4,0x1
+  3c:	81170713          	addi	a4,a4,-2031 # 811 <main+0x7ed>
+  40:	c3d8                	sw	a4,4(a5)
+  42:	300036b7          	lui	a3,0x30003
+  46:	42dc                	lw	a5,4(a3)
+  48:	0017f713          	andi	a4,a5,1
+  4c:	df6d                	beqz	a4,46 <main+0x22>
+  4e:	4698                	lw	a4,8(a3)
+  50:	4685                	li	a3,1
+  52:	4501                	li	a0,0
+  54:	00d78363          	beq	a5,a3,5a <main+0x36>
+  58:	8082                	ret
+  5a:	edcb37b7          	lui	a5,0xedcb3
+  5e:	21178793          	addi	a5,a5,529 # edcb3211 <main+0xedcb31ed>
+  62:	973e                	add	a4,a4,a5
+  64:	00173513          	seqz	a0,a4
+  68:	8082                	ret
+
+Disassembly of section .comment:
+
+00000000 <.comment>:
+   0:	3a434347          	fmsub.d	ft6,ft6,ft4,ft7,rmm
+   4:	2820                	fld	fs0,80(s0)
+   6:	2029                	jal	10 <_start+0x10>
+   8:	3131                	jal	fffffc14 <main+0xfffffbf0>
+   a:	312e                	fld	ft2,232(sp)
+   c:	302e                	fld	ft0,232(sp)
+	...
+
+Disassembly of section .riscv.attributes:
+
+00000000 <.riscv.attributes>:
+   0:	8541                	srai	a0,a0,0x10
+   2:	0000                	unimp
+   4:	7200                	flw	fs0,32(a2)
+   6:	7369                	lui	t1,0xffffa
+   8:	01007663          	bgeu	zero,a6,14 <_start+0x14>
+   c:	0000007b          	.4byte	0x7b
+  10:	1004                	addi	s1,sp,32
+  12:	7205                	lui	tp,0xfffe1
+  14:	3376                	fld	ft6,376(sp)
+  16:	6932                	flw	fs2,12(sp)
+  18:	7032                	flw	ft0,44(sp)
+  1a:	5f30                	lw	a2,120(a4)
+  1c:	3261                	jal	fffff9a4 <main+0xfffff980>
+  1e:	3070                	fld	fa2,224(s0)
+  20:	665f 7032 5f30      	.byte	0x5f, 0x66, 0x32, 0x70, 0x30, 0x5f
+  26:	3264                	fld	fs1,224(a2)
+  28:	3070                	fld	fa2,224(s0)
+  2a:	635f 7032 5f30      	.byte	0x5f, 0x63, 0x32, 0x70, 0x30, 0x5f
+  30:	3176                	fld	ft2,376(sp)
+  32:	3070                	fld	fa2,224(s0)
+  34:	7a5f 6576 3233      	.byte	0x5f, 0x7a, 0x76, 0x65, 0x33, 0x32
+  3a:	3166                	fld	ft2,120(sp)
+  3c:	3070                	fld	fa2,224(s0)
+  3e:	7a5f 6576 3233      	.byte	0x5f, 0x7a, 0x76, 0x65, 0x33, 0x32
+  44:	3178                	fld	fa4,224(a0)
+  46:	3070                	fld	fa2,224(s0)
+  48:	7a5f 6576 3436      	.byte	0x5f, 0x7a, 0x76, 0x65, 0x36, 0x34
+  4e:	3164                	fld	fs1,224(a0)
+  50:	3070                	fld	fa2,224(s0)
+  52:	7a5f 6576 3436      	.byte	0x5f, 0x7a, 0x76, 0x65, 0x36, 0x34
+  58:	3166                	fld	ft2,120(sp)
+  5a:	3070                	fld	fa2,224(s0)
+  5c:	7a5f 6576 3436      	.byte	0x5f, 0x7a, 0x76, 0x65, 0x36, 0x34
+  62:	3178                	fld	fa4,224(a0)
+  64:	3070                	fld	fa2,224(s0)
+  66:	7a5f 6c76 3231      	.byte	0x5f, 0x7a, 0x76, 0x6c, 0x31, 0x32
+  6c:	6238                	flw	fa4,64(a2)
+  6e:	7031                	c.lui	zero,0xfffec
+  70:	5f30                	lw	a2,120(a4)
+  72:	767a                	flw	fa2,188(sp)
+  74:	336c                	fld	fa1,224(a4)
+  76:	6232                	flw	ft4,12(sp)
+  78:	7031                	c.lui	zero,0xfffec
+  7a:	5f30                	lw	a2,120(a4)
+  7c:	767a                	flw	fa2,188(sp)
+  7e:	366c                	fld	fa1,232(a2)
+  80:	6234                	flw	fa3,64(a2)
+  82:	7031                	c.lui	zero,0xfffec
+  84:	0030                	addi	a2,sp,8
