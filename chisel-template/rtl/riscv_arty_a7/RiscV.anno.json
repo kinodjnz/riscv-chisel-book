@@ -141,15 +141,6 @@
   },
   {
     "class":"firrtl.transforms.CombinationalPath",
-    "sink":"~RiscV|RiscV>io_debugSignals_dram_ren",
-    "sources":[
-      "~RiscV|RiscV>io_dram_ren",
-      "~RiscV|RiscV>io_dram_init_calib_complete",
-      "~RiscV|RiscV>io_dram_busy"
-    ]
-  },
-  {
-    "class":"firrtl.transforms.CombinationalPath",
     "sink":"~RiscV|RiscV>io_debugSignals_dram_init_calib_complete",
     "sources":[
       "~RiscV|RiscV>io_dram_init_calib_complete"
@@ -210,6 +201,22 @@
     "class":"firrtl.transforms.CombinationalPath",
     "sink":"~RiscV|RiscV>io_dram_ren",
     "sources":[
+      "~RiscV|RiscV>io_dram_init_calib_complete",
+      "~RiscV|RiscV>io_dram_busy"
+    ]
+  },
+  {
+    "class":"firrtl.transforms.CombinationalPath",
+    "sink":"~RiscV|RiscV>io_debugSignals_sdc_res_in",
+    "sources":[
+      "~RiscV|RiscV>io_sdc_port_res_in"
+    ]
+  },
+  {
+    "class":"firrtl.transforms.CombinationalPath",
+    "sink":"~RiscV|RiscV>io_debugSignals_dram_ren",
+    "sources":[
+      "~RiscV|RiscV>io_dram_ren",
       "~RiscV|RiscV>io_dram_init_calib_complete",
       "~RiscV|RiscV>io_dram_busy"
     ]
