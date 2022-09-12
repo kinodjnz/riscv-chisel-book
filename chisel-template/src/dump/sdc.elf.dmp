@@ -20,28 +20,51 @@ Disassembly of section .text.startup:
 00000024 <main>:
   24:	80000737          	lui	a4,0x80000
   28:	300037b7          	lui	a5,0x30003
-  2c:	0709                	addi	a4,a4,2 # 80000002 <main+0x7fffffde>
+  2c:	0705                	addi	a4,a4,1 # 80000001 <main+0x7fffffdd>
   2e:	c398                	sw	a4,0(a5)
   30:	1234d737          	lui	a4,0x1234d
   34:	def70713          	addi	a4,a4,-529 # 1234cdef <main+0x1234cdcb>
   38:	c798                	sw	a4,8(a5)
-  3a:	6705                	lui	a4,0x1
-  3c:	81170713          	addi	a4,a4,-2031 # 811 <main+0x7ed>
-  40:	c3d8                	sw	a4,4(a5)
-  42:	300036b7          	lui	a3,0x30003
-  46:	42dc                	lw	a5,4(a3)
-  48:	0017f713          	andi	a4,a5,1
-  4c:	df6d                	beqz	a4,46 <main+0x22>
-  4e:	4698                	lw	a4,8(a3)
-  50:	4685                	li	a3,1
-  52:	4501                	li	a0,0
-  54:	00d78363          	beq	a5,a3,5a <main+0x36>
-  58:	8082                	ret
-  5a:	edcb37b7          	lui	a5,0xedcb3
-  5e:	21178793          	addi	a5,a5,529 # edcb3211 <main+0xedcb31ed>
-  62:	973e                	add	a4,a4,a5
-  64:	00173513          	seqz	a0,a4
-  68:	8082                	ret
+  3a:	6709                	lui	a4,0x2
+  3c:	81170713          	addi	a4,a4,-2031 # 1811 <main+0x17ed>
+  40:	dddde5b7          	lui	a1,0xdddde
+  44:	c3d8                	sw	a4,4(a5)
+  46:	4501                	li	a0,0
+  48:	4681                	li	a3,0
+  4a:	4301                	li	t1,0
+  4c:	30003637          	lui	a2,0x30003
+  50:	6841                	lui	a6,0x10
+  52:	4885                	li	a7,1
+  54:	ddd58593          	addi	a1,a1,-547 # dddddddd <main+0xddddddb9>
+  58:	425c                	lw	a5,4(a2)
+  5a:	0017f713          	andi	a4,a5,1
+  5e:	c31d                	beqz	a4,84 <main+0x60>
+  60:	00862303          	lw	t1,8(a2) # 30003008 <main+0x30002fe4>
+  64:	0107f7b3          	and	a5,a5,a6
+  68:	0505                	addi	a0,a0,1
+  6a:	e385                	bnez	a5,8a <main+0x66>
+  6c:	fea8d6e3          	bge	a7,a0,58 <main+0x34>
+  70:	1234d7b7          	lui	a5,0x1234d
+  74:	def78793          	addi	a5,a5,-529 # 1234cdef <main+0x1234cdcb>
+  78:	450d                	li	a0,3
+  7a:	00f31463          	bne	t1,a5,82 <main+0x5e>
+  7e:	4505                	li	a0,1
+  80:	e295                	bnez	a3,a4 <main+0x80>
+  82:	8082                	ret
+  84:	0107f7b3          	and	a5,a5,a6
+  88:	dbe1                	beqz	a5,58 <main+0x34>
+  8a:	08000713          	li	a4,128
+  8e:	465c                	lw	a5,12(a2)
+  90:	177d                	addi	a4,a4,-1
+  92:	8f8d                	sub	a5,a5,a1
+  94:	00f037b3          	snez	a5,a5
+  98:	96be                	add	a3,a3,a5
+  9a:	fb75                	bnez	a4,8e <main+0x6a>
+  9c:	0505                	addi	a0,a0,1
+  9e:	faa8dde3          	bge	a7,a0,58 <main+0x34>
+  a2:	b7f9                	j	70 <main+0x4c>
+  a4:	00368513          	addi	a0,a3,3
+  a8:	8082                	ret
 
 Disassembly of section .comment:
 
