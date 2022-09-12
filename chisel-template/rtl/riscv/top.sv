@@ -61,8 +61,10 @@ logic io_exit;
 (* mark_debug = "true" *) logic        io_debugSignals_sram2_en;
 (* mark_debug = "true" *) logic [31:0] io_debugSignals_sram2_we;
 (* mark_debug = "true" *) logic [6:0]  io_debugSignals_sram2_addr;
-(* mark_debug = "true" *) logic        io_sdc_port_clk;
-(* mark_debug = "true" *) logic        sdc_cmd;
+(* mark_debug = "true" *) logic        io_debugSignals_sdc_clk;
+(* mark_debug = "true" *) logic        io_debugSignals_sdc_cmd_wrt;
+(* mark_debug = "true" *) logic        io_debugSignals_sdc_cmd_out;
+(* mark_debug = "true" *) logic        io_debugSignals_sdc_res_in;
 
 wire clk;
 wire rst;

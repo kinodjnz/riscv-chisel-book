@@ -3,7 +3,7 @@ ENTRY(_start)
 
 MEMORY
 {
-    imem(rx)  : ORIGIN = 0x08000000, LENGTH = 1024
+    imem(rx)  : ORIGIN = 0x08000000, LENGTH = 2048
     dmem(rwx) : ORIGIN = 0x20000000, LENGTH = 512 
 }
 
