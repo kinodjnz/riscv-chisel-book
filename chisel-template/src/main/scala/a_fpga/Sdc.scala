@@ -87,11 +87,12 @@ class Sdc() extends Module {
   val tx_cmd = Reg(Vec(cmd_bits, Bool()))
   val tx_cmd_counter = RegInit(0.U(6.W))
   val tx_cmd_crc = Reg(Vec(7, Bool()))
+  val tx_cmd_timer = RegInit(0.U(6.W))
   val reg_tx_cmd_wrt = RegInit(false.B)
   val reg_tx_cmd_out = RegInit(false.B)
   val rx_dat_in_progress = RegInit(false.B)
   val rx_dat_counter = RegInit(0.U(11.W))
-  val rx_dat_index = RegInit(0.U(11.W))
+  val rx_dat_index = RegInit(0.U(8.W))
   val rx_dat_start_bit = RegInit(false.B)
   val rx_dat_bits = Reg(Vec(8, UInt(4.W)))
   val rx_dat_next = RegInit(0.U(4.W))
@@ -135,6 +136,7 @@ class Sdc() extends Module {
           rx_res := Cat(Cat(rx_res_bits.reverse), rx_res_next)
           rx_res_ready := true.B
           rx_res_crc_error := rx_res_crc_en && Cat(rx_res_crc) =/= 0.U
+          tx_cmd_timer := 48.U // wait 1 byte before next cmd
         }
       }
     }
@@ -143,7 +145,11 @@ class Sdc() extends Module {
   io.sdc_port.cmd_wrt := reg_tx_cmd_wrt
   io.sdc_port.cmd_out := reg_tx_cmd_out
 
-  when (tx_cmd_counter > 0.U && reg_clk_counter === 0.U && reg_clk) {
+  when (tx_cmd_timer =/= 0.U && reg_clk_counter === 0.U && reg_clk) {
+    tx_cmd_timer := tx_cmd_timer - 1.U
+    reg_tx_cmd_wrt := false.B
+    reg_tx_cmd_out := DontCare
+  }.elsewhen (tx_cmd_counter > 0.U && reg_clk_counter === 0.U && reg_clk) {
     reg_tx_cmd_wrt := true.B
     reg_tx_cmd_out := tx_cmd(0)
     (0 to cmd_bits - 2).foreach(i => tx_cmd(i) := tx_cmd(i + 1))
@@ -280,6 +286,9 @@ class Sdc() extends Module {
             rx_dat_timer := 500000.U // 20ms (25MHz)
             rx_dat_timeout := false.B
             rx_dat_read_counter := 0.U
+          }.otherwise {
+            rx_dat_counter := 0.U
+            rx_dat_ready := false.B
           }
         }
       }

@@ -6,9 +6,15 @@ mod uart;
 mod cycle;
 mod gpio;
 mod sdc;
+mod loader;
 
 fn main() {
-    sdc::init_card();
+    let s = sdc::init_card();
+    uart::print(s);
+    uart::puts(b" sd\r\n");
+    let s = loader::load_kernel();
+    uart::print(s);
+    uart::puts(b" ld\r\n");
     let mut led_out: u32 = 1;
     loop {
         //uart::puts(b"Hello, RISC-V\r\n");
