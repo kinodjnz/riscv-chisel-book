@@ -1003,18 +1003,21 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
 
   //**********************************
   // EX2/EX3 register
-  ex3_reg_bp_en            := ex2_reg_is_valid_inst && !mem_reg_is_br && !ex3_reg_is_br
-  ex3_reg_pc               := ex2_reg_pc
-  ex3_reg_is_j             := ex2_reg_is_j
-  ex3_reg_is_cond_br       := ex2_is_cond_br
-  ex3_reg_is_cond_br_inst  := ex2_is_cond_br_inst
-  ex3_reg_is_uncond_br     := ex2_is_uncond_br
-  ex3_reg_cond_br_target   := ex2_cond_br_target
-  ex3_reg_uncond_br_target := ex2_uncond_br_target
-  ex3_reg_is_j             := ex2_reg_is_j
-  ex3_reg_is_bp_pos        := ex2_reg_is_bp_pos
-  ex3_reg_bp_addr          := ex2_reg_bp_addr
-  ex3_reg_is_half          := ex2_reg_is_half
+  // jump, br 命令ではストールは発生しないためストール時は単に更新しない
+  when (!mem_stall) {
+    ex3_reg_bp_en            := ex2_reg_is_valid_inst && !mem_reg_is_br && !ex3_reg_is_br
+    ex3_reg_pc               := ex2_reg_pc
+    ex3_reg_is_j             := ex2_reg_is_j
+    ex3_reg_is_cond_br       := ex2_is_cond_br
+    ex3_reg_is_cond_br_inst  := ex2_is_cond_br_inst
+    ex3_reg_is_uncond_br     := ex2_is_uncond_br
+    ex3_reg_cond_br_target   := ex2_cond_br_target
+    ex3_reg_uncond_br_target := ex2_uncond_br_target
+    ex3_reg_is_j             := ex2_reg_is_j
+    ex3_reg_is_bp_pos        := ex2_reg_is_bp_pos
+    ex3_reg_bp_addr          := ex2_reg_bp_addr
+    ex3_reg_is_half          := ex2_reg_is_half
+  }
 
   //**********************************
   // Execute (EX3) Stage
