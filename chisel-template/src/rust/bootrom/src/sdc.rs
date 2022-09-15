@@ -131,7 +131,6 @@ pub fn init_card() -> u32 {
     if s != 0 {
         return 5;
     }
-    cycle::wait(101000); // 1ms 待つ
     let (s, _r) = cmd(0x0000_0901, 512); // CMD16 / R1
     if s != 0 {
         return 6;

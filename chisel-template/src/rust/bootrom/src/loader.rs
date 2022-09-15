@@ -17,24 +17,14 @@ fn array_to_u32<const N: usize>(b: &[u8; N]) -> u32 {
 pub fn load_kernel() -> u32 {
     let buf: *mut u32 = 0x2000_1000 as *mut u32;
 
-    let mut s: u32;
-    for _ in 0..1 {
-        cycle::wait(1010000); // 10ms 待つ
-        s = sdc::read_sector(0, buf);
-        if s != 0 {
-            uart::print(s);
-            uart::puts(b" ");
-            return 1;
-        }
+    let s = sdc::read_sector(0, buf);
+    if s != 0 {
+        return 1;
     }
     let boot_sector: u32 = read_unaligned(buf, 0x1c6);
-    uart::print(boot_sector);
-    uart::puts(b"\r\n");
 
     let s = sdc::read_sector(boot_sector, buf);
     if s != 0 {
-        uart::print(s);
-        uart::puts(b" ");
         return 2;
     }
     //let sector_per_cluster: u32 = read::<u8>(buf, 0x00d) as u32;
@@ -84,9 +74,10 @@ pub fn load_kernel() -> u32 {
     uart::puts(b" ");
     uart::print(kernel_file_size);
     uart::puts(b" #kern\r\n");
-    // for i in 0..128 {
-    //     uart::print(read::<u32>(buf, i * 4));
-    //     uart::puts(b"\r\n");
-    // }
+
+    for i in 0..128 {
+        uart::print(read::<u32>(buf, i * 4));
+        uart::puts(b"\r\n");
+    }
     0
 }
