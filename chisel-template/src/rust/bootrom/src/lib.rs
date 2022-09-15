@@ -1,12 +1,12 @@
 #![no_std]
 
-mod start;
-mod mmio;
-mod uart;
 mod cycle;
 mod gpio;
-mod sdc;
 mod loader;
+mod mmio;
+mod sdc;
+mod start;
+mod uart;
 
 fn main() {
     let s = sdc::init_card();

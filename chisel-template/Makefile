@@ -6,3 +6,9 @@ verilog:
 
 bootrom:
 	make -C src/rust/bootrom
+
+rustfmt:
+	(cd src/rust/bootrom && cargo fmt)
+
+picocom:
+	sudo picocom /dev/ttyUSB1 -b 115200

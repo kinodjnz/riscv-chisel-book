@@ -1,5 +1,5 @@
-use core::arch::asm;
 use super::mmio::readv;
+use core::arch::asm;
 
 const REG_CONFIG_CLOCK_HZ: *mut u32 = 0x4000_0004 as *mut u32;
 static mut CLOCK_HZ: u32 = 0;
@@ -14,15 +14,15 @@ fn read_cycle() -> u64 {
             asm!("rdcycle  {0}", out(reg) l);
             asm!("rdcycleh {0}", out(reg) hv);
         }
-        if h == hv { break; }
+        if h == hv {
+            break;
+        }
     }
     ((h as u64) << 32) | (l as u64)
 }
 
 pub fn clock_hz() -> u32 {
-    unsafe {
-        CLOCK_HZ
-    }
+    unsafe { CLOCK_HZ }
 }
 
 pub fn wait(cycles: u32) {

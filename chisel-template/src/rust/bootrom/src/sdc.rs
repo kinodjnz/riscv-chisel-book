@@ -1,12 +1,12 @@
-use super::mmio::{readv, writev};
 use super::cycle;
+use super::mmio::{readv, writev};
 
-const REG_SDC_SETTING:  *mut u32 = 0x3000_3000 as *mut u32;
-const REG_SDC_CONTROL:  *mut u32 = 0x3000_3004 as *mut u32;
-const REG_SDC_STATUS:   *mut u32 = 0x3000_3004 as *mut u32;
-const REG_SDC_COMMAND:  *mut u32 = 0x3000_3008 as *mut u32;
+const REG_SDC_SETTING: *mut u32 = 0x3000_3000 as *mut u32;
+const REG_SDC_CONTROL: *mut u32 = 0x3000_3004 as *mut u32;
+const REG_SDC_STATUS: *mut u32 = 0x3000_3004 as *mut u32;
+const REG_SDC_COMMAND: *mut u32 = 0x3000_3008 as *mut u32;
 const REG_SDC_RESPONSE: *mut u32 = 0x3000_3008 as *mut u32;
-const REG_SDC_DATA:     *mut u32 = 0x3000_300c as *mut u32;
+const REG_SDC_DATA: *mut u32 = 0x3000_300c as *mut u32;
 
 static mut BLOCK_ACCESS: bool = false;
 
@@ -31,7 +31,7 @@ fn acmd(control: u32, command: u32, rca: u32) -> (u32, u32) {
     }
     let (s, r) = cmd(control, command);
     if s != 0 {
-        return (0x0000_0200 + s, r)
+        return (0x0000_0200 + s, r);
     }
     (0, r)
 }
