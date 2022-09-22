@@ -1,25 +1,22 @@
 #![no_std]
 
 mod cycle;
-mod gpio;
 mod loader;
 mod mmio;
 mod sdc;
 mod start;
 mod uart;
 
-fn main() {
+fn main() -> ! {
     let s = sdc::init_card();
-    uart::print(s);
-    uart::puts(b" sd\r\n");
-    let s = loader::load_kernel();
-    uart::print(s);
-    uart::puts(b" ld\r\n");
-    let mut led_out: u32 = 1;
-    loop {
-        //uart::puts(b"Hello, RISC-V\r\n");
-        gpio::out(led_out);
-        led_out = (led_out << 1) | ((led_out >> 7) & 1);
-        cycle::wait(cycle::clock_hz() >> 1);
+    if s != 0 {
+        uart::puts(b"sd init failed: ");
+        uart::print(s);
+        uart::puts(b"\r\n");
     }
+    let s = loader::load_kernel();
+    uart::puts(b"load failed: ");
+    uart::print(s);
+    uart::puts(b"\r\n");
+    loop {}
 }

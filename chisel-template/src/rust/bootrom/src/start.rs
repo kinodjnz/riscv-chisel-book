@@ -22,7 +22,6 @@ pub extern "C" fn __start_rust() -> ! {
     init_bss();
     super::cycle::init();
     super::main();
-    loop {}
 }
 
 use core::panic::PanicInfo;

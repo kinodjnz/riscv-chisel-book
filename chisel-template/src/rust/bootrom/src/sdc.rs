@@ -36,14 +36,7 @@ fn acmd(control: u32, command: u32, rca: u32) -> (u32, u32) {
     (0, r)
 }
 
-pub fn read_sector(sector_address: u32, buf: *mut u32) -> u32 {
-    let address: u32 = unsafe {
-        if BLOCK_ACCESS {
-            sector_address
-        } else {
-            sector_address * 512
-        }
-    };
+pub fn read_sector_single(address: u32, buf: *mut u32) -> u32 {
     let (s, _r) = cmd(0x0000_1911, address); // CMD17 / R1
     if s != 0 {
         return s;
@@ -62,6 +55,50 @@ pub fn read_sector(sector_address: u32, buf: *mut u32) -> u32 {
         }
     }
     0
+}
+
+fn read_sector_multi(address: u32, sector_count: u32, mut buf: *mut u32) -> u32 {
+    let (s, _r) = cmd(0x0000_2921, address); // CMD18 / R1
+    if s != 0 {
+        return s;
+    }
+    for _ in 0..sector_count {
+        let mut s = 0;
+        while (s & 0x0001_0000) == 0 {
+            s = readv(REG_SDC_STATUS);
+        }
+        if s != 0x0001_0000 {
+            cmd(0x0000_08c5, address); // CMD12 / R1b
+            return 0x0000_2000 + s;
+        }
+        for i in 0..128 {
+            let x = readv(REG_SDC_DATA);
+            unsafe {
+                writev(buf.add(i), x);
+            }
+        }
+        buf = unsafe { buf.add(128) };
+    }
+    let (s, _r) = cmd(0x0000_08c5, address); // CMD12 / R1b
+    if s != 0 {
+        return 0x0000_4000 + s;
+    }
+    0
+}
+
+pub fn read_sector(sector_address: u32, sector_count: u32, buf: *mut u32) -> u32 {
+    let address: u32 = unsafe {
+        if BLOCK_ACCESS {
+            sector_address
+        } else {
+            sector_address * 512
+        }
+    };
+    if sector_count == 1 {
+        read_sector_single(address, buf)
+    } else {
+        read_sector_multi(address, sector_count, buf)
+    }
 }
 
 pub fn init_card() -> u32 {
