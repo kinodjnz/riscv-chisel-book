@@ -37,6 +37,8 @@ class CoreDebugSignals extends Bundle {
   val me_intr = Output(Bool())
   val cycle_counter = Output(UInt(64.W))
   val instret = Output(UInt(64.W))
+  val id_pc = Output(UInt(WORD_LEN.W))
+  val id_inst = Output(UInt(WORD_LEN.W))
 }
 
 object IcState extends ChiselEnum {
@@ -552,10 +554,10 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
       C_OR       -> List(ALU_OR   , OP1_C_RS1P, OP2_C_RS2P , MEN_X, REN_S, WB_ALU, WBA_CP1, CSR_X, MW_X),
       C_AND      -> List(ALU_AND  , OP1_C_RS1P, OP2_C_RS2P , MEN_X, REN_S, WB_ALU, WBA_CP1, CSR_X, MW_X),
       C_SLLI     -> List(ALU_SLL  , OP1_C_RS1 , OP2_C_IMI  , MEN_X, REN_S, WB_ALU, WBA_C  , CSR_X, MW_X),
-      C_J        -> List(ALU_ADD  , OP1_PC    , OP2_C_IMJ  , MEN_X, REN_S, WB_X  , WBA_C  , CSR_X, MW_X),
+      C_J        -> List(ALU_ADD  , OP1_PC    , OP2_C_IMJ  , MEN_X, REN_X, WB_X  , WBA_C  , CSR_X, MW_X),
       C_BEQZ     -> List(BR_BEQ   , OP1_C_RS1P, OP2_Z      , MEN_X, REN_X, WB_X  , WBA_C  , CSR_X, MW_X),
       C_BNEZ     -> List(BR_BNE   , OP1_C_RS1P, OP2_Z      , MEN_X, REN_X, WB_X  , WBA_C  , CSR_X, MW_X),
-      C_JR       -> List(ALU_JALR , OP1_C_RS1 , OP2_Z      , MEN_X, REN_S, WB_X  , WBA_C  , CSR_X, MW_X),
+      C_JR       -> List(ALU_JALR , OP1_C_RS1 , OP2_Z      , MEN_X, REN_X, WB_X  , WBA_C  , CSR_X, MW_X),
       C_JALR     -> List(ALU_JALR , OP1_C_RS1 , OP2_Z      , MEN_X, REN_S, WB_PC , WBA_RA , CSR_X, MW_X),
       C_JAL      -> List(ALU_ADD  , OP1_PC    , OP2_C_IMJ  , MEN_X, REN_S, WB_PC , WBA_RA , CSR_X, MW_X),
       C_LWSP     -> List(ALU_ADD  , OP1_C_SP  , OP2_C_IMSL , MEN_X, REN_S, WB_MEM, WBA_C  , CSR_X, MW_W),
@@ -1277,6 +1279,8 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
   io.debug_signal.mem_reg_pc := mem_reg_pc
   io.debug_signal.mem_is_valid_inst := mem_is_valid_inst
   io.debug_signal.me_intr := mem_is_meintr
+  io.debug_signal.id_pc := id_reg_pc
+  io.debug_signal.id_inst := id_inst
 
   //**********************************
   // IO & Debug

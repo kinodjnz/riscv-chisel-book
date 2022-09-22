@@ -341,7 +341,10 @@ class Memory() extends Module {
     }
     is (ICacheState.Lookup) {
       io.imem.inst := io.icache.rdata
-      io.imem.valid := true.B
+      when (i_reg_req_addr.tag(ICACHE_TAG_BITS-5, 0) === i_reg_next_addr.tag(ICACHE_TAG_BITS-5, 0) &&
+          i_reg_req_addr.index === i_reg_next_addr.index) {
+        io.imem.valid := true.B
+      }
       io.icache_control.busy := false.B
       val req_addr = io.imem.addr.asTypeOf(new ICacheAddrBundle())
       i_reg_req_addr := req_addr
