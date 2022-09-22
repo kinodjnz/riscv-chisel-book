@@ -95,4 +95,19 @@ class BranchPredictor(tableLen: Int, bpTagInitPath: String = null) extends Modul
     bp_cache_tag.write(bp_update_rw_index, bp_reg_write_tag)
     bp_cache_br.write(bp_update_rw_index, bp_reg_write_br_addr)
   }
+
+  // printf(p"io.up.update_en         : 0x${Hexadecimal(io.up.update_en)}\n")
+  // printf(p"io.up.inst_pc           : 0x${Hexadecimal(io.up.inst_pc)}\n")
+  // printf(p"io.up.br_pos            : 0x${Hexadecimal(io.up.br_pos)}\n")
+  // printf(p"io.up.br_addr           : 0x${Hexadecimal(io.up.br_addr)}\n")
+  // printf(p"bp_reg_write_en         : 0x${Hexadecimal(bp_reg_write_en)}\n")
+  // printf(p"bp_reg_write_index      : 0x${Hexadecimal(bp_reg_write_index)}\n")
+  // printf(p"bp_reg_write_hist       : 0x${Hexadecimal(bp_reg_write_hist)}\n")
+  // printf(p"bp_reg_write_tag        : 0x${Hexadecimal(bp_reg_write_tag)}\n")
+  // printf(p"bp_reg_write_br_addr    : 0x${Hexadecimal(bp_reg_write_br_addr)}\n")
+  // printf(p"bp_index                : 0x${Hexadecimal(bp_index)}\n")
+  // printf(p"bp_reg_tag              : 0x${Hexadecimal(bp_reg_tag)}\n")
+  // printf(p"bp_reg_rd_hist          : 0x${Hexadecimal(bp_reg_rd_hist)}\n")
+  // printf(p"bp_reg_rd_tag           : 0x${Hexadecimal(bp_reg_rd_tag)}\n")
+  // printf(p"bp_reg_rd_br            : 0x${Hexadecimal(bp_reg_rd_br)}\n")
 }

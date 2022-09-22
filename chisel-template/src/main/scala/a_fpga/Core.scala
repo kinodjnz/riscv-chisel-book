@@ -218,6 +218,7 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
   val ic_data_out     = Wire(UInt(WORD_LEN.W))
   val ic_reg_imem_addr = RegInit(0.U(WORD_LEN.W))
   val ic_reg_addr_out = RegInit(0.U(WORD_LEN.W))
+  val ic_addr_out     = Wire(UInt(WORD_LEN.W))
 
   val ic_reg_inst       = RegInit(0.U(WORD_LEN.W))
   val ic_reg_inst_addr  = RegInit(0.U(WORD_LEN.W))
@@ -234,12 +235,14 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
   ic_reg_read_rdy := true.B
   ic_reg_half_rdy := true.B
   ic_data_out := BUBBLE
+  ic_addr_out := ic_reg_addr_out
+  ic_reg_addr_out := ic_addr_out
 
   when (ic_addr_en) {
     val ic_next_imem_addr = Cat(ic_addr(WORD_LEN-1, 2), Fill(2, 0.U))
     io.imem.addr := ic_next_imem_addr
     ic_reg_imem_addr := ic_next_imem_addr
-    ic_reg_addr_out := ic_addr
+    ic_addr_out := ic_addr
     ic_state := Mux(ic_addr(1).asBool, IcState.EmptyHalf, IcState.Empty)
     ic_reg_read_rdy := !ic_addr(1).asBool
   }.elsewhen (ic_state =/= IcState.Full && ic_state =/= IcState.Full2Half && !io.imem.valid) {
@@ -255,10 +258,10 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
         ic_data_out := io.imem.inst
         ic_state := IcState.Full
         when (ic_read_en2) {
-          ic_reg_addr_out := ic_imem_addr_2
+          ic_addr_out := ic_imem_addr_2
           ic_state := IcState.FullHalf
         }.elsewhen (ic_read_en4) {
-          ic_reg_addr_out := ic_imem_addr_4
+          ic_addr_out := ic_imem_addr_4
           ic_state := IcState.Empty
         }
       }
@@ -268,10 +271,10 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
         ic_reg_inst := io.imem.inst
         ic_reg_inst_addr := ic_reg_imem_addr
         ic_data_out := Cat(Fill(WORD_LEN/2-1, 0.U), io.imem.inst(WORD_LEN-1, WORD_LEN/2))
-        ic_reg_addr_out := ic_imem_addr_2
+        ic_addr_out := ic_imem_addr_2
         ic_state := IcState.FullHalf
         when (ic_read_en2) {
-          ic_reg_addr_out := ic_imem_addr_4
+          ic_addr_out := ic_imem_addr_4
           ic_state := IcState.Empty
         }
       }
@@ -279,10 +282,10 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
         io.imem.addr := ic_reg_imem_addr
         ic_data_out := ic_reg_inst
         when (ic_read_en2) {
-          ic_reg_addr_out := ic_inst_addr_2
+          ic_addr_out := ic_inst_addr_2
           ic_state := IcState.FullHalf
         }.elsewhen(ic_read_en4) {
-          ic_reg_addr_out := ic_reg_imem_addr
+          ic_addr_out := ic_reg_imem_addr
           ic_state := IcState.Empty
         }
       }
@@ -296,12 +299,12 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
         when (ic_read_en2) {
           ic_reg_inst := io.imem.inst
           ic_reg_inst_addr := ic_reg_imem_addr
-          ic_reg_addr_out := ic_reg_imem_addr
+          ic_addr_out := ic_reg_imem_addr
           ic_state := IcState.Full
         }.elsewhen(ic_read_en4) {
           ic_reg_inst := io.imem.inst
           ic_reg_inst_addr := ic_reg_imem_addr
-          ic_reg_addr_out := Cat(ic_reg_imem_addr(WORD_LEN-1, 2), 1.U(1.W), 0.U(1.W))
+          ic_addr_out := Cat(ic_reg_imem_addr(WORD_LEN-1, 2), 1.U(1.W), 0.U(1.W))
           ic_state := IcState.FullHalf
         }
       }
@@ -311,12 +314,12 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
         when (ic_read_en2) {
           ic_reg_inst := ic_reg_inst2
           ic_reg_inst_addr := ic_reg_inst2_addr
-          ic_reg_addr_out := ic_reg_inst2_addr
+          ic_addr_out := ic_reg_inst2_addr
           ic_state := IcState.Full
         }.elsewhen(ic_read_en4) {
           ic_reg_inst := ic_reg_inst2
           ic_reg_inst_addr := ic_reg_inst2_addr
-          ic_reg_addr_out := Cat(ic_reg_inst2_addr(WORD_LEN-1, 2), 1.U(1.W), 0.U(1.W))
+          ic_addr_out := Cat(ic_reg_inst2_addr(WORD_LEN-1, 2), 1.U(1.W), 0.U(1.W))
           ic_state := IcState.FullHalf
         }
       }
@@ -351,11 +354,7 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
   ic_addr_en  := if1_is_jump
   ic_addr     := if1_jump_addr
 
-  val if1_reg_next_pc = RegInit(0.U(WORD_LEN.W))
-  val if1_next_pc = Mux(if1_is_jump, if1_jump_addr, if1_reg_next_pc)
-  val if1_next_pc_4 = if1_next_pc + 4.U(WORD_LEN.W)
-  if1_reg_next_pc := Mux(id_reg_stall, if1_next_pc, if1_next_pc_4)
-  bp.io.lu.inst_pc := if1_next_pc
+  bp.io.lu.inst_pc := ic_addr_out
 
   //**********************************
   // IF1/IF2 Register
