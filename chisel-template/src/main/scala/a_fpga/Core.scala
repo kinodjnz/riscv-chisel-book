@@ -1081,7 +1081,7 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
       when ((ex2_reg_dd(WORD_LEN*2-2, WORD_LEN+2) === 0.U) || (ex2_reg_dd(WORD_LEN*2-2, WORD_LEN+2) === 0x1FFF_FFFF.U)) {
         ex2_reg_divrem_state := DivremState.Dividing
         val ex2_dd = Mux(
-          ex2_reg_dd < 0.S,
+          ex2_reg_dd(WORD_LEN*2-2) === 1.U,
           ~ex2_reg_dd(WORD_LEN+1, WORD_LEN-3),
           ex2_reg_dd(WORD_LEN+1, WORD_LEN-3)
         )
@@ -1102,7 +1102,7 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
     }
     is (DivremState.Dividing) {
       val p = Mux(
-        ex2_reg_dividend >= 0.S,
+        ex2_reg_dividend(WORD_LEN*2) === 0.U,
         (ex2_reg_dividend >> ex2_reg_shift)(4, 0),
         ~(ex2_reg_dividend >> ex2_reg_shift)(4, 0),
       )
@@ -1161,7 +1161,7 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
           20.U -> 2.U, 21.U -> 2.U,
         )),
       ))
-      val wneg = ((ex2_reg_dividend >= 0.S && ex2_reg_sign_op2 === 1.U) || (ex2_reg_dividend < 0.S && ex2_reg_sign_op2 === 0.U))
+      val wneg = ((ex2_reg_dividend(WORD_LEN*2) === 0.U && ex2_reg_sign_op2 === 1.U) || (ex2_reg_dividend(WORD_LEN*2) === 1.U && ex2_reg_sign_op2 === 0.U))
       val d2 = ex2_reg_divisor + ex2_reg_divisor
       reminder := Mux(wneg,
         MuxCase(ex2_reg_dividend(WORD_LEN*2, WORD_LEN).asSInt(), Seq(
@@ -1194,10 +1194,10 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
       val quotient = ex2_reg_quotient
       val d1 = reminder + ex2_reg_divisor
       val d2 = reminder - ex2_reg_divisor
-      when (reminder =/= 0.S && ((d1 >= 0.S && ex2_reg_sign_op1 === 0.U && reminder < 0.S) || (d1 < 0.S && ex2_reg_sign_op1 === 1.U && reminder >= 0.S))) {
+      when (reminder =/= 0.S && ((d1(WORD_LEN) === 0.U && ex2_reg_sign_op1 === 0.U && reminder(WORD_LEN) === 1.U) || (d1(WORD_LEN) === 1.U && ex2_reg_sign_op1 === 1.U && reminder(WORD_LEN) === 0.U))) {
         ex2_reminder := d1(WORD_LEN-1, 0)
         ex2_quotient := (quotient - 1.S)(WORD_LEN-1, 0)
-      }.elsewhen (reminder =/= 0.S && ((d2 >= 0.S && ex2_reg_sign_op1 === 0.U && reminder < 0.S) || (d2 < 0.S && ex2_reg_sign_op1 === 1.U && reminder >= 0.S))) {
+      }.elsewhen (reminder =/= 0.S && ((d2(WORD_LEN) === 0.U && ex2_reg_sign_op1 === 0.U && reminder(WORD_LEN) === 1.U) || (d2(WORD_LEN) === 1.U && ex2_reg_sign_op1 === 1.U && reminder(WORD_LEN) === 0.U))) {
         ex2_reminder := d2(WORD_LEN-1, 0)
         ex2_quotient := (quotient + 1.S)(WORD_LEN-1, 0)
       }.otherwise {
