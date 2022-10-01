@@ -95,6 +95,7 @@ object Consts {
   val WB_PC      = 4.U(WB_SEL_LEN.W)
   val WB_CSR     = 7.U(WB_SEL_LEN.W)
   val WB_MUL     = 6.U(WB_SEL_LEN.W)
+  val WB_DR      = 1.U(WB_SEL_LEN.W)
   val WB_MEM_V   = 1.U(WB_SEL_LEN.W)
   val WB_ALU_V   = 2.U(WB_SEL_LEN.W)
   val WB_VL      = 3.U(WB_SEL_LEN.W)

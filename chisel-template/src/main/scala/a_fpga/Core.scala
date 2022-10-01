@@ -155,6 +155,7 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
   val ex2_reg_mtval         = RegInit(0.U(WORD_LEN.W))
   val ex2_reminder          = Wire(UInt(WORD_LEN.W))
   val ex2_quotient          = Wire(UInt(WORD_LEN.W))
+  val ex2_alu_divrem_out    = Wire(UInt(WORD_LEN.W))
 
   // EX2/EX3 State
   val ex3_reg_bp_en            = RegInit(false.B)
@@ -196,6 +197,7 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
   val mem_reg_is_trap       = RegInit(false.B)
   val mem_reg_mcause        = RegInit(0.U(WORD_LEN.W))
   val mem_reg_mtval         = RegInit(0.U(WORD_LEN.W))
+  val mem_reg_alu_divrem_out = RegInit(0.U(WORD_LEN.W))
 
   // MEM/WB State
   val wb_reg_wb_addr        = RegInit(0.U(ADDR_LEN.W))
@@ -547,10 +549,10 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
       MULH  -> List(ALU_MULH  , OP1_RS1, OP2_RS2, MEN_X, REN_S, WB_MUL, WBA_RD, CSR_X, MW_X),
       MULHU -> List(ALU_MULHU , OP1_RS1, OP2_RS2, MEN_X, REN_S, WB_MUL, WBA_RD, CSR_X, MW_X),
       MULHSU-> List(ALU_MULHSU, OP1_RS1, OP2_RS2, MEN_X, REN_S, WB_MUL, WBA_RD, CSR_X, MW_X),
-      DIV   -> List(ALU_DIV   , OP1_RS1, OP2_RS2, MEN_X, REN_S, WB_ALU, WBA_RD, CSR_X, MW_X),
-      DIVU  -> List(ALU_DIVU  , OP1_RS1, OP2_RS2, MEN_X, REN_S, WB_ALU, WBA_RD, CSR_X, MW_X),
-      REM   -> List(ALU_REM   , OP1_RS1, OP2_RS2, MEN_X, REN_S, WB_ALU, WBA_RD, CSR_X, MW_X),
-      REMU  -> List(ALU_REMU  , OP1_RS1, OP2_RS2, MEN_X, REN_S, WB_ALU, WBA_RD, CSR_X, MW_X),
+      DIV   -> List(ALU_DIV   , OP1_RS1, OP2_RS2, MEN_X, REN_S, WB_DR,  WBA_RD, CSR_X, MW_X),
+      DIVU  -> List(ALU_DIVU  , OP1_RS1, OP2_RS2, MEN_X, REN_S, WB_DR,  WBA_RD, CSR_X, MW_X),
+      REM   -> List(ALU_REM   , OP1_RS1, OP2_RS2, MEN_X, REN_S, WB_DR,  WBA_RD, CSR_X, MW_X),
+      REMU  -> List(ALU_REMU  , OP1_RS1, OP2_RS2, MEN_X, REN_S, WB_DR,  WBA_RD, CSR_X, MW_X),
       C_ILL      -> List(ALU_X    , OP1_C_RS1 , OP2_C_RS2  , MEN_X, REN_X, WB_X  , WBA_C  , CSR_X, MW_X),
       C_ADDI4SPN -> List(ALU_ADD  , OP1_C_SP  , OP2_C_IMIW , MEN_X, REN_S, WB_ALU, WBA_CP2, CSR_X, MW_X),
       C_ADDI16SP -> List(ALU_ADD  , OP1_C_RS1 , OP2_C_IMI16, MEN_X, REN_S, WB_ALU, WBA_C  , CSR_X, MW_X),
@@ -928,7 +930,7 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
   when(!ex2_stall && !mem_stall) {
     val ex1_hazard = (ex1_reg_rf_wen === REN_S) && (ex1_reg_wb_addr =/= 0.U) && !mem_reg_is_br && !ex3_reg_is_br
     ex1_reg_fw_en := !ex1_stall && ex1_hazard && (ex1_reg_wb_sel =/= WB_MEM) && (ex1_reg_wb_sel =/= WB_CSR)
-    ex1_reg_hazard := ex1_hazard && ((ex1_reg_wb_sel === WB_MEM) || (ex1_reg_wb_sel === WB_CSR) || (ex1_reg_wb_sel === WB_MUL))
+    ex1_reg_hazard := ex1_hazard && ((ex1_reg_wb_sel === WB_MEM) || (ex1_reg_wb_sel === WB_CSR) || (ex1_reg_wb_sel === WB_MUL) || (ex1_reg_wb_sel === WB_DR))
   }
 
   //**********************************
@@ -974,10 +976,10 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
     (ex2_reg_exe_fun === ALU_SLTU)  -> (ex2_reg_op1_data < ex2_reg_op2_data).asUInt(),
     (ex2_reg_exe_fun === ALU_JALR)  -> ((ex2_reg_op1_data + ex2_reg_op2_data) & ~1.U(WORD_LEN.W)),
     (ex2_reg_exe_fun === ALU_COPY1) -> ex2_reg_op1_data,
-    (ex2_reg_exe_fun === ALU_DIV)   -> ex2_quotient,
-    (ex2_reg_exe_fun === ALU_DIVU)  -> ex2_quotient,
-    (ex2_reg_exe_fun === ALU_REM)   -> ex2_reminder,
-    (ex2_reg_exe_fun === ALU_REMU)  -> ex2_reminder,
+    // (ex2_reg_exe_fun === ALU_DIV)   -> ex2_quotient,
+    // (ex2_reg_exe_fun === ALU_DIVU)  -> ex2_quotient,
+    // (ex2_reg_exe_fun === ALU_REM)   -> ex2_reminder,
+    // (ex2_reg_exe_fun === ALU_REMU)  -> ex2_reminder,
   ))
 
   val ex2_mullu  = (ex2_reg_op1_data * ex2_reg_op2_data(WORD_LEN/2-1, 0))
@@ -989,7 +991,10 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
   val ex2_reg_divrem_state = RegInit(DivremState.Idle)
   val ex2_reg_dividend = RegInit(0.S((WORD_LEN*2+1).W))
   val ex2_reg_quotient = RegInit(0.S((WORD_LEN+1).W))
+  val ex2_reg_reminder_final = RegInit(0.S((WORD_LEN+1).W))
+  val ex2_reg_quotient_final = RegInit(0.S((WORD_LEN+1).W))
   val ex2_reg_divisor = RegInit(0.S((WORD_LEN*2+2).W))
+  val ex2_reg_divisor2 = RegInit(0.S((WORD_LEN*2+2).W))
   val ex2_reg_dd = RegInit(0.S((WORD_LEN*2-1).W))
   val ex2_reg_d = RegInit(0.U(3.W))
   val ex2_reg_shift = RegInit(0.U(6.W))
@@ -998,14 +1003,17 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
   val ex2_reg_sign_op2 = RegInit(0.U(1.W))
   val ex2_q = Wire(UInt(3.W))
   ex2_q := DontCare
-  val reminder = Wire(SInt(33.W))
-  val quotient = Wire(UInt(33.W))
-  reminder := DontCare
-  quotient := DontCare
 
   ex2_stall := false.B
   ex2_quotient := DontCare
   ex2_reminder := DontCare
+  ex2_alu_divrem_out := DontCare
+  when (ex2_reg_exe_fun === ALU_DIV || ex2_reg_exe_fun === ALU_DIVU) {
+    ex2_alu_divrem_out := ex2_quotient
+  }.elsewhen (ex2_reg_exe_fun === ALU_REM || ex2_reg_exe_fun === ALU_REMU) {
+    ex2_alu_divrem_out := ex2_reminder
+  }
+
   switch (ex2_reg_divrem_state) {
     is (DivremState.Idle) {
       when (ex2_reg_exe_fun === ALU_DIV || ex2_reg_exe_fun === ALU_REM) {
@@ -1025,22 +1033,24 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
             )
             when (ex2_dd(4, 3) === 0.U) {
               // -1 による除算
-              ex2_reg_shift := 29.U
+              ex2_reg_shift := 0.U
               ex2_reg_d := 7.U
             }.elsewhen (ex2_dd(4) === 0.U) {
-              ex2_reg_shift := 30.U
+              ex2_reg_shift := 1.U
               ex2_reg_d := ex2_dd(2, 0)
             }.otherwise {
-              ex2_reg_shift := 31.U;
+              ex2_reg_shift := 2.U;
               ex2_reg_d := ex2_dd(3, 1)
             }
           }.otherwise {
             ex2_reg_divrem_state := DivremState.Placing
-            ex2_reg_shift := 31.U
+            ex2_reg_shift := 2.U
           }
           ex2_reg_dividend := Cat(Fill(WORD_LEN+1, ex2_reg_op1_data(WORD_LEN-1)), ex2_reg_op1_data).asSInt()
           ex2_reg_quotient := 0.S
-          ex2_reg_divisor := Cat(ex2_reg_op2_data(WORD_LEN-1), ex2_reg_op2_data).asSInt()
+          val divisor = Cat(ex2_reg_op2_data(WORD_LEN-1), ex2_reg_op2_data).asSInt()
+          ex2_reg_divisor := divisor
+          ex2_reg_divisor2 := divisor + divisor
           ex2_reg_dd := Cat(ex2_reg_op2_data(WORD_LEN-1), ex2_reg_op2_data, 0.U((WORD_LEN-2).W)).asSInt()
           ex2_reg_count := 16.U(5.W)
           ex2_reg_sign_op1 := ex2_reg_op1_data(WORD_LEN-1)
@@ -1056,19 +1066,21 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
             ex2_reg_divrem_state := DivremState.Dividing
             val ex2_dd = Cat(ex2_reg_op2_data(1, 0), 0.U(3.W))
             when (ex2_dd(4) === 0.U) {
-              ex2_reg_shift := 30.U
+              ex2_reg_shift := 1.U
               ex2_reg_d := ex2_dd(2, 0)
             }.otherwise {
-              ex2_reg_shift := 31.U;
+              ex2_reg_shift := 2.U
               ex2_reg_d := ex2_dd(3, 1)
             }
           }.otherwise {
             ex2_reg_divrem_state := DivremState.Placing
-            ex2_reg_shift := 31.U(6.W)
+            ex2_reg_shift := 2.U
           }
           ex2_reg_dividend := Cat(Fill(WORD_LEN+1, 0.U(1.W)), ex2_reg_op1_data).asSInt()
           ex2_reg_quotient := 0.S
-          ex2_reg_divisor := Cat(0.U(1.W), ex2_reg_op2_data).asSInt()
+          val divisor = Cat(0.U(1.W), ex2_reg_op2_data).asSInt()
+          ex2_reg_divisor := divisor
+          ex2_reg_divisor2 := divisor + divisor
           ex2_reg_dd := Cat(0.U(1.W), ex2_reg_op2_data, 0.U((WORD_LEN-2).W)).asSInt()
           ex2_reg_count := 16.U(5.W)
           ex2_reg_sign_op1 := 0.U
@@ -1101,11 +1113,8 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
       ex2_stall := true.B
     }
     is (DivremState.Dividing) {
-      val p = Mux(
-        ex2_reg_dividend(WORD_LEN*2) === 0.U,
-        (ex2_reg_dividend >> ex2_reg_shift)(4, 0),
-        ~(ex2_reg_dividend >> ex2_reg_shift)(4, 0),
-      )
+      val shifted = (ex2_reg_dividend(2*WORD_LEN, 29) >> ex2_reg_shift)(4, 0)
+      val p = Mux(ex2_reg_dividend(WORD_LEN*2) === 0.U, shifted, ~shifted)
       val d: UInt = ex2_reg_d
       ex2_q := MuxLookup(d, 0.U(2.W), Seq(
         0.U -> MuxLookup(p, DontCare, Seq(
@@ -1162,36 +1171,31 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
         )),
       ))
       val wneg = ((ex2_reg_dividend(WORD_LEN*2) === 0.U && ex2_reg_sign_op2 === 1.U) || (ex2_reg_dividend(WORD_LEN*2) === 1.U && ex2_reg_sign_op2 === 0.U))
-      val d2 = ex2_reg_divisor + ex2_reg_divisor
-      reminder := Mux(wneg,
-        MuxCase(ex2_reg_dividend(WORD_LEN*2, WORD_LEN).asSInt(), Seq(
-          (ex2_q === 1.U) -> (ex2_reg_dividend(WORD_LEN*2, WORD_LEN).asSInt() + ex2_reg_divisor),
-          (ex2_q === 2.U) -> (ex2_reg_dividend(WORD_LEN*2, WORD_LEN).asSInt() + d2),
-        )),
-        MuxCase(ex2_reg_dividend(WORD_LEN*2, WORD_LEN).asSInt(), Seq(
-          (ex2_q === 1.U) -> (ex2_reg_dividend(WORD_LEN*2, WORD_LEN).asSInt() - ex2_reg_divisor),
-          (ex2_q === 2.U) -> (ex2_reg_dividend(WORD_LEN*2, WORD_LEN).asSInt() - d2),
-        )),
-      )
-      quotient := Mux(wneg,
+      val rem0 = ex2_reg_dividend(WORD_LEN*2, WORD_LEN).asSInt()
+      val reminder = MuxCase(rem0, Seq(
+          (wneg && (ex2_q === 1.U)) -> (rem0 + ex2_reg_divisor),
+          (wneg && (ex2_q === 2.U)) -> (rem0 + ex2_reg_divisor2),
+          (!wneg && (ex2_q === 1.U)) -> (rem0 - ex2_reg_divisor),
+          (!wneg && (ex2_q === 2.U)) -> (rem0 - ex2_reg_divisor2),
+      ))
+      val quotient = Mux(wneg,
         ex2_reg_quotient.asUInt() - Cat(Fill(WORD_LEN-1, 0.U), ex2_q(1, 0)),
         ex2_reg_quotient.asUInt() + Cat(Fill(WORD_LEN-1, 0.U), ex2_q(1, 0)),
       )
       when (ex2_reg_count === 0.U) {
         ex2_reg_divrem_state := DivremState.Finished
-        ex2_reg_dividend := Cat(reminder, ex2_reg_dividend(WORD_LEN-1, 0)).asSInt()
-        ex2_reg_quotient := quotient.asSInt()
-      }.otherwise {
-        ex2_reg_dividend := (Cat(reminder, ex2_reg_dividend(WORD_LEN-1, 0)) << 2.U).asSInt()
-        ex2_reg_quotient := (quotient << 2.U)(WORD_LEN-1, 0).asSInt()
       }
+      ex2_reg_reminder_final := reminder
+      ex2_reg_quotient_final := quotient.asSInt()
+      ex2_reg_dividend := (Cat(reminder, ex2_reg_dividend(WORD_LEN-1, 0)) << 2.U).asSInt()
+      ex2_reg_quotient := (quotient << 2.U)(WORD_LEN-1, 0).asSInt()
       ex2_reg_count := ex2_reg_count - 1.U
       ex2_stall := true.B
     }
     is (DivremState.Finished) {
       ex2_reg_divrem_state := DivremState.Idle
-      val reminder = ex2_reg_dividend(WORD_LEN*2, WORD_LEN).asSInt()
-      val quotient = ex2_reg_quotient
+      val reminder = ex2_reg_reminder_final
+      val quotient = ex2_reg_quotient_final
       val d1 = reminder + ex2_reg_divisor
       val d2 = reminder - ex2_reg_divisor
       when (reminder =/= 0.S && ((d1(WORD_LEN) === 0.U && ex2_reg_sign_op1 === 0.U && reminder(WORD_LEN) === 1.U) || (d1(WORD_LEN) === 1.U && ex2_reg_sign_op1 === 1.U && reminder(WORD_LEN) === 0.U))) {
@@ -1238,7 +1242,7 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
   when(!mem_stall) {
     val ex2_hazard = (ex2_reg_rf_wen === REN_S) && (ex2_reg_wb_addr =/= 0.U) && !mem_reg_is_br && !ex3_reg_is_br
     ex2_reg_fw_en := ex2_hazard && (ex2_reg_wb_sel =/= WB_MEM) && (ex2_reg_wb_sel =/= WB_CSR)
-    ex2_reg_hazard := ex2_hazard && ((ex2_reg_wb_sel === WB_MEM) || (ex2_reg_wb_sel === WB_CSR) || (ex2_reg_wb_sel === WB_MUL))
+    ex2_reg_hazard := ex2_hazard && ((ex2_reg_wb_sel === WB_MEM) || (ex2_reg_wb_sel === WB_CSR) || (ex2_reg_wb_sel === WB_MUL) || (ex2_reg_wb_sel === WB_DR))
   }
 
   //**********************************
@@ -1333,6 +1337,7 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
     mem_reg_is_trap    := ex2_reg_is_trap
     mem_reg_mcause     := ex2_reg_mcause
     mem_reg_mtval      := ex2_reg_mtval
+    mem_reg_alu_divrem_out := ex2_alu_divrem_out
   }
 
   //**********************************
@@ -1479,6 +1484,7 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
     (mem_reg_wb_sel === WB_PC)  -> Mux(mem_reg_is_half, mem_reg_pc + 2.U(WORD_LEN.W), mem_reg_pc + 4.U(WORD_LEN.W)),
     (mem_reg_wb_sel === WB_CSR) -> csr_rdata,
     (mem_reg_wb_sel === WB_MUL) -> mem_alu_mul_out,
+    (mem_reg_wb_sel === WB_DR)  -> mem_reg_alu_divrem_out,
   ))
 
   mem_reg_rf_wen_delay  := mem_rf_wen
