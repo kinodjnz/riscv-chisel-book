@@ -101,6 +101,21 @@
   },
   {
     "class":"chisel3.experimental.EnumAnnotations$EnumDefAnnotation",
+    "typeName":"fpga.DivremState",
+    "definition":{
+      "Idle":0,
+      "Placing":1,
+      "Dividing":2,
+      "Finished":3
+    }
+  },
+  {
+    "class":"chisel3.experimental.EnumAnnotations$EnumComponentAnnotation",
+    "target":"RiscV.Core.ex2_reg_divrem_state",
+    "enumTypeName":"fpga.DivremState"
+  },
+  {
+    "class":"chisel3.experimental.EnumAnnotations$EnumDefAnnotation",
     "typeName":"fpga.IcState",
     "definition":{
       "Full2Half":3,
