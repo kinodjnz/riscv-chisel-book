@@ -78,7 +78,6 @@ class RiscV(clockHz: Int) extends Module {
   val sram2 = Module(new SRAM)
   val icache = Module(new ICache(log2Ceil(WORD_LEN), ICACHE_INDEX_BITS+(log2Ceil(CACHE_LINE_LEN)-log2Ceil(WORD_LEN)), log2Ceil(CACHE_LINE_LEN), ICACHE_INDEX_BITS))
   val icache_valid = Module(new ICacheValid(ICACHE_VALID_DATA_BITS, ICACHE_VALID_ADDR_BITS, ICACHE_INVALIDATE_DATA_BITS, ICACHE_INVALIDATE_ADDR_BITS))
-  //val quotient_table = Module(new QuotientTable(3, 4, 6, 1))
   val gpio = Module(new Gpio)
   val uart = Module(new Uart(clockHz))
   val sdc = Module(new Sdc)
@@ -112,13 +111,6 @@ class RiscV(clockHz: Int) extends Module {
   core.io.dmem <> dmem_decoder.io.initiator
 
   core.io.icache_control <> memory.io.icache_control
-
-  // quotient_table.io.clock := clock
-  // quotient_table.io.wen := core.io.quotient_table.wen
-  // quotient_table.io.waddr := core.io.quotient_table.waddr
-  // quotient_table.io.wdata := core.io.quotient_table.wdata
-  // quotient_table.io.raddr := core.io.quotient_table.raddr
-  // core.io.quotient_table.rdata := quotient_table.io.rdata
 
   // dram
   io.dram <> memory.io.dramPort

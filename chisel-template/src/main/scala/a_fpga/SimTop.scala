@@ -42,9 +42,6 @@ class SimTop(memoryPath: String, bpTagInitPath: String) extends Module {
 
   core.io.icache_control <> memory.io.icache_control
 
-  // val quotient_table = Module(new MockQuotientTable())
-  // core.io.quotient_table <> quotient_table.io.quotient_table
-
   val dram = Module(new MockDram(null, dmemSizeInBytes))
   memory.io.dramPort <> dram.io.dram
 
