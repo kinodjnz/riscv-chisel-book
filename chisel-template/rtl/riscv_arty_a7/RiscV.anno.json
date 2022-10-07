@@ -104,14 +104,13 @@
     "typeName":"fpga.DivremState",
     "definition":{
       "Idle":0,
-      "Placing":1,
-      "Dividing":2,
-      "Finished":3
+      "Dividing":1,
+      "Finished":2
     }
   },
   {
     "class":"chisel3.experimental.EnumAnnotations$EnumComponentAnnotation",
-    "target":"RiscV.Core.ex2_reg_divrem_state",
+    "target":"RiscV.Core.mem_reg_divrem_state",
     "enumTypeName":"fpga.DivremState"
   },
   {
