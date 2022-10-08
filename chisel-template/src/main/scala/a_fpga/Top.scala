@@ -44,13 +44,6 @@ class RiscVDebugSignals extends Bundle {
   val dram_busy                = Output(Bool())
   val dram_ren                 = Output(Bool())
 
-  val sram1_en = Output(UInt(1.W))
-  val sram1_we = Output(UInt(32.W))
-  val sram1_addr = Output(UInt(7.W))
-  val sram2_en = Output(UInt(1.W))
-  val sram2_we = Output(UInt(32.W))
-  val sram2_addr = Output(UInt(7.W))
-
   val sdc_clk     = Output(Bool())
   val sdc_cmd_wrt = Output(Bool())
   val sdc_cmd_out = Output(Bool())
@@ -66,6 +59,7 @@ class RiscV(clockHz: Int) extends Module {
     val dram = Flipped(new DramIo())
     val gpio = Output(UInt(8.W))
     val uart_tx = Output(Bool())
+    val uart_rx = Input(Bool())
     val sdc_port = new SdcPort
     val exit = Output(Bool())
     val debugSignals = new RiscVDebugSignals()
@@ -164,13 +158,6 @@ class RiscV(clockHz: Int) extends Module {
   io.debugSignals.dram_busy                := io.dram.busy
   io.debugSignals.dram_ren                 := io.dram.ren
 
-  io.debugSignals.sram1_en := memory.io.cache_array1.en
-  io.debugSignals.sram1_we := memory.io.cache_array1.we
-  io.debugSignals.sram1_addr := memory.io.cache_array1.addr
-  io.debugSignals.sram2_en := memory.io.cache_array2.en
-  io.debugSignals.sram2_we := memory.io.cache_array2.we
-  io.debugSignals.sram2_addr := memory.io.cache_array2.addr
-
   io.debugSignals.sdc_clk     := sdc.io.sdc_port.clk
   io.debugSignals.sdc_cmd_wrt := sdc.io.sdc_port.cmd_wrt
   io.debugSignals.sdc_cmd_out := sdc.io.sdc_port.cmd_out
@@ -179,6 +166,7 @@ class RiscV(clockHz: Int) extends Module {
   io.exit := core.io.exit
   io.gpio <> gpio.io.gpio
   io.uart_tx <> uart.io.tx
+  io.uart_rx <> uart.io.rx
   core.io.intr <> uart.io.intr
   io.sdc_port <> sdc.io.sdc_port
 }

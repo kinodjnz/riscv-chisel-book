@@ -95,6 +95,7 @@ class Uart(clockHz: Int, baudRate: Int = 115200) extends Module {
     val mem = new DmemPortIo
     val intr = Output(Bool())
     val tx = Output(Bool())
+    val rx = Input(Bool())
   })
 
   val tx = Module(new UartTx(8, clockHz/baudRate))
@@ -105,9 +106,23 @@ class Uart(clockHz: Int, baudRate: Int = 115200) extends Module {
   tx.io.in.valid := !tx_empty
   tx.io.in.bits := tx_data
 
+  val rx = Module(new UartRx(8, clockHz/baudRate, 2))
+  val rx_data = RegInit(0.U(8.W))
+  val rx_data_ready = RegInit(false.B)
+  val rx_intr_en = RegInit(false.B)
+  rx.io.rx := io.rx
+  rx.io.out.ready := !rx_data_ready
+  when (rx.io.out.valid && !rx_data_ready) {
+    rx_data := rx.io.out.bits
+    rx_data_ready := true.B
+  }
+
   when (io.mem.ren) {
     when (io.mem.raddr === 0.U) {
-      io.mem.rdata := Cat(0.U(29.W), (!tx_empty).asUInt, 0.U(1.W), tx_intr_en.asUInt)
+      io.mem.rdata := Cat(0.U(27.W), rx.io.overrun.asUInt, rx_data_ready.asUInt, (!tx_empty).asUInt, rx_intr_en.asUInt, tx_intr_en.asUInt)
+    }.elsewhen (io.mem.raddr === 4.U) {
+      io.mem.rdata := rx_data
+      rx_data_ready := false.B
     }.otherwise {
       io.mem.rdata := 0.U(WORD_LEN.W)
     }
@@ -121,6 +136,7 @@ class Uart(clockHz: Int, baudRate: Int = 115200) extends Module {
   when (io.mem.wen) {
     when (io.mem.waddr === 0.U) {
       tx_intr_en := io.mem.wdata(0).asBool
+      rx_intr_en := io.mem.wdata(1).asBool
     }.elsewhen (io.mem.waddr === 4.U) {
       when (tx_empty) {  //Send TX Data if not busy.
         tx_empty := false.B
@@ -134,6 +150,7 @@ class Uart(clockHz: Int, baudRate: Int = 115200) extends Module {
     tx_empty := true.B
   }
 
-  io.intr := tx_empty && tx_intr_en
+  io.intr := (tx_empty && tx_intr_en) || (rx_data_ready && rx_intr_en)
   io.tx <> tx.io.tx // Connect UART TX signal.
+  io.rx <> rx.io.rx
 }

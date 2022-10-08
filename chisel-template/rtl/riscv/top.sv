@@ -28,6 +28,7 @@ module top #(
     output wire [0:0]                   ddr3_odt,
     output logic [7:0] gpio_out,
     output logic uart_tx,
+    input  logic uart_rx,
     output logic sdc_clk,
     inout  logic sdc_cmd,
     inout  logic [3:0] sdc_dat
@@ -40,7 +41,6 @@ logic io_exit;
 (* mark_debug = "true" *) logic [11:0] io_debugSignals_core_mem_reg_csr_addr;
 (* mark_debug = "true" *) logic        io_debugSignals_core_me_intr;
 (* mark_debug = "true" *) logic [63:0] io_debugSignals_core_cycle_counter;
-(* mark_debug = "true" *) logic [31:0] io_debugSignals_core_instret;
 (* mark_debug = "true" *) logic [31:0] io_debugSignals_core_id_pc;
 (* mark_debug = "true" *) logic [31:0] io_debugSignals_core_id_inst;
 (* mark_debug = "true" *) logic [31:0] io_debugSignals_raddr;
@@ -56,12 +56,6 @@ logic io_exit;
 (* mark_debug = "true" *) logic        io_debugSignals_dram_rdata_valid;
 (* mark_debug = "true" *) logic        io_debugSignals_dram_busy;
 (* mark_debug = "true" *) logic        io_debugSignals_dram_ren;
-(* mark_debug = "true" *) logic        io_debugSignals_sram1_en;
-(* mark_debug = "true" *) logic [31:0] io_debugSignals_sram1_we;
-(* mark_debug = "true" *) logic [6:0]  io_debugSignals_sram1_addr;
-(* mark_debug = "true" *) logic        io_debugSignals_sram2_en;
-(* mark_debug = "true" *) logic [31:0] io_debugSignals_sram2_we;
-(* mark_debug = "true" *) logic [6:0]  io_debugSignals_sram2_addr;
 (* mark_debug = "true" *) logic        io_debugSignals_sdc_clk;
 (* mark_debug = "true" *) logic        io_debugSignals_sdc_cmd_wrt;
 (* mark_debug = "true" *) logic        io_debugSignals_sdc_cmd_out;
@@ -173,6 +167,7 @@ RiscV core(
     .reset(rst),
     .io_gpio(gpio_out),
     .io_uart_tx(uart_tx),
+    .io_uart_rx(uart_rx),
     .io_sdc_port_clk(sdc_clk),
     .io_sdc_port_cmd_wrt(sdc_cmd_wrt),
     .io_sdc_port_cmd_out(sdc_cmd_out),
