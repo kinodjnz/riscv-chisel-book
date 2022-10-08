@@ -3,13 +3,13 @@
     "class":"firrtl.transforms.DedupedResult",
     "original":"~RiscV|SRAM",
     "duplicate":"~RiscV|RiscV/sram1:SRAM",
-    "index":0.35294117647058826
+    "index":0.3333333333333333
   },
   {
     "class":"firrtl.transforms.DedupedResult",
     "original":"~RiscV|SRAM_1",
     "duplicate":"~RiscV|RiscV/sram2:SRAM",
-    "index":0.4117647058823529
+    "index":0.3888888888888889
   },
   {
     "class":"firrtl.EmitCircuitAnnotation",
@@ -141,13 +141,6 @@
   },
   {
     "class":"firrtl.transforms.CombinationalPath",
-    "sink":"~RiscV|RiscV>io_debugSignals_sram2_we",
-    "sources":[
-      "~RiscV|RiscV>io_dram_rdata_valid"
-    ]
-  },
-  {
-    "class":"firrtl.transforms.CombinationalPath",
     "sink":"~RiscV|RiscV>io_debugSignals_wready",
     "sources":[
       "~RiscV|RiscV>io_dram_rdata_valid"
@@ -169,13 +162,6 @@
   },
   {
     "class":"firrtl.transforms.CombinationalPath",
-    "sink":"~RiscV|RiscV>io_debugSignals_sram2_addr",
-    "sources":[
-      "~RiscV|RiscV>io_dram_rdata_valid"
-    ]
-  },
-  {
-    "class":"firrtl.transforms.CombinationalPath",
     "sink":"~RiscV|RiscV>io_dram_addr",
     "sources":[
       "~RiscV|RiscV>io_dram_init_calib_complete",
@@ -184,23 +170,9 @@
   },
   {
     "class":"firrtl.transforms.CombinationalPath",
-    "sink":"~RiscV|RiscV>io_debugSignals_sram2_en",
-    "sources":[
-      "~RiscV|RiscV>io_dram_rdata_valid"
-    ]
-  },
-  {
-    "class":"firrtl.transforms.CombinationalPath",
     "sink":"~RiscV|RiscV>io_debugSignals_dram_busy",
     "sources":[
       "~RiscV|RiscV>io_dram_busy"
-    ]
-  },
-  {
-    "class":"firrtl.transforms.CombinationalPath",
-    "sink":"~RiscV|RiscV>io_debugSignals_sram1_addr",
-    "sources":[
-      "~RiscV|RiscV>io_dram_rdata_valid"
     ]
   },
   {
@@ -238,20 +210,6 @@
   {
     "class":"firrtl.transforms.CombinationalPath",
     "sink":"~RiscV|RiscV>io_debugSignals_dram_rdata_valid",
-    "sources":[
-      "~RiscV|RiscV>io_dram_rdata_valid"
-    ]
-  },
-  {
-    "class":"firrtl.transforms.CombinationalPath",
-    "sink":"~RiscV|RiscV>io_debugSignals_sram1_en",
-    "sources":[
-      "~RiscV|RiscV>io_dram_rdata_valid"
-    ]
-  },
-  {
-    "class":"firrtl.transforms.CombinationalPath",
-    "sink":"~RiscV|RiscV>io_debugSignals_sram1_we",
     "sources":[
       "~RiscV|RiscV>io_dram_rdata_valid"
     ]
