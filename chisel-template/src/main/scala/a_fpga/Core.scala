@@ -200,7 +200,6 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
   val mem_reg_sign_op12         = RegInit(0.U(1.W))
   val mem_reg_init_dividend     = RegInit(0.U((WORD_LEN*2).W))
   val mem_reg_init_divisor      = RegInit(0.U(WORD_LEN.W))
-  val mem_reg_init_divrem_count = RegInit(0.U(5.W))
 
   // MEM/WB State
   val wb_reg_wb_addr        = RegInit(0.U(ADDR_LEN.W))
@@ -992,7 +991,6 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
   val ex2_sign_op12 = WireDefault(0.U(1.W))
   val ex2_dividend = WireDefault(0.U((WORD_LEN*2).W))
   val ex2_divisor = WireDefault(0.U(WORD_LEN.W))
-  val ex2_divrem_count = WireDefault(0.U(5.W))
 
   when (ex2_reg_exe_fun === ALU_DIV || ex2_reg_exe_fun === ALU_REM) {
     ex2_divrem := true.B
@@ -1017,7 +1015,6 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
     ex2_divisor := ex2_reg_op2_data
     ex2_sign_op12 := 0.U
   }
-  ex2_divrem_count := 0.U
 
   // branch
   val ex2_is_cond_br = MuxCase(false.B, Seq(
@@ -1150,7 +1147,6 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
     mem_reg_sign_op12         := ex2_sign_op12
     mem_reg_init_dividend     := ex2_dividend
     mem_reg_init_divisor      := ex2_divisor
-    mem_reg_init_divrem_count := ex2_divrem_count
   }
 
   //**********************************
@@ -1292,10 +1288,10 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
       when (mem_reg_divrem) {
         mem_reg_divrem_state := DivremState.Dividing
         mem_div_stall        := true.B
+        mem_reg_dividend     := mem_reg_init_dividend
+        mem_reg_divisor      := mem_reg_init_divisor
+        mem_reg_divrem_count := 0.U // mem_reg_init_divrem_count
       }
-      mem_reg_dividend     := mem_reg_init_dividend
-      mem_reg_divisor      := mem_reg_init_divisor
-      mem_reg_divrem_count := mem_reg_init_divrem_count
     }
     is (DivremState.Dividing) {
       val reminder = Cat(mem_reg_dividend(WORD_LEN*2-1, WORD_LEN-1)) - Cat(0.U(1.W), mem_reg_divisor)
@@ -1320,8 +1316,6 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
         mem_reg_dividend(WORD_LEN-1, 0),
         ~mem_reg_dividend(WORD_LEN-1, 0) + 1.U,
       )
-      // mem_reminder := mem_reg_dividend(2*WORD_LEN-1, WORD_LEN)
-      // mem_quotient := mem_reg_dividend(WORD_LEN-1, 0)
     }
   }
   printf(p"mem_reg_divrem_state : 0x${Hexadecimal(mem_reg_divrem_state.asUInt())}\n")

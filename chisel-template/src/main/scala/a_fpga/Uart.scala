@@ -88,7 +88,6 @@ class UartRx(numberOfBits: Int, baudDivider: Int, rxSyncStages: Int) extends Mod
             rateCounter := rateCounter - 1.U
         }
     }
-
 }
 
 class Uart(clockHz: Int, baudRate: Int = 115200) extends Module {
