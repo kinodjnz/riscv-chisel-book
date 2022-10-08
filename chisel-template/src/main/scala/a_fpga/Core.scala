@@ -50,7 +50,10 @@ object IcState extends ChiselEnum {
 
 object DivremState extends ChiselEnum {
   val Idle = Value
+  val Placing = Value
   val Dividing = Value
+  val Shifting = Value
+  val Correction = Value
   val Finished = Value
 }
 
@@ -192,13 +195,15 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
   val mem_reg_is_trap       = RegInit(false.B)
   val mem_reg_mcause        = RegInit(0.U(WORD_LEN.W))
   val mem_reg_mtval         = RegInit(0.U(WORD_LEN.W))
-  val mem_reminder              = Wire(UInt(WORD_LEN.W))
-  val mem_quotient              = Wire(UInt(WORD_LEN.W))
+  // val mem_reminder              = Wire(UInt(WORD_LEN.W))
+  // val mem_quotient              = Wire(UInt(WORD_LEN.W))
   val mem_reg_divrem            = RegInit(false.B)
   val mem_reg_sign_op1          = RegInit(0.U(1.W))
   val mem_reg_sign_op12         = RegInit(0.U(1.W))
-  val mem_reg_init_dividend     = RegInit(0.U((WORD_LEN*2).W))
-  val mem_reg_init_divisor      = RegInit(0.U(WORD_LEN.W))
+  val mem_reg_zero_op2          = RegInit(false.B)
+  val mem_reg_init_dividend     = RegInit(0.U((WORD_LEN+5).W))
+  val mem_reg_init_divisor      = RegInit(0.U((WORD_LEN*2).W))
+  val mem_reg_orig_dividend     = RegInit(0.U(WORD_LEN.W))
 
   // MEM/WB State
   val wb_reg_wb_addr        = RegInit(0.U(ADDR_LEN.W))
@@ -988,32 +993,35 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
   val ex2_divrem = WireDefault(false.B)
   val ex2_sign_op1 = WireDefault(0.U(1.W))
   val ex2_sign_op12 = WireDefault(0.U(1.W))
-  val ex2_dividend = WireDefault(0.U((WORD_LEN*2).W))
-  val ex2_divisor = WireDefault(0.U(WORD_LEN.W))
+  val ex2_zero_op2 = Wire(Bool())
+  val ex2_dividend = WireDefault(0.U((WORD_LEN+5).W))
+  val ex2_divisor = WireDefault(0.U((WORD_LEN*2).W))
+  val ex2_orig_dividend = Wire(UInt(WORD_LEN.W))
 
   when (ex2_reg_exe_fun === ALU_DIV || ex2_reg_exe_fun === ALU_REM) {
     ex2_divrem := true.B
     when (ex2_reg_op1_data(WORD_LEN-1) === 1.U) {
-      ex2_dividend := Cat(Fill(WORD_LEN, 0.U(1.W)), (~ex2_reg_op1_data + 1.U)(WORD_LEN-1, 0))
-      ex2_sign_op1 := 1.U
+      ex2_dividend := Cat(Fill(5, 0.U(1.W)), (~ex2_reg_op1_data + 1.U)(WORD_LEN-1, 0))
     }.otherwise {
-      ex2_dividend := Cat(Fill(WORD_LEN, 0.U(1.W)), ex2_reg_op1_data(WORD_LEN-1, 0))
-      ex2_sign_op1 := 0.U
+      ex2_dividend := Cat(Fill(5, 0.U(1.W)), ex2_reg_op1_data(WORD_LEN-1, 0))
     }
+    ex2_sign_op1 := ex2_reg_op1_data(WORD_LEN-1)
     when (ex2_reg_op2_data(WORD_LEN-1) === 1.U) {
-      ex2_divisor := (~ex2_reg_op2_data + 1.U)(WORD_LEN-1, 0)
-      ex2_sign_op12 := (ex2_sign_op1 === 0.U) && (ex2_reg_op2_data =/= 0.U)
+      ex2_divisor := Cat((~ex2_reg_op2_data + 1.U)(WORD_LEN-1, 0), Fill(32, 0.U(1.W)))
+      ex2_sign_op12 := (ex2_sign_op1 === 0.U)
     }.otherwise {
-      ex2_divisor := ex2_reg_op2_data
-      ex2_sign_op12 := (ex2_sign_op1 === 1.U) && (ex2_reg_op2_data =/= 0.U)
+      ex2_divisor := Cat(ex2_reg_op2_data, Fill(32, 0.U(1.W)))
+      ex2_sign_op12 := (ex2_sign_op1 === 1.U)
     }
   }.elsewhen (ex2_reg_exe_fun === ALU_DIVU || ex2_reg_exe_fun === ALU_REMU) {
     ex2_divrem := true.B
-    ex2_dividend := Cat(Fill(WORD_LEN, 0.U(1.W)), ex2_reg_op1_data(WORD_LEN-1, 0))
+    ex2_dividend := Cat(Fill(5, 0.U(1.W)), ex2_reg_op1_data(WORD_LEN-1, 0))
     ex2_sign_op1 := 0.U
-    ex2_divisor := ex2_reg_op2_data
+    ex2_divisor := Cat(ex2_reg_op2_data, Fill(32, 0.U(1.W)))
     ex2_sign_op12 := 0.U
   }
+  ex2_zero_op2 := (ex2_reg_op2_data === 0.U)
+  ex2_orig_dividend := ex2_reg_op1_data
 
   // branch
   val ex2_is_cond_br = MuxCase(false.B, Seq(
@@ -1144,8 +1152,10 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
     mem_reg_divrem            := ex2_divrem
     mem_reg_sign_op1          := ex2_sign_op1
     mem_reg_sign_op12         := ex2_sign_op12
+    mem_reg_zero_op2          := ex2_zero_op2
     mem_reg_init_dividend     := ex2_dividend
     mem_reg_init_divisor      := ex2_divisor
+    mem_reg_orig_dividend     := ex2_orig_dividend
   }
 
   //**********************************
@@ -1262,65 +1272,203 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
       Fill(WORD_LEN*3/2 - w, 0.U) ## value(w - 1, 0)
   }
 
+  val mem_reg_divrem_state = RegInit(DivremState.Idle)
+  val mem_reg_dividend     = RegInit(0.S((WORD_LEN+5).W))
+  val mem_reg_divisor      = RegInit(0.U((WORD_LEN+4).W))
+  val mem_reg_p_divisor    = RegInit(0.U((WORD_LEN*2).W))
+  val mem_reg_divrem_count = RegInit(0.U(5.W))
+  val mem_reg_rem_shift    = RegInit(0.U(5.W))
+  val mem_reg_extra_shift  = RegInit(false.B)
+  val mem_reg_d            = RegInit(0.U(3.W))
+  val mem_reg_reminder     = RegInit(0.U(WORD_LEN.W))
+  val mem_reg_quotient     = RegInit(0.U(WORD_LEN.W))
+
   val mem_alu_muldiv_out = MuxCase(0.U(WORD_LEN.W), Seq(
     (mem_reg_exe_fun === ALU_MUL)    -> (mem_reg_mullu(WORD_LEN-1, 0) + (mem_reg_mulhuu(WORD_LEN/2-1, 0) << (WORD_LEN/2))),
     (mem_reg_exe_fun === ALU_MULH)   -> (signExtend48(mem_reg_mulls(WORD_LEN*3/2-1, WORD_LEN/2), WORD_LEN) + mem_reg_mulhss)(WORD_LEN*3/2-1, WORD_LEN/2),
     (mem_reg_exe_fun === ALU_MULHU)  -> (zeroExtend48(mem_reg_mullu(WORD_LEN*3/2-1, WORD_LEN/2), WORD_LEN) + mem_reg_mulhuu)(WORD_LEN*3/2-1, WORD_LEN/2),
     (mem_reg_exe_fun === ALU_MULHSU) -> (signExtend48(mem_reg_mulls(WORD_LEN*3/2-1, WORD_LEN/2), WORD_LEN) + mem_reg_mulhsu)(WORD_LEN*3/2-1, WORD_LEN/2),
-    (mem_reg_exe_fun === ALU_DIV)    -> mem_quotient,
-    (mem_reg_exe_fun === ALU_DIVU)   -> mem_quotient,
-    (mem_reg_exe_fun === ALU_REM)    -> mem_reminder,
-    (mem_reg_exe_fun === ALU_REMU)   -> mem_reminder,
+    (mem_reg_exe_fun === ALU_DIV)    -> mem_reg_quotient,
+    (mem_reg_exe_fun === ALU_DIVU)   -> mem_reg_quotient,
+    (mem_reg_exe_fun === ALU_REM)    -> mem_reg_reminder,
+    (mem_reg_exe_fun === ALU_REMU)   -> mem_reg_reminder,
   ))
 
-  val mem_reg_divrem_state = RegInit(DivremState.Idle)
-  val mem_reg_dividend     = RegInit(0.U((WORD_LEN*2).W))
-  val mem_reg_divisor      = RegInit(0.U(WORD_LEN.W))
-  val mem_reg_divrem_count = RegInit(0.U(5.W))
-
-  mem_quotient := DontCare
-  mem_reminder := DontCare
+  // mem_quotient := mem_reg_quotient
+  // mem_reminder := mem_reg_reminder
   mem_div_stall := false.B
 
   switch (mem_reg_divrem_state) {
     is (DivremState.Idle) {
       when (mem_reg_divrem) {
-        mem_reg_divrem_state := DivremState.Dividing
+        when (mem_reg_init_divisor(WORD_LEN*2-1, WORD_LEN+2) === 0.U) {
+          mem_reg_divrem_state := DivremState.Dividing
+        }.otherwise {
+          mem_reg_divrem_state := DivremState.Placing
+        }
         mem_div_stall        := true.B
-        mem_reg_dividend     := mem_reg_init_dividend
-        mem_reg_divisor      := mem_reg_init_divisor
-        mem_reg_divrem_count := 0.U // mem_reg_init_divrem_count
+      }
+      mem_reg_dividend     := mem_reg_init_dividend.asSInt()
+      mem_reg_divisor      := mem_reg_init_divisor(WORD_LEN+3, 0)
+      mem_reg_p_divisor    := mem_reg_init_divisor
+      mem_reg_divrem_count := 0.U
+      mem_reg_rem_shift    := 0.U
+      mem_reg_quotient     := 0.U
+      when (mem_reg_init_divisor(WORD_LEN+1) === 0.U) {
+        mem_reg_extra_shift := false.B
+        mem_reg_d           := mem_reg_init_divisor(WORD_LEN-1, WORD_LEN-3)
+      }.otherwise {
+        mem_reg_extra_shift := true.B
+        mem_reg_d           := mem_reg_init_divisor(WORD_LEN, WORD_LEN-2)
       }
     }
-    is (DivremState.Dividing) {
-      val reminder = Cat(mem_reg_dividend(WORD_LEN*2-1, WORD_LEN-1)) - Cat(0.U(1.W), mem_reg_divisor)
-      when (reminder(WORD_LEN) === 0.U) {
-        mem_reg_dividend := Cat(reminder(WORD_LEN-1, 0), mem_reg_dividend(WORD_LEN-2, 0), 1.U(1.W))
+    is (DivremState.Placing) {
+      when (mem_reg_p_divisor(WORD_LEN*2-1, WORD_LEN+4) === 0.U) {
+        mem_reg_divrem_state := DivremState.Dividing
+      }
+      mem_reg_p_divisor    := mem_reg_p_divisor >> 2
+      mem_reg_divisor      := (mem_reg_p_divisor >> 2)(WORD_LEN+3, 0)
+      mem_reg_divrem_count := mem_reg_divrem_count + 1.U
+      when (mem_reg_p_divisor(WORD_LEN+3) === 0.U) {
+        mem_reg_extra_shift := false.B
+        mem_reg_d           := mem_reg_p_divisor(WORD_LEN+1, WORD_LEN-1)
       }.otherwise {
-        mem_reg_dividend := Cat(mem_reg_dividend(WORD_LEN*2-2, 0), 0.U(1.W))
+        mem_reg_extra_shift := true.B
+        mem_reg_d           := mem_reg_p_divisor(WORD_LEN+2, WORD_LEN)
       }
-      mem_reg_divrem_count := mem_reg_divrem_count - 1.U
-      when (mem_reg_divrem_count === 1.U) {
-        mem_reg_divrem_state := DivremState.Finished
+      mem_div_stall        := true.B
+    }
+    is (DivremState.Dividing) {
+      val p = Mux(mem_reg_extra_shift,
+        Mux(mem_reg_dividend(WORD_LEN+4) === 0.U,
+          mem_reg_dividend(WORD_LEN+3, WORD_LEN-1),
+          ~mem_reg_dividend(WORD_LEN+3, WORD_LEN-1),
+        ),
+        Mux(mem_reg_dividend(WORD_LEN+4) === 0.U,
+          mem_reg_dividend(WORD_LEN+2, WORD_LEN-2),
+          ~mem_reg_dividend(WORD_LEN+2, WORD_LEN-2),
+        ),
+      )
+      val mem_q = MuxLookup(mem_reg_d, 0.U(2.W), Seq(
+        0.U -> MuxLookup(p, 0.U(2.W), Seq(
+          0.U  -> 0.U, 1.U  -> 0.U, 2.U  -> 1.U, 3.U  -> 1.U,
+          4.U  -> 1.U, 5.U  -> 1.U, 6.U  -> 2.U, 7.U  -> 2.U,
+          8.U  -> 2.U, 9.U  -> 2.U, 10.U -> 2.U, 11.U -> 2.U,
+        )),
+        1.U -> MuxLookup(p, 0.U(2.W), Seq(
+          0.U  -> 0.U, 1.U  -> 0.U, 2.U  -> 1.U, 3.U  -> 1.U,
+          4.U  -> 1.U, 5.U  -> 1.U, 6.U  -> 1.U, 7.U  -> 2.U,
+          8.U  -> 2.U, 9.U  -> 2.U, 10.U -> 2.U, 11.U -> 2.U,
+          12.U -> 2.U, 13.U -> 2.U,
+        )),
+        2.U -> MuxLookup(p, 0.U(2.W), Seq(
+          0.U  -> 0.U, 1.U  -> 0.U, 2.U  -> 1.U, 3.U  -> 1.U,
+          4.U  -> 1.U, 5.U  -> 1.U, 6.U  -> 1.U, 7.U  -> 1.U,
+          8.U  -> 2.U, 9.U  -> 2.U, 10.U -> 2.U, 11.U -> 2.U,
+          12.U -> 2.U, 13.U -> 2.U, 14.U -> 2.U, 15.U -> 2.U,
+        )),
+        3.U -> MuxLookup(p, 0.U(2.W), Seq(
+          0.U  -> 0.U, 1.U  -> 0.U, 2.U  -> 1.U, 3.U  -> 1.U,
+          4.U  -> 1.U, 5.U  -> 1.U, 6.U  -> 1.U, 7.U  -> 1.U,
+          8.U  -> 2.U, 9.U  -> 2.U, 10.U -> 2.U, 11.U -> 2.U,
+          12.U -> 2.U, 13.U -> 2.U, 14.U -> 2.U, 15.U -> 2.U,
+        )),
+        4.U -> MuxLookup(p, 0.U(2.W), Seq(
+          0.U  -> 0.U, 1.U  -> 0.U, 2.U  -> 0.U, 3.U  -> 0.U,
+          4.U  -> 1.U, 5.U  -> 1.U, 6.U  -> 1.U, 7.U  -> 1.U,
+          8.U  -> 1.U, 9.U  -> 1.U, 10.U -> 2.U, 11.U -> 2.U,
+          12.U -> 2.U, 13.U -> 2.U, 14.U -> 2.U, 15.U -> 2.U,
+          16.U -> 2.U, 17.U -> 2.U,
+        )),
+        5.U -> MuxLookup(p, 0.U(2.W), Seq(
+          0.U  -> 0.U, 1.U  -> 0.U, 2.U  -> 0.U, 3.U  -> 0.U,
+          4.U  -> 1.U, 5.U  -> 1.U, 6.U  -> 1.U, 7.U  -> 1.U,
+          8.U  -> 1.U, 9.U  -> 1.U, 10.U -> 2.U, 11.U -> 2.U,
+          12.U -> 2.U, 13.U -> 2.U, 14.U -> 2.U, 15.U -> 2.U,
+          16.U -> 2.U, 17.U -> 2.U, 18.U -> 2.U, 19.U -> 2.U,
+        )),
+        6.U -> MuxLookup(p, 0.U(2.W), Seq(
+          0.U  -> 0.U, 1.U  -> 0.U, 2.U  -> 0.U, 3.U  -> 0.U,
+          4.U  -> 1.U, 5.U  -> 1.U, 6.U  -> 1.U, 7.U  -> 1.U,
+          8.U  -> 1.U, 9.U  -> 1.U, 10.U -> 2.U, 11.U -> 2.U,
+          12.U -> 2.U, 13.U -> 2.U, 14.U -> 2.U, 15.U -> 2.U,
+          16.U -> 2.U, 17.U -> 2.U, 18.U -> 2.U, 19.U -> 2.U,
+        )),
+        7.U -> MuxLookup(p, 0.U(2.W), Seq(
+          0.U  -> 0.U, 1.U  -> 0.U, 2.U  -> 0.U, 3.U  -> 0.U,
+          4.U  -> 1.U, 5.U  -> 1.U, 6.U  -> 1.U, 7.U  -> 1.U,
+          8.U  -> 1.U, 9.U  -> 1.U, 10.U -> 1.U, 11.U -> 1.U,
+          12.U -> 2.U, 13.U -> 2.U, 14.U -> 2.U, 15.U -> 2.U,
+          16.U -> 2.U, 17.U -> 2.U, 18.U -> 2.U, 19.U -> 2.U,
+          20.U -> 2.U, 21.U -> 2.U,
+        )),
+      ))
+      when (mem_reg_dividend(WORD_LEN+4) === 0.U) {
+        mem_reg_dividend := MuxCase(mem_reg_dividend << 2, Seq(
+          (mem_q(0) === 1.U) -> ((mem_reg_dividend - Cat(0.U(1.W), mem_reg_divisor).asSInt()) << 2),
+          (mem_q(1) === 1.U) -> ((mem_reg_dividend - Cat(mem_reg_divisor, 0.U(1.W)).asSInt()) << 2),
+        ))
+        mem_reg_quotient := MuxCase(mem_reg_quotient << 2, Seq(
+          (mem_q(0) === 1.U) -> ((mem_reg_quotient << 2) + 1.U),
+          (mem_q(1) === 1.U) -> ((mem_reg_quotient << 2) + 2.U),
+        ))
+      }.otherwise {
+        mem_reg_dividend := MuxCase(mem_reg_dividend << 2, Seq(
+          (mem_q(0) === 1.U) -> ((mem_reg_dividend + Cat(0.U(1.W), mem_reg_divisor).asSInt()) << 2),
+          (mem_q(1) === 1.U) -> ((mem_reg_dividend + Cat(mem_reg_divisor, 0.U(1.W)).asSInt()) << 2),
+        ))
+        mem_reg_quotient := MuxCase(mem_reg_quotient << 2, Seq(
+          (mem_q(0) === 1.U) -> ((mem_reg_quotient << 2) - 1.U),
+          (mem_q(1) === 1.U) -> ((mem_reg_quotient << 2) - 2.U),
+        ))
       }
+      mem_reg_rem_shift := mem_reg_rem_shift + 1.U
+      mem_reg_divrem_count := mem_reg_divrem_count + 1.U
+      when (mem_reg_divrem_count === 16.U) {
+        mem_reg_divrem_state := DivremState.Shifting
+      }
+      mem_div_stall := true.B
+    }
+    is (DivremState.Shifting) {
+      mem_reg_reminder := (mem_reg_dividend >> Cat(mem_reg_rem_shift, 0.U(1.W)))(WORD_LEN-1, 0)
+      mem_reg_divrem_state := DivremState.Correction
+      mem_div_stall := true.B
+    }
+    is (DivremState.Correction) {
+      val reminder = Mux(mem_reg_dividend(WORD_LEN+4) === 1.U,
+        mem_reg_reminder + mem_reg_init_divisor(WORD_LEN*2-1, WORD_LEN),
+        mem_reg_reminder,
+      )
+      mem_reg_reminder := Mux(mem_reg_zero_op2,
+        mem_reg_orig_dividend,
+        Mux(mem_reg_sign_op1 === 0.U,
+          reminder,
+          ~reminder + 1.U,
+        ),
+      )
+      val quotient = Mux(mem_reg_dividend(WORD_LEN+4) === 1.U,
+        mem_reg_quotient - 1.U,
+        mem_reg_quotient,
+      )
+      mem_reg_quotient := Mux(mem_reg_zero_op2,
+        0xFFFF_FFFFL.U,
+        Mux(mem_reg_sign_op12 === 0.U,
+          quotient,
+          ~quotient + 1.U,
+        ),
+      )
+      mem_reg_divrem_state := DivremState.Finished
       mem_div_stall := true.B
     }
     is (DivremState.Finished) {
       mem_reg_divrem_state := DivremState.Idle
-      mem_reminder := Mux(mem_reg_sign_op1 === 0.U,
-        mem_reg_dividend(2*WORD_LEN-1, WORD_LEN),
-        ~mem_reg_dividend(2*WORD_LEN-1, WORD_LEN) + 1.U,
-      )
-      mem_quotient := Mux(mem_reg_sign_op12 === 0.U,
-        mem_reg_dividend(WORD_LEN-1, 0),
-        ~mem_reg_dividend(WORD_LEN-1, 0) + 1.U,
-      )
     }
   }
-  printf(p"mem_reg_divrem_state : 0x${Hexadecimal(mem_reg_divrem_state.asUInt())}\n")
-  printf(p"mem_reg_dividend     : 0x${Hexadecimal(mem_reg_dividend)}\n")
-  printf(p"mem_reg_divisor      : 0x${Hexadecimal(mem_reg_divisor)}\n")
-  printf(p"mem_reg_divrem_count : 0x${Hexadecimal(mem_reg_divrem_count)}\n")
+  // printf(p"mem_reg_divrem_state : 0x${Hexadecimal(mem_reg_divrem_state.asUInt())}\n")
+  // printf(p"mem_reg_dividend     : 0x${Hexadecimal(mem_reg_dividend)}\n")
+  // printf(p"mem_reg_divisor      : 0x${Hexadecimal(mem_reg_divisor)}\n")
+  // printf(p"mem_reg_divrem_count : 0x${Hexadecimal(mem_reg_divrem_count)}\n")
+  // printf(p"mem_reg_rem_shift    : 0x${Hexadecimal(mem_reg_rem_shift)}\n")
 
   io.icache_control.invalidate := (mem_mem_wen === MEN_FENCE)
 
