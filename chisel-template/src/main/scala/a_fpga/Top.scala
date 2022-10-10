@@ -28,26 +28,27 @@ class Config(clockHz: Int) extends Module {
 class RiscVDebugSignals extends Bundle {
   val core = new CoreDebugSignals()
 
-  val raddr  = Output(UInt(WORD_LEN.W))
+  //val raddr  = Output(UInt(WORD_LEN.W))
   val rdata = Output(UInt(WORD_LEN.W))
   val ren   = Output(Bool())
   val rvalid = Output(Bool())
 
-  val waddr  = Output(UInt(WORD_LEN.W))
+  val rwaddr  = Output(UInt(WORD_LEN.W))
   val wen   = Output(Bool())
   val wready = Output(Bool())
   val wstrb = Output(UInt(4.W))
   val wdata = Output(UInt(WORD_LEN.W))
 
-  val dram_init_calib_complete = Output(Bool())
-  val dram_rdata_valid         = Output(Bool())
-  val dram_busy                = Output(Bool())
-  val dram_ren                 = Output(Bool())
+  // val dram_init_calib_complete = Output(Bool())
+  // val dram_rdata_valid         = Output(Bool())
+  // val dram_busy                = Output(Bool())
+  // val dram_ren                 = Output(Bool())
 
-  val sdc_clk     = Output(Bool())
-  val sdc_cmd_wrt = Output(Bool())
-  val sdc_cmd_out = Output(Bool())
-  val sdc_res_in  = Output(Bool())
+  // val sdc_cmd_wrt = Output(Bool())
+  // val sdc_cmd_out = Output(Bool())
+  // val sdc_res_in  = Output(Bool())
+  val sdc_dat_in  = Output(UInt(4.W))
+  val sdc_rx_dat_index = Output(UInt(8.W))
 }
 
 class RiscV(clockHz: Int) extends Module {
@@ -143,25 +144,26 @@ class RiscV(clockHz: Int) extends Module {
 
   // Debug signals
   io.debugSignals.core <> core.io.debug_signal
-  io.debugSignals.raddr  := core.io.dmem.raddr
+  //io.debugSignals.raddr  := core.io.dmem.raddr
   io.debugSignals.rdata  := dmem_decoder.io.initiator.rdata
   io.debugSignals.ren    := core.io.dmem.ren
   io.debugSignals.rvalid := dmem_decoder.io.initiator.rvalid
-  io.debugSignals.waddr  := core.io.dmem.waddr
+  io.debugSignals.rwaddr  := core.io.dmem.waddr
   io.debugSignals.wdata  := core.io.dmem.wdata
   io.debugSignals.wen    := core.io.dmem.wen
   io.debugSignals.wready := dmem_decoder.io.initiator.wready
   io.debugSignals.wstrb  := core.io.dmem.wstrb
 
-  io.debugSignals.dram_init_calib_complete := io.dram.init_calib_complete
-  io.debugSignals.dram_rdata_valid         := io.dram.rdata_valid
-  io.debugSignals.dram_busy                := io.dram.busy
-  io.debugSignals.dram_ren                 := io.dram.ren
+  // io.debugSignals.dram_init_calib_complete := io.dram.init_calib_complete
+  // io.debugSignals.dram_rdata_valid         := io.dram.rdata_valid
+  // io.debugSignals.dram_busy                := io.dram.busy
+  // io.debugSignals.dram_ren                 := io.dram.ren
 
-  io.debugSignals.sdc_clk     := sdc.io.sdc_port.clk
-  io.debugSignals.sdc_cmd_wrt := sdc.io.sdc_port.cmd_wrt
-  io.debugSignals.sdc_cmd_out := sdc.io.sdc_port.cmd_out
-  io.debugSignals.sdc_res_in  := io.sdc_port.res_in
+  // io.debugSignals.sdc_cmd_wrt := sdc.io.sdc_port.cmd_wrt
+  // io.debugSignals.sdc_cmd_out := sdc.io.sdc_port.cmd_out
+  // io.debugSignals.sdc_res_in  := io.sdc_port.res_in
+  io.debugSignals.sdc_dat_in  := io.sdc_port.dat_in
+  io.debugSignals.sdc_rx_dat_index := sdc.io.rx_dat_index
 
   io.exit := core.io.exit
   io.gpio <> gpio.io.gpio

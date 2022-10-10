@@ -51,6 +51,7 @@ class Sdc() extends Module {
   val io = IO(new Bundle {
     val mem = new DmemPortIo
     val sdc_port = new SdcPort()
+    val rx_dat_index = Output(UInt(8.W))
   })
 
   val cmd_bits: Int = 48
@@ -99,7 +100,7 @@ class Sdc() extends Module {
   val rx_dat_bits = Reg(Vec(8, UInt(4.W)))
   val rx_dat_next = RegInit(0.U(4.W))
   val rx_dat_continuous = RegInit(false.B)
-  val rx_dat = Mem(130, UInt(32.W))
+  val rx_dat = Mem(256, UInt(32.W))
   val rx_dat_ready = RegInit(false.B)
   val rx_dat_crc = Reg(Vec(16, UInt(4.W)))
   val rx_dat_crc_error = RegInit(false.B)
@@ -366,14 +367,18 @@ class Sdc() extends Module {
         }
       }
       is (3.U) {
-        rx_dat_read_counter := rx_dat_read_counter + 1.U
-        io.mem.rdata := rx_dat.read(rx_dat_read_counter)
-        when (rx_dat_read_counter(6, 0) === 127.U) {
-          rx_dat_ready := false.B
+        when (rx_dat_ready) {
+          rx_dat_read_counter := rx_dat_read_counter + 1.U
+          io.mem.rdata := rx_dat.read(rx_dat_read_counter)
+          when (rx_dat_read_counter(6, 0) === 127.U) {
+            rx_dat_ready := false.B
+          }
         }
       }
     }
   }
+
+  io.rx_dat_index := rx_dat_index
 
   printf(p"sdc.clk           : 0x${Hexadecimal(reg_clk)}\n")
   printf(p"sdc.cmd_wrt       : 0x${Hexadecimal(io.sdc_port.cmd_wrt)}\n")
