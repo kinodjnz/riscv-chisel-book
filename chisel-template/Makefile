@@ -11,4 +11,4 @@ rustfmt:
 	(cd src/rust/bootrom && cargo fmt)
 
 picocom:
-	sudo picocom /dev/ttyUSB1 -b 115200
+	sudo picocom /dev/ttyUSB1 -b 115200 --omap crcrlf --imap crcrlf

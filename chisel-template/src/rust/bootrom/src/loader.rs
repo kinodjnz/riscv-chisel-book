@@ -89,8 +89,8 @@ pub fn load_kernel() -> u32 {
     loop {
         // uart::print(current_cluster);
         // uart::puts(b" ");
-        // uart::print(remaining_sectors);
-        // uart::puts(b" #kern\r\n");
+        // uart::print(p as u32);
+        // uart::puts(b"\r\n");
 
         let s = sdc::read_sector(
             data_start_sector + ((current_cluster - 2) << cluster_shift),
@@ -105,7 +105,7 @@ pub fn load_kernel() -> u32 {
         }
         remaining_sectors -= sector_per_cluster;
         p = unsafe { p.add((sector_per_cluster << 7) as usize) };
-        let fat_sector: u32 = fat_start_sector + (current_cluster * 2) >> 9;
+        let fat_sector: u32 = fat_start_sector + ((current_cluster * 2) >> 9);
         if fat_sector != current_fat_sector {
             let s = sdc::read_sector(fat_sector, 1, fat);
             if s != 0 {
@@ -114,6 +114,12 @@ pub fn load_kernel() -> u32 {
             current_fat_sector = fat_sector;
         }
         current_cluster = read::<u16>(fat, ((current_cluster * 2) & 511) as usize) as u32
+    }
+
+    let pp: *const u32 = 0x2000_2700 as *const u32;
+    for i in 0..128 {
+        uart::print(read::<u32>(pp, i * 4));
+        uart::puts(b"\r\n");
     }
     uart::puts(b"KERNEL.BIN loaded\r\n");
 
