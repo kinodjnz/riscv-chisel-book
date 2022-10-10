@@ -103,9 +103,12 @@
     "class":"chisel3.experimental.EnumAnnotations$EnumDefAnnotation",
     "typeName":"fpga.DivremState",
     "definition":{
+      "Finished":5,
+      "Dividing":2,
+      "Correction":4,
       "Idle":0,
-      "Dividing":1,
-      "Finished":2
+      "Shifting":3,
+      "Placing":1
     }
   },
   {
@@ -141,16 +144,16 @@
   },
   {
     "class":"firrtl.transforms.CombinationalPath",
-    "sink":"~RiscV|RiscV>io_debugSignals_wready",
+    "sink":"~RiscV|RiscV>io_debugSignals_sdc_dat_in",
     "sources":[
-      "~RiscV|RiscV>io_dram_rdata_valid"
+      "~RiscV|RiscV>io_sdc_port_dat_in"
     ]
   },
   {
     "class":"firrtl.transforms.CombinationalPath",
-    "sink":"~RiscV|RiscV>io_debugSignals_dram_init_calib_complete",
+    "sink":"~RiscV|RiscV>io_debugSignals_wready",
     "sources":[
-      "~RiscV|RiscV>io_dram_init_calib_complete"
+      "~RiscV|RiscV>io_dram_rdata_valid"
     ]
   },
   {
@@ -170,13 +173,6 @@
   },
   {
     "class":"firrtl.transforms.CombinationalPath",
-    "sink":"~RiscV|RiscV>io_debugSignals_dram_busy",
-    "sources":[
-      "~RiscV|RiscV>io_dram_busy"
-    ]
-  },
-  {
-    "class":"firrtl.transforms.CombinationalPath",
     "sink":"~RiscV|RiscV>io_debugSignals_rdata",
     "sources":[
       "~RiscV|RiscV>io_dram_rdata_valid",
@@ -189,29 +185,6 @@
     "sources":[
       "~RiscV|RiscV>io_dram_init_calib_complete",
       "~RiscV|RiscV>io_dram_busy"
-    ]
-  },
-  {
-    "class":"firrtl.transforms.CombinationalPath",
-    "sink":"~RiscV|RiscV>io_debugSignals_sdc_res_in",
-    "sources":[
-      "~RiscV|RiscV>io_sdc_port_res_in"
-    ]
-  },
-  {
-    "class":"firrtl.transforms.CombinationalPath",
-    "sink":"~RiscV|RiscV>io_debugSignals_dram_ren",
-    "sources":[
-      "~RiscV|RiscV>io_dram_ren",
-      "~RiscV|RiscV>io_dram_init_calib_complete",
-      "~RiscV|RiscV>io_dram_busy"
-    ]
-  },
-  {
-    "class":"firrtl.transforms.CombinationalPath",
-    "sink":"~RiscV|RiscV>io_debugSignals_dram_rdata_valid",
-    "sources":[
-      "~RiscV|RiscV>io_dram_rdata_valid"
     ]
   },
   {
