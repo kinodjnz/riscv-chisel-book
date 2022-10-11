@@ -278,6 +278,7 @@ class Memory() extends Module {
   val i_reg_read_inst = RegInit(0.U(WORD_LEN.W))
   val i_reg_valid_rdata = RegInit(0.U((1 << ICACHE_VALID_DATA_BITS).W))
   val i_reg_cur_tag_index = RegInit(Fill(ICACHE_TAG_BITS+ICACHE_INDEX_BITS, 1.U(1.W)))
+  val i_reg_addr_match = RegInit(false.B)
 
   val dcache_snoop_en = Wire(Bool())
   val dcache_snoop_addr = Wire(new DCacheAddrBundle())
@@ -327,9 +328,14 @@ class Memory() extends Module {
           icache_state := ICacheState.Prelookup
         }
       }
+      i_reg_addr_match := true.B
     }
     is (ICacheState.Prelookup) {
       i_reg_valid_rdata := io.icache_valid.rdata
+      val i_next_addr = io.imem.addr.asTypeOf(new ICacheAddrBundle())
+      i_reg_addr_match := (i_reg_req_addr.tag(ICACHE_TAG_BITS-5, 0) === i_next_addr.tag(ICACHE_TAG_BITS-5, 0) &&
+          i_reg_req_addr.index === i_next_addr.index &&
+          i_reg_req_addr.line_off(CACHE_LINE_BITS-1, 2) === i_next_addr.line_off(CACHE_LINE_BITS-1, 2))
       when ((io.icache_valid.rdata >> i_reg_req_addr.index(ICACHE_INVALIDATE_ADDR_BITS-1, 0))(0).asBool && i_reg_tag(0) === i_reg_req_addr.tag) {
         io.icache.ren := true.B
         io.icache.raddr := Cat(i_reg_req_addr.index, i_reg_req_addr.line_off(CACHE_LINE_BITS-1, 2))
@@ -341,13 +347,13 @@ class Memory() extends Module {
     }
     is (ICacheState.Lookup) {
       io.imem.inst := io.icache.rdata
-      when (i_reg_req_addr.tag(ICACHE_TAG_BITS-5, 0) === i_reg_next_addr.tag(ICACHE_TAG_BITS-5, 0) &&
-          i_reg_req_addr.index === i_reg_next_addr.index) {
+      when (i_reg_addr_match) {
         io.imem.valid := true.B
       }
       io.icache_control.busy := false.B
       val req_addr = io.imem.addr.asTypeOf(new ICacheAddrBundle())
       i_reg_req_addr := req_addr
+      i_reg_addr_match := true.B
       when (io.icache_control.invalidate) {
         io.icache_valid.invalidate := true.B
         io.icache_valid.iaddr := 0.U(1.W)
@@ -411,6 +417,7 @@ class Memory() extends Module {
       i_reg_snoop_inst_valid := false.B
       val req_addr = io.imem.addr.asTypeOf(new ICacheAddrBundle())
       i_reg_req_addr := req_addr
+      i_reg_addr_match := true.B
       when (io.imem.en) {
         i_reg_tag := i_tag_array.read(req_addr.index)
         io.icache.ren := true.B
@@ -463,6 +470,7 @@ class Memory() extends Module {
       i_reg_cur_tag_index := Fill(ICACHE_TAG_BITS+ICACHE_INDEX_BITS, 1.U(1.W))
       val req_addr = io.imem.addr.asTypeOf(new ICacheAddrBundle())
       i_reg_req_addr := req_addr
+      i_reg_addr_match := true.B
       when (io.imem.en) {
         i_reg_tag := i_tag_array.read(req_addr.index)
         io.icache.ren := true.B
