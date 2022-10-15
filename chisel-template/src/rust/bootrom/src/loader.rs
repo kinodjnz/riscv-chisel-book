@@ -116,11 +116,11 @@ pub fn load_kernel() -> u32 {
         current_cluster = read::<u16>(fat, ((current_cluster * 2) & 511) as usize) as u32
     }
 
-    let pp: *const u32 = 0x2000_2700 as *const u32;
-    for i in 0..128 {
-        uart::print(read::<u32>(pp, i * 4));
-        uart::puts(b"\r\n");
-    }
+    // let pp: *const u32 = 0x2000_2700 as *const u32;
+    // for i in 0..128 {
+    //     uart::print(read::<u32>(pp, i * 4));
+    //     uart::puts(b"\r\n");
+    // }
     uart::puts(b"KERNEL.BIN loaded\r\n");
 
     unsafe {

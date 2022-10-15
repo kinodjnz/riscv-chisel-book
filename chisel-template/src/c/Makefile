@@ -1,4 +1,4 @@
-LIBGCC:=/opt/riscv/lib/gcc/riscv64-unknown-elf/11.1.0/rv32iac/ilp32/libgcc.a
+LIBGCC:=/opt/riscv/lib/gcc/riscv64-unknown-elf/11.1.0/rv32imac/ilp32/libgcc.a
 
 start.o: start.c
 	riscv64-unknown-elf-gcc -O2 -march=rv32iac -mabi=ilp32 -c -o $@ $<
