@@ -26,34 +26,41 @@ class BranchPredictor(tableLen: Int, bpTagInitPath: String = null) extends Modul
   })
 
   // Lookup
-  val bp_cache_hist = Mem(tableLen, UInt(BP_HIST_LEN.W))
-  val bp_cache_tag  = Mem(tableLen, UInt(BP_TAG_LEN.W))
-  val bp_cache_br   = Mem(tableLen, UInt(BP_BRANCH_LEN.W))
-  if (bpTagInitPath != null ) {
-    loadMemoryFromFile(bp_cache_tag, bpTagInitPath)
-  }
+  // val bp_cache_hist = Mem(tableLen, UInt(BP_HIST_LEN.W))
+  // val bp_cache_tag  = Mem(tableLen, UInt(BP_TAG_LEN.W))
+  // val bp_cache_br   = Mem(tableLen, UInt(BP_BRANCH_LEN.W))
+  val bp_cache = Mem(tableLen, UInt((BP_HIST_LEN + BP_TAG_LEN + BP_BRANCH_LEN).W))
+  // if (bpTagInitPath != null ) {
+  //   loadMemoryFromFile(bp_cache_tag, bpTagInitPath)
+  // }
 
-  val bp_reg_rd_hist = RegInit(0.U(BP_HIST_LEN.W))
-  val bp_reg_rd_tag  = RegInit(0.U(BP_TAG_LEN.W))
-  val bp_reg_rd_br   = RegInit(0.U((BP_BRANCH_LEN.W)))
+  // val bp_reg_rd_hist = RegInit(0.U(BP_HIST_LEN.W))
+  // val bp_reg_rd_tag  = RegInit(0.U(BP_TAG_LEN.W))
+  // val bp_reg_rd_br   = RegInit(0.U((BP_BRANCH_LEN.W)))
+  val bp_reg_rd      = RegInit(0.U((BP_HIST_LEN + BP_TAG_LEN + BP_BRANCH_LEN).W))
   val bp_reg_tag     = RegInit(0.U(BP_TAG_LEN.W))
 
   bp_reg_tag := io.lu.inst_pc(WORD_LEN-1, BP_INDEX_LEN+1)
   val bp_index = io.lu.inst_pc(BP_INDEX_LEN, 1)
-  bp_reg_rd_hist := bp_cache_hist.read(bp_index)
-  bp_reg_rd_tag := bp_cache_tag.read(bp_index)
-  bp_reg_rd_br := bp_cache_br.read(bp_index)
-  val bp_cache_do_br = bp_reg_rd_hist(BP_HIST_LEN-1, BP_HIST_LEN-1).asBool()
-  io.lu.br_hit := bp_reg_tag === bp_reg_rd_tag
+  // bp_reg_rd_hist := bp_cache_hist.read(bp_index)
+  // bp_reg_rd_tag := bp_cache_tag.read(bp_index)
+  // bp_reg_rd_br := bp_cache_br.read(bp_index)
+  bp_reg_rd := bp_cache.read(bp_index)
+  val bp_rd_hist = bp_reg_rd(BP_HIST_LEN + BP_TAG_LEN + BP_BRANCH_LEN - 1, BP_TAG_LEN + BP_BRANCH_LEN)
+  val bp_rd_tag  = bp_reg_rd(BP_TAG_LEN + BP_BRANCH_LEN - 1, BP_BRANCH_LEN)
+  val bp_rd_br   = bp_reg_rd(BP_BRANCH_LEN - 1, 0)
+  val bp_cache_do_br = bp_rd_hist(BP_HIST_LEN-1, BP_HIST_LEN-1).asBool()
+  io.lu.br_hit := bp_reg_tag === bp_rd_tag
   io.lu.br_pos := bp_cache_do_br && io.lu.br_hit
-  io.lu.br_addr := Mux(io.lu.br_pos, bp_reg_rd_br, DontCare)
+  io.lu.br_addr := Mux(io.lu.br_pos, bp_rd_br, DontCare)
 
   // Update
   val bp_reg_update_pos     = RegInit(false.B)
   val bp_reg_update_br_addr = RegInit(0.U(WORD_LEN.W))
-  val bp_reg_update_rd_hist = RegInit(0.U(BP_HIST_LEN.W))
-  val bp_reg_update_rd_tag  = RegInit(0.U(BP_TAG_LEN.W))
-  val bp_reg_update_rd_br   = RegInit(0.U(BP_BRANCH_LEN.W))
+  val bp_reg_update_rd      = RegInit(0.U((BP_HIST_LEN + BP_TAG_LEN + BP_BRANCH_LEN).W))
+  // val bp_reg_update_rd_hist = RegInit(0.U(BP_HIST_LEN.W))
+  // val bp_reg_update_rd_tag  = RegInit(0.U(BP_TAG_LEN.W))
+  // val bp_reg_update_rd_br   = RegInit(0.U(BP_BRANCH_LEN.W))
   val bp_reg_update_write   = RegInit(false.B)
   val bp_reg_update_tag     = RegInit(0.U((BP_TAG_LEN).W))
   val bp_reg_update_index   = RegInit(0.U(BP_INDEX_LEN.W))
@@ -66,19 +73,23 @@ class BranchPredictor(tableLen: Int, bpTagInitPath: String = null) extends Modul
   bp_reg_update_pos := io.up.br_pos
   bp_reg_update_br_addr := io.up.br_addr
 
+  val bp_update_rd_hist = bp_reg_update_rd(BP_HIST_LEN + BP_TAG_LEN + BP_BRANCH_LEN - 1, BP_TAG_LEN + BP_BRANCH_LEN)
+  val bp_update_rd_tag  = bp_reg_update_rd(BP_TAG_LEN + BP_BRANCH_LEN - 1, BP_BRANCH_LEN)
+  val bp_update_rd_br   = bp_reg_update_rd(BP_BRANCH_LEN - 1, 0)
+
   bp_reg_update_tag := io.up.inst_pc(WORD_LEN-1, BP_INDEX_LEN+1)
   val bp_update_index = io.up.inst_pc(BP_INDEX_LEN, 1)
   bp_reg_update_index := bp_update_index
-  val bp_update_hist = Mux(bp_reg_update_rd_tag === bp_reg_update_tag,
+  val bp_update_hist = Mux(bp_update_rd_tag === bp_reg_update_tag,
     MuxCase(0.U(BP_HIST_LEN.W), Seq(
-      (bp_reg_update_pos && bp_reg_update_rd_hist === 3.U)  -> 3.U(BP_HIST_LEN.W),
-      bp_reg_update_pos                                     -> (bp_reg_update_rd_hist + 1.U(BP_HIST_LEN.W)),
-      (!bp_reg_update_pos && bp_reg_update_rd_hist === 0.U) -> 0.U(BP_HIST_LEN.W),
-      !bp_reg_update_pos                                    -> (bp_reg_update_rd_hist - 1.U(BP_HIST_LEN.W)),
+      (bp_reg_update_pos && bp_update_rd_hist === 3.U)  -> 3.U(BP_HIST_LEN.W),
+      bp_reg_update_pos                                     -> (bp_update_rd_hist + 1.U(BP_HIST_LEN.W)),
+      (!bp_reg_update_pos && bp_update_rd_hist === 0.U) -> 0.U(BP_HIST_LEN.W),
+      !bp_reg_update_pos                                    -> (bp_update_rd_hist - 1.U(BP_HIST_LEN.W)),
     )),
     Mux(bp_reg_update_pos, 2.U(BP_HIST_LEN.W), 1.U(BP_HIST_LEN.W)),
   )
-  val bp_update_next_br_addr = Mux(bp_reg_update_pos, bp_reg_update_br_addr, bp_reg_update_rd_br)
+  val bp_update_next_br_addr = Mux(bp_reg_update_pos, bp_reg_update_br_addr, bp_update_rd_br)
   bp_reg_write_en      := bp_reg_update_write
   bp_reg_write_index   := bp_reg_update_index
   bp_reg_write_hist    := bp_update_hist
@@ -86,14 +97,16 @@ class BranchPredictor(tableLen: Int, bpTagInitPath: String = null) extends Modul
   bp_reg_write_br_addr := bp_update_next_br_addr
   val bp_update_rw_index = Mux(io.up.update_en, bp_update_index, bp_reg_write_index)
   when(io.up.update_en) {
-    bp_reg_update_rd_hist := bp_cache_hist.read(bp_update_rw_index)
-    bp_reg_update_rd_tag  := bp_cache_tag.read(bp_update_rw_index)
-    bp_reg_update_rd_br   := bp_cache_br.read(bp_update_rw_index)
+    // bp_reg_update_rd_hist := bp_cache_hist.read(bp_update_rw_index)
+    // bp_reg_update_rd_tag  := bp_cache_tag.read(bp_update_rw_index)
+    // bp_reg_update_rd_br   := bp_cache_br.read(bp_update_rw_index)
+    bp_reg_update_rd := bp_cache.read(bp_update_rw_index)
   }
   when(!io.up.update_en && bp_reg_write_en) {
-    bp_cache_hist.write(bp_update_rw_index, bp_reg_write_hist)
-    bp_cache_tag.write(bp_update_rw_index, bp_reg_write_tag)
-    bp_cache_br.write(bp_update_rw_index, bp_reg_write_br_addr)
+    // bp_cache_hist.write(bp_update_rw_index, bp_reg_write_hist)
+    // bp_cache_tag.write(bp_update_rw_index, bp_reg_write_tag)
+    // bp_cache_br.write(bp_update_rw_index, bp_reg_write_br_addr)
+    bp_cache.write(bp_update_rw_index, Cat(bp_reg_write_hist, bp_reg_write_tag, bp_reg_write_br_addr))
   }
 
   // printf(p"io.up.update_en         : 0x${Hexadecimal(io.up.update_en)}\n")

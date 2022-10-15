@@ -59,8 +59,8 @@ logic io_exit;
 // (* mark_debug = "true" *) logic        io_debugSignals_sdc_cmd_wrt;
 // (* mark_debug = "true" *) logic        io_debugSignals_sdc_cmd_out;
 // (* mark_debug = "true" *) logic        io_debugSignals_sdc_res_in;
-(* mark_debug = "true" *) logic [3:0]  io_debugSignals_sdc_dat_in;
-(* mark_debug = "true" *) logic [7:0]  io_debugSignals_sdc_rx_dat_index;
+// (* mark_debug = "true" *) logic [3:0]  io_debugSignals_sdc_dat_in;
+// (* mark_debug = "true" *) logic [7:0]  io_debugSignals_sdc_rx_dat_index;
 
 wire clk;
 wire rst;

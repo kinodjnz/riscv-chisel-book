@@ -47,8 +47,8 @@ class RiscVDebugSignals extends Bundle {
   // val sdc_cmd_wrt = Output(Bool())
   // val sdc_cmd_out = Output(Bool())
   // val sdc_res_in  = Output(Bool())
-  val sdc_dat_in  = Output(UInt(4.W))
-  val sdc_rx_dat_index = Output(UInt(8.W))
+  // val sdc_dat_in  = Output(UInt(4.W))
+  // val sdc_rx_dat_index = Output(UInt(8.W))
 }
 
 class RiscV(clockHz: Int) extends Module {
@@ -162,8 +162,8 @@ class RiscV(clockHz: Int) extends Module {
   // io.debugSignals.sdc_cmd_wrt := sdc.io.sdc_port.cmd_wrt
   // io.debugSignals.sdc_cmd_out := sdc.io.sdc_port.cmd_out
   // io.debugSignals.sdc_res_in  := io.sdc_port.res_in
-  io.debugSignals.sdc_dat_in  := io.sdc_port.dat_in
-  io.debugSignals.sdc_rx_dat_index := sdc.io.rx_dat_index
+  // io.debugSignals.sdc_dat_in  := io.sdc_port.dat_in
+  // io.debugSignals.sdc_rx_dat_index := sdc.io.rx_dat_index
 
   io.exit := core.io.exit
   io.gpio <> gpio.io.gpio

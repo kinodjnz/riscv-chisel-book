@@ -51,7 +51,6 @@ class Sdc() extends Module {
   val io = IO(new Bundle {
     val mem = new DmemPortIo
     val sdc_port = new SdcPort()
-    val rx_dat_index = Output(UInt(8.W))
   })
 
   val cmd_bits: Int = 48
@@ -377,8 +376,6 @@ class Sdc() extends Module {
       }
     }
   }
-
-  io.rx_dat_index := rx_dat_index
 
   printf(p"sdc.clk           : 0x${Hexadecimal(reg_clk)}\n")
   printf(p"sdc.cmd_wrt       : 0x${Hexadecimal(io.sdc_port.cmd_wrt)}\n")

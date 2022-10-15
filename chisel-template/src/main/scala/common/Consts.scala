@@ -15,6 +15,7 @@ object Consts {
   val SEW_LEN       = 11
   val VL_ADDR       = 0xC20
   val VTYPE_ADDR    = 0xC21
+  val INST_CNT_LEN  = 2
 
   val EXE_FUN_LEN = 5
   val ALU_X       =  0.U(EXE_FUN_LEN.W)
