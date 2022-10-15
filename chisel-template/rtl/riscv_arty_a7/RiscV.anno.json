@@ -101,6 +101,22 @@
   },
   {
     "class":"chisel3.experimental.EnumAnnotations$EnumDefAnnotation",
+    "typeName":"fpga.IcState",
+    "definition":{
+      "Full2Half":3,
+      "Empty":0,
+      "EmptyHalf":1,
+      "Full":2,
+      "FullHalf":4
+    }
+  },
+  {
+    "class":"chisel3.experimental.EnumAnnotations$EnumComponentAnnotation",
+    "target":"RiscV.Core.ic_state",
+    "enumTypeName":"fpga.IcState"
+  },
+  {
+    "class":"chisel3.experimental.EnumAnnotations$EnumDefAnnotation",
     "typeName":"fpga.DivremState",
     "definition":{
       "Finished":5,
@@ -117,22 +133,6 @@
     "enumTypeName":"fpga.DivremState"
   },
   {
-    "class":"chisel3.experimental.EnumAnnotations$EnumDefAnnotation",
-    "typeName":"fpga.IcState",
-    "definition":{
-      "Full2Half":3,
-      "Empty":0,
-      "EmptyHalf":1,
-      "Full":2,
-      "FullHalf":4
-    }
-  },
-  {
-    "class":"chisel3.experimental.EnumAnnotations$EnumComponentAnnotation",
-    "target":"RiscV.Core.ic_state",
-    "enumTypeName":"fpga.IcState"
-  },
-  {
     "class":"firrtl.transforms.BlackBoxTargetDirAnno",
     "targetDir":"rtl/riscv_arty_a7"
   },
@@ -141,13 +141,6 @@
     "target":"~RiscV|BootRom>imem",
     "filename":"bootrom.hex",
     "hexOrBinary":"h"
-  },
-  {
-    "class":"firrtl.transforms.CombinationalPath",
-    "sink":"~RiscV|RiscV>io_debugSignals_sdc_dat_in",
-    "sources":[
-      "~RiscV|RiscV>io_sdc_port_dat_in"
-    ]
   },
   {
     "class":"firrtl.transforms.CombinationalPath",
