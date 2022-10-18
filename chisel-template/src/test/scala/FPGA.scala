@@ -22,6 +22,7 @@ class RiscvTest extends AnyFlatSpec with ChiselScalatestTester {
       // ("mtimer", 1000, -1),
       // ("br", 1000, -1),
       // ("loop", 1000, -1),
+      ("cpop", 1000, -1),
       // ("sdc", 7000, -1),
       ("icache", 200, -1),
       ("dcache", 200, -1),
