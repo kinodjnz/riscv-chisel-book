@@ -568,6 +568,7 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
       DIVU  -> List(ALU_DIVU  , OP1_RS1, OP2_RS2, MEN_X, REN_S, WB_MD,  WBA_RD, CSR_X, MW_X),
       REM   -> List(ALU_REM   , OP1_RS1, OP2_RS2, MEN_X, REN_S, WB_MD,  WBA_RD, CSR_X, MW_X),
       REMU  -> List(ALU_REMU  , OP1_RS1, OP2_RS2, MEN_X, REN_S, WB_MD,  WBA_RD, CSR_X, MW_X),
+      CPOP  -> List(ALU_CPOP  , OP1_RS1, OP2_X  , MEN_X, REN_S, WB_ALU, WBA_RD, CSR_X, MW_X),
       C_ILL      -> List(ALU_X    , OP1_C_RS1 , OP2_C_RS2  , MEN_X, REN_X, WB_X  , WBA_C  , CSR_X, MW_X),
       C_ADDI4SPN -> List(ALU_ADD  , OP1_C_SP  , OP2_C_IMIW , MEN_X, REN_S, WB_ALU, WBA_CP2, CSR_X, MW_X),
       C_ADDI16SP -> List(ALU_ADD  , OP1_C_RS1 , OP2_C_IMI16, MEN_X, REN_S, WB_ALU, WBA_C  , CSR_X, MW_X),
@@ -1003,6 +1004,7 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
     (ex2_reg_exe_fun === ALU_SLTU)  -> (ex2_reg_op1_data < ex2_reg_op2_data).asUInt(),
     (ex2_reg_exe_fun === ALU_JALR)  -> ((ex2_reg_op1_data + ex2_reg_op2_data) & ~1.U(WORD_LEN.W)),
     (ex2_reg_exe_fun === ALU_COPY1) -> ex2_reg_op1_data,
+    (ex2_reg_exe_fun === ALU_CPOP)  -> PopCount(ex2_reg_op1_data),
   ))
 
   val ex2_mullu  = (ex2_reg_op1_data * ex2_reg_op2_data(WORD_LEN/2-1, 0))
@@ -1327,6 +1329,79 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
   // mem_reminder := mem_reg_reminder
   mem_div_stall_next := false.B
 
+  /*
+  val (q_input, q_output) = pla(Seq(
+    // d: 0
+    (BitPat("b0000000?"), BitPat("b00")),
+    (BitPat("b0000001?"), BitPat("b01")),
+    (BitPat("b0000010?"), BitPat("b01")),
+    (BitPat("b0000011?"), BitPat("b1?")),
+    (BitPat("b000010??"), BitPat("b1?")),
+    (BitPat("b000011??"), BitPat("b??")),
+    (BitPat("b0001????"), BitPat("b??")),
+    // d: 1
+    (BitPat("b0010000?"), BitPat("b00")),
+    (BitPat("b0010001?"), BitPat("b01")),
+    (BitPat("b0010010?"), BitPat("b01")),
+    (BitPat("b00100110"), BitPat("b01")),
+    (BitPat("b00100111"), BitPat("b1?")),
+    (BitPat("b001010??"), BitPat("b1?")),
+    (BitPat("b0010110?"), BitPat("b1?")),
+    (BitPat("b0010111?"), BitPat("b??")),
+    (BitPat("b0011????"), BitPat("b??")),
+    // d: 2
+    (BitPat("b0100000?"), BitPat("b00")),
+    (BitPat("b0100001?"), BitPat("b01")),
+    (BitPat("b010001??"), BitPat("b01")),
+    (BitPat("b01001???"), BitPat("b1?")),
+    (BitPat("b0101????"), BitPat("b??")),
+    // d: 3
+    (BitPat("b0110000?"), BitPat("b00")),
+    (BitPat("b0110001?"), BitPat("b01")),
+    (BitPat("b011001??"), BitPat("b01")),
+    (BitPat("b01101???"), BitPat("b1?")),
+    (BitPat("b0111????"), BitPat("b??")),
+    // d: 4
+    (BitPat("b100000??"), BitPat("b00")),
+    (BitPat("b100001??"), BitPat("b01")),
+    (BitPat("b1000100?"), BitPat("b01")),
+    (BitPat("b1000101?"), BitPat("b1?")),
+    (BitPat("b100011??"), BitPat("b1?")),
+    (BitPat("b1001000?"), BitPat("b1?")),
+    (BitPat("b1001001?"), BitPat("b??")),
+    (BitPat("b100101??"), BitPat("b??")),
+    (BitPat("b10011???"), BitPat("b??")),
+    // d: 5
+    (BitPat("b101000??"), BitPat("b00")),
+    (BitPat("b101001??"), BitPat("b01")),
+    (BitPat("b1010100?"), BitPat("b01")),
+    (BitPat("b1010101?"), BitPat("b1?")),
+    (BitPat("b101011??"), BitPat("b1?")),
+    (BitPat("b101100??"), BitPat("b1?")),
+    (BitPat("b101101??"), BitPat("b??")),
+    (BitPat("b10111???"), BitPat("b??")),
+    // d: 6
+    (BitPat("b110000??"), BitPat("b00")),
+    (BitPat("b110001??"), BitPat("b01")),
+    (BitPat("b1100100?"), BitPat("b01")),
+    (BitPat("b1100101?"), BitPat("b1?")),
+    (BitPat("b110011??"), BitPat("b1?")),
+    (BitPat("b110100??"), BitPat("b1?")),
+    (BitPat("b110101??"), BitPat("b??")),
+    (BitPat("b11011???"), BitPat("b??")),
+    // d: 7
+    (BitPat("b111000??"), BitPat("b00")),
+    (BitPat("b111001??"), BitPat("b01")),
+    (BitPat("b111010??"), BitPat("b01")),
+    (BitPat("b111011??"), BitPat("b1?")),
+    (BitPat("b111100??"), BitPat("b1?")),
+    (BitPat("b1111010?"), BitPat("b1?")),
+    (BitPat("b1111011?"), BitPat("b??")),
+    (BitPat("b11111???"), BitPat("b??")),
+  ))
+  q_input := 0.U(8.W)
+  */
+
   switch (mem_reg_divrem_state) {
     is (DivremState.Idle) {
       when (mem_reg_divrem) {
@@ -1378,6 +1453,8 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
           ~mem_reg_dividend(WORD_LEN+2, WORD_LEN-2),
         ),
       )
+      // q_input := Cat(mem_reg_d, p)
+      // val mem_q = q_output
       val mem_q = MuxLookup(mem_reg_d, 0.U(2.W), Seq(
         0.U -> MuxLookup(p, 0.U(2.W), Seq(
           0.U  -> 0.U, 1.U  -> 0.U, 2.U  -> 1.U, 3.U  -> 1.U,
