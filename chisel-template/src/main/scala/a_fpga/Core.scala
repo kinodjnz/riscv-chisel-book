@@ -569,6 +569,8 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
       REM   -> List(ALU_REM   , OP1_RS1, OP2_RS2, MEN_X, REN_S, WB_MD,  WBA_RD, CSR_X, MW_X),
       REMU  -> List(ALU_REMU  , OP1_RS1, OP2_RS2, MEN_X, REN_S, WB_MD,  WBA_RD, CSR_X, MW_X),
       CPOP  -> List(ALU_CPOP  , OP1_RS1, OP2_X  , MEN_X, REN_S, WB_ALU, WBA_RD, CSR_X, MW_X),
+      CLZ   -> List(ALU_CLZ   , OP1_RS1, OP2_X  , MEN_X, REN_S, WB_ALU, WBA_RD, CSR_X, MW_X),
+      CTZ   -> List(ALU_CTZ   , OP1_RS1, OP2_X  , MEN_X, REN_S, WB_ALU, WBA_RD, CSR_X, MW_X),
       C_ILL      -> List(ALU_X    , OP1_C_RS1 , OP2_C_RS2  , MEN_X, REN_X, WB_X  , WBA_C  , CSR_X, MW_X),
       C_ADDI4SPN -> List(ALU_ADD  , OP1_C_SP  , OP2_C_IMIW , MEN_X, REN_S, WB_ALU, WBA_CP2, CSR_X, MW_X),
       C_ADDI16SP -> List(ALU_ADD  , OP1_C_RS1 , OP2_C_IMI16, MEN_X, REN_S, WB_ALU, WBA_C  , CSR_X, MW_X),
@@ -1005,6 +1007,8 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
     (ex2_reg_exe_fun === ALU_JALR)  -> ((ex2_reg_op1_data + ex2_reg_op2_data) & ~1.U(WORD_LEN.W)),
     (ex2_reg_exe_fun === ALU_COPY1) -> ex2_reg_op1_data,
     (ex2_reg_exe_fun === ALU_CPOP)  -> PopCount(ex2_reg_op1_data),
+    (ex2_reg_exe_fun === ALU_CLZ)   -> PriorityEncoder(Cat(1.U(1.W), Reverse(ex2_reg_op1_data))),
+    (ex2_reg_exe_fun === ALU_CTZ)   -> PriorityEncoder(Cat(1.U(1.W), ex2_reg_op1_data)),
   ))
 
   val ex2_mullu  = (ex2_reg_op1_data * ex2_reg_op2_data(WORD_LEN/2-1, 0))
