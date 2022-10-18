@@ -1,5 +1,5 @@
 
-cpop:     file format elf32-littleriscv
+zbb:     file format elf32-littleriscv
 
 
 Disassembly of section .text:
@@ -25,42 +25,85 @@ Disassembly of section .text.startup:
   28:	4081                	li	ra,0
   2a:	60209713          	.4byte	0x60209713
   2e:	4381                	li	t2,0
-  30:	02771763          	bne	a4,t2,5e <fail>
+  30:	08771863          	bne	a4,t2,c0 <fail>
 
 00000034 <test_3>:
   34:	418d                	li	gp,3
   36:	500f10b7          	lui	ra,0x500f1
-  3a:	aa008093          	addi	ra,ra,-1376 # 500f0aa0 <pass+0x500f0a2a>
+  3a:	aa008093          	addi	ra,ra,-1376 # 500f0aa0 <pass+0x500f09c8>
   3e:	60209713          	.4byte	0x60209713
   42:	43a9                	li	t2,10
-  44:	00771d63          	bne	a4,t2,5e <fail>
+  44:	06771e63          	bne	a4,t2,c0 <fail>
 
 00000048 <test_4>:
   48:	4191                	li	gp,4
   4a:	fff00093          	li	ra,-1
   4e:	60209713          	.4byte	0x60209713
   52:	02000393          	li	t2,32
-  56:	00771463          	bne	a4,t2,5e <fail>
-  5a:	00770e63          	beq	a4,t2,76 <pass>
+  56:	06771563          	bne	a4,t2,c0 <fail>
 
-0000005e <fail>:
-  5e:	0ff0000f          	fence
-  62:	00018063          	beqz	gp,62 <fail+0x4>
-  66:	0186                	slli	gp,gp,0x1
-  68:	0011e193          	ori	gp,gp,1
-  6c:	05d00893          	li	a7,93
-  70:	850e                	mv	a0,gp
-  72:	00000073          	ecall
+0000005a <test_5>:
+  5a:	4195                	li	gp,5
+  5c:	800000b7          	lui	ra,0x80000
+  60:	60009713          	.4byte	0x60009713
+  64:	4381                	li	t2,0
+  66:	04771d63          	bne	a4,t2,c0 <fail>
 
-00000076 <pass>:
-  76:	0ff0000f          	fence
-  7a:	4185                	li	gp,1
-  7c:	05d00893          	li	a7,93
-  80:	4501                	li	a0,0
-  82:	00000073          	ecall
-  86:	0000                	unimp
-  88:	4501                	li	a0,0
-  8a:	8082                	ret
+0000006a <test_6>:
+  6a:	4199                	li	gp,6
+  6c:	005f40b7          	lui	ra,0x5f4
+  70:	a4908093          	addi	ra,ra,-1463 # 5f3a49 <pass+0x5f3971>
+  74:	60009713          	.4byte	0x60009713
+  78:	43a5                	li	t2,9
+  7a:	04771363          	bne	a4,t2,c0 <fail>
+
+0000007e <test_7>:
+  7e:	419d                	li	gp,7
+  80:	4081                	li	ra,0
+  82:	60009713          	.4byte	0x60009713
+  86:	02000393          	li	t2,32
+  8a:	02771b63          	bne	a4,t2,c0 <fail>
+
+0000008e <test_8>:
+  8e:	41a1                	li	gp,8
+  90:	4085                	li	ra,1
+  92:	60109713          	.4byte	0x60109713
+  96:	4381                	li	t2,0
+  98:	02771463          	bne	a4,t2,c0 <fail>
+
+0000009c <test_9>:
+  9c:	41a5                	li	gp,9
+  9e:	5fe1a0b7          	lui	ra,0x5fe1a
+  a2:	60109713          	.4byte	0x60109713
+  a6:	43b5                	li	t2,13
+  a8:	00771c63          	bne	a4,t2,c0 <fail>
+
+000000ac <test_10>:
+  ac:	41a9                	li	gp,10
+  ae:	4081                	li	ra,0
+  b0:	60109713          	.4byte	0x60109713
+  b4:	02000393          	li	t2,32
+  b8:	00771463          	bne	a4,t2,c0 <fail>
+  bc:	00770e63          	beq	a4,t2,d8 <pass>
+
+000000c0 <fail>:
+  c0:	0ff0000f          	fence
+  c4:	00018063          	beqz	gp,c4 <fail+0x4>
+  c8:	0186                	slli	gp,gp,0x1
+  ca:	0011e193          	ori	gp,gp,1
+  ce:	05d00893          	li	a7,93
+  d2:	850e                	mv	a0,gp
+  d4:	00000073          	ecall
+
+000000d8 <pass>:
+  d8:	0ff0000f          	fence
+  dc:	4185                	li	gp,1
+  de:	05d00893          	li	a7,93
+  e2:	4501                	li	a0,0
+  e4:	00000073          	ecall
+  e8:	0000                	unimp
+  ea:	4501                	li	a0,0
+  ec:	8082                	ret
 
 Disassembly of section .comment:
 
@@ -68,7 +111,7 @@ Disassembly of section .comment:
    0:	3a434347          	fmsub.d	ft6,ft6,ft4,ft7,rmm
    4:	2820                	fld	fs0,80(s0)
    6:	2029                	jal	10 <_start+0x10>
-   8:	3131                	jal	fffffc14 <pass+0xfffffb9e>
+   8:	3131                	jal	fffffc14 <pass+0xfffffb3c>
    a:	312e                	fld	ft2,232(sp)
    c:	302e                	fld	ft0,232(sp)
 	...
@@ -88,7 +131,7 @@ Disassembly of section .riscv.attributes:
   16:	6932                	flw	fs2,12(sp)
   18:	7032                	flw	ft0,44(sp)
   1a:	5f30                	lw	a2,120(a4)
-  1c:	3261                	jal	fffff9a4 <pass+0xfffff92e>
+  1c:	3261                	jal	fffff9a4 <pass+0xfffff8cc>
   1e:	3070                	fld	fa2,224(s0)
   20:	665f 7032 5f30      	.byte	0x5f, 0x66, 0x32, 0x70, 0x30, 0x5f
   26:	3264                	fld	fs1,224(a2)
