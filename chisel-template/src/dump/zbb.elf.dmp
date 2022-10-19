@@ -25,85 +25,111 @@ Disassembly of section .text.startup:
   28:	4081                	li	ra,0
   2a:	60209713          	.4byte	0x60209713
   2e:	4381                	li	t2,0
-  30:	08771863          	bne	a4,t2,c0 <fail>
+  30:	0c771563          	bne	a4,t2,fa <fail>
 
 00000034 <test_3>:
   34:	418d                	li	gp,3
   36:	500f10b7          	lui	ra,0x500f1
-  3a:	aa008093          	addi	ra,ra,-1376 # 500f0aa0 <pass+0x500f09c8>
+  3a:	aa008093          	addi	ra,ra,-1376 # 500f0aa0 <pass+0x500f098e>
   3e:	60209713          	.4byte	0x60209713
   42:	43a9                	li	t2,10
-  44:	06771e63          	bne	a4,t2,c0 <fail>
+  44:	0a771b63          	bne	a4,t2,fa <fail>
 
 00000048 <test_4>:
   48:	4191                	li	gp,4
   4a:	fff00093          	li	ra,-1
   4e:	60209713          	.4byte	0x60209713
   52:	02000393          	li	t2,32
-  56:	06771563          	bne	a4,t2,c0 <fail>
+  56:	0a771263          	bne	a4,t2,fa <fail>
 
 0000005a <test_5>:
   5a:	4195                	li	gp,5
   5c:	800000b7          	lui	ra,0x80000
   60:	60009713          	.4byte	0x60009713
   64:	4381                	li	t2,0
-  66:	04771d63          	bne	a4,t2,c0 <fail>
+  66:	08771a63          	bne	a4,t2,fa <fail>
 
 0000006a <test_6>:
   6a:	4199                	li	gp,6
   6c:	005f40b7          	lui	ra,0x5f4
-  70:	a4908093          	addi	ra,ra,-1463 # 5f3a49 <pass+0x5f3971>
+  70:	a4908093          	addi	ra,ra,-1463 # 5f3a49 <pass+0x5f3937>
   74:	60009713          	.4byte	0x60009713
   78:	43a5                	li	t2,9
-  7a:	04771363          	bne	a4,t2,c0 <fail>
+  7a:	08771063          	bne	a4,t2,fa <fail>
 
 0000007e <test_7>:
   7e:	419d                	li	gp,7
   80:	4081                	li	ra,0
   82:	60009713          	.4byte	0x60009713
   86:	02000393          	li	t2,32
-  8a:	02771b63          	bne	a4,t2,c0 <fail>
+  8a:	06771863          	bne	a4,t2,fa <fail>
 
 0000008e <test_8>:
   8e:	41a1                	li	gp,8
   90:	4085                	li	ra,1
   92:	60109713          	.4byte	0x60109713
   96:	4381                	li	t2,0
-  98:	02771463          	bne	a4,t2,c0 <fail>
+  98:	06771163          	bne	a4,t2,fa <fail>
 
 0000009c <test_9>:
   9c:	41a5                	li	gp,9
   9e:	5fe1a0b7          	lui	ra,0x5fe1a
   a2:	60109713          	.4byte	0x60109713
   a6:	43b5                	li	t2,13
-  a8:	00771c63          	bne	a4,t2,c0 <fail>
+  a8:	04771963          	bne	a4,t2,fa <fail>
 
 000000ac <test_10>:
   ac:	41a9                	li	gp,10
   ae:	4081                	li	ra,0
   b0:	60109713          	.4byte	0x60109713
   b4:	02000393          	li	t2,32
-  b8:	00771463          	bne	a4,t2,c0 <fail>
-  bc:	00770e63          	beq	a4,t2,d8 <pass>
+  b8:	04771163          	bne	a4,t2,fa <fail>
 
-000000c0 <fail>:
-  c0:	0ff0000f          	fence
-  c4:	00018063          	beqz	gp,c4 <fail+0x4>
-  c8:	0186                	slli	gp,gp,0x1
-  ca:	0011e193          	ori	gp,gp,1
-  ce:	05d00893          	li	a7,93
-  d2:	850e                	mv	a0,gp
-  d4:	00000073          	ecall
+000000bc <test_11>:
+  bc:	41ad                	li	gp,11
+  be:	800000b7          	lui	ra,0x80000
+  c2:	80000137          	lui	sp,0x80000
+  c6:	117d                	addi	sp,sp,-1 # 7fffffff <pass+0x7ffffeed>
+  c8:	0a20d733          	.4byte	0xa20d733
+  cc:	800003b7          	lui	t2,0x80000
+  d0:	13fd                	addi	t2,t2,-1 # 7fffffff <pass+0x7ffffeed>
+  d2:	02771463          	bne	a4,t2,fa <fail>
 
-000000d8 <pass>:
-  d8:	0ff0000f          	fence
-  dc:	4185                	li	gp,1
-  de:	05d00893          	li	a7,93
-  e2:	4501                	li	a0,0
-  e4:	00000073          	ecall
-  e8:	0000                	unimp
-  ea:	4501                	li	a0,0
-  ec:	8082                	ret
+000000d6 <test_12>:
+  d6:	41b1                	li	gp,12
+  d8:	40b9                	li	ra,14
+  da:	4159                	li	sp,22
+  dc:	0a20d733          	.4byte	0xa20d733
+  e0:	43b9                	li	t2,14
+  e2:	00771c63          	bne	a4,t2,fa <fail>
+
+000000e6 <test_13>:
+  e6:	41b5                	li	gp,13
+  e8:	50fd                	li	ra,-1
+  ea:	517d                	li	sp,-1
+  ec:	0a20d733          	.4byte	0xa20d733
+  f0:	53fd                	li	t2,-1
+  f2:	00771463          	bne	a4,t2,fa <fail>
+  f6:	00770e63          	beq	a4,t2,112 <pass>
+
+000000fa <fail>:
+  fa:	0ff0000f          	fence
+  fe:	00018063          	beqz	gp,fe <fail+0x4>
+ 102:	0186                	slli	gp,gp,0x1
+ 104:	0011e193          	ori	gp,gp,1
+ 108:	05d00893          	li	a7,93
+ 10c:	850e                	mv	a0,gp
+ 10e:	00000073          	ecall
+
+00000112 <pass>:
+ 112:	0ff0000f          	fence
+ 116:	4185                	li	gp,1
+ 118:	05d00893          	li	a7,93
+ 11c:	4501                	li	a0,0
+ 11e:	00000073          	ecall
+ 122:	0000                	unimp
+ 124:	4501                	li	a0,0
+ 126:	8082                	ret
 
 Disassembly of section .comment:
 
@@ -111,7 +137,7 @@ Disassembly of section .comment:
    0:	3a434347          	fmsub.d	ft6,ft6,ft4,ft7,rmm
    4:	2820                	fld	fs0,80(s0)
    6:	2029                	jal	10 <_start+0x10>
-   8:	3131                	jal	fffffc14 <pass+0xfffffb3c>
+   8:	3131                	jal	fffffc14 <pass+0xfffffb02>
    a:	312e                	fld	ft2,232(sp)
    c:	302e                	fld	ft0,232(sp)
 	...
@@ -131,7 +157,7 @@ Disassembly of section .riscv.attributes:
   16:	6932                	flw	fs2,12(sp)
   18:	7032                	flw	ft0,44(sp)
   1a:	5f30                	lw	a2,120(a4)
-  1c:	3261                	jal	fffff9a4 <pass+0xfffff8cc>
+  1c:	3261                	jal	fffff9a4 <pass+0xfffff892>
   1e:	3070                	fld	fa2,224(s0)
   20:	665f 7032 5f30      	.byte	0x5f, 0x66, 0x32, 0x70, 0x30, 0x5f
   26:	3264                	fld	fs1,224(a2)
