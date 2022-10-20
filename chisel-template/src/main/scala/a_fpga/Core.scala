@@ -128,8 +128,7 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
   val ex1_reg_is_j           = RegInit(false.B)
   val ex1_reg_is_bp_pos      = RegInit(false.B)
   val ex1_reg_bp_addr        = RegInit(0.U(WORD_LEN.W))
-  // val ex1_reg_is_half        = RegInit(false.B)
-  val ex1_reg_link_addr      = RegInit(0.U(WORD_LEN.W))
+  val ex1_reg_is_half        = RegInit(false.B)
   val ex1_reg_is_valid_inst  = RegInit(false.B)
   val ex1_reg_is_trap        = RegInit(false.B)
   val ex1_reg_mcause         = RegInit(0.U(WORD_LEN.W))
@@ -153,8 +152,7 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
   val ex2_reg_is_j          = RegInit(false.B)
   val ex2_reg_is_bp_pos     = RegInit(false.B)
   val ex2_reg_bp_addr       = RegInit(0.U(WORD_LEN.W))
-  // val ex2_reg_is_half       = RegInit(false.B)
-  val ex2_reg_link_addr     = RegInit(0.U(WORD_LEN.W))
+  val ex2_reg_is_half       = RegInit(false.B)
   val ex2_reg_is_valid_inst = RegInit(false.B)
   val ex2_reg_is_trap       = RegInit(false.B)
   val ex2_reg_mcause        = RegInit(0.U(WORD_LEN.W))
@@ -171,8 +169,7 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
   // val ex3_reg_is_j             = RegInit(false.B)
   val ex3_reg_is_bp_pos        = RegInit(false.B)
   val ex3_reg_bp_addr          = RegInit(0.U(WORD_LEN.W))
-  // val ex3_reg_is_half          = RegInit(false.B)
-  val ex3_reg_link_addr        = RegInit(0.U(WORD_LEN.W))
+  val ex3_reg_is_half          = RegInit(false.B)
 
   // EX2/MEM State
   val mem_reg_en            = RegInit(false.B)
@@ -194,11 +191,10 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
   val mem_reg_csr_cmd       = RegInit(0.U(CSR_LEN.W))
   //val mem_reg_imm_z_uext    = RegInit(0.U(WORD_LEN.W))
   val mem_reg_alu_out       = RegInit(0.U(WORD_LEN.W))
-  val mem_reg_alu_mulhsu_out  = RegInit(0.U(WORD_LEN.W))
+  val mem_reg_pc_bit_out    = RegInit(0.U(WORD_LEN.W))
+  //val mem_reg_alu_mulhsu_out  = RegInit(0.U(WORD_LEN.W))
   val mem_reg_mem_w         = RegInit(0.U(WORD_LEN.W))
   val mem_reg_mem_wstrb     = RegInit(0.U((WORD_LEN/8).W))
-  // val mem_reg_is_half       = RegInit(false.B)
-  val mem_reg_link_addr     = RegInit(0.U(WORD_LEN.W))
   val mem_reg_is_valid_inst = RegInit(false.B)
   val mem_reg_is_trap       = RegInit(false.B)
   val mem_reg_mcause        = RegInit(0.U(WORD_LEN.W))
@@ -461,10 +457,6 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
   val id_inst = Mux(mem_reg_is_br || ex3_reg_is_br, BUBBLE, id_reg_inst)
 
   val id_is_half = (id_inst(1, 0) =/= 3.U)
-  val id_link_addr = Mux(id_is_half,
-    id_reg_pc + 2.U(WORD_LEN.W),
-    id_reg_pc + 4.U(WORD_LEN.W)
-  )
 
   val id_rs1_addr = id_inst(19, 15)
   val id_rs2_addr = id_inst(24, 20)
@@ -576,11 +568,11 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
       DIVU  -> List(ALU_DIVU  , OP1_RS1, OP2_RS2, MEN_X, REN_S, WB_MD,  WBA_RD, CSR_X, MW_X),
       REM   -> List(ALU_REM   , OP1_RS1, OP2_RS2, MEN_X, REN_S, WB_MD,  WBA_RD, CSR_X, MW_X),
       REMU  -> List(ALU_REMU  , OP1_RS1, OP2_RS2, MEN_X, REN_S, WB_MD,  WBA_RD, CSR_X, MW_X),
-      CPOP  -> List(ALU_CPOP  , OP1_RS1, OP2_X  , MEN_X, REN_S, WB_ALU, WBA_RD, CSR_X, MW_X),
-      CLZ   -> List(ALU_CLZ   , OP1_RS1, OP2_X  , MEN_X, REN_S, WB_ALU, WBA_RD, CSR_X, MW_X),
-      CTZ   -> List(ALU_CTZ   , OP1_RS1, OP2_X  , MEN_X, REN_S, WB_ALU, WBA_RD, CSR_X, MW_X),
-      MINU  -> List(ALU_MINU  , OP1_RS1, OP2_RS2, MEN_X, REN_S, WB_ALU, WBA_RD, CSR_X, MW_X),
-      C_ILL      -> List(ALU_X    , OP1_C_RS1 , OP2_C_RS2  , MEN_X, REN_X, WB_X  , WBA_C  , CSR_X, MW_X),
+      CPOP  -> List(ALU_CPOP  , OP1_RS1, OP2_X  , MEN_X, REN_S, WB_BIT, WBA_RD, CSR_X, MW_X),
+      CLZ   -> List(ALU_CLZ   , OP1_RS1, OP2_X  , MEN_X, REN_S, WB_BIT, WBA_RD, CSR_X, MW_X),
+      CTZ   -> List(ALU_CTZ   , OP1_RS1, OP2_X  , MEN_X, REN_S, WB_BIT, WBA_RD, CSR_X, MW_X),
+      MINU  -> List(ALU_MINU  , OP1_RS1, OP2_RS2, MEN_X, REN_S, WB_BIT, WBA_RD, CSR_X, MW_X),
+      C_ILL      -> List(ALU_X    , OP1_X     , OP2_X      , MEN_X, REN_X, WB_X  , WBA_C  , CSR_X, MW_X),
       C_ADDI4SPN -> List(ALU_ADD  , OP1_C_SP  , OP2_C_IMIW , MEN_X, REN_S, WB_ALU, WBA_CP2, CSR_X, MW_X),
       C_ADDI16SP -> List(ALU_ADD  , OP1_C_RS1 , OP2_C_IMI16, MEN_X, REN_S, WB_ALU, WBA_C  , CSR_X, MW_X),
       C_ADDI     -> List(ALU_ADD  , OP1_C_RS1 , OP2_C_IMI  , MEN_X, REN_S, WB_ALU, WBA_C  , CSR_X, MW_X),
@@ -704,8 +696,7 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
   val id_reg_is_j_delay       = RegInit(false.B)
   val id_reg_is_bp_pos_delay  = RegInit(false.B)
   val id_reg_bp_addr_delay    = RegInit(0.U(WORD_LEN.W))
-  // val id_reg_is_half_delay    = RegInit(false.B)
-  val id_reg_link_addr_delay  = RegInit(0.U(WORD_LEN.W))
+  val id_reg_is_half_delay    = RegInit(false.B)
   val id_reg_is_valid_inst_delay = RegInit(false.B)
   val id_reg_is_trap_delay    = RegInit(false.B)
   val id_reg_mcause_delay     = RegInit(0.U(WORD_LEN.W))
@@ -752,8 +743,7 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
     id_reg_is_j_delay       := id_is_j
     id_reg_is_bp_pos_delay  := id_reg_is_bp_pos
     id_reg_bp_addr_delay    := id_reg_bp_addr
-    // id_reg_is_half_delay    := id_is_half
-    id_reg_link_addr_delay  := id_link_addr
+    id_reg_is_half_delay    := id_is_half
     id_reg_is_valid_inst_delay := id_inst =/= BUBBLE
     id_reg_is_trap_delay    := id_is_trap
     id_reg_mcause_delay     := id_mcause
@@ -785,8 +775,7 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
       ex1_reg_is_j          := false.B
       ex1_reg_is_bp_pos     := false.B
       ex1_reg_bp_addr       := id_reg_bp_addr_delay
-      // ex1_reg_is_half       := id_reg_is_half_delay
-      ex1_reg_link_addr     := id_reg_link_addr_delay
+      ex1_reg_is_half       := id_reg_is_half_delay
       ex1_reg_is_valid_inst := false.B
       ex1_reg_is_trap       := false.B
       ex1_reg_mcause        := id_reg_mcause_delay
@@ -813,8 +802,7 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
       ex1_reg_is_j          := false.B
       ex1_reg_is_bp_pos     := false.B
       ex1_reg_bp_addr       := id_reg_bp_addr
-      // ex1_reg_is_half       := id_is_half
-      ex1_reg_link_addr     := id_link_addr
+      ex1_reg_is_half       := id_is_half
       ex1_reg_is_valid_inst := false.B
       ex1_reg_is_trap       := false.B
       ex1_reg_mcause        := id_mcause
@@ -848,8 +836,7 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
       ex1_reg_is_j          := id_reg_is_j_delay
       ex1_reg_is_bp_pos     := id_reg_is_bp_pos_delay
       ex1_reg_bp_addr       := id_reg_bp_addr_delay
-      // ex1_reg_is_half       := id_reg_is_half_delay
-      ex1_reg_link_addr     := id_reg_link_addr_delay
+      ex1_reg_is_half       := id_reg_is_half_delay
       ex1_reg_is_valid_inst := id_reg_is_valid_inst_delay
       ex1_reg_is_trap       := id_reg_is_trap_delay
       ex1_reg_mcause        := id_reg_mcause_delay
@@ -880,8 +867,7 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
       ex1_reg_is_j          := id_is_j
       ex1_reg_is_bp_pos     := id_reg_is_bp_pos
       ex1_reg_bp_addr       := id_reg_bp_addr
-      // ex1_reg_is_half       := id_is_half
-      ex1_reg_link_addr     := id_link_addr
+      ex1_reg_is_half       := id_is_half
       ex1_reg_is_valid_inst := id_inst =/= BUBBLE
       ex1_reg_is_trap       := id_is_trap
       ex1_reg_mcause        := id_mcause
@@ -975,7 +961,7 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
   when(!mem_stall) {
     val ex1_hazard = (ex1_reg_rf_wen === REN_S) && (ex1_reg_wb_addr =/= 0.U) && !mem_reg_is_br && !ex3_reg_is_br
     ex1_reg_fw_en := !ex1_stall && ex1_hazard && (ex1_reg_wb_sel =/= WB_MEM) && (ex1_reg_wb_sel =/= WB_CSR)
-    ex1_reg_hazard := ex1_hazard && ((ex1_reg_wb_sel === WB_MEM) || (ex1_reg_wb_sel === WB_CSR) || (ex1_reg_wb_sel === WB_MD))
+    ex1_reg_hazard := ex1_hazard && ((ex1_reg_wb_sel === WB_MEM) || (ex1_reg_wb_sel === WB_CSR) || (ex1_reg_wb_sel === WB_MD) || (ex1_reg_wb_sel === WB_BIT))
   }
 
   //**********************************
@@ -999,8 +985,7 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
     ex2_reg_is_j          := ex1_reg_is_j
     ex2_reg_is_bp_pos     := ex1_reg_is_bp_pos
     ex2_reg_bp_addr       := ex1_reg_bp_addr
-    // ex2_reg_is_half       := ex1_reg_is_half
-    ex2_reg_link_addr     := ex1_reg_link_addr
+    ex2_reg_is_half       := ex1_reg_is_half
     ex2_reg_is_valid_inst := ex1_reg_is_valid_inst && !ex_is_bubble
     ex2_reg_is_trap       := Mux(ex_is_bubble, false.B, ex1_reg_is_trap)
     ex2_reg_mcause        := ex1_reg_mcause
@@ -1022,10 +1007,6 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
     (ex2_reg_exe_fun === ALU_SLT)   -> (ex2_reg_op1_data.asSInt() < ex2_reg_op2_data.asSInt()).asUInt(),
     (ex2_reg_exe_fun === ALU_SLTU)  -> (ex2_reg_op1_data < ex2_reg_op2_data).asUInt(),
     // (ex2_reg_exe_fun === ALU_JALR)  -> ((ex2_reg_op1_data + ex2_reg_op2_data) & ~1.U(WORD_LEN.W)),
-    (ex2_reg_exe_fun === ALU_MINU)  -> Mux(ex2_reg_op1_data < ex2_reg_op2_data, ex2_reg_op1_data, ex2_reg_op2_data),
-    (ex2_reg_exe_fun === ALU_CPOP)  -> PopCount(ex2_reg_op1_data),
-    (ex2_reg_exe_fun === ALU_CLZ)   -> PriorityEncoder(Cat(1.U(1.W), Reverse(ex2_reg_op1_data))),
-    (ex2_reg_exe_fun === ALU_CTZ)   -> PriorityEncoder(Cat(1.U(1.W), ex2_reg_op1_data)),
   ))
 
   val ex2_mullu  = (ex2_reg_op1_data * ex2_reg_op2_data(WORD_LEN/2-1, 0))
@@ -1033,6 +1014,15 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
   val ex2_mulhuu = (ex2_reg_op1_data * ex2_reg_op2_data(WORD_LEN-1, WORD_LEN/2))
   val ex2_mulhss = (ex2_reg_op1_data.asSInt() * ex2_reg_op2_data(WORD_LEN-1, WORD_LEN/2).asSInt())
   val ex2_mulhsu = (ex2_reg_op1_data.asSInt() * ex2_reg_op2_data(WORD_LEN-1, WORD_LEN/2))
+
+  val ex2_next_pc = Mux(ex2_reg_is_half, ex2_reg_pc + 2.U(WORD_LEN.W), ex2_reg_pc + 4.U(WORD_LEN.W))
+  val ex2_pc_bit_out = MuxCase(0.U(WORD_LEN.W), Seq(
+    (ex2_reg_wb_sel === WB_PC)      -> ex2_next_pc,
+    (ex2_reg_exe_fun === ALU_MINU)  -> Mux(ex2_reg_op1_data < ex2_reg_op2_data, ex2_reg_op1_data, ex2_reg_op2_data),
+    (ex2_reg_exe_fun === ALU_CPOP)  -> PopCount(ex2_reg_op1_data),
+    (ex2_reg_exe_fun === ALU_CLZ)   -> PriorityEncoder(Cat(1.U(1.W), Reverse(ex2_reg_op1_data))),
+    (ex2_reg_exe_fun === ALU_CTZ)   -> PriorityEncoder(Cat(1.U(1.W), ex2_reg_op1_data)),
+  ))
 
   val ex2_divrem = WireDefault(false.B)
   val ex2_sign_op1 = WireDefault(0.U(1.W))
@@ -1088,12 +1078,14 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
   val ex2_cond_br_target = ex2_reg_pc + ex2_reg_imm_b_sext
   val ex2_uncond_br_target = ex2_alu_out & ~1.U(WORD_LEN.W)
 
-  ex1_fw_data := Mux((ex2_reg_wb_sel === WB_PC), ex2_reg_link_addr, ex2_alu_out)
+  ex1_fw_data := MuxCase(ex2_alu_out, Seq(
+    (ex2_reg_wb_sel === WB_PC) -> ex2_next_pc,
+  ))
   ex2_reg_fw_data := ex1_fw_data
   when(!mem_stall) {
     val ex2_hazard = (ex2_reg_rf_wen === REN_S) && (ex2_reg_wb_addr =/= 0.U) && !mem_reg_is_br && !ex3_reg_is_br
     ex2_reg_fw_en := ex2_hazard && (ex2_reg_wb_sel =/= WB_MEM) && (ex2_reg_wb_sel =/= WB_CSR)
-    ex2_reg_hazard := ex2_hazard && ((ex2_reg_wb_sel === WB_MEM) || (ex2_reg_wb_sel === WB_CSR) || (ex2_reg_wb_sel === WB_MD))
+    ex2_reg_hazard := ex2_hazard && ((ex2_reg_wb_sel === WB_MEM) || (ex2_reg_wb_sel === WB_CSR) || (ex2_reg_wb_sel === WB_MD) || (ex2_reg_wb_sel === WB_BIT))
   }
 
   //**********************************
@@ -1110,8 +1102,7 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
     // ex3_reg_is_j             := ex2_reg_is_j
     ex3_reg_is_bp_pos        := ex2_reg_is_bp_pos
     ex3_reg_bp_addr          := ex2_reg_bp_addr
-    // ex3_reg_is_half          := ex2_reg_is_half
-    ex3_reg_link_addr        := ex2_reg_link_addr
+    ex3_reg_is_half          := ex2_reg_is_half
   }
 
   //**********************************
@@ -1129,7 +1120,7 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
   )
   ex3_reg_br_target := MuxCase(DontCare, Seq(
     ex3_cond_bp_fail   -> ex3_reg_cond_br_target,
-    ex3_cond_nbp_fail  -> ex3_reg_link_addr,
+    ex3_cond_nbp_fail  -> Mux(ex3_reg_is_half, ex3_reg_pc + 2.U(WORD_LEN.W), ex3_reg_pc + 4.U(WORD_LEN.W)),
     ex3_uncond_bp_fail -> ex3_reg_uncond_br_target,
   ))
   ex3_reg_is_br := ex3_cond_bp_fail || ex3_cond_nbp_fail || ex3_uncond_bp_fail
@@ -1171,6 +1162,7 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
     mem_reg_mulhuu     := ex2_mulhuu
     mem_reg_mulhss     := ex2_mulhss
     mem_reg_mulhsu     := ex2_mulhsu
+    mem_reg_pc_bit_out := ex2_pc_bit_out
     mem_reg_exe_fun    := ex2_reg_exe_fun
     mem_reg_rf_wen     := ex2_reg_rf_wen
     mem_reg_wb_sel     := ex2_reg_wb_sel
@@ -1184,8 +1176,6 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
       (ex2_reg_mem_w === MW_H) -> "b0011".U,
       (ex2_reg_mem_w === MW_W) -> "b1111".U,
     )) << (ex2_alu_out(1, 0)))(3, 0)
-    // mem_reg_is_half    := ex2_reg_is_half
-    mem_reg_link_addr  := ex2_reg_link_addr
     mem_reg_is_valid_inst := ex2_reg_is_valid_inst && !mem_reg_is_br && !ex3_reg_is_br
     mem_reg_is_trap    := ex2_reg_is_trap
     mem_reg_mcause     := ex2_reg_mcause
@@ -1613,7 +1603,7 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
 
   mem_wb_data := MuxCase(mem_reg_alu_out, Seq(
     (mem_reg_wb_sel === WB_MEM) -> mem_wb_data_load,
-    (mem_reg_wb_sel === WB_PC)  -> mem_reg_link_addr,
+    ((mem_reg_wb_sel === WB_PC) || (mem_reg_wb_sel === WB_BIT)) -> mem_reg_pc_bit_out,
     (mem_reg_wb_sel === WB_CSR) -> csr_rdata,
     (mem_reg_wb_sel === WB_MD) -> mem_alu_muldiv_out,
   ))
