@@ -144,13 +144,6 @@
   },
   {
     "class":"firrtl.transforms.CombinationalPath",
-    "sink":"~RiscV|RiscV>io_debugSignals_wready",
-    "sources":[
-      "~RiscV|RiscV>io_dram_rdata_valid"
-    ]
-  },
-  {
-    "class":"firrtl.transforms.CombinationalPath",
     "sink":"~RiscV|RiscV>io_debugSignals_wen",
     "sources":[
       "~RiscV|RiscV>io_dram_rdata_valid"
@@ -182,6 +175,13 @@
   },
   {
     "class":"firrtl.transforms.CombinationalPath",
+    "sink":"~RiscV|RiscV>io_debugSignals_wready",
+    "sources":[
+      "~RiscV|RiscV>io_dram_rdata_valid"
+    ]
+  },
+  {
+    "class":"firrtl.transforms.CombinationalPath",
     "sink":"~RiscV|RiscV>io_dram_wdata",
     "sources":[
       "~RiscV|RiscV>io_dram_init_calib_complete",
@@ -194,13 +194,6 @@
     "sources":[
       "~RiscV|RiscV>io_dram_init_calib_complete",
       "~RiscV|RiscV>io_dram_busy"
-    ]
-  },
-  {
-    "class":"firrtl.transforms.CombinationalPath",
-    "sink":"~RiscV|RiscV>io_debugSignals_ren",
-    "sources":[
-      "~RiscV|RiscV>io_dram_rdata_valid"
     ]
   },
   {
