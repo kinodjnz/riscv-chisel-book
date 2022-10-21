@@ -37,8 +37,8 @@ object Consts {
   val ALU_PCNT    = 21.U(EXE_FUN_LEN.W)
 
   val ALU_MAX     = 1.U(EXE_FUN_LEN.W)
-  val ALU_MIN     = 2.U(EXE_FUN_LEN.W)
-  val ALU_MAXU    = 3.U(EXE_FUN_LEN.W)
+  val ALU_MAXU    = 2.U(EXE_FUN_LEN.W)
+  val ALU_MIN     = 3.U(EXE_FUN_LEN.W)
   val ALU_MINU    = 4.U(EXE_FUN_LEN.W)
   val ALU_CLZ     = 5.U(EXE_FUN_LEN.W)
   val ALU_CTZ     = 6.U(EXE_FUN_LEN.W)

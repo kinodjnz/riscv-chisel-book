@@ -60,5 +60,11 @@ class SimTop(memoryPath: String, bpTagInitPath: String) extends Module {
 
   core.io.intr := false.B
   io.gp   := core.io.gp
-  io.exit := core.io.exit
+
+  val do_exit = RegInit(false.B)
+  val do_exit_delay = RegInit(false.B)
+
+  do_exit := core.io.exit
+  do_exit_delay := do_exit
+  io.exit := do_exit_delay
 }
