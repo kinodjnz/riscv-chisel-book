@@ -11,7 +11,7 @@ class Gpio() extends Module {
     val gpio = Output(UInt(32.W))
   })
 
-  val output = RegInit(255.U(32.W))
+  val output = RegInit(0.U(32.W))
   io.gpio := output
 
   io.mem.rdata := "xdeadbeef".U
