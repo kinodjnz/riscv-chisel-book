@@ -12,7 +12,7 @@ LD = ld.lld
 all: target/$(NAME).hex target/$(NAME).dump
 
 target/CACHEDIR.TAG target/$(TARGET)/release/lib$(NAME).a: $(RUST_SRCS)
-	cargo build --release
+	cargo +nightly build --release -Z unstable-options
 
 target/boot.o: libsrc/boot.s target/CACHEDIR.TAG
 	$(AS) -mabi=ilp32 -o $@ $<
