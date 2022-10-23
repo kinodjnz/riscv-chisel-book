@@ -58,7 +58,7 @@ class SimTop(memoryPath: String, bpTagInitPath: String) extends Module {
   val sd = Module(new MockSd)
   sdc.io.sdc_port <> sd.io.sdc_port
 
-  core.io.intr := false.B
+  core.io.intr := 0.U
   io.gp   := core.io.gp
 
   val do_exit = RegInit(false.B)

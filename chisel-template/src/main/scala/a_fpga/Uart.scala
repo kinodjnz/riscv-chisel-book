@@ -117,34 +117,37 @@ class Uart(clockHz: Int, baudRate: Int = 115200) extends Module {
     rx_data_ready := true.B
   }
 
-  when (io.mem.ren) {
-    when (io.mem.raddr === 0.U) {
-      io.mem.rdata := Cat(0.U(27.W), rx.io.overrun.asUInt, rx_data_ready.asUInt, (!tx_empty).asUInt, rx_intr_en.asUInt, tx_intr_en.asUInt)
-    }.elsewhen (io.mem.raddr === 4.U) {
-      io.mem.rdata := rx_data
-      rx_data_ready := false.B
-    }.otherwise {
-      io.mem.rdata := 0.U(WORD_LEN.W)
-    }
-    io.mem.rvalid := true.B
-  }.otherwise {
-    io.mem.rdata := 0.U(WORD_LEN.W)
-    io.mem.rvalid := false.B
-  }
+  io.mem.rdata := "xdeadbeef".U
+  io.mem.rvalid := true.B
   io.mem.rready := true.B
+  io.mem.wready := true.B
 
-  when (io.mem.wen) {
-    when (io.mem.waddr === 0.U) {
-      tx_intr_en := io.mem.wdata(0).asBool
-      rx_intr_en := io.mem.wdata(1).asBool
-    }.elsewhen (io.mem.waddr === 4.U) {
-      when (tx_empty) {  //Send TX Data if not busy.
-        tx_empty := false.B
-        tx_data := io.mem.wdata
+  when (io.mem.ren) {
+    switch (io.mem.raddr(3, 2)) {
+      is (0.U) {
+        io.mem.rdata := Cat(0.U(27.W), rx.io.overrun.asUInt, rx_data_ready.asUInt, (!tx_empty).asUInt, rx_intr_en.asUInt, tx_intr_en.asUInt)
+      }
+      is (1.U) {
+        io.mem.rdata := rx_data
+        rx_data_ready := false.B
       }
     }
   }
-  io.mem.wready := true.B
+
+  when (io.mem.wen) {
+    switch (io.mem.waddr(3, 2)) {
+      is (0.U) {
+        tx_intr_en := io.mem.wdata(0).asBool
+        rx_intr_en := io.mem.wdata(1).asBool
+      }
+      is (1.U) {
+        when (tx_empty) {  //Send TX Data if not busy.
+          tx_empty := false.B
+          tx_data := io.mem.wdata
+        }
+      }
+    }
+  }
 
   when(!tx_empty && tx_ready) {
     tx_empty := true.B

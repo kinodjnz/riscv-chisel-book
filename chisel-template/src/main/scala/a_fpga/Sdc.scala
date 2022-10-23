@@ -28,7 +28,11 @@ object SdcConsts {
 }
 
 // memory map
-// 00000000 | power | 0000000 | 000000 | width | 0000000 | baud divider |
+// 00000000 | settings |
+//    8-0 : baud divider
+//     16 : res_intr_en
+//     17 : dat_intr_en
+//     31 : power
 // 00000004 | control / status |
 //    3-0 : res_type
 //    9-4 : cmd
@@ -51,6 +55,7 @@ class Sdc() extends Module {
   val io = IO(new Bundle {
     val mem = new DmemPortIo
     val sdc_port = new SdcPort()
+    val intr = Output(Bool())
   })
 
   val cmd_bits: Int = 48
@@ -79,6 +84,7 @@ class Sdc() extends Module {
   val rx_res_type = RegInit(0.U(RES_TYPE_LEN.W))
   val rx_res = RegInit(0.U(136.W))
   val rx_res_ready = RegInit(false.B)
+  val rx_res_intr_en = RegInit(false.B)
   val rx_res_crc = Reg(Vec(7, Bool()))
   val rx_res_crc_error = RegInit(false.B)
   val rx_res_crc_en = RegInit(false.B)
@@ -101,6 +107,7 @@ class Sdc() extends Module {
   val rx_dat_continuous = RegInit(false.B)
   val rx_dat = Mem(256, UInt(32.W))
   val rx_dat_ready = RegInit(false.B)
+  val rx_dat_intr_en = RegInit(false.B)
   val rx_dat_crc = Reg(Vec(16, UInt(4.W)))
   val rx_dat_crc_error = RegInit(false.B)
   val rx_dat_timer = RegInit(0.U(19.W))
@@ -286,6 +293,8 @@ class Sdc() extends Module {
           reg_baud_divider := baud_divider
           reg_clk_counter := baud_divider
         }
+        rx_res_intr_en := io.mem.wdata(16)
+        rx_dat_intr_en := io.mem.wdata(17)
       }
       is (1.U) {
         when (io.mem.wdata(11).asBool) {
@@ -340,14 +349,24 @@ class Sdc() extends Module {
   when (io.mem.ren) {
     val addr = io.mem.raddr(3, 2)
     switch (addr) {
+      is (0.U) {
+        io.mem.rdata := Cat(
+          reg_power.asUInt,
+          0.U(13.W),
+          rx_dat_intr_en.asUInt,
+          rx_res_intr_en.asUInt,
+          0.U(7.W),
+          reg_baud_divider
+        )
+      }
       is (1.U) {
         io.mem.rdata := Cat(
-          Fill(12, 0.U(1.W)),
+          0.U(12.W),
           rx_dat_overrun.asUInt,
           rx_dat_timeout.asUInt,
           rx_dat_crc_error.asUInt,
           rx_dat_ready.asUInt,
-          Fill(13, 0.U(1.W)),
+          0.U(13.W),
           rx_res_timeout.asUInt,
           rx_res_crc_error.asUInt,
           rx_res_ready.asUInt
@@ -376,6 +395,8 @@ class Sdc() extends Module {
       }
     }
   }
+
+  io.intr := (rx_res_intr_en && rx_res_ready) || (rx_dat_intr_en && rx_dat_ready)
 
   printf(p"sdc.clk           : 0x${Hexadecimal(reg_clk)}\n")
   printf(p"sdc.cmd_wrt       : 0x${Hexadecimal(io.sdc_port.cmd_wrt)}\n")

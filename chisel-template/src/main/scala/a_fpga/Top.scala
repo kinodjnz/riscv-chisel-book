@@ -169,7 +169,7 @@ class RiscV(clockHz: Int) extends Module {
   io.gpio <> gpio.io.gpio
   io.uart_tx <> uart.io.tx
   io.uart_rx <> uart.io.rx
-  core.io.intr <> uart.io.intr
+  core.io.intr := Cat(sdc.io.intr.asBool, uart.io.intr.asUInt)
   io.sdc_port <> sdc.io.sdc_port
 }
 

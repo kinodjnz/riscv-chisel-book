@@ -64,7 +64,7 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
       val icache_control = Flipped(new ICacheControl())
       val dmem = Flipped(new DmemPortIo())
       val mtimer_mem = new DmemPortIo()
-      val intr = Input(Bool())
+      val intr = Input(UInt(INTR_LEN.W))
       val gp   = Output(UInt(WORD_LEN.W))
       val exit = Output(Bool())
       val debug_signal = new CoreDebugSignals()
@@ -1224,7 +1224,7 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
   // Memory Access Stage
 
   val mem_is_valid_inst = mem_reg_is_valid_inst && (!mem_reg_is_br && !ex3_reg_is_br)
-  val mem_is_meintr = csr_mstatus(3).asBool && (io.intr && csr_mie(11)) && mem_is_valid_inst
+  val mem_is_meintr = csr_mstatus(3).asBool && (io.intr.orR && csr_mie(11)) && mem_is_valid_inst
   val mem_is_mtintr = csr_mstatus(3).asBool && (mtimer.io.intr && csr_mie(7)) && mem_is_valid_inst
   val mem_is_trap = mem_reg_is_trap && mem_is_valid_inst && !mem_is_meintr && !mem_is_mtintr
   val mem_en = mem_reg_en && !mem_reg_is_br && !ex3_reg_is_br && !mem_reg_is_trap && !mem_is_meintr && !mem_is_mtintr
@@ -1284,11 +1284,11 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
     }
   }
 
-  csr_mip := Cat(csr_mip(31, 12), io.intr.asUInt, csr_mip(10, 8), mtimer.io.intr.asUInt, csr_mip(6, 0))
+  csr_mip := Cat(csr_mip(31, 12), io.intr.orR.asUInt, csr_mip(10, 8), mtimer.io.intr.asUInt, csr_mip(6, 0))
 
   when (mem_is_meintr) {
     csr_mcause      := CSR_MCAUSE_MEI
-    csr_mtval       := 0.U(WORD_LEN.W)
+    csr_mtval       := PriorityEncoder(io.intr)
     csr_mepc        := mem_reg_pc
     // csr_mepc        := MuxCase(mem_reg_pc, Seq(
     //   ex3_reg_is_br             -> ex3_reg_br_target,
