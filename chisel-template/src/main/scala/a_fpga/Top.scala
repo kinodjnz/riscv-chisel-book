@@ -49,6 +49,13 @@ class RiscVDebugSignals extends Bundle {
   // val sdc_res_in  = Output(Bool())
   // val sdc_dat_in  = Output(UInt(4.W))
   // val sdc_rx_dat_index = Output(UInt(8.W))
+  val sdc_sdbuf_ren1 = Output(Bool())
+  val sdc_sdbuf_wen1 = Output(Bool())
+  val sdc_sdbuf_addr1 = Output(UInt(8.W))
+  val sdc_sdbuf_wdata1 = Output(UInt(8.W))
+  val sdc_sdbuf_ren2 = Output(Bool())
+  val sdc_sdbuf_wen2 = Output(Bool())
+  val sdc_sdbuf_addr2 = Output(UInt(8.W))
 }
 
 class RiscV(clockHz: Int) extends Module {
@@ -76,6 +83,7 @@ class RiscV(clockHz: Int) extends Module {
   val gpio = Module(new Gpio)
   val uart = Module(new Uart(clockHz))
   val sdc = Module(new Sdc)
+  val sdbuf = Module(new SdBuf)
   val config = Module(new Config(clockHz))
 
   val dmem_decoder = Module(new DMemDecoder(Seq(
@@ -164,6 +172,13 @@ class RiscV(clockHz: Int) extends Module {
   // io.debugSignals.sdc_res_in  := io.sdc_port.res_in
   // io.debugSignals.sdc_dat_in  := io.sdc_port.dat_in
   // io.debugSignals.sdc_rx_dat_index := sdc.io.rx_dat_index
+  io.debugSignals.sdc_sdbuf_ren1 := sdc.io.sdbuf.ren1
+  io.debugSignals.sdc_sdbuf_wen1 := sdc.io.sdbuf.wen1
+  io.debugSignals.sdc_sdbuf_addr1 := sdc.io.sdbuf.addr1
+  io.debugSignals.sdc_sdbuf_wdata1 := sdc.io.sdbuf.wdata1(7, 0)
+  io.debugSignals.sdc_sdbuf_ren2 := sdc.io.sdbuf.ren2
+  io.debugSignals.sdc_sdbuf_wen2 := sdc.io.sdbuf.wen2
+  io.debugSignals.sdc_sdbuf_addr2 := sdc.io.sdbuf.addr2
 
   // io.exit := core.io.exit
   io.gpio <> gpio.io.gpio
@@ -171,6 +186,18 @@ class RiscV(clockHz: Int) extends Module {
   io.uart_rx <> uart.io.rx
   core.io.intr := Cat(sdc.io.intr.asBool, uart.io.intr.asUInt)
   io.sdc_port <> sdc.io.sdc_port
+
+  sdbuf.io.clock  := clock
+  sdbuf.io.ren1   := sdc.io.sdbuf.ren1
+  sdbuf.io.wen1   := sdc.io.sdbuf.wen1
+  sdbuf.io.addr1  := sdc.io.sdbuf.addr1
+  sdbuf.io.wdata1 := sdc.io.sdbuf.wdata1
+  sdc.io.sdbuf.rdata1 := sdbuf.io.rdata1
+  sdbuf.io.ren2   := sdc.io.sdbuf.ren2
+  sdbuf.io.wen2   := sdc.io.sdbuf.wen2
+  sdbuf.io.addr2  := sdc.io.sdbuf.addr2
+  sdbuf.io.wdata2 := sdc.io.sdbuf.wdata2
+  sdc.io.sdbuf.rdata2 := sdbuf.io.rdata2
 }
 
 object ElaborateArtyA7 extends App {

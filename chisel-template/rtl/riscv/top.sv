@@ -37,13 +37,12 @@ module top #(
 // logic io_exit;
 (* mark_debug = "true" *) logic [31:0] io_debugSignals_core_mem_reg_pc;
 (* mark_debug = "true" *) logic        io_debugSignals_core_mem_is_valid_inst;
-(* mark_debug = "true" *) logic [31:0] io_debugSignals_core_csr_rdata;
-(* mark_debug = "true" *) logic [11:0] io_debugSignals_core_mem_reg_csr_addr;
+// (* mark_debug = "true" *) logic [31:0] io_debugSignals_core_csr_rdata;
+// (* mark_debug = "true" *) logic [11:0] io_debugSignals_core_mem_reg_csr_addr;
 (* mark_debug = "true" *) logic        io_debugSignals_core_me_intr;
 (* mark_debug = "true" *) logic [47:0] io_debugSignals_core_cycle_counter;
 (* mark_debug = "true" *) logic [31:0] io_debugSignals_core_id_pc;
 (* mark_debug = "true" *) logic [31:0] io_debugSignals_core_id_inst;
-// (* mark_debug = "true" *) logic [31:0] io_debugSignals_raddr;
 (* mark_debug = "true" *) logic [31:0] io_debugSignals_rdata;
 (* mark_debug = "true" *) logic        io_debugSignals_ren;
 (* mark_debug = "true" *) logic        io_debugSignals_rvalid;
@@ -61,6 +60,13 @@ module top #(
 // (* mark_debug = "true" *) logic        io_debugSignals_sdc_res_in;
 // (* mark_debug = "true" *) logic [3:0]  io_debugSignals_sdc_dat_in;
 // (* mark_debug = "true" *) logic [7:0]  io_debugSignals_sdc_rx_dat_index;
+(* mark_debug = "true" *) logic        io_debugSignals_sdc_sdbuf_ren1;
+(* mark_debug = "true" *) logic        io_debugSignals_sdc_sdbuf_wen1;
+(* mark_debug = "true" *) logic [7:0]  io_debugSignals_sdc_sdbuf_addr1;
+(* mark_debug = "true" *) logic [7:0]  io_debugSignals_sdc_sdbuf_wdata1;
+(* mark_debug = "true" *) logic        io_debugSignals_sdc_sdbuf_ren2;
+(* mark_debug = "true" *) logic        io_debugSignals_sdc_sdbuf_wen2;
+(* mark_debug = "true" *) logic [7:0]  io_debugSignals_sdc_sdbuf_addr2;
 
 wire clk;
 wire rst;

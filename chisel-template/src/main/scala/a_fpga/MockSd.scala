@@ -10,6 +10,9 @@ object SdState extends ChiselEnum {
   val Command = Value
   val WaitRes = Value
   val Respond = Value
+  val RespondTrans = Value
+  val WaitTrans = Value
+  val Trans = Value
 }
 
 class MockSd extends Module {
@@ -54,11 +57,15 @@ class MockSd extends Module {
       is (SdState.WaitRes) {
         wait_counter := wait_counter - 1.U
         when (wait_counter === 0.U) {
-          sd_state := SdState.Respond
+          when (cmd(45, 40) === 24.U) {
+            sd_state := SdState.RespondTrans
+          }.otherwise {
+            sd_state := SdState.Respond
+            dat_bits := VecInit((0 to 15).map(_ => 0.U(4.W)))
+          }
           res_counter := 47.U
           res_bits := cmd.asBools.reverse
           dat_counter := (1024 + 16 + 1).U
-          dat_bits := VecInit((0 to 15).map(_ => 0.U(4.W)))
         }
       }
       is (SdState.Respond) {
@@ -75,10 +82,66 @@ class MockSd extends Module {
           dat_bits := VecInit((0 to 15).map(_ => 15.U(4.W)))
         }
       }
+      is (SdState.RespondTrans) {
+        res_counter := res_counter - 1.U
+        when (res_counter === 0.U) {
+          res_bits := Fill(48, 1.U(1.W)).asBools
+          sd_state := SdState.WaitTrans
+        }
+      }
+      is (SdState.WaitTrans) {
+        dat_bits := VecInit((0 to 15).map(_ => 0xf.U(4.W)))
+        when (io.sdc_port.dat_wrt && io.sdc_port.dat_out(0) === 0.U(1.W)) {
+          sd_state := SdState.Trans
+        }
+      }
+      is (SdState.Trans) {
+        dat_counter := dat_counter - 1.U
+        dat_bits := VecInit((0 to 15).map(_ => 0xf.U(4.W)))
+        when (dat_counter === 0.U) {
+          dat_bits := VecInit((0 to 15).map(_ => 0xe.U(4.W)))
+        }.elsewhen (dat_counter === 2047.U) {
+          dat_bits := VecInit((0 to 15).map(_ => 0xe.U(4.W)))
+        }.elsewhen (dat_counter === 2046.U) {
+          dat_bits := VecInit((0 to 15).map(_ => 0xf.U(4.W)))
+        }.elsewhen (dat_counter === 2045.U) {
+          dat_bits := VecInit((0 to 15).map(_ => 0xe.U(4.W)))
+        }.elsewhen (dat_counter === 2044.U) {
+          dat_bits := VecInit((0 to 15).map(_ => 0xf.U(4.W)))
+        }.elsewhen (2023.U <= dat_counter && dat_counter <= 2043.U) {
+          dat_bits := VecInit((0 to 15).map(_ => 0xe.U(4.W)))
+        }
+      }
     }
   }
   io.sdc_port.res_in := res_bits(0)
   io.sdc_port.dat_in := dat_bits(0)
 
   printf(p"sd_state           : 0x${Hexadecimal(sd_state.asUInt)}\n")
+}
+
+class MockSdBuf extends Module {
+  val io = IO(new Bundle() {
+    val sdbuf = new SdBufPort()
+  })
+
+  val rxtx_dat = Mem(256, UInt(32.W))
+  val rdata1 = RegInit(0.U(32.W))
+  val rdata2 = RegInit(0.U(32.W))
+
+  io.sdbuf.rdata1 := rdata1
+  io.sdbuf.rdata2 := rdata2
+
+  when (io.sdbuf.ren1) {
+    rdata1 := rxtx_dat.read(io.sdbuf.addr1)
+  }
+  when (io.sdbuf.wen1) {
+    rxtx_dat.write(io.sdbuf.addr1, io.sdbuf.wdata1)
+  }
+  when (io.sdbuf.ren2) {
+    rdata2 := rxtx_dat.read(io.sdbuf.addr2)
+  }
+  when (io.sdbuf.wen2) {
+    rxtx_dat.write(io.sdbuf.addr2, io.sdbuf.wdata2)
+  }
 }

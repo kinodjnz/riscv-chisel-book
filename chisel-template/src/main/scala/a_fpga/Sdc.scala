@@ -6,6 +6,19 @@ import common.Consts._
 import chisel3.stage.ChiselStage
 import SdcConsts._
 
+class SdBufPort extends Bundle {
+  val ren1   = Input(Bool())
+  val wen1   = Input(Bool())
+  val addr1  = Input(UInt(8.W))
+  val rdata1 = Output(UInt(32.W))
+  val wdata1 = Input(UInt(32.W))
+  val ren2   = Input(Bool())
+  val wen2   = Input(Bool())
+  val addr2  = Input(UInt(8.W))
+  val rdata2 = Output(UInt(32.W))
+  val wdata2 = Input(UInt(32.W))
+}
+
 class SdcPort extends Bundle {
   val clk     = Output(Bool())
   val cmd_wrt = Output(Bool())
@@ -31,7 +44,9 @@ object SdcConsts {
 // 00000000 | settings |
 //    8-0 : baud divider
 //     16 : res_intr_en
-//     17 : dat_intr_en
+//     17 : rx_dat_intr_en
+//     18 : tx_empty_intr_en
+//     19 : tx_end_intr_en
 //     31 : power
 // 00000004 | control / status |
 //    3-0 : res_type
@@ -39,15 +54,20 @@ object SdcConsts {
 //     11 : cmd/res enable
 //     12 : single block read enable
 //     13 : multi block read enable
+//     14 : single block write enable
+//     15 : multi block write enable
 //  31-14 : reserved
-//      0 : res_ready
-//      1 : crc error
-//      2 : response timeout
+//      0 : rx response ready
+//      1 : rx response crc error
+//      2 : rx response timeout
 //      3 : buffer overrun
-//     16 : dat ready
-//     17 : dat crc error
-//     18 : dat timeout
-//     19 : dat overrun
+//     16 : rx data ready
+//     17 : rx data crc error
+//     18 : rx data timeout
+//     19 : rx data overrun
+//     20 : tx data buffer full
+//     21 : tx data end
+//  22-23 : tx data status
 // 00000008 | command / response |
 // 0000000c | data    | 
 
@@ -55,11 +75,15 @@ class Sdc() extends Module {
   val io = IO(new Bundle {
     val mem = new DmemPortIo
     val sdc_port = new SdcPort()
+    val sdbuf    = Flipped(new SdBufPort())
     val intr = Output(Bool())
   })
 
   val cmd_bits: Int = 48
   val res_bits: Int = 136
+  val tx_dat_len: Int = 24
+  val rx_busy_timeout: Int = 500000 // sclk = 20ms (25MHz)
+  val tx_dat_crc_status_len: Int = 3
 
   val reg_power = RegInit(false.B)
   val reg_baud_divider = RegInit(2.U(9.W)) // actual divider = (d + 1) * 2
@@ -76,6 +100,8 @@ class Sdc() extends Module {
     reg_clk := false.B
   }
   io.sdc_port.clk := reg_clk
+
+  val intr = RegInit(false.B)
 
   val rx_res_in_progress = RegInit(false.B)
   val rx_res_counter = RegInit(0.U(8.W))
@@ -100,23 +126,47 @@ class Sdc() extends Module {
   val reg_tx_cmd_out = RegInit(false.B)
   val rx_dat_in_progress = RegInit(false.B)
   val rx_dat_counter = RegInit(0.U(11.W))
-  val rx_dat_index = RegInit(0.U(8.W))
   val rx_dat_start_bit = RegInit(false.B)
   val rx_dat_bits = Reg(Vec(8, UInt(4.W)))
   val rx_dat_next = RegInit(0.U(4.W))
   val rx_dat_continuous = RegInit(false.B)
-  val rx_dat = Mem(256, UInt(32.W))
   val rx_dat_ready = RegInit(false.B)
   val rx_dat_intr_en = RegInit(false.B)
   val rx_dat_crc = Reg(Vec(16, UInt(4.W)))
   val rx_dat_crc_error = RegInit(false.B)
   val rx_dat_timer = RegInit(0.U(19.W))
   val rx_dat_timeout = RegInit(false.B)
-  val rx_dat_read_counter = RegInit(0.U(8.W))
   val rx_dat_overrun = RegInit(false.B)
+  // val rxtx_dat = Mem(256, UInt(32.W))
+  val rxtx_dat_counter = RegInit(0.U(8.W))
+  val rxtx_dat_index = RegInit(0.U(8.W))
   val rx_busy_timer = RegInit(0.U(19.W))
   val rx_busy_in_progress = RegInit(false.B)
-  val rx_busy_next = RegInit(true.B)
+  val rx_dat0_next = RegInit(true.B)
+  val rx_dat_buf_read = RegInit(false.B)
+  val rx_dat_buf_cache = RegInit(0.U(32.W))
+  val reg_tx_dat_wrt = RegInit(false.B)
+  val reg_tx_dat_out = RegInit(false.B)
+  val tx_empty_intr_en = RegInit(false.B)
+  val tx_end_intr_en = RegInit(false.B)
+  val tx_dat_counter = RegInit(0.U(11.W))
+  val tx_dat_timer = RegInit(0.U(6.W))
+  val tx_dat = Reg(Vec(tx_dat_len, UInt(4.W)))
+  val tx_dat_crc = Reg(Vec(16, UInt(4.W)))
+  val tx_dat_prepared = RegInit(0.U(32.W))
+  val tx_dat_prepare_state = RegInit(0.U(2.W))
+  val tx_dat_started = RegInit(false.B)
+  val tx_dat_continuous = RegInit(false.B)
+  val tx_dat_in_progress = RegInit(false.B)
+  val tx_dat_end = RegInit(false.B)
+  val tx_dat_read_sel = RegInit(0.U(2.W))
+  val tx_dat_write_sel = RegInit(0.U(2.W))
+  val tx_dat_read_sel_changed = RegInit(false.B)
+  val tx_dat_write_sel_new = RegInit(false.B)
+  val tx_dat_crc_status_counter = RegInit(0.U(4.W))
+  val tx_dat_crc_status_b = Reg(Vec(tx_dat_crc_status_len, UInt(1.W)))
+  val tx_dat_crc_status = RegInit(0.U(2.W))
+  val tx_dat_prepared_read = RegInit(false.B)
 
   when (rx_res_counter > 0.U && tx_cmd_counter === 0.U) {
     rx_res_next := io.sdc_port.res_in
@@ -151,7 +201,7 @@ class Sdc() extends Module {
           rx_res_ready := true.B
           rx_res_crc_error := rx_res_crc_en && Cat(rx_res_crc) =/= 0.U
           when (rx_res_type === RES_TYPE_R1B) {
-            rx_busy_timer := 500000.U // 20ms (25MHz)
+            rx_busy_timer := rx_busy_timeout.U
           }
           tx_cmd_timer := 48.U // wait 1 byte before next cmd
         }
@@ -196,8 +246,26 @@ class Sdc() extends Module {
     reg_tx_cmd_out := DontCare
   }
 
-  io.sdc_port.dat_wrt := false.B
-  io.sdc_port.dat_out := DontCare
+  io.sdc_port.dat_wrt := reg_tx_dat_wrt
+  io.sdc_port.dat_out := reg_tx_dat_out
+
+  io.sdbuf.ren1 := false.B
+  io.sdbuf.wen1 := false.B
+  io.sdbuf.addr1 := rxtx_dat_index
+  io.sdbuf.wdata1 := DontCare
+  io.sdbuf.ren2 := false.B
+  io.sdbuf.wen2 := false.B
+  io.sdbuf.addr2 := rxtx_dat_counter
+  io.sdbuf.wdata2 := DontCare
+
+  when (rx_dat_buf_read) {
+    rx_dat_buf_cache := io.sdbuf.rdata2
+    rx_dat_buf_read := false.B
+  }
+  when (tx_dat_prepared_read) {
+    tx_dat_prepared := io.sdbuf.rdata1
+    tx_dat_prepared_read := false.B
+  }
 
   when (rx_dat_counter > 0.U && tx_cmd_counter === 0.U) {
     rx_dat_next := io.sdc_port.dat_in
@@ -208,6 +276,9 @@ class Sdc() extends Module {
           rx_dat_counter := 0.U
           rx_dat_ready := true.B
           rx_dat_timeout := true.B
+          io.sdbuf.ren2 := true.B
+          rx_dat_buf_read := true.B
+          rxtx_dat_counter := rxtx_dat_counter + 1.U
         }
       }.elsewhen (!rx_dat_in_progress && !rx_dat_next(0).asBool) {
         rx_dat_in_progress := true.B
@@ -232,21 +303,31 @@ class Sdc() extends Module {
         rx_dat_crc(13) := rx_dat_crc(12)
         rx_dat_crc(14) := rx_dat_crc(13)
         rx_dat_crc(15) := rx_dat_crc(14)
-        when (rx_dat_counter(2, 0) === 1.U && rx_dat_counter(10, 3) > 1.U) {
+        when (rx_dat_counter(2, 0) === 1.U && rx_dat_counter(10, 4) =/= 0.U) {
           rx_dat_start_bit := false.B
           when (!rx_dat_start_bit) {
-            rx_dat_index := rx_dat_index + 1.U
-            rx_dat.write(rx_dat_index, Cat(
+            rxtx_dat_index := rxtx_dat_index + 1.U
+            io.sdbuf.wen1 := true.B
+            io.sdbuf.wdata1 := Cat(
               rx_dat_bits(1), rx_dat_bits(0),
               rx_dat_bits(3), rx_dat_bits(2),
               rx_dat_bits(5), rx_dat_bits(4),
               rx_dat_bits(7), rx_dat_bits(6),
-            ))
+            )
+            // rxtx_dat.write(rxtx_dat_index, Cat(
+            //   rx_dat_bits(1), rx_dat_bits(0),
+            //   rx_dat_bits(3), rx_dat_bits(2),
+            //   rx_dat_bits(5), rx_dat_bits(4),
+            //   rx_dat_bits(7), rx_dat_bits(6),
+            // ))
           }
         }
         when (rx_dat_counter === 1.U) {
           rx_dat_in_progress := false.B
           rx_dat_ready := true.B
+          io.sdbuf.ren2 := true.B
+          rx_dat_buf_read := true.B
+          rxtx_dat_counter := rxtx_dat_counter + 1.U
           val crc_error = Cat(rx_dat_crc) =/= 0.U
           rx_dat_crc_error := crc_error
           val overrun = rx_dat_ready
@@ -262,19 +343,160 @@ class Sdc() extends Module {
     }
   }
 
+  when ((tx_dat_read_sel_changed && (tx_dat_read_sel =/= tx_dat_write_sel)) || tx_dat_write_sel_new) {
+    tx_dat_counter := (1+1024+16+1).U
+    io.sdbuf.ren1 := true.B
+    tx_dat_prepared_read := true.B
+    // tx_dat_prepared := rxtx_dat.read(rxtx_dat_index)
+    rxtx_dat_index := rxtx_dat_index + 1.U
+    tx_dat_prepare_state := 2.U
+    tx_dat_timer := 255.U
+    tx_dat_read_sel_changed := false.B
+    tx_dat_write_sel_new := false.B
+    tx_dat_in_progress := true.B
+  }
+  when (tx_dat_read_sel_changed && (tx_dat_read_sel === tx_dat_write_sel)) {
+    tx_dat_in_progress := false.B
+  }
+
   when (rx_busy_timer > 0.U) {
-    rx_busy_next := !io.sdc_port.dat_in(0)
+    rx_dat0_next := io.sdc_port.dat_in(0)
     when (reg_clk_counter === 0.U && reg_clk) {
-      when (!rx_busy_in_progress && !rx_busy_next) {
+      when (!rx_busy_in_progress && rx_dat0_next) {
         rx_busy_timer := rx_busy_timer - 1.U
       }
-      when (rx_busy_in_progress || rx_busy_next) {
+      when (rx_busy_in_progress || !rx_dat0_next) {
         rx_busy_in_progress := true.B
-        when (!rx_busy_next) {
-          rx_busy_in_progress := false.B
-          rx_busy_timer := 0.U
+        when (tx_dat_crc_status_counter > 0.U) {
+          (0 to tx_dat_crc_status_len - 2).foreach(i => tx_dat_crc_status_b(i + 1) := tx_dat_crc_status_b(i))
+          tx_dat_crc_status_b(0) := rx_dat0_next
+          tx_dat_crc_status_counter := tx_dat_crc_status_counter - 1.U
+          when (tx_dat_crc_status_counter === 2.U) {
+            val crc_status = Cat(tx_dat_crc_status_b(2), tx_dat_crc_status_b(1), tx_dat_crc_status_b(0))
+            tx_dat_crc_status := MuxCase(3.U(2.W), Seq(
+              (crc_status === "b010".U) -> 0.U(2.W), // data accepted
+              (crc_status === "b101".U) -> 1.U(2.W), // CRC error
+              (crc_status === "b110".U) -> 2.U(2.W), // write error
+            ))
+            when (crc_status =/= "b010".U) {
+              tx_dat_continuous := false.B
+            }
+            tx_dat_read_sel := tx_dat_read_sel + 1.U
+            tx_dat_read_sel_changed := true.B
+          }
+        }.otherwise {
+          when (rx_dat0_next) {
+            rx_busy_in_progress := false.B
+            rx_busy_timer := 0.U
+            when (tx_dat_started && !tx_dat_in_progress) {
+              tx_dat_end := true.B
+            }
+          }
         }
       }
+    }
+  }
+
+  when ((tx_dat_read_sel_changed && (tx_dat_read_sel =/= tx_dat_write_sel)) || tx_dat_write_sel_new) {
+    // false 優先
+    tx_dat_end := false.B
+  }
+
+  when (rx_busy_timer =/= 0.U && reg_clk_counter === 0.U && reg_clk) {
+    reg_tx_dat_wrt := false.B
+    reg_tx_dat_out := DontCare
+  }.elsewhen (tx_dat_timer =/= 0.U && reg_clk_counter === 0.U && reg_clk) {
+    tx_dat_timer := tx_dat_timer - 1.U
+    reg_tx_dat_wrt := false.B
+    reg_tx_dat_out := DontCare
+  }.elsewhen (tx_dat_counter =/= 0.U && reg_clk_counter === 0.U && reg_clk) {
+    reg_tx_dat_wrt := true.B
+    reg_tx_dat_out := tx_dat(0)
+    (0 to tx_dat_len - 2).foreach(i => tx_dat(i) := tx_dat(i + 1))
+    tx_dat_counter := tx_dat_counter - 1.U
+    val crc_out = tx_dat_crc(15)
+    val crc = VecInit(
+      tx_dat(16) ^ crc_out,
+      tx_dat_crc(0),
+      tx_dat_crc(1),
+      tx_dat_crc(2),
+      tx_dat_crc(3),
+      tx_dat_crc(4) ^ crc_out,
+      tx_dat_crc(5),
+      tx_dat_crc(6),
+      tx_dat_crc(7),
+      tx_dat_crc(8),
+      tx_dat_crc(9),
+      tx_dat_crc(10),
+      tx_dat_crc(11) ^ crc_out,
+      tx_dat_crc(12),
+      tx_dat_crc(13),
+      tx_dat_crc(14),
+    )
+    tx_dat_crc := crc
+    //printf(p"tx_dat_crc    : 0x${Hexadecimal(Cat(tx_dat_crc.reverse))}\n")
+    //printf(p"tx_crc        : 0x${Hexadecimal(Cat(crc.reverse))}\n")
+    when (tx_dat_counter(10, 5) =/= 0.U && tx_dat_counter(2, 0) === 2.U) {
+      io.sdbuf.ren1 := true.B
+      tx_dat_prepared_read := true.B
+      // tx_dat_prepared := rxtx_dat.read(rxtx_dat_index)
+      rxtx_dat_index := rxtx_dat_index + 1.U
+      tx_dat_prepare_state := 1.U
+    }.elsewhen (tx_dat_counter(10, 4) === 1.U && tx_dat_counter(2, 0) === 2.U) {
+      tx_dat_prepared := 0.U(32.W)
+      tx_dat_prepare_state := 1.U
+    }
+    when (tx_dat_counter === 18.U) {
+      (0 to 15).foreach(i => tx_dat(i) := crc(15 - i))
+      tx_dat(16) := 15.U(4.W)
+      //printf(p"final tx_crc  : 0x${Hexadecimal(Cat(crc.reverse))}\n")
+    }
+    when (tx_dat_counter === 1.U) {
+      reg_tx_dat_wrt := false.B
+      reg_tx_dat_out := DontCare
+      rx_busy_timer := rx_busy_timeout.U
+      tx_dat_crc_status_counter := 6.U
+    }
+  }
+
+  switch (tx_dat_prepare_state) {
+    is (1.U) {
+      tx_dat(16) := tx_dat_prepared(7, 4)
+      tx_dat(17) := tx_dat_prepared(3, 0)
+      tx_dat(18) := tx_dat_prepared(15, 12)
+      tx_dat(19) := tx_dat_prepared(11, 8)
+      tx_dat(20) := tx_dat_prepared(23, 20)
+      tx_dat(21) := tx_dat_prepared(19, 16)
+      tx_dat(22) := tx_dat_prepared(31, 28)
+      tx_dat(23) := tx_dat_prepared(27, 24)
+      tx_dat_prepare_state := 0.U
+    }
+    is (2.U) {
+      tx_dat(0) := 0.U(4.W)
+      tx_dat(1) := tx_dat_prepared(7, 4)
+      tx_dat(2) := tx_dat_prepared(3, 0)
+      tx_dat(3) := tx_dat_prepared(15, 12)
+      tx_dat(4) := tx_dat_prepared(11, 8)
+      tx_dat(5) := tx_dat_prepared(23, 20)
+      tx_dat(6) := tx_dat_prepared(19, 16)
+      tx_dat(7) := tx_dat_prepared(31, 28)
+      tx_dat(8) := tx_dat_prepared(27, 24)
+      io.sdbuf.ren1 := true.B
+      tx_dat_prepared_read := true.B
+      // tx_dat_prepared := rxtx_dat.read(rxtx_dat_index)
+      rxtx_dat_index := rxtx_dat_index + 1.U
+      tx_dat_prepare_state := 3.U
+    }
+    is (3.U) {
+      tx_dat(9)  := tx_dat_prepared(7, 4)
+      tx_dat(10) := tx_dat_prepared(3, 0)
+      tx_dat(11) := tx_dat_prepared(15, 12)
+      tx_dat(12) := tx_dat_prepared(11, 8)
+      tx_dat(13) := tx_dat_prepared(23, 20)
+      tx_dat(14) := tx_dat_prepared(19, 16)
+      tx_dat(15) := tx_dat_prepared(31, 28)
+      tx_dat(16) := tx_dat_prepared(27, 24)
+      tx_dat_prepare_state := 0.U
     }
   }
 
@@ -293,8 +515,10 @@ class Sdc() extends Module {
           reg_baud_divider := baud_divider
           reg_clk_counter := baud_divider
         }
-        rx_res_intr_en := io.mem.wdata(16)
-        rx_dat_intr_en := io.mem.wdata(17)
+        rx_res_intr_en   := io.mem.wdata(16)
+        rx_dat_intr_en   := io.mem.wdata(17)
+        tx_empty_intr_en := io.mem.wdata(18)
+        tx_end_intr_en   := io.mem.wdata(19)
       }
       is (1.U) {
         when (io.mem.wdata(11).asBool) {
@@ -325,24 +549,53 @@ class Sdc() extends Module {
           when (io.mem.wdata(12).asBool || io.mem.wdata(13).asBool) {
             rx_dat_in_progress := false.B
             rx_dat_counter := (1024+16+1).U
-            rx_dat_index := 0.U
             rx_dat_start_bit := true.B
             rx_dat_ready := false.B
             rx_dat_crc := 0.U(16.W).asBools
             rx_dat_crc_error := false.B
             rx_dat_timer := 500000.U // 20ms (25MHz)
             rx_dat_timeout := false.B
-            rx_dat_read_counter := 0.U
             rx_dat_continuous := io.mem.wdata(13).asBool
             rx_dat_overrun := false.B
+            rxtx_dat_index := 0.U
+            rxtx_dat_counter := 0.U
           }.otherwise {
             rx_dat_counter := 0.U
             rx_dat_ready := false.B
+          }
+          when (io.mem.wdata(14).asBool || io.mem.wdata(15).asBool) {
+            tx_dat_started := true.B
+            tx_dat_continuous := io.mem.wdata(15).asBool
+            tx_dat_read_sel := 0.U
+            tx_dat_write_sel := 0.U
+            tx_dat_read_sel_changed := false.B
+            tx_dat_write_sel_new := false.B
+            tx_dat_in_progress := false.B
+            tx_dat_end := false.B
+            rxtx_dat_index := 0.U
+            rxtx_dat_counter := 0.U
+          }.otherwise {
+            tx_dat_started := false.B
+            tx_dat_continuous := false.B
           }
         }
       }
       is (2.U) {
         tx_cmd_arg := io.mem.wdata
+      }
+      is (3.U) {
+        when ((tx_dat_read_sel ^ tx_dat_write_sel) =/= "b10".U) {
+          rxtx_dat_counter := rxtx_dat_counter + 1.U
+          io.sdbuf.wen2 := true.B
+          io.sdbuf.wdata2 := io.mem.wdata
+          // rxtx_dat.write(rxtx_dat_counter, io.mem.wdata)
+        }
+        when (rxtx_dat_counter(6, 0) === 127.U) {
+          tx_dat_write_sel := tx_dat_write_sel + 1.U
+          when (tx_dat_read_sel === tx_dat_write_sel) {
+            tx_dat_write_sel_new := true.B
+          }
+        }
       }
     }
   }
@@ -352,7 +605,9 @@ class Sdc() extends Module {
       is (0.U) {
         io.mem.rdata := Cat(
           reg_power.asUInt,
-          0.U(13.W),
+          0.U(11.W),
+          tx_end_intr_en.asUInt,
+          tx_empty_intr_en.asUInt,
           rx_dat_intr_en.asUInt,
           rx_res_intr_en.asUInt,
           0.U(7.W),
@@ -361,7 +616,10 @@ class Sdc() extends Module {
       }
       is (1.U) {
         io.mem.rdata := Cat(
-          0.U(12.W),
+          0.U(8.W),
+          tx_dat_crc_status,
+          tx_dat_started && tx_dat_end,
+          tx_dat_started && ((tx_dat_read_sel ^ tx_dat_write_sel) === "b10".U),
           rx_dat_overrun.asUInt,
           rx_dat_timeout.asUInt,
           rx_dat_crc_error.asUInt,
@@ -385,10 +643,13 @@ class Sdc() extends Module {
         }
       }
       is (3.U) {
+        io.mem.rdata := rx_dat_buf_cache
         when (rx_dat_ready) {
-          rx_dat_read_counter := rx_dat_read_counter + 1.U
-          io.mem.rdata := rx_dat.read(rx_dat_read_counter)
-          when (rx_dat_read_counter(6, 0) === 127.U) {
+          rxtx_dat_counter := rxtx_dat_counter + 1.U
+          io.sdbuf.ren2 := true.B
+          rx_dat_buf_read := true.B
+          // io.mem.rdata := rxtx_dat.read(rxtx_dat_counter)
+          when (rxtx_dat_counter(6, 0) === 127.U) {
             rx_dat_ready := false.B
           }
         }
@@ -396,7 +657,11 @@ class Sdc() extends Module {
     }
   }
 
-  io.intr := (rx_res_intr_en && rx_res_ready) || (rx_dat_intr_en && rx_dat_ready)
+  intr := (rx_res_intr_en && rx_res_ready) ||
+    (rx_dat_intr_en && rx_dat_ready) ||
+    (tx_empty_intr_en && tx_dat_started && (tx_dat_read_sel ^ tx_dat_write_sel) =/= "b10".U)
+    (tx_end_intr_en && tx_dat_started && tx_dat_end)
+  io.intr := intr
 
   printf(p"sdc.clk           : 0x${Hexadecimal(reg_clk)}\n")
   printf(p"sdc.cmd_wrt       : 0x${Hexadecimal(io.sdc_port.cmd_wrt)}\n")
@@ -404,4 +669,12 @@ class Sdc() extends Module {
   printf(p"rx_res_counter    : 0x${Hexadecimal(rx_res_counter)}\n")
   printf(p"rx_dat_counter    : 0x${Hexadecimal(rx_dat_counter)}\n")
   printf(p"rx_dat_next       : 0x${Hexadecimal(rx_dat_next)}\n")
+  printf(p"tx_cmd_counter    : 0x${Hexadecimal(tx_cmd_counter)}\n")
+  printf(p"tx_dat_counter    : 0x${Hexadecimal(tx_dat_counter)}\n")
+  printf(p"tx_cmd_timer      : 0x${Hexadecimal(tx_cmd_timer)}\n")
+  printf(p"rx_busy_timer     : 0x${Hexadecimal(rx_busy_timer)}\n")
+  printf(p"tx_dat_read_sel   : 0x${Hexadecimal(tx_dat_read_sel)}\n")
+  printf(p"tx_dat_write_sel  : 0x${Hexadecimal(tx_dat_write_sel)}\n")
+  printf(p"tx_dat_started    : ${tx_dat_started}\n")
+  printf(p"tx_dat_in_progress: ${tx_dat_in_progress}\n")
 }

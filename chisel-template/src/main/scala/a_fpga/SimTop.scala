@@ -56,7 +56,9 @@ class SimTop(memoryPath: String, bpTagInitPath: String) extends Module {
   memory.io.icache_valid <> icache_valid.io.icache_valid
 
   val sd = Module(new MockSd)
+  val sdbuf = Module(new MockSdBuf)
   sdc.io.sdc_port <> sd.io.sdc_port
+  sdc.io.sdbuf <> sdbuf.io.sdbuf
 
   core.io.intr := 0.U
   io.gp   := core.io.gp
