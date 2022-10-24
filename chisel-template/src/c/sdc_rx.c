@@ -16,20 +16,20 @@ int main() {
     uint32_t e = 0;
     int done = 0;
     while (done < 2) {
-     uint32_t s = *sdc_status;
-     if (s & 1) {
-        r = *sdc_response;
-        done++;
-     }
-     if (s & 0x10000) {
-        for (int i = 0; i < 128; i++) {
-            uint32_t x = *sdc_data;
-            if (x != 0xdddddddd) {
-                e++;
-            }
+        uint32_t s = *sdc_status;
+        if (s & 1) {
+            r = *sdc_response;
+            done++;
         }
-        done++;
-     }
+        if (s & 0x10000) {
+            for (int i = 0; i < 128; i++) {
+                uint32_t x = *sdc_data;
+                if (x != 0xdddddddd) {
+                    e++;
+                }
+            }
+            done++;
+        }
     }
     if (r != 0x1234cdef) return 3;
     if (e != 0) return 3 + e;

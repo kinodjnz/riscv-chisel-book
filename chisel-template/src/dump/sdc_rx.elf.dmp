@@ -1,5 +1,5 @@
 
-sdc:     file format elf32-littleriscv
+sdc_rx:     file format elf32-littleriscv
 
 
 Disassembly of section .text:
