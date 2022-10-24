@@ -3,13 +3,13 @@
     "class":"firrtl.transforms.DedupedResult",
     "original":"~RiscV|SRAM",
     "duplicate":"~RiscV|RiscV/sram1:SRAM",
-    "index":0.3333333333333333
+    "index":0.3157894736842105
   },
   {
     "class":"firrtl.transforms.DedupedResult",
     "original":"~RiscV|SRAM_1",
     "duplicate":"~RiscV|RiscV/sram2:SRAM",
-    "index":0.3888888888888889
+    "index":0.3684210526315789
   },
   {
     "class":"firrtl.EmitCircuitAnnotation",
@@ -141,6 +141,13 @@
     "target":"~RiscV|BootRom>imem",
     "filename":"bootrom.hex",
     "hexOrBinary":"h"
+  },
+  {
+    "class":"firrtl.transforms.CombinationalPath",
+    "sink":"~RiscV|RiscV>io_debugSignals_sdc_sdbuf_wen2",
+    "sources":[
+      "~RiscV|RiscV>io_dram_rdata_valid"
+    ]
   },
   {
     "class":"firrtl.transforms.CombinationalPath",
