@@ -14,6 +14,14 @@ fn array_to_u32<const N: usize>(b: &[u8; N]) -> u32 {
     b.iter().rev().fold(0u32, |acc, x| (acc << 8) + *x as u32)
 }
 
+#[allow(dead_code)]
+fn print_mem(pp: *const u32, len: usize) {
+    for i in 0..len {
+        uart::print(read::<u32>(pp, i * 4));
+        uart::puts(b"\r\n");
+    }
+}
+
 pub fn load_kernel() -> u32 {
     let buf: *mut u32 = 0x2000_1000 as *mut u32;
 
@@ -29,6 +37,7 @@ pub fn load_kernel() -> u32 {
     if s != 0 {
         return 2;
     }
+    // print_mem(0x2000_1000 as *const u32, 128);
     let sector_per_cluster: u32 = read::<u8>(buf, 0x00d) as u32;
     let reserved_sector_count: u32 = read::<u16>(buf, 0x00e) as u32;
     let num_fat: u32 = read::<u8>(buf, 0x010) as u32;
@@ -77,6 +86,10 @@ pub fn load_kernel() -> u32 {
         j = (j + 32) & 511
     }
 
+    if kernel_start_cluster == 0 {
+        uart::puts(b"KERNEL.BIN not found\r\n");
+        return 4;
+    }
     //uart::print(kernel_file_size);
     //uart::puts(b" #kern\r\n");
 
@@ -98,7 +111,7 @@ pub fn load_kernel() -> u32 {
             p,
         );
         if s != 0 {
-            return 4;
+            return 5;
         }
         if remaining_sectors <= sector_per_cluster {
             break;
@@ -109,18 +122,14 @@ pub fn load_kernel() -> u32 {
         if fat_sector != current_fat_sector {
             let s = sdc::read_sector(fat_sector, 1, fat);
             if s != 0 {
-                return 5;
+                return 6;
             }
             current_fat_sector = fat_sector;
         }
         current_cluster = read::<u16>(fat, ((current_cluster * 2) & 511) as usize) as u32
     }
 
-    // let pp: *const u32 = 0x2000_2700 as *const u32;
-    // for i in 0..128 {
-    //     uart::print(read::<u32>(pp, i * 4));
-    //     uart::puts(b"\r\n");
-    // }
+    // print_mem(0x2000_1000 as *const u32, 128);
     uart::puts(b"KERNEL.BIN loaded\r\n");
 
     unsafe {
