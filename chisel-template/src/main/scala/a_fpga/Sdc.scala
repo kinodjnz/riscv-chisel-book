@@ -101,8 +101,6 @@ class Sdc() extends Module {
   }
   io.sdc_port.clk := reg_clk
 
-  val intr = RegInit(false.B)
-
   val rx_res_in_progress = RegInit(false.B)
   val rx_res_counter = RegInit(0.U(8.W))
   val rx_res_bits = Reg(Vec(res_bits, Bool()))
@@ -657,11 +655,10 @@ class Sdc() extends Module {
     }
   }
 
-  intr := (rx_res_intr_en && rx_res_ready) ||
+  io.intr := (rx_res_intr_en && rx_res_ready) ||
     (rx_dat_intr_en && rx_dat_ready) ||
     (tx_empty_intr_en && tx_dat_started && (tx_dat_read_sel ^ tx_dat_write_sel) =/= "b10".U)
     (tx_end_intr_en && tx_dat_started && tx_dat_end)
-  io.intr := intr
 
   printf(p"sdc.clk           : 0x${Hexadecimal(reg_clk)}\n")
   printf(p"sdc.cmd_wrt       : 0x${Hexadecimal(io.sdc_port.cmd_wrt)}\n")

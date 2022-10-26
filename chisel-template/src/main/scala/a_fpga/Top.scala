@@ -84,6 +84,7 @@ class RiscV(clockHz: Int) extends Module {
   val uart = Module(new Uart(clockHz))
   val sdc = Module(new Sdc)
   val sdbuf = Module(new SdBuf)
+  val intr = Module(new InterruptController)
   val config = Module(new Config(clockHz))
 
   val dmem_decoder = Module(new DMemDecoder(Seq(
@@ -93,6 +94,7 @@ class RiscV(clockHz: Int) extends Module {
     (BigInt(0x30001000L), BigInt(64)),  // UART
     (BigInt(0x30002000L), BigInt(64)),  // mtimer
     (BigInt(0x30003000L), BigInt(64)),  // SD Controller
+    (BigInt(0x30004000L), BigInt(64)),  // Interrupt Controller
     (BigInt(0x40000000L), BigInt(64)),  // CONFIG
   )))
   dmem_decoder.io.targets(0) <> boot_rom.io.dmem
@@ -101,7 +103,8 @@ class RiscV(clockHz: Int) extends Module {
   dmem_decoder.io.targets(3) <> uart.io.mem
   dmem_decoder.io.targets(4) <> core.io.mtimer_mem
   dmem_decoder.io.targets(5) <> sdc.io.mem
-  dmem_decoder.io.targets(6) <> config.io.mem
+  dmem_decoder.io.targets(6) <> intr.io.mem
+  dmem_decoder.io.targets(7) <> config.io.mem
 
   val imem_decoder = Module(new IMemDecoder(Seq(
     (BigInt(startAddress), BigInt(imemSizeInBytes)),
@@ -184,8 +187,10 @@ class RiscV(clockHz: Int) extends Module {
   io.gpio <> gpio.io.gpio
   io.uart_tx <> uart.io.tx
   io.uart_rx <> uart.io.rx
-  core.io.intr := Cat(sdc.io.intr.asBool, uart.io.intr.asUInt)
   io.sdc_port <> sdc.io.sdc_port
+
+  intr.io.intr_periferal := Cat(sdc.io.intr.asUInt, uart.io.intr.asUInt)
+  core.io.intr := intr.io.intr_cpu
 
   sdbuf.io.clock  := clock
   sdbuf.io.ren1   := sdc.io.sdbuf.ren1

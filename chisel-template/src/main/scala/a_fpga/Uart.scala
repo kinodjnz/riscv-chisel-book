@@ -98,8 +98,6 @@ class Uart(clockHz: Int, baudRate: Int = 115200) extends Module {
     val rx = Input(Bool())
   })
 
-  val intr = RegInit(false.B)
-
   val tx = Module(new UartTx(8, clockHz/baudRate))
   val tx_empty = RegInit(true.B)
   val tx_ready = WireDefault(tx.io.in.ready)
@@ -125,7 +123,7 @@ class Uart(clockHz: Int, baudRate: Int = 115200) extends Module {
   io.mem.wready := true.B
 
   when (io.mem.ren) {
-    switch (io.mem.raddr(3, 2)) {
+    switch (io.mem.raddr(2, 2)) {
       is (0.U) {
         io.mem.rdata := Cat(0.U(27.W), rx.io.overrun.asUInt, rx_data_ready.asUInt, (!tx_empty).asUInt, rx_intr_en.asUInt, tx_intr_en.asUInt)
       }
@@ -137,7 +135,7 @@ class Uart(clockHz: Int, baudRate: Int = 115200) extends Module {
   }
 
   when (io.mem.wen) {
-    switch (io.mem.waddr(3, 2)) {
+    switch (io.mem.waddr(2, 2)) {
       is (0.U) {
         tx_intr_en := io.mem.wdata(0).asBool
         rx_intr_en := io.mem.wdata(1).asBool
@@ -155,8 +153,7 @@ class Uart(clockHz: Int, baudRate: Int = 115200) extends Module {
     tx_empty := true.B
   }
 
-  intr := (tx_empty && tx_intr_en) || (rx_data_ready && rx_intr_en)
-  io.intr := intr
+  io.intr := (tx_empty && tx_intr_en) || (rx_data_ready && rx_intr_en)
   io.tx <> tx.io.tx // Connect UART TX signal.
   io.rx <> rx.io.rx
 }

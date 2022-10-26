@@ -166,8 +166,6 @@ object Consts {
   val CSR_MCAUSE_MTI     = (0x80000000L + 7L).U(WORD_LEN.W)
   val CSR_MCAUSE_ECALL_M = 11.U(WORD_LEN.W)
 
-  val INTR_LEN = 2
-
   val BP_HIST_LEN   = 2
   val BP_INDEX_LEN  = 8
   val BP_TAG_LEN    = 23
