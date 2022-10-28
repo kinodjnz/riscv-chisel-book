@@ -7,16 +7,22 @@ mod sdc;
 mod start;
 mod uart;
 
+use sdc::Sdc;
+
 fn main() -> ! {
-    let s = sdc::init_card();
-    if s != 0 {
-        uart::puts(b"sd init failed: ");
-        uart::print(s);
-        uart::puts(b"\r\n");
+    let result = Sdc::init_card();
+    match result {
+        Err(e) => {
+            uart::puts(b"sd init failed: ");
+            uart::print(e);
+            uart::puts(b"\r\n");
+        }
+        Ok(sdc) => {
+            let s = loader::load_kernel(sdc);
+            uart::puts(b"load failed: ");
+            uart::print(s);
+            uart::puts(b"\r\n");
+        }
     }
-    let s = loader::load_kernel();
-    uart::puts(b"load failed: ");
-    uart::print(s);
-    uart::puts(b"\r\n");
     loop {}
 }

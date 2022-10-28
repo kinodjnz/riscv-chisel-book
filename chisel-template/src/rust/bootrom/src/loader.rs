@@ -1,4 +1,4 @@
-use super::sdc;
+use super::sdc::Sdc;
 use super::uart;
 use core::arch::asm;
 
@@ -22,10 +22,12 @@ fn print_mem(pp: *const u32, len: usize) {
     }
 }
 
-pub fn load_kernel() -> u32 {
-    let buf: *mut u32 = 0x2000_1000 as *mut u32;
+pub fn load_kernel(sdc: Sdc) -> u32 {
+    const KERNEL_SIZE_MAX: u32 = 0x0100_0000;
+    const RAM_START: u32 = 0x2000_0000;
+    let buf: *mut u32 = RAM_START as *mut u32;
 
-    let s = sdc::read_sector(0, 1, buf);
+    let s = sdc.read_sector(0, 1, buf);
     if s != 0 {
         return 1;
     }
@@ -33,7 +35,7 @@ pub fn load_kernel() -> u32 {
     // uart::print(boot_sector);
     // uart::puts(b" #bs\r\n");
 
-    let s = sdc::read_sector(boot_sector, 1, buf);
+    let s = sdc.read_sector(boot_sector, 1, buf);
     if s != 0 {
         return 2;
     }
@@ -64,7 +66,7 @@ pub fn load_kernel() -> u32 {
     let mut kernel_file_size: u32 = 0;
     for _ in 0..root_dirent_count {
         if j == 0 {
-            let s = sdc::read_sector(root_dirent_start_sector, 1, buf);
+            let s = sdc.read_sector(root_dirent_start_sector, 1, buf);
             if s != 0 {
                 uart::print(s);
                 uart::puts(b" ");
@@ -90,13 +92,17 @@ pub fn load_kernel() -> u32 {
         uart::puts(b"KERNEL.BIN not found\r\n");
         return 4;
     }
-    //uart::print(kernel_file_size);
-    //uart::puts(b" #kern\r\n");
+    if kernel_file_size > KERNEL_SIZE_MAX {
+        uart::puts(b"kernel size too large: ");
+        uart::print(kernel_file_size);
+        uart::puts(b"\r\n");
+        return 5;
+    }
 
     let kernel_sector_count: u32 = (kernel_file_size + 511) >> 9;
     let mut remaining_sectors: u32 = kernel_sector_count;
     let mut current_cluster: u32 = kernel_start_cluster;
-    let fat: *mut u32 = 0x2000_0e00 as *mut u32;
+    let fat: *mut u32 = (RAM_START + KERNEL_SIZE_MAX) as *mut u32;
     let mut current_fat_sector: u32 = 0xffff_ffff;
     let mut p: *mut u32 = buf;
     loop {
@@ -105,13 +111,17 @@ pub fn load_kernel() -> u32 {
         // uart::print(p as u32);
         // uart::puts(b"\r\n");
 
-        let s = sdc::read_sector(
+        let s = sdc.read_sector(
             data_start_sector + ((current_cluster - 2) << cluster_shift),
-            if remaining_sectors > sector_per_cluster { sector_per_cluster } else { remaining_sectors },
+            if remaining_sectors > sector_per_cluster {
+                sector_per_cluster
+            } else {
+                remaining_sectors
+            },
             p,
         );
         if s != 0 {
-            return 5;
+            return 6;
         }
         if remaining_sectors <= sector_per_cluster {
             break;
@@ -120,21 +130,21 @@ pub fn load_kernel() -> u32 {
         p = unsafe { p.add((sector_per_cluster << 7) as usize) };
         let fat_sector: u32 = fat_start_sector + ((current_cluster * 2) >> 9);
         if fat_sector != current_fat_sector {
-            let s = sdc::read_sector(fat_sector, 1, fat);
+            let s = sdc.read_sector(fat_sector, 1, fat);
             if s != 0 {
-                return 6;
+                return 7;
             }
             current_fat_sector = fat_sector;
         }
         current_cluster = read::<u16>(fat, ((current_cluster * 2) & 511) as usize) as u32
     }
 
-    // print_mem(0x2000_1000 as *const u32, 128);
+    // print_mem(0x2000_0000 as *const u32, 128);
     uart::puts(b"KERNEL.BIN loaded\r\n");
 
     unsafe {
         asm!("fence.i");
-        asm!("lui a0,0x20001");
+        asm!("lui a0,0x20000");
         asm!("jr a0");
         core::hint::unreachable_unchecked();
     }

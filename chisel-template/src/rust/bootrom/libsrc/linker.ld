@@ -3,8 +3,9 @@ ENTRY(_start)
 
 MEMORY
 {
-    imem(rx)  : ORIGIN = 0x08000000, LENGTH = 2048
-    dmem(rwx) : ORIGIN = 0x20000000, LENGTH = 268435456 
+    imem(rx)   : ORIGIN = 0x08000000, LENGTH = 2048
+    dummy(rwx) : ORIGIN = 0x20000000, LENGTH = 0
+    dmem(rwx)  : ORIGIN = 0x20000000, LENGTH = 268435456
 }
 
 SECTIONS
@@ -38,7 +39,7 @@ SECTIONS
       *(.data)
       . = ALIGN(4);
       __data_end = .;
-  } >dmem AT>imem
+  } >dummy AT>imem
   .bss : { 
       . = ALIGN(4);
       __bss_start = .;
@@ -46,7 +47,7 @@ SECTIONS
       *(.sbss*);
       . = ALIGN(4);
       __bss_end = .;
-  } >dmem
+  } >dummy
   PROVIDE(stack_bottom = .);
   PROVIDE(_end = .);
   PROVIDE(end = .);

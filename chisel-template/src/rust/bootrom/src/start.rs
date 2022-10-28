@@ -1,6 +1,7 @@
 use core::mem::zeroed;
 use core::ptr::write_volatile;
 
+#[allow(dead_code)]
 pub fn init_bss() {
     extern "C" {
         static mut __bss_start: u32;
@@ -19,7 +20,7 @@ pub fn init_bss() {
 
 #[no_mangle]
 pub extern "C" fn __start_rust() -> ! {
-    init_bss();
+    // init_bss();
     super::cycle::init();
     super::main();
 }
