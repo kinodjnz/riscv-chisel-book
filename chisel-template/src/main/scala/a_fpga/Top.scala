@@ -44,18 +44,22 @@ class RiscVDebugSignals extends Bundle {
   // val dram_busy                = Output(Bool())
   // val dram_ren                 = Output(Bool())
 
+  val mem_icache_state = Output(UInt(3.W))
+  val mem_dram_state = Output(UInt(3.W))
+  val mem_imem_addr = Output(UInt(16.W))
+
   // val sdc_cmd_wrt = Output(Bool())
   // val sdc_cmd_out = Output(Bool())
   // val sdc_res_in  = Output(Bool())
   // val sdc_dat_in  = Output(UInt(4.W))
   // val sdc_rx_dat_index = Output(UInt(8.W))
-  val sdc_sdbuf_ren1 = Output(Bool())
-  val sdc_sdbuf_wen1 = Output(Bool())
-  val sdc_sdbuf_addr1 = Output(UInt(8.W))
-  val sdc_sdbuf_wdata1 = Output(UInt(8.W))
-  val sdc_sdbuf_ren2 = Output(Bool())
-  val sdc_sdbuf_wen2 = Output(Bool())
-  val sdc_sdbuf_addr2 = Output(UInt(8.W))
+  // val sdc_sdbuf_ren1 = Output(Bool())
+  // val sdc_sdbuf_wen1 = Output(Bool())
+  // val sdc_sdbuf_addr1 = Output(UInt(8.W))
+  // val sdc_sdbuf_wdata1 = Output(UInt(8.W))
+  // val sdc_sdbuf_ren2 = Output(Bool())
+  // val sdc_sdbuf_wen2 = Output(Bool())
+  // val sdc_sdbuf_addr2 = Output(UInt(8.W))
 }
 
 class RiscV(clockHz: Int) extends Module {
@@ -170,18 +174,22 @@ class RiscV(clockHz: Int) extends Module {
   // io.debugSignals.dram_busy                := io.dram.busy
   // io.debugSignals.dram_ren                 := io.dram.ren
 
+  io.debugSignals.mem_icache_state := memory.io.icache_state
+  io.debugSignals.mem_dram_state := memory.io.dram_state
+  io.debugSignals.mem_imem_addr := core.io.imem.addr(15, 0)
+
   // io.debugSignals.sdc_cmd_wrt := sdc.io.sdc_port.cmd_wrt
   // io.debugSignals.sdc_cmd_out := sdc.io.sdc_port.cmd_out
   // io.debugSignals.sdc_res_in  := io.sdc_port.res_in
   // io.debugSignals.sdc_dat_in  := io.sdc_port.dat_in
   // io.debugSignals.sdc_rx_dat_index := sdc.io.rx_dat_index
-  io.debugSignals.sdc_sdbuf_ren1 := sdc.io.sdbuf.ren1
-  io.debugSignals.sdc_sdbuf_wen1 := sdc.io.sdbuf.wen1
-  io.debugSignals.sdc_sdbuf_addr1 := sdc.io.sdbuf.addr1
-  io.debugSignals.sdc_sdbuf_wdata1 := sdc.io.sdbuf.wdata1(7, 0)
-  io.debugSignals.sdc_sdbuf_ren2 := sdc.io.sdbuf.ren2
-  io.debugSignals.sdc_sdbuf_wen2 := sdc.io.sdbuf.wen2
-  io.debugSignals.sdc_sdbuf_addr2 := sdc.io.sdbuf.addr2
+  // io.debugSignals.sdc_sdbuf_ren1 := sdc.io.sdbuf.ren1
+  // io.debugSignals.sdc_sdbuf_wen1 := sdc.io.sdbuf.wen1
+  // io.debugSignals.sdc_sdbuf_addr1 := sdc.io.sdbuf.addr1
+  // io.debugSignals.sdc_sdbuf_wdata1 := sdc.io.sdbuf.wdata1(7, 0)
+  // io.debugSignals.sdc_sdbuf_ren2 := sdc.io.sdbuf.ren2
+  // io.debugSignals.sdc_sdbuf_wen2 := sdc.io.sdbuf.wen2
+  // io.debugSignals.sdc_sdbuf_addr2 := sdc.io.sdbuf.addr2
 
   // io.exit := core.io.exit
   io.gpio <> gpio.io.gpio

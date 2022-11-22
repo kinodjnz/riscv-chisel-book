@@ -155,6 +155,8 @@ class Memory() extends Module {
     val cache_array2 = Flipped(new DCachePort())
     val icache = Flipped(new ICachePort())
     val icache_valid = Flipped(new ICacheValidPort())
+    val icache_state = Output(UInt(3.W))
+    val dram_state = Output(UInt(3.W))
   })
 
   val dram_i_busy  = Wire(Bool())
@@ -273,9 +275,6 @@ class Memory() extends Module {
   val i_reg_line = RegInit(0.U(CACHE_LINE_LEN.W))
   val i_reg_req_addr = RegInit(0.U.asTypeOf(new ICacheAddrBundle()))
   val i_reg_next_addr = RegInit(0.U.asTypeOf(new ICacheAddrBundle()))
-  val i_reg_snoop_inst = RegInit(0.U(WORD_LEN.W))
-  val i_reg_snoop_inst_valid = RegInit(false.B)
-  val i_reg_read_inst = RegInit(0.U(WORD_LEN.W))
   val i_reg_valid_rdata = RegInit(0.U((1 << ICACHE_VALID_DATA_BITS).W))
   val i_reg_cur_tag_index = RegInit(Fill(ICACHE_TAG_BITS+ICACHE_INDEX_BITS, 1.U(1.W)))
   val i_reg_addr_match = RegInit(false.B)
@@ -321,7 +320,7 @@ class Memory() extends Module {
         io.icache.ren := true.B
         io.icache.raddr := Cat(req_addr.index, req_addr.line_off(CACHE_LINE_BITS-1, 2))
         io.icache_valid.ren := true.B
-        io.icache_valid.addr := req_addr.index(CACHE_LINE_BITS-1, ICACHE_INVALIDATE_ADDR_BITS)
+        io.icache_valid.addr := req_addr.index(ICACHE_INDEX_BITS-1, ICACHE_INVALIDATE_ADDR_BITS)
         when (i_reg_cur_tag_index === Cat(req_addr.tag, req_addr.index)) {
           icache_state := ICacheState.Lookup
         }.otherwise {
@@ -364,7 +363,7 @@ class Memory() extends Module {
         io.icache.ren := true.B
         io.icache.raddr := Cat(req_addr.index, req_addr.line_off(CACHE_LINE_BITS-1, 2))
         io.icache_valid.ren := true.B
-        io.icache_valid.addr := req_addr.index(CACHE_LINE_BITS-1, ICACHE_INVALIDATE_ADDR_BITS)
+        io.icache_valid.addr := req_addr.index(ICACHE_INDEX_BITS-1, ICACHE_INVALIDATE_ADDR_BITS)
         when (i_reg_cur_tag_index === Cat(req_addr.tag, req_addr.index)) {
           icache_state := ICacheState.Lookup
         }.otherwise {
@@ -381,19 +380,14 @@ class Memory() extends Module {
           dcache_snoop_addr := i_reg_req_addr.asUInt.asTypeOf(new DCacheAddrBundle())
         }
         is (DCacheSnoopStatus.Found) {
-          val line = dcache_snoop_line
-          i_reg_snoop_inst := (line >> Cat(i_reg_next_addr.line_off(CACHE_LINE_BITS-1, 2), 0.U(5.W)))(WORD_LEN-1, 0)
-          i_reg_snoop_inst_valid := (
-            i_reg_req_addr.tag(ICACHE_TAG_BITS-5, 0) === i_reg_next_addr.tag(ICACHE_TAG_BITS-5, 0) &&
-            i_reg_req_addr.index === i_reg_next_addr.index
-          )
+          i_reg_line := dcache_snoop_line
           i_tag_array.write(i_reg_req_addr.index, VecInit(i_reg_req_addr.tag))
           io.icache.wen := true.B
           io.icache.waddr := i_reg_req_addr.index
-          io.icache.wdata := line
+          io.icache.wdata := dcache_snoop_line
           io.icache_valid.ren := true.B
           io.icache_valid.wen := true.B
-          io.icache_valid.addr := i_reg_req_addr.index(CACHE_LINE_BITS-1, ICACHE_VALID_DATA_BITS)
+          io.icache_valid.addr := i_reg_req_addr.index(ICACHE_INDEX_BITS-1, ICACHE_INVALIDATE_ADDR_BITS)
           val icache_valid_wdata = (i_reg_valid_rdata | (1.U << i_reg_req_addr.index(ICACHE_VALID_DATA_BITS-1, 0)))((1 << ICACHE_VALID_DATA_BITS)-1, 0)
           io.icache_valid.wdata := icache_valid_wdata
           i_reg_cur_tag_index := Cat(i_reg_req_addr.tag, i_reg_req_addr.index)
@@ -412,9 +406,11 @@ class Memory() extends Module {
       }
     }
     is (ICacheState.RespondSnoop) {
-      io.imem.inst := i_reg_snoop_inst
-      io.imem.valid := i_reg_snoop_inst_valid
-      i_reg_snoop_inst_valid := false.B
+      io.imem.inst := (i_reg_line >> Cat(i_reg_next_addr.line_off(CACHE_LINE_BITS-1, 2), 0.U(5.W)))(WORD_LEN-1, 0)
+      when (i_reg_req_addr.tag(ICACHE_TAG_BITS-5, 0) === i_reg_next_addr.tag(ICACHE_TAG_BITS-5, 0) &&
+          i_reg_req_addr.index === i_reg_next_addr.index) {
+        io.imem.valid := true.B
+      }
       val req_addr = io.imem.addr.asTypeOf(new ICacheAddrBundle())
       i_reg_req_addr := req_addr
       i_reg_addr_match := true.B
@@ -423,7 +419,7 @@ class Memory() extends Module {
         io.icache.ren := true.B
         io.icache.raddr := Cat(req_addr.index, req_addr.line_off(CACHE_LINE_BITS-1, 2))
         io.icache_valid.ren := true.B
-        io.icache_valid.addr := req_addr.index(CACHE_LINE_BITS-1, ICACHE_INVALIDATE_ADDR_BITS)
+        io.icache_valid.addr := req_addr.index(ICACHE_INDEX_BITS-1, ICACHE_INVALIDATE_ADDR_BITS)
         when (i_reg_cur_tag_index === Cat(req_addr.tag, req_addr.index)) {
           icache_state := ICacheState.Lookup
         }.otherwise {
@@ -454,7 +450,7 @@ class Memory() extends Module {
         io.icache.wdata := line
         io.icache_valid.ren := true.B
         io.icache_valid.wen := true.B
-        io.icache_valid.addr := i_reg_req_addr.index(CACHE_LINE_BITS-1, ICACHE_VALID_DATA_BITS)
+        io.icache_valid.addr := i_reg_req_addr.index(ICACHE_INDEX_BITS-1, ICACHE_INVALIDATE_ADDR_BITS)
         val icache_valid_wdata = (i_reg_valid_rdata | (1.U << i_reg_req_addr.index(ICACHE_VALID_DATA_BITS-1, 0)))((1 << ICACHE_VALID_DATA_BITS)-1, 0)
         io.icache_valid.wdata := icache_valid_wdata
         i_reg_cur_tag_index := Cat(i_reg_req_addr.tag, i_reg_req_addr.index)
@@ -476,7 +472,7 @@ class Memory() extends Module {
         io.icache.ren := true.B
         io.icache.raddr := Cat(req_addr.index, req_addr.line_off(CACHE_LINE_BITS-1, 2))
         io.icache_valid.ren := true.B
-        io.icache_valid.addr := req_addr.index(CACHE_LINE_BITS-1, ICACHE_INVALIDATE_ADDR_BITS)
+        io.icache_valid.addr := req_addr.index(ICACHE_INDEX_BITS-1, ICACHE_INVALIDATE_ADDR_BITS)
         icache_state := ICacheState.Lookup
       }.otherwise {
         icache_state := ICacheState.Ready
@@ -725,6 +721,9 @@ class Memory() extends Module {
       }
     }
   }
+
+  io.icache_state := icache_state.asUInt
+  io.dram_state := reg_dram_state.asUInt
 
   // printf(p"io.imem.en      : ${io.imem.en}\n")
   // printf(p"io.imem.addr    : 0x${Hexadecimal(io.imem.addr)}\n")

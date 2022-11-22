@@ -35,6 +35,7 @@ class CoreDebugSignals extends Bundle {
   // val csr_rdata = Output(UInt(WORD_LEN.W))
   // val mem_reg_csr_addr = Output(UInt(CSR_ADDR_LEN.W))
   val me_intr = Output(Bool())
+  val mt_intr = Output(Bool())
   val cycle_counter = Output(UInt(48.W))
   val id_pc = Output(UInt(WORD_LEN.W))
   val id_inst = Output(UInt(WORD_LEN.W))
@@ -239,6 +240,8 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
   val ic_read_en4     = Wire(Bool())
   val ic_reg_read_rdy = RegInit(false.B)
   val ic_reg_half_rdy = RegInit(false.B)
+  val ic_read_rdy     = Wire(Bool())
+  val ic_half_rdy     = Wire(Bool())
   val ic_data_out     = Wire(UInt(WORD_LEN.W))
   val ic_reg_imem_addr = RegInit(0.U(WORD_LEN.W))
   val ic_reg_addr_out = RegInit(0.U(WORD_LEN.W))
@@ -258,6 +261,8 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
   io.imem.en := true.B
   ic_reg_read_rdy := true.B
   ic_reg_half_rdy := true.B
+  ic_read_rdy := ic_reg_read_rdy
+  ic_half_rdy := ic_reg_half_rdy
   ic_data_out := BUBBLE
   ic_addr_out := ic_reg_addr_out
   ic_reg_addr_out := ic_addr_out
@@ -269,9 +274,11 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
     ic_addr_out := ic_addr
     ic_state := Mux(ic_addr(1).asBool, IcState.EmptyHalf, IcState.Empty)
     ic_reg_read_rdy := !ic_addr(1).asBool
-  }.elsewhen (ic_state =/= IcState.Full && ic_state =/= IcState.Full2Half && !io.imem.valid) {
+  }.elsewhen (/*ic_state =/= IcState.Full && ic_state =/= IcState.Full2Half &&*/ !io.imem.valid) {
     ic_reg_read_rdy := ic_reg_read_rdy
     ic_reg_half_rdy := ic_reg_half_rdy
+    ic_read_rdy := false.B
+    ic_half_rdy := false.B
   }.otherwise {
     switch (ic_state) {
       is (IcState.Empty) {
@@ -393,7 +400,7 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
   val is_half_inst = (ic_data_out(1, 0) =/= 3.U)
   ic_read_en2 := !id_reg_stall && is_half_inst
   ic_read_en4 := !id_reg_stall && !is_half_inst
-  val if2_pc = Mux(id_reg_stall || !(ic_reg_read_rdy || (ic_reg_half_rdy && is_half_inst)),
+  val if2_pc = Mux(id_reg_stall || !(ic_read_rdy || (ic_half_rdy && is_half_inst)),
     if2_reg_pc,
     ic_reg_addr_out,
   )
@@ -404,8 +411,8 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
     mem_reg_is_br     -> BUBBLE,
     id_reg_stall      -> if2_reg_inst,
     if2_reg_is_bp_pos -> BUBBLE,
-    ic_reg_read_rdy   -> ic_data_out,
-    (ic_reg_half_rdy && is_half_inst) -> ic_data_out,
+    ic_read_rdy   -> ic_data_out,
+    (ic_half_rdy && is_half_inst) -> ic_data_out,
   ))
   if2_reg_inst := if2_inst
   val if2_is_cond_br_w = (if2_inst(6, 0) === 0x63.U)
@@ -416,21 +423,22 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
   val if2_is_jal = if2_is_jal_w || if2_is_jal_c
   val if2_is_jalr = ((if2_inst(6, 0) === 0x67.U) || (if2_inst(15, 13) === 4.U && if2_inst(6, 0) === 2.U))
   val if2_is_bp_br = if2_is_cond_br || if2_is_jalr || if2_is_jal
-  val if2_is_bp_pos = Mux(id_reg_stall,
-    if2_reg_is_bp_pos,
-    (if2_is_bp_br && bp.io.lu.br_pos),
-  )
-  if2_reg_is_bp_pos := if2_is_bp_pos
-  val if2_bp_addr = MuxCase(DontCare, Seq(
-    id_reg_stall                         -> if2_reg_bp_addr,
-    (if2_is_bp_br && bp.io.lu.br_pos)    -> bp.io.lu.br_addr,
+  val if2_is_bp_pos = MuxCase(false.B, Seq(
+    mem_reg_is_br -> false.B,
+    id_reg_stall  -> if2_reg_is_bp_pos,
+    if2_is_bp_br -> bp.io.lu.br_pos,
   ))
+  if2_reg_is_bp_pos := if2_is_bp_pos
+  val if2_bp_addr = Mux(id_reg_stall,
+    if2_reg_bp_addr,
+    bp.io.lu.br_addr,
+  )
   if2_reg_bp_addr := if2_bp_addr
   val if2_inst_cnt = Mux(!ex3_reg_is_br && !mem_reg_is_br && id_reg_stall, if2_reg_inst_cnt, if2_reg_inst_cnt + 1.U)
   if2_reg_inst_cnt := if2_inst_cnt
   
   printf(p"ic_reg_addr_out: ${Hexadecimal(ic_reg_addr_out)}, ic_data_out: ${Hexadecimal(ic_data_out)}\n")
-  printf(p"inst: ${Hexadecimal(if2_inst)}, ic_reg_read_rdy: ${ic_reg_read_rdy}, ic_state: ${ic_state.asUInt}\n")
+  printf(p"inst: ${Hexadecimal(if2_inst)}, ic_read_rdy: ${ic_read_rdy}, ic_state: ${ic_state.asUInt}\n")
 
   //**********************************
   // IF2/ID Register
@@ -1670,6 +1678,7 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
   io.debug_signal.mem_reg_pc := mem_reg_pc
   io.debug_signal.mem_is_valid_inst := mem_is_valid_inst
   io.debug_signal.me_intr := mem_is_meintr
+  io.debug_signal.mt_intr := mem_is_mtintr
   io.debug_signal.id_pc := id_reg_pc
   io.debug_signal.id_inst := id_inst
 
