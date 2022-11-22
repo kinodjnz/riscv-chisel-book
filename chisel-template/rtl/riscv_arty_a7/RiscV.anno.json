@@ -144,7 +144,7 @@
   },
   {
     "class":"firrtl.transforms.CombinationalPath",
-    "sink":"~RiscV|RiscV>io_debugSignals_sdc_sdbuf_wen2",
+    "sink":"~RiscV|RiscV>io_debugSignals_mem_imem_addr",
     "sources":[
       "~RiscV|RiscV>io_dram_rdata_valid"
     ]
