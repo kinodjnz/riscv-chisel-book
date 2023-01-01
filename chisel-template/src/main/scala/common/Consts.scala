@@ -62,14 +62,17 @@ object Consts {
   val BR_BLTU     = 22.U(EXE_FUN_LEN.W)
   val BR_BGEU     = 23.U(EXE_FUN_LEN.W)
 
-  val ALU_MUL     = 24.U(EXE_FUN_LEN.W)
-  val ALU_MULH    = 25.U(EXE_FUN_LEN.W)
-  val ALU_MULHU   = 26.U(EXE_FUN_LEN.W)
-  val ALU_MULHSU  = 27.U(EXE_FUN_LEN.W)
-  val ALU_DIV     = 28.U(EXE_FUN_LEN.W)
-  val ALU_REM     = 29.U(EXE_FUN_LEN.W)
-  val ALU_DIVU    = 30.U(EXE_FUN_LEN.W)
-  val ALU_REMU    = 31.U(EXE_FUN_LEN.W)
+  val ALU_MUL     = 8.U(EXE_FUN_LEN.W)
+  val ALU_MULH    = 9.U(EXE_FUN_LEN.W)
+  val ALU_MULHU   = 10.U(EXE_FUN_LEN.W)
+  val ALU_MULHSU  = 11.U(EXE_FUN_LEN.W)
+  val ALU_DIV     = 12.U(EXE_FUN_LEN.W)
+  val ALU_REM     = 13.U(EXE_FUN_LEN.W)
+  val ALU_DIVU    = 14.U(EXE_FUN_LEN.W)
+  val ALU_REMU    = 15.U(EXE_FUN_LEN.W)
+
+  val CMD_ECALL   = 24.U(EXE_FUN_LEN.W)
+  val CMD_MRET    = 25.U(EXE_FUN_LEN.W)
 
   val OP1_LEN    = 3
   val OP1_RS1    = 0.U(OP1_LEN.W)
@@ -115,6 +118,8 @@ object Consts {
   val WB_X       = 0.U(WB_SEL_LEN.W)
   val WB_ALU     = 0.U(WB_SEL_LEN.W)
   val WB_PC      = 1.U(WB_SEL_LEN.W)
+  val WB_ST      = 2.U(WB_SEL_LEN.W)
+  val WB_FENCE   = 3.U(WB_SEL_LEN.W)
   val WB_MD      = 4.U(WB_SEL_LEN.W)
   val WB_BIT     = 5.U(WB_SEL_LEN.W)
   val WB_MEM     = 6.U(WB_SEL_LEN.W)
@@ -132,20 +137,20 @@ object Consts {
 
   val MW_LEN = 3
   val MW_X   = 0.U(MW_LEN.W)
-  val MW_W   = 1.U(MW_LEN.W)
-  val MW_H   = 2.U(MW_LEN.W)
-  val MW_B   = 3.U(MW_LEN.W)
-  val MW_HU  = 4.U(MW_LEN.W)
-  val MW_BU  = 5.U(MW_LEN.W)
+  val MW_W   = 0.U(MW_LEN.W)
+  val MW_H   = 4.U(MW_LEN.W)
+  val MW_B   = 5.U(MW_LEN.W)
+  val MW_HU  = 6.U(MW_LEN.W)
+  val MW_BU  = 7.U(MW_LEN.W)
 
-  val CSR_LEN = 3
+  val CSR_LEN = 2
   val CSR_X   = 0.U(CSR_LEN.W)
   val CSR_W   = 1.U(CSR_LEN.W)
   val CSR_S   = 2.U(CSR_LEN.W)
   val CSR_C   = 3.U(CSR_LEN.W)
-  val CSR_E   = 4.U(CSR_LEN.W)
-  val CSR_V   = 5.U(CSR_LEN.W)
-  val CSR_R   = 6.U(CSR_LEN.W)
+  val CSR_E   = 0.U(CSR_LEN.W)
+  val CSR_V   = 0.U(CSR_LEN.W)
+  val CSR_R   = 0.U(CSR_LEN.W)
 
   val CSR_ADDR_MSTATUS  = 0x300.U(CSR_ADDR_LEN.W)
   val CSR_ADDR_MIE      = 0x304.U(CSR_ADDR_LEN.W)

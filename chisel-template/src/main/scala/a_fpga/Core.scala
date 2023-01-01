@@ -58,6 +58,11 @@ object DivremState extends ChiselEnum {
   val Finished = Value
 }
 
+object DmemState extends ChiselEnum {
+  val Idle = Value
+  val Reading = Value
+}
+
 class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: String = null) extends Module {
   val io = IO(
     new Bundle {
@@ -115,7 +120,7 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
   val ex1_reg_op2_data      = RegInit(0.U(WORD_LEN.W))
   val ex1_reg_rs2_data      = RegInit(0.U(WORD_LEN.W))
   val ex1_reg_exe_fun       = RegInit(0.U(EXE_FUN_LEN.W))
-  val ex1_reg_mem_wen       = RegInit(0.U(MEN_LEN.W))
+  // val ex1_reg_mem_wen       = RegInit(0.U(MEN_LEN.W))
   val ex1_reg_rf_wen        = RegInit(0.U(REN_LEN.W))
   val ex1_reg_wb_sel        = RegInit(0.U(WB_SEL_LEN.W))
   val ex1_reg_csr_addr      = RegInit(0.U(CSR_ADDR_LEN.W))
@@ -143,7 +148,7 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
   val ex2_reg_op2_data      = RegInit(0.U(WORD_LEN.W))
   val ex2_reg_rs2_data      = RegInit(0.U(WORD_LEN.W))
   val ex2_reg_exe_fun       = RegInit(0.U(EXE_FUN_LEN.W))
-  val ex2_reg_mem_wen       = RegInit(0.U(MEN_LEN.W))
+  // val ex2_reg_mem_wen       = RegInit(0.U(MEN_LEN.W))
   val ex2_reg_rf_wen        = RegInit(0.U(REN_LEN.W))
   val ex2_reg_wb_sel        = RegInit(0.U(WB_SEL_LEN.W))
   val ex2_reg_csr_addr      = RegInit(0.U(CSR_ADDR_LEN.W))
@@ -180,12 +185,12 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
   val mem_reg_op1_data      = RegInit(0.U(WORD_LEN.W))
   val mem_reg_rs2_data      = RegInit(0.U(WORD_LEN.W))
   val mem_reg_mullu         = RegInit(0.U((WORD_LEN*3/2).W))
-  val mem_reg_mulls         = RegInit(0.S((WORD_LEN*3/2).W))
+  val mem_reg_mulls         = RegInit(0.U(WORD_LEN.W))
   val mem_reg_mulhuu        = RegInit(0.U((WORD_LEN*3/2).W))
   val mem_reg_mulhss        = RegInit(0.S((WORD_LEN*3/2).W))
   val mem_reg_mulhsu        = RegInit(0.S((WORD_LEN*3/2).W))
   val mem_reg_exe_fun       = RegInit(0.U(EXE_FUN_LEN.W))
-  val mem_reg_mem_wen       = RegInit(0.U(MEN_LEN.W))
+  // val mem_reg_mem_wen       = RegInit(0.U(MEN_LEN.W))
   val mem_reg_rf_wen        = RegInit(0.U(REN_LEN.W))
   val mem_reg_wb_sel        = RegInit(0.U(WB_SEL_LEN.W))
   val mem_reg_csr_addr      = RegInit(0.U(CSR_ADDR_LEN.W))
@@ -196,6 +201,7 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
   //val mem_reg_alu_mulhsu_out  = RegInit(0.U(WORD_LEN.W))
   val mem_reg_mem_w         = RegInit(0.U(WORD_LEN.W))
   val mem_reg_mem_wstrb     = RegInit(0.U((WORD_LEN/8).W))
+  val mem_reg_wdata         = RegInit(0.U(WORD_LEN.W))
   val mem_reg_is_valid_inst = RegInit(false.B)
   val mem_reg_is_trap       = RegInit(false.B)
   val mem_reg_mcause        = RegInit(0.U(WORD_LEN.W))
@@ -230,6 +236,7 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
   // val ex3_reg_trap_pc    = RegInit(0.U(WORD_LEN.W))
   val mem_reg_is_br      = RegInit(false.B)
   val mem_reg_br_addr    = RegInit(0.U(WORD_LEN.W))
+  val mem_reg_dmem_state = RegInit(DmemState.Idle)
 
   //**********************************
   // Instruction Cache Controller
@@ -520,108 +527,108 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
   val id_c_imm_j = Cat(Fill(21, id_inst(12)), id_inst(8), id_inst(10, 9), id_inst(6), id_inst(7), id_inst(2), id_inst(11), id_inst(5, 3), 0.U(1.W))
 
   val csignals = ListLookup(id_inst,
-               List(ALU_X    , OP1_RS1, OP2_RS2, MEN_X, REN_X, WB_X  , WBA_RD, CSR_X, MW_X),
+                    List(ALU_X     , OP1_RS1   , OP2_RS2    , REN_X, WB_X  , WBA_RD , CSR_X, MW_X),
     Array(
-      LB    -> List(ALU_ADD  , OP1_RS1, OP2_IMI, MEN_X, REN_S, WB_MEM, WBA_RD, CSR_X, MW_B),
-      LBU   -> List(ALU_ADD  , OP1_RS1, OP2_IMI, MEN_X, REN_S, WB_MEM, WBA_RD, CSR_X, MW_BU),
-      SB    -> List(ALU_ADD  , OP1_RS1, OP2_IMS, MEN_S, REN_X, WB_X  , WBA_RD, CSR_X, MW_B),
-      LH    -> List(ALU_ADD  , OP1_RS1, OP2_IMI, MEN_X, REN_S, WB_MEM, WBA_RD, CSR_X, MW_H),
-      LHU   -> List(ALU_ADD  , OP1_RS1, OP2_IMI, MEN_X, REN_S, WB_MEM, WBA_RD, CSR_X, MW_HU),
-      SH    -> List(ALU_ADD  , OP1_RS1, OP2_IMS, MEN_S, REN_X, WB_X  , WBA_RD, CSR_X, MW_H),
-      LW    -> List(ALU_ADD  , OP1_RS1, OP2_IMI, MEN_X, REN_S, WB_MEM, WBA_RD, CSR_X, MW_W),
-      SW    -> List(ALU_ADD  , OP1_RS1, OP2_IMS, MEN_S, REN_X, WB_X  , WBA_RD, CSR_X, MW_W),
-      ADD   -> List(ALU_ADD  , OP1_RS1, OP2_RS2, MEN_X, REN_S, WB_ALU, WBA_RD, CSR_X, MW_X),
-      ADDI  -> List(ALU_ADD  , OP1_RS1, OP2_IMI, MEN_X, REN_S, WB_ALU, WBA_RD, CSR_X, MW_X),
-      SUB   -> List(ALU_SUB  , OP1_RS1, OP2_RS2, MEN_X, REN_S, WB_ALU, WBA_RD, CSR_X, MW_X),
-      AND   -> List(ALU_AND  , OP1_RS1, OP2_RS2, MEN_X, REN_S, WB_ALU, WBA_RD, CSR_X, MW_X),
-      OR    -> List(ALU_OR   , OP1_RS1, OP2_RS2, MEN_X, REN_S, WB_ALU, WBA_RD, CSR_X, MW_X),
-      XOR   -> List(ALU_XOR  , OP1_RS1, OP2_RS2, MEN_X, REN_S, WB_ALU, WBA_RD, CSR_X, MW_X),
-      ANDI  -> List(ALU_AND  , OP1_RS1, OP2_IMI, MEN_X, REN_S, WB_ALU, WBA_RD, CSR_X, MW_X),
-      ORI   -> List(ALU_OR   , OP1_RS1, OP2_IMI, MEN_X, REN_S, WB_ALU, WBA_RD, CSR_X, MW_X),
-      XORI  -> List(ALU_XOR  , OP1_RS1, OP2_IMI, MEN_X, REN_S, WB_ALU, WBA_RD, CSR_X, MW_X),
-      SLL   -> List(ALU_SLL  , OP1_RS1, OP2_RS2, MEN_X, REN_S, WB_ALU, WBA_RD, CSR_X, MW_X),
-      SRL   -> List(ALU_SRL  , OP1_RS1, OP2_RS2, MEN_X, REN_S, WB_ALU, WBA_RD, CSR_X, MW_X),
-      SRA   -> List(ALU_SRA  , OP1_RS1, OP2_RS2, MEN_X, REN_S, WB_ALU, WBA_RD, CSR_X, MW_X),
-      SLLI  -> List(ALU_SLL  , OP1_RS1, OP2_IMI, MEN_X, REN_S, WB_ALU, WBA_RD, CSR_X, MW_X),
-      SRLI  -> List(ALU_SRL  , OP1_RS1, OP2_IMI, MEN_X, REN_S, WB_ALU, WBA_RD, CSR_X, MW_X),
-      SRAI  -> List(ALU_SRA  , OP1_RS1, OP2_IMI, MEN_X, REN_S, WB_ALU, WBA_RD, CSR_X, MW_X),
-      SLT   -> List(ALU_SLT  , OP1_RS1, OP2_RS2, MEN_X, REN_S, WB_ALU, WBA_RD, CSR_X, MW_X),
-      SLTU  -> List(ALU_SLTU , OP1_RS1, OP2_RS2, MEN_X, REN_S, WB_ALU, WBA_RD, CSR_X, MW_X),
-      SLTI  -> List(ALU_SLT  , OP1_RS1, OP2_IMI, MEN_X, REN_S, WB_ALU, WBA_RD, CSR_X, MW_X),
-      SLTIU -> List(ALU_SLTU , OP1_RS1, OP2_IMI, MEN_X, REN_S, WB_ALU, WBA_RD, CSR_X, MW_X),
-      BEQ   -> List(BR_BEQ   , OP1_RS1, OP2_RS2, MEN_X, REN_X, WB_X  , WBA_RD, CSR_X, MW_X),
-      BNE   -> List(BR_BNE   , OP1_RS1, OP2_RS2, MEN_X, REN_X, WB_X  , WBA_RD, CSR_X, MW_X),
-      BGE   -> List(BR_BGE   , OP1_RS1, OP2_RS2, MEN_X, REN_X, WB_X  , WBA_RD, CSR_X, MW_X),
-      BGEU  -> List(BR_BGEU  , OP1_RS1, OP2_RS2, MEN_X, REN_X, WB_X  , WBA_RD, CSR_X, MW_X),
-      BLT   -> List(BR_BLT   , OP1_RS1, OP2_RS2, MEN_X, REN_X, WB_X  , WBA_RD, CSR_X, MW_X),
-      BLTU  -> List(BR_BLTU  , OP1_RS1, OP2_RS2, MEN_X, REN_X, WB_X  , WBA_RD, CSR_X, MW_X),
-      JAL   -> List(ALU_ADD  , OP1_PC , OP2_IMJ, MEN_X, REN_S, WB_PC , WBA_RD, CSR_X, MW_X),
-      JALR  -> List(ALU_ADD  , OP1_RS1, OP2_IMI, MEN_X, REN_S, WB_PC , WBA_RD, CSR_X, MW_X),
-      LUI   -> List(ALU_ADD  , OP1_X  , OP2_IMU, MEN_X, REN_S, WB_ALU, WBA_RD, CSR_X, MW_X),
-      AUIPC -> List(ALU_ADD  , OP1_PC , OP2_IMU, MEN_X, REN_S, WB_ALU, WBA_RD, CSR_X, MW_X),
-      CSRRW -> List(ALU_ADD  , OP1_RS1, OP2_Z  , MEN_X, REN_S, WB_CSR, WBA_RD, CSR_W, MW_X),
-      CSRRWI-> List(ALU_ADD  , OP1_IMZ, OP2_Z  , MEN_X, REN_S, WB_CSR, WBA_RD, CSR_W, MW_X),
-      CSRRS -> List(ALU_ADD  , OP1_RS1, OP2_Z  , MEN_X, REN_S, WB_CSR, WBA_RD, CSR_S, MW_X),
-      CSRRSI-> List(ALU_ADD  , OP1_IMZ, OP2_Z  , MEN_X, REN_S, WB_CSR, WBA_RD, CSR_S, MW_X),
-      CSRRC -> List(ALU_ADD  , OP1_RS1, OP2_Z  , MEN_X, REN_S, WB_CSR, WBA_RD, CSR_C, MW_X),
-      CSRRCI-> List(ALU_ADD  , OP1_IMZ, OP2_Z  , MEN_X, REN_S, WB_CSR, WBA_RD, CSR_C, MW_X),
-      ECALL -> List(ALU_X    , OP1_X  , OP2_X  , MEN_X, REN_X, WB_X  , WBA_RD, CSR_E, MW_X),
-      MRET  -> List(ALU_X    , OP1_X  , OP2_X  , MEN_X, REN_X, WB_X  , WBA_RD, CSR_R, MW_X),
-      FENCE_I -> List(ALU_X  , OP1_X  , OP2_X  , MEN_FENCE, REN_X, WB_X  , WBA_RD, CSR_X, MW_X),
-      MUL   -> List(ALU_MUL   , OP1_RS1, OP2_RS2, MEN_X, REN_S, WB_MD,  WBA_RD, CSR_X, MW_X),
-      MULH  -> List(ALU_MULH  , OP1_RS1, OP2_RS2, MEN_X, REN_S, WB_MD,  WBA_RD, CSR_X, MW_X),
-      MULHU -> List(ALU_MULHU , OP1_RS1, OP2_RS2, MEN_X, REN_S, WB_MD,  WBA_RD, CSR_X, MW_X),
-      MULHSU-> List(ALU_MULHSU, OP1_RS1, OP2_RS2, MEN_X, REN_S, WB_MD,  WBA_RD, CSR_X, MW_X),
-      DIV   -> List(ALU_DIV   , OP1_RS1, OP2_RS2, MEN_X, REN_S, WB_MD,  WBA_RD, CSR_X, MW_X),
-      DIVU  -> List(ALU_DIVU  , OP1_RS1, OP2_RS2, MEN_X, REN_S, WB_MD,  WBA_RD, CSR_X, MW_X),
-      REM   -> List(ALU_REM   , OP1_RS1, OP2_RS2, MEN_X, REN_S, WB_MD,  WBA_RD, CSR_X, MW_X),
-      REMU  -> List(ALU_REMU  , OP1_RS1, OP2_RS2, MEN_X, REN_S, WB_MD,  WBA_RD, CSR_X, MW_X),
-      MAX   -> List(ALU_MAX   , OP1_RS1, OP2_RS2, MEN_X, REN_S, WB_ALU, WBA_RD, CSR_X, MW_X),
-      MAXU  -> List(ALU_MAXU  , OP1_RS1, OP2_RS2, MEN_X, REN_S, WB_ALU, WBA_RD, CSR_X, MW_X),
-      MIN   -> List(ALU_MIN   , OP1_RS1, OP2_RS2, MEN_X, REN_S, WB_ALU, WBA_RD, CSR_X, MW_X),
-      MINU  -> List(ALU_MINU  , OP1_RS1, OP2_RS2, MEN_X, REN_S, WB_ALU, WBA_RD, CSR_X, MW_X),
-      CLZ   -> List(ALU_CLZ   , OP1_RS1, OP2_X  , MEN_X, REN_S, WB_BIT, WBA_RD, CSR_X, MW_X),
-      CTZ   -> List(ALU_CTZ   , OP1_RS1, OP2_X  , MEN_X, REN_S, WB_BIT, WBA_RD, CSR_X, MW_X),
-      CPOP  -> List(ALU_CPOP  , OP1_RS1, OP2_X  , MEN_X, REN_S, WB_BIT, WBA_RD, CSR_X, MW_X),
-      REV8  -> List(ALU_REV8  , OP1_RS1, OP2_X  , MEN_X, REN_S, WB_BIT, WBA_RD, CSR_X, MW_X),
-      SEXTB -> List(ALU_SEXTB , OP1_RS1, OP2_X  , MEN_X, REN_S, WB_BIT, WBA_RD, CSR_X, MW_X),
-      SEXTH -> List(ALU_SEXTH , OP1_RS1, OP2_X  , MEN_X, REN_S, WB_BIT, WBA_RD, CSR_X, MW_X),
-      ZEXTH -> List(ALU_ZEXTH , OP1_RS1, OP2_X  , MEN_X, REN_S, WB_BIT, WBA_RD, CSR_X, MW_X),
-      ANDN  -> List(ALU_ANDN  , OP1_RS1, OP2_RS2, MEN_X, REN_S, WB_ALU, WBA_RD, CSR_X, MW_X),
-      ORN   -> List(ALU_ORN   , OP1_RS1, OP2_RS2, MEN_X, REN_S, WB_ALU, WBA_RD, CSR_X, MW_X),
-      XNOR  -> List(ALU_XNOR  , OP1_RS1, OP2_RS2, MEN_X, REN_S, WB_ALU, WBA_RD, CSR_X, MW_X),
-      // ROL   -> List(ALU_ROL   , OP1_RS1, OP2_RS2, MEN_X, REN_S, WB_BIT, WBA_RD, CSR_X, MW_X),
-      // ROR   -> List(ALU_ROR   , OP1_RS1, OP2_RS2, MEN_X, REN_S, WB_BIT, WBA_RD, CSR_X, MW_X),
-      // RORI  -> List(ALU_ROR   , OP1_RS1, OP2_IMI, MEN_X, REN_S, WB_BIT, WBA_RD, CSR_X, MW_X),
-      C_ILL      -> List(ALU_X    , OP1_X     , OP2_X      , MEN_X, REN_X, WB_X  , WBA_C  , CSR_X, MW_X),
-      C_ADDI4SPN -> List(ALU_ADD  , OP1_C_SP  , OP2_C_IMIW , MEN_X, REN_S, WB_ALU, WBA_CP2, CSR_X, MW_X),
-      C_ADDI16SP -> List(ALU_ADD  , OP1_C_RS1 , OP2_C_IMI16, MEN_X, REN_S, WB_ALU, WBA_C  , CSR_X, MW_X),
-      C_ADDI     -> List(ALU_ADD  , OP1_C_RS1 , OP2_C_IMI  , MEN_X, REN_S, WB_ALU, WBA_C  , CSR_X, MW_X),
-      C_LW       -> List(ALU_ADD  , OP1_C_RS1P, OP2_C_IMLS , MEN_X, REN_S, WB_MEM, WBA_CP2, CSR_X, MW_W),
-      C_SW       -> List(ALU_ADD  , OP1_C_RS1P, OP2_C_IMLS , MEN_S, REN_X, WB_X  , WBA_C  , CSR_X, MW_W),
-      C_LI       -> List(ALU_ADD  , OP1_X     , OP2_C_IMI  , MEN_X, REN_S, WB_ALU, WBA_C  , CSR_X, MW_X),
-      C_LUI      -> List(ALU_ADD  , OP1_X     , OP2_C_IMIU , MEN_X, REN_S, WB_ALU, WBA_C  , CSR_X, MW_X),
-      C_SRAI     -> List(ALU_SRA  , OP1_C_RS1P, OP2_C_IMI  , MEN_X, REN_S, WB_ALU, WBA_CP1, CSR_X, MW_X),
-      C_SRLI     -> List(ALU_SRL  , OP1_C_RS1P, OP2_C_IMI  , MEN_X, REN_S, WB_ALU, WBA_CP1, CSR_X, MW_X),
-      C_ANDI     -> List(ALU_AND  , OP1_C_RS1P, OP2_C_IMI  , MEN_X, REN_S, WB_ALU, WBA_CP1, CSR_X, MW_X),
-      C_SUB      -> List(ALU_SUB  , OP1_C_RS1P, OP2_C_RS2P , MEN_X, REN_S, WB_ALU, WBA_CP1, CSR_X, MW_X),
-      C_XOR      -> List(ALU_XOR  , OP1_C_RS1P, OP2_C_RS2P , MEN_X, REN_S, WB_ALU, WBA_CP1, CSR_X, MW_X),
-      C_OR       -> List(ALU_OR   , OP1_C_RS1P, OP2_C_RS2P , MEN_X, REN_S, WB_ALU, WBA_CP1, CSR_X, MW_X),
-      C_AND      -> List(ALU_AND  , OP1_C_RS1P, OP2_C_RS2P , MEN_X, REN_S, WB_ALU, WBA_CP1, CSR_X, MW_X),
-      C_SLLI     -> List(ALU_SLL  , OP1_C_RS1 , OP2_C_IMI  , MEN_X, REN_S, WB_ALU, WBA_C  , CSR_X, MW_X),
-      C_J        -> List(ALU_ADD  , OP1_PC    , OP2_C_IMJ  , MEN_X, REN_X, WB_PC , WBA_C  , CSR_X, MW_X),
-      C_BEQZ     -> List(BR_BEQ   , OP1_C_RS1P, OP2_Z      , MEN_X, REN_X, WB_X  , WBA_C  , CSR_X, MW_X),
-      C_BNEZ     -> List(BR_BNE   , OP1_C_RS1P, OP2_Z      , MEN_X, REN_X, WB_X  , WBA_C  , CSR_X, MW_X),
-      C_JR       -> List(ALU_ADD  , OP1_C_RS1 , OP2_Z      , MEN_X, REN_X, WB_PC , WBA_C  , CSR_X, MW_X),
-      C_JALR     -> List(ALU_ADD  , OP1_C_RS1 , OP2_Z      , MEN_X, REN_S, WB_PC , WBA_RA , CSR_X, MW_X),
-      C_JAL      -> List(ALU_ADD  , OP1_PC    , OP2_C_IMJ  , MEN_X, REN_S, WB_PC , WBA_RA , CSR_X, MW_X),
-      C_LWSP     -> List(ALU_ADD  , OP1_C_SP  , OP2_C_IMSL , MEN_X, REN_S, WB_MEM, WBA_C  , CSR_X, MW_W),
-      C_SWSP     -> List(ALU_ADD  , OP1_C_SP  , OP2_C_IMSS , MEN_S, REN_X, WB_X  , WBA_C  , CSR_X, MW_W),
-      C_MV       -> List(ALU_ADD  , OP1_Z     , OP2_C_RS2  , MEN_X, REN_S, WB_ALU, WBA_C  , CSR_X, MW_X),
-      C_ADD      -> List(ALU_ADD  , OP1_C_RS1 , OP2_C_RS2  , MEN_X, REN_S, WB_ALU, WBA_C  , CSR_X, MW_X),
+      LB         -> List(ALU_ADD   , OP1_RS1   , OP2_IMI    , REN_S, WB_MEM, WBA_RD , CSR_X, MW_B),
+      LBU        -> List(ALU_ADD   , OP1_RS1   , OP2_IMI    , REN_S, WB_MEM, WBA_RD , CSR_X, MW_BU),
+      SB         -> List(ALU_ADD   , OP1_RS1   , OP2_IMS    , REN_X, WB_ST , WBA_RD , CSR_X, MW_B),
+      LH         -> List(ALU_ADD   , OP1_RS1   , OP2_IMI    , REN_S, WB_MEM, WBA_RD , CSR_X, MW_H),
+      LHU        -> List(ALU_ADD   , OP1_RS1   , OP2_IMI    , REN_S, WB_MEM, WBA_RD , CSR_X, MW_HU),
+      SH         -> List(ALU_ADD   , OP1_RS1   , OP2_IMS    , REN_X, WB_ST , WBA_RD , CSR_X, MW_H),
+      LW         -> List(ALU_ADD   , OP1_RS1   , OP2_IMI    , REN_S, WB_MEM, WBA_RD , CSR_X, MW_W),
+      SW         -> List(ALU_ADD   , OP1_RS1   , OP2_IMS    , REN_X, WB_ST , WBA_RD , CSR_X, MW_W),
+      ADD        -> List(ALU_ADD   , OP1_RS1   , OP2_RS2    , REN_S, WB_ALU, WBA_RD , CSR_X, MW_X),
+      ADDI       -> List(ALU_ADD   , OP1_RS1   , OP2_IMI    , REN_S, WB_ALU, WBA_RD , CSR_X, MW_X),
+      SUB        -> List(ALU_SUB   , OP1_RS1   , OP2_RS2    , REN_S, WB_ALU, WBA_RD , CSR_X, MW_X),
+      AND        -> List(ALU_AND   , OP1_RS1   , OP2_RS2    , REN_S, WB_ALU, WBA_RD , CSR_X, MW_X),
+      OR         -> List(ALU_OR    , OP1_RS1   , OP2_RS2    , REN_S, WB_ALU, WBA_RD , CSR_X, MW_X),
+      XOR        -> List(ALU_XOR   , OP1_RS1   , OP2_RS2    , REN_S, WB_ALU, WBA_RD , CSR_X, MW_X),
+      ANDI       -> List(ALU_AND   , OP1_RS1   , OP2_IMI    , REN_S, WB_ALU, WBA_RD , CSR_X, MW_X),
+      ORI        -> List(ALU_OR    , OP1_RS1   , OP2_IMI    , REN_S, WB_ALU, WBA_RD , CSR_X, MW_X),
+      XORI       -> List(ALU_XOR   , OP1_RS1   , OP2_IMI    , REN_S, WB_ALU, WBA_RD , CSR_X, MW_X),
+      SLL        -> List(ALU_SLL   , OP1_RS1   , OP2_RS2    , REN_S, WB_ALU, WBA_RD , CSR_X, MW_X),
+      SRL        -> List(ALU_SRL   , OP1_RS1   , OP2_RS2    , REN_S, WB_ALU, WBA_RD , CSR_X, MW_X),
+      SRA        -> List(ALU_SRA   , OP1_RS1   , OP2_RS2    , REN_S, WB_ALU, WBA_RD , CSR_X, MW_X),
+      SLLI       -> List(ALU_SLL   , OP1_RS1   , OP2_IMI    , REN_S, WB_ALU, WBA_RD , CSR_X, MW_X),
+      SRLI       -> List(ALU_SRL   , OP1_RS1   , OP2_IMI    , REN_S, WB_ALU, WBA_RD , CSR_X, MW_X),
+      SRAI       -> List(ALU_SRA   , OP1_RS1   , OP2_IMI    , REN_S, WB_ALU, WBA_RD , CSR_X, MW_X),
+      SLT        -> List(ALU_SLT   , OP1_RS1   , OP2_RS2    , REN_S, WB_ALU, WBA_RD , CSR_X, MW_X),
+      SLTU       -> List(ALU_SLTU  , OP1_RS1   , OP2_RS2    , REN_S, WB_ALU, WBA_RD , CSR_X, MW_X),
+      SLTI       -> List(ALU_SLT   , OP1_RS1   , OP2_IMI    , REN_S, WB_ALU, WBA_RD , CSR_X, MW_X),
+      SLTIU      -> List(ALU_SLTU  , OP1_RS1   , OP2_IMI    , REN_S, WB_ALU, WBA_RD , CSR_X, MW_X),
+      BEQ        -> List(BR_BEQ    , OP1_RS1   , OP2_RS2    , REN_X, WB_X  , WBA_RD , CSR_X, MW_X),
+      BNE        -> List(BR_BNE    , OP1_RS1   , OP2_RS2    , REN_X, WB_X  , WBA_RD , CSR_X, MW_X),
+      BGE        -> List(BR_BGE    , OP1_RS1   , OP2_RS2    , REN_X, WB_X  , WBA_RD , CSR_X, MW_X),
+      BGEU       -> List(BR_BGEU   , OP1_RS1   , OP2_RS2    , REN_X, WB_X  , WBA_RD , CSR_X, MW_X),
+      BLT        -> List(BR_BLT    , OP1_RS1   , OP2_RS2    , REN_X, WB_X  , WBA_RD , CSR_X, MW_X),
+      BLTU       -> List(BR_BLTU   , OP1_RS1   , OP2_RS2    , REN_X, WB_X  , WBA_RD , CSR_X, MW_X),
+      JAL        -> List(ALU_ADD   , OP1_PC    , OP2_IMJ    , REN_S, WB_PC , WBA_RD , CSR_X, MW_X),
+      JALR       -> List(ALU_ADD   , OP1_RS1   , OP2_IMI    , REN_S, WB_PC , WBA_RD , CSR_X, MW_X),
+      LUI        -> List(ALU_ADD   , OP1_X     , OP2_IMU    , REN_S, WB_ALU, WBA_RD , CSR_X, MW_X),
+      AUIPC      -> List(ALU_ADD   , OP1_PC    , OP2_IMU    , REN_S, WB_ALU, WBA_RD , CSR_X, MW_X),
+      CSRRW      -> List(ALU_ADD   , OP1_RS1   , OP2_Z      , REN_S, WB_CSR, WBA_RD , CSR_W, MW_X),
+      CSRRWI     -> List(ALU_ADD   , OP1_IMZ   , OP2_Z      , REN_S, WB_CSR, WBA_RD , CSR_W, MW_X),
+      CSRRS      -> List(ALU_ADD   , OP1_RS1   , OP2_Z      , REN_S, WB_CSR, WBA_RD , CSR_S, MW_X),
+      CSRRSI     -> List(ALU_ADD   , OP1_IMZ   , OP2_Z      , REN_S, WB_CSR, WBA_RD , CSR_S, MW_X),
+      CSRRC      -> List(ALU_ADD   , OP1_RS1   , OP2_Z      , REN_S, WB_CSR, WBA_RD , CSR_C, MW_X),
+      CSRRCI     -> List(ALU_ADD   , OP1_IMZ   , OP2_Z      , REN_S, WB_CSR, WBA_RD , CSR_C, MW_X),
+      ECALL      -> List(CMD_ECALL , OP1_X     , OP2_X      , REN_X, WB_X  , WBA_RD , CSR_X, MW_X),
+      MRET       -> List(CMD_MRET  , OP1_X     , OP2_X      , REN_X, WB_X  , WBA_RD , CSR_X, MW_X),
+      FENCE_I    -> List(ALU_X     , OP1_X     , OP2_X      , REN_X, WB_FENCE, WBA_RD, CSR_X, MW_X),
+      MUL        -> List(ALU_MUL   , OP1_RS1   , OP2_RS2    , REN_S, WB_MD,  WBA_RD , CSR_X, MW_X),
+      MULH       -> List(ALU_MULH  , OP1_RS1   , OP2_RS2    , REN_S, WB_MD,  WBA_RD , CSR_X, MW_X),
+      MULHU      -> List(ALU_MULHU , OP1_RS1   , OP2_RS2    , REN_S, WB_MD,  WBA_RD , CSR_X, MW_X),
+      MULHSU     -> List(ALU_MULHSU, OP1_RS1   , OP2_RS2    , REN_S, WB_MD,  WBA_RD , CSR_X, MW_X),
+      DIV        -> List(ALU_DIV   , OP1_RS1   , OP2_RS2    , REN_S, WB_MD,  WBA_RD , CSR_X, MW_X),
+      DIVU       -> List(ALU_DIVU  , OP1_RS1   , OP2_RS2    , REN_S, WB_MD,  WBA_RD , CSR_X, MW_X),
+      REM        -> List(ALU_REM   , OP1_RS1   , OP2_RS2    , REN_S, WB_MD,  WBA_RD , CSR_X, MW_X),
+      REMU       -> List(ALU_REMU  , OP1_RS1   , OP2_RS2    , REN_S, WB_MD,  WBA_RD , CSR_X, MW_X),
+      MAX        -> List(ALU_MAX   , OP1_RS1   , OP2_RS2    , REN_S, WB_ALU, WBA_RD , CSR_X, MW_X),
+      MAXU       -> List(ALU_MAXU  , OP1_RS1   , OP2_RS2    , REN_S, WB_ALU, WBA_RD , CSR_X, MW_X),
+      MIN        -> List(ALU_MIN   , OP1_RS1   , OP2_RS2    , REN_S, WB_ALU, WBA_RD , CSR_X, MW_X),
+      MINU       -> List(ALU_MINU  , OP1_RS1   , OP2_RS2    , REN_S, WB_ALU, WBA_RD , CSR_X, MW_X),
+      CLZ        -> List(ALU_CLZ   , OP1_RS1   , OP2_X      , REN_S, WB_BIT, WBA_RD , CSR_X, MW_X),
+      CTZ        -> List(ALU_CTZ   , OP1_RS1   , OP2_X      , REN_S, WB_BIT, WBA_RD , CSR_X, MW_X),
+      CPOP       -> List(ALU_CPOP  , OP1_RS1   , OP2_X      , REN_S, WB_BIT, WBA_RD , CSR_X, MW_X),
+      REV8       -> List(ALU_REV8  , OP1_RS1   , OP2_X      , REN_S, WB_BIT, WBA_RD , CSR_X, MW_X),
+      SEXTB      -> List(ALU_SEXTB , OP1_RS1   , OP2_X      , REN_S, WB_BIT, WBA_RD , CSR_X, MW_X),
+      SEXTH      -> List(ALU_SEXTH , OP1_RS1   , OP2_X      , REN_S, WB_BIT, WBA_RD , CSR_X, MW_X),
+      ZEXTH      -> List(ALU_ZEXTH , OP1_RS1   , OP2_X      , REN_S, WB_BIT, WBA_RD , CSR_X, MW_X),
+      ANDN       -> List(ALU_ANDN  , OP1_RS1   , OP2_RS2    , REN_S, WB_ALU, WBA_RD , CSR_X, MW_X),
+      ORN        -> List(ALU_ORN   , OP1_RS1   , OP2_RS2    , REN_S, WB_ALU, WBA_RD , CSR_X, MW_X),
+      XNOR       -> List(ALU_XNOR  , OP1_RS1   , OP2_RS2    , REN_S, WB_ALU, WBA_RD , CSR_X, MW_X),
+      // ROL     -> List(ALU_ROL   , OP1_RS1   , OP2_RS2    , REN_S, WB_BIT, WBA_RD , CSR_X, MW_X),
+      // ROR     -> List(ALU_ROR   , OP1_RS1   , OP2_RS2    , REN_S, WB_BIT, WBA_RD , CSR_X, MW_X),
+      // RORI    -> List(ALU_ROR   , OP1_RS1   , OP2_IMI    , REN_S, WB_BIT, WBA_RD , CSR_X, MW_X),
+      C_ILL      -> List(ALU_X     , OP1_X     , OP2_X      , REN_X, WB_X  , WBA_C  , CSR_X, MW_X),
+      C_ADDI4SPN -> List(ALU_ADD   , OP1_C_SP  , OP2_C_IMIW , REN_S, WB_ALU, WBA_CP2, CSR_X, MW_X),
+      C_ADDI16SP -> List(ALU_ADD   , OP1_C_RS1 , OP2_C_IMI16, REN_S, WB_ALU, WBA_C  , CSR_X, MW_X),
+      C_ADDI     -> List(ALU_ADD   , OP1_C_RS1 , OP2_C_IMI  , REN_S, WB_ALU, WBA_C  , CSR_X, MW_X),
+      C_LW       -> List(ALU_ADD   , OP1_C_RS1P, OP2_C_IMLS , REN_S, WB_MEM, WBA_CP2, CSR_X, MW_W),
+      C_SW       -> List(ALU_ADD   , OP1_C_RS1P, OP2_C_IMLS , REN_X, WB_ST , WBA_C  , CSR_X, MW_W),
+      C_LI       -> List(ALU_ADD   , OP1_X     , OP2_C_IMI  , REN_S, WB_ALU, WBA_C  , CSR_X, MW_X),
+      C_LUI      -> List(ALU_ADD   , OP1_X     , OP2_C_IMIU , REN_S, WB_ALU, WBA_C  , CSR_X, MW_X),
+      C_SRAI     -> List(ALU_SRA   , OP1_C_RS1P, OP2_C_IMI  , REN_S, WB_ALU, WBA_CP1, CSR_X, MW_X),
+      C_SRLI     -> List(ALU_SRL   , OP1_C_RS1P, OP2_C_IMI  , REN_S, WB_ALU, WBA_CP1, CSR_X, MW_X),
+      C_ANDI     -> List(ALU_AND   , OP1_C_RS1P, OP2_C_IMI  , REN_S, WB_ALU, WBA_CP1, CSR_X, MW_X),
+      C_SUB      -> List(ALU_SUB   , OP1_C_RS1P, OP2_C_RS2P , REN_S, WB_ALU, WBA_CP1, CSR_X, MW_X),
+      C_XOR      -> List(ALU_XOR   , OP1_C_RS1P, OP2_C_RS2P , REN_S, WB_ALU, WBA_CP1, CSR_X, MW_X),
+      C_OR       -> List(ALU_OR    , OP1_C_RS1P, OP2_C_RS2P , REN_S, WB_ALU, WBA_CP1, CSR_X, MW_X),
+      C_AND      -> List(ALU_AND   , OP1_C_RS1P, OP2_C_RS2P , REN_S, WB_ALU, WBA_CP1, CSR_X, MW_X),
+      C_SLLI     -> List(ALU_SLL   , OP1_C_RS1 , OP2_C_IMI  , REN_S, WB_ALU, WBA_C  , CSR_X, MW_X),
+      C_J        -> List(ALU_ADD   , OP1_PC    , OP2_C_IMJ  , REN_X, WB_PC , WBA_C  , CSR_X, MW_X),
+      C_BEQZ     -> List(BR_BEQ    , OP1_C_RS1P, OP2_Z      , REN_X, WB_X  , WBA_C  , CSR_X, MW_X),
+      C_BNEZ     -> List(BR_BNE    , OP1_C_RS1P, OP2_Z      , REN_X, WB_X  , WBA_C  , CSR_X, MW_X),
+      C_JR       -> List(ALU_ADD   , OP1_C_RS1 , OP2_Z      , REN_X, WB_PC , WBA_C  , CSR_X, MW_X),
+      C_JALR     -> List(ALU_ADD   , OP1_C_RS1 , OP2_Z      , REN_S, WB_PC , WBA_RA , CSR_X, MW_X),
+      C_JAL      -> List(ALU_ADD   , OP1_PC    , OP2_C_IMJ  , REN_S, WB_PC , WBA_RA , CSR_X, MW_X),
+      C_LWSP     -> List(ALU_ADD   , OP1_C_SP  , OP2_C_IMSL , REN_S, WB_MEM, WBA_C  , CSR_X, MW_W),
+      C_SWSP     -> List(ALU_ADD   , OP1_C_SP  , OP2_C_IMSS , REN_X, WB_ST , WBA_C  , CSR_X, MW_W),
+      C_MV       -> List(ALU_ADD   , OP1_Z     , OP2_C_RS2  , REN_S, WB_ALU, WBA_C  , CSR_X, MW_X),
+      C_ADD      -> List(ALU_ADD   , OP1_C_RS1 , OP2_C_RS2  , REN_S, WB_ALU, WBA_C  , CSR_X, MW_X),
 		)
 	)
-  val List(id_exe_fun, id_op1_sel, id_op2_sel, id_mem_wen, id_rf_wen, id_wb_sel, id_wba, id_csr_cmd, id_mem_w) = csignals
+  val List(id_exe_fun, id_op1_sel, id_op2_sel, id_rf_wen, id_wb_sel, id_wba, id_csr_cmd, id_mem_w) = csignals
 
   val id_wb_addr = MuxCase(id_w_wb_addr, Seq(
     (id_wba === WBA_C)   -> id_c_wb_addr,
@@ -656,7 +663,7 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
     (id_op2_sel === OP2_C_IMSS)  -> id_c_imm_ss,
   ))
 
-  val id_csr_addr = Mux(id_csr_cmd === CSR_E, CSR_ADDR_MCAUSE, id_inst(31,20))
+  val id_csr_addr = Mux(id_exe_fun === CMD_ECALL, CSR_ADDR_MCAUSE, id_inst(31,20))
 
   val id_m_op1_sel = MuxCase(id_op1_sel, Seq(
     (id_op1_sel === OP1_C_RS1)  -> OP1_RS1,
@@ -688,7 +695,7 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
 
   // val id_is_j = (id_op2_sel === OP2_IMJ) || (id_op2_sel === OP2_C_IMJ)
   val id_is_j = (id_wb_sel === WB_PC)
-  val id_is_trap = (id_csr_cmd === CSR_E)
+  val id_is_trap = (id_exe_fun === CMD_ECALL)
   val id_mcause = CSR_MCAUSE_ECALL_M
   val id_mtval = 0.U(WORD_LEN.W)
 
@@ -703,7 +710,7 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
   val id_reg_op2_data_delay   = RegInit(0.U(WORD_LEN.W))
   val id_reg_rs2_data_delay   = RegInit(0.U(WORD_LEN.W))
   val id_reg_exe_fun_delay    = RegInit(0.U(EXE_FUN_LEN.W))
-  val id_reg_mem_wen_delay    = RegInit(0.U(MEN_LEN.W))
+  // val id_reg_mem_wen_delay    = RegInit(0.U(MEN_LEN.W))
   val id_reg_rf_wen_delay     = RegInit(0.U(REN_LEN.W))
   val id_reg_wb_sel_delay     = RegInit(0.U(WB_SEL_LEN.W))
   val id_reg_csr_addr_delay   = RegInit(0.U(CSR_ADDR_LEN.W))
@@ -732,7 +739,7 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
     id_reg_exe_fun_delay       := ALU_ADD
     id_reg_wb_sel_delay        := WB_X
     id_reg_csr_cmd_delay       := CSR_X
-    id_reg_mem_wen_delay       := MEN_X
+    // id_reg_mem_wen_delay       := MEN_X
     id_reg_mem_w_delay         := MW_X
     id_reg_is_j_delay          := false.B
     id_reg_is_bp_pos_delay     := false.B
@@ -759,7 +766,7 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
     //id_reg_imm_z_uext     := id_imm_z_uext
     id_reg_csr_addr_delay   := id_csr_addr
     id_reg_csr_cmd_delay    := id_csr_cmd
-    id_reg_mem_wen_delay    := id_mem_wen
+    // id_reg_mem_wen_delay    := id_mem_wen
     id_reg_mem_w_delay      := id_mem_w
     id_reg_is_j_delay       := id_is_j
     id_reg_is_bp_pos_delay  := id_reg_is_bp_pos
@@ -791,7 +798,7 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
       ex1_reg_imm_b_sext    := id_reg_imm_b_sext_delay
       ex1_reg_csr_addr      := id_reg_csr_addr_delay
       ex1_reg_csr_cmd       := CSR_X
-      ex1_reg_mem_wen       := MEN_X
+      // ex1_reg_mem_wen       := MEN_X
       ex1_reg_mem_w         := MW_X
       ex1_reg_is_j          := false.B
       ex1_reg_is_bp_pos     := false.B
@@ -818,7 +825,7 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
       ex1_reg_imm_b_sext    := id_m_imm_b_sext
       ex1_reg_csr_addr      := id_csr_addr
       ex1_reg_csr_cmd       := CSR_X
-      ex1_reg_mem_wen       := MEN_X
+      // ex1_reg_mem_wen       := MEN_X
       ex1_reg_mem_w         := MW_X
       ex1_reg_is_j          := false.B
       ex1_reg_is_bp_pos     := false.B
@@ -852,7 +859,7 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
       //ex1_reg_imm_z_uext    := id_imm_z_uext
       ex1_reg_csr_addr      := id_reg_csr_addr_delay
       ex1_reg_csr_cmd       := id_reg_csr_cmd_delay
-      ex1_reg_mem_wen       := id_reg_mem_wen_delay
+      // ex1_reg_mem_wen       := id_reg_mem_wen_delay
       ex1_reg_mem_w         := id_reg_mem_w_delay
       ex1_reg_is_j          := id_reg_is_j_delay
       ex1_reg_is_bp_pos     := id_reg_is_bp_pos_delay
@@ -883,7 +890,7 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
       //ex1_reg_imm_z_uext    := id_imm_z_uext
       ex1_reg_csr_addr      := id_csr_addr
       ex1_reg_csr_cmd       := id_csr_cmd
-      ex1_reg_mem_wen       := id_mem_wen
+      // ex1_reg_mem_wen       := id_mem_wen
       ex1_reg_mem_w         := id_mem_w
       ex1_reg_is_j          := id_is_j
       ex1_reg_is_bp_pos     := id_reg_is_bp_pos
@@ -922,11 +929,11 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
      (ex1_reg_rs1_addr === mem_reg_wb_addr) &&
      (ex1_reg_inst_cnt =/= mem_reg_inst_cnt)) ||
     (ex1_reg_hazard &&
-     (ex1_reg_op2_sel === OP2_RS2 || ex1_reg_mem_wen === MEN_S) &&
+     (ex1_reg_op2_sel === OP2_RS2 || ex1_reg_wb_sel === WB_ST) &&
      (ex1_reg_rs2_addr === ex2_reg_wb_addr) &&
      (ex1_reg_inst_cnt =/= ex2_reg_inst_cnt)) ||
     (ex2_reg_hazard &&
-     (ex1_reg_op2_sel === OP2_RS2 || ex1_reg_mem_wen === MEN_S) &&
+     (ex1_reg_op2_sel === OP2_RS2 || ex1_reg_wb_sel === WB_ST) &&
      (ex1_reg_rs2_addr === mem_reg_wb_addr) &&
      (ex1_reg_inst_cnt =/= mem_reg_inst_cnt))
 
@@ -1002,7 +1009,7 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
     ex2_reg_imm_b_sext    := ex1_reg_imm_b_sext
     ex2_reg_csr_addr      := ex1_reg_csr_addr
     ex2_reg_csr_cmd       := Mux(ex_is_bubble, CSR_X, ex1_reg_csr_cmd)
-    ex2_reg_mem_wen       := Mux(ex_is_bubble, MEN_X, ex1_reg_mem_wen)
+    // ex2_reg_mem_wen       := Mux(ex_is_bubble, MEN_X, ex1_reg_mem_wen)
     ex2_reg_mem_w         := ex1_reg_mem_w
     ex2_reg_is_j          := ex1_reg_is_j
     ex2_reg_is_bp_pos     := ex1_reg_is_bp_pos
@@ -1039,7 +1046,7 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
   ))
 
   val ex2_mullu  = (ex2_reg_op1_data * ex2_reg_op2_data(WORD_LEN/2-1, 0))
-  val ex2_mulls  = (ex2_reg_op1_data.asSInt() * ex2_reg_op2_data(WORD_LEN/2-1, 0))
+  val ex2_mulls  = (ex2_reg_op1_data.asSInt() * ex2_reg_op2_data(WORD_LEN/2-1, 0))(WORD_LEN*3/2-1, WORD_LEN/2)
   val ex2_mulhuu = (ex2_reg_op1_data * ex2_reg_op2_data(WORD_LEN-1, WORD_LEN/2))
   val ex2_mulhss = (ex2_reg_op1_data.asSInt() * ex2_reg_op2_data(WORD_LEN-1, WORD_LEN/2).asSInt())
   val ex2_mulhsu = (ex2_reg_op1_data.asSInt() * ex2_reg_op2_data(WORD_LEN-1, WORD_LEN/2))
@@ -1203,13 +1210,14 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
     mem_reg_csr_addr   := ex2_reg_csr_addr
     mem_reg_csr_cmd    := ex2_reg_csr_cmd
     //mem_reg_imm_z_uext := ex2_reg_imm_z_uext
-    mem_reg_mem_wen    := ex2_reg_mem_wen
+    // mem_reg_mem_wen    := ex2_reg_mem_wen
     mem_reg_mem_w      := ex2_reg_mem_w
     mem_reg_mem_wstrb  := (MuxCase("b1111".U, Seq(
       (ex2_reg_mem_w === MW_B) -> "b0001".U,
       (ex2_reg_mem_w === MW_H) -> "b0011".U,
-      (ex2_reg_mem_w === MW_W) -> "b1111".U,
+      //(ex2_reg_mem_w === MW_W) -> "b1111".U,
     )) << (ex2_alu_out(1, 0)))(3, 0)
+    mem_reg_wdata      := (ex2_reg_rs2_data << (8.U * ex2_alu_out(1, 0)))(WORD_LEN-1, 0)
     mem_reg_is_valid_inst := ex2_reg_is_valid_inst && !mem_reg_is_br && !ex3_reg_is_br
     mem_reg_is_trap    := ex2_reg_is_trap
     mem_reg_mcause     := ex2_reg_mcause
@@ -1239,20 +1247,49 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
   val mem_rf_wen = Mux(mem_en, mem_reg_rf_wen, REN_X)
   val mem_wb_sel = Mux(mem_en, mem_reg_wb_sel, WB_X)
   val mem_csr_cmd = Mux(mem_en, mem_reg_csr_cmd, CSR_X)
-  val mem_mem_wen = Mux(mem_en, mem_reg_mem_wen, MEN_X)
+  // val mem_mem_wen = Mux(mem_en, mem_reg_mem_wen, MEN_X)
+  val mem_is_mret = mem_en && (mem_reg_exe_fun === CMD_MRET)
   val mem_stall_delay = RegInit(false.B)
+  val mem_reg_inst_cnt_prev = RegInit(0.U(INST_CNT_LEN.W))
+  mem_reg_inst_cnt_prev := mem_reg_inst_cnt
 
   io.dmem.raddr := mem_reg_alu_out
   io.dmem.waddr := mem_reg_alu_out
   io.dmem.ren   := /*io.dmem.rready &&*/ (mem_wb_sel === WB_MEM)
-  io.dmem.wen   := io.dmem.wready && (mem_mem_wen === MEN_S)
+  io.dmem.wen   := io.dmem.wready && (mem_wb_sel === WB_ST)
   io.dmem.wstrb := mem_reg_mem_wstrb
-  io.dmem.wdata := (mem_reg_rs2_data << (8.U * mem_reg_alu_out(1, 0)))(WORD_LEN-1, 0)
-  mem_stall := ((mem_wb_sel === WB_MEM) && (!io.dmem.rvalid /*|| !io.dmem.rready*/ || mem_stall_delay)) ||
-    ((mem_mem_wen === MEN_S) && !io.dmem.wready) ||
-    ((mem_mem_wen === MEN_FENCE) && io.icache_control.busy) ||
-    mem_reg_div_stall
-  mem_stall_delay := (mem_wb_sel === WB_MEM) && io.dmem.rvalid && !mem_stall // 読めた直後はストール
+  io.dmem.wdata := mem_reg_wdata // (mem_reg_rs2_data << (8.U * mem_reg_alu_out(1, 0)))(WORD_LEN-1, 0)
+  // mem_stall := ((mem_wb_sel === WB_MEM) && (!io.dmem.rvalid || !io.dmem.rready /*|| mem_stall_delay*/)) ||
+  //   ((mem_mem_wen === MEN_S) && !io.dmem.wready) ||
+  //   ((mem_mem_wen === MEN_FENCE) && io.icache_control.busy) ||
+  //   mem_reg_div_stall
+  // mem_stall_delay := (mem_wb_sel === WB_MEM) && io.dmem.rvalid && !mem_stall // 読めた直後はストール
+  mem_stall := false.B
+
+  switch (mem_reg_dmem_state) {
+    is (DmemState.Idle) {
+      io.dmem.ren := (mem_wb_sel === WB_MEM)
+      mem_stall :=
+        ((mem_wb_sel === WB_MEM) && (!io.dmem.rvalid || !io.dmem.rready)) ||
+        ((mem_wb_sel === WB_ST) && !io.dmem.wready) ||
+        ((mem_wb_sel === WB_FENCE) && io.icache_control.busy) ||
+        mem_reg_div_stall
+      when ((mem_wb_sel === WB_MEM) && !io.dmem.rvalid && io.dmem.rready) {
+        mem_reg_dmem_state := DmemState.Reading
+      }
+    }
+    is (DmemState.Reading) {
+      io.dmem.ren := false.B
+      mem_stall :=
+        ((mem_wb_sel === WB_MEM) && !io.dmem.rvalid) ||
+        ((mem_wb_sel === WB_ST) && !io.dmem.wready) ||
+        ((mem_wb_sel === WB_FENCE) && io.icache_control.busy) ||
+        mem_reg_div_stall
+      when (io.dmem.rvalid || (mem_wb_sel =/= WB_MEM)) {
+        mem_reg_dmem_state := DmemState.Idle
+      }
+    }
+  }
 
   // CSR
   val csr_rdata = MuxLookup(mem_reg_csr_addr, 0.U(WORD_LEN.W), Seq(
@@ -1278,7 +1315,7 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
     (mem_csr_cmd === CSR_C) -> (csr_rdata & ~mem_reg_op1_data),
   ))
   
-  when (mem_csr_cmd === CSR_W || mem_csr_cmd === CSR_S || mem_csr_cmd === CSR_C) {
+  when (mem_wb_sel === WB_CSR) {
     when (mem_reg_csr_addr === CSR_ADDR_MTVEC) {
       csr_trap_vector := csr_wdata
     }.elsewhen (mem_reg_csr_addr === CSR_ADDR_MEPC) {
@@ -1330,7 +1367,7 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
     csr_mstatus     := Cat(csr_mstatus(31, 8), csr_mstatus(3), csr_mstatus(6, 4), 0.U(1.W), csr_mstatus(2, 0))
     mem_reg_is_br   := true.B
     mem_reg_br_addr := csr_trap_vector
-  }.elsewhen (mem_csr_cmd === CSR_R) {
+  }.elsewhen (mem_is_mret) {
     csr_mstatus     := Cat(csr_mstatus(31, 8), 1.U(1.W), csr_mstatus(6, 4), csr_mstatus(7), csr_mstatus(2, 0))
     mem_reg_is_br   := true.B
     mem_reg_br_addr := csr_mepc
@@ -1357,9 +1394,9 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
 
   val mem_alu_muldiv_out = MuxCase(0.U(WORD_LEN.W), Seq(
     (mem_reg_exe_fun === ALU_MUL)    -> (mem_reg_mullu(WORD_LEN-1, 0) + (mem_reg_mulhuu(WORD_LEN/2-1, 0) << (WORD_LEN/2))),
-    (mem_reg_exe_fun === ALU_MULH)   -> (signExtend48(mem_reg_mulls(WORD_LEN*3/2-1, WORD_LEN/2), WORD_LEN) + mem_reg_mulhss)(WORD_LEN*3/2-1, WORD_LEN/2),
+    (mem_reg_exe_fun === ALU_MULH)   -> (signExtend48(mem_reg_mulls, WORD_LEN) + mem_reg_mulhss)(WORD_LEN*3/2-1, WORD_LEN/2),
     (mem_reg_exe_fun === ALU_MULHU)  -> (zeroExtend48(mem_reg_mullu(WORD_LEN*3/2-1, WORD_LEN/2), WORD_LEN) + mem_reg_mulhuu)(WORD_LEN*3/2-1, WORD_LEN/2),
-    (mem_reg_exe_fun === ALU_MULHSU) -> (signExtend48(mem_reg_mulls(WORD_LEN*3/2-1, WORD_LEN/2), WORD_LEN) + mem_reg_mulhsu)(WORD_LEN*3/2-1, WORD_LEN/2),
+    (mem_reg_exe_fun === ALU_MULHSU) -> (signExtend48(mem_reg_mulls, WORD_LEN) + mem_reg_mulhsu)(WORD_LEN*3/2-1, WORD_LEN/2),
     (mem_reg_exe_fun === ALU_DIV)    -> mem_reg_quotient,
     (mem_reg_exe_fun === ALU_DIVU)   -> mem_reg_quotient,
     (mem_reg_exe_fun === ALU_REM)    -> mem_reg_reminder,
@@ -1617,7 +1654,7 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
   // printf(p"mem_reg_divrem_count : 0x${Hexadecimal(mem_reg_divrem_count)}\n")
   // printf(p"mem_reg_rem_shift    : 0x${Hexadecimal(mem_reg_rem_shift)}\n")
 
-  io.icache_control.invalidate := (mem_mem_wen === MEN_FENCE)
+  io.icache_control.invalidate := (mem_wb_sel === WB_FENCE)
 
   def signExtend(value: UInt, w: Int) = {
       Fill(WORD_LEN - w, value(w - 1)) ## value(w - 1, 0)

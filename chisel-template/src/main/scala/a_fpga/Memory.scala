@@ -613,7 +613,7 @@ class Memory() extends Module {
       }
     }
     is (DCacheState.RespondRead) {
-        io.dmem.rready := true.B
+        io.dmem.rready := false.B
         io.dmem.wready := false.B
         io.dmem.rvalid := true.B
         io.dmem.rdata := reg_read_word
@@ -674,11 +674,11 @@ class Memory() extends Module {
     is (DCacheState.WaitingRead) {
       when (dram_d_rdata_valid) {
         val line = dram_rdata
-        io.dmem.rready := reg_ren
+        io.dmem.rready := false.B
         io.dmem.wready := false.B
-        when (reg_ren && io.dmem.ren && io.dmem.raddr === reg_req_addr.asUInt) {
+        io.dmem.rdata := (line >> Cat(reg_req_addr.line_off(CACHE_LINE_BITS-1, 2), 0.U(5.W)))(WORD_LEN-1, 0)
+        when (reg_ren /*&& !io.dmem.ren && io.dmem.raddr === reg_req_addr.asUInt*/) {
           io.dmem.rvalid := true.B
-          io.dmem.rdata := (line >> Cat(reg_req_addr.line_off(CACHE_LINE_BITS-1, 2), 0.U(5.W)))(WORD_LEN-1, 0)
         }
         when (reg_lru.way_hot === 1.U && reg_ren) {
           tag_array.write(reg_req_addr.index, VecInit(reg_req_addr.tag, reg_tag(1)))
