@@ -1,0 +1,2 @@
+*.v diff=ignore-comment
+*.fir diff=ignore-comment
