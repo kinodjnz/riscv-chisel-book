@@ -117,6 +117,19 @@
   },
   {
     "class":"chisel3.experimental.EnumAnnotations$EnumDefAnnotation",
+    "typeName":"fpga.DmemState",
+    "definition":{
+      "Idle":0,
+      "Reading":1
+    }
+  },
+  {
+    "class":"chisel3.experimental.EnumAnnotations$EnumComponentAnnotation",
+    "target":"RiscV.Core.mem_reg_dmem_state",
+    "enumTypeName":"fpga.DmemState"
+  },
+  {
+    "class":"chisel3.experimental.EnumAnnotations$EnumDefAnnotation",
     "typeName":"fpga.DivremState",
     "definition":{
       "Finished":5,
