@@ -1,9 +1,11 @@
-package fpga
+package fpga.sim
 
 import chisel3._
 import chisel3.util._
-import common.Consts._
 import chisel3.util.experimental.loadMemoryFromFile
+import fpga._
+import fpga.periferals._
+import common.Consts._
 
 class SimTop(memoryPath: String, bpTagInitPath: String) extends Module {
   val imemSizeInBytes = 16384

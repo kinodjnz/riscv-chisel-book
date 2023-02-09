@@ -1,8 +1,9 @@
-package fpga
+package fpga.periferals
 
 import chisel3._
 import chisel3.util._
 import common.Consts._
+import fpga._
 
 class UartTx(numberOfBits: Int, baudDivider: Int) extends Module {
     val io = IO(new Bundle{

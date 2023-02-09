@@ -1,9 +1,10 @@
-package fpga
+package fpga.sim
 
 import chisel3._
 import chisel3.util._
-import DramConsts._
 import chisel3.util.experimental.loadMemoryFromFile
+import fpga._
+import fpga.DramConsts._
 
 class MockDram(dataMemoryPath: String = null, dmemSizeInBytes: Int = 16384) extends Module {
   val io = IO(new Bundle {

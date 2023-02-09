@@ -1,9 +1,11 @@
-package fpga
+package fpga.sim
 
 import chisel3._
 import chisel3.util._
 import chisel3.experimental.ChiselEnum
-import CacheConsts._
+import fpga._
+import fpga.periferals._
+import fpga.CacheConsts._
 
 object SdState extends ChiselEnum {
   val WaitCmd = Value

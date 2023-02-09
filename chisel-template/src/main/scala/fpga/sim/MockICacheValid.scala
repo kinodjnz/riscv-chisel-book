@@ -1,8 +1,9 @@
-package fpga
+package fpga.sim
 
 import chisel3._
 import chisel3.util._
-import CacheConsts._
+import fpga._
+import fpga.CacheConsts._
 import common.Consts._
 
 class MockICacheValid extends Module {

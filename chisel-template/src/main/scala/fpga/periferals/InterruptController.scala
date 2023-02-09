@@ -1,9 +1,10 @@
-package fpga
+package fpga.periferals
 
 import chisel3._
 import chisel3.util._
-import common.Consts._
 import chisel3.stage.ChiselStage
+import fpga._
+import common.Consts._
 
 // memory map
 // 00000000 | intrrupt enable

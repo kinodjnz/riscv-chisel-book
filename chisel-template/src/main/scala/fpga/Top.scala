@@ -2,14 +2,14 @@ package fpga
 
 import chisel3._
 import chisel3.util._
-import common.Consts._
-import DramConsts._
-import CacheConsts._
 import chisel3.stage.ChiselStage
 import chisel3.util.experimental.loadMemoryFromFileInline
 import chisel3.experimental.{annotate, ChiselAnnotation}
 import firrtl.annotations.MemorySynthInit
-
+import common.Consts._
+import DramConsts._
+import CacheConsts._
+import periferals._
 
 class Config(clockHz: Int) extends Module {
   val io = IO(new Bundle {

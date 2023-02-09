@@ -10,8 +10,8 @@ SDK_DIR := project/$(PROJECT_NAME).sdk
 HARDWARE_DEF := $(SDK_DIR)/$(BD_NAME)_wrapper.xsa
 BOOTROM := src/bootrom.hex
 PACKAGE := fpga
-SCALA_DIR := ../../chisel-template/src/main/scala/a_fpga
-SCALA_SRCS := $(wildcard $(SCALA_DIR)/*.scala)
+SCALA_DIR := ../../chisel-template/src/main/scala/fpga
+SCALA_SRCS := $(wildcard $(SCALA_DIR)/*.scala $(SCALA_DIR)/*/*.scala)
 
 BASH := /bin/bash
 RISCV_CORE_DIR := ../../chisel-template/rtl/riscv_arty_a7

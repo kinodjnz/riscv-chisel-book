@@ -5,6 +5,7 @@ import scala.util.control.Breaks
 import org.scalatest.flatspec.AnyFlatSpec
 import chisel3._
 import chisel3.util._
+import fpga.sim._
 
 class RiscvTest extends AnyFlatSpec with ChiselScalatestTester {
     val dutName = "RiscV"
