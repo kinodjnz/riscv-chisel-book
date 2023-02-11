@@ -7,7 +7,7 @@ import fpga._
 import fpga.periferals._
 import common.Consts._
 
-class SimTop(memoryPath: String, bpTagInitPath: String) extends Module {
+class SimTop(memoryPath: String, with_sdc: Boolean, bpTagInitPath: String) extends Module {
   val imemSizeInBytes = 16384
   val dmemSizeInBytes = 16384
   val startAddress = 0x00000000L
@@ -19,18 +19,32 @@ class SimTop(memoryPath: String, bpTagInitPath: String) extends Module {
   val core = Module(new Core(startAddress, 10, bpTagInitPath))
   val memory = Module(new Memory())
   val boot_rom = Module(new BootRom(memoryPath, imemSizeInBytes))
-  val sdc = Module(new Sdc)
 
-  val dmem_decoder = Module(new DMemDecoder(Seq(
-    (BigInt(startAddress), BigInt(imemSizeInBytes)),
-    (BigInt(0x20000000L), BigInt(dmemSizeInBytes)),
-    (BigInt(0x30002000L), BigInt(64)),  // mtimer
-    (BigInt(0x30003000L), BigInt(64)),  // SD Controller
-  )))
+  val dmem_decoder = Module(new DMemDecoder(
+    Seq(
+      (BigInt(startAddress), BigInt(imemSizeInBytes)),
+      (BigInt(0x20000000L), BigInt(dmemSizeInBytes)),
+      (BigInt(0x30002000L), BigInt(64)),  // mtimer
+    ) ++ (
+      if (with_sdc)
+        Seq(
+          (BigInt(0x30003000L), BigInt(64)),  // SD Controller
+        )
+     else
+      List.empty
+    )
+  ))
   dmem_decoder.io.targets(0) <> boot_rom.io.dmem
   dmem_decoder.io.targets(1) <> memory.io.dmem
   dmem_decoder.io.targets(2) <> core.io.mtimer_mem
-  dmem_decoder.io.targets(3) <> sdc.io.mem
+  if (with_sdc) {
+    val sdc = Module(new Sdc)
+    val sd = Module(new MockSd)
+    val sdbuf = Module(new MockSdBuf)
+    dmem_decoder.io.targets(3) <> sdc.io.mem
+    sdc.io.sdc_port <> sd.io.sdc_port
+    sdc.io.sdbuf <> sdbuf.io.sdbuf
+  }
 
   val imem_decoder = Module(new IMemDecoder(Seq(
     (BigInt(startAddress), BigInt(imemSizeInBytes)),
@@ -56,11 +70,6 @@ class SimTop(memoryPath: String, bpTagInitPath: String) extends Module {
 
   val icache_valid = Module(new MockICacheValid)
   memory.io.icache_valid <> icache_valid.io.icache_valid
-
-  val sd = Module(new MockSd)
-  val sdbuf = Module(new MockSdBuf)
-  sdc.io.sdc_port <> sd.io.sdc_port
-  sdc.io.sdbuf <> sdbuf.io.sdbuf
 
   core.io.intr := 0.U
   io.gp   := core.io.gp

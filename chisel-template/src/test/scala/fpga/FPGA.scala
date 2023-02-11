@@ -78,12 +78,14 @@ class RiscvTest extends AnyFlatSpec with ChiselScalatestTester {
       ("rv32um-p-remu", 1000, -1),
     )
     for( (code, timeOut, maxPc) <- tests ) {
-        it must f"runs ${code}" in { test(new SimTop(f"../riscv-tests/isa/${code}.binhex", "mem/bp_tag_init.binhex")) { c =>
-          c.clock.setTimeout(timeOut)
-          while (!c.io.exit.peek().litToBoolean){
-            c.clock.step(1)
+        it must f"runs ${code}" in {
+          test(new SimTop(f"../riscv-tests/isa/${code}.binhex", code.startsWith("sdc"), "mem/bp_tag_init.binhex")) { c =>
+            c.clock.setTimeout(timeOut)
+            while (!c.io.exit.peek().litToBoolean){
+              c.clock.step(1)
+            }
+            c.io.gp.expect(1.U)
           }
-          c.io.gp.expect(1.U)
-        } }
+        }
     }
 }
