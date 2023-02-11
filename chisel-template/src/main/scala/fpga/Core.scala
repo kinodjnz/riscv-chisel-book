@@ -79,19 +79,20 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
 
   val regfile = Mem(32, UInt(WORD_LEN.W))
   //val csr_regfile = Mem(4096, UInt(WORD_LEN.W)) 
-  val csr_trap_vector = RegInit(0.U(WORD_LEN.W))
   val cycle_counter = Module(new LongCounter(8, 8)) // 64-bit cycle counter for CYCLE[H] CSR
   val mtimer = Module(new MachineTimer)
+
   val instret = RegInit(0.U(64.W))
-  val csr_mcause   = RegInit(0.U(WORD_LEN.W))
-  // val csr_mtval    = RegInit(0.U(WORD_LEN.W))
-  val csr_mepc     = RegInit(0.U(WORD_LEN.W))
-  val csr_mstatus_mie = RegInit(false.B)
-  val csr_mstatus_mpie = RegInit(false.B)
-  val csr_mscratch = RegInit(0.U(WORD_LEN.W))
-  val csr_mie_meie = RegInit(false.B)
-  val csr_mie_mtie = RegInit(false.B)
-  // val csr_mip      = RegInit(0.U(WORD_LEN.W))
+  val csr_reg_trap_vector  = RegInit(0.U(WORD_LEN.W))
+  val csr_reg_mcause       = RegInit(0.U(WORD_LEN.W))
+  // val csr_mtval         = RegInit(0.U(WORD_LEN.W))
+  val csr_reg_mepc         = RegInit(0.U(WORD_LEN.W))
+  val csr_reg_mstatus_mie  = RegInit(false.B)
+  val csr_reg_mstatus_mpie = RegInit(false.B)
+  val csr_reg_mscratch     = RegInit(0.U(WORD_LEN.W))
+  val csr_reg_mie_meie     = RegInit(false.B)
+  val csr_reg_mie_mtie     = RegInit(false.B)
+  // val csr_mip           = RegInit(0.U(WORD_LEN.W))
   val scoreboard   = Mem(32, Bool())
 
   io.mtimer_mem <> mtimer.io.mem
@@ -1201,10 +1202,10 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
   val csr_mstatus_mie_fw_en = WireDefault(false.B)
   val csr_mstatus_mie_fw = WireDefault(false.B)
   val csr_reg_is_meintr = RegNext(
-    ((csr_mstatus_mie_fw_en && csr_mstatus_mie_fw) || csr_mstatus_mie) && io.intr && ((csr_mie_fw_en && csr_mie_meie_fw) || csr_mie_meie)
+    ((csr_mstatus_mie_fw_en && csr_mstatus_mie_fw) || csr_reg_mstatus_mie) && io.intr && ((csr_mie_fw_en && csr_mie_meie_fw) || csr_reg_mie_meie)
   )
   val csr_reg_is_mtintr = RegNext(
-    ((csr_mstatus_mie_fw_en && csr_mstatus_mie_fw) || csr_mstatus_mie) && mtimer.io.intr && ((csr_mie_fw_en && csr_mie_mtie_fw) || csr_mie_mtie)
+    ((csr_mstatus_mie_fw_en && csr_mstatus_mie_fw) || csr_reg_mstatus_mie) && mtimer.io.intr && ((csr_mie_fw_en && csr_mie_mtie_fw) || csr_reg_mie_mtie)
   )
 
   val csr_is_valid_inst = ex2_reg_is_valid_inst && !ex2_reg_is_br
@@ -1216,19 +1217,19 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
   val csr_is_mret = csr_is_valid_inst && !csr_is_meintr && !csr_is_mtintr && (ex2_reg_exe_fun === CMD_MRET)
 
   val csr_rdata = MuxLookup(ex2_reg_csr_addr, 0.U(WORD_LEN.W), Seq(
-    CSR_ADDR_MTVEC    -> csr_trap_vector,
+    CSR_ADDR_MTVEC    -> csr_reg_trap_vector,
     CSR_ADDR_TIME     -> mtimer.io.mtime(31, 0),
     CSR_ADDR_CYCLE    -> cycle_counter.io.value(31, 0),
     CSR_ADDR_INSTRET  -> instret(31, 0),
     CSR_ADDR_CYCLEH   -> cycle_counter.io.value(63, 32),
     CSR_ADDR_TIMEH    -> mtimer.io.mtime(63, 32),
     CSR_ADDR_INSTRETH -> instret(63, 32),
-    CSR_ADDR_MEPC     -> csr_mepc,
-    CSR_ADDR_MCAUSE   -> csr_mcause,
-    // CSR_ADDR_MTVAL    -> csr_mtval,
-    CSR_ADDR_MSTATUS  -> Cat(0.U(24.W), csr_mstatus_mpie.asUInt, 0.U(3.W), csr_mstatus_mie.asUInt, 0.U(3.W)),
-    CSR_ADDR_MSCRATCH -> csr_mscratch,
-    CSR_ADDR_MIE      -> Cat(0.U(20.W), csr_mie_meie.asUInt, 0.U(3.W), csr_mie_mtie.asUInt, 0.U(7.W)),
+    CSR_ADDR_MEPC     -> csr_reg_mepc,
+    CSR_ADDR_MCAUSE   -> csr_reg_mcause,
+    // CSR_ADDR_MTVAL   -> csr_mtval,
+    CSR_ADDR_MSTATUS  -> Cat(0.U(24.W), csr_reg_mstatus_mpie.asUInt, 0.U(3.W), csr_reg_mstatus_mie.asUInt, 0.U(3.W)),
+    CSR_ADDR_MSCRATCH -> csr_reg_mscratch,
+    CSR_ADDR_MIE      -> Cat(0.U(20.W), csr_reg_mie_meie.asUInt, 0.U(3.W), csr_reg_mie_mtie.asUInt, 0.U(7.W)),
     CSR_ADDR_MIP      -> Cat(0.U(20.W), io.intr.asUInt, 0.U(3.W), mtimer.io.intr.asUInt, 0.U(7.W)),
   ))
 
@@ -1240,59 +1241,59 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
 
   when (!ex2_reg_is_br && ex2_reg_wb_sel === WB_CSR) {
     when (ex2_reg_csr_addr === CSR_ADDR_MTVEC) {
-      csr_trap_vector := csr_wdata
+      csr_reg_trap_vector := csr_wdata
     }.elsewhen (ex2_reg_csr_addr === CSR_ADDR_MEPC) {
-      csr_mepc := csr_wdata
+      csr_reg_mepc := csr_wdata
     }.elsewhen (ex2_reg_csr_addr === CSR_ADDR_MSTATUS) {
-      csr_mstatus_mie  := csr_wdata(3)
-      csr_mstatus_mpie := csr_wdata(7)
+      csr_reg_mstatus_mie   := csr_wdata(3)
+      csr_reg_mstatus_mpie  := csr_wdata(7)
       csr_mstatus_mie_fw_en := true.B
-      csr_mstatus_mie_fw := csr_wdata(3)
+      csr_mstatus_mie_fw    := csr_wdata(3)
     }.elsewhen (ex2_reg_csr_addr === CSR_ADDR_MSCRATCH) {
-      csr_mscratch := csr_wdata
+      csr_reg_mscratch := csr_wdata
     }.elsewhen (ex2_reg_csr_addr === CSR_ADDR_MIE) {
-      csr_mie_meie := csr_wdata(11)
-      csr_mie_mtie := csr_wdata(7)
-      csr_mie_fw_en := true.B
-      csr_mie_meie_fw := csr_wdata(11)
-      csr_mie_mtie_fw := csr_wdata(7)
+      csr_reg_mie_meie := csr_wdata(11)
+      csr_reg_mie_mtie := csr_wdata(7)
+      csr_mie_fw_en    := true.B
+      csr_mie_meie_fw  := csr_wdata(11)
+      csr_mie_mtie_fw  := csr_wdata(7)
     }
   }
 
   // csr_mip := Cat(csr_mip(31, 12), io.intr.asUInt, csr_mip(10, 8), mtimer.io.intr.asUInt, csr_mip(6, 0))
 
   when (csr_is_meintr) {
-    csr_mcause       := CSR_MCAUSE_MEI
-    // csr_mtval        := 0.U(WORD_LEN.W)
-    csr_mepc         := ex2_reg_pc
-    csr_mstatus_mpie := csr_mstatus_mie
-    csr_mstatus_mie  := false.B
-    csr_is_br        := true.B
-    csr_br_addr      := csr_trap_vector
+    csr_reg_mcause       := CSR_MCAUSE_MEI
+    // csr_mtval         := 0.U(WORD_LEN.W)
+    csr_reg_mepc         := ex2_reg_pc
+    csr_reg_mstatus_mpie := csr_reg_mstatus_mie
+    csr_reg_mstatus_mie  := false.B
+    csr_is_br            := true.B
+    csr_br_addr          := csr_reg_trap_vector
   }.elsewhen (csr_is_mtintr) {
-    csr_mcause       := CSR_MCAUSE_MTI
-    // csr_mtval        := 0.U(WORD_LEN.W)
-    csr_mepc         := ex2_reg_pc
-    csr_mstatus_mpie := csr_mstatus_mie
-    csr_mstatus_mie  := false.B
-    csr_is_br        := true.B
-    csr_br_addr      := csr_trap_vector
+    csr_reg_mcause       := CSR_MCAUSE_MTI
+    // csr_mtval         := 0.U(WORD_LEN.W)
+    csr_reg_mepc         := ex2_reg_pc
+    csr_reg_mstatus_mpie := csr_reg_mstatus_mie
+    csr_reg_mstatus_mie  := false.B
+    csr_is_br            := true.B
+    csr_br_addr          := csr_reg_trap_vector
   }.elsewhen (csr_is_trap) {
-    csr_mcause       := ex2_reg_mcause
-    // csr_mtval        := ex2_reg_mtval
-    csr_mepc         := ex2_reg_pc
-    csr_mstatus_mpie := csr_mstatus_mie
-    csr_mstatus_mie  := false.B
-    csr_is_br        := true.B
-    csr_br_addr      := csr_trap_vector
+    csr_reg_mcause       := ex2_reg_mcause
+    // csr_mtval         := ex2_reg_mtval
+    csr_reg_mepc         := ex2_reg_pc
+    csr_reg_mstatus_mpie := csr_reg_mstatus_mie
+    csr_reg_mstatus_mie  := false.B
+    csr_is_br            := true.B
+    csr_br_addr          := csr_reg_trap_vector
   }.elsewhen (csr_is_mret) {
-    csr_mstatus_mpie := true.B
-    csr_mstatus_mie  := csr_mstatus_mpie
-    csr_is_br        := true.B
-    csr_br_addr      := csr_mepc
+    csr_reg_mstatus_mpie := true.B
+    csr_reg_mstatus_mie  := csr_reg_mstatus_mpie
+    csr_is_br            := true.B
+    csr_br_addr          := csr_reg_mepc
   }.otherwise {
-    csr_is_br        := false.B
-    csr_br_addr      := DontCare
+    csr_is_br            := false.B
+    csr_br_addr          := DontCare
   }
 
   ex2_reg_is_br := csr_is_br || jbr_is_br
@@ -1776,7 +1777,7 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
   printf(p"mem2_wb_data_load: 0x${Hexadecimal(mem2_wb_data_load)}\n")
   printf(p"csr_is_meintr    : ${csr_is_meintr}\n")
   printf(p"csr_is_mtintr    : ${csr_is_mtintr}\n")
-  // printf(p"csr_mepc         : 0x${Hexadecimal(csr_mepc)}\n")
+  // printf(p"csr_reg_mepc         : 0x${Hexadecimal(csr_reg_mepc)}\n")
   printf(p"csr_is_br        : ${csr_is_br}\n")
   // printf(p"csr_wdata        : 0x${Hexadecimal(csr_wdata)}\n")
   // printf(p"ex2_reg_csr_cmd  : 0x${Hexadecimal(ex2_reg_csr_cmd)}\n")
