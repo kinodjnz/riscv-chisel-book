@@ -235,6 +235,8 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
   val id_stall           = Wire(Bool())
   val rrd_stall          = Wire(Bool())
   val mem_stall          = Wire(Bool())
+  val ex1_reg_fw_en      = RegInit(false.B)
+  val ex1_fw_data        = Wire(UInt(WORD_LEN.W))
   val mem_div_stall_next = Wire(Bool())
   val mem_reg_div_stall  = RegInit(false.B)
   val mem_reg_divrem_state = RegInit(DivremState.Idle)
@@ -245,6 +247,7 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
   val csr_reg_is_br      = RegInit(false.B)
   val csr_reg_br_addr    = RegInit(0.U(WORD_LEN.W))
   val mem_reg_dmem_state = RegInit(DmemState.Idle)
+
 
   //**********************************
   // Instruction Cache Controller
@@ -876,9 +879,6 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
   //**********************************
   // Register read (RRD) Stage
 
-  val rrd_reg_fw_en = RegInit(false.B)
-  val rrd_fw_data   = Wire(UInt(WORD_LEN.W))
-
   rrd_stall :=
     ((rrd_reg_op1_sel === OP1_RS1) && scoreboard(rrd_reg_rs1_addr)) ||
     ((rrd_reg_op2_sel === OP2_RS2 || rrd_reg_wb_sel === WB_ST) && scoreboard(rrd_reg_rs2_addr)) ||
@@ -887,22 +887,22 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
 
   val rrd_op1_data = MuxCase(rrd_reg_op1_data, Seq(
     (rrd_reg_op1_sel === OP1_RS1 && rrd_reg_rs1_addr === 0.U) -> 0.U(WORD_LEN.W),
-    (rrd_reg_fw_en &&
+    (ex1_reg_fw_en &&
      (rrd_reg_op1_sel === OP1_RS1) &&
-     (rrd_reg_rs1_addr === ex1_reg_wb_addr)) -> rrd_fw_data,
+     (rrd_reg_rs1_addr === ex1_reg_wb_addr)) -> ex1_fw_data,
     (rrd_reg_op1_sel === OP1_RS1) -> regfile(rrd_reg_rs1_addr),
   ))
   val rrd_op2_data = MuxCase(rrd_reg_op2_data, Seq(
     (rrd_reg_op2_sel === OP2_RS2 && rrd_reg_rs2_addr === 0.U) -> 0.U(WORD_LEN.W),
-    (rrd_reg_fw_en &&
+    (ex1_reg_fw_en &&
      (rrd_reg_op2_sel === OP2_RS2) &&
-     (rrd_reg_rs2_addr === ex1_reg_wb_addr)) -> rrd_fw_data,
+     (rrd_reg_rs2_addr === ex1_reg_wb_addr)) -> ex1_fw_data,
     (rrd_reg_op2_sel === OP2_RS2) -> regfile(rrd_reg_rs2_addr),
   ))
   val rrd_rs2_data = MuxCase(regfile(rrd_reg_rs2_addr), Seq(
     (rrd_reg_rs2_addr === 0.U) -> 0.U(WORD_LEN.W),
-    (rrd_reg_fw_en &&
-     (rrd_reg_rs2_addr === ex1_reg_wb_addr)) -> rrd_fw_data,
+    (ex1_reg_fw_en &&
+     (rrd_reg_rs2_addr === ex1_reg_wb_addr)) -> ex1_fw_data,
   ))
 
   val rrd_direct_jbr_target = rrd_reg_pc + MuxCase(rrd_reg_imm_b_sext, Seq(
@@ -912,22 +912,20 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
     (rrd_reg_exe_fun === CMD_ECALL) ||
     (rrd_reg_exe_fun === CMD_MRET)
 
-  when (!mem_stall) {
-    val rrd_hazard = (rrd_reg_rf_wen === REN_S) && (rrd_reg_wb_addr =/= 0.U) && !csr_reg_is_br && !ex3_reg_is_br
-    rrd_reg_fw_en := !rrd_stall && rrd_hazard && (rrd_reg_wb_sel =/= WB_MEM) && (rrd_reg_wb_sel =/= WB_CSR)
-  }
+  val rrd_hazard = (rrd_reg_rf_wen === REN_S) && (rrd_reg_wb_addr =/= 0.U) && !rrd_stall && !csr_reg_is_br && !ex3_reg_is_br
+  val rrd_fw_en = rrd_hazard && (rrd_reg_wb_sel === WB_ALU) && (rrd_reg_wb_sel === WB_PC)
+
   val rrd_mem_use_reg   = WireDefault(false.B)
   val rrd_inst3_use_reg = WireDefault(false.B)
+
   when (
-    !mem_stall &&
-    !rrd_stall &&
-    rrd_reg_rf_wen === REN_S &&
-    rrd_reg_wb_addr =/= 0.U &&
-    ((rrd_reg_wb_sel === WB_MEM) || (rrd_reg_wb_sel === WB_CSR) || (rrd_reg_wb_sel === WB_MD) || (rrd_reg_wb_sel === WB_BIT))
+    !mem_stall && !rrd_stall && !csr_reg_is_br && !ex3_reg_is_br &&
+    rrd_reg_rf_wen === REN_S && rrd_reg_wb_addr =/= 0.U &&
+    rrd_reg_wb_sel =/= WB_ALU && rrd_reg_wb_sel =/= WB_PC
   ) {
-    scoreboard(rrd_reg_wb_addr) := true.B
-    rrd_mem_use_reg := (rrd_reg_wb_sel === WB_MEM)
-    rrd_inst3_use_reg := (rrd_reg_wb_sel =/= WB_MEM) // (rrd_reg_wb_sel === WB_CSR) || (rrd_reg_wb_sel === WB_MD)
+      scoreboard(rrd_reg_wb_addr) := true.B
+      rrd_mem_use_reg := (rrd_reg_wb_sel === WB_MEM || rrd_reg_wb_sel === WB_ST)
+      rrd_inst3_use_reg := (rrd_reg_wb_sel =/= WB_MEM && rrd_reg_wb_sel =/= WB_ST)
   }
 
   //**********************************
@@ -960,6 +958,7 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
     ex1_reg_mem_use_reg   := rrd_mem_use_reg
     ex1_reg_inst3_use_reg := rrd_inst3_use_reg
     ex1_reg_is_indirect_j := rrd_reg_is_valid_inst && !ex_is_bubble && rrd_is_indirect_j
+    ex1_reg_fw_en         := rrd_fw_en
   }
 
   //**********************************
@@ -1157,7 +1156,7 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
     (ex1_reg_is_br && !ex1_is_cond_br && ex1_reg_is_bp_pos)
   )
 
-  rrd_fw_data := MuxCase(ex1_alu_out, Seq(
+  ex1_fw_data := MuxCase(ex1_alu_out, Seq(
     (ex1_reg_wb_sel === WB_PC) -> ex1_next_pc,
   ))
 
@@ -1686,9 +1685,9 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
   printf(p"rrd_op1_data     : 0x${Hexadecimal(rrd_op1_data)}\n")
   printf(p"rrd_op2_data     : 0x${Hexadecimal(rrd_op2_data)}\n")
   // printf(p"rrd_reg_op1_sel  : 0x${Hexadecimal(rrd_reg_op1_sel)}\n")
-  // printf(p"rrd_reg_fw_en    : 0x${Hexadecimal(rrd_reg_fw_en)}\n")
+  // printf(p"ex1_reg_fw_en    : 0x${Hexadecimal(ex1_reg_fw_en)}\n")
   // printf(p"rrd_reg_rs1_addr  : 0x${Hexadecimal(rrd_reg_rs1_addr)}\n")
-  printf(p"rrd_fw_data      : 0x${Hexadecimal(rrd_fw_data)}\n")
+  printf(p"ex1_fw_data      : 0x${Hexadecimal(ex1_fw_data)}\n")
   printf(p"ex1_reg_pc       : 0x${Hexadecimal(ex1_reg_pc)}\n")
   printf(p"ex1_reg_inst_cnt : 0x${Hexadecimal(ex1_reg_inst_cnt)}\n")
   printf(p"ex1_is_valid_inst: 0x${Hexadecimal(ex1_is_valid_inst)}\n")
