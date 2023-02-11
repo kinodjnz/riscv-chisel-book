@@ -30,10 +30,10 @@ class LongCounter(unitWidth: Int, unitCount: Int) extends Module {
 }
 
 class CoreDebugSignals extends Bundle {
-  val mem_reg_pc = Output(UInt(WORD_LEN.W))
-  val mem_is_valid_inst = Output(Bool())
+  val ex2_reg_pc = Output(UInt(WORD_LEN.W))
+  val ex2_is_valid_inst = Output(Bool())
   // val csr_rdata = Output(UInt(WORD_LEN.W))
-  // val mem_reg_csr_addr = Output(UInt(CSR_ADDR_LEN.W))
+  // val ex2_reg_csr_addr = Output(UInt(CSR_ADDR_LEN.W))
   val me_intr = Output(Bool())
   val mt_intr = Output(Bool())
   val cycle_counter = Output(UInt(48.W))
@@ -183,44 +183,46 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
   val jbr_reg_bp_addr          = RegInit(0.U(WORD_LEN.W))
   val jbr_reg_is_half          = RegInit(false.B)
 
+  // EX1/EX2 State
+  val ex2_reg_en            = RegInit(false.B)
+  val ex2_reg_pc            = RegInit(0.U(WORD_LEN.W))
+  val ex2_reg_inst_cnt      = RegInit(0.U(INST_CNT_LEN.W))
+  val ex2_reg_wb_addr       = RegInit(0.U(ADDR_LEN.W))
+  val ex2_reg_op1_data      = RegInit(0.U(WORD_LEN.W))
+  val ex2_reg_rs2_data      = RegInit(0.U(WORD_LEN.W))
+  val ex2_reg_mullu         = RegInit(0.U((WORD_LEN*3/2).W))
+  val ex2_reg_mulls         = RegInit(0.U(WORD_LEN.W))
+  val ex2_reg_mulhuu        = RegInit(0.U((WORD_LEN*3/2).W))
+  val ex2_reg_mulhss        = RegInit(0.S((WORD_LEN*3/2).W))
+  val ex2_reg_mulhsu        = RegInit(0.S((WORD_LEN*3/2).W))
+  val ex2_reg_exe_fun       = RegInit(0.U(EXE_FUN_LEN.W))
+  val ex2_reg_rf_wen        = RegInit(0.U(REN_LEN.W))
+  val ex2_reg_wb_sel        = RegInit(0.U(WB_SEL_LEN.W))
+  val ex2_reg_csr_addr      = RegInit(0.U(CSR_ADDR_LEN.W))
+  val ex2_reg_csr_cmd       = RegInit(0.U(CSR_LEN.W))
+  val ex2_reg_alu_out       = RegInit(0.U(WORD_LEN.W))
+  val ex2_reg_pc_bit_out    = RegInit(0.U(WORD_LEN.W))
+  //val ex2_reg_alu_mulhsu_out  = RegInit(0.U(WORD_LEN.W))
+  val ex2_reg_wdata         = RegInit(0.U(WORD_LEN.W))
+  val ex2_reg_is_valid_inst = RegInit(false.B)
+  val ex2_reg_is_trap       = RegInit(false.B)
+  val ex2_reg_mcause        = RegInit(0.U(WORD_LEN.W))
+  // val ex2_reg_mtval         = RegInit(0.U(WORD_LEN.W))
+  // val ex2_reminder              = Wire(UInt(WORD_LEN.W))
+  // val ex2_quotient              = Wire(UInt(WORD_LEN.W))
+  val ex2_reg_divrem            = RegInit(false.B)
+  val ex2_reg_sign_op1          = RegInit(0.U(1.W))
+  val ex2_reg_sign_op12         = RegInit(0.U(1.W))
+  val ex2_reg_zero_op2          = RegInit(false.B)
+  val ex2_reg_init_dividend     = RegInit(0.U((WORD_LEN+5).W))
+  val ex2_reg_init_divisor      = RegInit(0.U(WORD_LEN.W))
+  val ex2_reg_orig_dividend     = RegInit(0.U(WORD_LEN.W))
+  val ex2_reg_inst3_use_reg     = RegInit(false.B)
+
   // EX1/MEM State
-  val mem_reg_en            = RegInit(false.B)
-  val mem_reg_pc            = RegInit(0.U(WORD_LEN.W))
-  val mem_reg_inst_cnt      = RegInit(0.U(INST_CNT_LEN.W))
-  val mem_reg_wb_addr       = RegInit(0.U(ADDR_LEN.W))
-  val mem_reg_op1_data      = RegInit(0.U(WORD_LEN.W))
-  val mem_reg_rs2_data      = RegInit(0.U(WORD_LEN.W))
-  val mem_reg_mullu         = RegInit(0.U((WORD_LEN*3/2).W))
-  val mem_reg_mulls         = RegInit(0.U(WORD_LEN.W))
-  val mem_reg_mulhuu        = RegInit(0.U((WORD_LEN*3/2).W))
-  val mem_reg_mulhss        = RegInit(0.S((WORD_LEN*3/2).W))
-  val mem_reg_mulhsu        = RegInit(0.S((WORD_LEN*3/2).W))
-  val mem_reg_exe_fun       = RegInit(0.U(EXE_FUN_LEN.W))
-  val mem_reg_rf_wen        = RegInit(0.U(REN_LEN.W))
-  val mem_reg_wb_sel        = RegInit(0.U(WB_SEL_LEN.W))
-  val mem_reg_csr_addr      = RegInit(0.U(CSR_ADDR_LEN.W))
-  val mem_reg_csr_cmd       = RegInit(0.U(CSR_LEN.W))
-  val mem_reg_alu_out       = RegInit(0.U(WORD_LEN.W))
-  val mem_reg_pc_bit_out    = RegInit(0.U(WORD_LEN.W))
-  //val mem_reg_alu_mulhsu_out  = RegInit(0.U(WORD_LEN.W))
-  val mem_reg_mem_w         = RegInit(0.U(MW_LEN.W))
   val mem_reg_mem_wstrb     = RegInit(0.U((WORD_LEN/8).W))
-  val mem_reg_wdata         = RegInit(0.U(WORD_LEN.W))
-  val mem_reg_is_valid_inst = RegInit(false.B)
-  val mem_reg_is_trap       = RegInit(false.B)
-  val mem_reg_mcause        = RegInit(0.U(WORD_LEN.W))
-  // val mem_reg_mtval         = RegInit(0.U(WORD_LEN.W))
-  // val mem_reminder              = Wire(UInt(WORD_LEN.W))
-  // val mem_quotient              = Wire(UInt(WORD_LEN.W))
-  val mem_reg_divrem            = RegInit(false.B)
-  val mem_reg_sign_op1          = RegInit(0.U(1.W))
-  val mem_reg_sign_op12         = RegInit(0.U(1.W))
-  val mem_reg_zero_op2          = RegInit(false.B)
-  val mem_reg_init_dividend     = RegInit(0.U((WORD_LEN+5).W))
-  val mem_reg_init_divisor      = RegInit(0.U(WORD_LEN.W))
-  val mem_reg_orig_dividend     = RegInit(0.U(WORD_LEN.W))
+  val mem_reg_mem_w         = RegInit(0.U(MW_LEN.W))
   val mem_reg_mem_use_reg       = RegInit(false.B)
-  val mem_reg_inst3_use_reg     = RegInit(false.B)
 
   // MEM/MEM2 State
   val mem2_reg_wb_byte_offset = RegInit(0.U(2.W))
@@ -234,14 +236,15 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
   val if2_reg_bp_addr    = RegInit(0.U(WORD_LEN.W))
   val id_stall           = Wire(Bool())
   val rrd_stall          = Wire(Bool())
+  val ex2_stall          = Wire(Bool())
   val mem_stall          = Wire(Bool())
   val ex1_reg_fw_en      = RegInit(false.B)
   val ex1_fw_data        = Wire(UInt(WORD_LEN.W))
-  val mem_reg_fw_en      = RegInit(false.B)
-  val mem_fw_data        = Wire(UInt(WORD_LEN.W))
-  val mem_div_stall_next = Wire(Bool())
-  val mem_reg_div_stall  = RegInit(false.B)
-  val mem_reg_divrem_state = RegInit(DivremState.Idle)
+  val ex2_reg_fw_en      = RegInit(false.B)
+  val ex2_fw_data        = Wire(UInt(WORD_LEN.W))
+  val ex2_div_stall_next = Wire(Bool())
+  val ex2_reg_div_stall  = RegInit(false.B)
+  val ex2_reg_divrem_state = RegInit(DivremState.Idle)
   val jbr_reg_is_br      = RegInit(false.B)
   val jbr_reg_br_target  = RegInit(0.U(WORD_LEN.W))
   // val jbr_reg_is_br_before_trap = RegInit(false.B)
@@ -249,7 +252,8 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
   val csr_reg_is_br      = RegInit(false.B)
   val csr_reg_br_addr    = RegInit(0.U(WORD_LEN.W))
   val mem_reg_dmem_state = RegInit(DmemState.Idle)
-
+  val ex2_reg_is_retired = RegInit(false.B)
+  val mem2_reg_is_retired = RegInit(false.B)
 
   //**********************************
   // Instruction Cache Controller
@@ -478,7 +482,7 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
   //**********************************
   // Instruction Decode (ID) Stage
 
-  id_stall := rrd_stall || mem_stall
+  id_stall := rrd_stall || ex2_stall
   id_reg_stall := id_stall
 
   // branch,jump時にIDをBUBBLE化
@@ -490,7 +494,7 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
   val id_rs2_addr = id_inst(24, 20)
   val id_w_wb_addr  = id_inst(11, 7)
 
-  val mem_wb_data = Wire(UInt(WORD_LEN.W))
+  val ex2_wb_data = Wire(UInt(WORD_LEN.W))
 
   val id_c_rs1_addr  = id_inst(11, 7)
   val id_c_rs2_addr  = id_inst(6, 2)
@@ -821,7 +825,7 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
       rrd_reg_mcause        := id_mcause
       // rrd_reg_mtval         := id_mtval
     }
-  }.elsewhen(!rrd_stall && !mem_stall) {
+  }.elsewhen(!rrd_stall && !ex2_stall) {
     when(id_reg_stall) {
       rrd_reg_pc            := id_reg_pc_delay
       rrd_reg_inst_cnt      := id_reg_inst_cnt_delay
@@ -892,9 +896,9 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
     (ex1_reg_fw_en &&
      (rrd_reg_op1_sel === OP1_RS1) &&
      (rrd_reg_rs1_addr === ex1_reg_wb_addr)) -> ex1_fw_data,
-    (mem_reg_fw_en &&
+    (ex2_reg_fw_en &&
      (rrd_reg_op1_sel === OP1_RS1) &&
-     (rrd_reg_rs1_addr === mem_reg_wb_addr)) -> mem_fw_data,
+     (rrd_reg_rs1_addr === ex2_reg_wb_addr)) -> ex2_fw_data,
     (rrd_reg_op1_sel === OP1_RS1) -> regfile(rrd_reg_rs1_addr),
   ))
   val rrd_op2_data = MuxCase(rrd_reg_op2_data, Seq(
@@ -902,17 +906,17 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
     (ex1_reg_fw_en &&
      (rrd_reg_op2_sel === OP2_RS2) &&
      (rrd_reg_rs2_addr === ex1_reg_wb_addr)) -> ex1_fw_data,
-    (mem_reg_fw_en &&
+    (ex2_reg_fw_en &&
      (rrd_reg_op2_sel === OP2_RS2) &&
-     (rrd_reg_rs2_addr === mem_reg_wb_addr)) -> mem_fw_data,
+     (rrd_reg_rs2_addr === ex2_reg_wb_addr)) -> ex2_fw_data,
     (rrd_reg_op2_sel === OP2_RS2) -> regfile(rrd_reg_rs2_addr),
   ))
   val rrd_rs2_data = MuxCase(regfile(rrd_reg_rs2_addr), Seq(
     (rrd_reg_rs2_addr === 0.U) -> 0.U(WORD_LEN.W),
     (ex1_reg_fw_en &&
      (rrd_reg_rs2_addr === ex1_reg_wb_addr)) -> ex1_fw_data,
-    (mem_reg_fw_en &&
-     (rrd_reg_rs2_addr === mem_reg_wb_addr)) -> mem_fw_data,
+    (ex2_reg_fw_en &&
+     (rrd_reg_rs2_addr === ex2_reg_wb_addr)) -> ex2_fw_data,
   ))
 
   val rrd_direct_jbr_target = rrd_reg_pc + MuxCase(rrd_reg_imm_b_sext, Seq(
@@ -930,7 +934,7 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
   val rrd_inst3_use_reg = WireDefault(false.B)
 
   when (
-    !mem_stall && !rrd_stall && !csr_reg_is_br && !jbr_reg_is_br &&
+    !ex2_stall && !rrd_stall && !csr_reg_is_br && !jbr_reg_is_br &&
     rrd_reg_rf_wen === REN_S && rrd_reg_wb_addr =/= 0.U
   ) {
       scoreboard(rrd_reg_wb_addr) := (rrd_reg_wb_sel =/= WB_ALU && rrd_reg_wb_sel =/= WB_PC)
@@ -941,7 +945,7 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
 
   //**********************************
   // RRD/EX1 register
-  when(!mem_stall) {
+  when(!ex2_stall) {
     val ex_is_bubble = rrd_stall || csr_reg_is_br || jbr_reg_is_br
     ex1_reg_pc            := rrd_reg_pc
     ex1_reg_inst_cnt      := rrd_reg_inst_cnt
@@ -1060,7 +1064,7 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
     csr_reg_br_addr  := csr_trap_vector
   }.elsewhen (csr_is_trap) {
     csr_mcause       := ex1_reg_mcause
-    // csr_mtval        := mem_reg_mtval
+    // csr_mtval        := ex2_reg_mtval
     csr_mepc         := ex1_reg_pc
     csr_mstatus_mpie := csr_mstatus_mie
     csr_mstatus_mie  := false.B
@@ -1182,8 +1186,8 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
   //**********************************
   // EX1/JBR register
   // jump, br 命令ではストールは発生しないためストール時は単に更新しない
-  when (!mem_stall) {
-    jbr_reg_bp_en            := ex1_is_valid_inst // && !mem_reg_is_br && !jbr_reg_is_br
+  when (!ex2_stall) {
+    jbr_reg_bp_en            := ex1_is_valid_inst // && !ex2_reg_is_br && !jbr_reg_is_br
     jbr_reg_is_cond_br       := ex1_is_cond_br
     jbr_reg_is_cond_br_inst  := ex1_is_cond_br_inst
     jbr_reg_is_uncond_br     := ex1_is_uncond_br
@@ -1209,13 +1213,13 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
   )
   jbr_reg_br_target := MuxCase(DontCare, Seq(
     jbr_cond_bp_fail   -> jbr_reg_cond_br_target,
-    jbr_cond_nbp_fail  -> Mux(jbr_reg_is_half, mem_reg_pc + 2.U(WORD_LEN.W), mem_reg_pc + 4.U(WORD_LEN.W)),
+    jbr_cond_nbp_fail  -> Mux(jbr_reg_is_half, ex2_reg_pc + 2.U(WORD_LEN.W), ex2_reg_pc + 4.U(WORD_LEN.W)),
     jbr_uncond_bp_fail -> jbr_reg_uncond_br_target,
   ))
   jbr_reg_is_br := jbr_cond_bp_fail || jbr_cond_nbp_fail || jbr_uncond_bp_fail
 
   bp.io.up.update_en := jbr_bp_en && (jbr_reg_is_cond_br_inst || jbr_reg_is_uncond_br)
-  bp.io.up.inst_pc := mem_reg_pc
+  bp.io.up.inst_pc := ex2_reg_pc
   bp.io.up.br_pos := jbr_reg_is_cond_br || jbr_reg_is_uncond_br
   bp.io.up.br_addr := MuxCase(DontCare, Seq(
     jbr_reg_is_cond_br   -> jbr_reg_cond_br_target,
@@ -1237,98 +1241,52 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
   // ))
 
   //**********************************
-  // EX1/MEM register
-  when( !mem_stall ) {  // MEMステージがストールしていない場合のみMEMのパイプラインレジスタを更新する。
-    mem_reg_en         := !jbr_reg_is_br // && !(ex1_reg_rf_wen === REN_S && ex1_reg_wb_sel === WB_ALU)
-    mem_reg_pc         := ex1_reg_pc
-    mem_reg_inst_cnt   := ex1_reg_inst_cnt
-    mem_reg_op1_data   := ex1_reg_op1_data
-    mem_reg_rs2_data   := ex1_reg_rs2_data
-    mem_reg_wb_addr    := ex1_reg_wb_addr
-    mem_reg_alu_out    := ex1_alu_out
-    mem_reg_mullu      := ex1_mullu
-    mem_reg_mulls      := ex1_mulls
-    mem_reg_mulhuu     := ex1_mulhuu
-    mem_reg_mulhss     := ex1_mulhss
-    mem_reg_mulhsu     := ex1_mulhsu
-    mem_reg_pc_bit_out := ex1_pc_bit_out
-    mem_reg_exe_fun    := ex1_reg_exe_fun
-    mem_reg_rf_wen     := ex1_reg_rf_wen
-    mem_reg_wb_sel     := ex1_reg_wb_sel
-    mem_reg_mem_w      := ex1_reg_mem_w
-    mem_reg_mem_wstrb  := (MuxCase("b1111".U, Seq(
-      (ex1_reg_mem_w === MW_B) -> "b0001".U,
-      (ex1_reg_mem_w === MW_H) -> "b0011".U,
-      //(ex1_reg_mem_w === MW_W) -> "b1111".U,
-    )) << (ex1_alu_out(1, 0)))(3, 0)
-    mem_reg_wdata      := (ex1_reg_rs2_data << (8.U * ex1_alu_out(1, 0)))(WORD_LEN-1, 0)
-    mem_reg_is_valid_inst := ex1_is_valid_inst // && !mem_reg_is_br && !jbr_reg_is_br
-    mem_reg_is_trap    := ex1_reg_is_trap
-    mem_reg_mcause     := ex1_reg_mcause
-    // mem_reg_mtval      := ex1_reg_mtval
-    mem_reg_divrem            := ex1_divrem
-    mem_reg_div_stall         := mem_div_stall_next ||
-      (ex1_divrem && (mem_reg_divrem_state === DivremState.Idle || mem_reg_divrem_state === DivremState.Finished))
-    mem_reg_sign_op1          := ex1_sign_op1
-    mem_reg_sign_op12         := ex1_sign_op12
-    mem_reg_zero_op2          := ex1_zero_op2
-    mem_reg_init_dividend     := ex1_dividend
-    mem_reg_init_divisor      := ex1_divisor
-    mem_reg_orig_dividend     := ex1_orig_dividend
-    mem_reg_mem_use_reg       := ex1_reg_mem_use_reg
-    mem_reg_inst3_use_reg     := ex1_reg_inst3_use_reg
-    mem_reg_fw_en             := ex1_fw_en_next
+  // EX1/EX2 register
+  when (!ex2_stall) {
+    ex2_reg_en         := !jbr_reg_is_br // && !(ex1_reg_rf_wen === REN_S && ex1_reg_wb_sel === WB_ALU)
+    ex2_reg_pc         := ex1_reg_pc
+    ex2_reg_inst_cnt   := ex1_reg_inst_cnt
+    ex2_reg_op1_data   := ex1_reg_op1_data
+    ex2_reg_rs2_data   := ex1_reg_rs2_data
+    ex2_reg_wb_addr    := ex1_reg_wb_addr
+    ex2_reg_alu_out    := ex1_alu_out
+    ex2_reg_mullu      := ex1_mullu
+    ex2_reg_mulls      := ex1_mulls
+    ex2_reg_mulhuu     := ex1_mulhuu
+    ex2_reg_mulhss     := ex1_mulhss
+    ex2_reg_mulhsu     := ex1_mulhsu
+    ex2_reg_pc_bit_out := ex1_pc_bit_out
+    ex2_reg_exe_fun    := ex1_reg_exe_fun
+    ex2_reg_rf_wen     := ex1_reg_rf_wen
+    ex2_reg_wb_sel     := ex1_reg_wb_sel
+    ex2_reg_wdata      := (ex1_reg_rs2_data << (8.U * ex1_alu_out(1, 0)))(WORD_LEN-1, 0)
+    ex2_reg_is_valid_inst := ex1_is_valid_inst // && !ex2_reg_is_br && !jbr_reg_is_br
+    ex2_reg_is_trap    := ex1_reg_is_trap
+    ex2_reg_mcause     := ex1_reg_mcause
+    // ex2_reg_mtval      := ex1_reg_mtval
+    ex2_reg_divrem            := ex1_divrem
+    ex2_reg_div_stall         := ex2_div_stall_next ||
+      (ex1_divrem && (ex2_reg_divrem_state === DivremState.Idle || ex2_reg_divrem_state === DivremState.Finished))
+    ex2_reg_sign_op1          := ex1_sign_op1
+    ex2_reg_sign_op12         := ex1_sign_op12
+    ex2_reg_zero_op2          := ex1_zero_op2
+    ex2_reg_init_dividend     := ex1_dividend
+    ex2_reg_init_divisor      := ex1_divisor
+    ex2_reg_orig_dividend     := ex1_orig_dividend
+    ex2_reg_inst3_use_reg     := ex1_reg_inst3_use_reg
+    ex2_reg_fw_en             := ex1_fw_en_next
   }.otherwise {
-    mem_reg_div_stall := mem_div_stall_next ||
-      (mem_reg_divrem && (mem_reg_divrem_state === DivremState.Idle || mem_reg_divrem_state === DivremState.Finished))
+    ex2_reg_div_stall := ex2_div_stall_next ||
+      (ex2_reg_divrem && (ex2_reg_divrem_state === DivremState.Idle || ex2_reg_divrem_state === DivremState.Finished))
   }
 
-  //**********************************
-  // Memory Access Stage
+  val ex2_is_valid_inst = ex2_reg_is_valid_inst && !jbr_reg_is_br
+  val ex2_en = ex2_reg_en && !jbr_reg_is_br
+  val ex2_rf_wen = Mux(ex2_en, ex2_reg_rf_wen, REN_X)
+  val ex2_wb_sel = Mux(ex2_en, ex2_reg_wb_sel, WB_X)
+  // val ex2_stall_delay = RegInit(false.B)
 
-  val mem_is_valid_inst = mem_reg_is_valid_inst && !jbr_reg_is_br
-  val mem_en = mem_reg_en && !jbr_reg_is_br
-  val mem_rf_wen = Mux(mem_en, mem_reg_rf_wen, REN_X)
-  val mem_wb_sel = Mux(mem_en, mem_reg_wb_sel, WB_X)
-  // val mem_stall_delay = RegInit(false.B)
-
-  io.dmem.raddr := mem_reg_alu_out
-  io.dmem.waddr := mem_reg_alu_out
-  io.dmem.ren   := /*io.dmem.rready &&*/ (mem_wb_sel === WB_MEM)
-  io.dmem.wen   := io.dmem.wready && (mem_wb_sel === WB_ST)
-  io.dmem.wstrb := mem_reg_mem_wstrb
-  io.dmem.wdata := mem_reg_wdata // (mem_reg_rs2_data << (8.U * mem_reg_alu_out(1, 0)))(WORD_LEN-1, 0)
-  // mem_stall := ((mem_wb_sel === WB_MEM) && (!io.dmem.rvalid || !io.dmem.rready /*|| mem_stall_delay*/)) ||
-  //   ((mem_mem_wen === MEN_S) && !io.dmem.wready) ||
-  //   ((mem_mem_wen === MEN_FENCE) && io.icache_control.busy) ||
-  //   mem_reg_div_stall
-  // mem_stall_delay := (mem_wb_sel === WB_MEM) && io.dmem.rvalid && !mem_stall // 読めた直後はストール
-  mem_stall := false.B
-
-  switch (mem_reg_dmem_state) {
-    is (DmemState.Idle) {
-      io.dmem.ren := (mem_wb_sel === WB_MEM)
-      mem_stall :=
-        ((mem_wb_sel === WB_MEM) && (!io.dmem.rvalid || !io.dmem.rready)) ||
-        ((mem_wb_sel === WB_ST) && !io.dmem.wready) ||
-        ((mem_wb_sel === WB_FENCE) && io.icache_control.busy) ||
-        mem_reg_div_stall
-      when ((mem_wb_sel === WB_MEM) && !io.dmem.rvalid && io.dmem.rready) {
-        mem_reg_dmem_state := DmemState.Reading
-      }
-    }
-    is (DmemState.Reading) {
-      io.dmem.ren := false.B
-      mem_stall :=
-        ((mem_wb_sel === WB_MEM) && !io.dmem.rvalid) ||
-        ((mem_wb_sel === WB_ST) && !io.dmem.wready) ||
-        ((mem_wb_sel === WB_FENCE) && io.icache_control.busy) ||
-        mem_reg_div_stall
-      when (io.dmem.rvalid || (mem_wb_sel =/= WB_MEM)) {
-        mem_reg_dmem_state := DmemState.Idle
-      }
-    }
-  }
+  ex2_stall := mem_stall || ex2_reg_div_stall
 
   def signExtend48(value: UInt, w: Int): SInt = {
       (Fill(WORD_LEN*3/2 - w, value(w - 1)) ## value(w - 1, 0)).asSInt()
@@ -1337,30 +1295,30 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
       Fill(WORD_LEN*3/2 - w, 0.U) ## value(w - 1, 0)
   }
 
-  val mem_reg_dividend     = RegInit(0.S((WORD_LEN+5).W))
-  val mem_reg_divisor      = RegInit(0.U((WORD_LEN+4).W))
-  val mem_reg_p_divisor    = RegInit(0.U((WORD_LEN*2).W))
-  val mem_reg_divrem_count = RegInit(0.U(5.W))
-  val mem_reg_rem_shift    = RegInit(0.U(5.W))
-  val mem_reg_extra_shift  = RegInit(false.B)
-  val mem_reg_d            = RegInit(0.U(3.W))
-  val mem_reg_reminder     = RegInit(0.U(WORD_LEN.W))
-  val mem_reg_quotient     = RegInit(0.U(WORD_LEN.W))
+  val ex2_reg_dividend     = RegInit(0.S((WORD_LEN+5).W))
+  val ex2_reg_divisor      = RegInit(0.U((WORD_LEN+4).W))
+  val ex2_reg_p_divisor    = RegInit(0.U((WORD_LEN*2).W))
+  val ex2_reg_divrem_count = RegInit(0.U(5.W))
+  val ex2_reg_rem_shift    = RegInit(0.U(5.W))
+  val ex2_reg_extra_shift  = RegInit(false.B)
+  val ex2_reg_d            = RegInit(0.U(3.W))
+  val ex2_reg_reminder     = RegInit(0.U(WORD_LEN.W))
+  val ex2_reg_quotient     = RegInit(0.U(WORD_LEN.W))
 
-  val mem_alu_muldiv_out = MuxCase(0.U(WORD_LEN.W), Seq(
-    (mem_reg_exe_fun === ALU_MUL)    -> (mem_reg_mullu(WORD_LEN-1, 0) + (mem_reg_mulhuu(WORD_LEN/2-1, 0) << (WORD_LEN/2))),
-    (mem_reg_exe_fun === ALU_MULH)   -> (signExtend48(mem_reg_mulls, WORD_LEN) + mem_reg_mulhss)(WORD_LEN*3/2-1, WORD_LEN/2),
-    (mem_reg_exe_fun === ALU_MULHU)  -> (zeroExtend48(mem_reg_mullu(WORD_LEN*3/2-1, WORD_LEN/2), WORD_LEN) + mem_reg_mulhuu)(WORD_LEN*3/2-1, WORD_LEN/2),
-    (mem_reg_exe_fun === ALU_MULHSU) -> (signExtend48(mem_reg_mulls, WORD_LEN) + mem_reg_mulhsu)(WORD_LEN*3/2-1, WORD_LEN/2),
-    (mem_reg_exe_fun === ALU_DIV)    -> mem_reg_quotient,
-    (mem_reg_exe_fun === ALU_DIVU)   -> mem_reg_quotient,
-    (mem_reg_exe_fun === ALU_REM)    -> mem_reg_reminder,
-    (mem_reg_exe_fun === ALU_REMU)   -> mem_reg_reminder,
+  val ex2_alu_muldiv_out = MuxCase(0.U(WORD_LEN.W), Seq(
+    (ex2_reg_exe_fun === ALU_MUL)    -> (ex2_reg_mullu(WORD_LEN-1, 0) + (ex2_reg_mulhuu(WORD_LEN/2-1, 0) << (WORD_LEN/2))),
+    (ex2_reg_exe_fun === ALU_MULH)   -> (signExtend48(ex2_reg_mulls, WORD_LEN) + ex2_reg_mulhss)(WORD_LEN*3/2-1, WORD_LEN/2),
+    (ex2_reg_exe_fun === ALU_MULHU)  -> (zeroExtend48(ex2_reg_mullu(WORD_LEN*3/2-1, WORD_LEN/2), WORD_LEN) + ex2_reg_mulhuu)(WORD_LEN*3/2-1, WORD_LEN/2),
+    (ex2_reg_exe_fun === ALU_MULHSU) -> (signExtend48(ex2_reg_mulls, WORD_LEN) + ex2_reg_mulhsu)(WORD_LEN*3/2-1, WORD_LEN/2),
+    (ex2_reg_exe_fun === ALU_DIV)    -> ex2_reg_quotient,
+    (ex2_reg_exe_fun === ALU_DIVU)   -> ex2_reg_quotient,
+    (ex2_reg_exe_fun === ALU_REM)    -> ex2_reg_reminder,
+    (ex2_reg_exe_fun === ALU_REMU)   -> ex2_reg_reminder,
   ))
 
-  // mem_quotient := mem_reg_quotient
-  // mem_reminder := mem_reg_reminder
-  mem_div_stall_next := false.B
+  // ex2_quotient := ex2_reg_quotient
+  // ex2_reminder := ex2_reg_reminder
+  ex2_div_stall_next := false.B
 
   /*
   val (q_input, q_output) = pla(Seq(
@@ -1435,60 +1393,60 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
   q_input := 0.U(8.W)
   */
 
-  switch (mem_reg_divrem_state) {
+  switch (ex2_reg_divrem_state) {
     is (DivremState.Idle) {
-      when (mem_reg_divrem) {
-        when (mem_reg_init_divisor(WORD_LEN-1, 2) === 0.U) {
-          mem_reg_divrem_state := DivremState.Dividing
+      when (ex2_reg_divrem) {
+        when (ex2_reg_init_divisor(WORD_LEN-1, 2) === 0.U) {
+          ex2_reg_divrem_state := DivremState.Dividing
         }.otherwise {
-          mem_reg_divrem_state := DivremState.Placing
+          ex2_reg_divrem_state := DivremState.Placing
         }
-        //mem_div_stall        := true.B
+        //ex2_div_stall        := true.B
       }
-      mem_reg_dividend     := mem_reg_init_dividend.asSInt()
-      mem_reg_divisor      := Cat(mem_reg_init_divisor(3, 0), 0.U(32.W))
-      mem_reg_p_divisor    := Cat(mem_reg_init_divisor, 0.U(32.W))
-      mem_reg_divrem_count := 0.U
-      mem_reg_rem_shift    := 0.U
-      mem_reg_quotient     := 0.U
-      when (mem_reg_init_divisor(1) === 0.U) {
-        mem_reg_extra_shift := false.B
-        mem_reg_d           := 0.U(3.W)
+      ex2_reg_dividend     := ex2_reg_init_dividend.asSInt()
+      ex2_reg_divisor      := Cat(ex2_reg_init_divisor(3, 0), 0.U(32.W))
+      ex2_reg_p_divisor    := Cat(ex2_reg_init_divisor, 0.U(32.W))
+      ex2_reg_divrem_count := 0.U
+      ex2_reg_rem_shift    := 0.U
+      ex2_reg_quotient     := 0.U
+      when (ex2_reg_init_divisor(1) === 0.U) {
+        ex2_reg_extra_shift := false.B
+        ex2_reg_d           := 0.U(3.W)
       }.otherwise {
-        mem_reg_extra_shift := true.B
-        mem_reg_d           := Cat(mem_reg_init_divisor(0), 0.U(2.W))
+        ex2_reg_extra_shift := true.B
+        ex2_reg_d           := Cat(ex2_reg_init_divisor(0), 0.U(2.W))
       }
     }
     is (DivremState.Placing) {
-      when (mem_reg_p_divisor(WORD_LEN*2-1, WORD_LEN+4) === 0.U) {
-        mem_reg_divrem_state := DivremState.Dividing
+      when (ex2_reg_p_divisor(WORD_LEN*2-1, WORD_LEN+4) === 0.U) {
+        ex2_reg_divrem_state := DivremState.Dividing
       }
-      mem_reg_p_divisor    := mem_reg_p_divisor >> 2
-      mem_reg_divisor      := (mem_reg_p_divisor >> 2)(WORD_LEN+3, 0)
-      mem_reg_divrem_count := mem_reg_divrem_count + 1.U
-      when (mem_reg_p_divisor(WORD_LEN+3) === 0.U) {
-        mem_reg_extra_shift := false.B
-        mem_reg_d           := mem_reg_p_divisor(WORD_LEN+1, WORD_LEN-1)
+      ex2_reg_p_divisor    := ex2_reg_p_divisor >> 2
+      ex2_reg_divisor      := (ex2_reg_p_divisor >> 2)(WORD_LEN+3, 0)
+      ex2_reg_divrem_count := ex2_reg_divrem_count + 1.U
+      when (ex2_reg_p_divisor(WORD_LEN+3) === 0.U) {
+        ex2_reg_extra_shift := false.B
+        ex2_reg_d           := ex2_reg_p_divisor(WORD_LEN+1, WORD_LEN-1)
       }.otherwise {
-        mem_reg_extra_shift := true.B
-        mem_reg_d           := mem_reg_p_divisor(WORD_LEN+2, WORD_LEN)
+        ex2_reg_extra_shift := true.B
+        ex2_reg_d           := ex2_reg_p_divisor(WORD_LEN+2, WORD_LEN)
       }
-      mem_div_stall_next    := true.B
+      ex2_div_stall_next    := true.B
     }
     is (DivremState.Dividing) {
-      val p = Mux(mem_reg_extra_shift,
-        Mux(mem_reg_dividend(WORD_LEN+4) === 0.U,
-          mem_reg_dividend(WORD_LEN+3, WORD_LEN-1),
-          ~mem_reg_dividend(WORD_LEN+3, WORD_LEN-1),
+      val p = Mux(ex2_reg_extra_shift,
+        Mux(ex2_reg_dividend(WORD_LEN+4) === 0.U,
+          ex2_reg_dividend(WORD_LEN+3, WORD_LEN-1),
+          ~ex2_reg_dividend(WORD_LEN+3, WORD_LEN-1),
         ),
-        Mux(mem_reg_dividend(WORD_LEN+4) === 0.U,
-          mem_reg_dividend(WORD_LEN+2, WORD_LEN-2),
-          ~mem_reg_dividend(WORD_LEN+2, WORD_LEN-2),
+        Mux(ex2_reg_dividend(WORD_LEN+4) === 0.U,
+          ex2_reg_dividend(WORD_LEN+2, WORD_LEN-2),
+          ~ex2_reg_dividend(WORD_LEN+2, WORD_LEN-2),
         ),
       )
-      // q_input := Cat(mem_reg_d, p)
-      // val mem_q = q_output
-      val mem_q = MuxLookup(mem_reg_d, 0.U(2.W), Seq(
+      // q_input := Cat(ex2_reg_d, p)
+      // val ex2_q = q_output
+      val ex2_q = MuxLookup(ex2_reg_d, 0.U(2.W), Seq(
         0.U -> MuxLookup(p, 0.U(2.W), Seq(
           0.U  -> 0.U, 1.U  -> 0.U, 2.U  -> 1.U, 3.U  -> 1.U,
           4.U  -> 1.U, 5.U  -> 1.U, 6.U  -> 2.U, 7.U  -> 2.U,
@@ -1542,74 +1500,74 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
           20.U -> 2.U, 21.U -> 2.U,
         )),
       ))
-      when (mem_reg_dividend(WORD_LEN+4) === 0.U) {
-        mem_reg_dividend := MuxCase(mem_reg_dividend << 2, Seq(
-          (mem_q(0) === 1.U) -> ((mem_reg_dividend - Cat(0.U(1.W), mem_reg_divisor).asSInt()) << 2),
-          (mem_q(1) === 1.U) -> ((mem_reg_dividend - Cat(mem_reg_divisor, 0.U(1.W)).asSInt()) << 2),
+      when (ex2_reg_dividend(WORD_LEN+4) === 0.U) {
+        ex2_reg_dividend := MuxCase(ex2_reg_dividend << 2, Seq(
+          (ex2_q(0) === 1.U) -> ((ex2_reg_dividend - Cat(0.U(1.W), ex2_reg_divisor).asSInt()) << 2),
+          (ex2_q(1) === 1.U) -> ((ex2_reg_dividend - Cat(ex2_reg_divisor, 0.U(1.W)).asSInt()) << 2),
         ))
-        mem_reg_quotient := MuxCase(mem_reg_quotient << 2, Seq(
-          (mem_q(0) === 1.U) -> ((mem_reg_quotient << 2) + 1.U),
-          (mem_q(1) === 1.U) -> ((mem_reg_quotient << 2) + 2.U),
+        ex2_reg_quotient := MuxCase(ex2_reg_quotient << 2, Seq(
+          (ex2_q(0) === 1.U) -> ((ex2_reg_quotient << 2) + 1.U),
+          (ex2_q(1) === 1.U) -> ((ex2_reg_quotient << 2) + 2.U),
         ))
       }.otherwise {
-        mem_reg_dividend := MuxCase(mem_reg_dividend << 2, Seq(
-          (mem_q(0) === 1.U) -> ((mem_reg_dividend + Cat(0.U(1.W), mem_reg_divisor).asSInt()) << 2),
-          (mem_q(1) === 1.U) -> ((mem_reg_dividend + Cat(mem_reg_divisor, 0.U(1.W)).asSInt()) << 2),
+        ex2_reg_dividend := MuxCase(ex2_reg_dividend << 2, Seq(
+          (ex2_q(0) === 1.U) -> ((ex2_reg_dividend + Cat(0.U(1.W), ex2_reg_divisor).asSInt()) << 2),
+          (ex2_q(1) === 1.U) -> ((ex2_reg_dividend + Cat(ex2_reg_divisor, 0.U(1.W)).asSInt()) << 2),
         ))
-        mem_reg_quotient := MuxCase(mem_reg_quotient << 2, Seq(
-          (mem_q(0) === 1.U) -> ((mem_reg_quotient << 2) - 1.U),
-          (mem_q(1) === 1.U) -> ((mem_reg_quotient << 2) - 2.U),
+        ex2_reg_quotient := MuxCase(ex2_reg_quotient << 2, Seq(
+          (ex2_q(0) === 1.U) -> ((ex2_reg_quotient << 2) - 1.U),
+          (ex2_q(1) === 1.U) -> ((ex2_reg_quotient << 2) - 2.U),
         ))
       }
-      mem_reg_rem_shift := mem_reg_rem_shift + 1.U
-      mem_reg_divrem_count := mem_reg_divrem_count + 1.U
-      when (mem_reg_divrem_count === 16.U) {
-        mem_reg_divrem_state := DivremState.Shifting
+      ex2_reg_rem_shift := ex2_reg_rem_shift + 1.U
+      ex2_reg_divrem_count := ex2_reg_divrem_count + 1.U
+      when (ex2_reg_divrem_count === 16.U) {
+        ex2_reg_divrem_state := DivremState.Shifting
       }
-      mem_div_stall_next := true.B
+      ex2_div_stall_next := true.B
     }
     is (DivremState.Shifting) {
-      mem_reg_reminder := (mem_reg_dividend >> Cat(mem_reg_rem_shift, 0.U(1.W)))(WORD_LEN-1, 0)
-      mem_reg_divrem_state := DivremState.Correction
-      mem_div_stall_next := true.B
+      ex2_reg_reminder := (ex2_reg_dividend >> Cat(ex2_reg_rem_shift, 0.U(1.W)))(WORD_LEN-1, 0)
+      ex2_reg_divrem_state := DivremState.Correction
+      ex2_div_stall_next := true.B
     }
     is (DivremState.Correction) {
-      val reminder = Mux(mem_reg_dividend(WORD_LEN+4) === 1.U,
-        mem_reg_reminder + mem_reg_init_divisor(WORD_LEN-1, 0),
-        mem_reg_reminder,
+      val reminder = Mux(ex2_reg_dividend(WORD_LEN+4) === 1.U,
+        ex2_reg_reminder + ex2_reg_init_divisor(WORD_LEN-1, 0),
+        ex2_reg_reminder,
       )
-      mem_reg_reminder := Mux(mem_reg_zero_op2,
-        mem_reg_orig_dividend,
-        Mux(mem_reg_sign_op1 === 0.U,
+      ex2_reg_reminder := Mux(ex2_reg_zero_op2,
+        ex2_reg_orig_dividend,
+        Mux(ex2_reg_sign_op1 === 0.U,
           reminder,
           ~reminder + 1.U,
         ),
       )
-      val quotient = Mux(mem_reg_dividend(WORD_LEN+4) === 1.U,
-        mem_reg_quotient - 1.U,
-        mem_reg_quotient,
+      val quotient = Mux(ex2_reg_dividend(WORD_LEN+4) === 1.U,
+        ex2_reg_quotient - 1.U,
+        ex2_reg_quotient,
       )
-      mem_reg_quotient := Mux(mem_reg_zero_op2,
+      ex2_reg_quotient := Mux(ex2_reg_zero_op2,
         0xFFFF_FFFFL.U,
-        Mux(mem_reg_sign_op12 === 0.U,
+        Mux(ex2_reg_sign_op12 === 0.U,
           quotient,
           ~quotient + 1.U,
         ),
       )
-      mem_reg_divrem_state := DivremState.Finished
-      //mem_div_stall := true.B
+      ex2_reg_divrem_state := DivremState.Finished
+      //ex2_div_stall := true.B
     }
     is (DivremState.Finished) {
-      mem_reg_divrem_state := DivremState.Idle
+      ex2_reg_divrem_state := DivremState.Idle
     }
   }
-  // printf(p"mem_reg_divrem_state : 0x${Hexadecimal(mem_reg_divrem_state.asUInt())}\n")
-  // printf(p"mem_reg_dividend     : 0x${Hexadecimal(mem_reg_dividend)}\n")
-  // printf(p"mem_reg_divisor      : 0x${Hexadecimal(mem_reg_divisor)}\n")
-  // printf(p"mem_reg_divrem_count : 0x${Hexadecimal(mem_reg_divrem_count)}\n")
-  // printf(p"mem_reg_rem_shift    : 0x${Hexadecimal(mem_reg_rem_shift)}\n")
+  // printf(p"ex2_reg_divrem_state : 0x${Hexadecimal(ex2_reg_divrem_state.asUInt())}\n")
+  // printf(p"ex2_reg_dividend     : 0x${Hexadecimal(ex2_reg_dividend)}\n")
+  // printf(p"ex2_reg_divisor      : 0x${Hexadecimal(ex2_reg_divisor)}\n")
+  // printf(p"ex2_reg_divrem_count : 0x${Hexadecimal(ex2_reg_divrem_count)}\n")
+  // printf(p"ex2_reg_rem_shift    : 0x${Hexadecimal(ex2_reg_rem_shift)}\n")
 
-  io.icache_control.invalidate := (mem_wb_sel === WB_FENCE)
+  io.icache_control.invalidate := (ex2_wb_sel === WB_FENCE)
 
   def signExtend(value: UInt, w: Int) = {
       Fill(WORD_LEN - w, value(w - 1)) ## value(w - 1, 0)
@@ -1618,43 +1576,95 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
       Fill(WORD_LEN - w, 0.U) ## value(w - 1, 0)
   }
 
-  mem_wb_data := MuxCase(mem_reg_alu_out, Seq(
+  ex2_wb_data := MuxCase(ex2_reg_alu_out, Seq(
     (
-      (mem_reg_wb_sel === WB_PC) ||
-      (mem_reg_wb_sel === WB_BIT) ||
-      (mem_reg_wb_sel === WB_CSR) ||
-      (mem_reg_wb_sel === WB_FENCE) // dummy for optimization
-    ) -> mem_reg_pc_bit_out,
-    (mem_reg_wb_sel === WB_MD) -> mem_alu_muldiv_out,
+      (ex2_reg_wb_sel === WB_PC) ||
+      (ex2_reg_wb_sel === WB_BIT) ||
+      (ex2_reg_wb_sel === WB_CSR) ||
+      (ex2_reg_wb_sel === WB_FENCE) // dummy for optimization
+    ) -> ex2_reg_pc_bit_out,
+    (ex2_reg_wb_sel === WB_MD) -> ex2_alu_muldiv_out,
   ))
 
-  mem_fw_data := Mux(
+  ex2_fw_data := Mux(
     (
-      (mem_reg_wb_sel === WB_PC) ||
-      (mem_reg_wb_sel === WB_BIT) ||
-      (mem_reg_wb_sel === WB_CSR) ||
-      (mem_reg_wb_sel === WB_FENCE) // dummy for optimization
+      (ex2_reg_wb_sel === WB_PC) ||
+      (ex2_reg_wb_sel === WB_BIT) ||
+      (ex2_reg_wb_sel === WB_CSR) ||
+      (ex2_reg_wb_sel === WB_FENCE) // dummy for optimization
     ),
-    mem_reg_pc_bit_out,
-    mem_reg_alu_out,
+    ex2_reg_pc_bit_out,
+    ex2_reg_alu_out,
   )
-  when (mem_reg_inst3_use_reg && !mem_reg_div_stall) {
-    scoreboard(mem_reg_wb_addr) := false.B
+  when (ex2_reg_inst3_use_reg && !ex2_reg_div_stall) {
+    scoreboard(ex2_reg_wb_addr) := false.B
   }
 
-  val wb_is_valid_inst = mem_is_valid_inst && !mem_stall
+  ex2_reg_is_retired := ex2_is_valid_inst && !ex2_stall && (ex2_reg_wb_sel =/= WB_MEM && ex2_reg_wb_sel =/= WB_ST)
 
-  when (!mem_stall && mem_rf_wen === REN_S && (mem_reg_wb_sel =/= WB_MEM && mem_reg_wb_sel =/= WB_ST)) {
-    regfile(mem_reg_wb_addr) := mem_wb_data
+  when (!ex2_stall && ex2_rf_wen === REN_S && (ex2_reg_wb_sel =/= WB_MEM && ex2_reg_wb_sel =/= WB_ST)) {
+    regfile(ex2_reg_wb_addr) := ex2_wb_data
+  }
+
+  //**********************************
+  // EX1/MEM register
+  when (!ex2_stall) {
+    mem_reg_mem_wstrb   := (MuxCase("b1111".U, Seq(
+      (ex1_reg_mem_w === MW_B) -> "b0001".U,
+      (ex1_reg_mem_w === MW_H) -> "b0011".U,
+      //(ex1_reg_mem_w === MW_W) -> "b1111".U,
+    )) << (ex1_alu_out(1, 0)))(3, 0)
+    mem_reg_mem_w       := ex1_reg_mem_w
+    mem_reg_mem_use_reg := ex1_reg_mem_use_reg
+  }
+
+  //**********************************
+  // Memory Access Stage
+
+  io.dmem.raddr := ex2_reg_alu_out
+  io.dmem.waddr := ex2_reg_alu_out
+  io.dmem.ren   := /*io.dmem.rready &&*/ (ex2_wb_sel === WB_MEM)
+  io.dmem.wen   := io.dmem.wready && (ex2_wb_sel === WB_ST)
+  io.dmem.wstrb := mem_reg_mem_wstrb
+  io.dmem.wdata := ex2_reg_wdata // (ex2_reg_rs2_data << (8.U * ex2_reg_alu_out(1, 0)))(WORD_LEN-1, 0)
+  // ex2_stall := ((ex2_wb_sel === WB_MEM) && (!io.dmem.rvalid || !io.dmem.rready /*|| ex2_stall_delay*/)) ||
+  //   ((ex2_mem_wen === MEN_S) && !io.dmem.wready) ||
+  //   ((ex2_mem_wen === MEN_FENCE) && io.icache_control.busy) ||
+  //   ex2_reg_div_stall
+  // ex2_stall_delay := (ex2_wb_sel === WB_MEM) && io.dmem.rvalid && !ex2_stall // 読めた直後はストール
+
+  mem_stall := false.B
+
+  switch (mem_reg_dmem_state) {
+    is (DmemState.Idle) {
+      io.dmem.ren := (ex2_wb_sel === WB_MEM)
+      mem_stall :=
+        ((ex2_wb_sel === WB_MEM) && (!io.dmem.rvalid || !io.dmem.rready)) ||
+        ((ex2_wb_sel === WB_ST) && !io.dmem.wready) ||
+        ((ex2_wb_sel === WB_FENCE) && io.icache_control.busy)
+      when ((ex2_wb_sel === WB_MEM) && !io.dmem.rvalid && io.dmem.rready) {
+        mem_reg_dmem_state := DmemState.Reading
+      }
+    }
+    is (DmemState.Reading) {
+      io.dmem.ren := false.B
+      mem_stall :=
+        ((ex2_wb_sel === WB_MEM) && !io.dmem.rvalid) ||
+        ((ex2_wb_sel === WB_ST) && !io.dmem.wready) ||
+        ((ex2_wb_sel === WB_FENCE) && io.icache_control.busy)
+      when (io.dmem.rvalid || (ex2_wb_sel =/= WB_MEM)) {
+        mem_reg_dmem_state := DmemState.Idle
+      }
+    }
   }
 
   //**********************************
   // MEM/MEM2 regsiter
-  mem2_reg_wb_byte_offset := mem_reg_alu_out(1, 0)
+  mem2_reg_wb_byte_offset := ex2_reg_alu_out(1, 0)
   mem2_reg_mem_w          := mem_reg_mem_w
   mem2_reg_dmem_rdata     := io.dmem.rdata
-  mem2_reg_wb_addr        := mem_reg_wb_addr
-  mem2_reg_is_valid       := (!mem_stall && mem_wb_sel === WB_MEM)
+  mem2_reg_wb_addr        := ex2_reg_wb_addr
+  mem2_reg_is_valid       := (!mem_stall && ex2_wb_sel === WB_MEM)
   mem2_reg_mem_use_reg    := !mem_stall && mem_reg_mem_use_reg
 
   val mem2_wb_rdata = mem2_reg_dmem_rdata >> (8.U * mem2_reg_wb_byte_offset)
@@ -1670,17 +1680,20 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
   when (mem2_reg_mem_use_reg) {
     scoreboard(mem2_reg_wb_addr) := false.B
   }
+  mem2_reg_is_retired := mem2_reg_is_valid
 
-  when (wb_is_valid_inst) {
+  when (ex2_reg_is_retired && mem2_reg_is_retired) {
+    instret := instret + 2.U
+  }.elsewhen (ex2_reg_is_retired || mem2_reg_is_retired) {
     instret := instret + 1.U
   }
 
   // Debug signals
   io.debug_signal.cycle_counter := cycle_counter.io.value(47, 0)
   // io.debug_signal.csr_rdata := csr_rdata
-  // io.debug_signal.mem_reg_csr_addr := mem_reg_csr_addr
-  io.debug_signal.mem_reg_pc := mem_reg_pc
-  io.debug_signal.mem_is_valid_inst := mem_is_valid_inst
+  // io.debug_signal.ex2_reg_csr_addr := ex2_reg_csr_addr
+  io.debug_signal.ex2_reg_pc := ex2_reg_pc
+  io.debug_signal.ex2_is_valid_inst := ex2_is_valid_inst
   io.debug_signal.me_intr := csr_is_meintr
   io.debug_signal.mt_intr := csr_is_mtintr
   io.debug_signal.id_pc := id_reg_pc
@@ -1689,7 +1702,7 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
   //**********************************
   // IO & Debug
   io.gp := regfile(3)
-  io.exit := ex1_reg_is_trap && (mem_reg_mcause === CSR_MCAUSE_ECALL_M) && (regfile(17) === 93.U(WORD_LEN.W))
+  io.exit := ex1_reg_is_trap && (ex2_reg_mcause === CSR_MCAUSE_ECALL_M) && (regfile(17) === 93.U(WORD_LEN.W))
 
   //printf(p"if1_reg_pc       : 0x${Hexadecimal(if1_reg_pc)}\n")
   printf(p"if2_pc           : 0x${Hexadecimal(if2_pc)}\n")
@@ -1731,14 +1744,14 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
   printf(p"ex1_reg_is_d_jbr_: 0x${Hexadecimal(ex1_reg_is_direct_jbr_fail)}\n")
   printf(p"jbr_reg_is_br    : 0x${Hexadecimal(jbr_reg_is_br)}\n")
   printf(p"jbr_reg_br_target: 0x${Hexadecimal(jbr_reg_br_target)}\n")
-  printf(p"mem_reg_pc       : 0x${Hexadecimal(mem_reg_pc)}\n")
-  printf(p"mem_reg_inst_cnt : 0x${Hexadecimal(mem_reg_inst_cnt)}\n")
-  printf(p"mem_is_valid_inst: 0x${Hexadecimal(mem_is_valid_inst)}\n")
-  printf(p"mem_stall        : 0x${Hexadecimal(mem_stall)}\n")
-  printf(p"mem_wb_data      : 0x${Hexadecimal(mem_wb_data)}\n")
-  printf(p"mem_alu_muldiv_ou: 0x${Hexadecimal(mem_alu_muldiv_out)}\n")
+  printf(p"ex2_reg_pc       : 0x${Hexadecimal(ex2_reg_pc)}\n")
+  printf(p"ex2_reg_inst_cnt : 0x${Hexadecimal(ex2_reg_inst_cnt)}\n")
+  printf(p"ex2_is_valid_inst: 0x${Hexadecimal(ex2_is_valid_inst)}\n")
+  printf(p"ex2_stall        : 0x${Hexadecimal(ex2_stall)}\n")
+  printf(p"ex2_wb_data      : 0x${Hexadecimal(ex2_wb_data)}\n")
+  printf(p"ex2_alu_muldiv_ou: 0x${Hexadecimal(ex2_alu_muldiv_out)}\n")
   printf(p"mem_reg_mem_w    : 0x${Hexadecimal(mem_reg_mem_w)}\n")
-  printf(p"mem_reg_wb_addr  : 0x${Hexadecimal(mem_reg_wb_addr)}\n")
+  printf(p"ex2_reg_wb_addr  : 0x${Hexadecimal(ex2_reg_wb_addr)}\n")
   printf(p"mem2_reg_wb_addr : 0x${Hexadecimal(mem2_reg_wb_addr)}\n")
   printf(p"mem2_wb_data_load: 0x${Hexadecimal(mem2_wb_data_load)}\n")
   printf(p"csr_is_meintr    : ${csr_is_meintr}\n")
