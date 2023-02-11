@@ -501,7 +501,6 @@ class Sdc() extends Module {
 
   io.mem.rdata := "xdeadbeef".U
   io.mem.rvalid := true.B
-  io.mem.rready := true.B
   io.mem.wready := true.B
 
   when (io.mem.wen) {

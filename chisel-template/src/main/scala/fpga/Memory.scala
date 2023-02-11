@@ -22,7 +22,7 @@ class DmemPortIo extends Bundle {
   val rdata  = Output(UInt(WORD_LEN.W))
   val ren    = Input(Bool())
   val rvalid = Output(Bool())
-  val rready = Output(Bool())
+  // val rready = Output(Bool())
 
   val waddr  = Input(UInt(WORD_LEN.W))
   val wen    = Input(Bool())
@@ -31,9 +31,21 @@ class DmemPortIo extends Bundle {
   val wdata  = Input(UInt(WORD_LEN.W))
 }
 
-class ICacheControl extends Bundle {
-  val invalidate = Input(Bool())
-  val busy       = Output(Bool())
+class CachePort extends Bundle {
+  val iinvalidate = Input(Bool())
+  val ibusy       = Output(Bool())
+
+  val raddr  = Input(UInt(WORD_LEN.W))
+  val rdata  = Output(UInt(WORD_LEN.W))
+  val ren    = Input(Bool())
+  val rvalid = Output(Bool())
+  val rready = Output(Bool())
+
+  val waddr  = Input(UInt(WORD_LEN.W))
+  val wen    = Input(Bool())
+  val wready = Output(Bool())
+  val wstrb  = Input(UInt(4.W))
+  val wdata  = Input(UInt(WORD_LEN.W))
 }
 
 object ICacheState extends ChiselEnum {
@@ -62,10 +74,10 @@ object CacheConsts {
   val CACHE_LINE_BITS = log2Ceil(CACHE_LINE_LEN/8)
   val ICACHE_LINES = 128
   val ICACHE_INDEX_BITS = log2Ceil(ICACHE_LINES)
-  val ICACHE_TAG_BITS = WORD_LEN - ICACHE_INDEX_BITS - CACHE_LINE_BITS
+  val ICACHE_TAG_BITS = WORD_LEN - 4 - ICACHE_INDEX_BITS - CACHE_LINE_BITS
   val DCACHE_LINES = 128
   val DCACHE_INDEX_BITS = log2Ceil(DCACHE_LINES)
-  val DCACHE_TAG_BITS = WORD_LEN - DCACHE_INDEX_BITS - CACHE_LINE_BITS
+  val DCACHE_TAG_BITS = WORD_LEN - 4 - DCACHE_INDEX_BITS - CACHE_LINE_BITS
   val DCACHE_LRU_BITS = 3
   val ICACHE_VALID_BUNDLE_BITS = 2
   val ICACHE_VALID_DATA_BITS = log2Ceil(ICACHE_VALID_BUNDLE_BITS)
@@ -148,8 +160,8 @@ object DCacheSnoopStatus extends ChiselEnum {
 class Memory() extends Module {
   val io = IO(new Bundle {
     val imem = new ImemPortIo()
-    val icache_control = new ICacheControl()
-    val dmem = new DmemPortIo()
+    val cache = new CachePort()
+    // val dmem = new DmemPortIo()
     val dramPort = Flipped(new DramIo())
     val cache_array1 = Flipped(new DCachePort())
     val cache_array2 = Flipped(new DCachePort())
@@ -286,7 +298,7 @@ class Memory() extends Module {
 
   io.imem.inst := "xdeadbeef".U
   io.imem.valid := false.B
-  io.icache_control.busy := true.B
+  io.cache.ibusy := true.B
   i_reg_next_addr := io.imem.addr.asTypeOf(new ICacheAddrBundle())
   dcache_snoop_en := false.B
   dcache_snoop_addr := DontCare
@@ -307,10 +319,10 @@ class Memory() extends Module {
 
   switch (icache_state) {
     is (ICacheState.Ready) {
-      io.icache_control.busy := false.B
+      io.cache.ibusy := false.B
       val req_addr = io.imem.addr.asTypeOf(new ICacheAddrBundle())
       i_reg_req_addr := req_addr
-      when (io.icache_control.invalidate) {
+      when (io.cache.iinvalidate) {
         io.icache_valid.invalidate := true.B
         io.icache_valid.iaddr := 0.U(1.W)
         io.icache_valid.idata := 0.U((1 << ICACHE_INVALIDATE_DATA_BITS).W)
@@ -332,7 +344,7 @@ class Memory() extends Module {
     is (ICacheState.Prelookup) {
       i_reg_valid_rdata := io.icache_valid.rdata
       val i_next_addr = io.imem.addr.asTypeOf(new ICacheAddrBundle())
-      i_reg_addr_match := (i_reg_req_addr.tag(ICACHE_TAG_BITS-5, 0) === i_next_addr.tag(ICACHE_TAG_BITS-5, 0) &&
+      i_reg_addr_match := (i_reg_req_addr.tag(ICACHE_TAG_BITS-1, 0) === i_next_addr.tag(ICACHE_TAG_BITS-1, 0) &&
           i_reg_req_addr.index === i_next_addr.index &&
           i_reg_req_addr.line_off(CACHE_LINE_BITS-1, 2) === i_next_addr.line_off(CACHE_LINE_BITS-1, 2))
       when ((io.icache_valid.rdata >> i_reg_req_addr.index(ICACHE_INVALIDATE_ADDR_BITS-1, 0))(0).asBool && i_reg_tag(0) === i_reg_req_addr.tag) {
@@ -349,11 +361,11 @@ class Memory() extends Module {
       when (i_reg_addr_match) {
         io.imem.valid := true.B
       }
-      io.icache_control.busy := false.B
+      io.cache.ibusy := false.B
       val req_addr = io.imem.addr.asTypeOf(new ICacheAddrBundle())
       i_reg_req_addr := req_addr
       i_reg_addr_match := true.B
-      when (io.icache_control.invalidate) {
+      when (io.cache.iinvalidate) {
         io.icache_valid.invalidate := true.B
         io.icache_valid.iaddr := 0.U(1.W)
         io.icache_valid.idata := 0.U((1 << ICACHE_INVALIDATE_DATA_BITS).W)
@@ -397,7 +409,7 @@ class Memory() extends Module {
         is (DCacheSnoopStatus.NotFound) {
           when (!dram_i_busy) {
             dram_i_ren := true.B
-            dram_i_addr := Cat(i_reg_req_addr.tag(ICACHE_TAG_BITS-5, 0), i_reg_req_addr.index)
+            dram_i_addr := Cat(i_reg_req_addr.tag(ICACHE_TAG_BITS-1, 0), i_reg_req_addr.index)
             icache_state := ICacheState.WaitingRead
           }.otherwise {
             icache_state := ICacheState.Read
@@ -407,7 +419,7 @@ class Memory() extends Module {
     }
     is (ICacheState.RespondSnoop) {
       io.imem.inst := (i_reg_line >> Cat(i_reg_next_addr.line_off(CACHE_LINE_BITS-1, 2), 0.U(5.W)))(WORD_LEN-1, 0)
-      when (i_reg_req_addr.tag(ICACHE_TAG_BITS-5, 0) === i_reg_next_addr.tag(ICACHE_TAG_BITS-5, 0) &&
+      when (i_reg_req_addr.tag(ICACHE_TAG_BITS-1, 0) === i_reg_next_addr.tag(ICACHE_TAG_BITS-1, 0) &&
           i_reg_req_addr.index === i_reg_next_addr.index) {
         io.imem.valid := true.B
       }
@@ -432,7 +444,7 @@ class Memory() extends Module {
     is (ICacheState.Read) {
       when (!dram_i_busy) {
         dram_i_ren := true.B
-        dram_i_addr := Cat(i_reg_req_addr.tag(ICACHE_TAG_BITS-5, 0), i_reg_req_addr.index)
+        dram_i_addr := Cat(i_reg_req_addr.tag(ICACHE_TAG_BITS-1, 0), i_reg_req_addr.index)
         icache_state := ICacheState.WaitingRead
       }
     }
@@ -440,7 +452,7 @@ class Memory() extends Module {
       when (dram_i_rdata_valid) {
         val line = dram_rdata
         io.imem.inst := (line >> Cat(i_reg_next_addr.line_off(CACHE_LINE_BITS-1, 2), 0.U(5.W)))(WORD_LEN-1, 0)
-        when (i_reg_req_addr.tag(ICACHE_TAG_BITS-5, 0) === i_reg_next_addr.tag(ICACHE_TAG_BITS-5, 0) &&
+        when (i_reg_req_addr.tag(ICACHE_TAG_BITS-1, 0) === i_reg_next_addr.tag(ICACHE_TAG_BITS-1, 0) &&
             i_reg_req_addr.index === i_reg_next_addr.index) {
           io.imem.valid := true.B
         }
@@ -459,7 +471,7 @@ class Memory() extends Module {
       }
     }
     is (ICacheState.Invalidate2) {
-      io.icache_control.busy := true.B
+      io.cache.ibusy := true.B
       io.icache_valid.invalidate := true.B
       io.icache_valid.iaddr := 1.U(1.W)
       io.icache_valid.idata := 0.U((1 << ICACHE_INVALIDATE_DATA_BITS).W)
@@ -495,10 +507,10 @@ class Memory() extends Module {
   val reg_dcache_read = RegInit(false.B)
   val reg_read_word = RegInit(0.U(WORD_LEN.W))
 
-  io.dmem.rready := false.B
-  io.dmem.wready := false.B
-  io.dmem.rvalid := false.B
-  io.dmem.rdata  := DontCare
+  io.cache.rready := false.B
+  io.cache.wready := false.B
+  io.cache.rvalid := false.B
+  io.cache.rdata  := DontCare
   dram_d_ren := false.B
   dram_d_wen := false.B
   dram_d_addr := DontCare
@@ -542,14 +554,14 @@ class Memory() extends Module {
         io.cache_array2.we := 0.U
         dcache_state := DCacheState.SnoopRead
       }.otherwise {
-        io.dmem.rready := true.B
-        io.dmem.wready := true.B
-        val req_addr = Mux(io.dmem.ren, io.dmem.raddr, io.dmem.waddr).asTypeOf(new DCacheAddrBundle())
+        io.cache.rready := true.B
+        io.cache.wready := true.B
+        val req_addr = Mux(io.cache.ren, io.cache.raddr, io.cache.waddr).asTypeOf(new DCacheAddrBundle())
         reg_req_addr := req_addr
-        reg_wdata := io.dmem.wdata
-        reg_wstrb := io.dmem.wstrb
-        reg_ren := io.dmem.ren
-        when (io.dmem.ren || io.dmem.wen) {
+        reg_wdata := io.cache.wdata
+        reg_wstrb := io.cache.wstrb
+        reg_ren := io.cache.ren
+        when (io.cache.ren || io.cache.wen) {
           reg_tag := tag_array.read(req_addr.index)
           io.cache_array1.en := true.B
           io.cache_array1.addr := req_addr.index
@@ -559,7 +571,7 @@ class Memory() extends Module {
           io.cache_array2.we := 0.U
           reg_dcache_read := true.B
           reg_lru := lru_array.read(req_addr.index)
-          when (io.dmem.ren) {
+          when (io.cache.ren) {
             dcache_state := DCacheState.LookupForRead
           }.otherwise {
             dcache_state := DCacheState.LookupForWrite
@@ -596,10 +608,10 @@ class Memory() extends Module {
         when (!dram_d_busy) {
           dram_d_wen := true.B
           when (reg_lru.way_hot === 1.U) {
-            dram_d_addr := Cat(reg_tag(0)(DCACHE_TAG_BITS-5, 0), reg_req_addr.index)
+            dram_d_addr := Cat(reg_tag(0)(DCACHE_TAG_BITS-1, 0), reg_req_addr.index)
             dram_d_wdata := line1
           }.otherwise {
-            dram_d_addr := Cat(reg_tag(1)(DCACHE_TAG_BITS-5, 0), reg_req_addr.index)
+            dram_d_addr := Cat(reg_tag(1)(DCACHE_TAG_BITS-1, 0), reg_req_addr.index)
             dram_d_wdata := line2
           }
           dcache_state := DCacheState.Read
@@ -607,16 +619,16 @@ class Memory() extends Module {
       }.otherwise {
         when (!dram_d_busy) {
           dram_d_ren := true.B
-          dram_d_addr := Cat(reg_req_addr.tag(DCACHE_TAG_BITS-5, 0), reg_req_addr.index)
+          dram_d_addr := Cat(reg_req_addr.tag(DCACHE_TAG_BITS-1, 0), reg_req_addr.index)
           dcache_state := DCacheState.WaitingRead
         }
       }
     }
     is (DCacheState.RespondRead) {
-        io.dmem.rready := false.B
-        io.dmem.wready := false.B
-        io.dmem.rvalid := true.B
-        io.dmem.rdata := reg_read_word
+        io.cache.rready := false.B
+        io.cache.wready := false.B
+        io.cache.rvalid := true.B
+        io.cache.rdata := reg_read_word
         dcache_state := DCacheState.Ready
     }
     is (DCacheState.LookupForWrite) {
@@ -648,10 +660,10 @@ class Memory() extends Module {
         when (!dram_d_busy) {
           dram_d_wen := true.B
           when (reg_lru.way_hot === 1.U) {
-            dram_d_addr := Cat(reg_tag(0)(DCACHE_TAG_BITS-5, 0), reg_req_addr.index)
+            dram_d_addr := Cat(reg_tag(0)(DCACHE_TAG_BITS-1, 0), reg_req_addr.index)
             dram_d_wdata := line1
           }.otherwise {
-            dram_d_addr := Cat(reg_tag(1)(DCACHE_TAG_BITS-5, 0), reg_req_addr.index)
+            dram_d_addr := Cat(reg_tag(1)(DCACHE_TAG_BITS-1, 0), reg_req_addr.index)
             dram_d_wdata := line2
           }
           dcache_state := DCacheState.Read
@@ -659,7 +671,7 @@ class Memory() extends Module {
       }.otherwise {
         when (!dram_d_busy) {
           dram_d_ren := true.B
-          dram_d_addr := Cat(reg_req_addr.tag(DCACHE_TAG_BITS-5, 0), reg_req_addr.index)
+          dram_d_addr := Cat(reg_req_addr.tag(DCACHE_TAG_BITS-1, 0), reg_req_addr.index)
           dcache_state := DCacheState.WaitingRead
         }
       }
@@ -667,18 +679,18 @@ class Memory() extends Module {
     is (DCacheState.Read) {
       when (!dram_d_busy) {
         dram_d_ren := true.B
-        dram_d_addr := Cat(reg_req_addr.tag(DCACHE_TAG_BITS-5, 0), reg_req_addr.index)
+        dram_d_addr := Cat(reg_req_addr.tag(DCACHE_TAG_BITS-1, 0), reg_req_addr.index)
         dcache_state := DCacheState.WaitingRead
       }
     }
     is (DCacheState.WaitingRead) {
       when (dram_d_rdata_valid) {
         val line = dram_rdata
-        io.dmem.rready := false.B
-        io.dmem.wready := false.B
-        io.dmem.rdata := (line >> Cat(reg_req_addr.line_off(CACHE_LINE_BITS-1, 2), 0.U(5.W)))(WORD_LEN-1, 0)
-        when (reg_ren /*&& !io.dmem.ren && io.dmem.raddr === reg_req_addr.asUInt*/) {
-          io.dmem.rvalid := true.B
+        io.cache.rready := false.B
+        io.cache.wready := false.B
+        io.cache.rdata := (line >> Cat(reg_req_addr.line_off(CACHE_LINE_BITS-1, 2), 0.U(5.W)))(WORD_LEN-1, 0)
+        when (reg_ren /*&& !io.cache.ren && io.cache.raddr === reg_req_addr.asUInt*/) {
+          io.cache.rvalid := true.B
         }
         when (reg_lru.way_hot === 1.U && reg_ren) {
           tag_array.write(reg_req_addr.index, VecInit(reg_req_addr.tag, reg_tag(1)))
@@ -733,12 +745,12 @@ class Memory() extends Module {
   // printf(p"dcache_snoop_addr   : 0x${Hexadecimal(dcache_snoop_addr.asUInt)}\n")
   // printf(p"dcache_snoop_line   : 0x${Hexadecimal(dcache_snoop_line)}\n")
   // printf(p"dcache_snoop_status : ${dcache_snoop_status.asUInt}\n")
-  // printf(p"io.dmem.rready  : ${io.dmem.rready}\n")
-  // printf(p"io.dmem.wready  : ${io.dmem.wready}\n")
-  // printf(p"io.dmem.ren     : ${io.dmem.ren}\n")
-  // printf(p"io.dmem.wen     : ${io.dmem.wen}\n")
-  // printf(p"io.dmem.raddr   : 0x${Hexadecimal(io.dmem.raddr)}\n")
-  // printf(p"io.dmem.waddr   : 0x${Hexadecimal(io.dmem.waddr)}\n")
+  // printf(p"io.cache.rready  : ${io.cache.rready}\n")
+  // printf(p"io.cache.wready  : ${io.cache.wready}\n")
+  // printf(p"io.cache.ren     : ${io.cache.ren}\n")
+  // printf(p"io.cache.wen     : ${io.cache.wen}\n")
+  // printf(p"io.cache.raddr   : 0x${Hexadecimal(io.cache.raddr)}\n")
+  // printf(p"io.cache.waddr   : 0x${Hexadecimal(io.cache.waddr)}\n")
   // printf(p"reg_req_addr    : 0x${Hexadecimal(reg_req_addr.asUInt)}\n")
   // printf(p"reg_req_addr.tag: 0x${Hexadecimal(reg_req_addr.tag)}\n")
   // printf(p"reg_req_addr.ind: 0x${Hexadecimal(reg_req_addr.index)}\n")

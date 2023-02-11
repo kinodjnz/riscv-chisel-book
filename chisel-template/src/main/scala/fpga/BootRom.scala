@@ -41,6 +41,5 @@ class BootRom(data_memory_path: String = null, imem_size_in_bytes: Int = 2048) e
   }
   io.dmem.rdata := imem_rdata
   io.dmem.rvalid := RegNext(io.dmem.ren, false.B)
-  io.dmem.rready := true.B
   io.dmem.wready := true.B
 }

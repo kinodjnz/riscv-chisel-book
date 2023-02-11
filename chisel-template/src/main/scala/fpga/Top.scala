@@ -21,7 +21,6 @@ class Config(clockHz: Int) extends Module {
     1.U -> clockHz.U,
   ))
   io.mem.rvalid := true.B
-  io.mem.rready := true.B
   io.mem.wready := true.B
 }
 
@@ -93,7 +92,7 @@ class RiscV(clockHz: Int) extends Module {
 
   val dmem_decoder = Module(new DMemDecoder(Seq(
     (BigInt(startAddress), BigInt(imemSizeInBytes)),
-    (BigInt(0x20000000L), BigInt(dmemSizeInBytes)),
+    // (BigInt(0x20000000L), BigInt(dmemSizeInBytes)),
     (BigInt(0x30000000L), BigInt(64)),  // GPIO
     (BigInt(0x30001000L), BigInt(64)),  // UART
     (BigInt(0x30002000L), BigInt(64)),  // mtimer
@@ -102,13 +101,13 @@ class RiscV(clockHz: Int) extends Module {
     (BigInt(0x40000000L), BigInt(64)),  // CONFIG
   )))
   dmem_decoder.io.targets(0) <> boot_rom.io.dmem
-  dmem_decoder.io.targets(1) <> memory.io.dmem
-  dmem_decoder.io.targets(2) <> gpio.io.mem
-  dmem_decoder.io.targets(3) <> uart.io.mem
-  dmem_decoder.io.targets(4) <> core.io.mtimer_mem
-  dmem_decoder.io.targets(5) <> sdc.io.mem
-  dmem_decoder.io.targets(6) <> intr.io.mem
-  dmem_decoder.io.targets(7) <> config.io.mem
+  // dmem_decoder.io.targets(1) <> memory.io.dmem
+  dmem_decoder.io.targets(1) <> gpio.io.mem
+  dmem_decoder.io.targets(2) <> uart.io.mem
+  dmem_decoder.io.targets(3) <> core.io.mtimer_mem
+  dmem_decoder.io.targets(4) <> sdc.io.mem
+  dmem_decoder.io.targets(5) <> intr.io.mem
+  dmem_decoder.io.targets(6) <> config.io.mem
 
   val imem_decoder = Module(new IMemDecoder(Seq(
     (BigInt(startAddress), BigInt(imemSizeInBytes)),
@@ -120,7 +119,7 @@ class RiscV(clockHz: Int) extends Module {
   core.io.imem <> imem_decoder.io.initiator
   core.io.dmem <> dmem_decoder.io.initiator
 
-  core.io.icache_control <> memory.io.icache_control
+  core.io.cache <> memory.io.cache
 
   // dram
   io.dram <> memory.io.dramPort
@@ -161,11 +160,11 @@ class RiscV(clockHz: Int) extends Module {
   io.debugSignals.core <> core.io.debug_signal
   //io.debugSignals.raddr  := core.io.dmem.raddr
   io.debugSignals.rdata  := dmem_decoder.io.initiator.rdata
-  io.debugSignals.ren    := core.io.dmem.ren
+  io.debugSignals.ren    := core.io.dmem.ren || core.io.cache.ren
   io.debugSignals.rvalid := dmem_decoder.io.initiator.rvalid
   io.debugSignals.rwaddr  := core.io.dmem.waddr
   io.debugSignals.wdata  := core.io.dmem.wdata
-  io.debugSignals.wen    := core.io.dmem.wen
+  io.debugSignals.wen    := core.io.dmem.wen || core.io.cache.wen
   io.debugSignals.wready := dmem_decoder.io.initiator.wready
   io.debugSignals.wstrb  := core.io.dmem.wstrb
 

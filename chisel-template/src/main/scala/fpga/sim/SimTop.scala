@@ -23,7 +23,7 @@ class SimTop(memoryPath: String, with_sdc: Boolean, bpTagInitPath: String) exten
   val dmem_decoder = Module(new DMemDecoder(
     Seq(
       (BigInt(startAddress), BigInt(imemSizeInBytes)),
-      (BigInt(0x20000000L), BigInt(dmemSizeInBytes)),
+      // (BigInt(0x20000000L), BigInt(dmemSizeInBytes)),
       (BigInt(0x30002000L), BigInt(64)),  // mtimer
     ) ++ (
       if (with_sdc)
@@ -35,13 +35,13 @@ class SimTop(memoryPath: String, with_sdc: Boolean, bpTagInitPath: String) exten
     )
   ))
   dmem_decoder.io.targets(0) <> boot_rom.io.dmem
-  dmem_decoder.io.targets(1) <> memory.io.dmem
-  dmem_decoder.io.targets(2) <> core.io.mtimer_mem
+  // dmem_decoder.io.targets(1) <> memory.io.dmem
+  dmem_decoder.io.targets(1) <> core.io.mtimer_mem
   if (with_sdc) {
     val sdc = Module(new Sdc)
     val sd = Module(new MockSd)
     val sdbuf = Module(new MockSdBuf)
-    dmem_decoder.io.targets(3) <> sdc.io.mem
+    dmem_decoder.io.targets(2) <> sdc.io.mem
     sdc.io.sdc_port <> sd.io.sdc_port
     sdc.io.sdbuf <> sdbuf.io.sdbuf
   }
@@ -56,7 +56,7 @@ class SimTop(memoryPath: String, with_sdc: Boolean, bpTagInitPath: String) exten
   core.io.imem <> imem_decoder.io.initiator
   core.io.dmem <> dmem_decoder.io.initiator
 
-  core.io.icache_control <> memory.io.icache_control
+  core.io.cache <> memory.io.cache
 
   val dram = Module(new MockDram(null, dmemSizeInBytes))
   memory.io.dramPort <> dram.io.dram
@@ -74,10 +74,6 @@ class SimTop(memoryPath: String, with_sdc: Boolean, bpTagInitPath: String) exten
   core.io.intr := 0.U
   io.gp   := core.io.gp
 
-  val do_exit = RegInit(false.B)
-  val do_exit_delay = RegInit(false.B)
-
-  do_exit := core.io.exit
-  do_exit_delay := do_exit
-  io.exit := do_exit_delay
+  val do_exit = RegNext(core.io.exit)
+  io.exit := RegNext(do_exit)
 }

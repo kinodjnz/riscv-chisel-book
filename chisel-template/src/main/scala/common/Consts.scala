@@ -122,11 +122,8 @@ object Consts {
   val WB_FENCE   = 3.U(WB_SEL_LEN.W)
   val WB_MD      = 4.U(WB_SEL_LEN.W)
   val WB_CSR     = 5.U(WB_SEL_LEN.W)
-  val WB_MEM     = 6.U(WB_SEL_LEN.W)
+  val WB_LD      = 6.U(WB_SEL_LEN.W)
   val WB_BIT     = 7.U(WB_SEL_LEN.W)
-  val WB_MEM_V   = 1.U(WB_SEL_LEN.W)
-  val WB_ALU_V   = 2.U(WB_SEL_LEN.W)
-  val WB_VL      = 3.U(WB_SEL_LEN.W)
 
   val WBA_LEN = 3
   val WBA_RD  = 0.U(WBA_LEN.W)
