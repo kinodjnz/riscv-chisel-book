@@ -165,10 +165,10 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
   val ex1_reg_mem_use_reg   = RegInit(false.B)
   val ex1_reg_inst2_use_reg = RegInit(false.B)
   val ex1_reg_inst3_use_reg = RegInit(false.B)
-  val ex1_reg_is_direct_jbr_fail = RegInit(false.B)
+  // val ex1_reg_is_direct_jbr_fail = RegInit(false.B)
   val ex1_reg_is_br              = RegInit(false.B)
   val ex1_reg_is_indirect_j      = RegInit(false.B)
-  val ex1_reg_is_direct_j        = RegInit(false.B)
+  // val ex1_reg_is_direct_j        = RegInit(false.B)
   val ex1_reg_direct_jbr_target  = RegInit(0.U(WORD_LEN.W))
   // val ex1_reg_direct_bp_match  = RegInit(false.B)
 
@@ -184,7 +184,7 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
   val jbr_reg_is_half          = RegInit(false.B)
 
   // EX1/EX2 State
-  val ex2_reg_en            = RegInit(false.B)
+  // val ex2_reg_en            = RegInit(false.B)
   val ex2_reg_pc            = RegInit(0.U(WORD_LEN.W))
   val ex2_reg_inst_cnt      = RegInit(0.U(INST_CNT_LEN.W))
   val ex2_reg_wb_addr       = RegInit(0.U(ADDR_LEN.W))
@@ -254,6 +254,7 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
   val mem_reg_dmem_state = RegInit(DmemState.Idle)
   val ex2_reg_is_retired = RegInit(false.B)
   val mem2_reg_is_retired = RegInit(false.B)
+  val ex2_is_valid_inst  = Wire(Bool())
 
   //**********************************
   // Instruction Cache Controller
@@ -458,7 +459,7 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
     bp.io.lu.br_addr,
   )
   if2_reg_bp_addr := if2_bp_addr
-  val if2_inst_cnt = Mux(!jbr_reg_is_br && !csr_reg_is_br && id_reg_stall, if2_reg_inst_cnt, if2_reg_inst_cnt + 1.U)
+  val if2_inst_cnt = Mux(!csr_reg_is_br && !jbr_reg_is_br && id_reg_stall, if2_reg_inst_cnt, if2_reg_inst_cnt + 1.U)
   if2_reg_inst_cnt := if2_inst_cnt
   
   printf(p"ic_reg_addr_out: ${Hexadecimal(ic_reg_addr_out)}, ic_data_out: ${Hexadecimal(ic_data_out)}\n")
@@ -939,8 +940,8 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
   ) {
       scoreboard(rrd_reg_wb_addr) := (rrd_reg_wb_sel =/= WB_ALU && rrd_reg_wb_sel =/= WB_PC)
       rrd_mem_use_reg   := (rrd_reg_wb_sel === WB_MEM || rrd_reg_wb_sel === WB_ST)
-      rrd_inst2_use_reg := (rrd_reg_wb_sel === WB_CSR || rrd_reg_wb_sel === WB_BIT)
-      rrd_inst3_use_reg := (rrd_reg_wb_sel === WB_MD)
+      rrd_inst2_use_reg := (rrd_reg_wb_sel === WB_BIT || rrd_reg_wb_sel === WB_FENCE)
+      rrd_inst3_use_reg := (rrd_reg_wb_sel === WB_MD || rrd_reg_wb_sel === WB_CSR)
   }
 
   //**********************************
@@ -960,7 +961,7 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
     ex1_reg_csr_addr      := rrd_reg_csr_addr
     ex1_reg_csr_cmd       := Mux(ex_is_bubble, CSR_X, rrd_reg_csr_cmd)
     ex1_reg_mem_w         := rrd_reg_mem_w
-    ex1_reg_is_direct_j   := rrd_reg_is_direct_j
+    // ex1_reg_is_direct_j   := rrd_reg_is_direct_j
     ex1_reg_is_br         := rrd_reg_is_br
     ex1_reg_is_j          := rrd_reg_is_j
     ex1_reg_is_bp_pos     := rrd_reg_is_bp_pos
@@ -979,105 +980,6 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
 
   //**********************************
   // Execute (EX1) Stage
-
-  // CSR
-  val csr_mie_fw_en = WireDefault(false.B)
-  val csr_mie_meie_fw = WireDefault(false.B)
-  val csr_mie_mtie_fw = WireDefault(false.B)
-  val csr_mstatus_mie_fw_en = WireDefault(false.B)
-  val csr_mstatus_mie_fw = WireDefault(false.B)
-  val csr_reg_is_meintr = RegNext(
-    ((csr_mstatus_mie_fw_en && csr_mstatus_mie_fw) || csr_mstatus_mie) && io.intr && ((csr_mie_fw_en && csr_mie_meie_fw) || csr_mie_meie)
-  )
-  val csr_reg_is_mtintr = RegNext(
-    ((csr_mstatus_mie_fw_en && csr_mstatus_mie_fw) || csr_mstatus_mie) && mtimer.io.intr && ((csr_mie_fw_en && csr_mie_mtie_fw) || csr_mie_mtie)
-  )
-
-  val csr_is_valid_inst = ex1_reg_is_valid_inst && !(csr_reg_is_br || jbr_reg_is_br)
-  val csr_is_meintr = csr_reg_is_meintr && csr_is_valid_inst
-  val csr_is_mtintr = csr_reg_is_mtintr && csr_is_valid_inst
-  val csr_is_trap = ex1_reg_is_trap && csr_is_valid_inst && !csr_is_meintr && !csr_is_mtintr
-  val ex1_is_valid_inst = csr_is_valid_inst && !csr_is_trap && !csr_is_meintr && !csr_is_mtintr
-  val csr_is_mret = csr_is_valid_inst && !csr_is_meintr && !csr_is_mtintr && (ex1_reg_exe_fun === CMD_MRET)
-
-  val csr_rdata = MuxLookup(ex1_reg_csr_addr, 0.U(WORD_LEN.W), Seq(
-    CSR_ADDR_MTVEC    -> csr_trap_vector,
-    CSR_ADDR_TIME     -> mtimer.io.mtime(31, 0),
-    CSR_ADDR_CYCLE    -> cycle_counter.io.value(31, 0),
-    CSR_ADDR_INSTRET  -> instret(31, 0),
-    CSR_ADDR_CYCLEH   -> cycle_counter.io.value(63, 32),
-    CSR_ADDR_TIMEH    -> mtimer.io.mtime(63, 32),
-    CSR_ADDR_INSTRETH -> instret(63, 32),
-    CSR_ADDR_MEPC     -> csr_mepc,
-    CSR_ADDR_MCAUSE   -> csr_mcause,
-    // CSR_ADDR_MTVAL    -> csr_mtval,
-    CSR_ADDR_MSTATUS  -> Cat(0.U(24.W), csr_mstatus_mpie.asUInt, 0.U(3.W), csr_mstatus_mie.asUInt, 0.U(3.W)),
-    CSR_ADDR_MSCRATCH -> csr_mscratch,
-    CSR_ADDR_MIE      -> Cat(0.U(20.W), csr_mie_meie.asUInt, 0.U(3.W), csr_mie_mtie.asUInt, 0.U(7.W)),
-    CSR_ADDR_MIP      -> Cat(0.U(20.W), io.intr.asUInt, 0.U(3.W), mtimer.io.intr.asUInt, 0.U(7.W)),
-  ))
-
-  val csr_wdata = MuxCase(0.U(WORD_LEN.W), Seq(
-    (ex1_reg_csr_cmd === CSR_W) -> ex1_reg_op1_data,
-    (ex1_reg_csr_cmd === CSR_S) -> (csr_rdata | ex1_reg_op1_data),
-    (ex1_reg_csr_cmd === CSR_C) -> (csr_rdata & ~ex1_reg_op1_data),
-  ))
-
-  when (ex1_is_valid_inst && ex1_reg_wb_sel === WB_CSR) {
-    when (ex1_reg_csr_addr === CSR_ADDR_MTVEC) {
-      csr_trap_vector := csr_wdata
-    }.elsewhen (ex1_reg_csr_addr === CSR_ADDR_MEPC) {
-      csr_mepc := csr_wdata
-    }.elsewhen (ex1_reg_csr_addr === CSR_ADDR_MSTATUS) {
-      csr_mstatus_mie  := csr_wdata(3)
-      csr_mstatus_mpie := csr_wdata(7)
-      csr_mstatus_mie_fw_en := true.B
-      csr_mstatus_mie_fw := csr_wdata(3)
-    }.elsewhen (ex1_reg_csr_addr === CSR_ADDR_MSCRATCH) {
-      csr_mscratch := csr_wdata
-    }.elsewhen (ex1_reg_csr_addr === CSR_ADDR_MIE) {
-      csr_mie_meie := csr_wdata(11)
-      csr_mie_mtie := csr_wdata(7)
-      csr_mie_fw_en := true.B
-      csr_mie_meie_fw := csr_wdata(11)
-      csr_mie_mtie_fw := csr_wdata(7)
-    }
-  }
-
-  // csr_mip := Cat(csr_mip(31, 12), io.intr.asUInt, csr_mip(10, 8), mtimer.io.intr.asUInt, csr_mip(6, 0))
-
-  when (csr_is_meintr) {
-    csr_mcause       := CSR_MCAUSE_MEI
-    // csr_mtval        := 0.U(WORD_LEN.W)
-    csr_mepc         := ex1_reg_pc
-    csr_mstatus_mpie := csr_mstatus_mie
-    csr_mstatus_mie  := false.B
-    csr_reg_is_br    := true.B
-    csr_reg_br_addr  := csr_trap_vector
-  }.elsewhen (csr_is_mtintr) {
-    csr_mcause       := CSR_MCAUSE_MTI
-    // csr_mtval        := 0.U(WORD_LEN.W)
-    csr_mepc         := ex1_reg_pc
-    csr_mstatus_mpie := csr_mstatus_mie
-    csr_mstatus_mie  := false.B
-    csr_reg_is_br    := true.B
-    csr_reg_br_addr  := csr_trap_vector
-  }.elsewhen (csr_is_trap) {
-    csr_mcause       := ex1_reg_mcause
-    // csr_mtval        := ex2_reg_mtval
-    csr_mepc         := ex1_reg_pc
-    csr_mstatus_mpie := csr_mstatus_mie
-    csr_mstatus_mie  := false.B
-    csr_reg_is_br    := true.B
-    csr_reg_br_addr  := csr_trap_vector
-  }.elsewhen (csr_is_mret) {
-    csr_mstatus_mpie := true.B
-    csr_mstatus_mie  := csr_mstatus_mpie
-    csr_reg_is_br    := true.B
-    csr_reg_br_addr  := csr_mepc
-  }.otherwise {
-    csr_reg_is_br    := false.B
-  }
 
   val ex1_alu_out = MuxCase(0.U(WORD_LEN.W), Seq(
     (ex1_reg_exe_fun === ALU_ADD)   -> (ex1_reg_op1_data + ex1_reg_op2_data),
@@ -1108,7 +1010,6 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
   val ex1_next_pc = Mux(ex1_reg_is_half, ex1_reg_pc + 2.U(WORD_LEN.W), ex1_reg_pc + 4.U(WORD_LEN.W))
   val ex1_pc_bit_out = MuxCase(0.U(WORD_LEN.W), Seq(
     (ex1_reg_wb_sel === WB_PC)      -> ex1_next_pc,
-    (ex1_reg_wb_sel === WB_CSR)     -> csr_rdata,
     (ex1_reg_exe_fun === ALU_ZEXTH) -> Cat(0.U(16.W), ex1_reg_op1_data(15, 0)),
     (ex1_reg_exe_fun === ALU_CPOP)  -> PopCount(ex1_reg_op1_data),
     (ex1_reg_exe_fun === ALU_CLZ)   -> PriorityEncoder(Cat(1.U(1.W), Reverse(ex1_reg_op1_data))),
@@ -1166,11 +1067,11 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
   val ex1_is_uncond_br = ex1_reg_is_j
   val ex1_cond_br_target = ex1_reg_direct_jbr_target
   val ex1_uncond_br_target = ex1_alu_out & ~1.U(WORD_LEN.W)
-  ex1_reg_is_direct_jbr_fail := ex1_is_valid_inst && (
-    (ex1_reg_is_br && ex1_is_cond_br && (!ex1_reg_is_bp_pos || ex1_reg_direct_jbr_target =/= ex1_reg_bp_addr)) ||
-    (ex1_reg_is_direct_j && (!ex1_reg_is_bp_pos || ex1_reg_direct_jbr_target =/= ex1_reg_bp_addr)) ||
-    (ex1_reg_is_br && !ex1_is_cond_br && ex1_reg_is_bp_pos)
-  )
+  // ex1_reg_is_direct_jbr_fail := ex1_is_valid_inst && (
+  //   (ex1_reg_is_br && ex1_is_cond_br && (!ex1_reg_is_bp_pos || ex1_reg_direct_jbr_target =/= ex1_reg_bp_addr)) ||
+  //   (ex1_reg_is_direct_j && (!ex1_reg_is_bp_pos || ex1_reg_direct_jbr_target =/= ex1_reg_bp_addr)) ||
+  //   (ex1_reg_is_br && !ex1_is_cond_br && ex1_reg_is_bp_pos)
+  // )
 
   ex1_fw_data := MuxCase(ex1_alu_out, Seq(
     (ex1_reg_wb_sel === WB_PC) -> ex1_next_pc,
@@ -1187,7 +1088,7 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
   // EX1/JBR register
   // jump, br 命令ではストールは発生しないためストール時は単に更新しない
   when (!ex2_stall) {
-    jbr_reg_bp_en            := ex1_is_valid_inst // && !ex2_reg_is_br && !jbr_reg_is_br
+    jbr_reg_bp_en            := ex1_reg_is_valid_inst && !csr_reg_is_br && !jbr_reg_is_br
     jbr_reg_is_cond_br       := ex1_is_cond_br
     jbr_reg_is_cond_br_inst  := ex1_is_cond_br_inst
     jbr_reg_is_uncond_br     := ex1_is_uncond_br
@@ -1201,7 +1102,7 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
   //**********************************
   // Execute Jump/Branch (JBR) Stage
 
-  val jbr_bp_en = jbr_reg_bp_en && !jbr_reg_is_br
+  val jbr_bp_en = jbr_reg_bp_en && !csr_reg_is_br && !jbr_reg_is_br
   val jbr_cond_bp_fail = jbr_bp_en && (
     (!jbr_reg_is_bp_pos && jbr_reg_is_cond_br) ||
     (jbr_reg_is_bp_pos && jbr_reg_is_cond_br && (jbr_reg_bp_addr =/= jbr_reg_cond_br_target))
@@ -1243,7 +1144,7 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
   //**********************************
   // EX1/EX2 register
   when (!ex2_stall) {
-    ex2_reg_en         := !jbr_reg_is_br // && !(ex1_reg_rf_wen === REN_S && ex1_reg_wb_sel === WB_ALU)
+    // ex2_reg_en         := !csr_reg_is_br && !jbr_reg_is_br // && !(ex1_reg_rf_wen === REN_S && ex1_reg_wb_sel === WB_ALU)
     ex2_reg_pc         := ex1_reg_pc
     ex2_reg_inst_cnt   := ex1_reg_inst_cnt
     ex2_reg_op1_data   := ex1_reg_op1_data
@@ -1260,7 +1161,7 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
     ex2_reg_rf_wen     := ex1_reg_rf_wen
     ex2_reg_wb_sel     := ex1_reg_wb_sel
     ex2_reg_wdata      := (ex1_reg_rs2_data << (8.U * ex1_alu_out(1, 0)))(WORD_LEN-1, 0)
-    ex2_reg_is_valid_inst := ex1_is_valid_inst // && !ex2_reg_is_br && !jbr_reg_is_br
+    ex2_reg_is_valid_inst := ex1_reg_is_valid_inst && !csr_reg_is_br && !jbr_reg_is_br
     ex2_reg_is_trap    := ex1_reg_is_trap
     ex2_reg_mcause     := ex1_reg_mcause
     // ex2_reg_mtval      := ex1_reg_mtval
@@ -1275,25 +1176,124 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
     ex2_reg_orig_dividend     := ex1_orig_dividend
     ex2_reg_inst3_use_reg     := ex1_reg_inst3_use_reg
     ex2_reg_fw_en             := ex1_fw_en_next
+    ex2_reg_csr_cmd           := ex1_reg_csr_cmd
+    ex2_reg_csr_addr          := ex1_reg_csr_addr
   }.otherwise {
     ex2_reg_div_stall := ex2_div_stall_next ||
       (ex2_reg_divrem && (ex2_reg_divrem_state === DivremState.Idle || ex2_reg_divrem_state === DivremState.Finished))
   }
 
-  val ex2_is_valid_inst = ex2_reg_is_valid_inst && !jbr_reg_is_br
-  val ex2_en = ex2_reg_en && !jbr_reg_is_br
-  val ex2_rf_wen = Mux(ex2_en, ex2_reg_rf_wen, REN_X)
-  val ex2_wb_sel = Mux(ex2_en, ex2_reg_wb_sel, WB_X)
+  // val ex2_is_valid_inst = ex2_reg_is_valid_inst && !csr_reg_is_br && !jbr_reg_is_br
+  // val ex2_en = ex2_reg_en && !csr_reg_is_br && !jbr_reg_is_br
+  // val ex2_rf_wen = Mux(ex2_is_valid_inst, ex2_reg_rf_wen, REN_X)
+  val ex2_wb_sel = Mux(ex2_is_valid_inst, ex2_reg_wb_sel, WB_X)
   // val ex2_stall_delay = RegInit(false.B)
 
   ex2_stall := mem_stall || ex2_reg_div_stall
 
-  def signExtend48(value: UInt, w: Int): SInt = {
-      (Fill(WORD_LEN*3/2 - w, value(w - 1)) ## value(w - 1, 0)).asSInt()
+  //**********************************
+  // EX2 CSR Stage
+
+  // val csr_mie_fw_en = WireDefault(false.B)
+  // val csr_mie_meie_fw = WireDefault(false.B)
+  // val csr_mie_mtie_fw = WireDefault(false.B)
+  // val csr_mstatus_mie_fw_en = WireDefault(false.B)
+  // val csr_mstatus_mie_fw = WireDefault(false.B)
+  // val csr_reg_is_meintr = RegNext(
+  //   ((csr_mstatus_mie_fw_en && csr_mstatus_mie_fw) || csr_mstatus_mie) && io.intr && ((csr_mie_fw_en && csr_mie_meie_fw) || csr_mie_meie)
+  // )
+  // val csr_reg_is_mtintr = RegNext(
+  //   ((csr_mstatus_mie_fw_en && csr_mstatus_mie_fw) || csr_mstatus_mie) && mtimer.io.intr && ((csr_mie_fw_en && csr_mie_mtie_fw) || csr_mie_mtie)
+  // )
+
+  val csr_is_valid_inst = ex2_reg_is_valid_inst && !csr_reg_is_br && !jbr_reg_is_br
+  val csr_is_meintr = csr_mstatus_mie && io.intr && csr_mie_meie && csr_is_valid_inst
+  val csr_is_mtintr = csr_mstatus_mie && mtimer.io.intr && csr_mie_mtie && csr_is_valid_inst
+  val csr_is_trap = ex2_reg_is_trap && csr_is_valid_inst && !csr_is_meintr && !csr_is_mtintr
+  ex2_is_valid_inst := csr_is_valid_inst && !csr_is_trap && !csr_is_meintr && !csr_is_mtintr
+  val csr_is_mret = csr_is_valid_inst && !csr_is_meintr && !csr_is_mtintr && (ex2_reg_exe_fun === CMD_MRET)
+
+  val csr_rdata = MuxLookup(ex2_reg_csr_addr, 0.U(WORD_LEN.W), Seq(
+    CSR_ADDR_MTVEC    -> csr_trap_vector,
+    CSR_ADDR_TIME     -> mtimer.io.mtime(31, 0),
+    CSR_ADDR_CYCLE    -> cycle_counter.io.value(31, 0),
+    CSR_ADDR_INSTRET  -> instret(31, 0),
+    CSR_ADDR_CYCLEH   -> cycle_counter.io.value(63, 32),
+    CSR_ADDR_TIMEH    -> mtimer.io.mtime(63, 32),
+    CSR_ADDR_INSTRETH -> instret(63, 32),
+    CSR_ADDR_MEPC     -> csr_mepc,
+    CSR_ADDR_MCAUSE   -> csr_mcause,
+    // CSR_ADDR_MTVAL    -> csr_mtval,
+    CSR_ADDR_MSTATUS  -> Cat(0.U(24.W), csr_mstatus_mpie.asUInt, 0.U(3.W), csr_mstatus_mie.asUInt, 0.U(3.W)),
+    CSR_ADDR_MSCRATCH -> csr_mscratch,
+    CSR_ADDR_MIE      -> Cat(0.U(20.W), csr_mie_meie.asUInt, 0.U(3.W), csr_mie_mtie.asUInt, 0.U(7.W)),
+    CSR_ADDR_MIP      -> Cat(0.U(20.W), io.intr.asUInt, 0.U(3.W), mtimer.io.intr.asUInt, 0.U(7.W)),
+  ))
+
+  val csr_wdata = MuxCase(0.U(WORD_LEN.W), Seq(
+    (ex2_reg_csr_cmd === CSR_W) -> ex2_reg_op1_data,
+    (ex2_reg_csr_cmd === CSR_S) -> (csr_rdata | ex2_reg_op1_data),
+    (ex2_reg_csr_cmd === CSR_C) -> (csr_rdata & ~ex2_reg_op1_data),
+  ))
+
+  when (!csr_reg_is_br && !jbr_reg_is_br && ex2_reg_wb_sel === WB_CSR) {
+    when (ex2_reg_csr_addr === CSR_ADDR_MTVEC) {
+      csr_trap_vector := csr_wdata
+    }.elsewhen (ex2_reg_csr_addr === CSR_ADDR_MEPC) {
+      csr_mepc := csr_wdata
+    }.elsewhen (ex2_reg_csr_addr === CSR_ADDR_MSTATUS) {
+      csr_mstatus_mie  := csr_wdata(3)
+      csr_mstatus_mpie := csr_wdata(7)
+      // csr_mstatus_mie_fw_en := true.B
+      // csr_mstatus_mie_fw := csr_wdata(3)
+    }.elsewhen (ex2_reg_csr_addr === CSR_ADDR_MSCRATCH) {
+      csr_mscratch := csr_wdata
+    }.elsewhen (ex2_reg_csr_addr === CSR_ADDR_MIE) {
+      csr_mie_meie := csr_wdata(11)
+      csr_mie_mtie := csr_wdata(7)
+      // csr_mie_fw_en := true.B
+      // csr_mie_meie_fw := csr_wdata(11)
+      // csr_mie_mtie_fw := csr_wdata(7)
+    }
   }
-  def zeroExtend48(value: UInt, w: Int) = {
-      Fill(WORD_LEN*3/2 - w, 0.U) ## value(w - 1, 0)
+
+  // csr_mip := Cat(csr_mip(31, 12), io.intr.asUInt, csr_mip(10, 8), mtimer.io.intr.asUInt, csr_mip(6, 0))
+
+  when (csr_is_meintr) {
+    csr_mcause       := CSR_MCAUSE_MEI
+    // csr_mtval        := 0.U(WORD_LEN.W)
+    csr_mepc         := ex2_reg_pc
+    csr_mstatus_mpie := csr_mstatus_mie
+    csr_mstatus_mie  := false.B
+    csr_reg_is_br    := true.B
+    csr_reg_br_addr  := csr_trap_vector
+  }.elsewhen (csr_is_mtintr) {
+    csr_mcause       := CSR_MCAUSE_MTI
+    // csr_mtval        := 0.U(WORD_LEN.W)
+    csr_mepc         := ex2_reg_pc
+    csr_mstatus_mpie := csr_mstatus_mie
+    csr_mstatus_mie  := false.B
+    csr_reg_is_br    := true.B
+    csr_reg_br_addr  := csr_trap_vector
+  }.elsewhen (csr_is_trap) {
+    csr_mcause       := ex2_reg_mcause
+    // csr_mtval        := ex2_reg_mtval
+    csr_mepc         := ex2_reg_pc
+    csr_mstatus_mpie := csr_mstatus_mie
+    csr_mstatus_mie  := false.B
+    csr_reg_is_br    := true.B
+    csr_reg_br_addr  := csr_trap_vector
+  }.elsewhen (csr_is_mret) {
+    csr_mstatus_mpie := true.B
+    csr_mstatus_mie  := csr_mstatus_mpie
+    csr_reg_is_br    := true.B
+    csr_reg_br_addr  := csr_mepc
+  }.otherwise {
+    csr_reg_is_br    := false.B
   }
+
+  //**********************************
+  // EX2 MUL/DIV Stage
 
   val ex2_reg_dividend     = RegInit(0.S((WORD_LEN+5).W))
   val ex2_reg_divisor      = RegInit(0.U((WORD_LEN+4).W))
@@ -1304,6 +1304,13 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
   val ex2_reg_d            = RegInit(0.U(3.W))
   val ex2_reg_reminder     = RegInit(0.U(WORD_LEN.W))
   val ex2_reg_quotient     = RegInit(0.U(WORD_LEN.W))
+
+  def signExtend48(value: UInt, w: Int): SInt = {
+      (Fill(WORD_LEN*3/2 - w, value(w - 1)) ## value(w - 1, 0)).asSInt()
+  }
+  def zeroExtend48(value: UInt, w: Int) = {
+      Fill(WORD_LEN*3/2 - w, 0.U) ## value(w - 1, 0)
+  }
 
   val ex2_alu_muldiv_out = MuxCase(0.U(WORD_LEN.W), Seq(
     (ex2_reg_exe_fun === ALU_MUL)    -> (ex2_reg_mullu(WORD_LEN-1, 0) + (ex2_reg_mulhuu(WORD_LEN/2-1, 0) << (WORD_LEN/2))),
@@ -1567,31 +1574,24 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
   // printf(p"ex2_reg_divrem_count : 0x${Hexadecimal(ex2_reg_divrem_count)}\n")
   // printf(p"ex2_reg_rem_shift    : 0x${Hexadecimal(ex2_reg_rem_shift)}\n")
 
-  io.icache_control.invalidate := (ex2_wb_sel === WB_FENCE)
-
-  def signExtend(value: UInt, w: Int) = {
-      Fill(WORD_LEN - w, value(w - 1)) ## value(w - 1, 0)
-  }
-  def zeroExtend(value: UInt, w: Int) = {
-      Fill(WORD_LEN - w, 0.U) ## value(w - 1, 0)
-  }
-
+  //**********************************
+  // EX2 Stage
   ex2_wb_data := MuxCase(ex2_reg_alu_out, Seq(
     (
       (ex2_reg_wb_sel === WB_PC) ||
-      (ex2_reg_wb_sel === WB_BIT) ||
+      (ex2_reg_wb_sel === WB_BIT)
+    ) -> ex2_reg_pc_bit_out,
+    (
       (ex2_reg_wb_sel === WB_CSR) ||
       (ex2_reg_wb_sel === WB_FENCE) // dummy for optimization
-    ) -> ex2_reg_pc_bit_out,
+    ) -> csr_rdata,
     (ex2_reg_wb_sel === WB_MD) -> ex2_alu_muldiv_out,
   ))
 
   ex2_fw_data := Mux(
     (
       (ex2_reg_wb_sel === WB_PC) ||
-      (ex2_reg_wb_sel === WB_BIT) ||
-      (ex2_reg_wb_sel === WB_CSR) ||
-      (ex2_reg_wb_sel === WB_FENCE) // dummy for optimization
+      (ex2_reg_wb_sel === WB_BIT)
     ),
     ex2_reg_pc_bit_out,
     ex2_reg_alu_out,
@@ -1602,7 +1602,7 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
 
   ex2_reg_is_retired := ex2_is_valid_inst && !ex2_stall && (ex2_reg_wb_sel =/= WB_MEM && ex2_reg_wb_sel =/= WB_ST)
 
-  when (!ex2_stall && ex2_rf_wen === REN_S && (ex2_reg_wb_sel =/= WB_MEM && ex2_reg_wb_sel =/= WB_ST)) {
+  when (ex2_is_valid_inst && !ex2_stall && ex2_reg_rf_wen === REN_S && (ex2_reg_wb_sel =/= WB_MEM && ex2_reg_wb_sel =/= WB_ST)) {
     regfile(ex2_reg_wb_addr) := ex2_wb_data
   }
 
@@ -1632,6 +1632,7 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
   //   ((ex2_mem_wen === MEN_FENCE) && io.icache_control.busy) ||
   //   ex2_reg_div_stall
   // ex2_stall_delay := (ex2_wb_sel === WB_MEM) && io.dmem.rvalid && !ex2_stall // 読めた直後はストール
+  io.icache_control.invalidate := (ex2_wb_sel === WB_FENCE)
 
   mem_stall := false.B
 
@@ -1666,6 +1667,13 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
   mem2_reg_wb_addr        := ex2_reg_wb_addr
   mem2_reg_is_valid       := (!mem_stall && ex2_wb_sel === WB_MEM)
   mem2_reg_mem_use_reg    := !mem_stall && mem_reg_mem_use_reg
+
+  def signExtend(value: UInt, w: Int) = {
+      Fill(WORD_LEN - w, value(w - 1)) ## value(w - 1, 0)
+  }
+  def zeroExtend(value: UInt, w: Int) = {
+      Fill(WORD_LEN - w, 0.U) ## value(w - 1, 0)
+  }
 
   val mem2_wb_rdata = mem2_reg_dmem_rdata >> (8.U * mem2_reg_wb_byte_offset)
   val mem2_wb_data_load = MuxCase(mem2_wb_rdata, Seq(
@@ -1732,7 +1740,7 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
   printf(p"ex1_fw_data      : 0x${Hexadecimal(ex1_fw_data)}\n")
   printf(p"ex1_reg_pc       : 0x${Hexadecimal(ex1_reg_pc)}\n")
   printf(p"ex1_reg_inst_cnt : 0x${Hexadecimal(ex1_reg_inst_cnt)}\n")
-  printf(p"ex1_is_valid_inst: 0x${Hexadecimal(ex1_is_valid_inst)}\n")
+  printf(p"ex1_reg_is_valid_: 0x${Hexadecimal(ex1_reg_is_valid_inst)}\n")
   printf(p"ex1_reg_op1_data : 0x${Hexadecimal(ex1_reg_op1_data)}\n")
   printf(p"ex1_reg_op2_data : 0x${Hexadecimal(ex1_reg_op2_data)}\n")
   printf(p"ex1_alu_out      : 0x${Hexadecimal(ex1_alu_out)}\n")
@@ -1741,7 +1749,7 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
   printf(p"ex1_reg_wb_addr  : 0x${Hexadecimal(ex1_reg_wb_addr)}\n")
   printf(p"ex1_reg_is_bp_pos: 0x${Hexadecimal(ex1_reg_is_bp_pos)}\n")
   printf(p"ex1_reg_bp_addr  : 0x${Hexadecimal(ex1_reg_bp_addr)}\n")
-  printf(p"ex1_reg_is_d_jbr_: 0x${Hexadecimal(ex1_reg_is_direct_jbr_fail)}\n")
+  // printf(p"ex1_reg_is_d_jbr_: 0x${Hexadecimal(ex1_reg_is_direct_jbr_fail)}\n")
   printf(p"jbr_reg_is_br    : 0x${Hexadecimal(jbr_reg_is_br)}\n")
   printf(p"jbr_reg_br_target: 0x${Hexadecimal(jbr_reg_br_target)}\n")
   printf(p"ex2_reg_pc       : 0x${Hexadecimal(ex2_reg_pc)}\n")
@@ -1750,13 +1758,16 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
   printf(p"ex2_stall        : 0x${Hexadecimal(ex2_stall)}\n")
   printf(p"ex2_wb_data      : 0x${Hexadecimal(ex2_wb_data)}\n")
   printf(p"ex2_alu_muldiv_ou: 0x${Hexadecimal(ex2_alu_muldiv_out)}\n")
-  printf(p"mem_reg_mem_w    : 0x${Hexadecimal(mem_reg_mem_w)}\n")
   printf(p"ex2_reg_wb_addr  : 0x${Hexadecimal(ex2_reg_wb_addr)}\n")
+  printf(p"mem_reg_mem_w    : 0x${Hexadecimal(mem_reg_mem_w)}\n")
   printf(p"mem2_reg_wb_addr : 0x${Hexadecimal(mem2_reg_wb_addr)}\n")
   printf(p"mem2_wb_data_load: 0x${Hexadecimal(mem2_wb_data_load)}\n")
   printf(p"csr_is_meintr    : ${csr_is_meintr}\n")
   printf(p"csr_is_mtintr    : ${csr_is_mtintr}\n")
   printf(p"csr_mepc         : 0x${Hexadecimal(csr_mepc)}\n")
+  printf(p"csr_reg_is_br    : ${csr_reg_is_br}\n")
+  printf(p"csr_wdata        : 0x${Hexadecimal(csr_wdata)}\n")
+  printf(p"ex2_reg_csr_cmd  : 0x${Hexadecimal(ex2_reg_csr_cmd)}\n")
   printf(p"instret          : ${instret}\n")
   printf(p"cycle_counter(${io.exit}) : ${io.debug_signal.cycle_counter}\n")
   printf("---------\n")
