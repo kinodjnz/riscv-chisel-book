@@ -112,35 +112,35 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
   // val id_reg_mtval          = RegInit(0.U(WORD_LEN.W))
   val id_reg_is_br          = RegInit(false.B)
 
-  // ID/EX1 State
-  val ex1_reg_pc            = RegInit(0.U(WORD_LEN.W))
-  val ex1_reg_inst_cnt      = RegInit(0.U(INST_CNT_LEN.W))
-  val ex1_reg_wb_addr       = RegInit(0.U(ADDR_LEN.W))
-  val ex1_reg_op1_sel       = RegInit(0.U(OP1_LEN.W))
-  val ex1_reg_op2_sel       = RegInit(0.U(OP2_LEN.W))
-  val ex1_reg_rs1_addr      = RegInit(0.U(ADDR_LEN.W))
-  val ex1_reg_rs2_addr      = RegInit(0.U(ADDR_LEN.W))
-  val ex1_reg_op1_data      = RegInit(0.U(WORD_LEN.W))
-  val ex1_reg_op2_data      = RegInit(0.U(WORD_LEN.W))
-  val ex1_reg_exe_fun       = RegInit(0.U(EXE_FUN_LEN.W))
-  val ex1_reg_rf_wen        = RegInit(0.U(REN_LEN.W))
-  val ex1_reg_wb_sel        = RegInit(0.U(WB_SEL_LEN.W))
-  val ex1_reg_csr_addr      = RegInit(0.U(CSR_ADDR_LEN.W))
-  val ex1_reg_csr_cmd       = RegInit(0.U(CSR_LEN.W))
-  val ex1_reg_imm_b_sext    = RegInit(0.U(WORD_LEN.W))
-  val ex1_reg_mem_w         = RegInit(0.U(MW_LEN.W))
-  val ex1_reg_is_direct_j    = RegInit(false.B)
-  val ex1_reg_is_br          = RegInit(false.B)
-  val ex1_reg_is_j           = RegInit(false.B)
-  val ex1_reg_is_bp_pos      = RegInit(false.B)
-  val ex1_reg_bp_addr        = RegInit(0.U(WORD_LEN.W))
-  val ex1_reg_is_half        = RegInit(false.B)
-  val ex1_reg_is_valid_inst  = RegInit(false.B)
-  val ex1_reg_is_trap        = RegInit(false.B)
-  val ex1_reg_mcause         = RegInit(0.U(WORD_LEN.W))
-  // val ex1_reg_mtval          = RegInit(0.U(WORD_LEN.W))
+  // ID/RRD State
+  val rrd_reg_pc            = RegInit(0.U(WORD_LEN.W))
+  val rrd_reg_inst_cnt      = RegInit(0.U(INST_CNT_LEN.W))
+  val rrd_reg_wb_addr       = RegInit(0.U(ADDR_LEN.W))
+  val rrd_reg_op1_sel       = RegInit(0.U(OP1_LEN.W))
+  val rrd_reg_op2_sel       = RegInit(0.U(OP2_LEN.W))
+  val rrd_reg_rs1_addr      = RegInit(0.U(ADDR_LEN.W))
+  val rrd_reg_rs2_addr      = RegInit(0.U(ADDR_LEN.W))
+  val rrd_reg_op1_data      = RegInit(0.U(WORD_LEN.W))
+  val rrd_reg_op2_data      = RegInit(0.U(WORD_LEN.W))
+  val rrd_reg_exe_fun       = RegInit(0.U(EXE_FUN_LEN.W))
+  val rrd_reg_rf_wen        = RegInit(0.U(REN_LEN.W))
+  val rrd_reg_wb_sel        = RegInit(0.U(WB_SEL_LEN.W))
+  val rrd_reg_csr_addr      = RegInit(0.U(CSR_ADDR_LEN.W))
+  val rrd_reg_csr_cmd       = RegInit(0.U(CSR_LEN.W))
+  val rrd_reg_imm_b_sext    = RegInit(0.U(WORD_LEN.W))
+  val rrd_reg_mem_w         = RegInit(0.U(MW_LEN.W))
+  val rrd_reg_is_direct_j    = RegInit(false.B)
+  val rrd_reg_is_br          = RegInit(false.B)
+  val rrd_reg_is_j           = RegInit(false.B)
+  val rrd_reg_is_bp_pos      = RegInit(false.B)
+  val rrd_reg_bp_addr        = RegInit(0.U(WORD_LEN.W))
+  val rrd_reg_is_half        = RegInit(false.B)
+  val rrd_reg_is_valid_inst  = RegInit(false.B)
+  val rrd_reg_is_trap        = RegInit(false.B)
+  val rrd_reg_mcause         = RegInit(0.U(WORD_LEN.W))
+  // val rrd_reg_mtval          = RegInit(0.U(WORD_LEN.W))
 
-  // EX1/EX2 State
+  // RRD/EX2 State
   val ex2_reg_pc            = RegInit(0.U(WORD_LEN.W))
   val ex2_reg_inst_cnt      = RegInit(0.U(INST_CNT_LEN.W))
   val ex2_reg_wb_addr       = RegInit(0.U(ADDR_LEN.W))
@@ -233,7 +233,7 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
   val if2_reg_is_bp_pos  = RegInit(false.B)
   val if2_reg_bp_addr    = RegInit(0.U(WORD_LEN.W))
   val id_stall           = Wire(Bool())
-  val ex1_stall          = Wire(Bool())
+  val rrd_stall          = Wire(Bool())
   val mem_stall          = Wire(Bool())
   val mem_div_stall_next = Wire(Bool())
   val mem_reg_div_stall  = RegInit(false.B)
@@ -473,7 +473,7 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
   //**********************************
   // Instruction Decode (ID) Stage
 
-  id_stall := ex1_stall || mem_stall
+  id_stall := rrd_stall || mem_stall
   id_reg_stall := id_stall
 
   // branch,jump時にIDをBUBBLE化
@@ -759,207 +759,207 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
   }
 
   //**********************************
-  // ID/EX1 register
+  // ID/RRD register
   when (csr_reg_is_br || ex3_reg_is_br) {
     when(id_reg_stall) {
-      ex1_reg_pc            := id_reg_pc_delay
-      ex1_reg_inst_cnt      := id_reg_inst_cnt_delay
-      ex1_reg_op1_sel       := id_reg_op1_sel_delay
-      ex1_reg_op2_sel       := id_reg_op2_sel_delay
-      ex1_reg_rs1_addr      := id_reg_rs1_addr_delay
-      ex1_reg_rs2_addr      := id_reg_rs2_addr_delay
-      ex1_reg_op1_data      := id_reg_op1_data_delay
-      ex1_reg_op2_data      := id_reg_op2_data_delay
-      ex1_reg_wb_addr       := id_reg_wb_addr_delay
-      ex1_reg_rf_wen        := REN_X
-      ex1_reg_exe_fun       := ALU_ADD
-      ex1_reg_wb_sel        := WB_X
-      ex1_reg_imm_b_sext    := id_reg_imm_b_sext_delay
-      ex1_reg_csr_addr      := id_reg_csr_addr_delay
-      ex1_reg_csr_cmd       := CSR_X
-      ex1_reg_mem_w         := MW_X
-      ex1_reg_is_direct_j   := false.B
-      ex1_reg_is_br         := false.B
-      ex1_reg_is_j          := false.B
-      ex1_reg_is_bp_pos     := false.B
-      ex1_reg_bp_addr       := id_reg_bp_addr_delay
-      ex1_reg_is_half       := id_reg_is_half_delay
-      ex1_reg_is_valid_inst := false.B
-      ex1_reg_is_trap       := false.B
-      ex1_reg_mcause        := id_reg_mcause_delay
-      // ex1_reg_mtval         := id_reg_mtval_delay
+      rrd_reg_pc            := id_reg_pc_delay
+      rrd_reg_inst_cnt      := id_reg_inst_cnt_delay
+      rrd_reg_op1_sel       := id_reg_op1_sel_delay
+      rrd_reg_op2_sel       := id_reg_op2_sel_delay
+      rrd_reg_rs1_addr      := id_reg_rs1_addr_delay
+      rrd_reg_rs2_addr      := id_reg_rs2_addr_delay
+      rrd_reg_op1_data      := id_reg_op1_data_delay
+      rrd_reg_op2_data      := id_reg_op2_data_delay
+      rrd_reg_wb_addr       := id_reg_wb_addr_delay
+      rrd_reg_rf_wen        := REN_X
+      rrd_reg_exe_fun       := ALU_ADD
+      rrd_reg_wb_sel        := WB_X
+      rrd_reg_imm_b_sext    := id_reg_imm_b_sext_delay
+      rrd_reg_csr_addr      := id_reg_csr_addr_delay
+      rrd_reg_csr_cmd       := CSR_X
+      rrd_reg_mem_w         := MW_X
+      rrd_reg_is_direct_j   := false.B
+      rrd_reg_is_br         := false.B
+      rrd_reg_is_j          := false.B
+      rrd_reg_is_bp_pos     := false.B
+      rrd_reg_bp_addr       := id_reg_bp_addr_delay
+      rrd_reg_is_half       := id_reg_is_half_delay
+      rrd_reg_is_valid_inst := false.B
+      rrd_reg_is_trap       := false.B
+      rrd_reg_mcause        := id_reg_mcause_delay
+      // rrd_reg_mtval         := id_reg_mtval_delay
     }.otherwise {
-      ex1_reg_pc            := id_reg_pc
-      ex1_reg_inst_cnt      := id_reg_inst_cnt
-      ex1_reg_op1_sel       := id_m_op1_sel
-      ex1_reg_op2_sel       := id_m_op2_sel
-      ex1_reg_rs1_addr      := id_m_rs1_addr
-      ex1_reg_rs2_addr      := id_m_rs2_addr
-      ex1_reg_op1_data      := id_op1_data
-      ex1_reg_op2_data      := id_op2_data
-      ex1_reg_wb_addr       := id_wb_addr
-      ex1_reg_rf_wen        := REN_X
-      ex1_reg_exe_fun       := ALU_ADD
-      ex1_reg_wb_sel        := WB_X
-      ex1_reg_imm_b_sext    := id_m_imm_b_sext
-      ex1_reg_csr_addr      := id_csr_addr
-      ex1_reg_csr_cmd       := CSR_X
-      ex1_reg_mem_w         := MW_X
-      ex1_reg_is_direct_j   := false.B
-      ex1_reg_is_br         := false.B
-      ex1_reg_is_j          := false.B
-      ex1_reg_is_bp_pos     := false.B
-      ex1_reg_bp_addr       := id_reg_bp_addr
-      ex1_reg_is_half       := id_is_half
-      ex1_reg_is_valid_inst := false.B
-      ex1_reg_is_trap       := false.B
-      ex1_reg_mcause        := id_mcause
-      // ex1_reg_mtval         := id_mtval
+      rrd_reg_pc            := id_reg_pc
+      rrd_reg_inst_cnt      := id_reg_inst_cnt
+      rrd_reg_op1_sel       := id_m_op1_sel
+      rrd_reg_op2_sel       := id_m_op2_sel
+      rrd_reg_rs1_addr      := id_m_rs1_addr
+      rrd_reg_rs2_addr      := id_m_rs2_addr
+      rrd_reg_op1_data      := id_op1_data
+      rrd_reg_op2_data      := id_op2_data
+      rrd_reg_wb_addr       := id_wb_addr
+      rrd_reg_rf_wen        := REN_X
+      rrd_reg_exe_fun       := ALU_ADD
+      rrd_reg_wb_sel        := WB_X
+      rrd_reg_imm_b_sext    := id_m_imm_b_sext
+      rrd_reg_csr_addr      := id_csr_addr
+      rrd_reg_csr_cmd       := CSR_X
+      rrd_reg_mem_w         := MW_X
+      rrd_reg_is_direct_j   := false.B
+      rrd_reg_is_br         := false.B
+      rrd_reg_is_j          := false.B
+      rrd_reg_is_bp_pos     := false.B
+      rrd_reg_bp_addr       := id_reg_bp_addr
+      rrd_reg_is_half       := id_is_half
+      rrd_reg_is_valid_inst := false.B
+      rrd_reg_is_trap       := false.B
+      rrd_reg_mcause        := id_mcause
+      // rrd_reg_mtval         := id_mtval
     }
-  }.elsewhen(!ex1_stall && !mem_stall) {
+  }.elsewhen(!rrd_stall && !mem_stall) {
     when(id_reg_stall) {
-      ex1_reg_pc            := id_reg_pc_delay
-      ex1_reg_inst_cnt      := id_reg_inst_cnt_delay
-      ex1_reg_op1_sel       := id_reg_op1_sel_delay
-      ex1_reg_op2_sel       := id_reg_op2_sel_delay
-      ex1_reg_rs1_addr      := id_reg_rs1_addr_delay
-      ex1_reg_rs2_addr      := id_reg_rs2_addr_delay
-      ex1_reg_op1_data      := id_reg_op1_data_delay
-      ex1_reg_op2_data      := id_reg_op2_data_delay
-      ex1_reg_wb_addr       := id_reg_wb_addr_delay
-      ex1_reg_rf_wen        := id_reg_rf_wen_delay
-      ex1_reg_exe_fun       := id_reg_exe_fun_delay
-      ex1_reg_wb_sel        := id_reg_wb_sel_delay
-      ex1_reg_imm_b_sext    := id_reg_imm_b_sext_delay
-      ex1_reg_csr_addr      := id_reg_csr_addr_delay
-      ex1_reg_csr_cmd       := id_reg_csr_cmd_delay
-      ex1_reg_mem_w         := id_reg_mem_w_delay
-      ex1_reg_is_direct_j   := id_reg_is_direct_j_delay
-      ex1_reg_is_br         := id_reg_is_br_delay
-      ex1_reg_is_j          := id_reg_is_j_delay
-      ex1_reg_is_bp_pos     := id_reg_is_bp_pos_delay
-      ex1_reg_bp_addr       := id_reg_bp_addr_delay
-      ex1_reg_is_half       := id_reg_is_half_delay
-      ex1_reg_is_valid_inst := id_reg_is_valid_inst_delay
-      ex1_reg_is_trap       := id_reg_is_trap_delay
-      ex1_reg_mcause        := id_reg_mcause_delay
-      // ex1_reg_mtval         := id_reg_mtval_delay
+      rrd_reg_pc            := id_reg_pc_delay
+      rrd_reg_inst_cnt      := id_reg_inst_cnt_delay
+      rrd_reg_op1_sel       := id_reg_op1_sel_delay
+      rrd_reg_op2_sel       := id_reg_op2_sel_delay
+      rrd_reg_rs1_addr      := id_reg_rs1_addr_delay
+      rrd_reg_rs2_addr      := id_reg_rs2_addr_delay
+      rrd_reg_op1_data      := id_reg_op1_data_delay
+      rrd_reg_op2_data      := id_reg_op2_data_delay
+      rrd_reg_wb_addr       := id_reg_wb_addr_delay
+      rrd_reg_rf_wen        := id_reg_rf_wen_delay
+      rrd_reg_exe_fun       := id_reg_exe_fun_delay
+      rrd_reg_wb_sel        := id_reg_wb_sel_delay
+      rrd_reg_imm_b_sext    := id_reg_imm_b_sext_delay
+      rrd_reg_csr_addr      := id_reg_csr_addr_delay
+      rrd_reg_csr_cmd       := id_reg_csr_cmd_delay
+      rrd_reg_mem_w         := id_reg_mem_w_delay
+      rrd_reg_is_direct_j   := id_reg_is_direct_j_delay
+      rrd_reg_is_br         := id_reg_is_br_delay
+      rrd_reg_is_j          := id_reg_is_j_delay
+      rrd_reg_is_bp_pos     := id_reg_is_bp_pos_delay
+      rrd_reg_bp_addr       := id_reg_bp_addr_delay
+      rrd_reg_is_half       := id_reg_is_half_delay
+      rrd_reg_is_valid_inst := id_reg_is_valid_inst_delay
+      rrd_reg_is_trap       := id_reg_is_trap_delay
+      rrd_reg_mcause        := id_reg_mcause_delay
+      // rrd_reg_mtval         := id_reg_mtval_delay
     }.otherwise {
-      ex1_reg_pc            := id_reg_pc
-      ex1_reg_inst_cnt      := id_reg_inst_cnt
-      ex1_reg_op1_sel       := id_m_op1_sel
-      ex1_reg_op2_sel       := id_m_op2_sel
-      ex1_reg_rs1_addr      := id_m_rs1_addr
-      ex1_reg_rs2_addr      := id_m_rs2_addr
-      ex1_reg_op1_data      := id_op1_data
-      ex1_reg_op2_data      := id_op2_data
-      ex1_reg_wb_addr       := id_wb_addr
-      ex1_reg_rf_wen        := id_rf_wen
-      ex1_reg_exe_fun       := id_exe_fun
-      ex1_reg_wb_sel        := id_wb_sel
-      ex1_reg_imm_b_sext    := id_m_imm_b_sext
-      ex1_reg_csr_addr      := id_csr_addr
-      ex1_reg_csr_cmd       := id_csr_cmd
-      ex1_reg_mem_w         := id_mem_w
-      ex1_reg_is_direct_j   := id_is_direct_j
-      ex1_reg_is_br         := id_is_br
-      ex1_reg_is_j          := id_is_j
-      ex1_reg_is_bp_pos     := id_reg_is_bp_pos
-      ex1_reg_bp_addr       := id_reg_bp_addr
-      ex1_reg_is_half       := id_is_half
-      ex1_reg_is_valid_inst := id_inst =/= BUBBLE
-      ex1_reg_is_trap       := id_is_trap
-      ex1_reg_mcause        := id_mcause
-      // ex1_reg_mtval         := id_mtval
+      rrd_reg_pc            := id_reg_pc
+      rrd_reg_inst_cnt      := id_reg_inst_cnt
+      rrd_reg_op1_sel       := id_m_op1_sel
+      rrd_reg_op2_sel       := id_m_op2_sel
+      rrd_reg_rs1_addr      := id_m_rs1_addr
+      rrd_reg_rs2_addr      := id_m_rs2_addr
+      rrd_reg_op1_data      := id_op1_data
+      rrd_reg_op2_data      := id_op2_data
+      rrd_reg_wb_addr       := id_wb_addr
+      rrd_reg_rf_wen        := id_rf_wen
+      rrd_reg_exe_fun       := id_exe_fun
+      rrd_reg_wb_sel        := id_wb_sel
+      rrd_reg_imm_b_sext    := id_m_imm_b_sext
+      rrd_reg_csr_addr      := id_csr_addr
+      rrd_reg_csr_cmd       := id_csr_cmd
+      rrd_reg_mem_w         := id_mem_w
+      rrd_reg_is_direct_j   := id_is_direct_j
+      rrd_reg_is_br         := id_is_br
+      rrd_reg_is_j          := id_is_j
+      rrd_reg_is_bp_pos     := id_reg_is_bp_pos
+      rrd_reg_bp_addr       := id_reg_bp_addr
+      rrd_reg_is_half       := id_is_half
+      rrd_reg_is_valid_inst := id_inst =/= BUBBLE
+      rrd_reg_is_trap       := id_is_trap
+      rrd_reg_mcause        := id_mcause
+      // rrd_reg_mtval         := id_mtval
     }
   }
   //**********************************
-  // Execute (EX1) Stage
+  // Register read (RRD) Stage
 
-  val ex1_reg_fw_en         = RegInit(false.B)
-  val ex1_fw_data           = Wire(UInt(WORD_LEN.W))
+  val rrd_reg_fw_en         = RegInit(false.B)
+  val rrd_fw_data           = Wire(UInt(WORD_LEN.W))
 
-  ex1_stall :=
-    ((ex1_reg_op1_sel === OP1_RS1) && scoreboard(ex1_reg_rs1_addr)) ||
-    ((ex1_reg_op2_sel === OP2_RS2 || ex1_reg_wb_sel === WB_ST) && scoreboard(ex1_reg_rs2_addr)) ||
-    ((ex1_reg_rf_wen === REN_S) && scoreboard(ex1_reg_wb_addr)) ||
-    ((ex1_reg_rf_wen === REN_S) && (ex1_reg_wb_sel === WB_ALU) && ex2_reg_is_indirect_j)
+  rrd_stall :=
+    ((rrd_reg_op1_sel === OP1_RS1) && scoreboard(rrd_reg_rs1_addr)) ||
+    ((rrd_reg_op2_sel === OP2_RS2 || rrd_reg_wb_sel === WB_ST) && scoreboard(rrd_reg_rs2_addr)) ||
+    ((rrd_reg_rf_wen === REN_S) && scoreboard(rrd_reg_wb_addr)) ||
+    ((rrd_reg_rf_wen === REN_S) && (rrd_reg_wb_sel === WB_ALU) && ex2_reg_is_indirect_j)
 
-  val ex1_op1_data = MuxCase(ex1_reg_op1_data, Seq(
-    (ex1_reg_op1_sel === OP1_RS1 && ex1_reg_rs1_addr === 0.U) -> 0.U(WORD_LEN.W),
-    (ex1_reg_fw_en &&
-     (ex1_reg_op1_sel === OP1_RS1) &&
-     (ex1_reg_rs1_addr === ex2_reg_wb_addr)) -> ex1_fw_data,
-    (ex1_reg_op1_sel === OP1_RS1) -> regfile(ex1_reg_rs1_addr),
+  val rrd_op1_data = MuxCase(rrd_reg_op1_data, Seq(
+    (rrd_reg_op1_sel === OP1_RS1 && rrd_reg_rs1_addr === 0.U) -> 0.U(WORD_LEN.W),
+    (rrd_reg_fw_en &&
+     (rrd_reg_op1_sel === OP1_RS1) &&
+     (rrd_reg_rs1_addr === ex2_reg_wb_addr)) -> rrd_fw_data,
+    (rrd_reg_op1_sel === OP1_RS1) -> regfile(rrd_reg_rs1_addr),
   ))
-  val ex1_op2_data = MuxCase(ex1_reg_op2_data, Seq(
-    (ex1_reg_op2_sel === OP2_RS2 && ex1_reg_rs2_addr === 0.U) -> 0.U(WORD_LEN.W),
-    (ex1_reg_fw_en &&
-     (ex1_reg_op2_sel === OP2_RS2) &&
-     (ex1_reg_rs2_addr === ex2_reg_wb_addr)) -> ex1_fw_data,
-    (ex1_reg_op2_sel === OP2_RS2) -> regfile(ex1_reg_rs2_addr),
+  val rrd_op2_data = MuxCase(rrd_reg_op2_data, Seq(
+    (rrd_reg_op2_sel === OP2_RS2 && rrd_reg_rs2_addr === 0.U) -> 0.U(WORD_LEN.W),
+    (rrd_reg_fw_en &&
+     (rrd_reg_op2_sel === OP2_RS2) &&
+     (rrd_reg_rs2_addr === ex2_reg_wb_addr)) -> rrd_fw_data,
+    (rrd_reg_op2_sel === OP2_RS2) -> regfile(rrd_reg_rs2_addr),
   ))
-  val ex1_rs2_data = MuxCase(regfile(ex1_reg_rs2_addr), Seq(
-    (ex1_reg_rs2_addr === 0.U) -> 0.U(WORD_LEN.W),
-    (ex1_reg_fw_en &&
-     (ex1_reg_rs2_addr === ex2_reg_wb_addr)) -> ex1_fw_data,
+  val rrd_rs2_data = MuxCase(regfile(rrd_reg_rs2_addr), Seq(
+    (rrd_reg_rs2_addr === 0.U) -> 0.U(WORD_LEN.W),
+    (rrd_reg_fw_en &&
+     (rrd_reg_rs2_addr === ex2_reg_wb_addr)) -> rrd_fw_data,
   ))
 
-  val ex1_direct_jbr_target = ex1_reg_pc + MuxCase(ex1_reg_imm_b_sext, Seq(
-    ex1_reg_is_direct_j -> ex1_reg_op2_data,
+  val rrd_direct_jbr_target = rrd_reg_pc + MuxCase(rrd_reg_imm_b_sext, Seq(
+    rrd_reg_is_direct_j -> rrd_reg_op2_data,
   ))
-  val ex1_is_indirect_j = (ex1_reg_is_j && !ex1_reg_is_direct_j) ||
-    (ex1_reg_exe_fun === CMD_ECALL) ||
-    (ex1_reg_exe_fun === CMD_MRET)
+  val rrd_is_indirect_j = (rrd_reg_is_j && !rrd_reg_is_direct_j) ||
+    (rrd_reg_exe_fun === CMD_ECALL) ||
+    (rrd_reg_exe_fun === CMD_MRET)
 
   when (!mem_stall) {
-    val ex1_hazard = (ex1_reg_rf_wen === REN_S) && (ex1_reg_wb_addr =/= 0.U) && !csr_reg_is_br && !ex3_reg_is_br
-    ex1_reg_fw_en := !ex1_stall && ex1_hazard && (ex1_reg_wb_sel =/= WB_MEM) && (ex1_reg_wb_sel =/= WB_CSR)
+    val rrd_hazard = (rrd_reg_rf_wen === REN_S) && (rrd_reg_wb_addr =/= 0.U) && !csr_reg_is_br && !ex3_reg_is_br
+    rrd_reg_fw_en := !rrd_stall && rrd_hazard && (rrd_reg_wb_sel =/= WB_MEM) && (rrd_reg_wb_sel =/= WB_CSR)
   }
-  val ex1_mem_use_reg   = WireDefault(false.B)
-  val ex1_inst3_use_reg = WireDefault(false.B)
+  val rrd_mem_use_reg   = WireDefault(false.B)
+  val rrd_inst3_use_reg = WireDefault(false.B)
   when (
     !mem_stall &&
-    !ex1_stall &&
-    ex1_reg_rf_wen === REN_S &&
-    ex1_reg_wb_addr =/= 0.U &&
-    ((ex1_reg_wb_sel === WB_MEM) || (ex1_reg_wb_sel === WB_CSR) || (ex1_reg_wb_sel === WB_MD) || (ex1_reg_wb_sel === WB_BIT))
+    !rrd_stall &&
+    rrd_reg_rf_wen === REN_S &&
+    rrd_reg_wb_addr =/= 0.U &&
+    ((rrd_reg_wb_sel === WB_MEM) || (rrd_reg_wb_sel === WB_CSR) || (rrd_reg_wb_sel === WB_MD) || (rrd_reg_wb_sel === WB_BIT))
   ) {
-    scoreboard(ex1_reg_wb_addr) := true.B
-    ex1_mem_use_reg := (ex1_reg_wb_sel === WB_MEM)
-    ex1_inst3_use_reg := (ex1_reg_wb_sel =/= WB_MEM) // (ex1_reg_wb_sel === WB_CSR) || (ex1_reg_wb_sel === WB_MD)
+    scoreboard(rrd_reg_wb_addr) := true.B
+    rrd_mem_use_reg := (rrd_reg_wb_sel === WB_MEM)
+    rrd_inst3_use_reg := (rrd_reg_wb_sel =/= WB_MEM) // (rrd_reg_wb_sel === WB_CSR) || (rrd_reg_wb_sel === WB_MD)
   }
 
   //**********************************
-  // EX1/EX2 register
+  // RRD/EX2 register
   when(!mem_stall) {
-    val ex_is_bubble = ex1_stall || csr_reg_is_br || ex3_reg_is_br
-    ex2_reg_pc            := ex1_reg_pc
-    ex2_reg_inst_cnt      := ex1_reg_inst_cnt
-    ex2_reg_op1_data      := ex1_op1_data
-    ex2_reg_op2_data      := ex1_op2_data
-    ex2_reg_rs2_data      := ex1_rs2_data
-    ex2_reg_wb_addr       := ex1_reg_wb_addr
-    ex2_reg_rf_wen        := Mux(ex_is_bubble, REN_X, ex1_reg_rf_wen)
-    ex2_reg_exe_fun       := Mux(ex_is_bubble, ALU_ADD, ex1_reg_exe_fun)
-    ex2_reg_wb_sel        := Mux(ex_is_bubble, WB_X, ex1_reg_wb_sel)
-    ex2_reg_direct_jbr_target := ex1_direct_jbr_target
-    ex2_reg_csr_addr      := ex1_reg_csr_addr
-    ex2_reg_csr_cmd       := Mux(ex_is_bubble, CSR_X, ex1_reg_csr_cmd)
-    ex2_reg_mem_w         := ex1_reg_mem_w
-    ex2_reg_is_direct_j   := ex1_reg_is_direct_j
-    ex2_reg_is_br         := ex1_reg_is_br
-    ex2_reg_is_j          := ex1_reg_is_j
-    ex2_reg_is_bp_pos     := ex1_reg_is_bp_pos
-    ex2_reg_bp_addr       := ex1_reg_bp_addr
-    ex2_reg_is_half       := ex1_reg_is_half
-    ex2_reg_is_valid_inst := ex1_reg_is_valid_inst && !ex_is_bubble
-    ex2_reg_is_trap       := Mux(ex_is_bubble, false.B, ex1_reg_is_trap)
-    ex2_reg_mcause        := ex1_reg_mcause
-    // ex2_reg_mtval         := ex1_reg_mtval
-    ex2_reg_mem_use_reg   := ex1_mem_use_reg
-    ex2_reg_inst3_use_reg := ex1_inst3_use_reg
-    ex2_reg_is_indirect_j := ex1_reg_is_valid_inst && !ex_is_bubble && ex1_is_indirect_j
+    val ex_is_bubble = rrd_stall || csr_reg_is_br || ex3_reg_is_br
+    ex2_reg_pc            := rrd_reg_pc
+    ex2_reg_inst_cnt      := rrd_reg_inst_cnt
+    ex2_reg_op1_data      := rrd_op1_data
+    ex2_reg_op2_data      := rrd_op2_data
+    ex2_reg_rs2_data      := rrd_rs2_data
+    ex2_reg_wb_addr       := rrd_reg_wb_addr
+    ex2_reg_rf_wen        := Mux(ex_is_bubble, REN_X, rrd_reg_rf_wen)
+    ex2_reg_exe_fun       := Mux(ex_is_bubble, ALU_ADD, rrd_reg_exe_fun)
+    ex2_reg_wb_sel        := Mux(ex_is_bubble, WB_X, rrd_reg_wb_sel)
+    ex2_reg_direct_jbr_target := rrd_direct_jbr_target
+    ex2_reg_csr_addr      := rrd_reg_csr_addr
+    ex2_reg_csr_cmd       := Mux(ex_is_bubble, CSR_X, rrd_reg_csr_cmd)
+    ex2_reg_mem_w         := rrd_reg_mem_w
+    ex2_reg_is_direct_j   := rrd_reg_is_direct_j
+    ex2_reg_is_br         := rrd_reg_is_br
+    ex2_reg_is_j          := rrd_reg_is_j
+    ex2_reg_is_bp_pos     := rrd_reg_is_bp_pos
+    ex2_reg_bp_addr       := rrd_reg_bp_addr
+    ex2_reg_is_half       := rrd_reg_is_half
+    ex2_reg_is_valid_inst := rrd_reg_is_valid_inst && !ex_is_bubble
+    ex2_reg_is_trap       := Mux(ex_is_bubble, false.B, rrd_reg_is_trap)
+    ex2_reg_mcause        := rrd_reg_mcause
+    // ex2_reg_mtval         := rrd_reg_mtval
+    ex2_reg_mem_use_reg   := rrd_mem_use_reg
+    ex2_reg_inst3_use_reg := rrd_inst3_use_reg
+    ex2_reg_is_indirect_j := rrd_reg_is_valid_inst && !ex_is_bubble && rrd_is_indirect_j
   }
 
   //**********************************
@@ -1157,7 +1157,7 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
     (ex2_reg_is_br && !ex2_is_cond_br && ex2_reg_is_bp_pos)
   )
 
-  ex1_fw_data := MuxCase(ex2_alu_out, Seq(
+  rrd_fw_data := MuxCase(ex2_alu_out, Seq(
     (ex2_reg_wb_sel === WB_PC) -> ex2_next_pc,
   ))
 
@@ -1677,18 +1677,18 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
   // printf(p"id_rs1_data      : 0x${Hexadecimal(id_rs1_data)}\n")
   // printf(p"id_rs2_data      : 0x${Hexadecimal(id_rs2_data)}\n")
   printf(p"id_wb_addr       : 0x${Hexadecimal(id_wb_addr)}\n")
-  printf(p"ex1_reg_pc       : 0x${Hexadecimal(ex1_reg_pc)}\n")
-  printf(p"ex1_reg_inst_cnt : 0x${Hexadecimal(ex1_reg_inst_cnt)}\n")
-  printf(p"ex1_reg_is_valid_: 0x${Hexadecimal(ex1_reg_is_valid_inst)}\n")
-  printf(p"ex1_stall        : 0x${Hexadecimal(ex1_stall)}\n")
-  // printf(p"ex1_reg_rs1_addr : 0x${Hexadecimal(ex1_reg_rs1_addr)}\n")
-  // printf(p"ex1_reg_rs2_addr : 0x${Hexadecimal(ex1_reg_rs2_addr)}\n")
-  printf(p"ex1_op1_data     : 0x${Hexadecimal(ex1_op1_data)}\n")
-  printf(p"ex1_op2_data     : 0x${Hexadecimal(ex1_op2_data)}\n")
-  // printf(p"ex1_reg_op1_sel  : 0x${Hexadecimal(ex1_reg_op1_sel)}\n")
-  // printf(p"ex1_reg_fw_en    : 0x${Hexadecimal(ex1_reg_fw_en)}\n")
-  // printf(p"ex1_reg_rs1_addr  : 0x${Hexadecimal(ex1_reg_rs1_addr)}\n")
-  printf(p"ex1_fw_data      : 0x${Hexadecimal(ex1_fw_data)}\n")
+  printf(p"rrd_reg_pc       : 0x${Hexadecimal(rrd_reg_pc)}\n")
+  printf(p"rrd_reg_inst_cnt : 0x${Hexadecimal(rrd_reg_inst_cnt)}\n")
+  printf(p"rrd_reg_is_valid_: 0x${Hexadecimal(rrd_reg_is_valid_inst)}\n")
+  printf(p"rrd_stall        : 0x${Hexadecimal(rrd_stall)}\n")
+  // printf(p"rrd_reg_rs1_addr : 0x${Hexadecimal(rrd_reg_rs1_addr)}\n")
+  // printf(p"rrd_reg_rs2_addr : 0x${Hexadecimal(rrd_reg_rs2_addr)}\n")
+  printf(p"rrd_op1_data     : 0x${Hexadecimal(rrd_op1_data)}\n")
+  printf(p"rrd_op2_data     : 0x${Hexadecimal(rrd_op2_data)}\n")
+  // printf(p"rrd_reg_op1_sel  : 0x${Hexadecimal(rrd_reg_op1_sel)}\n")
+  // printf(p"rrd_reg_fw_en    : 0x${Hexadecimal(rrd_reg_fw_en)}\n")
+  // printf(p"rrd_reg_rs1_addr  : 0x${Hexadecimal(rrd_reg_rs1_addr)}\n")
+  printf(p"rrd_fw_data      : 0x${Hexadecimal(rrd_fw_data)}\n")
   printf(p"ex2_reg_pc       : 0x${Hexadecimal(ex2_reg_pc)}\n")
   printf(p"ex2_reg_inst_cnt : 0x${Hexadecimal(ex2_reg_inst_cnt)}\n")
   printf(p"ex2_is_valid_inst: 0x${Hexadecimal(ex2_is_valid_inst)}\n")
