@@ -124,11 +124,6 @@
     }
   },
   {
-    "class":"chisel3.experimental.EnumAnnotations$EnumComponentAnnotation",
-    "target":"RiscV.Core.mem_reg_dmem_state",
-    "enumTypeName":"fpga.DmemState"
-  },
-  {
     "class":"chisel3.experimental.EnumAnnotations$EnumDefAnnotation",
     "typeName":"fpga.DivremState",
     "definition":{
@@ -142,7 +137,7 @@
   },
   {
     "class":"chisel3.experimental.EnumAnnotations$EnumComponentAnnotation",
-    "target":"RiscV.Core.mem_reg_divrem_state",
+    "target":"RiscV.Core.ex2_reg_divrem_state",
     "enumTypeName":"fpga.DivremState"
   },
   {
@@ -164,13 +159,6 @@
   },
   {
     "class":"firrtl.transforms.CombinationalPath",
-    "sink":"~RiscV|RiscV>io_debugSignals_wen",
-    "sources":[
-      "~RiscV|RiscV>io_dram_rdata_valid"
-    ]
-  },
-  {
-    "class":"firrtl.transforms.CombinationalPath",
     "sink":"~RiscV|RiscV>io_dram_addr",
     "sources":[
       "~RiscV|RiscV>io_dram_init_calib_complete",
@@ -179,25 +167,10 @@
   },
   {
     "class":"firrtl.transforms.CombinationalPath",
-    "sink":"~RiscV|RiscV>io_debugSignals_rdata",
-    "sources":[
-      "~RiscV|RiscV>io_dram_rdata_valid",
-      "~RiscV|RiscV>io_dram_rdata"
-    ]
-  },
-  {
-    "class":"firrtl.transforms.CombinationalPath",
     "sink":"~RiscV|RiscV>io_dram_ren",
     "sources":[
       "~RiscV|RiscV>io_dram_init_calib_complete",
       "~RiscV|RiscV>io_dram_busy"
-    ]
-  },
-  {
-    "class":"firrtl.transforms.CombinationalPath",
-    "sink":"~RiscV|RiscV>io_debugSignals_wready",
-    "sources":[
-      "~RiscV|RiscV>io_dram_rdata_valid"
     ]
   },
   {
@@ -214,13 +187,6 @@
     "sources":[
       "~RiscV|RiscV>io_dram_init_calib_complete",
       "~RiscV|RiscV>io_dram_busy"
-    ]
-  },
-  {
-    "class":"firrtl.transforms.CombinationalPath",
-    "sink":"~RiscV|RiscV>io_debugSignals_rvalid",
-    "sources":[
-      "~RiscV|RiscV>io_dram_rdata_valid"
     ]
   },
   {
