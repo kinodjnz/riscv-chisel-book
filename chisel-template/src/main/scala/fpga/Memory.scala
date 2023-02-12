@@ -625,11 +625,46 @@ class Memory() extends Module {
       }
     }
     is (DCacheState.RespondRead) {
-        io.cache.rready := false.B
-        io.cache.wready := false.B
-        io.cache.rvalid := true.B
-        io.cache.rdata := reg_read_word
-        dcache_state := DCacheState.Ready
+      io.cache.rvalid := true.B
+      io.cache.rdata  := reg_read_word
+      when (dcache_snoop_en) {
+        val req_addr = dcache_snoop_addr
+        reg_req_addr := req_addr
+        reg_tag := tag_array.read(req_addr.index)
+        io.cache_array1.en := true.B
+        io.cache_array1.addr := req_addr.index
+        io.cache_array1.we := 0.U
+        io.cache_array2.en := true.B
+        io.cache_array2.addr := req_addr.index
+        io.cache_array2.we := 0.U
+        dcache_state := DCacheState.SnoopRead
+      }.otherwise {
+        io.cache.rready := true.B
+        io.cache.wready := true.B
+        val req_addr = Mux(io.cache.ren, io.cache.raddr, io.cache.waddr).asTypeOf(new DCacheAddrBundle())
+        reg_req_addr := req_addr
+        reg_wdata := io.cache.wdata
+        reg_wstrb := io.cache.wstrb
+        reg_ren := io.cache.ren
+        when (io.cache.ren || io.cache.wen) {
+          reg_tag := tag_array.read(req_addr.index)
+          io.cache_array1.en := true.B
+          io.cache_array1.addr := req_addr.index
+          io.cache_array1.we := 0.U
+          io.cache_array2.en := true.B
+          io.cache_array2.addr := req_addr.index
+          io.cache_array2.we := 0.U
+          reg_dcache_read := true.B
+          reg_lru := lru_array.read(req_addr.index)
+          when (io.cache.ren) {
+            dcache_state := DCacheState.LookupForRead
+          }.otherwise {
+            dcache_state := DCacheState.LookupForWrite
+          }
+        }.otherwise {
+          dcache_state := DCacheState.Ready
+        }
+      }
     }
     is (DCacheState.LookupForWrite) {
       when (reg_dcache_read) {
