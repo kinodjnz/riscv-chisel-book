@@ -79,50 +79,50 @@ module MachineTimer(
   reg [63:0] _RAND_1;
   reg [31:0] _RAND_2;
 `endif // RANDOMIZE_REG_INIT
-  reg [63:0] mtime; // @[MachineTimer.scala 14:22]
-  reg [63:0] mtimecmp; // @[MachineTimer.scala 15:25]
-  reg  intr; // @[MachineTimer.scala 16:21]
-  wire [63:0] _mtime_T_1 = mtime + 64'h1; // @[MachineTimer.scala 18:18]
-  wire [31:0] _GEN_0 = 2'h3 == io_mem_raddr[3:2] ? mtimecmp[63:32] : 32'hdeadbeef; // @[MachineTimer.scala 23:16 28:33 39:22]
-  wire [31:0] _GEN_1 = 2'h2 == io_mem_raddr[3:2] ? mtimecmp[31:0] : _GEN_0; // @[MachineTimer.scala 28:33 36:22]
-  wire [31:0] _GEN_2 = 2'h1 == io_mem_raddr[3:2] ? mtime[63:32] : _GEN_1; // @[MachineTimer.scala 28:33 33:22]
-  wire [31:0] _GEN_3 = 2'h0 == io_mem_raddr[3:2] ? mtime[31:0] : _GEN_2; // @[MachineTimer.scala 28:33 30:22]
+  reg [63:0] mtime; // @[MachineTimer.scala 15:22]
+  reg [63:0] mtimecmp; // @[MachineTimer.scala 16:25]
+  reg  intr; // @[MachineTimer.scala 17:21]
+  wire [63:0] _mtime_T_1 = mtime + 64'h1; // @[MachineTimer.scala 19:18]
+  wire [31:0] _GEN_0 = 2'h3 == io_mem_raddr[3:2] ? mtimecmp[63:32] : 32'hdeadbeef; // @[MachineTimer.scala 25:16 30:33 41:22]
+  wire [31:0] _GEN_1 = 2'h2 == io_mem_raddr[3:2] ? mtimecmp[31:0] : _GEN_0; // @[MachineTimer.scala 30:33 38:22]
+  wire [31:0] _GEN_2 = 2'h1 == io_mem_raddr[3:2] ? mtime[63:32] : _GEN_1; // @[MachineTimer.scala 30:33 35:22]
+  wire [31:0] _GEN_3 = 2'h0 == io_mem_raddr[3:2] ? mtime[31:0] : _GEN_2; // @[MachineTimer.scala 30:33 32:22]
   wire [63:0] _mtime_T_3 = {mtime[63:32],io_mem_wdata}; // @[Cat.scala 31:58]
   wire [63:0] _mtime_T_5 = {io_mem_wdata,mtime[31:0]}; // @[Cat.scala 31:58]
   wire [63:0] _mtimecmp_T_1 = {mtimecmp[63:32],io_mem_wdata}; // @[Cat.scala 31:58]
   wire [63:0] _mtimecmp_T_3 = {io_mem_wdata,mtimecmp[31:0]}; // @[Cat.scala 31:58]
-  wire [63:0] _GEN_5 = 2'h3 == io_mem_waddr[3:2] ? _mtimecmp_T_3 : mtimecmp; // @[MachineTimer.scala 45:33 56:18 15:25]
-  wire [63:0] _GEN_6 = 2'h2 == io_mem_waddr[3:2] ? _mtimecmp_T_1 : _GEN_5; // @[MachineTimer.scala 45:33 53:18]
-  assign io_mem_rdata = io_mem_ren ? _GEN_3 : 32'hdeadbeef; // @[MachineTimer.scala 23:16 27:21]
-  assign io_intr = intr; // @[MachineTimer.scala 20:11]
-  assign io_mtime = mtime; // @[MachineTimer.scala 21:12]
+  wire [63:0] _GEN_5 = 2'h3 == io_mem_waddr[3:2] ? _mtimecmp_T_3 : mtimecmp; // @[MachineTimer.scala 47:33 58:18 16:25]
+  wire [63:0] _GEN_6 = 2'h2 == io_mem_waddr[3:2] ? _mtimecmp_T_1 : _GEN_5; // @[MachineTimer.scala 47:33 55:18]
+  assign io_mem_rdata = io_mem_ren ? _GEN_3 : 32'hdeadbeef; // @[MachineTimer.scala 25:16 29:21]
+  assign io_intr = intr; // @[MachineTimer.scala 21:11]
+  assign io_mtime = mtime; // @[MachineTimer.scala 22:12]
   always @(posedge clock) begin
-    if (reset) begin // @[MachineTimer.scala 14:22]
-      mtime <= 64'h0; // @[MachineTimer.scala 14:22]
-    end else if (io_mem_wen) begin // @[MachineTimer.scala 44:21]
-      if (2'h0 == io_mem_waddr[3:2]) begin // @[MachineTimer.scala 45:33]
-        mtime <= _mtime_T_3; // @[MachineTimer.scala 47:15]
-      end else if (2'h1 == io_mem_waddr[3:2]) begin // @[MachineTimer.scala 45:33]
-        mtime <= _mtime_T_5; // @[MachineTimer.scala 50:15]
+    if (reset) begin // @[MachineTimer.scala 15:22]
+      mtime <= 64'h0; // @[MachineTimer.scala 15:22]
+    end else if (io_mem_wen) begin // @[MachineTimer.scala 46:21]
+      if (2'h0 == io_mem_waddr[3:2]) begin // @[MachineTimer.scala 47:33]
+        mtime <= _mtime_T_3; // @[MachineTimer.scala 49:15]
+      end else if (2'h1 == io_mem_waddr[3:2]) begin // @[MachineTimer.scala 47:33]
+        mtime <= _mtime_T_5; // @[MachineTimer.scala 52:15]
       end else begin
-        mtime <= _mtime_T_1; // @[MachineTimer.scala 18:9]
+        mtime <= _mtime_T_1; // @[MachineTimer.scala 19:9]
       end
     end else begin
-      mtime <= _mtime_T_1; // @[MachineTimer.scala 18:9]
+      mtime <= _mtime_T_1; // @[MachineTimer.scala 19:9]
     end
-    if (reset) begin // @[MachineTimer.scala 15:25]
-      mtimecmp <= 64'hffffffff; // @[MachineTimer.scala 15:25]
-    end else if (io_mem_wen) begin // @[MachineTimer.scala 44:21]
-      if (!(2'h0 == io_mem_waddr[3:2])) begin // @[MachineTimer.scala 45:33]
-        if (!(2'h1 == io_mem_waddr[3:2])) begin // @[MachineTimer.scala 45:33]
+    if (reset) begin // @[MachineTimer.scala 16:25]
+      mtimecmp <= 64'hffffffff; // @[MachineTimer.scala 16:25]
+    end else if (io_mem_wen) begin // @[MachineTimer.scala 46:21]
+      if (!(2'h0 == io_mem_waddr[3:2])) begin // @[MachineTimer.scala 47:33]
+        if (!(2'h1 == io_mem_waddr[3:2])) begin // @[MachineTimer.scala 47:33]
           mtimecmp <= _GEN_6;
         end
       end
     end
-    if (reset) begin // @[MachineTimer.scala 16:21]
-      intr <= 1'h0; // @[MachineTimer.scala 16:21]
+    if (reset) begin // @[MachineTimer.scala 17:21]
+      intr <= 1'h0; // @[MachineTimer.scala 17:21]
     end else begin
-      intr <= mtime >= mtimecmp; // @[MachineTimer.scala 19:8]
+      intr <= mtime >= mtimecmp; // @[MachineTimer.scala 20:8]
     end
   end
 // Register and memory initialization
@@ -455,9 +455,13 @@ module Core(
   output        io_debug_signal_ex2_is_valid_inst,
   output        io_debug_signal_me_intr,
   output        io_debug_signal_mt_intr,
+  output        io_debug_signal_trap,
   output [47:0] io_debug_signal_cycle_counter,
   output [31:0] io_debug_signal_id_pc,
-  output [31:0] io_debug_signal_id_inst
+  output [31:0] io_debug_signal_id_inst,
+  output [31:0] io_debug_signal_mem3_rdata,
+  output        io_debug_signal_mem3_rvalid,
+  output [31:0] io_debug_signal_rwaddr
 );
 `ifdef RANDOMIZE_MEM_INIT
   reg [31:0] _RAND_0;
@@ -537,12 +541,12 @@ module Core(
   reg [31:0] _RAND_72;
   reg [31:0] _RAND_73;
   reg [31:0] _RAND_74;
-  reg [31:0] _RAND_75;
-  reg [63:0] _RAND_76;
-  reg [31:0] _RAND_77;
+  reg [63:0] _RAND_75;
+  reg [31:0] _RAND_76;
+  reg [63:0] _RAND_77;
   reg [63:0] _RAND_78;
   reg [63:0] _RAND_79;
-  reg [63:0] _RAND_80;
+  reg [31:0] _RAND_80;
   reg [31:0] _RAND_81;
   reg [31:0] _RAND_82;
   reg [31:0] _RAND_83;
@@ -557,8 +561,8 @@ module Core(
   reg [31:0] _RAND_92;
   reg [31:0] _RAND_93;
   reg [31:0] _RAND_94;
-  reg [31:0] _RAND_95;
-  reg [63:0] _RAND_96;
+  reg [63:0] _RAND_95;
+  reg [31:0] _RAND_96;
   reg [31:0] _RAND_97;
   reg [31:0] _RAND_98;
   reg [31:0] _RAND_99;
@@ -645,368 +649,365 @@ module Core(
   reg [31:0] _RAND_180;
   reg [31:0] _RAND_181;
 `endif // RANDOMIZE_REG_INIT
-  reg [31:0] regfile [0:31]; // @[Core.scala 80:20]
-  wire  regfile_rrd_op1_data_MPORT_en; // @[Core.scala 80:20]
-  wire [4:0] regfile_rrd_op1_data_MPORT_addr; // @[Core.scala 80:20]
-  wire [31:0] regfile_rrd_op1_data_MPORT_data; // @[Core.scala 80:20]
-  wire  regfile_rrd_op2_data_MPORT_en; // @[Core.scala 80:20]
-  wire [4:0] regfile_rrd_op2_data_MPORT_addr; // @[Core.scala 80:20]
-  wire [31:0] regfile_rrd_op2_data_MPORT_data; // @[Core.scala 80:20]
-  wire  regfile_rrd_rs2_data_MPORT_en; // @[Core.scala 80:20]
-  wire [4:0] regfile_rrd_rs2_data_MPORT_addr; // @[Core.scala 80:20]
-  wire [31:0] regfile_rrd_rs2_data_MPORT_data; // @[Core.scala 80:20]
-  wire  regfile_io_gp_MPORT_en; // @[Core.scala 80:20]
-  wire [4:0] regfile_io_gp_MPORT_addr; // @[Core.scala 80:20]
-  wire [31:0] regfile_io_gp_MPORT_data; // @[Core.scala 80:20]
-  wire  regfile_io_exit_MPORT_en; // @[Core.scala 80:20]
-  wire [4:0] regfile_io_exit_MPORT_addr; // @[Core.scala 80:20]
-  wire [31:0] regfile_io_exit_MPORT_data; // @[Core.scala 80:20]
-  wire [31:0] regfile_MPORT_3_data; // @[Core.scala 80:20]
-  wire [4:0] regfile_MPORT_3_addr; // @[Core.scala 80:20]
-  wire  regfile_MPORT_3_mask; // @[Core.scala 80:20]
-  wire  regfile_MPORT_3_en; // @[Core.scala 80:20]
-  wire [31:0] regfile_MPORT_4_data; // @[Core.scala 80:20]
-  wire [4:0] regfile_MPORT_4_addr; // @[Core.scala 80:20]
-  wire  regfile_MPORT_4_mask; // @[Core.scala 80:20]
-  wire  regfile_MPORT_4_en; // @[Core.scala 80:20]
-  wire  cycle_counter_clock; // @[Core.scala 82:29]
-  wire  cycle_counter_reset; // @[Core.scala 82:29]
-  wire [63:0] cycle_counter_io_value; // @[Core.scala 82:29]
-  wire  mtimer_clock; // @[Core.scala 83:22]
-  wire  mtimer_reset; // @[Core.scala 83:22]
-  wire [31:0] mtimer_io_mem_raddr; // @[Core.scala 83:22]
-  wire [31:0] mtimer_io_mem_rdata; // @[Core.scala 83:22]
-  wire  mtimer_io_mem_ren; // @[Core.scala 83:22]
-  wire [31:0] mtimer_io_mem_waddr; // @[Core.scala 83:22]
-  wire  mtimer_io_mem_wen; // @[Core.scala 83:22]
-  wire [31:0] mtimer_io_mem_wdata; // @[Core.scala 83:22]
-  wire  mtimer_io_intr; // @[Core.scala 83:22]
-  wire [63:0] mtimer_io_mtime; // @[Core.scala 83:22]
-  reg  scoreboard [0:31]; // @[Core.scala 96:25]
-  wire  scoreboard_rrd_stall_MPORT_en; // @[Core.scala 96:25]
-  wire [4:0] scoreboard_rrd_stall_MPORT_addr; // @[Core.scala 96:25]
-  wire  scoreboard_rrd_stall_MPORT_data; // @[Core.scala 96:25]
-  wire  scoreboard_rrd_stall_MPORT_1_en; // @[Core.scala 96:25]
-  wire [4:0] scoreboard_rrd_stall_MPORT_1_addr; // @[Core.scala 96:25]
-  wire  scoreboard_rrd_stall_MPORT_1_data; // @[Core.scala 96:25]
-  wire  scoreboard_rrd_stall_MPORT_2_en; // @[Core.scala 96:25]
-  wire [4:0] scoreboard_rrd_stall_MPORT_2_addr; // @[Core.scala 96:25]
-  wire  scoreboard_rrd_stall_MPORT_2_data; // @[Core.scala 96:25]
-  wire  scoreboard_MPORT_data; // @[Core.scala 96:25]
-  wire [4:0] scoreboard_MPORT_addr; // @[Core.scala 96:25]
-  wire  scoreboard_MPORT_mask; // @[Core.scala 96:25]
-  wire  scoreboard_MPORT_en; // @[Core.scala 96:25]
-  wire  scoreboard_MPORT_1_data; // @[Core.scala 96:25]
-  wire [4:0] scoreboard_MPORT_1_addr; // @[Core.scala 96:25]
-  wire  scoreboard_MPORT_1_mask; // @[Core.scala 96:25]
-  wire  scoreboard_MPORT_1_en; // @[Core.scala 96:25]
-  wire  scoreboard_MPORT_2_data; // @[Core.scala 96:25]
-  wire [4:0] scoreboard_MPORT_2_addr; // @[Core.scala 96:25]
-  wire  scoreboard_MPORT_2_mask; // @[Core.scala 96:25]
-  wire  scoreboard_MPORT_2_en; // @[Core.scala 96:25]
-  wire  scoreboard_MPORT_5_data; // @[Core.scala 96:25]
-  wire [4:0] scoreboard_MPORT_5_addr; // @[Core.scala 96:25]
-  wire  scoreboard_MPORT_5_mask; // @[Core.scala 96:25]
-  wire  scoreboard_MPORT_5_en; // @[Core.scala 96:25]
-  wire  bp_clock; // @[Core.scala 411:18]
-  wire  bp_reset; // @[Core.scala 411:18]
-  wire [31:0] bp_io_lu_inst_pc; // @[Core.scala 411:18]
-  wire  bp_io_lu_br_hit; // @[Core.scala 411:18]
-  wire  bp_io_lu_br_pos; // @[Core.scala 411:18]
-  wire [31:0] bp_io_lu_br_addr; // @[Core.scala 411:18]
-  wire  bp_io_up_update_en; // @[Core.scala 411:18]
-  wire [31:0] bp_io_up_inst_pc; // @[Core.scala 411:18]
-  wire  bp_io_up_br_pos; // @[Core.scala 411:18]
-  wire [31:0] bp_io_up_br_addr; // @[Core.scala 411:18]
-  reg [63:0] instret; // @[Core.scala 85:24]
-  reg [31:0] csr_reg_trap_vector; // @[Core.scala 86:37]
-  reg [31:0] csr_reg_mcause; // @[Core.scala 87:37]
-  reg [31:0] csr_reg_mepc; // @[Core.scala 89:37]
-  reg  csr_reg_mstatus_mie; // @[Core.scala 90:37]
-  reg  csr_reg_mstatus_mpie; // @[Core.scala 91:37]
-  reg [31:0] csr_reg_mscratch; // @[Core.scala 92:37]
-  reg  csr_reg_mie_meie; // @[Core.scala 93:37]
-  reg  csr_reg_mie_mtie; // @[Core.scala 94:37]
-  reg [31:0] id_reg_pc; // @[Core.scala 104:38]
-  reg [31:0] id_reg_inst; // @[Core.scala 106:38]
-  reg  id_reg_stall; // @[Core.scala 107:38]
-  reg  id_reg_is_bp_pos; // @[Core.scala 108:38]
-  reg [31:0] id_reg_bp_addr; // @[Core.scala 109:38]
-  reg [31:0] rrd_reg_pc; // @[Core.scala 117:38]
-  reg [4:0] rrd_reg_wb_addr; // @[Core.scala 119:38]
-  reg [2:0] rrd_reg_op1_sel; // @[Core.scala 120:38]
-  reg [3:0] rrd_reg_op2_sel; // @[Core.scala 121:38]
-  reg [4:0] rrd_reg_rs1_addr; // @[Core.scala 122:38]
-  reg [4:0] rrd_reg_rs2_addr; // @[Core.scala 123:38]
-  reg [31:0] rrd_reg_op1_data; // @[Core.scala 124:38]
-  reg [31:0] rrd_reg_op2_data; // @[Core.scala 125:38]
-  reg [4:0] rrd_reg_exe_fun; // @[Core.scala 126:38]
-  reg  rrd_reg_rf_wen; // @[Core.scala 127:38]
-  reg [2:0] rrd_reg_wb_sel; // @[Core.scala 128:38]
-  reg [11:0] rrd_reg_csr_addr; // @[Core.scala 129:38]
-  reg [1:0] rrd_reg_csr_cmd; // @[Core.scala 130:38]
-  reg [31:0] rrd_reg_imm_b_sext; // @[Core.scala 131:38]
-  reg [2:0] rrd_reg_mem_w; // @[Core.scala 132:38]
-  reg  rrd_reg_is_direct_j; // @[Core.scala 133:39]
-  reg  rrd_reg_is_br; // @[Core.scala 134:39]
-  reg  rrd_reg_is_j; // @[Core.scala 135:39]
-  reg  rrd_reg_is_bp_pos; // @[Core.scala 136:39]
-  reg [31:0] rrd_reg_bp_addr; // @[Core.scala 137:39]
-  reg  rrd_reg_is_half; // @[Core.scala 138:39]
-  reg  rrd_reg_is_valid_inst; // @[Core.scala 139:39]
-  reg  rrd_reg_is_trap; // @[Core.scala 140:39]
-  reg [31:0] rrd_reg_mcause; // @[Core.scala 141:39]
-  reg [31:0] ex1_reg_pc; // @[Core.scala 145:38]
-  reg [4:0] ex1_reg_wb_addr; // @[Core.scala 147:38]
-  reg [31:0] ex1_reg_op1_data; // @[Core.scala 148:38]
-  reg [31:0] ex1_reg_op2_data; // @[Core.scala 149:38]
-  reg [31:0] ex1_reg_rs2_data; // @[Core.scala 150:38]
-  reg [4:0] ex1_reg_exe_fun; // @[Core.scala 151:38]
-  reg  ex1_reg_rf_wen; // @[Core.scala 152:38]
-  reg [2:0] ex1_reg_wb_sel; // @[Core.scala 153:38]
-  reg [11:0] ex1_reg_csr_addr; // @[Core.scala 154:38]
-  reg [1:0] ex1_reg_csr_cmd; // @[Core.scala 155:38]
-  reg [2:0] ex1_reg_mem_w; // @[Core.scala 157:38]
-  reg  ex1_is_uncond_br; // @[Core.scala 158:38]
-  reg  ex1_reg_is_bp_pos; // @[Core.scala 159:38]
-  reg [31:0] ex1_reg_bp_addr; // @[Core.scala 160:38]
-  reg  ex1_reg_is_half; // @[Core.scala 161:38]
-  reg  ex1_reg_is_valid_inst; // @[Core.scala 162:38]
-  reg  ex1_reg_is_trap; // @[Core.scala 163:38]
-  reg [31:0] ex1_reg_mcause; // @[Core.scala 164:38]
-  reg  ex1_reg_mem_use_reg; // @[Core.scala 166:38]
-  reg  ex1_reg_inst2_use_reg; // @[Core.scala 167:38]
-  reg  ex1_reg_inst3_use_reg; // @[Core.scala 168:38]
+  reg [31:0] regfile [0:31]; // @[Core.scala 84:20]
+  wire  regfile_rrd_op1_data_MPORT_en; // @[Core.scala 84:20]
+  wire [4:0] regfile_rrd_op1_data_MPORT_addr; // @[Core.scala 84:20]
+  wire [31:0] regfile_rrd_op1_data_MPORT_data; // @[Core.scala 84:20]
+  wire  regfile_rrd_op2_data_MPORT_en; // @[Core.scala 84:20]
+  wire [4:0] regfile_rrd_op2_data_MPORT_addr; // @[Core.scala 84:20]
+  wire [31:0] regfile_rrd_op2_data_MPORT_data; // @[Core.scala 84:20]
+  wire  regfile_rrd_rs2_data_MPORT_en; // @[Core.scala 84:20]
+  wire [4:0] regfile_rrd_rs2_data_MPORT_addr; // @[Core.scala 84:20]
+  wire [31:0] regfile_rrd_rs2_data_MPORT_data; // @[Core.scala 84:20]
+  wire  regfile_io_gp_MPORT_en; // @[Core.scala 84:20]
+  wire [4:0] regfile_io_gp_MPORT_addr; // @[Core.scala 84:20]
+  wire [31:0] regfile_io_gp_MPORT_data; // @[Core.scala 84:20]
+  wire  regfile_io_exit_MPORT_en; // @[Core.scala 84:20]
+  wire [4:0] regfile_io_exit_MPORT_addr; // @[Core.scala 84:20]
+  wire [31:0] regfile_io_exit_MPORT_data; // @[Core.scala 84:20]
+  wire [31:0] regfile_MPORT_3_data; // @[Core.scala 84:20]
+  wire [4:0] regfile_MPORT_3_addr; // @[Core.scala 84:20]
+  wire  regfile_MPORT_3_mask; // @[Core.scala 84:20]
+  wire  regfile_MPORT_3_en; // @[Core.scala 84:20]
+  wire [31:0] regfile_MPORT_4_data; // @[Core.scala 84:20]
+  wire [4:0] regfile_MPORT_4_addr; // @[Core.scala 84:20]
+  wire  regfile_MPORT_4_mask; // @[Core.scala 84:20]
+  wire  regfile_MPORT_4_en; // @[Core.scala 84:20]
+  wire  cycle_counter_clock; // @[Core.scala 86:29]
+  wire  cycle_counter_reset; // @[Core.scala 86:29]
+  wire [63:0] cycle_counter_io_value; // @[Core.scala 86:29]
+  wire  mtimer_clock; // @[Core.scala 87:22]
+  wire  mtimer_reset; // @[Core.scala 87:22]
+  wire [31:0] mtimer_io_mem_raddr; // @[Core.scala 87:22]
+  wire [31:0] mtimer_io_mem_rdata; // @[Core.scala 87:22]
+  wire  mtimer_io_mem_ren; // @[Core.scala 87:22]
+  wire [31:0] mtimer_io_mem_waddr; // @[Core.scala 87:22]
+  wire  mtimer_io_mem_wen; // @[Core.scala 87:22]
+  wire [31:0] mtimer_io_mem_wdata; // @[Core.scala 87:22]
+  wire  mtimer_io_intr; // @[Core.scala 87:22]
+  wire [63:0] mtimer_io_mtime; // @[Core.scala 87:22]
+  reg  scoreboard [0:31]; // @[Core.scala 100:25]
+  wire  scoreboard_rrd_stall_MPORT_en; // @[Core.scala 100:25]
+  wire [4:0] scoreboard_rrd_stall_MPORT_addr; // @[Core.scala 100:25]
+  wire  scoreboard_rrd_stall_MPORT_data; // @[Core.scala 100:25]
+  wire  scoreboard_rrd_stall_MPORT_1_en; // @[Core.scala 100:25]
+  wire [4:0] scoreboard_rrd_stall_MPORT_1_addr; // @[Core.scala 100:25]
+  wire  scoreboard_rrd_stall_MPORT_1_data; // @[Core.scala 100:25]
+  wire  scoreboard_rrd_stall_MPORT_2_en; // @[Core.scala 100:25]
+  wire [4:0] scoreboard_rrd_stall_MPORT_2_addr; // @[Core.scala 100:25]
+  wire  scoreboard_rrd_stall_MPORT_2_data; // @[Core.scala 100:25]
+  wire  scoreboard_MPORT_data; // @[Core.scala 100:25]
+  wire [4:0] scoreboard_MPORT_addr; // @[Core.scala 100:25]
+  wire  scoreboard_MPORT_mask; // @[Core.scala 100:25]
+  wire  scoreboard_MPORT_en; // @[Core.scala 100:25]
+  wire  scoreboard_MPORT_1_data; // @[Core.scala 100:25]
+  wire [4:0] scoreboard_MPORT_1_addr; // @[Core.scala 100:25]
+  wire  scoreboard_MPORT_1_mask; // @[Core.scala 100:25]
+  wire  scoreboard_MPORT_1_en; // @[Core.scala 100:25]
+  wire  scoreboard_MPORT_2_data; // @[Core.scala 100:25]
+  wire [4:0] scoreboard_MPORT_2_addr; // @[Core.scala 100:25]
+  wire  scoreboard_MPORT_2_mask; // @[Core.scala 100:25]
+  wire  scoreboard_MPORT_2_en; // @[Core.scala 100:25]
+  wire  scoreboard_MPORT_5_data; // @[Core.scala 100:25]
+  wire [4:0] scoreboard_MPORT_5_addr; // @[Core.scala 100:25]
+  wire  scoreboard_MPORT_5_mask; // @[Core.scala 100:25]
+  wire  scoreboard_MPORT_5_en; // @[Core.scala 100:25]
+  wire  bp_clock; // @[Core.scala 406:18]
+  wire  bp_reset; // @[Core.scala 406:18]
+  wire [31:0] bp_io_lu_inst_pc; // @[Core.scala 406:18]
+  wire  bp_io_lu_br_hit; // @[Core.scala 406:18]
+  wire  bp_io_lu_br_pos; // @[Core.scala 406:18]
+  wire [31:0] bp_io_lu_br_addr; // @[Core.scala 406:18]
+  wire  bp_io_up_update_en; // @[Core.scala 406:18]
+  wire [31:0] bp_io_up_inst_pc; // @[Core.scala 406:18]
+  wire  bp_io_up_br_pos; // @[Core.scala 406:18]
+  wire [31:0] bp_io_up_br_addr; // @[Core.scala 406:18]
+  reg [63:0] instret; // @[Core.scala 89:24]
+  reg [31:0] csr_reg_trap_vector; // @[Core.scala 90:37]
+  reg [31:0] csr_reg_mcause; // @[Core.scala 91:37]
+  reg [31:0] csr_reg_mepc; // @[Core.scala 93:37]
+  reg  csr_reg_mstatus_mie; // @[Core.scala 94:37]
+  reg  csr_reg_mstatus_mpie; // @[Core.scala 95:37]
+  reg [31:0] csr_reg_mscratch; // @[Core.scala 96:37]
+  reg  csr_reg_mie_meie; // @[Core.scala 97:37]
+  reg  csr_reg_mie_mtie; // @[Core.scala 98:37]
+  reg [31:0] id_reg_pc; // @[Core.scala 108:38]
+  reg [31:0] id_reg_inst; // @[Core.scala 110:38]
+  reg  id_reg_stall; // @[Core.scala 111:38]
+  reg  id_reg_is_bp_pos; // @[Core.scala 112:38]
+  reg [31:0] id_reg_bp_addr; // @[Core.scala 113:38]
+  reg [31:0] rrd_reg_pc; // @[Core.scala 120:38]
+  reg [4:0] rrd_reg_wb_addr; // @[Core.scala 121:38]
+  reg [2:0] rrd_reg_op1_sel; // @[Core.scala 122:38]
+  reg [3:0] rrd_reg_op2_sel; // @[Core.scala 123:38]
+  reg [4:0] rrd_reg_rs1_addr; // @[Core.scala 124:38]
+  reg [4:0] rrd_reg_rs2_addr; // @[Core.scala 125:38]
+  reg [31:0] rrd_reg_op1_data; // @[Core.scala 126:38]
+  reg [31:0] rrd_reg_op2_data; // @[Core.scala 127:38]
+  reg [4:0] rrd_reg_exe_fun; // @[Core.scala 128:38]
+  reg  rrd_reg_rf_wen; // @[Core.scala 129:38]
+  reg [2:0] rrd_reg_wb_sel; // @[Core.scala 130:38]
+  reg [11:0] rrd_reg_csr_addr; // @[Core.scala 131:38]
+  reg [1:0] rrd_reg_csr_cmd; // @[Core.scala 132:38]
+  reg [31:0] rrd_reg_imm_b_sext; // @[Core.scala 133:38]
+  reg [2:0] rrd_reg_mem_w; // @[Core.scala 134:38]
+  reg  rrd_reg_is_direct_j; // @[Core.scala 135:39]
+  reg  rrd_reg_is_br; // @[Core.scala 136:39]
+  reg  rrd_reg_is_j; // @[Core.scala 137:39]
+  reg  rrd_reg_is_bp_pos; // @[Core.scala 138:39]
+  reg [31:0] rrd_reg_bp_addr; // @[Core.scala 139:39]
+  reg  rrd_reg_is_half; // @[Core.scala 140:39]
+  reg  rrd_reg_is_valid_inst; // @[Core.scala 141:39]
+  reg  rrd_reg_is_trap; // @[Core.scala 142:39]
+  reg [31:0] rrd_reg_mcause; // @[Core.scala 143:39]
+  reg [31:0] ex1_reg_pc; // @[Core.scala 147:38]
+  reg [4:0] ex1_reg_wb_addr; // @[Core.scala 148:38]
+  reg [31:0] ex1_reg_op1_data; // @[Core.scala 149:38]
+  reg [31:0] ex1_reg_op2_data; // @[Core.scala 150:38]
+  reg [31:0] ex1_reg_rs2_data; // @[Core.scala 151:38]
+  reg [4:0] ex1_reg_exe_fun; // @[Core.scala 152:38]
+  reg  ex1_reg_rf_wen; // @[Core.scala 153:38]
+  reg [2:0] ex1_reg_wb_sel; // @[Core.scala 154:38]
+  reg [11:0] ex1_reg_csr_addr; // @[Core.scala 155:38]
+  reg [1:0] ex1_reg_csr_cmd; // @[Core.scala 156:38]
+  reg [2:0] ex1_reg_mem_w; // @[Core.scala 158:38]
+  reg  ex1_is_uncond_br; // @[Core.scala 159:38]
+  reg  ex1_reg_is_bp_pos; // @[Core.scala 160:38]
+  reg [31:0] ex1_reg_bp_addr; // @[Core.scala 161:38]
+  reg  ex1_reg_is_half; // @[Core.scala 162:38]
+  reg  ex1_reg_is_valid_inst; // @[Core.scala 163:38]
+  reg  ex1_reg_is_trap; // @[Core.scala 164:38]
+  reg [31:0] ex1_reg_mcause; // @[Core.scala 165:38]
+  reg  ex1_reg_mem_use_reg; // @[Core.scala 167:38]
+  reg  ex1_reg_inst2_use_reg; // @[Core.scala 168:38]
+  reg  ex1_reg_inst3_use_reg; // @[Core.scala 169:38]
   reg  ex1_is_cond_br_inst; // @[Core.scala 170:43]
-  reg  ex1_reg_is_indirect_j; // @[Core.scala 171:43]
-  reg [31:0] ex1_cond_br_target; // @[Core.scala 173:43]
-  reg  jbr_reg_bp_en; // @[Core.scala 177:41]
-  reg  jbr_reg_is_cond_br; // @[Core.scala 178:41]
-  reg  jbr_reg_is_cond_br_inst; // @[Core.scala 179:41]
-  reg  jbr_reg_is_uncond_br; // @[Core.scala 180:41]
-  reg [31:0] jbr_reg_cond_br_target; // @[Core.scala 181:41]
-  reg [31:0] jbr_reg_uncond_br_target; // @[Core.scala 182:41]
-  reg  jbr_reg_is_bp_pos; // @[Core.scala 183:41]
-  reg [31:0] jbr_reg_bp_addr; // @[Core.scala 184:41]
-  reg  jbr_reg_is_half; // @[Core.scala 185:41]
-  reg [31:0] ex2_reg_pc; // @[Core.scala 189:38]
-  reg [4:0] ex2_reg_wb_addr; // @[Core.scala 191:38]
-  reg [31:0] ex2_reg_op1_data; // @[Core.scala 192:38]
-  reg [47:0] ex2_reg_mullu; // @[Core.scala 194:38]
-  reg [31:0] ex2_reg_mulls; // @[Core.scala 195:38]
-  reg [47:0] ex2_reg_mulhuu; // @[Core.scala 196:38]
-  reg [47:0] ex2_reg_mulhss; // @[Core.scala 197:38]
-  reg [47:0] ex2_reg_mulhsu; // @[Core.scala 198:38]
-  reg [4:0] ex2_reg_exe_fun; // @[Core.scala 199:38]
-  reg  ex2_reg_rf_wen; // @[Core.scala 200:38]
-  reg [2:0] ex2_reg_wb_sel; // @[Core.scala 201:38]
-  reg [11:0] ex2_reg_csr_addr; // @[Core.scala 202:38]
-  reg [1:0] ex2_reg_csr_cmd; // @[Core.scala 203:38]
-  reg [31:0] ex2_reg_alu_out; // @[Core.scala 204:38]
-  reg [31:0] ex2_reg_pc_bit_out; // @[Core.scala 205:38]
-  reg [31:0] ex2_reg_wdata; // @[Core.scala 207:38]
-  reg  ex2_reg_is_valid_inst; // @[Core.scala 208:38]
-  reg  ex2_reg_is_trap; // @[Core.scala 209:38]
-  reg [31:0] ex2_reg_mcause; // @[Core.scala 210:38]
-  reg  ex2_reg_divrem; // @[Core.scala 214:42]
-  reg  ex2_reg_sign_op1; // @[Core.scala 215:42]
-  reg  ex2_reg_sign_op12; // @[Core.scala 216:42]
-  reg  ex2_reg_zero_op2; // @[Core.scala 217:42]
-  reg [36:0] ex2_reg_init_dividend; // @[Core.scala 218:42]
-  reg [31:0] ex2_reg_init_divisor; // @[Core.scala 219:42]
-  reg [31:0] ex2_reg_orig_dividend; // @[Core.scala 220:42]
-  reg  ex2_reg_inst3_use_reg; // @[Core.scala 221:42]
-  reg [3:0] mem1_reg_mem_wstrb; // @[Core.scala 224:39]
-  reg [2:0] mem1_reg_mem_w; // @[Core.scala 225:39]
-  reg  mem1_reg_mem_use_reg; // @[Core.scala 226:39]
-  reg  mem1_reg_is_mem_load; // @[Core.scala 228:39]
-  reg  mem1_reg_is_mem_store; // @[Core.scala 229:39]
-  reg  mem1_reg_is_dram_load; // @[Core.scala 230:39]
-  reg  mem1_reg_is_dram_store; // @[Core.scala 231:39]
-  reg  mem1_reg_is_dram_fence; // @[Core.scala 232:39]
-  reg  mem1_reg_is_valid_inst; // @[Core.scala 233:39]
-  reg [1:0] mem2_reg_wb_byte_offset; // @[Core.scala 236:40]
-  reg [2:0] mem2_reg_mem_w; // @[Core.scala 237:40]
-  reg [31:0] mem2_reg_dmem_rdata; // @[Core.scala 238:40]
-  reg [31:0] mem2_reg_wb_addr; // @[Core.scala 239:40]
-  reg  mem2_reg_is_valid_load; // @[Core.scala 240:40]
-  reg  mem2_reg_mem_use_reg; // @[Core.scala 241:40]
-  reg  mem2_reg_is_valid_inst; // @[Core.scala 242:40]
-  reg  mem2_reg_is_dram_load; // @[Core.scala 243:40]
-  reg [1:0] mem3_reg_wb_byte_offset; // @[Core.scala 246:40]
-  reg [2:0] mem3_reg_mem_w; // @[Core.scala 247:40]
-  reg [31:0] mem3_reg_dmem_rdata; // @[Core.scala 248:40]
-  reg [31:0] mem3_reg_wb_addr; // @[Core.scala 249:40]
-  reg  mem3_reg_is_valid_load; // @[Core.scala 250:40]
-  reg  mem3_reg_is_valid_inst; // @[Core.scala 251:40]
-  reg  mem3_reg_mem_use_reg; // @[Core.scala 252:40]
-  reg  if2_reg_is_bp_pos; // @[Core.scala 254:35]
-  reg [31:0] if2_reg_bp_addr; // @[Core.scala 255:35]
-  reg  mem1_mem_stall_delay; // @[Core.scala 263:37]
-  reg  ex1_reg_fw_en; // @[Core.scala 264:35]
-  reg  ex2_reg_fw_en; // @[Core.scala 266:35]
-  reg  ex2_reg_div_stall; // @[Core.scala 269:35]
-  reg [2:0] ex2_reg_divrem_state; // @[Core.scala 270:37]
-  reg  ex2_reg_is_br; // @[Core.scala 271:35]
-  reg [31:0] ex2_reg_br_addr; // @[Core.scala 272:35]
-  reg  ex2_reg_is_retired; // @[Core.scala 277:35]
-  reg  mem3_reg_is_retired; // @[Core.scala 278:36]
-  reg  ic_reg_read_rdy; // @[Core.scala 289:32]
-  reg  ic_reg_half_rdy; // @[Core.scala 290:32]
-  reg [31:0] ic_reg_imem_addr; // @[Core.scala 294:33]
-  reg [31:0] ic_reg_addr_out; // @[Core.scala 295:32]
-  reg [31:0] ic_reg_inst; // @[Core.scala 298:34]
-  reg [31:0] ic_reg_inst_addr; // @[Core.scala 299:34]
-  reg [31:0] ic_reg_inst2; // @[Core.scala 300:34]
-  reg [31:0] ic_reg_inst2_addr; // @[Core.scala 301:34]
-  reg [2:0] ic_state; // @[Core.scala 303:25]
+  reg [31:0] ex1_cond_br_target; // @[Core.scala 171:43]
+  reg  jbr_reg_bp_en; // @[Core.scala 174:41]
+  reg  jbr_reg_is_cond_br; // @[Core.scala 175:41]
+  reg  jbr_reg_is_cond_br_inst; // @[Core.scala 176:41]
+  reg  jbr_reg_is_uncond_br; // @[Core.scala 177:41]
+  reg [31:0] jbr_reg_cond_br_target; // @[Core.scala 178:41]
+  reg [31:0] jbr_reg_uncond_br_target; // @[Core.scala 179:41]
+  reg  jbr_reg_is_bp_pos; // @[Core.scala 180:41]
+  reg [31:0] jbr_reg_bp_addr; // @[Core.scala 181:41]
+  reg  jbr_reg_is_half; // @[Core.scala 182:41]
+  reg [31:0] ex2_reg_pc; // @[Core.scala 185:38]
+  reg [4:0] ex2_reg_wb_addr; // @[Core.scala 186:38]
+  reg [31:0] ex2_reg_op1_data; // @[Core.scala 187:38]
+  reg [47:0] ex2_reg_mullu; // @[Core.scala 189:38]
+  reg [31:0] ex2_reg_mulls; // @[Core.scala 190:38]
+  reg [47:0] ex2_reg_mulhuu; // @[Core.scala 191:38]
+  reg [47:0] ex2_reg_mulhss; // @[Core.scala 192:38]
+  reg [47:0] ex2_reg_mulhsu; // @[Core.scala 193:38]
+  reg [4:0] ex2_reg_exe_fun; // @[Core.scala 194:38]
+  reg  ex2_reg_rf_wen; // @[Core.scala 195:38]
+  reg [2:0] ex2_reg_wb_sel; // @[Core.scala 196:38]
+  reg [11:0] ex2_reg_csr_addr; // @[Core.scala 197:38]
+  reg [1:0] ex2_reg_csr_cmd; // @[Core.scala 198:38]
+  reg [31:0] ex2_reg_alu_out; // @[Core.scala 199:38]
+  reg [31:0] ex2_reg_pc_bit_out; // @[Core.scala 200:38]
+  reg [31:0] ex2_reg_wdata; // @[Core.scala 201:38]
+  reg  ex2_reg_is_valid_inst; // @[Core.scala 202:38]
+  reg  ex2_reg_is_trap; // @[Core.scala 203:38]
+  reg [31:0] ex2_reg_mcause; // @[Core.scala 204:38]
+  reg  ex2_reg_divrem; // @[Core.scala 208:38]
+  reg  ex2_reg_sign_op1; // @[Core.scala 209:38]
+  reg  ex2_reg_sign_op12; // @[Core.scala 210:38]
+  reg  ex2_reg_zero_op2; // @[Core.scala 211:38]
+  reg [36:0] ex2_reg_init_dividend; // @[Core.scala 212:38]
+  reg [31:0] ex2_reg_init_divisor; // @[Core.scala 213:38]
+  reg [31:0] ex2_reg_orig_dividend; // @[Core.scala 214:38]
+  reg  ex2_reg_inst3_use_reg; // @[Core.scala 215:38]
+  reg  ex2_reg_no_mem; // @[Core.scala 216:38]
+  reg [3:0] mem1_reg_mem_wstrb; // @[Core.scala 219:39]
+  reg [2:0] mem1_reg_mem_w; // @[Core.scala 220:39]
+  reg  mem1_reg_mem_use_reg; // @[Core.scala 221:39]
+  reg  mem1_reg_is_mem_load; // @[Core.scala 223:39]
+  reg  mem1_reg_is_mem_store; // @[Core.scala 224:39]
+  reg  mem1_reg_is_dram_load; // @[Core.scala 225:39]
+  reg  mem1_reg_is_dram_store; // @[Core.scala 226:39]
+  reg  mem1_reg_is_dram_fence; // @[Core.scala 227:39]
+  reg  mem1_reg_is_valid_inst; // @[Core.scala 228:39]
+  reg [1:0] mem2_reg_wb_byte_offset; // @[Core.scala 231:40]
+  reg [2:0] mem2_reg_mem_w; // @[Core.scala 232:40]
+  reg [31:0] mem2_reg_dmem_rdata; // @[Core.scala 233:40]
+  reg [31:0] mem2_reg_wb_addr; // @[Core.scala 234:40]
+  reg  mem2_reg_is_valid_load; // @[Core.scala 235:40]
+  reg  mem2_reg_mem_use_reg; // @[Core.scala 236:40]
+  reg  mem2_reg_is_valid_inst; // @[Core.scala 237:40]
+  reg  mem2_reg_is_dram_load; // @[Core.scala 238:40]
+  reg [1:0] mem3_reg_wb_byte_offset; // @[Core.scala 241:40]
+  reg [2:0] mem3_reg_mem_w; // @[Core.scala 242:40]
+  reg [31:0] mem3_reg_dmem_rdata; // @[Core.scala 243:40]
+  reg [31:0] mem3_reg_wb_addr; // @[Core.scala 244:40]
+  reg  mem3_reg_is_valid_load; // @[Core.scala 245:40]
+  reg  mem3_reg_is_valid_inst; // @[Core.scala 246:40]
+  reg  mem3_reg_mem_use_reg; // @[Core.scala 247:40]
+  reg  if2_reg_is_bp_pos; // @[Core.scala 249:35]
+  reg [31:0] if2_reg_bp_addr; // @[Core.scala 250:35]
+  reg  mem1_mem_stall_delay; // @[Core.scala 258:37]
+  reg  ex1_reg_fw_en; // @[Core.scala 259:35]
+  reg  ex2_reg_fw_en; // @[Core.scala 261:35]
+  reg  ex2_reg_div_stall; // @[Core.scala 264:35]
+  reg [2:0] ex2_reg_divrem_state; // @[Core.scala 265:37]
+  reg  ex2_reg_is_br; // @[Core.scala 266:35]
+  reg [31:0] ex2_reg_br_addr; // @[Core.scala 267:35]
+  reg  ex2_reg_is_retired; // @[Core.scala 272:35]
+  reg  mem3_reg_is_retired; // @[Core.scala 273:36]
+  reg  ic_reg_read_rdy; // @[Core.scala 284:32]
+  reg  ic_reg_half_rdy; // @[Core.scala 285:32]
+  reg [31:0] ic_reg_imem_addr; // @[Core.scala 289:33]
+  reg [31:0] ic_reg_addr_out; // @[Core.scala 290:32]
+  reg [31:0] ic_reg_inst; // @[Core.scala 293:34]
+  reg [31:0] ic_reg_inst_addr; // @[Core.scala 294:34]
+  reg [31:0] ic_reg_inst2; // @[Core.scala 295:34]
+  reg [31:0] ic_reg_inst2_addr; // @[Core.scala 296:34]
+  reg [2:0] ic_state; // @[Core.scala 298:25]
   wire [31:0] ic_imem_addr_2 = {ic_reg_imem_addr[31:2],1'h1,1'h0}; // @[Cat.scala 31:58]
-  wire [31:0] ic_imem_addr_4 = ic_reg_imem_addr + 32'h4; // @[Core.scala 306:41]
+  wire [31:0] ic_imem_addr_4 = ic_reg_imem_addr + 32'h4; // @[Core.scala 301:41]
   wire [31:0] ic_inst_addr_2 = {ic_reg_inst_addr[31:2],1'h1,1'h0}; // @[Cat.scala 31:58]
-  reg  if1_reg_first; // @[Core.scala 417:30]
+  reg  if1_reg_first; // @[Core.scala 412:30]
   wire [31:0] _if1_jump_addr_T = if1_reg_first ? 32'h8000000 : 32'h0; // @[Mux.scala 101:16]
   wire [31:0] _if1_jump_addr_T_1 = if2_reg_is_bp_pos ? if2_reg_bp_addr : _if1_jump_addr_T; // @[Mux.scala 101:16]
   wire [31:0] if1_jump_addr = ex2_reg_is_br ? ex2_reg_br_addr : _if1_jump_addr_T_1; // @[Mux.scala 101:16]
   wire [31:0] ic_next_imem_addr = {if1_jump_addr[31:2],2'h0}; // @[Cat.scala 31:58]
-  wire  _ic_read_en4_T = ~id_reg_stall; // @[Core.scala 449:18]
-  wire  if1_is_jump = ex2_reg_is_br | if2_reg_is_bp_pos | if1_reg_first; // @[Core.scala 430:56]
+  wire  _ic_read_en4_T = ~id_reg_stall; // @[Core.scala 443:18]
+  wire  if1_is_jump = ex2_reg_is_br | if2_reg_is_bp_pos | if1_reg_first; // @[Core.scala 425:56]
   wire [30:0] _ic_data_out_T_2 = {15'h0,io_imem_inst[31:16]}; // @[Cat.scala 31:58]
   wire [31:0] _ic_data_out_T_5 = {io_imem_inst[15:0],ic_reg_inst[31:16]}; // @[Cat.scala 31:58]
   wire [31:0] _ic_data_out_T_8 = {ic_reg_inst2[15:0],ic_reg_inst[31:16]}; // @[Cat.scala 31:58]
-  wire [31:0] _GEN_27 = 3'h3 == ic_state ? _ic_data_out_T_8 : 32'h13; // @[Core.scala 314:15 331:23 392:21]
-  wire [31:0] _GEN_34 = 3'h4 == ic_state ? _ic_data_out_T_5 : _GEN_27; // @[Core.scala 331:23 374:21]
-  wire [31:0] _GEN_42 = 3'h2 == ic_state ? ic_reg_inst : _GEN_34; // @[Core.scala 331:23 362:21]
-  wire [31:0] _GEN_54 = 3'h1 == ic_state ? {{1'd0}, _ic_data_out_T_2} : _GEN_42; // @[Core.scala 331:23 352:21]
-  wire [31:0] _GEN_63 = 3'h0 == ic_state ? io_imem_inst : _GEN_54; // @[Core.scala 331:23 337:21]
-  wire [31:0] _GEN_76 = ~io_imem_valid ? 32'h13 : _GEN_63; // @[Core.scala 314:15 325:98]
-  wire [31:0] ic_data_out = if1_is_jump ? 32'h13 : _GEN_76; // @[Core.scala 314:15 318:21]
-  wire  is_half_inst = ic_data_out[1:0] != 2'h3; // @[Core.scala 447:41]
-  wire  ic_read_en4 = ~id_reg_stall & ~is_half_inst; // @[Core.scala 449:32]
-  wire [31:0] _GEN_0 = ic_read_en4 ? ic_imem_addr_4 : ic_reg_addr_out; // @[Core.scala 315:15 342:34 343:23]
-  wire [1:0] _GEN_1 = ic_read_en4 ? 2'h0 : 2'h2; // @[Core.scala 338:18 342:34 344:20]
-  wire  ic_read_en2 = _ic_read_en4_T & is_half_inst; // @[Core.scala 448:32]
-  wire [31:0] _GEN_2 = ic_read_en2 ? ic_imem_addr_2 : _GEN_0; // @[Core.scala 339:28 340:23]
-  wire [2:0] _GEN_3 = ic_read_en2 ? 3'h4 : {{1'd0}, _GEN_1}; // @[Core.scala 339:28 341:20]
-  wire [31:0] _GEN_4 = ic_read_en2 ? ic_imem_addr_4 : ic_imem_addr_2; // @[Core.scala 353:21 355:28 356:23]
-  wire [2:0] _GEN_5 = ic_read_en2 ? 3'h0 : 3'h4; // @[Core.scala 354:18 355:28 357:20]
-  wire [31:0] _GEN_6 = ic_read_en4 ? ic_reg_imem_addr : ic_reg_addr_out; // @[Core.scala 315:15 366:33 367:23]
-  wire [2:0] _GEN_7 = ic_read_en4 ? 3'h0 : ic_state; // @[Core.scala 366:33 368:20 303:25]
-  wire [31:0] _GEN_8 = ic_read_en2 ? ic_inst_addr_2 : _GEN_6; // @[Core.scala 363:28 364:23]
-  wire [2:0] _GEN_9 = ic_read_en2 ? 3'h4 : _GEN_7; // @[Core.scala 363:28 365:20]
-  wire [31:0] _GEN_10 = ic_read_en4 ? io_imem_inst : ic_reg_inst; // @[Core.scala 383:33 384:23 298:34]
-  wire [31:0] _GEN_11 = ic_read_en4 ? ic_reg_imem_addr : ic_reg_inst_addr; // @[Core.scala 383:33 385:28 299:34]
-  wire [31:0] _GEN_12 = ic_read_en4 ? ic_imem_addr_2 : ic_reg_addr_out; // @[Core.scala 315:15 383:33 386:23]
-  wire [2:0] _GEN_13 = ic_read_en4 ? 3'h4 : 3'h3; // @[Core.scala 377:18 383:33 387:20]
-  wire [31:0] _GEN_14 = ic_read_en2 ? io_imem_inst : _GEN_10; // @[Core.scala 378:28 379:23]
-  wire [31:0] _GEN_15 = ic_read_en2 ? ic_reg_imem_addr : _GEN_11; // @[Core.scala 378:28 380:28]
-  wire [31:0] _GEN_16 = ic_read_en2 ? ic_reg_imem_addr : _GEN_12; // @[Core.scala 378:28 381:23]
-  wire [2:0] _GEN_17 = ic_read_en2 ? 3'h2 : _GEN_13; // @[Core.scala 378:28 382:20]
+  wire [31:0] _GEN_27 = 3'h3 == ic_state ? _ic_data_out_T_8 : 32'h13; // @[Core.scala 309:15 326:23 387:21]
+  wire [31:0] _GEN_34 = 3'h4 == ic_state ? _ic_data_out_T_5 : _GEN_27; // @[Core.scala 326:23 369:21]
+  wire [31:0] _GEN_42 = 3'h2 == ic_state ? ic_reg_inst : _GEN_34; // @[Core.scala 326:23 357:21]
+  wire [31:0] _GEN_54 = 3'h1 == ic_state ? {{1'd0}, _ic_data_out_T_2} : _GEN_42; // @[Core.scala 326:23 347:21]
+  wire [31:0] _GEN_63 = 3'h0 == ic_state ? io_imem_inst : _GEN_54; // @[Core.scala 326:23 332:21]
+  wire [31:0] _GEN_76 = ~io_imem_valid ? 32'h13 : _GEN_63; // @[Core.scala 309:15 320:98]
+  wire [31:0] ic_data_out = if1_is_jump ? 32'h13 : _GEN_76; // @[Core.scala 309:15 313:21]
+  wire  is_half_inst = ic_data_out[1:0] != 2'h3; // @[Core.scala 441:41]
+  wire  ic_read_en4 = ~id_reg_stall & ~is_half_inst; // @[Core.scala 443:32]
+  wire [31:0] _GEN_0 = ic_read_en4 ? ic_imem_addr_4 : ic_reg_addr_out; // @[Core.scala 310:15 337:34 338:23]
+  wire [1:0] _GEN_1 = ic_read_en4 ? 2'h0 : 2'h2; // @[Core.scala 333:18 337:34 339:20]
+  wire  ic_read_en2 = _ic_read_en4_T & is_half_inst; // @[Core.scala 442:32]
+  wire [31:0] _GEN_2 = ic_read_en2 ? ic_imem_addr_2 : _GEN_0; // @[Core.scala 334:28 335:23]
+  wire [2:0] _GEN_3 = ic_read_en2 ? 3'h4 : {{1'd0}, _GEN_1}; // @[Core.scala 334:28 336:20]
+  wire [31:0] _GEN_4 = ic_read_en2 ? ic_imem_addr_4 : ic_imem_addr_2; // @[Core.scala 348:21 350:28 351:23]
+  wire [2:0] _GEN_5 = ic_read_en2 ? 3'h0 : 3'h4; // @[Core.scala 349:18 350:28 352:20]
+  wire [31:0] _GEN_6 = ic_read_en4 ? ic_reg_imem_addr : ic_reg_addr_out; // @[Core.scala 310:15 361:33 362:23]
+  wire [2:0] _GEN_7 = ic_read_en4 ? 3'h0 : ic_state; // @[Core.scala 361:33 363:20 298:25]
+  wire [31:0] _GEN_8 = ic_read_en2 ? ic_inst_addr_2 : _GEN_6; // @[Core.scala 358:28 359:23]
+  wire [2:0] _GEN_9 = ic_read_en2 ? 3'h4 : _GEN_7; // @[Core.scala 358:28 360:20]
+  wire [31:0] _GEN_10 = ic_read_en4 ? io_imem_inst : ic_reg_inst; // @[Core.scala 378:33 379:23 293:34]
+  wire [31:0] _GEN_11 = ic_read_en4 ? ic_reg_imem_addr : ic_reg_inst_addr; // @[Core.scala 378:33 380:28 294:34]
+  wire [31:0] _GEN_12 = ic_read_en4 ? ic_imem_addr_2 : ic_reg_addr_out; // @[Core.scala 310:15 378:33 381:23]
+  wire [2:0] _GEN_13 = ic_read_en4 ? 3'h4 : 3'h3; // @[Core.scala 372:18 378:33 382:20]
+  wire [31:0] _GEN_14 = ic_read_en2 ? io_imem_inst : _GEN_10; // @[Core.scala 373:28 374:23]
+  wire [31:0] _GEN_15 = ic_read_en2 ? ic_reg_imem_addr : _GEN_11; // @[Core.scala 373:28 375:28]
+  wire [31:0] _GEN_16 = ic_read_en2 ? ic_reg_imem_addr : _GEN_12; // @[Core.scala 373:28 376:23]
+  wire [2:0] _GEN_17 = ic_read_en2 ? 3'h2 : _GEN_13; // @[Core.scala 373:28 377:20]
   wire [31:0] _ic_addr_out_T_3 = {ic_reg_inst2_addr[31:2],1'h1,1'h0}; // @[Cat.scala 31:58]
-  wire [31:0] _GEN_18 = ic_read_en4 ? ic_reg_inst2 : ic_reg_inst; // @[Core.scala 398:33 399:23 298:34]
-  wire [31:0] _GEN_19 = ic_read_en4 ? ic_reg_inst2_addr : ic_reg_inst_addr; // @[Core.scala 398:33 400:28 299:34]
-  wire [31:0] _GEN_20 = ic_read_en4 ? _ic_addr_out_T_3 : ic_reg_addr_out; // @[Core.scala 315:15 398:33 401:23]
-  wire [2:0] _GEN_21 = ic_read_en4 ? 3'h4 : ic_state; // @[Core.scala 398:33 402:20 303:25]
-  wire [31:0] _GEN_22 = ic_read_en2 ? ic_reg_inst2 : _GEN_18; // @[Core.scala 393:28 394:23]
-  wire [31:0] _GEN_23 = ic_read_en2 ? ic_reg_inst2_addr : _GEN_19; // @[Core.scala 393:28 395:28]
-  wire [31:0] _GEN_24 = ic_read_en2 ? ic_reg_inst2_addr : _GEN_20; // @[Core.scala 393:28 396:23]
-  wire [2:0] _GEN_25 = ic_read_en2 ? 3'h2 : _GEN_21; // @[Core.scala 393:28 397:20]
-  wire [31:0] _GEN_28 = 3'h3 == ic_state ? _GEN_22 : ic_reg_inst; // @[Core.scala 331:23 298:34]
-  wire [31:0] _GEN_29 = 3'h3 == ic_state ? _GEN_23 : ic_reg_inst_addr; // @[Core.scala 331:23 299:34]
-  wire [31:0] _GEN_30 = 3'h3 == ic_state ? _GEN_24 : ic_reg_addr_out; // @[Core.scala 315:15 331:23]
-  wire [2:0] _GEN_31 = 3'h3 == ic_state ? _GEN_25 : ic_state; // @[Core.scala 331:23 303:25]
-  wire [31:0] _GEN_32 = 3'h4 == ic_state ? ic_imem_addr_4 : ic_reg_imem_addr; // @[Core.scala 331:23 372:22]
-  wire [31:0] _GEN_35 = 3'h4 == ic_state ? io_imem_inst : ic_reg_inst2; // @[Core.scala 331:23 375:22 300:34]
-  wire [31:0] _GEN_36 = 3'h4 == ic_state ? ic_reg_imem_addr : ic_reg_inst2_addr; // @[Core.scala 331:23 376:27 301:34]
-  wire [2:0] _GEN_37 = 3'h4 == ic_state ? _GEN_17 : _GEN_31; // @[Core.scala 331:23]
-  wire [31:0] _GEN_38 = 3'h4 == ic_state ? _GEN_14 : _GEN_28; // @[Core.scala 331:23]
-  wire [31:0] _GEN_39 = 3'h4 == ic_state ? _GEN_15 : _GEN_29; // @[Core.scala 331:23]
-  wire [31:0] _GEN_40 = 3'h4 == ic_state ? _GEN_16 : _GEN_30; // @[Core.scala 331:23]
-  wire [31:0] _GEN_41 = 3'h2 == ic_state ? ic_reg_imem_addr : _GEN_32; // @[Core.scala 331:23 361:22]
-  wire [31:0] _GEN_43 = 3'h2 == ic_state ? _GEN_8 : _GEN_40; // @[Core.scala 331:23]
-  wire [2:0] _GEN_44 = 3'h2 == ic_state ? _GEN_9 : _GEN_37; // @[Core.scala 331:23]
-  wire [31:0] _GEN_46 = 3'h2 == ic_state ? ic_reg_inst2 : _GEN_35; // @[Core.scala 331:23 300:34]
-  wire [31:0] _GEN_47 = 3'h2 == ic_state ? ic_reg_inst2_addr : _GEN_36; // @[Core.scala 331:23 301:34]
-  wire [31:0] _GEN_48 = 3'h2 == ic_state ? ic_reg_inst : _GEN_38; // @[Core.scala 331:23 298:34]
-  wire [31:0] _GEN_49 = 3'h2 == ic_state ? ic_reg_inst_addr : _GEN_39; // @[Core.scala 331:23 299:34]
-  wire [31:0] _GEN_50 = 3'h1 == ic_state ? ic_imem_addr_4 : _GEN_41; // @[Core.scala 331:23 348:22]
-  wire [31:0] _GEN_52 = 3'h1 == ic_state ? io_imem_inst : _GEN_48; // @[Core.scala 331:23 350:21]
-  wire [31:0] _GEN_53 = 3'h1 == ic_state ? ic_reg_imem_addr : _GEN_49; // @[Core.scala 331:23 351:26]
-  wire [31:0] _GEN_55 = 3'h1 == ic_state ? _GEN_4 : _GEN_43; // @[Core.scala 331:23]
-  wire [2:0] _GEN_56 = 3'h1 == ic_state ? _GEN_5 : _GEN_44; // @[Core.scala 331:23]
-  wire [31:0] _GEN_57 = 3'h1 == ic_state ? ic_reg_inst2 : _GEN_46; // @[Core.scala 331:23 300:34]
-  wire [31:0] _GEN_58 = 3'h1 == ic_state ? ic_reg_inst2_addr : _GEN_47; // @[Core.scala 331:23 301:34]
-  wire [31:0] _GEN_59 = 3'h0 == ic_state ? ic_imem_addr_4 : _GEN_50; // @[Core.scala 331:23 333:22]
-  wire [31:0] _GEN_65 = 3'h0 == ic_state ? _GEN_2 : _GEN_55; // @[Core.scala 331:23]
-  wire  _GEN_69 = ~io_imem_valid ? ic_reg_half_rdy : 1'h1; // @[Core.scala 311:19 325:98 327:21]
-  wire  _GEN_70 = ~io_imem_valid ? 1'h0 : ic_reg_read_rdy; // @[Core.scala 312:15 325:98 328:17]
-  wire  _GEN_71 = ~io_imem_valid ? 1'h0 : ic_reg_half_rdy; // @[Core.scala 313:15 325:98 329:17]
-  wire [31:0] _GEN_72 = ~io_imem_valid ? ic_reg_imem_addr : _GEN_59; // @[Core.scala 308:16 325:98]
-  wire [31:0] _GEN_78 = ~io_imem_valid ? ic_reg_addr_out : _GEN_65; // @[Core.scala 315:15 325:98]
-  wire  _GEN_86 = if1_is_jump | _GEN_69; // @[Core.scala 311:19 318:21]
-  wire  ic_read_rdy = if1_is_jump ? ic_reg_read_rdy : _GEN_70; // @[Core.scala 312:15 318:21]
-  wire  ic_half_rdy = if1_is_jump ? ic_reg_half_rdy : _GEN_71; // @[Core.scala 313:15 318:21]
-  reg [31:0] if2_reg_pc; // @[Core.scala 443:29]
-  reg [31:0] if2_reg_inst; // @[Core.scala 444:29]
-  wire  _if2_pc_T = ic_half_rdy & is_half_inst; // @[Core.scala 450:66]
-  wire [31:0] if2_pc = id_reg_stall | ~(ic_read_rdy | ic_half_rdy & is_half_inst) ? if2_reg_pc : ic_reg_addr_out; // @[Core.scala 450:19]
+  wire [31:0] _GEN_18 = ic_read_en4 ? ic_reg_inst2 : ic_reg_inst; // @[Core.scala 393:33 394:23 293:34]
+  wire [31:0] _GEN_19 = ic_read_en4 ? ic_reg_inst2_addr : ic_reg_inst_addr; // @[Core.scala 393:33 395:28 294:34]
+  wire [31:0] _GEN_20 = ic_read_en4 ? _ic_addr_out_T_3 : ic_reg_addr_out; // @[Core.scala 310:15 393:33 396:23]
+  wire [2:0] _GEN_21 = ic_read_en4 ? 3'h4 : ic_state; // @[Core.scala 393:33 397:20 298:25]
+  wire [31:0] _GEN_22 = ic_read_en2 ? ic_reg_inst2 : _GEN_18; // @[Core.scala 388:28 389:23]
+  wire [31:0] _GEN_23 = ic_read_en2 ? ic_reg_inst2_addr : _GEN_19; // @[Core.scala 388:28 390:28]
+  wire [31:0] _GEN_24 = ic_read_en2 ? ic_reg_inst2_addr : _GEN_20; // @[Core.scala 388:28 391:23]
+  wire [2:0] _GEN_25 = ic_read_en2 ? 3'h2 : _GEN_21; // @[Core.scala 388:28 392:20]
+  wire [31:0] _GEN_28 = 3'h3 == ic_state ? _GEN_22 : ic_reg_inst; // @[Core.scala 326:23 293:34]
+  wire [31:0] _GEN_29 = 3'h3 == ic_state ? _GEN_23 : ic_reg_inst_addr; // @[Core.scala 326:23 294:34]
+  wire [31:0] _GEN_30 = 3'h3 == ic_state ? _GEN_24 : ic_reg_addr_out; // @[Core.scala 310:15 326:23]
+  wire [2:0] _GEN_31 = 3'h3 == ic_state ? _GEN_25 : ic_state; // @[Core.scala 326:23 298:25]
+  wire [31:0] _GEN_32 = 3'h4 == ic_state ? ic_imem_addr_4 : ic_reg_imem_addr; // @[Core.scala 326:23 367:22]
+  wire [31:0] _GEN_35 = 3'h4 == ic_state ? io_imem_inst : ic_reg_inst2; // @[Core.scala 326:23 370:22 295:34]
+  wire [31:0] _GEN_36 = 3'h4 == ic_state ? ic_reg_imem_addr : ic_reg_inst2_addr; // @[Core.scala 326:23 371:27 296:34]
+  wire [2:0] _GEN_37 = 3'h4 == ic_state ? _GEN_17 : _GEN_31; // @[Core.scala 326:23]
+  wire [31:0] _GEN_38 = 3'h4 == ic_state ? _GEN_14 : _GEN_28; // @[Core.scala 326:23]
+  wire [31:0] _GEN_39 = 3'h4 == ic_state ? _GEN_15 : _GEN_29; // @[Core.scala 326:23]
+  wire [31:0] _GEN_40 = 3'h4 == ic_state ? _GEN_16 : _GEN_30; // @[Core.scala 326:23]
+  wire [31:0] _GEN_41 = 3'h2 == ic_state ? ic_reg_imem_addr : _GEN_32; // @[Core.scala 326:23 356:22]
+  wire [31:0] _GEN_43 = 3'h2 == ic_state ? _GEN_8 : _GEN_40; // @[Core.scala 326:23]
+  wire [2:0] _GEN_44 = 3'h2 == ic_state ? _GEN_9 : _GEN_37; // @[Core.scala 326:23]
+  wire [31:0] _GEN_46 = 3'h2 == ic_state ? ic_reg_inst2 : _GEN_35; // @[Core.scala 326:23 295:34]
+  wire [31:0] _GEN_47 = 3'h2 == ic_state ? ic_reg_inst2_addr : _GEN_36; // @[Core.scala 326:23 296:34]
+  wire [31:0] _GEN_48 = 3'h2 == ic_state ? ic_reg_inst : _GEN_38; // @[Core.scala 326:23 293:34]
+  wire [31:0] _GEN_49 = 3'h2 == ic_state ? ic_reg_inst_addr : _GEN_39; // @[Core.scala 326:23 294:34]
+  wire [31:0] _GEN_50 = 3'h1 == ic_state ? ic_imem_addr_4 : _GEN_41; // @[Core.scala 326:23 343:22]
+  wire [31:0] _GEN_52 = 3'h1 == ic_state ? io_imem_inst : _GEN_48; // @[Core.scala 326:23 345:21]
+  wire [31:0] _GEN_53 = 3'h1 == ic_state ? ic_reg_imem_addr : _GEN_49; // @[Core.scala 326:23 346:26]
+  wire [31:0] _GEN_55 = 3'h1 == ic_state ? _GEN_4 : _GEN_43; // @[Core.scala 326:23]
+  wire [2:0] _GEN_56 = 3'h1 == ic_state ? _GEN_5 : _GEN_44; // @[Core.scala 326:23]
+  wire [31:0] _GEN_57 = 3'h1 == ic_state ? ic_reg_inst2 : _GEN_46; // @[Core.scala 326:23 295:34]
+  wire [31:0] _GEN_58 = 3'h1 == ic_state ? ic_reg_inst2_addr : _GEN_47; // @[Core.scala 326:23 296:34]
+  wire [31:0] _GEN_59 = 3'h0 == ic_state ? ic_imem_addr_4 : _GEN_50; // @[Core.scala 326:23 328:22]
+  wire [31:0] _GEN_65 = 3'h0 == ic_state ? _GEN_2 : _GEN_55; // @[Core.scala 326:23]
+  wire  _GEN_69 = ~io_imem_valid ? ic_reg_half_rdy : 1'h1; // @[Core.scala 306:19 320:98 322:21]
+  wire  _GEN_70 = ~io_imem_valid ? 1'h0 : ic_reg_read_rdy; // @[Core.scala 307:15 320:98 323:17]
+  wire  _GEN_71 = ~io_imem_valid ? 1'h0 : ic_reg_half_rdy; // @[Core.scala 308:15 320:98 324:17]
+  wire [31:0] _GEN_72 = ~io_imem_valid ? ic_reg_imem_addr : _GEN_59; // @[Core.scala 303:16 320:98]
+  wire [31:0] _GEN_78 = ~io_imem_valid ? ic_reg_addr_out : _GEN_65; // @[Core.scala 310:15 320:98]
+  wire  _GEN_86 = if1_is_jump | _GEN_69; // @[Core.scala 306:19 313:21]
+  wire  ic_read_rdy = if1_is_jump ? ic_reg_read_rdy : _GEN_70; // @[Core.scala 307:15 313:21]
+  wire  ic_half_rdy = if1_is_jump ? ic_reg_half_rdy : _GEN_71; // @[Core.scala 308:15 313:21]
+  reg [31:0] if2_reg_pc; // @[Core.scala 438:29]
+  reg [31:0] if2_reg_inst; // @[Core.scala 439:29]
+  wire  _if2_pc_T = ic_half_rdy & is_half_inst; // @[Core.scala 444:66]
+  wire [31:0] if2_pc = id_reg_stall | ~(ic_read_rdy | ic_half_rdy & is_half_inst) ? if2_reg_pc : ic_reg_addr_out; // @[Core.scala 444:19]
   wire [31:0] _if2_inst_T_1 = _if2_pc_T ? ic_data_out : 32'h13; // @[Mux.scala 101:16]
   wire [31:0] _if2_inst_T_2 = ic_read_rdy ? ic_data_out : _if2_inst_T_1; // @[Mux.scala 101:16]
   wire [31:0] _if2_inst_T_3 = if2_reg_is_bp_pos ? 32'h13 : _if2_inst_T_2; // @[Mux.scala 101:16]
   wire [31:0] _if2_inst_T_4 = id_reg_stall ? if2_reg_inst : _if2_inst_T_3; // @[Mux.scala 101:16]
   wire [31:0] if2_inst = ex2_reg_is_br ? 32'h13 : _if2_inst_T_4; // @[Mux.scala 101:16]
-  wire  if2_is_cond_br_w = if2_inst[6:0] == 7'h63; // @[Core.scala 464:42]
-  wire  _if2_is_cond_br_c_T_3 = if2_inst[1:0] == 2'h1; // @[Core.scala 465:70]
-  wire  if2_is_cond_br_c = if2_inst[15:14] == 2'h3 & if2_inst[1:0] == 2'h1; // @[Core.scala 465:52]
-  wire  if2_is_cond_br = if2_is_cond_br_w | if2_is_cond_br_c; // @[Core.scala 466:41]
-  wire  if2_is_jal_w = if2_inst[6:0] == 7'h6f; // @[Core.scala 467:38]
-  wire  if2_is_jal_c = if2_inst[14:13] == 2'h1 & _if2_is_cond_br_c_T_3; // @[Core.scala 468:48]
-  wire  if2_is_jal = if2_is_jal_w | if2_is_jal_c; // @[Core.scala 469:33]
-  wire  if2_is_jalr = if2_inst[6:0] == 7'h67 | if2_inst[15:13] == 3'h4 & if2_inst[6:0] == 7'h2; // @[Core.scala 470:50]
-  wire  if2_is_bp_br = if2_is_cond_br | if2_is_jalr | if2_is_jal; // @[Core.scala 471:52]
-  wire  _if2_inst_cnt_T = ~ex2_reg_is_br; // @[Core.scala 483:26]
-  wire  _T_17 = ~reset; // @[Core.scala 486:9]
-  wire  _rrd_stall_T = rrd_reg_op1_sel == 3'h0; // @[Core.scala 911:23]
-  wire  _rrd_stall_T_2 = rrd_reg_op2_sel == 4'h1; // @[Core.scala 912:23]
-  wire  _rrd_stall_T_3 = rrd_reg_wb_sel == 3'h2; // @[Core.scala 912:53]
-  wire  _rrd_stall_T_5 = (rrd_reg_op2_sel == 4'h1 | rrd_reg_wb_sel == 3'h2) & scoreboard_rrd_stall_MPORT_1_data; // @[Core.scala 912:64]
-  wire  _rrd_stall_T_6 = rrd_reg_op1_sel == 3'h0 & scoreboard_rrd_stall_MPORT_data | _rrd_stall_T_5; // @[Core.scala 911:69]
-  wire  _rrd_stall_T_8 = rrd_reg_rf_wen & scoreboard_rrd_stall_MPORT_2_data; // @[Core.scala 913:33]
-  wire  _rrd_stall_T_9 = _rrd_stall_T_6 | _rrd_stall_T_8; // @[Core.scala 912:97]
-  wire  _rrd_stall_T_11 = rrd_reg_wb_sel == 3'h0; // @[Core.scala 914:52]
-  wire  _rrd_stall_T_13 = rrd_reg_rf_wen & rrd_reg_wb_sel == 3'h0 & ex1_reg_is_indirect_j; // @[Core.scala 914:64]
-  wire  rrd_stall = _rrd_stall_T_9 | _rrd_stall_T_13; // @[Core.scala 913:65]
-  wire  csr_is_valid_inst = ex2_reg_is_valid_inst & _if2_inst_cnt_T; // @[Core.scala 1230:49]
-  reg  csr_reg_is_meintr; // @[Core.scala 1223:34]
-  wire  csr_is_meintr = csr_reg_is_meintr & csr_is_valid_inst; // @[Core.scala 1231:41]
-  wire  _ex2_en_T = ~csr_is_meintr; // @[Core.scala 1234:34]
-  reg  csr_reg_is_mtintr; // @[Core.scala 1226:34]
-  wire  csr_is_mtintr = csr_reg_is_mtintr & csr_is_valid_inst; // @[Core.scala 1232:41]
-  wire  _ex2_en_T_2 = ~csr_is_mtintr; // @[Core.scala 1234:52]
-  wire  ex2_en = csr_is_valid_inst & ~csr_is_meintr & ~csr_is_mtintr; // @[Core.scala 1234:49]
-  wire  mem1_is_mem_load = mem1_reg_is_mem_load & ex2_en; // @[Core.scala 1659:49]
-  wire  mem1_is_mem_store = mem1_reg_is_mem_store & ex2_en; // @[Core.scala 1660:50]
+  wire  if2_is_cond_br_w = if2_inst[6:0] == 7'h63; // @[Core.scala 458:42]
+  wire  _if2_is_cond_br_c_T_3 = if2_inst[1:0] == 2'h1; // @[Core.scala 459:70]
+  wire  if2_is_cond_br_c = if2_inst[15:14] == 2'h3 & if2_inst[1:0] == 2'h1; // @[Core.scala 459:52]
+  wire  if2_is_cond_br = if2_is_cond_br_w | if2_is_cond_br_c; // @[Core.scala 460:41]
+  wire  if2_is_jal_w = if2_inst[6:0] == 7'h6f; // @[Core.scala 461:38]
+  wire  if2_is_jal_c = if2_inst[14:13] == 2'h1 & _if2_is_cond_br_c_T_3; // @[Core.scala 462:48]
+  wire  if2_is_jal = if2_is_jal_w | if2_is_jal_c; // @[Core.scala 463:33]
+  wire  if2_is_jalr = if2_inst[6:0] == 7'h67 | if2_inst[15:13] == 3'h4 & if2_inst[6:0] == 7'h2; // @[Core.scala 464:50]
+  wire  if2_is_bp_br = if2_is_cond_br | if2_is_jalr | if2_is_jal; // @[Core.scala 465:52]
+  wire  _T_17 = ~reset; // @[Core.scala 478:9]
+  wire  _rrd_stall_T = rrd_reg_op1_sel == 3'h0; // @[Core.scala 895:23]
+  wire  _rrd_stall_T_2 = rrd_reg_op2_sel == 4'h1; // @[Core.scala 896:23]
+  wire  _rrd_stall_T_3 = rrd_reg_wb_sel == 3'h2; // @[Core.scala 896:53]
+  wire  _rrd_stall_T_5 = (rrd_reg_op2_sel == 4'h1 | rrd_reg_wb_sel == 3'h2) & scoreboard_rrd_stall_MPORT_1_data; // @[Core.scala 896:64]
+  wire  _rrd_stall_T_6 = rrd_reg_op1_sel == 3'h0 & scoreboard_rrd_stall_MPORT_data | _rrd_stall_T_5; // @[Core.scala 895:69]
+  wire  _rrd_stall_T_8 = rrd_reg_rf_wen & scoreboard_rrd_stall_MPORT_2_data; // @[Core.scala 897:33]
+  wire  rrd_stall = _rrd_stall_T_6 | _rrd_stall_T_8; // @[Core.scala 896:97]
+  wire  _csr_is_valid_inst_T = ~ex2_reg_is_br; // @[Core.scala 1192:52]
+  wire  csr_is_valid_inst = ex2_reg_is_valid_inst & ~ex2_reg_is_br; // @[Core.scala 1192:49]
+  reg  csr_reg_is_meintr; // @[Core.scala 1181:34]
+  wire  csr_is_meintr = csr_reg_is_meintr & csr_is_valid_inst; // @[Core.scala 1193:41]
+  wire  _ex2_en_T = ~csr_is_meintr; // @[Core.scala 1196:34]
+  reg  csr_reg_is_mtintr; // @[Core.scala 1186:34]
+  wire  csr_is_mtintr = csr_reg_is_mtintr & csr_is_valid_inst; // @[Core.scala 1194:41]
+  wire  _ex2_en_T_2 = ~csr_is_mtintr; // @[Core.scala 1196:52]
+  wire  ex2_en = csr_is_valid_inst & ~csr_is_meintr & ~csr_is_mtintr; // @[Core.scala 1196:49]
+  wire  mem1_is_mem_load = mem1_reg_is_mem_load & ex2_en; // @[Core.scala 1629:49]
+  wire  mem1_is_mem_store = mem1_reg_is_mem_store & ex2_en; // @[Core.scala 1630:50]
   wire  mem1_mem_stall = mem1_is_mem_load & (~io_dmem_rvalid | mem1_mem_stall_delay) | mem1_is_mem_store & ~
-    io_dmem_wready; // @[Core.scala 1680:85]
-  wire  mem1_is_dram_load = mem1_reg_is_dram_load & ex2_en; // @[Core.scala 1661:50]
-  wire  mem1_is_dram_store = mem1_reg_is_dram_store & ex2_en; // @[Core.scala 1662:51]
-  wire  _mem1_dram_stall_T_3 = mem1_is_dram_store & ~io_cache_wready; // @[Core.scala 1687:25]
-  wire  _mem1_dram_stall_T_4 = mem1_is_dram_load & ~io_cache_rready | _mem1_dram_stall_T_3; // @[Core.scala 1686:45]
-  wire  mem1_is_dram_fence = mem1_reg_is_dram_fence & ex2_en; // @[Core.scala 1663:51]
-  wire  _mem1_dram_stall_T_5 = mem1_is_dram_fence & io_cache_ibusy; // @[Core.scala 1688:25]
-  wire  mem1_dram_stall = _mem1_dram_stall_T_4 | _mem1_dram_stall_T_5; // @[Core.scala 1687:46]
-  wire  mem2_dram_stall = mem2_reg_is_dram_load & ~io_cache_rvalid; // @[Core.scala 1705:45]
-  wire  mem_stall = mem1_mem_stall | mem1_dram_stall | mem2_dram_stall; // @[Core.scala 1683:50]
-  wire  ex2_stall = mem_stall | ex2_reg_div_stall; // @[Core.scala 1213:26]
-  wire  id_stall = rrd_stall | ex2_stall; // @[Core.scala 507:25]
-  wire [31:0] id_inst = ex2_reg_is_br ? 32'h13 : id_reg_inst; // @[Core.scala 511:20]
-  wire  id_is_half = id_inst[1:0] != 2'h3; // @[Core.scala 513:35]
-  wire [4:0] id_rs1_addr = id_inst[19:15]; // @[Core.scala 515:28]
-  wire [4:0] id_rs2_addr = id_inst[24:20]; // @[Core.scala 516:28]
-  wire [4:0] id_w_wb_addr = id_inst[11:7]; // @[Core.scala 517:30]
-  wire [4:0] id_c_rs2_addr = id_inst[6:2]; // @[Core.scala 522:31]
+    io_dmem_wready; // @[Core.scala 1650:85]
+  wire  mem1_is_dram_load = mem1_reg_is_dram_load & ex2_en; // @[Core.scala 1631:50]
+  wire  mem1_is_dram_store = mem1_reg_is_dram_store & ex2_en; // @[Core.scala 1632:51]
+  wire  _mem1_dram_stall_T_3 = mem1_is_dram_store & ~io_cache_wready; // @[Core.scala 1657:25]
+  wire  _mem1_dram_stall_T_4 = mem1_is_dram_load & ~io_cache_rready | _mem1_dram_stall_T_3; // @[Core.scala 1656:45]
+  wire  mem1_is_dram_fence = mem1_reg_is_dram_fence & ex2_en; // @[Core.scala 1633:51]
+  wire  _mem1_dram_stall_T_5 = mem1_is_dram_fence & io_cache_ibusy; // @[Core.scala 1658:25]
+  wire  mem1_dram_stall = _mem1_dram_stall_T_4 | _mem1_dram_stall_T_5; // @[Core.scala 1657:46]
+  wire  mem2_dram_stall = mem2_reg_is_dram_load & ~io_cache_rvalid; // @[Core.scala 1675:45]
+  wire  mem_stall = mem1_mem_stall | mem1_dram_stall | mem2_dram_stall; // @[Core.scala 1653:50]
+  wire  ex2_stall = mem_stall | ex2_reg_div_stall; // @[Core.scala 1171:26]
+  wire  id_stall = rrd_stall | ex2_stall; // @[Core.scala 498:25]
+  wire [31:0] id_inst = ex2_reg_is_br ? 32'h13 : id_reg_inst; // @[Core.scala 502:20]
+  wire  id_is_half = id_inst[1:0] != 2'h3; // @[Core.scala 504:35]
+  wire [4:0] id_rs1_addr = id_inst[19:15]; // @[Core.scala 506:28]
+  wire [4:0] id_rs2_addr = id_inst[24:20]; // @[Core.scala 507:28]
+  wire [4:0] id_w_wb_addr = id_inst[11:7]; // @[Core.scala 508:30]
+  wire [4:0] id_c_rs2_addr = id_inst[6:2]; // @[Core.scala 513:31]
   wire [4:0] id_c_rs1p_addr = {2'h1,id_inst[9:7]}; // @[Cat.scala 31:58]
   wire [4:0] id_c_rs2p_addr = {2'h1,id_inst[4:2]}; // @[Cat.scala 31:58]
-  wire [11:0] id_imm_i = id_inst[31:20]; // @[Core.scala 529:25]
+  wire [11:0] id_imm_i = id_inst[31:20]; // @[Core.scala 520:25]
   wire [19:0] _id_imm_i_sext_T_2 = id_imm_i[11] ? 20'hfffff : 20'h0; // @[Bitwise.scala 74:12]
   wire [31:0] id_imm_i_sext = {_id_imm_i_sext_T_2,id_imm_i}; // @[Cat.scala 31:58]
   wire [11:0] id_imm_s = {id_inst[31:25],id_w_wb_addr}; // @[Cat.scala 31:58]
@@ -1018,7 +1019,7 @@ module Core(
   wire [19:0] id_imm_j = {id_inst[31],id_inst[19:12],id_inst[20],id_inst[30:21]}; // @[Cat.scala 31:58]
   wire [10:0] _id_imm_j_sext_T_2 = id_imm_j[19] ? 11'h7ff : 11'h0; // @[Bitwise.scala 74:12]
   wire [31:0] id_imm_j_sext = {_id_imm_j_sext_T_2,id_inst[31],id_inst[19:12],id_inst[20],id_inst[30:21],1'h0}; // @[Cat.scala 31:58]
-  wire [19:0] id_imm_u = id_inst[31:12]; // @[Core.scala 537:25]
+  wire [19:0] id_imm_u = id_inst[31:12]; // @[Core.scala 528:25]
   wire [31:0] id_imm_u_shifted = {id_imm_u,12'h0}; // @[Cat.scala 31:58]
   wire [31:0] id_imm_z_uext = {27'h0,id_rs1_addr}; // @[Cat.scala 31:58]
   wire [26:0] _id_c_imm_i_T_2 = id_inst[12] ? 27'h7ffffff : 27'h0; // @[Bitwise.scala 74:12]
@@ -1684,30 +1685,30 @@ module Core(
   wire [2:0] _csignals_T_930 = _csignals_T_5 ? 3'h5 : _csignals_T_929; // @[Lookup.scala 34:39]
   wire [2:0] _csignals_T_931 = _csignals_T_3 ? 3'h7 : _csignals_T_930; // @[Lookup.scala 34:39]
   wire [2:0] csignals_7 = _csignals_T_1 ? 3'h5 : _csignals_T_931; // @[Lookup.scala 34:39]
-  wire  _id_wb_addr_T = csignals_5 == 3'h1; // @[Core.scala 657:13]
-  wire  _id_wb_addr_T_1 = csignals_5 == 3'h2; // @[Core.scala 658:13]
-  wire  _id_wb_addr_T_2 = csignals_5 == 3'h3; // @[Core.scala 659:13]
-  wire  _id_wb_addr_T_3 = csignals_5 == 3'h4; // @[Core.scala 660:13]
+  wire  _id_wb_addr_T = csignals_5 == 3'h1; // @[Core.scala 648:13]
+  wire  _id_wb_addr_T_1 = csignals_5 == 3'h2; // @[Core.scala 649:13]
+  wire  _id_wb_addr_T_2 = csignals_5 == 3'h3; // @[Core.scala 650:13]
+  wire  _id_wb_addr_T_3 = csignals_5 == 3'h4; // @[Core.scala 651:13]
   wire [4:0] _id_wb_addr_T_4 = _id_wb_addr_T_3 ? 5'h1 : id_w_wb_addr; // @[Mux.scala 101:16]
   wire [4:0] _id_wb_addr_T_5 = _id_wb_addr_T_2 ? id_c_rs2p_addr : _id_wb_addr_T_4; // @[Mux.scala 101:16]
   wire [4:0] _id_wb_addr_T_6 = _id_wb_addr_T_1 ? id_c_rs1p_addr : _id_wb_addr_T_5; // @[Mux.scala 101:16]
   wire [4:0] id_wb_addr = _id_wb_addr_T ? id_w_wb_addr : _id_wb_addr_T_6; // @[Mux.scala 101:16]
-  wire  _id_op1_data_T = csignals_1 == 3'h1; // @[Core.scala 664:17]
-  wire  _id_op1_data_T_1 = csignals_1 == 3'h3; // @[Core.scala 665:17]
+  wire  _id_op1_data_T = csignals_1 == 3'h1; // @[Core.scala 655:17]
+  wire  _id_op1_data_T_1 = csignals_1 == 3'h3; // @[Core.scala 656:17]
   wire [31:0] _id_op1_data_T_2 = _id_op1_data_T_1 ? id_imm_z_uext : 32'h0; // @[Mux.scala 101:16]
   wire [31:0] id_op1_data = _id_op1_data_T ? id_reg_pc : _id_op1_data_T_2; // @[Mux.scala 101:16]
-  wire  _id_op2_data_T = csignals_2 == 4'h2; // @[Core.scala 668:17]
-  wire  _id_op2_data_T_1 = csignals_2 == 4'h3; // @[Core.scala 669:17]
-  wire  _id_op2_data_T_2 = csignals_2 == 4'h4; // @[Core.scala 670:17]
-  wire  _id_op2_data_T_3 = csignals_2 == 4'h5; // @[Core.scala 671:17]
-  wire  _id_op2_data_T_4 = csignals_2 == 4'h8; // @[Core.scala 672:17]
-  wire  _id_op2_data_T_5 = csignals_2 == 4'h9; // @[Core.scala 673:17]
-  wire  _id_op2_data_T_6 = csignals_2 == 4'ha; // @[Core.scala 674:17]
-  wire  _id_op2_data_T_7 = csignals_2 == 4'hb; // @[Core.scala 675:17]
-  wire  _id_op2_data_T_8 = csignals_2 == 4'hc; // @[Core.scala 676:17]
-  wire  _id_op2_data_T_9 = csignals_2 == 4'hd; // @[Core.scala 677:17]
-  wire  _id_op2_data_T_10 = csignals_2 == 4'he; // @[Core.scala 678:17]
-  wire  _id_op2_data_T_11 = csignals_2 == 4'hf; // @[Core.scala 679:17]
+  wire  _id_op2_data_T = csignals_2 == 4'h2; // @[Core.scala 659:17]
+  wire  _id_op2_data_T_1 = csignals_2 == 4'h3; // @[Core.scala 660:17]
+  wire  _id_op2_data_T_2 = csignals_2 == 4'h4; // @[Core.scala 661:17]
+  wire  _id_op2_data_T_3 = csignals_2 == 4'h5; // @[Core.scala 662:17]
+  wire  _id_op2_data_T_4 = csignals_2 == 4'h8; // @[Core.scala 663:17]
+  wire  _id_op2_data_T_5 = csignals_2 == 4'h9; // @[Core.scala 664:17]
+  wire  _id_op2_data_T_6 = csignals_2 == 4'ha; // @[Core.scala 665:17]
+  wire  _id_op2_data_T_7 = csignals_2 == 4'hb; // @[Core.scala 666:17]
+  wire  _id_op2_data_T_8 = csignals_2 == 4'hc; // @[Core.scala 667:17]
+  wire  _id_op2_data_T_9 = csignals_2 == 4'hd; // @[Core.scala 668:17]
+  wire  _id_op2_data_T_10 = csignals_2 == 4'he; // @[Core.scala 669:17]
+  wire  _id_op2_data_T_11 = csignals_2 == 4'hf; // @[Core.scala 670:17]
   wire [31:0] _id_op2_data_T_12 = _id_op2_data_T_11 ? id_c_imm_ss : 32'h0; // @[Mux.scala 101:16]
   wire [31:0] _id_op2_data_T_13 = _id_op2_data_T_10 ? id_c_imm_sl : _id_op2_data_T_12; // @[Mux.scala 101:16]
   wire [31:0] _id_op2_data_T_14 = _id_op2_data_T_9 ? id_c_imm_j : _id_op2_data_T_13; // @[Mux.scala 101:16]
@@ -1720,16 +1721,16 @@ module Core(
   wire [31:0] _id_op2_data_T_21 = _id_op2_data_T_2 ? id_imm_j_sext : _id_op2_data_T_20; // @[Mux.scala 101:16]
   wire [31:0] _id_op2_data_T_22 = _id_op2_data_T_1 ? id_imm_s_sext : _id_op2_data_T_21; // @[Mux.scala 101:16]
   wire [31:0] id_op2_data = _id_op2_data_T ? id_imm_i_sext : _id_op2_data_T_22; // @[Mux.scala 101:16]
-  wire  _id_csr_addr_T = csignals_0 == 5'h18; // @[Core.scala 682:36]
-  wire [11:0] id_csr_addr = csignals_0 == 5'h18 ? 12'h342 : id_imm_i; // @[Core.scala 682:24]
-  wire  _id_m_op1_sel_T = csignals_1 == 3'h4; // @[Core.scala 685:17]
-  wire  _id_m_op1_sel_T_1 = csignals_1 == 3'h5; // @[Core.scala 686:17]
-  wire  _id_m_op1_sel_T_2 = csignals_1 == 3'h6; // @[Core.scala 687:17]
+  wire  _id_csr_addr_T = csignals_0 == 5'h18; // @[Core.scala 673:36]
+  wire [11:0] id_csr_addr = csignals_0 == 5'h18 ? 12'h342 : id_imm_i; // @[Core.scala 673:24]
+  wire  _id_m_op1_sel_T = csignals_1 == 3'h4; // @[Core.scala 676:17]
+  wire  _id_m_op1_sel_T_1 = csignals_1 == 3'h5; // @[Core.scala 677:17]
+  wire  _id_m_op1_sel_T_2 = csignals_1 == 3'h6; // @[Core.scala 678:17]
   wire [2:0] _id_m_op1_sel_T_3 = _id_m_op1_sel_T_2 ? 3'h0 : csignals_1; // @[Mux.scala 101:16]
   wire [2:0] _id_m_op1_sel_T_4 = _id_m_op1_sel_T_1 ? 3'h0 : _id_m_op1_sel_T_3; // @[Mux.scala 101:16]
   wire [2:0] id_m_op1_sel = _id_m_op1_sel_T ? 3'h0 : _id_m_op1_sel_T_4; // @[Mux.scala 101:16]
-  wire  _id_m_op2_sel_T = csignals_2 == 4'h6; // @[Core.scala 690:17]
-  wire  _id_m_op2_sel_T_1 = csignals_2 == 4'h7; // @[Core.scala 691:17]
+  wire  _id_m_op2_sel_T = csignals_2 == 4'h6; // @[Core.scala 681:17]
+  wire  _id_m_op2_sel_T_1 = csignals_2 == 4'h7; // @[Core.scala 682:17]
   wire [3:0] _id_m_op2_sel_T_2 = _id_m_op2_sel_T_1 ? 4'h1 : csignals_2; // @[Mux.scala 101:16]
   wire [3:0] id_m_op2_sel = _id_m_op2_sel_T ? 4'h1 : _id_m_op2_sel_T_2; // @[Mux.scala 101:16]
   wire [4:0] _id_m_rs1_addr_T_3 = _id_m_op1_sel_T_2 ? id_c_rs1p_addr : id_rs1_addr; // @[Mux.scala 101:16]
@@ -1740,111 +1741,111 @@ module Core(
   wire [4:0] _id_m_rs2_addr_T_6 = _id_m_op2_sel_T_1 ? id_c_rs2p_addr : _id_m_rs2_addr_T_5; // @[Mux.scala 101:16]
   wire [4:0] id_m_rs2_addr = _id_m_op2_sel_T ? id_c_rs2_addr : _id_m_rs2_addr_T_6; // @[Mux.scala 101:16]
   wire [31:0] id_m_imm_b_sext = _id_wb_addr_T ? id_c_imm_b : id_imm_b_sext; // @[Mux.scala 101:16]
-  wire  id_is_direct_j = _id_op2_data_T_2 | _id_op2_data_T_9; // @[Core.scala 708:49]
-  wire  _id_is_br_T_1 = csignals_0 == 5'h13; // @[Core.scala 711:17]
-  wire  _id_is_br_T_2 = csignals_0 == 5'h12 | _id_is_br_T_1; // @[Core.scala 710:29]
-  wire  _id_is_br_T_3 = csignals_0 == 5'h14; // @[Core.scala 712:17]
-  wire  _id_is_br_T_4 = _id_is_br_T_2 | _id_is_br_T_3; // @[Core.scala 711:29]
-  wire  _id_is_br_T_5 = csignals_0 == 5'h15; // @[Core.scala 713:17]
-  wire  _id_is_br_T_6 = _id_is_br_T_4 | _id_is_br_T_5; // @[Core.scala 712:29]
-  wire  _id_is_br_T_7 = csignals_0 == 5'h16; // @[Core.scala 714:17]
-  wire  _id_is_br_T_8 = _id_is_br_T_6 | _id_is_br_T_7; // @[Core.scala 713:29]
-  wire  _id_is_br_T_9 = csignals_0 == 5'h17; // @[Core.scala 715:17]
-  wire  id_is_br = _id_is_br_T_8 | _id_is_br_T_9; // @[Core.scala 714:30]
-  wire  id_is_j = csignals_4 == 3'h1; // @[Core.scala 717:28]
-  reg [31:0] id_reg_pc_delay; // @[Core.scala 722:40]
-  reg [4:0] id_reg_wb_addr_delay; // @[Core.scala 724:40]
-  reg [2:0] id_reg_op1_sel_delay; // @[Core.scala 725:40]
-  reg [3:0] id_reg_op2_sel_delay; // @[Core.scala 726:40]
-  reg [4:0] id_reg_rs1_addr_delay; // @[Core.scala 727:40]
-  reg [4:0] id_reg_rs2_addr_delay; // @[Core.scala 728:40]
-  reg [31:0] id_reg_op1_data_delay; // @[Core.scala 729:40]
-  reg [31:0] id_reg_op2_data_delay; // @[Core.scala 730:40]
-  reg [4:0] id_reg_exe_fun_delay; // @[Core.scala 731:40]
-  reg  id_reg_rf_wen_delay; // @[Core.scala 732:40]
-  reg [2:0] id_reg_wb_sel_delay; // @[Core.scala 733:40]
-  reg [11:0] id_reg_csr_addr_delay; // @[Core.scala 734:40]
-  reg [1:0] id_reg_csr_cmd_delay; // @[Core.scala 735:40]
-  reg [31:0] id_reg_imm_b_sext_delay; // @[Core.scala 736:40]
-  reg [2:0] id_reg_mem_w_delay; // @[Core.scala 737:40]
-  reg  id_reg_is_direct_j_delay; // @[Core.scala 738:41]
-  reg  id_reg_is_br_delay; // @[Core.scala 739:40]
-  reg  id_reg_is_j_delay; // @[Core.scala 740:40]
-  reg  id_reg_is_bp_pos_delay; // @[Core.scala 741:40]
-  reg [31:0] id_reg_bp_addr_delay; // @[Core.scala 742:40]
-  reg  id_reg_is_half_delay; // @[Core.scala 743:40]
-  reg  id_reg_is_valid_inst_delay; // @[Core.scala 744:43]
-  reg  id_reg_is_trap_delay; // @[Core.scala 745:40]
-  reg [31:0] id_reg_mcause_delay; // @[Core.scala 746:40]
-  wire [31:0] _GEN_94 = _ic_read_en4_T ? id_reg_pc : id_reg_pc_delay; // @[Core.scala 750:26 751:32 722:40]
-  wire  _id_reg_is_valid_inst_delay_T = id_inst != 32'h13; // @[Core.scala 786:43]
-  wire [31:0] _GEN_146 = id_reg_stall ? id_reg_pc_delay : id_reg_pc; // @[Core.scala 795:24 796:29 823:29]
-  wire [2:0] _GEN_148 = id_reg_stall ? id_reg_op1_sel_delay : id_m_op1_sel; // @[Core.scala 795:24 798:29 825:29]
-  wire [3:0] _GEN_149 = id_reg_stall ? id_reg_op2_sel_delay : id_m_op2_sel; // @[Core.scala 795:24 799:29 826:29]
-  wire [4:0] _GEN_150 = id_reg_stall ? id_reg_rs1_addr_delay : id_m_rs1_addr; // @[Core.scala 795:24 800:29 827:29]
-  wire [4:0] _GEN_151 = id_reg_stall ? id_reg_rs2_addr_delay : id_m_rs2_addr; // @[Core.scala 795:24 801:29 828:29]
-  wire [31:0] _GEN_152 = id_reg_stall ? id_reg_op1_data_delay : id_op1_data; // @[Core.scala 795:24 802:29 829:29]
-  wire [31:0] _GEN_153 = id_reg_stall ? id_reg_op2_data_delay : id_op2_data; // @[Core.scala 795:24 803:29 830:29]
-  wire [4:0] _GEN_154 = id_reg_stall ? id_reg_wb_addr_delay : id_wb_addr; // @[Core.scala 795:24 804:29 831:29]
-  wire [31:0] _GEN_158 = id_reg_stall ? id_reg_imm_b_sext_delay : id_m_imm_b_sext; // @[Core.scala 795:24 808:29 835:29]
-  wire [11:0] _GEN_159 = id_reg_stall ? id_reg_csr_addr_delay : id_csr_addr; // @[Core.scala 795:24 809:29 836:29]
-  wire [31:0] _GEN_161 = id_reg_stall ? id_reg_bp_addr_delay : id_reg_bp_addr; // @[Core.scala 795:24 816:29 843:29]
-  wire  _GEN_162 = id_reg_stall ? id_reg_is_half_delay : id_is_half; // @[Core.scala 795:24 817:29 844:29]
-  wire [31:0] _GEN_163 = id_reg_stall ? id_reg_mcause_delay : 32'hb; // @[Core.scala 795:24 820:29 847:29]
-  wire  _T_23 = ~rrd_stall; // @[Core.scala 850:14]
-  wire  _T_24 = ~ex2_stall; // @[Core.scala 850:28]
-  wire  _rrd_op1_data_T_2 = _rrd_stall_T & rrd_reg_rs1_addr == 5'h0; // @[Core.scala 917:34]
-  wire  _rrd_op1_data_T_4 = ex1_reg_fw_en & _rrd_stall_T; // @[Core.scala 918:20]
-  wire  _rrd_op1_data_T_5 = rrd_reg_rs1_addr == ex1_reg_wb_addr; // @[Core.scala 920:24]
-  wire  _rrd_op1_data_T_6 = _rrd_op1_data_T_4 & _rrd_op1_data_T_5; // @[Core.scala 919:36]
-  wire  _rrd_op1_data_T_8 = ex2_reg_fw_en & _rrd_stall_T; // @[Core.scala 921:20]
-  wire  _rrd_op1_data_T_9 = rrd_reg_rs1_addr == ex2_reg_wb_addr; // @[Core.scala 923:24]
-  wire  _rrd_op1_data_T_10 = _rrd_op1_data_T_8 & _rrd_op1_data_T_9; // @[Core.scala 922:36]
+  wire  id_is_direct_j = _id_op2_data_T_2 | _id_op2_data_T_9; // @[Core.scala 699:49]
+  wire  _id_is_br_T_1 = csignals_0 == 5'h13; // @[Core.scala 702:17]
+  wire  _id_is_br_T_2 = csignals_0 == 5'h12 | _id_is_br_T_1; // @[Core.scala 701:29]
+  wire  _id_is_br_T_3 = csignals_0 == 5'h14; // @[Core.scala 703:17]
+  wire  _id_is_br_T_4 = _id_is_br_T_2 | _id_is_br_T_3; // @[Core.scala 702:29]
+  wire  _id_is_br_T_5 = csignals_0 == 5'h15; // @[Core.scala 704:17]
+  wire  _id_is_br_T_6 = _id_is_br_T_4 | _id_is_br_T_5; // @[Core.scala 703:29]
+  wire  _id_is_br_T_7 = csignals_0 == 5'h16; // @[Core.scala 705:17]
+  wire  _id_is_br_T_8 = _id_is_br_T_6 | _id_is_br_T_7; // @[Core.scala 704:29]
+  wire  _id_is_br_T_9 = csignals_0 == 5'h17; // @[Core.scala 706:17]
+  wire  id_is_br = _id_is_br_T_8 | _id_is_br_T_9; // @[Core.scala 705:30]
+  wire  id_is_j = csignals_4 == 3'h1; // @[Core.scala 708:28]
+  reg [31:0] id_reg_pc_delay; // @[Core.scala 713:40]
+  reg [4:0] id_reg_wb_addr_delay; // @[Core.scala 714:40]
+  reg [2:0] id_reg_op1_sel_delay; // @[Core.scala 715:40]
+  reg [3:0] id_reg_op2_sel_delay; // @[Core.scala 716:40]
+  reg [4:0] id_reg_rs1_addr_delay; // @[Core.scala 717:40]
+  reg [4:0] id_reg_rs2_addr_delay; // @[Core.scala 718:40]
+  reg [31:0] id_reg_op1_data_delay; // @[Core.scala 719:40]
+  reg [31:0] id_reg_op2_data_delay; // @[Core.scala 720:40]
+  reg [4:0] id_reg_exe_fun_delay; // @[Core.scala 721:40]
+  reg  id_reg_rf_wen_delay; // @[Core.scala 722:40]
+  reg [2:0] id_reg_wb_sel_delay; // @[Core.scala 723:40]
+  reg [11:0] id_reg_csr_addr_delay; // @[Core.scala 724:40]
+  reg [1:0] id_reg_csr_cmd_delay; // @[Core.scala 725:40]
+  reg [31:0] id_reg_imm_b_sext_delay; // @[Core.scala 726:40]
+  reg [2:0] id_reg_mem_w_delay; // @[Core.scala 727:40]
+  reg  id_reg_is_direct_j_delay; // @[Core.scala 728:41]
+  reg  id_reg_is_br_delay; // @[Core.scala 729:40]
+  reg  id_reg_is_j_delay; // @[Core.scala 730:40]
+  reg  id_reg_is_bp_pos_delay; // @[Core.scala 731:40]
+  reg [31:0] id_reg_bp_addr_delay; // @[Core.scala 732:40]
+  reg  id_reg_is_half_delay; // @[Core.scala 733:40]
+  reg  id_reg_is_valid_inst_delay; // @[Core.scala 734:43]
+  reg  id_reg_is_trap_delay; // @[Core.scala 735:40]
+  reg [31:0] id_reg_mcause_delay; // @[Core.scala 736:40]
+  wire [31:0] _GEN_94 = _ic_read_en4_T ? id_reg_pc : id_reg_pc_delay; // @[Core.scala 740:26 741:32 713:40]
+  wire  _id_reg_is_valid_inst_delay_T = id_inst != 32'h13; // @[Core.scala 774:43]
+  wire [31:0] _GEN_143 = id_reg_stall ? id_reg_pc_delay : id_reg_pc; // @[Core.scala 783:24 784:29 810:29]
+  wire [2:0] _GEN_144 = id_reg_stall ? id_reg_op1_sel_delay : id_m_op1_sel; // @[Core.scala 783:24 785:29 811:29]
+  wire [3:0] _GEN_145 = id_reg_stall ? id_reg_op2_sel_delay : id_m_op2_sel; // @[Core.scala 783:24 786:29 812:29]
+  wire [4:0] _GEN_146 = id_reg_stall ? id_reg_rs1_addr_delay : id_m_rs1_addr; // @[Core.scala 783:24 787:29 813:29]
+  wire [4:0] _GEN_147 = id_reg_stall ? id_reg_rs2_addr_delay : id_m_rs2_addr; // @[Core.scala 783:24 788:29 814:29]
+  wire [31:0] _GEN_148 = id_reg_stall ? id_reg_op1_data_delay : id_op1_data; // @[Core.scala 783:24 789:29 815:29]
+  wire [31:0] _GEN_149 = id_reg_stall ? id_reg_op2_data_delay : id_op2_data; // @[Core.scala 783:24 790:29 816:29]
+  wire [4:0] _GEN_150 = id_reg_stall ? id_reg_wb_addr_delay : id_wb_addr; // @[Core.scala 783:24 791:29 817:29]
+  wire [31:0] _GEN_154 = id_reg_stall ? id_reg_imm_b_sext_delay : id_m_imm_b_sext; // @[Core.scala 783:24 795:29 821:29]
+  wire [11:0] _GEN_155 = id_reg_stall ? id_reg_csr_addr_delay : id_csr_addr; // @[Core.scala 783:24 796:29 822:29]
+  wire [31:0] _GEN_157 = id_reg_stall ? id_reg_bp_addr_delay : id_reg_bp_addr; // @[Core.scala 783:24 803:29 829:29]
+  wire  _GEN_158 = id_reg_stall ? id_reg_is_half_delay : id_is_half; // @[Core.scala 783:24 804:29 830:29]
+  wire [31:0] _GEN_159 = id_reg_stall ? id_reg_mcause_delay : 32'hb; // @[Core.scala 783:24 807:29 833:29]
+  wire  _T_23 = ~rrd_stall; // @[Core.scala 836:14]
+  wire  _T_24 = ~ex2_stall; // @[Core.scala 836:28]
+  wire  _rrd_op1_data_T_2 = _rrd_stall_T & rrd_reg_rs1_addr == 5'h0; // @[Core.scala 900:34]
+  wire  _rrd_op1_data_T_4 = ex1_reg_fw_en & _rrd_stall_T; // @[Core.scala 901:20]
+  wire  _rrd_op1_data_T_5 = rrd_reg_rs1_addr == ex1_reg_wb_addr; // @[Core.scala 903:24]
+  wire  _rrd_op1_data_T_6 = _rrd_op1_data_T_4 & _rrd_op1_data_T_5; // @[Core.scala 902:36]
+  wire  _rrd_op1_data_T_8 = ex2_reg_fw_en & _rrd_stall_T; // @[Core.scala 904:20]
+  wire  _rrd_op1_data_T_9 = rrd_reg_rs1_addr == ex2_reg_wb_addr; // @[Core.scala 906:24]
+  wire  _rrd_op1_data_T_10 = _rrd_op1_data_T_8 & _rrd_op1_data_T_9; // @[Core.scala 905:36]
   wire [31:0] _rrd_op1_data_T_12 = _rrd_stall_T ? regfile_rrd_op1_data_MPORT_data : rrd_reg_op1_data; // @[Mux.scala 101:16]
-  wire  _ex2_fw_data_T_1 = ex2_reg_wb_sel == 3'h7; // @[Core.scala 1619:23]
-  wire  _ex2_fw_data_T_2 = ex2_reg_wb_sel == 3'h1 | _ex2_fw_data_T_1; // @[Core.scala 1618:34]
-  wire [31:0] ex2_fw_data = _ex2_fw_data_T_2 ? ex2_reg_pc_bit_out : ex2_reg_alu_out; // @[Core.scala 1616:21]
+  wire  _ex2_fw_data_T_1 = ex2_reg_wb_sel == 3'h7; // @[Core.scala 1589:23]
+  wire  _ex2_fw_data_T_2 = ex2_reg_wb_sel == 3'h1 | _ex2_fw_data_T_1; // @[Core.scala 1588:34]
+  wire [31:0] ex2_fw_data = _ex2_fw_data_T_2 ? ex2_reg_pc_bit_out : ex2_reg_alu_out; // @[Core.scala 1586:21]
   wire [31:0] _rrd_op1_data_T_13 = _rrd_op1_data_T_10 ? ex2_fw_data : _rrd_op1_data_T_12; // @[Mux.scala 101:16]
-  wire  _ex1_fw_data_T = ex1_reg_wb_sel == 3'h1; // @[Core.scala 1098:21]
-  wire [31:0] _ex1_next_pc_T_1 = ex1_reg_pc + 32'h2; // @[Core.scala 1031:53]
-  wire [31:0] _ex1_next_pc_T_3 = ex1_reg_pc + 32'h4; // @[Core.scala 1031:83]
-  wire [31:0] ex1_next_pc = ex1_reg_is_half ? _ex1_next_pc_T_1 : _ex1_next_pc_T_3; // @[Core.scala 1031:24]
-  wire  _ex1_alu_out_T = ex1_reg_exe_fun == 5'h0; // @[Core.scala 1006:22]
-  wire [31:0] _ex1_alu_out_T_2 = ex1_reg_op1_data + ex1_reg_op2_data; // @[Core.scala 1006:58]
-  wire  _ex1_alu_out_T_3 = ex1_reg_exe_fun == 5'h1; // @[Core.scala 1007:22]
-  wire [31:0] _ex1_alu_out_T_5 = ex1_reg_op1_data - ex1_reg_op2_data; // @[Core.scala 1007:58]
-  wire  _ex1_alu_out_T_6 = ex1_reg_exe_fun == 5'h3; // @[Core.scala 1008:22]
-  wire [31:0] _ex1_alu_out_T_7 = ex1_reg_op1_data & ex1_reg_op2_data; // @[Core.scala 1008:58]
-  wire  _ex1_alu_out_T_8 = ex1_reg_exe_fun == 5'h4; // @[Core.scala 1009:22]
-  wire [31:0] _ex1_alu_out_T_9 = ex1_reg_op1_data | ex1_reg_op2_data; // @[Core.scala 1009:58]
-  wire  _ex1_alu_out_T_10 = ex1_reg_exe_fun == 5'h2; // @[Core.scala 1010:22]
-  wire [31:0] _ex1_alu_out_T_11 = ex1_reg_op1_data ^ ex1_reg_op2_data; // @[Core.scala 1010:58]
-  wire  _ex1_alu_out_T_12 = ex1_reg_exe_fun == 5'h5; // @[Core.scala 1011:22]
-  wire [62:0] _GEN_26 = {{31'd0}, ex1_reg_op1_data}; // @[Core.scala 1011:58]
-  wire [62:0] _ex1_alu_out_T_14 = _GEN_26 << ex1_reg_op2_data[4:0]; // @[Core.scala 1011:58]
-  wire  _ex1_alu_out_T_16 = ex1_reg_exe_fun == 5'h6; // @[Core.scala 1012:22]
-  wire [31:0] _ex1_alu_out_T_18 = ex1_reg_op1_data >> ex1_reg_op2_data[4:0]; // @[Core.scala 1012:58]
-  wire  _ex1_alu_out_T_19 = ex1_reg_exe_fun == 5'h7; // @[Core.scala 1013:22]
-  wire [31:0] _ex1_alu_out_T_23 = $signed(ex1_reg_op1_data) >>> ex1_reg_op2_data[4:0]; // @[Core.scala 1013:100]
-  wire  _ex1_alu_out_T_24 = ex1_reg_exe_fun == 5'h8; // @[Core.scala 1014:22]
-  wire  _ex1_alu_out_T_27 = $signed(ex1_reg_op1_data) < $signed(ex1_reg_op2_data); // @[Core.scala 1014:67]
-  wire  _ex1_alu_out_T_28 = ex1_reg_exe_fun == 5'h9; // @[Core.scala 1015:22]
-  wire  _ex1_alu_out_T_29 = ex1_reg_op1_data < ex1_reg_op2_data; // @[Core.scala 1015:58]
-  wire  _ex1_alu_out_T_30 = ex1_reg_exe_fun == 5'ha; // @[Core.scala 1016:22]
-  wire [31:0] _ex1_alu_out_T_34 = _ex1_alu_out_T_27 ? ex1_reg_op2_data : ex1_reg_op1_data; // @[Core.scala 1016:43]
-  wire  _ex1_alu_out_T_35 = ex1_reg_exe_fun == 5'hb; // @[Core.scala 1017:22]
-  wire [31:0] _ex1_alu_out_T_37 = _ex1_alu_out_T_29 ? ex1_reg_op2_data : ex1_reg_op1_data; // @[Core.scala 1017:43]
-  wire  _ex1_alu_out_T_38 = ex1_reg_exe_fun == 5'hc; // @[Core.scala 1018:22]
-  wire [31:0] _ex1_alu_out_T_42 = _ex1_alu_out_T_27 ? ex1_reg_op1_data : ex1_reg_op2_data; // @[Core.scala 1018:43]
-  wire  _ex1_alu_out_T_43 = ex1_reg_exe_fun == 5'hd; // @[Core.scala 1019:22]
-  wire [31:0] _ex1_alu_out_T_45 = _ex1_alu_out_T_29 ? ex1_reg_op1_data : ex1_reg_op2_data; // @[Core.scala 1019:43]
-  wire  _ex1_alu_out_T_46 = ex1_reg_exe_fun == 5'hf; // @[Core.scala 1020:22]
-  wire [31:0] _ex1_alu_out_T_47 = ~ex1_reg_op2_data; // @[Core.scala 1020:60]
-  wire [31:0] _ex1_alu_out_T_48 = ex1_reg_op1_data & _ex1_alu_out_T_47; // @[Core.scala 1020:58]
-  wire  _ex1_alu_out_T_49 = ex1_reg_exe_fun == 5'he; // @[Core.scala 1021:22]
-  wire [31:0] _ex1_alu_out_T_51 = ex1_reg_op1_data ^ _ex1_alu_out_T_47; // @[Core.scala 1021:58]
-  wire  _ex1_alu_out_T_52 = ex1_reg_exe_fun == 5'h10; // @[Core.scala 1022:22]
-  wire [31:0] _ex1_alu_out_T_54 = ex1_reg_op1_data | _ex1_alu_out_T_47; // @[Core.scala 1022:58]
+  wire  _ex1_fw_data_T = ex1_reg_wb_sel == 3'h1; // @[Core.scala 1070:21]
+  wire [31:0] _ex1_next_pc_T_1 = ex1_reg_pc + 32'h2; // @[Core.scala 1008:53]
+  wire [31:0] _ex1_next_pc_T_3 = ex1_reg_pc + 32'h4; // @[Core.scala 1008:83]
+  wire [31:0] ex1_next_pc = ex1_reg_is_half ? _ex1_next_pc_T_1 : _ex1_next_pc_T_3; // @[Core.scala 1008:24]
+  wire  _ex1_alu_out_T = ex1_reg_exe_fun == 5'h0; // @[Core.scala 983:22]
+  wire [31:0] _ex1_alu_out_T_2 = ex1_reg_op1_data + ex1_reg_op2_data; // @[Core.scala 983:58]
+  wire  _ex1_alu_out_T_3 = ex1_reg_exe_fun == 5'h1; // @[Core.scala 984:22]
+  wire [31:0] _ex1_alu_out_T_5 = ex1_reg_op1_data - ex1_reg_op2_data; // @[Core.scala 984:58]
+  wire  _ex1_alu_out_T_6 = ex1_reg_exe_fun == 5'h3; // @[Core.scala 985:22]
+  wire [31:0] _ex1_alu_out_T_7 = ex1_reg_op1_data & ex1_reg_op2_data; // @[Core.scala 985:58]
+  wire  _ex1_alu_out_T_8 = ex1_reg_exe_fun == 5'h4; // @[Core.scala 986:22]
+  wire [31:0] _ex1_alu_out_T_9 = ex1_reg_op1_data | ex1_reg_op2_data; // @[Core.scala 986:58]
+  wire  _ex1_alu_out_T_10 = ex1_reg_exe_fun == 5'h2; // @[Core.scala 987:22]
+  wire [31:0] _ex1_alu_out_T_11 = ex1_reg_op1_data ^ ex1_reg_op2_data; // @[Core.scala 987:58]
+  wire  _ex1_alu_out_T_12 = ex1_reg_exe_fun == 5'h5; // @[Core.scala 988:22]
+  wire [62:0] _GEN_26 = {{31'd0}, ex1_reg_op1_data}; // @[Core.scala 988:58]
+  wire [62:0] _ex1_alu_out_T_14 = _GEN_26 << ex1_reg_op2_data[4:0]; // @[Core.scala 988:58]
+  wire  _ex1_alu_out_T_16 = ex1_reg_exe_fun == 5'h6; // @[Core.scala 989:22]
+  wire [31:0] _ex1_alu_out_T_18 = ex1_reg_op1_data >> ex1_reg_op2_data[4:0]; // @[Core.scala 989:58]
+  wire  _ex1_alu_out_T_19 = ex1_reg_exe_fun == 5'h7; // @[Core.scala 990:22]
+  wire [31:0] _ex1_alu_out_T_23 = $signed(ex1_reg_op1_data) >>> ex1_reg_op2_data[4:0]; // @[Core.scala 990:100]
+  wire  _ex1_alu_out_T_24 = ex1_reg_exe_fun == 5'h8; // @[Core.scala 991:22]
+  wire  _ex1_alu_out_T_27 = $signed(ex1_reg_op1_data) < $signed(ex1_reg_op2_data); // @[Core.scala 991:67]
+  wire  _ex1_alu_out_T_28 = ex1_reg_exe_fun == 5'h9; // @[Core.scala 992:22]
+  wire  _ex1_alu_out_T_29 = ex1_reg_op1_data < ex1_reg_op2_data; // @[Core.scala 992:58]
+  wire  _ex1_alu_out_T_30 = ex1_reg_exe_fun == 5'ha; // @[Core.scala 993:22]
+  wire [31:0] _ex1_alu_out_T_34 = _ex1_alu_out_T_27 ? ex1_reg_op2_data : ex1_reg_op1_data; // @[Core.scala 993:43]
+  wire  _ex1_alu_out_T_35 = ex1_reg_exe_fun == 5'hb; // @[Core.scala 994:22]
+  wire [31:0] _ex1_alu_out_T_37 = _ex1_alu_out_T_29 ? ex1_reg_op2_data : ex1_reg_op1_data; // @[Core.scala 994:43]
+  wire  _ex1_alu_out_T_38 = ex1_reg_exe_fun == 5'hc; // @[Core.scala 995:22]
+  wire [31:0] _ex1_alu_out_T_42 = _ex1_alu_out_T_27 ? ex1_reg_op1_data : ex1_reg_op2_data; // @[Core.scala 995:43]
+  wire  _ex1_alu_out_T_43 = ex1_reg_exe_fun == 5'hd; // @[Core.scala 996:22]
+  wire [31:0] _ex1_alu_out_T_45 = _ex1_alu_out_T_29 ? ex1_reg_op1_data : ex1_reg_op2_data; // @[Core.scala 996:43]
+  wire  _ex1_alu_out_T_46 = ex1_reg_exe_fun == 5'hf; // @[Core.scala 997:22]
+  wire [31:0] _ex1_alu_out_T_47 = ~ex1_reg_op2_data; // @[Core.scala 997:60]
+  wire [31:0] _ex1_alu_out_T_48 = ex1_reg_op1_data & _ex1_alu_out_T_47; // @[Core.scala 997:58]
+  wire  _ex1_alu_out_T_49 = ex1_reg_exe_fun == 5'he; // @[Core.scala 998:22]
+  wire [31:0] _ex1_alu_out_T_51 = ex1_reg_op1_data ^ _ex1_alu_out_T_47; // @[Core.scala 998:58]
+  wire  _ex1_alu_out_T_52 = ex1_reg_exe_fun == 5'h10; // @[Core.scala 999:22]
+  wire [31:0] _ex1_alu_out_T_54 = ex1_reg_op1_data | _ex1_alu_out_T_47; // @[Core.scala 999:58]
   wire [31:0] _ex1_alu_out_T_55 = _ex1_alu_out_T_52 ? _ex1_alu_out_T_54 : 32'h0; // @[Mux.scala 101:16]
   wire [31:0] _ex1_alu_out_T_56 = _ex1_alu_out_T_49 ? _ex1_alu_out_T_51 : _ex1_alu_out_T_55; // @[Mux.scala 101:16]
   wire [31:0] _ex1_alu_out_T_57 = _ex1_alu_out_T_46 ? _ex1_alu_out_T_48 : _ex1_alu_out_T_56; // @[Mux.scala 101:16]
@@ -1865,52 +1866,47 @@ module Core(
   wire [31:0] ex1_fw_data = _ex1_fw_data_T ? ex1_next_pc : ex1_alu_out; // @[Mux.scala 101:16]
   wire [31:0] _rrd_op1_data_T_14 = _rrd_op1_data_T_6 ? ex1_fw_data : _rrd_op1_data_T_13; // @[Mux.scala 101:16]
   wire [31:0] rrd_op1_data = _rrd_op1_data_T_2 ? 32'h0 : _rrd_op1_data_T_14; // @[Mux.scala 101:16]
-  wire  _rrd_op2_data_T_1 = rrd_reg_rs2_addr == 5'h0; // @[Core.scala 927:54]
-  wire  _rrd_op2_data_T_2 = _rrd_stall_T_2 & rrd_reg_rs2_addr == 5'h0; // @[Core.scala 927:34]
-  wire  _rrd_op2_data_T_4 = ex1_reg_fw_en & _rrd_stall_T_2; // @[Core.scala 928:20]
-  wire  _rrd_op2_data_T_5 = rrd_reg_rs2_addr == ex1_reg_wb_addr; // @[Core.scala 930:24]
-  wire  _rrd_op2_data_T_6 = _rrd_op2_data_T_4 & _rrd_op2_data_T_5; // @[Core.scala 929:36]
-  wire  _rrd_op2_data_T_8 = ex2_reg_fw_en & _rrd_stall_T_2; // @[Core.scala 931:20]
-  wire  _rrd_op2_data_T_9 = rrd_reg_rs2_addr == ex2_reg_wb_addr; // @[Core.scala 933:24]
-  wire  _rrd_op2_data_T_10 = _rrd_op2_data_T_8 & _rrd_op2_data_T_9; // @[Core.scala 932:36]
+  wire  _rrd_op2_data_T_1 = rrd_reg_rs2_addr == 5'h0; // @[Core.scala 910:54]
+  wire  _rrd_op2_data_T_2 = _rrd_stall_T_2 & rrd_reg_rs2_addr == 5'h0; // @[Core.scala 910:34]
+  wire  _rrd_op2_data_T_4 = ex1_reg_fw_en & _rrd_stall_T_2; // @[Core.scala 911:20]
+  wire  _rrd_op2_data_T_5 = rrd_reg_rs2_addr == ex1_reg_wb_addr; // @[Core.scala 913:24]
+  wire  _rrd_op2_data_T_6 = _rrd_op2_data_T_4 & _rrd_op2_data_T_5; // @[Core.scala 912:36]
+  wire  _rrd_op2_data_T_8 = ex2_reg_fw_en & _rrd_stall_T_2; // @[Core.scala 914:20]
+  wire  _rrd_op2_data_T_9 = rrd_reg_rs2_addr == ex2_reg_wb_addr; // @[Core.scala 916:24]
+  wire  _rrd_op2_data_T_10 = _rrd_op2_data_T_8 & _rrd_op2_data_T_9; // @[Core.scala 915:36]
   wire [31:0] _rrd_op2_data_T_12 = _rrd_stall_T_2 ? regfile_rrd_op2_data_MPORT_data : rrd_reg_op2_data; // @[Mux.scala 101:16]
   wire [31:0] _rrd_op2_data_T_13 = _rrd_op2_data_T_10 ? ex2_fw_data : _rrd_op2_data_T_12; // @[Mux.scala 101:16]
   wire [31:0] _rrd_op2_data_T_14 = _rrd_op2_data_T_6 ? ex1_fw_data : _rrd_op2_data_T_13; // @[Mux.scala 101:16]
   wire [31:0] rrd_op2_data = _rrd_op2_data_T_2 ? 32'h0 : _rrd_op2_data_T_14; // @[Mux.scala 101:16]
-  wire  _rrd_rs2_data_T_2 = ex1_reg_fw_en & _rrd_op2_data_T_5; // @[Core.scala 938:20]
-  wire  _rrd_rs2_data_T_4 = ex2_reg_fw_en & _rrd_op2_data_T_9; // @[Core.scala 940:20]
+  wire  _rrd_rs2_data_T_2 = ex1_reg_fw_en & _rrd_op2_data_T_5; // @[Core.scala 921:20]
+  wire  _rrd_rs2_data_T_4 = ex2_reg_fw_en & _rrd_op2_data_T_9; // @[Core.scala 923:20]
   wire [31:0] _rrd_rs2_data_T_5 = _rrd_rs2_data_T_4 ? ex2_fw_data : regfile_rrd_rs2_data_MPORT_data; // @[Mux.scala 101:16]
   wire [31:0] _rrd_rs2_data_T_6 = _rrd_rs2_data_T_2 ? ex1_fw_data : _rrd_rs2_data_T_5; // @[Mux.scala 101:16]
   wire [31:0] rrd_rs2_data = _rrd_op2_data_T_1 ? 32'h0 : _rrd_rs2_data_T_6; // @[Mux.scala 101:16]
   wire [31:0] _rrd_direct_jbr_target_T = rrd_reg_is_direct_j ? rrd_reg_op2_data : rrd_reg_imm_b_sext; // @[Mux.scala 101:16]
-  wire [31:0] rrd_direct_jbr_target = rrd_reg_pc + _rrd_direct_jbr_target_T; // @[Core.scala 944:42]
-  wire  _rrd_is_indirect_j_T_2 = rrd_reg_exe_fun == 5'h18; // @[Core.scala 948:22]
-  wire  _rrd_is_indirect_j_T_3 = rrd_reg_is_j & ~rrd_reg_is_direct_j | _rrd_is_indirect_j_T_2; // @[Core.scala 947:66]
-  wire  _rrd_is_indirect_j_T_4 = rrd_reg_exe_fun == 5'h19; // @[Core.scala 949:22]
-  wire  rrd_is_indirect_j = _rrd_is_indirect_j_T_3 | _rrd_is_indirect_j_T_4; // @[Core.scala 948:37]
-  wire  _rrd_hazard_T_1 = rrd_reg_wb_addr != 5'h0; // @[Core.scala 951:67]
-  wire  rrd_hazard = rrd_reg_rf_wen & rrd_reg_wb_addr != 5'h0 & _T_23 & _if2_inst_cnt_T; // @[Core.scala 951:90]
-  wire  rrd_fw_en_next = rrd_hazard & (_rrd_stall_T_11 | rrd_reg_wb_sel == 3'h1); // @[Core.scala 952:35]
-  wire  _T_32 = _T_24 & _T_23 & _if2_inst_cnt_T & rrd_reg_rf_wen; // @[Core.scala 959:48]
-  wire  _T_34 = _T_32 & _rrd_hazard_T_1; // @[Core.scala 960:30]
-  wire  _T_35 = rrd_reg_wb_sel != 3'h0; // @[Core.scala 962:54]
-  wire  _T_36 = rrd_reg_wb_sel != 3'h1; // @[Core.scala 962:83]
-  wire  rrd_mem_use_reg = _T_34 & (rrd_reg_wb_sel == 3'h6 | _rrd_stall_T_3); // @[Core.scala 961:5 963:25]
-  wire  rrd_inst2_use_reg = _T_34 & (rrd_reg_wb_sel == 3'h7 | rrd_reg_wb_sel == 3'h3); // @[Core.scala 961:5 964:25]
-  wire  rrd_inst3_use_reg = _T_34 & (rrd_reg_wb_sel == 3'h4 | rrd_reg_wb_sel == 3'h5); // @[Core.scala 961:5 965:25]
-  wire  ex_is_bubble = rrd_stall | ex2_reg_is_br; // @[Core.scala 971:34]
-  wire  _ex1_reg_is_valid_inst_T_1 = rrd_reg_is_valid_inst & ~ex_is_bubble; // @[Core.scala 991:52]
-  wire [47:0] ex1_mullu = ex1_reg_op1_data * ex1_reg_op2_data[15:0]; // @[Core.scala 1025:38]
-  wire [16:0] _ex1_mulls_T_2 = {1'b0,$signed(ex1_reg_op2_data[15:0])}; // @[Core.scala 1026:47]
-  wire [48:0] _ex1_mulls_T_3 = $signed(ex1_reg_op1_data) * $signed(_ex1_mulls_T_2); // @[Core.scala 1026:47]
-  wire [47:0] _ex1_mulls_T_5 = _ex1_mulls_T_3[47:0]; // @[Core.scala 1026:47]
-  wire [31:0] ex1_mulls = _ex1_mulls_T_5[47:16]; // @[Core.scala 1026:83]
-  wire [47:0] ex1_mulhuu = ex1_reg_op1_data * ex1_reg_op2_data[31:16]; // @[Core.scala 1027:38]
-  wire [15:0] _ex1_mulhss_T_2 = ex1_reg_op2_data[31:16]; // @[Core.scala 1028:96]
-  wire [47:0] ex1_mulhss = $signed(ex1_reg_op1_data) * $signed(_ex1_mulhss_T_2); // @[Core.scala 1028:47]
-  wire [16:0] _ex1_mulhsu_T_2 = {1'b0,$signed(ex1_reg_op2_data[31:16])}; // @[Core.scala 1029:47]
-  wire [48:0] _ex1_mulhsu_T_3 = $signed(ex1_reg_op1_data) * $signed(_ex1_mulhsu_T_2); // @[Core.scala 1029:47]
-  wire [47:0] ex1_mulhsu = _ex1_mulhsu_T_3[47:0]; // @[Core.scala 1029:47]
+  wire [31:0] rrd_direct_jbr_target = rrd_reg_pc + _rrd_direct_jbr_target_T; // @[Core.scala 927:42]
+  wire  _rrd_hazard_T_1 = rrd_reg_wb_addr != 5'h0; // @[Core.scala 931:67]
+  wire  rrd_hazard = rrd_reg_rf_wen & rrd_reg_wb_addr != 5'h0 & _T_23 & _csr_is_valid_inst_T; // @[Core.scala 931:90]
+  wire  rrd_fw_en_next = rrd_hazard & (rrd_reg_wb_sel == 3'h0 | rrd_reg_wb_sel == 3'h1); // @[Core.scala 932:35]
+  wire  _T_32 = _T_24 & _T_23 & _csr_is_valid_inst_T & rrd_reg_rf_wen; // @[Core.scala 939:48]
+  wire  _T_34 = _T_32 & _rrd_hazard_T_1; // @[Core.scala 940:30]
+  wire  _T_35 = rrd_reg_wb_sel != 3'h0; // @[Core.scala 942:54]
+  wire  _T_36 = rrd_reg_wb_sel != 3'h1; // @[Core.scala 942:83]
+  wire  rrd_mem_use_reg = _T_34 & (rrd_reg_wb_sel == 3'h6 | _rrd_stall_T_3); // @[Core.scala 941:5 943:25]
+  wire  rrd_inst2_use_reg = _T_34 & (rrd_reg_wb_sel == 3'h7 | rrd_reg_wb_sel == 3'h3); // @[Core.scala 941:5 944:25]
+  wire  rrd_inst3_use_reg = _T_34 & (rrd_reg_wb_sel == 3'h4 | rrd_reg_wb_sel == 3'h5); // @[Core.scala 941:5 945:25]
+  wire  ex_is_bubble = rrd_stall | ex2_reg_is_br; // @[Core.scala 951:34]
+  wire [47:0] ex1_mullu = ex1_reg_op1_data * ex1_reg_op2_data[15:0]; // @[Core.scala 1002:38]
+  wire [16:0] _ex1_mulls_T_2 = {1'b0,$signed(ex1_reg_op2_data[15:0])}; // @[Core.scala 1003:47]
+  wire [48:0] _ex1_mulls_T_3 = $signed(ex1_reg_op1_data) * $signed(_ex1_mulls_T_2); // @[Core.scala 1003:47]
+  wire [47:0] _ex1_mulls_T_5 = _ex1_mulls_T_3[47:0]; // @[Core.scala 1003:47]
+  wire [31:0] ex1_mulls = _ex1_mulls_T_5[47:16]; // @[Core.scala 1003:83]
+  wire [47:0] ex1_mulhuu = ex1_reg_op1_data * ex1_reg_op2_data[31:16]; // @[Core.scala 1004:38]
+  wire [15:0] _ex1_mulhss_T_2 = ex1_reg_op2_data[31:16]; // @[Core.scala 1005:96]
+  wire [47:0] ex1_mulhss = $signed(ex1_reg_op1_data) * $signed(_ex1_mulhss_T_2); // @[Core.scala 1005:47]
+  wire [16:0] _ex1_mulhsu_T_2 = {1'b0,$signed(ex1_reg_op2_data[31:16])}; // @[Core.scala 1006:47]
+  wire [48:0] _ex1_mulhsu_T_3 = $signed(ex1_reg_op1_data) * $signed(_ex1_mulhsu_T_2); // @[Core.scala 1006:47]
+  wire [47:0] ex1_mulhsu = _ex1_mulhsu_T_3[47:0]; // @[Core.scala 1006:47]
   wire [31:0] _ex1_pc_bit_out_T_3 = {16'h0,ex1_reg_op1_data[15:0]}; // @[Cat.scala 31:58]
   wire [1:0] _ex1_pc_bit_out_T_37 = ex1_reg_op1_data[0] + ex1_reg_op1_data[1]; // @[Bitwise.scala 48:55]
   wire [1:0] _ex1_pc_bit_out_T_39 = ex1_reg_op1_data[2] + ex1_reg_op1_data[3]; // @[Bitwise.scala 48:55]
@@ -1943,28 +1939,28 @@ module Core(
   wire [3:0] _ex1_pc_bit_out_T_93 = _ex1_pc_bit_out_T_85 + _ex1_pc_bit_out_T_91; // @[Bitwise.scala 48:55]
   wire [4:0] _ex1_pc_bit_out_T_95 = _ex1_pc_bit_out_T_79 + _ex1_pc_bit_out_T_93; // @[Bitwise.scala 48:55]
   wire [5:0] _ex1_pc_bit_out_T_97 = _ex1_pc_bit_out_T_65 + _ex1_pc_bit_out_T_95; // @[Bitwise.scala 48:55]
-  wire [31:0] _GEN_481 = {{16'd0}, ex1_reg_op1_data[31:16]}; // @[Bitwise.scala 105:31]
-  wire [31:0] _ex1_pc_bit_out_T_103 = _GEN_481 & 32'hffff; // @[Bitwise.scala 105:31]
+  wire [31:0] _GEN_485 = {{16'd0}, ex1_reg_op1_data[31:16]}; // @[Bitwise.scala 105:31]
+  wire [31:0] _ex1_pc_bit_out_T_103 = _GEN_485 & 32'hffff; // @[Bitwise.scala 105:31]
   wire [31:0] _ex1_pc_bit_out_T_105 = {ex1_reg_op1_data[15:0], 16'h0}; // @[Bitwise.scala 105:70]
   wire [31:0] _ex1_pc_bit_out_T_107 = _ex1_pc_bit_out_T_105 & 32'hffff0000; // @[Bitwise.scala 105:80]
   wire [31:0] _ex1_pc_bit_out_T_108 = _ex1_pc_bit_out_T_103 | _ex1_pc_bit_out_T_107; // @[Bitwise.scala 105:39]
-  wire [31:0] _GEN_482 = {{8'd0}, _ex1_pc_bit_out_T_108[31:8]}; // @[Bitwise.scala 105:31]
-  wire [31:0] _ex1_pc_bit_out_T_113 = _GEN_482 & 32'hff00ff; // @[Bitwise.scala 105:31]
+  wire [31:0] _GEN_486 = {{8'd0}, _ex1_pc_bit_out_T_108[31:8]}; // @[Bitwise.scala 105:31]
+  wire [31:0] _ex1_pc_bit_out_T_113 = _GEN_486 & 32'hff00ff; // @[Bitwise.scala 105:31]
   wire [31:0] _ex1_pc_bit_out_T_115 = {_ex1_pc_bit_out_T_108[23:0], 8'h0}; // @[Bitwise.scala 105:70]
   wire [31:0] _ex1_pc_bit_out_T_117 = _ex1_pc_bit_out_T_115 & 32'hff00ff00; // @[Bitwise.scala 105:80]
   wire [31:0] _ex1_pc_bit_out_T_118 = _ex1_pc_bit_out_T_113 | _ex1_pc_bit_out_T_117; // @[Bitwise.scala 105:39]
-  wire [31:0] _GEN_483 = {{4'd0}, _ex1_pc_bit_out_T_118[31:4]}; // @[Bitwise.scala 105:31]
-  wire [31:0] _ex1_pc_bit_out_T_123 = _GEN_483 & 32'hf0f0f0f; // @[Bitwise.scala 105:31]
+  wire [31:0] _GEN_487 = {{4'd0}, _ex1_pc_bit_out_T_118[31:4]}; // @[Bitwise.scala 105:31]
+  wire [31:0] _ex1_pc_bit_out_T_123 = _GEN_487 & 32'hf0f0f0f; // @[Bitwise.scala 105:31]
   wire [31:0] _ex1_pc_bit_out_T_125 = {_ex1_pc_bit_out_T_118[27:0], 4'h0}; // @[Bitwise.scala 105:70]
   wire [31:0] _ex1_pc_bit_out_T_127 = _ex1_pc_bit_out_T_125 & 32'hf0f0f0f0; // @[Bitwise.scala 105:80]
   wire [31:0] _ex1_pc_bit_out_T_128 = _ex1_pc_bit_out_T_123 | _ex1_pc_bit_out_T_127; // @[Bitwise.scala 105:39]
-  wire [31:0] _GEN_484 = {{2'd0}, _ex1_pc_bit_out_T_128[31:2]}; // @[Bitwise.scala 105:31]
-  wire [31:0] _ex1_pc_bit_out_T_133 = _GEN_484 & 32'h33333333; // @[Bitwise.scala 105:31]
+  wire [31:0] _GEN_488 = {{2'd0}, _ex1_pc_bit_out_T_128[31:2]}; // @[Bitwise.scala 105:31]
+  wire [31:0] _ex1_pc_bit_out_T_133 = _GEN_488 & 32'h33333333; // @[Bitwise.scala 105:31]
   wire [31:0] _ex1_pc_bit_out_T_135 = {_ex1_pc_bit_out_T_128[29:0], 2'h0}; // @[Bitwise.scala 105:70]
   wire [31:0] _ex1_pc_bit_out_T_137 = _ex1_pc_bit_out_T_135 & 32'hcccccccc; // @[Bitwise.scala 105:80]
   wire [31:0] _ex1_pc_bit_out_T_138 = _ex1_pc_bit_out_T_133 | _ex1_pc_bit_out_T_137; // @[Bitwise.scala 105:39]
-  wire [31:0] _GEN_485 = {{1'd0}, _ex1_pc_bit_out_T_138[31:1]}; // @[Bitwise.scala 105:31]
-  wire [31:0] _ex1_pc_bit_out_T_143 = _GEN_485 & 32'h55555555; // @[Bitwise.scala 105:31]
+  wire [31:0] _GEN_489 = {{1'd0}, _ex1_pc_bit_out_T_138[31:1]}; // @[Bitwise.scala 105:31]
+  wire [31:0] _ex1_pc_bit_out_T_143 = _GEN_489 & 32'h55555555; // @[Bitwise.scala 105:31]
   wire [31:0] _ex1_pc_bit_out_T_145 = {_ex1_pc_bit_out_T_138[30:0], 1'h0}; // @[Bitwise.scala 105:70]
   wire [31:0] _ex1_pc_bit_out_T_147 = _ex1_pc_bit_out_T_145 & 32'haaaaaaaa; // @[Bitwise.scala 105:80]
   wire [31:0] _ex1_pc_bit_out_T_148 = _ex1_pc_bit_out_T_143 | _ex1_pc_bit_out_T_147; // @[Bitwise.scala 105:39]
@@ -2046,68 +2042,74 @@ module Core(
   wire [31:0] _ex1_pc_bit_out_T_303 = _ex1_alu_out_T_16 ? {{26'd0}, _ex1_pc_bit_out_T_281} : _ex1_pc_bit_out_T_302; // @[Mux.scala 101:16]
   wire [31:0] _ex1_pc_bit_out_T_304 = _ex1_alu_out_T_12 ? {{26'd0}, _ex1_pc_bit_out_T_214} : _ex1_pc_bit_out_T_303; // @[Mux.scala 101:16]
   wire [31:0] _ex1_pc_bit_out_T_305 = _ex1_alu_out_T_19 ? {{26'd0}, _ex1_pc_bit_out_T_97} : _ex1_pc_bit_out_T_304; // @[Mux.scala 101:16]
-  wire [31:0] _ex1_dividend_T_1 = ~ex1_reg_op1_data; // @[Core.scala 1056:47]
-  wire [31:0] _ex1_dividend_T_3 = _ex1_dividend_T_1 + 32'h1; // @[Core.scala 1056:65]
+  wire [31:0] _ex1_dividend_T_1 = ~ex1_reg_op1_data; // @[Core.scala 1033:47]
+  wire [31:0] _ex1_dividend_T_3 = _ex1_dividend_T_1 + 32'h1; // @[Core.scala 1033:65]
   wire [36:0] _ex1_dividend_T_5 = {5'h0,_ex1_dividend_T_3}; // @[Cat.scala 31:58]
   wire [36:0] _ex1_dividend_T_8 = {5'h0,ex1_reg_op1_data}; // @[Cat.scala 31:58]
-  wire [31:0] _ex1_divisor_T_2 = _ex1_alu_out_T_47 + 32'h1; // @[Core.scala 1062:41]
-  wire  _T_48 = _ex1_alu_out_T_49 | _ex1_alu_out_T_46; // @[Core.scala 1068:44]
-  wire  ex1_sign_op1 = (_ex1_alu_out_T_38 | _ex1_alu_out_T_43) & ex1_reg_op1_data[31]; // @[Core.scala 1053:69 1060:18]
-  wire  _GEN_261 = ex1_reg_op2_data[31] ? ~ex1_sign_op1 : ex1_sign_op1; // @[Core.scala 1061:49 1063:21 1066:21]
-  wire  ex1_divrem = _ex1_alu_out_T_38 | _ex1_alu_out_T_43 | _T_48; // @[Core.scala 1053:69 1054:16]
-  wire  ex1_sign_op12 = (_ex1_alu_out_T_38 | _ex1_alu_out_T_43) & _GEN_261; // @[Core.scala 1053:69]
-  wire  ex1_zero_op2 = ex1_reg_op2_data == 32'h0; // @[Core.scala 1075:37]
-  wire  _ex1_is_cond_br_T = ex1_reg_exe_fun == 5'h12; // @[Core.scala 1080:22]
-  wire  _ex1_is_cond_br_T_1 = ex1_reg_op1_data == ex1_reg_op2_data; // @[Core.scala 1080:57]
-  wire  _ex1_is_cond_br_T_2 = ex1_reg_exe_fun == 5'h13; // @[Core.scala 1081:22]
-  wire  _ex1_is_cond_br_T_4 = ~_ex1_is_cond_br_T_1; // @[Core.scala 1081:38]
-  wire  _ex1_is_cond_br_T_5 = ex1_reg_exe_fun == 5'h14; // @[Core.scala 1082:22]
-  wire  _ex1_is_cond_br_T_9 = ex1_reg_exe_fun == 5'h15; // @[Core.scala 1083:22]
-  wire  _ex1_is_cond_br_T_13 = ~_ex1_alu_out_T_27; // @[Core.scala 1083:38]
-  wire  _ex1_is_cond_br_T_14 = ex1_reg_exe_fun == 5'h16; // @[Core.scala 1084:22]
-  wire  _ex1_is_cond_br_T_16 = ex1_reg_exe_fun == 5'h17; // @[Core.scala 1085:22]
-  wire  _ex1_is_cond_br_T_18 = ~_ex1_alu_out_T_29; // @[Core.scala 1085:38]
+  wire [31:0] _ex1_divisor_T_2 = _ex1_alu_out_T_47 + 32'h1; // @[Core.scala 1039:41]
+  wire  _T_48 = _ex1_alu_out_T_49 | _ex1_alu_out_T_46; // @[Core.scala 1045:44]
+  wire  ex1_sign_op1 = (_ex1_alu_out_T_38 | _ex1_alu_out_T_43) & ex1_reg_op1_data[31]; // @[Core.scala 1030:69 1037:18]
+  wire  _GEN_253 = ex1_reg_op2_data[31] ? ~ex1_sign_op1 : ex1_sign_op1; // @[Core.scala 1038:49 1040:21 1043:21]
+  wire  ex1_divrem = _ex1_alu_out_T_38 | _ex1_alu_out_T_43 | _T_48; // @[Core.scala 1030:69 1031:16]
+  wire  ex1_sign_op12 = (_ex1_alu_out_T_38 | _ex1_alu_out_T_43) & _GEN_253; // @[Core.scala 1030:69]
+  wire  ex1_zero_op2 = ex1_reg_op2_data == 32'h0; // @[Core.scala 1052:37]
+  wire  _ex1_is_cond_br_T = ex1_reg_exe_fun == 5'h12; // @[Core.scala 1057:22]
+  wire  _ex1_is_cond_br_T_1 = ex1_reg_op1_data == ex1_reg_op2_data; // @[Core.scala 1057:57]
+  wire  _ex1_is_cond_br_T_2 = ex1_reg_exe_fun == 5'h13; // @[Core.scala 1058:22]
+  wire  _ex1_is_cond_br_T_4 = ~_ex1_is_cond_br_T_1; // @[Core.scala 1058:38]
+  wire  _ex1_is_cond_br_T_5 = ex1_reg_exe_fun == 5'h14; // @[Core.scala 1059:22]
+  wire  _ex1_is_cond_br_T_9 = ex1_reg_exe_fun == 5'h15; // @[Core.scala 1060:22]
+  wire  _ex1_is_cond_br_T_13 = ~_ex1_alu_out_T_27; // @[Core.scala 1060:38]
+  wire  _ex1_is_cond_br_T_14 = ex1_reg_exe_fun == 5'h16; // @[Core.scala 1061:22]
+  wire  _ex1_is_cond_br_T_16 = ex1_reg_exe_fun == 5'h17; // @[Core.scala 1062:22]
+  wire  _ex1_is_cond_br_T_18 = ~_ex1_alu_out_T_29; // @[Core.scala 1062:38]
   wire  _ex1_is_cond_br_T_20 = _ex1_is_cond_br_T_14 ? _ex1_alu_out_T_29 : _ex1_is_cond_br_T_16 & _ex1_is_cond_br_T_18; // @[Mux.scala 101:16]
   wire  _ex1_is_cond_br_T_21 = _ex1_is_cond_br_T_9 ? _ex1_is_cond_br_T_13 : _ex1_is_cond_br_T_20; // @[Mux.scala 101:16]
   wire  _ex1_is_cond_br_T_22 = _ex1_is_cond_br_T_5 ? _ex1_alu_out_T_27 : _ex1_is_cond_br_T_21; // @[Mux.scala 101:16]
-  wire [31:0] ex1_uncond_br_target = ex1_alu_out & 32'hfffffffe; // @[Core.scala 1090:42]
-  wire  ex1_hazard = ex1_reg_rf_wen & ex1_reg_wb_addr != 5'h0 & _if2_inst_cnt_T; // @[Core.scala 1105:76]
-  wire  ex1_fw_en_next = ex1_hazard & ex1_reg_wb_sel != 3'h4 & ex1_reg_wb_sel != 3'h6; // @[Core.scala 1106:65]
-  wire  _jbr_reg_bp_en_T_1 = ex1_reg_is_valid_inst & _if2_inst_cnt_T; // @[Core.scala 1112:55]
-  wire  jbr_bp_en = jbr_reg_bp_en & _if2_inst_cnt_T; // @[Core.scala 1126:33]
-  wire  _jbr_cond_bp_fail_T = ~jbr_reg_is_bp_pos; // @[Core.scala 1128:6]
-  wire  _jbr_cond_bp_fail_T_4 = jbr_reg_is_bp_pos & jbr_reg_is_cond_br & jbr_reg_bp_addr != jbr_reg_cond_br_target; // @[Core.scala 1129:46]
-  wire  _jbr_cond_bp_fail_T_5 = ~jbr_reg_is_bp_pos & jbr_reg_is_cond_br | _jbr_cond_bp_fail_T_4; // @[Core.scala 1128:48]
-  wire  jbr_cond_bp_fail = jbr_bp_en & _jbr_cond_bp_fail_T_5; // @[Core.scala 1127:36]
-  wire  jbr_cond_nbp_fail = jbr_bp_en & jbr_reg_is_bp_pos & jbr_reg_is_cond_br_inst & ~jbr_reg_is_cond_br; // @[Core.scala 1131:85]
-  wire  _jbr_uncond_bp_fail_T_3 = jbr_reg_is_bp_pos & jbr_reg_bp_addr != jbr_reg_uncond_br_target; // @[Core.scala 1134:24]
-  wire  _jbr_uncond_bp_fail_T_4 = _jbr_cond_bp_fail_T | _jbr_uncond_bp_fail_T_3; // @[Core.scala 1133:24]
-  wire  jbr_uncond_bp_fail = jbr_bp_en & jbr_reg_is_uncond_br & _jbr_uncond_bp_fail_T_4; // @[Core.scala 1132:64]
-  wire [31:0] _ex2_reg_br_addr_T_1 = ex2_reg_pc + 32'h2; // @[Core.scala 1138:59]
-  wire [31:0] _ex2_reg_br_addr_T_3 = ex2_reg_pc + 32'h4; // @[Core.scala 1138:89]
-  wire  csr_is_trap = ex2_reg_is_trap & csr_is_valid_inst & _ex2_en_T & _ex2_en_T_2; // @[Core.scala 1233:76]
-  wire  csr_is_mret = ex2_en & ex2_reg_exe_fun == 5'h19; // @[Core.scala 1236:75]
-  wire [31:0] _GEN_381 = csr_is_trap ? csr_reg_trap_vector : csr_reg_mepc; // @[Core.scala 1300:28 1307:26]
-  wire [31:0] _GEN_387 = csr_is_mtintr ? csr_reg_trap_vector : _GEN_381; // @[Core.scala 1292:30 1299:26]
-  wire [31:0] csr_br_addr = csr_is_meintr ? csr_reg_trap_vector : _GEN_387; // @[Core.scala 1284:24 1291:26]
-  wire  jbr_is_br = jbr_cond_bp_fail | jbr_cond_nbp_fail | jbr_uncond_bp_fail; // @[Core.scala 1141:54]
+  wire [31:0] ex1_uncond_br_target = ex1_alu_out & 32'hfffffffe; // @[Core.scala 1067:42]
+  wire  ex1_hazard = ex1_reg_rf_wen & ex1_reg_wb_addr != 5'h0 & _csr_is_valid_inst_T; // @[Core.scala 1077:76]
+  wire  _ex1_fw_en_next_T_2 = ex1_reg_wb_sel != 3'h6; // @[Core.scala 1078:84]
+  wire  ex1_fw_en_next = ex1_hazard & ex1_reg_wb_sel != 3'h4 & ex1_reg_wb_sel != 3'h6; // @[Core.scala 1078:65]
+  wire  _jbr_reg_bp_en_T_1 = ex1_reg_is_valid_inst & _csr_is_valid_inst_T; // @[Core.scala 1084:55]
+  wire  jbr_bp_en = jbr_reg_bp_en & _csr_is_valid_inst_T; // @[Core.scala 1098:33]
+  wire  _jbr_cond_bp_fail_T = ~jbr_reg_is_bp_pos; // @[Core.scala 1100:6]
+  wire  _jbr_cond_bp_fail_T_4 = jbr_reg_is_bp_pos & jbr_reg_is_cond_br & jbr_reg_bp_addr != jbr_reg_cond_br_target; // @[Core.scala 1101:46]
+  wire  _jbr_cond_bp_fail_T_5 = ~jbr_reg_is_bp_pos & jbr_reg_is_cond_br | _jbr_cond_bp_fail_T_4; // @[Core.scala 1100:48]
+  wire  jbr_cond_bp_fail = jbr_bp_en & _jbr_cond_bp_fail_T_5; // @[Core.scala 1099:36]
+  wire  jbr_cond_nbp_fail = jbr_bp_en & jbr_reg_is_bp_pos & jbr_reg_is_cond_br_inst & ~jbr_reg_is_cond_br; // @[Core.scala 1103:85]
+  wire  _jbr_uncond_bp_fail_T_3 = jbr_reg_is_bp_pos & jbr_reg_bp_addr != jbr_reg_uncond_br_target; // @[Core.scala 1106:24]
+  wire  _jbr_uncond_bp_fail_T_4 = _jbr_cond_bp_fail_T | _jbr_uncond_bp_fail_T_3; // @[Core.scala 1105:24]
+  wire  jbr_uncond_bp_fail = jbr_bp_en & jbr_reg_is_uncond_br & _jbr_uncond_bp_fail_T_4; // @[Core.scala 1104:64]
+  wire [31:0] _ex2_reg_br_addr_T_1 = ex2_reg_pc + 32'h2; // @[Core.scala 1110:59]
+  wire [31:0] _ex2_reg_br_addr_T_3 = ex2_reg_pc + 32'h4; // @[Core.scala 1110:89]
+  wire  csr_is_trap = ex2_reg_is_trap & csr_is_valid_inst & _ex2_en_T & _ex2_en_T_2; // @[Core.scala 1195:76]
+  wire  csr_is_mret = ex2_en & ex2_reg_exe_fun == 5'h19; // @[Core.scala 1198:75]
+  wire [31:0] _GEN_381 = csr_is_trap ? csr_reg_trap_vector : csr_reg_mepc; // @[Core.scala 1266:28 1275:26]
+  wire [31:0] _GEN_389 = csr_is_mtintr ? csr_reg_trap_vector : _GEN_381; // @[Core.scala 1256:30 1265:26]
+  wire [31:0] csr_br_addr = csr_is_meintr ? csr_reg_trap_vector : _GEN_389; // @[Core.scala 1246:24 1255:26]
+  wire  jbr_is_br = jbr_cond_bp_fail | jbr_cond_nbp_fail | jbr_uncond_bp_fail; // @[Core.scala 1113:54]
   wire [31:0] _bp_io_up_br_addr_T = jbr_reg_is_uncond_br ? jbr_reg_uncond_br_target : 32'h0; // @[Mux.scala 101:16]
-  wire [5:0] _ex2_reg_wdata_T_1 = 4'h8 * ex1_alu_out[1:0]; // @[Core.scala 1184:53]
-  wire [94:0] _GEN_33 = {{63'd0}, ex1_reg_rs2_data}; // @[Core.scala 1184:45]
-  wire [94:0] _ex2_reg_wdata_T_2 = _GEN_33 << _ex2_reg_wdata_T_1; // @[Core.scala 1184:45]
-  wire  _ex2_reg_div_stall_T_2 = ex2_reg_divrem_state == 3'h0 | ex2_reg_divrem_state == 3'h5; // @[Core.scala 1191:65]
-  wire  _ex2_reg_div_stall_T_3 = ex1_divrem & (ex2_reg_divrem_state == 3'h0 | ex2_reg_divrem_state == 3'h5); // @[Core.scala 1191:19]
-  wire  _GEN_417 = 3'h2 == ex2_reg_divrem_state | 3'h3 == ex2_reg_divrem_state; // @[Core.scala 1428:33 1559:26]
-  wire  _GEN_425 = 3'h1 == ex2_reg_divrem_state | _GEN_417; // @[Core.scala 1428:33 1466:29]
-  wire  ex2_div_stall_next = 3'h0 == ex2_reg_divrem_state ? 1'h0 : _GEN_425; // @[Core.scala 1353:22 1428:33]
-  wire  _ex2_reg_div_stall_T_8 = ex2_reg_divrem & _ex2_reg_div_stall_T_2; // @[Core.scala 1204:23]
-  wire  _T_52 = ex2_reg_wb_sel == 3'h5; // @[Core.scala 1261:42]
-  wire  _T_56 = ex2_reg_csr_addr == 12'h300; // @[Core.scala 1266:34]
-  wire  _GEN_340 = ex2_reg_csr_addr == 12'h341 ? 1'h0 : _T_56; // @[Core.scala 1264:53]
-  wire  _GEN_352 = ex2_reg_csr_addr == 12'h305 ? 1'h0 : _GEN_340; // @[Core.scala 1262:48]
-  wire  csr_mstatus_mie_fw_en = _if2_inst_cnt_T & ex2_reg_wb_sel == 3'h5 & _GEN_352; // @[Core.scala 1261:54]
-  wire  _csr_wdata_T = ex2_reg_csr_cmd == 2'h1; // @[Core.scala 1256:22]
-  wire  _csr_wdata_T_1 = ex2_reg_csr_cmd == 2'h2; // @[Core.scala 1257:22]
+  wire [5:0] _ex2_reg_wdata_T_1 = 4'h8 * ex1_alu_out[1:0]; // @[Core.scala 1141:53]
+  wire [94:0] _GEN_33 = {{63'd0}, ex1_reg_rs2_data}; // @[Core.scala 1141:45]
+  wire [94:0] _ex2_reg_wdata_T_2 = _GEN_33 << _ex2_reg_wdata_T_1; // @[Core.scala 1141:45]
+  wire  _ex2_reg_div_stall_T_2 = ex2_reg_divrem_state == 3'h0 | ex2_reg_divrem_state == 3'h5; // @[Core.scala 1148:65]
+  wire  _ex2_reg_div_stall_T_3 = ex1_divrem & (ex2_reg_divrem_state == 3'h0 | ex2_reg_divrem_state == 3'h5); // @[Core.scala 1148:19]
+  wire  _GEN_421 = 3'h2 == ex2_reg_divrem_state | 3'h3 == ex2_reg_divrem_state; // @[Core.scala 1398:33 1529:26]
+  wire  _GEN_429 = 3'h1 == ex2_reg_divrem_state | _GEN_421; // @[Core.scala 1398:33 1436:29]
+  wire  ex2_div_stall_next = 3'h0 == ex2_reg_divrem_state ? 1'h0 : _GEN_429; // @[Core.scala 1323:22 1398:33]
+  wire  _ex2_reg_div_stall_T_8 = ex2_reg_divrem & _ex2_reg_div_stall_T_2; // @[Core.scala 1161:23]
+  wire  _T_51 = ~ex2_reg_div_stall; // @[Core.scala 1163:28]
+  wire  _T_55 = ex2_reg_wb_sel == 3'h5; // @[Core.scala 1223:42]
+  wire  _T_59 = ex2_reg_csr_addr == 12'h300; // @[Core.scala 1228:34]
+  wire  _GEN_336 = ex2_reg_csr_addr == 12'h341 ? 1'h0 : _T_59; // @[Core.scala 1226:53]
+  wire  _GEN_348 = ex2_reg_csr_addr == 12'h305 ? 1'h0 : _GEN_336; // @[Core.scala 1224:48]
+  wire  _GEN_360 = _csr_is_valid_inst_T & ex2_reg_wb_sel == 3'h5 & _GEN_348; // @[Core.scala 1223:54]
+  wire  _GEN_370 = csr_is_mret | _GEN_360; // @[Core.scala 1276:28 1279:26]
+  wire  _GEN_378 = csr_is_trap | _GEN_370; // @[Core.scala 1266:28 1272:26]
+  wire  _GEN_386 = csr_is_mtintr | _GEN_378; // @[Core.scala 1256:30 1262:26]
+  wire  csr_mstatus_mie_fw_en = csr_is_meintr | _GEN_386; // @[Core.scala 1246:24 1252:26]
+  wire  _csr_wdata_T = ex2_reg_csr_cmd == 2'h1; // @[Core.scala 1218:22]
+  wire  _csr_wdata_T_1 = ex2_reg_csr_cmd == 2'h2; // @[Core.scala 1219:22]
   wire [31:0] _csr_rdata_T_8 = {20'h0,io_intr,3'h0,mtimer_io_intr,7'h0}; // @[Cat.scala 31:58]
   wire [31:0] _csr_rdata_T_7 = {20'h0,csr_reg_mie_meie,3'h0,csr_reg_mie_mtie,7'h0}; // @[Cat.scala 31:58]
   wire [31:0] _csr_rdata_T_6 = {24'h0,csr_reg_mstatus_mpie,3'h0,csr_reg_mstatus_mie,3'h0}; // @[Cat.scala 31:58]
@@ -2124,86 +2126,97 @@ module Core(
   wire [31:0] _csr_rdata_T_30 = 12'h340 == ex2_reg_csr_addr ? csr_reg_mscratch : _csr_rdata_T_28; // @[Mux.scala 81:58]
   wire [31:0] _csr_rdata_T_32 = 12'h304 == ex2_reg_csr_addr ? _csr_rdata_T_7 : _csr_rdata_T_30; // @[Mux.scala 81:58]
   wire [31:0] csr_rdata = 12'h344 == ex2_reg_csr_addr ? _csr_rdata_T_8 : _csr_rdata_T_32; // @[Mux.scala 81:58]
-  wire [31:0] _csr_wdata_T_2 = csr_rdata | ex2_reg_op1_data; // @[Core.scala 1257:47]
-  wire  _csr_wdata_T_3 = ex2_reg_csr_cmd == 2'h3; // @[Core.scala 1258:22]
-  wire [31:0] _csr_wdata_T_4 = ~ex2_reg_op1_data; // @[Core.scala 1258:49]
-  wire [31:0] _csr_wdata_T_5 = csr_rdata & _csr_wdata_T_4; // @[Core.scala 1258:47]
+  wire [31:0] _csr_wdata_T_2 = csr_rdata | ex2_reg_op1_data; // @[Core.scala 1219:47]
+  wire  _csr_wdata_T_3 = ex2_reg_csr_cmd == 2'h3; // @[Core.scala 1220:22]
+  wire [31:0] _csr_wdata_T_4 = ~ex2_reg_op1_data; // @[Core.scala 1220:49]
+  wire [31:0] _csr_wdata_T_5 = csr_rdata & _csr_wdata_T_4; // @[Core.scala 1220:47]
   wire [31:0] _csr_wdata_T_6 = _csr_wdata_T_3 ? _csr_wdata_T_5 : 32'h0; // @[Mux.scala 101:16]
   wire [31:0] _csr_wdata_T_7 = _csr_wdata_T_1 ? _csr_wdata_T_2 : _csr_wdata_T_6; // @[Mux.scala 101:16]
   wire [31:0] csr_wdata = _csr_wdata_T ? ex2_reg_op1_data : _csr_wdata_T_7; // @[Mux.scala 101:16]
-  wire  _GEN_330 = ex2_reg_csr_addr == 12'h300 & csr_wdata[3]; // @[Core.scala 1266:56 1270:29]
-  wire  _GEN_341 = ex2_reg_csr_addr == 12'h341 ? 1'h0 : _GEN_330; // @[Core.scala 1264:53]
-  wire  _GEN_353 = ex2_reg_csr_addr == 12'h305 ? 1'h0 : _GEN_341; // @[Core.scala 1262:48]
-  wire  csr_mstatus_mie_fw = _if2_inst_cnt_T & ex2_reg_wb_sel == 3'h5 & _GEN_353; // @[Core.scala 1261:54]
-  wire  _csr_reg_is_meintr_T_1 = csr_mstatus_mie_fw_en & csr_mstatus_mie_fw | csr_reg_mstatus_mie; // @[Core.scala 1224:52]
-  wire  _T_58 = ex2_reg_csr_addr == 12'h304; // @[Core.scala 1273:34]
-  wire  _GEN_324 = ex2_reg_csr_addr == 12'h340 ? 1'h0 : _T_58; // @[Core.scala 1271:57]
-  wire  _GEN_334 = ex2_reg_csr_addr == 12'h300 ? 1'h0 : _GEN_324; // @[Core.scala 1266:56]
-  wire  _GEN_345 = ex2_reg_csr_addr == 12'h341 ? 1'h0 : _GEN_334; // @[Core.scala 1264:53]
-  wire  _GEN_357 = ex2_reg_csr_addr == 12'h305 ? 1'h0 : _GEN_345; // @[Core.scala 1262:48]
-  wire  csr_mie_fw_en = _if2_inst_cnt_T & ex2_reg_wb_sel == 3'h5 & _GEN_357; // @[Core.scala 1261:54]
-  wire  _GEN_319 = ex2_reg_csr_addr == 12'h304 & csr_wdata[11]; // @[Core.scala 1273:52 1277:24]
-  wire  _GEN_325 = ex2_reg_csr_addr == 12'h340 ? 1'h0 : _GEN_319; // @[Core.scala 1271:57]
-  wire  _GEN_335 = ex2_reg_csr_addr == 12'h300 ? 1'h0 : _GEN_325; // @[Core.scala 1266:56]
-  wire  _GEN_346 = ex2_reg_csr_addr == 12'h341 ? 1'h0 : _GEN_335; // @[Core.scala 1264:53]
-  wire  _GEN_358 = ex2_reg_csr_addr == 12'h305 ? 1'h0 : _GEN_346; // @[Core.scala 1262:48]
-  wire  csr_mie_meie_fw = _if2_inst_cnt_T & ex2_reg_wb_sel == 3'h5 & _GEN_358; // @[Core.scala 1261:54]
-  wire  _GEN_320 = ex2_reg_csr_addr == 12'h304 & csr_wdata[7]; // @[Core.scala 1273:52 1278:24]
-  wire  _GEN_326 = ex2_reg_csr_addr == 12'h340 ? 1'h0 : _GEN_320; // @[Core.scala 1271:57]
-  wire  _GEN_336 = ex2_reg_csr_addr == 12'h300 ? 1'h0 : _GEN_326; // @[Core.scala 1266:56]
-  wire  _GEN_347 = ex2_reg_csr_addr == 12'h341 ? 1'h0 : _GEN_336; // @[Core.scala 1264:53]
-  wire  _GEN_359 = ex2_reg_csr_addr == 12'h305 ? 1'h0 : _GEN_347; // @[Core.scala 1262:48]
-  wire  csr_mie_mtie_fw = _if2_inst_cnt_T & ex2_reg_wb_sel == 3'h5 & _GEN_359; // @[Core.scala 1261:54]
-  wire  ex2_is_valid_inst = ex2_en & ~csr_is_trap; // @[Core.scala 1235:31]
-  wire  _GEN_316 = ex2_reg_csr_addr == 12'h304 ? csr_wdata[11] : csr_reg_mie_meie; // @[Core.scala 1273:52 1274:24 93:37]
-  wire  _GEN_317 = ex2_reg_csr_addr == 12'h304 ? csr_wdata[7] : csr_reg_mie_mtie; // @[Core.scala 1273:52 1275:24 94:37]
-  wire [31:0] _GEN_321 = ex2_reg_csr_addr == 12'h340 ? csr_wdata : csr_reg_mscratch; // @[Core.scala 1271:57 1272:24 92:37]
-  wire  _GEN_322 = ex2_reg_csr_addr == 12'h340 ? csr_reg_mie_meie : _GEN_316; // @[Core.scala 1271:57 93:37]
-  wire  _GEN_323 = ex2_reg_csr_addr == 12'h340 ? csr_reg_mie_mtie : _GEN_317; // @[Core.scala 1271:57 94:37]
-  wire  _GEN_327 = ex2_reg_csr_addr == 12'h300 ? csr_wdata[3] : csr_reg_mstatus_mie; // @[Core.scala 1266:56 1267:29 90:37]
-  wire  _GEN_328 = ex2_reg_csr_addr == 12'h300 ? csr_wdata[7] : csr_reg_mstatus_mpie; // @[Core.scala 1266:56 1268:29 91:37]
-  wire [31:0] _GEN_331 = ex2_reg_csr_addr == 12'h300 ? csr_reg_mscratch : _GEN_321; // @[Core.scala 1266:56 92:37]
-  wire  _GEN_332 = ex2_reg_csr_addr == 12'h300 ? csr_reg_mie_meie : _GEN_322; // @[Core.scala 1266:56 93:37]
-  wire  _GEN_333 = ex2_reg_csr_addr == 12'h300 ? csr_reg_mie_mtie : _GEN_323; // @[Core.scala 1266:56 94:37]
-  wire [31:0] _GEN_337 = ex2_reg_csr_addr == 12'h341 ? csr_wdata : csr_reg_mepc; // @[Core.scala 1264:53 1265:20 89:37]
-  wire  _GEN_338 = ex2_reg_csr_addr == 12'h341 ? csr_reg_mstatus_mie : _GEN_327; // @[Core.scala 1264:53 90:37]
-  wire  _GEN_339 = ex2_reg_csr_addr == 12'h341 ? csr_reg_mstatus_mpie : _GEN_328; // @[Core.scala 1264:53 91:37]
-  wire [31:0] _GEN_349 = ex2_reg_csr_addr == 12'h305 ? csr_reg_mepc : _GEN_337; // @[Core.scala 1262:48 89:37]
-  wire  _GEN_350 = ex2_reg_csr_addr == 12'h305 ? csr_reg_mstatus_mie : _GEN_338; // @[Core.scala 1262:48 90:37]
-  wire  _GEN_351 = ex2_reg_csr_addr == 12'h305 ? csr_reg_mstatus_mpie : _GEN_339; // @[Core.scala 1262:48 91:37]
-  wire [31:0] _GEN_361 = _if2_inst_cnt_T & ex2_reg_wb_sel == 3'h5 ? _GEN_349 : csr_reg_mepc; // @[Core.scala 1261:54 89:37]
-  wire  _GEN_362 = _if2_inst_cnt_T & ex2_reg_wb_sel == 3'h5 ? _GEN_350 : csr_reg_mstatus_mie; // @[Core.scala 1261:54 90:37]
-  wire  _GEN_363 = _if2_inst_cnt_T & ex2_reg_wb_sel == 3'h5 ? _GEN_351 : csr_reg_mstatus_mpie; // @[Core.scala 1261:54 91:37]
-  wire  _GEN_372 = csr_is_mret | _GEN_363; // @[Core.scala 1308:28 1309:26]
-  wire  _GEN_373 = csr_is_mret ? csr_reg_mstatus_mpie : _GEN_362; // @[Core.scala 1308:28 1310:26]
-  wire  _GEN_380 = csr_is_trap | csr_is_mret; // @[Core.scala 1300:28 1306:26]
-  wire  _GEN_386 = csr_is_mtintr | _GEN_380; // @[Core.scala 1292:30 1298:26]
-  wire  csr_is_br = csr_is_meintr | _GEN_386; // @[Core.scala 1284:24 1290:26]
-  reg [36:0] ex2_reg_dividend; // @[Core.scala 1323:37]
-  reg [35:0] ex2_reg_divisor; // @[Core.scala 1324:37]
-  reg [63:0] ex2_reg_p_divisor; // @[Core.scala 1325:37]
-  reg [4:0] ex2_reg_divrem_count; // @[Core.scala 1326:37]
-  reg [4:0] ex2_reg_rem_shift; // @[Core.scala 1327:37]
-  reg  ex2_reg_extra_shift; // @[Core.scala 1328:37]
-  reg [2:0] ex2_reg_d; // @[Core.scala 1329:37]
-  reg [31:0] ex2_reg_reminder; // @[Core.scala 1330:37]
-  reg [31:0] ex2_reg_quotient; // @[Core.scala 1331:37]
-  wire  _ex2_alu_muldiv_out_T = ex2_reg_exe_fun == 5'h8; // @[Core.scala 1341:22]
-  wire [31:0] _ex2_alu_muldiv_out_T_3 = {ex2_reg_mulhuu[15:0], 16'h0}; // @[Core.scala 1341:106]
-  wire [31:0] _ex2_alu_muldiv_out_T_5 = ex2_reg_mullu[31:0] + _ex2_alu_muldiv_out_T_3; // @[Core.scala 1341:71]
-  wire  _ex2_alu_muldiv_out_T_6 = ex2_reg_exe_fun == 5'h9; // @[Core.scala 1342:22]
+  wire  _GEN_326 = ex2_reg_csr_addr == 12'h300 & csr_wdata[3]; // @[Core.scala 1228:56 1232:29]
+  wire  _GEN_337 = ex2_reg_csr_addr == 12'h341 ? 1'h0 : _GEN_326; // @[Core.scala 1226:53]
+  wire  _GEN_349 = ex2_reg_csr_addr == 12'h305 ? 1'h0 : _GEN_337; // @[Core.scala 1224:48]
+  wire  _GEN_361 = _csr_is_valid_inst_T & ex2_reg_wb_sel == 3'h5 & _GEN_349; // @[Core.scala 1223:54]
+  wire  _GEN_371 = csr_is_mret ? csr_reg_mstatus_mpie : _GEN_361; // @[Core.scala 1276:28 1280:26]
+  wire  _GEN_379 = csr_is_trap ? 1'h0 : _GEN_371; // @[Core.scala 1266:28 1273:26]
+  wire  _GEN_387 = csr_is_mtintr ? 1'h0 : _GEN_379; // @[Core.scala 1256:30 1263:26]
+  wire  csr_mstatus_mie_fw = csr_is_meintr ? 1'h0 : _GEN_387; // @[Core.scala 1246:24 1253:26]
+  wire  _csr_reg_is_meintr_T_3 = csr_mstatus_mie_fw_en & csr_mstatus_mie_fw | ~csr_mstatus_mie_fw_en &
+    csr_reg_mstatus_mie; // @[Core.scala 1182:52]
+  wire  _csr_reg_is_meintr_T_4 = (csr_mstatus_mie_fw_en & csr_mstatus_mie_fw | ~csr_mstatus_mie_fw_en &
+    csr_reg_mstatus_mie) & io_intr; // @[Core.scala 1182:104]
+  wire  _T_61 = ex2_reg_csr_addr == 12'h304; // @[Core.scala 1235:34]
+  wire  _GEN_320 = ex2_reg_csr_addr == 12'h340 ? 1'h0 : _T_61; // @[Core.scala 1233:57]
+  wire  _GEN_330 = ex2_reg_csr_addr == 12'h300 ? 1'h0 : _GEN_320; // @[Core.scala 1228:56]
+  wire  _GEN_341 = ex2_reg_csr_addr == 12'h341 ? 1'h0 : _GEN_330; // @[Core.scala 1226:53]
+  wire  _GEN_353 = ex2_reg_csr_addr == 12'h305 ? 1'h0 : _GEN_341; // @[Core.scala 1224:48]
+  wire  csr_mie_fw_en = _csr_is_valid_inst_T & ex2_reg_wb_sel == 3'h5 & _GEN_353; // @[Core.scala 1223:54]
+  wire  _GEN_315 = ex2_reg_csr_addr == 12'h304 & csr_wdata[11]; // @[Core.scala 1235:52 1239:24]
+  wire  _GEN_321 = ex2_reg_csr_addr == 12'h340 ? 1'h0 : _GEN_315; // @[Core.scala 1233:57]
+  wire  _GEN_331 = ex2_reg_csr_addr == 12'h300 ? 1'h0 : _GEN_321; // @[Core.scala 1228:56]
+  wire  _GEN_342 = ex2_reg_csr_addr == 12'h341 ? 1'h0 : _GEN_331; // @[Core.scala 1226:53]
+  wire  _GEN_354 = ex2_reg_csr_addr == 12'h305 ? 1'h0 : _GEN_342; // @[Core.scala 1224:48]
+  wire  csr_mie_meie_fw = _csr_is_valid_inst_T & ex2_reg_wb_sel == 3'h5 & _GEN_354; // @[Core.scala 1223:54]
+  wire  _csr_reg_is_meintr_T_6 = ~csr_mie_fw_en; // @[Core.scala 1184:47]
+  wire  _csr_reg_is_meintr_T_8 = csr_mie_fw_en & csr_mie_meie_fw | ~csr_mie_fw_en & csr_reg_mie_meie; // @[Core.scala 1184:43]
+  wire  _csr_reg_is_mtintr_T_4 = _csr_reg_is_meintr_T_3 & mtimer_io_intr; // @[Core.scala 1187:104]
+  wire  _GEN_316 = ex2_reg_csr_addr == 12'h304 & csr_wdata[7]; // @[Core.scala 1235:52 1240:24]
+  wire  _GEN_322 = ex2_reg_csr_addr == 12'h340 ? 1'h0 : _GEN_316; // @[Core.scala 1233:57]
+  wire  _GEN_332 = ex2_reg_csr_addr == 12'h300 ? 1'h0 : _GEN_322; // @[Core.scala 1228:56]
+  wire  _GEN_343 = ex2_reg_csr_addr == 12'h341 ? 1'h0 : _GEN_332; // @[Core.scala 1226:53]
+  wire  _GEN_355 = ex2_reg_csr_addr == 12'h305 ? 1'h0 : _GEN_343; // @[Core.scala 1224:48]
+  wire  csr_mie_mtie_fw = _csr_is_valid_inst_T & ex2_reg_wb_sel == 3'h5 & _GEN_355; // @[Core.scala 1223:54]
+  wire  _csr_reg_is_mtintr_T_8 = csr_mie_fw_en & csr_mie_mtie_fw | _csr_reg_is_meintr_T_6 & csr_reg_mie_mtie; // @[Core.scala 1189:43]
+  wire  ex2_is_valid_inst = ex2_en & ~csr_is_trap; // @[Core.scala 1197:31]
+  wire  _GEN_312 = ex2_reg_csr_addr == 12'h304 ? csr_wdata[11] : csr_reg_mie_meie; // @[Core.scala 1235:52 1236:24 97:37]
+  wire  _GEN_313 = ex2_reg_csr_addr == 12'h304 ? csr_wdata[7] : csr_reg_mie_mtie; // @[Core.scala 1235:52 1237:24 98:37]
+  wire [31:0] _GEN_317 = ex2_reg_csr_addr == 12'h340 ? csr_wdata : csr_reg_mscratch; // @[Core.scala 1233:57 1234:24 96:37]
+  wire  _GEN_318 = ex2_reg_csr_addr == 12'h340 ? csr_reg_mie_meie : _GEN_312; // @[Core.scala 1233:57 97:37]
+  wire  _GEN_319 = ex2_reg_csr_addr == 12'h340 ? csr_reg_mie_mtie : _GEN_313; // @[Core.scala 1233:57 98:37]
+  wire  _GEN_323 = ex2_reg_csr_addr == 12'h300 ? csr_wdata[3] : csr_reg_mstatus_mie; // @[Core.scala 1228:56 1229:29 94:37]
+  wire  _GEN_324 = ex2_reg_csr_addr == 12'h300 ? csr_wdata[7] : csr_reg_mstatus_mpie; // @[Core.scala 1228:56 1230:29 95:37]
+  wire [31:0] _GEN_327 = ex2_reg_csr_addr == 12'h300 ? csr_reg_mscratch : _GEN_317; // @[Core.scala 1228:56 96:37]
+  wire  _GEN_328 = ex2_reg_csr_addr == 12'h300 ? csr_reg_mie_meie : _GEN_318; // @[Core.scala 1228:56 97:37]
+  wire  _GEN_329 = ex2_reg_csr_addr == 12'h300 ? csr_reg_mie_mtie : _GEN_319; // @[Core.scala 1228:56 98:37]
+  wire [31:0] _GEN_333 = ex2_reg_csr_addr == 12'h341 ? csr_wdata : csr_reg_mepc; // @[Core.scala 1226:53 1227:20 93:37]
+  wire  _GEN_334 = ex2_reg_csr_addr == 12'h341 ? csr_reg_mstatus_mie : _GEN_323; // @[Core.scala 1226:53 94:37]
+  wire  _GEN_335 = ex2_reg_csr_addr == 12'h341 ? csr_reg_mstatus_mpie : _GEN_324; // @[Core.scala 1226:53 95:37]
+  wire [31:0] _GEN_345 = ex2_reg_csr_addr == 12'h305 ? csr_reg_mepc : _GEN_333; // @[Core.scala 1224:48 93:37]
+  wire  _GEN_346 = ex2_reg_csr_addr == 12'h305 ? csr_reg_mstatus_mie : _GEN_334; // @[Core.scala 1224:48 94:37]
+  wire  _GEN_347 = ex2_reg_csr_addr == 12'h305 ? csr_reg_mstatus_mpie : _GEN_335; // @[Core.scala 1224:48 95:37]
+  wire [31:0] _GEN_357 = _csr_is_valid_inst_T & ex2_reg_wb_sel == 3'h5 ? _GEN_345 : csr_reg_mepc; // @[Core.scala 1223:54 93:37]
+  wire  _GEN_358 = _csr_is_valid_inst_T & ex2_reg_wb_sel == 3'h5 ? _GEN_346 : csr_reg_mstatus_mie; // @[Core.scala 1223:54 94:37]
+  wire  _GEN_359 = _csr_is_valid_inst_T & ex2_reg_wb_sel == 3'h5 ? _GEN_347 : csr_reg_mstatus_mpie; // @[Core.scala 1223:54 95:37]
+  wire  _GEN_368 = csr_is_mret | _GEN_359; // @[Core.scala 1276:28 1277:26]
+  wire  _GEN_369 = csr_is_mret ? csr_reg_mstatus_mpie : _GEN_358; // @[Core.scala 1276:28 1278:26]
+  wire  _GEN_380 = csr_is_trap | csr_is_mret; // @[Core.scala 1266:28 1274:26]
+  wire  _GEN_388 = csr_is_mtintr | _GEN_380; // @[Core.scala 1256:30 1264:26]
+  wire  csr_is_br = csr_is_meintr | _GEN_388; // @[Core.scala 1246:24 1254:26]
+  reg [36:0] ex2_reg_dividend; // @[Core.scala 1293:37]
+  reg [35:0] ex2_reg_divisor; // @[Core.scala 1294:37]
+  reg [63:0] ex2_reg_p_divisor; // @[Core.scala 1295:37]
+  reg [4:0] ex2_reg_divrem_count; // @[Core.scala 1296:37]
+  reg [4:0] ex2_reg_rem_shift; // @[Core.scala 1297:37]
+  reg  ex2_reg_extra_shift; // @[Core.scala 1298:37]
+  reg [2:0] ex2_reg_d; // @[Core.scala 1299:37]
+  reg [31:0] ex2_reg_reminder; // @[Core.scala 1300:37]
+  reg [31:0] ex2_reg_quotient; // @[Core.scala 1301:37]
+  wire  _ex2_alu_muldiv_out_T = ex2_reg_exe_fun == 5'h8; // @[Core.scala 1311:22]
+  wire [31:0] _ex2_alu_muldiv_out_T_3 = {ex2_reg_mulhuu[15:0], 16'h0}; // @[Core.scala 1311:106]
+  wire [31:0] _ex2_alu_muldiv_out_T_5 = ex2_reg_mullu[31:0] + _ex2_alu_muldiv_out_T_3; // @[Core.scala 1311:71]
+  wire  _ex2_alu_muldiv_out_T_6 = ex2_reg_exe_fun == 5'h9; // @[Core.scala 1312:22]
   wire [15:0] _ex2_alu_muldiv_out_T_9 = ex2_reg_mulls[31] ? 16'hffff : 16'h0; // @[Bitwise.scala 74:12]
-  wire [47:0] _ex2_alu_muldiv_out_T_12 = {_ex2_alu_muldiv_out_T_9,ex2_reg_mulls}; // @[Core.scala 1334:71]
-  wire [47:0] _ex2_alu_muldiv_out_T_15 = $signed(_ex2_alu_muldiv_out_T_12) + $signed(ex2_reg_mulhss); // @[Core.scala 1342:80]
-  wire  _ex2_alu_muldiv_out_T_17 = ex2_reg_exe_fun == 5'ha; // @[Core.scala 1343:22]
-  wire [47:0] _ex2_alu_muldiv_out_T_21 = {16'h0,ex2_reg_mullu[47:16]}; // @[Core.scala 1337:35]
-  wire [47:0] _ex2_alu_muldiv_out_T_23 = _ex2_alu_muldiv_out_T_21 + ex2_reg_mulhuu; // @[Core.scala 1343:108]
-  wire  _ex2_alu_muldiv_out_T_25 = ex2_reg_exe_fun == 5'hb; // @[Core.scala 1344:22]
-  wire [47:0] _ex2_alu_muldiv_out_T_34 = $signed(_ex2_alu_muldiv_out_T_12) + $signed(ex2_reg_mulhsu); // @[Core.scala 1344:80]
-  wire  _ex2_alu_muldiv_out_T_36 = ex2_reg_exe_fun == 5'hc; // @[Core.scala 1345:22]
-  wire  _ex2_alu_muldiv_out_T_37 = ex2_reg_exe_fun == 5'he; // @[Core.scala 1346:22]
-  wire  _ex2_alu_muldiv_out_T_38 = ex2_reg_exe_fun == 5'hd; // @[Core.scala 1347:22]
-  wire  _ex2_alu_muldiv_out_T_39 = ex2_reg_exe_fun == 5'hf; // @[Core.scala 1348:22]
+  wire [47:0] _ex2_alu_muldiv_out_T_12 = {_ex2_alu_muldiv_out_T_9,ex2_reg_mulls}; // @[Core.scala 1304:71]
+  wire [47:0] _ex2_alu_muldiv_out_T_15 = $signed(_ex2_alu_muldiv_out_T_12) + $signed(ex2_reg_mulhss); // @[Core.scala 1312:80]
+  wire  _ex2_alu_muldiv_out_T_17 = ex2_reg_exe_fun == 5'ha; // @[Core.scala 1313:22]
+  wire [47:0] _ex2_alu_muldiv_out_T_21 = {16'h0,ex2_reg_mullu[47:16]}; // @[Core.scala 1307:35]
+  wire [47:0] _ex2_alu_muldiv_out_T_23 = _ex2_alu_muldiv_out_T_21 + ex2_reg_mulhuu; // @[Core.scala 1313:108]
+  wire  _ex2_alu_muldiv_out_T_25 = ex2_reg_exe_fun == 5'hb; // @[Core.scala 1314:22]
+  wire [47:0] _ex2_alu_muldiv_out_T_34 = $signed(_ex2_alu_muldiv_out_T_12) + $signed(ex2_reg_mulhsu); // @[Core.scala 1314:80]
+  wire  _ex2_alu_muldiv_out_T_36 = ex2_reg_exe_fun == 5'hc; // @[Core.scala 1315:22]
+  wire  _ex2_alu_muldiv_out_T_37 = ex2_reg_exe_fun == 5'he; // @[Core.scala 1316:22]
+  wire  _ex2_alu_muldiv_out_T_38 = ex2_reg_exe_fun == 5'hd; // @[Core.scala 1317:22]
+  wire  _ex2_alu_muldiv_out_T_39 = ex2_reg_exe_fun == 5'hf; // @[Core.scala 1318:22]
   wire [31:0] _ex2_alu_muldiv_out_T_40 = _ex2_alu_muldiv_out_T_39 ? ex2_reg_reminder : 32'h0; // @[Mux.scala 101:16]
   wire [31:0] _ex2_alu_muldiv_out_T_41 = _ex2_alu_muldiv_out_T_38 ? ex2_reg_reminder : _ex2_alu_muldiv_out_T_40; // @[Mux.scala 101:16]
   wire [31:0] _ex2_alu_muldiv_out_T_42 = _ex2_alu_muldiv_out_T_37 ? ex2_reg_quotient : _ex2_alu_muldiv_out_T_41; // @[Mux.scala 101:16]
@@ -2215,18 +2228,18 @@ module Core(
   wire [31:0] _ex2_alu_muldiv_out_T_46 = _ex2_alu_muldiv_out_T_6 ? _ex2_alu_muldiv_out_T_15[47:16] :
     _ex2_alu_muldiv_out_T_45; // @[Mux.scala 101:16]
   wire [31:0] ex2_alu_muldiv_out = _ex2_alu_muldiv_out_T ? _ex2_alu_muldiv_out_T_5 : _ex2_alu_muldiv_out_T_46; // @[Mux.scala 101:16]
-  wire [1:0] _GEN_394 = ex2_reg_init_divisor[31:2] == 30'h0 ? 2'h2 : 2'h1; // @[Core.scala 1431:60 1432:32 1434:32]
-  wire [36:0] _ex2_reg_dividend_T = ex2_reg_init_dividend; // @[Core.scala 1438:59]
+  wire [1:0] _GEN_398 = ex2_reg_init_divisor[31:2] == 30'h0 ? 2'h2 : 2'h1; // @[Core.scala 1401:60 1402:32 1404:32]
+  wire [36:0] _ex2_reg_dividend_T = ex2_reg_init_dividend; // @[Core.scala 1408:59]
   wire [35:0] _ex2_reg_divisor_T_1 = {ex2_reg_init_divisor[3:0],32'h0}; // @[Cat.scala 31:58]
   wire [63:0] _ex2_reg_p_divisor_T = {ex2_reg_init_divisor,32'h0}; // @[Cat.scala 31:58]
   wire [2:0] _ex2_reg_d_T_1 = {ex2_reg_init_divisor[0],2'h0}; // @[Cat.scala 31:58]
-  wire [4:0] _ex2_reg_divrem_count_T_1 = ex2_reg_divrem_count + 5'h1; // @[Core.scala 1458:52]
-  wire  _p_T_1 = ~ex2_reg_dividend[36]; // @[Core.scala 1470:42]
-  wire [4:0] _p_T_4 = ~ex2_reg_dividend[35:31]; // @[Core.scala 1472:11]
-  wire [4:0] _p_T_5 = ~ex2_reg_dividend[36] ? ex2_reg_dividend[35:31] : _p_T_4; // @[Core.scala 1470:12]
-  wire [4:0] _p_T_10 = ~ex2_reg_dividend[34:30]; // @[Core.scala 1476:11]
-  wire [4:0] _p_T_11 = _p_T_1 ? ex2_reg_dividend[34:30] : _p_T_10; // @[Core.scala 1474:12]
-  wire [4:0] p = ex2_reg_extra_shift ? _p_T_5 : _p_T_11; // @[Core.scala 1469:18]
+  wire [4:0] _ex2_reg_divrem_count_T_1 = ex2_reg_divrem_count + 5'h1; // @[Core.scala 1428:52]
+  wire  _p_T_1 = ~ex2_reg_dividend[36]; // @[Core.scala 1440:42]
+  wire [4:0] _p_T_4 = ~ex2_reg_dividend[35:31]; // @[Core.scala 1442:11]
+  wire [4:0] _p_T_5 = ~ex2_reg_dividend[36] ? ex2_reg_dividend[35:31] : _p_T_4; // @[Core.scala 1440:12]
+  wire [4:0] _p_T_10 = ~ex2_reg_dividend[34:30]; // @[Core.scala 1446:11]
+  wire [4:0] _p_T_11 = _p_T_1 ? ex2_reg_dividend[34:30] : _p_T_10; // @[Core.scala 1444:12]
+  wire [4:0] p = ex2_reg_extra_shift ? _p_T_5 : _p_T_11; // @[Core.scala 1439:18]
   wire [1:0] _ex2_q_T_5 = 5'h2 == p ? 2'h1 : 2'h0; // @[Mux.scala 81:58]
   wire [1:0] _ex2_q_T_7 = 5'h3 == p ? 2'h1 : _ex2_q_T_5; // @[Mux.scala 81:58]
   wire [1:0] _ex2_q_T_9 = 5'h4 == p ? 2'h1 : _ex2_q_T_7; // @[Mux.scala 81:58]
@@ -2289,116 +2302,114 @@ module Core(
   wire [1:0] _ex2_q_T_285 = 3'h5 == ex2_reg_d ? _ex2_q_T_191 : _ex2_q_T_283; // @[Mux.scala 81:58]
   wire [1:0] _ex2_q_T_287 = 3'h6 == ex2_reg_d ? _ex2_q_T_191 : _ex2_q_T_285; // @[Mux.scala 81:58]
   wire [1:0] ex2_q = 3'h7 == ex2_reg_d ? _ex2_q_T_275 : _ex2_q_T_287; // @[Mux.scala 81:58]
-  wire [38:0] _ex2_reg_dividend_T_1 = {$signed(ex2_reg_dividend), 2'h0}; // @[Core.scala 1536:54]
-  wire [36:0] _ex2_reg_dividend_T_5 = {1'h0,ex2_reg_divisor}; // @[Core.scala 1537:91]
-  wire [36:0] _ex2_reg_dividend_T_8 = $signed(ex2_reg_dividend) - $signed(_ex2_reg_dividend_T_5); // @[Core.scala 1537:52]
-  wire [38:0] _ex2_reg_dividend_T_9 = {$signed(_ex2_reg_dividend_T_8), 2'h0}; // @[Core.scala 1537:95]
-  wire [36:0] _ex2_reg_dividend_T_13 = {ex2_reg_divisor,1'h0}; // @[Core.scala 1538:91]
-  wire [36:0] _ex2_reg_dividend_T_16 = $signed(ex2_reg_dividend) - $signed(_ex2_reg_dividend_T_13); // @[Core.scala 1538:52]
-  wire [38:0] _ex2_reg_dividend_T_17 = {$signed(_ex2_reg_dividend_T_16), 2'h0}; // @[Core.scala 1538:95]
+  wire [38:0] _ex2_reg_dividend_T_1 = {$signed(ex2_reg_dividend), 2'h0}; // @[Core.scala 1506:54]
+  wire [36:0] _ex2_reg_dividend_T_5 = {1'h0,ex2_reg_divisor}; // @[Core.scala 1507:91]
+  wire [36:0] _ex2_reg_dividend_T_8 = $signed(ex2_reg_dividend) - $signed(_ex2_reg_dividend_T_5); // @[Core.scala 1507:52]
+  wire [38:0] _ex2_reg_dividend_T_9 = {$signed(_ex2_reg_dividend_T_8), 2'h0}; // @[Core.scala 1507:95]
+  wire [36:0] _ex2_reg_dividend_T_13 = {ex2_reg_divisor,1'h0}; // @[Core.scala 1508:91]
+  wire [36:0] _ex2_reg_dividend_T_16 = $signed(ex2_reg_dividend) - $signed(_ex2_reg_dividend_T_13); // @[Core.scala 1508:52]
+  wire [38:0] _ex2_reg_dividend_T_17 = {$signed(_ex2_reg_dividend_T_16), 2'h0}; // @[Core.scala 1508:95]
   wire [38:0] _ex2_reg_dividend_T_18 = ex2_q[1] ? $signed(_ex2_reg_dividend_T_17) : $signed(_ex2_reg_dividend_T_1); // @[Mux.scala 101:16]
   wire [38:0] _ex2_reg_dividend_T_19 = ex2_q[0] ? $signed(_ex2_reg_dividend_T_9) : $signed(_ex2_reg_dividend_T_18); // @[Mux.scala 101:16]
-  wire [33:0] _ex2_reg_quotient_T = {ex2_reg_quotient, 2'h0}; // @[Core.scala 1540:54]
-  wire [33:0] _ex2_reg_quotient_T_5 = _ex2_reg_quotient_T + 34'h1; // @[Core.scala 1541:58]
-  wire [33:0] _ex2_reg_quotient_T_10 = _ex2_reg_quotient_T + 34'h2; // @[Core.scala 1542:58]
+  wire [33:0] _ex2_reg_quotient_T = {ex2_reg_quotient, 2'h0}; // @[Core.scala 1510:54]
+  wire [33:0] _ex2_reg_quotient_T_5 = _ex2_reg_quotient_T + 34'h1; // @[Core.scala 1511:58]
+  wire [33:0] _ex2_reg_quotient_T_10 = _ex2_reg_quotient_T + 34'h2; // @[Core.scala 1512:58]
   wire [33:0] _ex2_reg_quotient_T_11 = ex2_q[1] ? _ex2_reg_quotient_T_10 : _ex2_reg_quotient_T; // @[Mux.scala 101:16]
   wire [33:0] _ex2_reg_quotient_T_12 = ex2_q[0] ? _ex2_reg_quotient_T_5 : _ex2_reg_quotient_T_11; // @[Mux.scala 101:16]
-  wire [36:0] _ex2_reg_dividend_T_27 = $signed(ex2_reg_dividend) + $signed(_ex2_reg_dividend_T_5); // @[Core.scala 1546:52]
-  wire [38:0] _ex2_reg_dividend_T_28 = {$signed(_ex2_reg_dividend_T_27), 2'h0}; // @[Core.scala 1546:95]
-  wire [36:0] _ex2_reg_dividend_T_35 = $signed(ex2_reg_dividend) + $signed(_ex2_reg_dividend_T_13); // @[Core.scala 1547:52]
-  wire [38:0] _ex2_reg_dividend_T_36 = {$signed(_ex2_reg_dividend_T_35), 2'h0}; // @[Core.scala 1547:95]
+  wire [36:0] _ex2_reg_dividend_T_27 = $signed(ex2_reg_dividend) + $signed(_ex2_reg_dividend_T_5); // @[Core.scala 1516:52]
+  wire [38:0] _ex2_reg_dividend_T_28 = {$signed(_ex2_reg_dividend_T_27), 2'h0}; // @[Core.scala 1516:95]
+  wire [36:0] _ex2_reg_dividend_T_35 = $signed(ex2_reg_dividend) + $signed(_ex2_reg_dividend_T_13); // @[Core.scala 1517:52]
+  wire [38:0] _ex2_reg_dividend_T_36 = {$signed(_ex2_reg_dividend_T_35), 2'h0}; // @[Core.scala 1517:95]
   wire [38:0] _ex2_reg_dividend_T_37 = ex2_q[1] ? $signed(_ex2_reg_dividend_T_36) : $signed(_ex2_reg_dividend_T_1); // @[Mux.scala 101:16]
   wire [38:0] _ex2_reg_dividend_T_38 = ex2_q[0] ? $signed(_ex2_reg_dividend_T_28) : $signed(_ex2_reg_dividend_T_37); // @[Mux.scala 101:16]
-  wire [33:0] _ex2_reg_quotient_T_18 = _ex2_reg_quotient_T - 34'h1; // @[Core.scala 1550:58]
-  wire [33:0] _ex2_reg_quotient_T_23 = _ex2_reg_quotient_T - 34'h2; // @[Core.scala 1551:58]
+  wire [33:0] _ex2_reg_quotient_T_18 = _ex2_reg_quotient_T - 34'h1; // @[Core.scala 1520:58]
+  wire [33:0] _ex2_reg_quotient_T_23 = _ex2_reg_quotient_T - 34'h2; // @[Core.scala 1521:58]
   wire [33:0] _ex2_reg_quotient_T_24 = ex2_q[1] ? _ex2_reg_quotient_T_23 : _ex2_reg_quotient_T; // @[Mux.scala 101:16]
   wire [33:0] _ex2_reg_quotient_T_25 = ex2_q[0] ? _ex2_reg_quotient_T_18 : _ex2_reg_quotient_T_24; // @[Mux.scala 101:16]
-  wire [38:0] _GEN_401 = _p_T_1 ? $signed(_ex2_reg_dividend_T_19) : $signed(_ex2_reg_dividend_T_38); // @[Core.scala 1535:51 1536:26 1545:26]
-  wire [33:0] _GEN_402 = _p_T_1 ? _ex2_reg_quotient_T_12 : _ex2_reg_quotient_T_25; // @[Core.scala 1535:51 1540:26 1549:26]
-  wire [4:0] _ex2_reg_rem_shift_T_1 = ex2_reg_rem_shift + 5'h1; // @[Core.scala 1554:46]
-  wire [2:0] _GEN_403 = ex2_reg_divrem_count == 5'h10 ? 3'h3 : ex2_reg_divrem_state; // @[Core.scala 1556:44 1557:30 270:37]
+  wire [38:0] _GEN_405 = _p_T_1 ? $signed(_ex2_reg_dividend_T_19) : $signed(_ex2_reg_dividend_T_38); // @[Core.scala 1505:51 1506:26 1515:26]
+  wire [33:0] _GEN_406 = _p_T_1 ? _ex2_reg_quotient_T_12 : _ex2_reg_quotient_T_25; // @[Core.scala 1505:51 1510:26 1519:26]
+  wire [4:0] _ex2_reg_rem_shift_T_1 = ex2_reg_rem_shift + 5'h1; // @[Core.scala 1524:46]
+  wire [2:0] _GEN_407 = ex2_reg_divrem_count == 5'h10 ? 3'h3 : ex2_reg_divrem_state; // @[Core.scala 1526:44 1527:30 265:37]
   wire [5:0] _ex2_reg_reminder_T = {ex2_reg_rem_shift,1'h0}; // @[Cat.scala 31:58]
-  wire [36:0] _ex2_reg_reminder_T_1 = $signed(ex2_reg_dividend) >>> _ex2_reg_reminder_T; // @[Core.scala 1562:45]
-  wire [31:0] _reminder_T_4 = ex2_reg_reminder + ex2_reg_init_divisor; // @[Core.scala 1568:26]
-  wire [31:0] reminder = ex2_reg_dividend[36] ? _reminder_T_4 : ex2_reg_reminder; // @[Core.scala 1567:25]
-  wire [31:0] _ex2_reg_reminder_T_4 = ~reminder; // @[Core.scala 1575:11]
-  wire [31:0] _ex2_reg_reminder_T_6 = _ex2_reg_reminder_T_4 + 32'h1; // @[Core.scala 1575:21]
-  wire [31:0] _ex2_reg_reminder_T_7 = ~ex2_reg_sign_op1 ? reminder : _ex2_reg_reminder_T_6; // @[Core.scala 1573:12]
-  wire [31:0] _ex2_reg_reminder_T_8 = ex2_reg_zero_op2 ? ex2_reg_orig_dividend : _ex2_reg_reminder_T_7; // @[Core.scala 1571:30]
-  wire [31:0] _quotient_T_3 = ex2_reg_quotient - 32'h1; // @[Core.scala 1579:26]
-  wire [31:0] quotient = ex2_reg_dividend[36] ? _quotient_T_3 : ex2_reg_quotient; // @[Core.scala 1578:25]
-  wire [31:0] _ex2_reg_quotient_T_27 = ~quotient; // @[Core.scala 1586:11]
-  wire [31:0] _ex2_reg_quotient_T_29 = _ex2_reg_quotient_T_27 + 32'h1; // @[Core.scala 1586:21]
-  wire [31:0] _ex2_reg_quotient_T_30 = ~ex2_reg_sign_op12 ? quotient : _ex2_reg_quotient_T_29; // @[Core.scala 1584:12]
-  wire [31:0] _ex2_reg_quotient_T_31 = ex2_reg_zero_op2 ? 32'hffffffff : _ex2_reg_quotient_T_30; // @[Core.scala 1582:30]
-  wire [2:0] _GEN_404 = 3'h5 == ex2_reg_divrem_state ? 3'h0 : ex2_reg_divrem_state; // @[Core.scala 1428:33 1593:28 270:37]
-  wire [31:0] _GEN_405 = 3'h4 == ex2_reg_divrem_state ? _ex2_reg_reminder_T_8 : ex2_reg_reminder; // @[Core.scala 1428:33 1571:24 1330:37]
-  wire [31:0] _GEN_406 = 3'h4 == ex2_reg_divrem_state ? _ex2_reg_quotient_T_31 : ex2_reg_quotient; // @[Core.scala 1428:33 1582:24 1331:37]
-  wire [2:0] _GEN_407 = 3'h4 == ex2_reg_divrem_state ? 3'h5 : _GEN_404; // @[Core.scala 1428:33 1589:28]
-  wire [31:0] _GEN_408 = 3'h3 == ex2_reg_divrem_state ? _ex2_reg_reminder_T_1[31:0] : _GEN_405; // @[Core.scala 1428:33 1562:24]
-  wire [2:0] _GEN_409 = 3'h3 == ex2_reg_divrem_state ? 3'h4 : _GEN_407; // @[Core.scala 1428:33 1563:28]
-  wire [31:0] _GEN_411 = 3'h3 == ex2_reg_divrem_state ? ex2_reg_quotient : _GEN_406; // @[Core.scala 1428:33 1331:37]
-  wire [38:0] _GEN_412 = 3'h2 == ex2_reg_divrem_state ? $signed(_GEN_401) : $signed({{2{ex2_reg_dividend[36]}},
-    ex2_reg_dividend}); // @[Core.scala 1428:33 1323:37]
-  wire [33:0] _GEN_413 = 3'h2 == ex2_reg_divrem_state ? _GEN_402 : {{2'd0}, _GEN_411}; // @[Core.scala 1428:33]
-  wire [38:0] _GEN_426 = 3'h1 == ex2_reg_divrem_state ? $signed({{2{ex2_reg_dividend[36]}},ex2_reg_dividend}) : $signed(
-    _GEN_412); // @[Core.scala 1428:33 1323:37]
-  wire [33:0] _GEN_427 = 3'h1 == ex2_reg_divrem_state ? {{2'd0}, ex2_reg_quotient} : _GEN_413; // @[Core.scala 1428:33 1331:37]
-  wire [38:0] _GEN_431 = 3'h0 == ex2_reg_divrem_state ? $signed({{2{_ex2_reg_dividend_T[36]}},_ex2_reg_dividend_T}) :
-    $signed(_GEN_426); // @[Core.scala 1428:33 1438:28]
-  wire [33:0] _GEN_436 = 3'h0 == ex2_reg_divrem_state ? 34'h0 : _GEN_427; // @[Core.scala 1428:33 1443:28]
-  wire  _ex2_wb_data_T_4 = ex2_reg_wb_sel == 3'h3; // @[Core.scala 1611:23]
-  wire  _ex2_wb_data_T_5 = _T_52 | _ex2_wb_data_T_4; // @[Core.scala 1610:35]
-  wire  _ex2_wb_data_T_6 = ex2_reg_wb_sel == 3'h4; // @[Core.scala 1613:21]
+  wire [36:0] _ex2_reg_reminder_T_1 = $signed(ex2_reg_dividend) >>> _ex2_reg_reminder_T; // @[Core.scala 1532:45]
+  wire [31:0] _reminder_T_4 = ex2_reg_reminder + ex2_reg_init_divisor; // @[Core.scala 1538:26]
+  wire [31:0] reminder = ex2_reg_dividend[36] ? _reminder_T_4 : ex2_reg_reminder; // @[Core.scala 1537:25]
+  wire [31:0] _ex2_reg_reminder_T_4 = ~reminder; // @[Core.scala 1545:11]
+  wire [31:0] _ex2_reg_reminder_T_6 = _ex2_reg_reminder_T_4 + 32'h1; // @[Core.scala 1545:21]
+  wire [31:0] _ex2_reg_reminder_T_7 = ~ex2_reg_sign_op1 ? reminder : _ex2_reg_reminder_T_6; // @[Core.scala 1543:12]
+  wire [31:0] _ex2_reg_reminder_T_8 = ex2_reg_zero_op2 ? ex2_reg_orig_dividend : _ex2_reg_reminder_T_7; // @[Core.scala 1541:30]
+  wire [31:0] _quotient_T_3 = ex2_reg_quotient - 32'h1; // @[Core.scala 1549:26]
+  wire [31:0] quotient = ex2_reg_dividend[36] ? _quotient_T_3 : ex2_reg_quotient; // @[Core.scala 1548:25]
+  wire [31:0] _ex2_reg_quotient_T_27 = ~quotient; // @[Core.scala 1556:11]
+  wire [31:0] _ex2_reg_quotient_T_29 = _ex2_reg_quotient_T_27 + 32'h1; // @[Core.scala 1556:21]
+  wire [31:0] _ex2_reg_quotient_T_30 = ~ex2_reg_sign_op12 ? quotient : _ex2_reg_quotient_T_29; // @[Core.scala 1554:12]
+  wire [31:0] _ex2_reg_quotient_T_31 = ex2_reg_zero_op2 ? 32'hffffffff : _ex2_reg_quotient_T_30; // @[Core.scala 1552:30]
+  wire [2:0] _GEN_408 = 3'h5 == ex2_reg_divrem_state ? 3'h0 : ex2_reg_divrem_state; // @[Core.scala 1398:33 1563:28 265:37]
+  wire [31:0] _GEN_409 = 3'h4 == ex2_reg_divrem_state ? _ex2_reg_reminder_T_8 : ex2_reg_reminder; // @[Core.scala 1398:33 1541:24 1300:37]
+  wire [31:0] _GEN_410 = 3'h4 == ex2_reg_divrem_state ? _ex2_reg_quotient_T_31 : ex2_reg_quotient; // @[Core.scala 1398:33 1552:24 1301:37]
+  wire [2:0] _GEN_411 = 3'h4 == ex2_reg_divrem_state ? 3'h5 : _GEN_408; // @[Core.scala 1398:33 1559:28]
+  wire [31:0] _GEN_412 = 3'h3 == ex2_reg_divrem_state ? _ex2_reg_reminder_T_1[31:0] : _GEN_409; // @[Core.scala 1398:33 1532:24]
+  wire [2:0] _GEN_413 = 3'h3 == ex2_reg_divrem_state ? 3'h4 : _GEN_411; // @[Core.scala 1398:33 1533:28]
+  wire [31:0] _GEN_415 = 3'h3 == ex2_reg_divrem_state ? ex2_reg_quotient : _GEN_410; // @[Core.scala 1398:33 1301:37]
+  wire [38:0] _GEN_416 = 3'h2 == ex2_reg_divrem_state ? $signed(_GEN_405) : $signed({{2{ex2_reg_dividend[36]}},
+    ex2_reg_dividend}); // @[Core.scala 1398:33 1293:37]
+  wire [33:0] _GEN_417 = 3'h2 == ex2_reg_divrem_state ? _GEN_406 : {{2'd0}, _GEN_415}; // @[Core.scala 1398:33]
+  wire [38:0] _GEN_430 = 3'h1 == ex2_reg_divrem_state ? $signed({{2{ex2_reg_dividend[36]}},ex2_reg_dividend}) : $signed(
+    _GEN_416); // @[Core.scala 1398:33 1293:37]
+  wire [33:0] _GEN_431 = 3'h1 == ex2_reg_divrem_state ? {{2'd0}, ex2_reg_quotient} : _GEN_417; // @[Core.scala 1398:33 1301:37]
+  wire [38:0] _GEN_435 = 3'h0 == ex2_reg_divrem_state ? $signed({{2{_ex2_reg_dividend_T[36]}},_ex2_reg_dividend_T}) :
+    $signed(_GEN_430); // @[Core.scala 1398:33 1408:28]
+  wire [33:0] _GEN_440 = 3'h0 == ex2_reg_divrem_state ? 34'h0 : _GEN_431; // @[Core.scala 1398:33 1413:28]
+  wire  _ex2_wb_data_T_4 = ex2_reg_wb_sel == 3'h3; // @[Core.scala 1581:23]
+  wire  _ex2_wb_data_T_5 = _T_55 | _ex2_wb_data_T_4; // @[Core.scala 1580:35]
+  wire  _ex2_wb_data_T_6 = ex2_reg_wb_sel == 3'h4; // @[Core.scala 1583:21]
   wire [31:0] _ex2_wb_data_T_7 = _ex2_wb_data_T_6 ? ex2_alu_muldiv_out : ex2_reg_alu_out; // @[Mux.scala 101:16]
   wire [31:0] _ex2_wb_data_T_8 = _ex2_wb_data_T_5 ? csr_rdata : _ex2_wb_data_T_7; // @[Mux.scala 101:16]
   wire [31:0] ex2_wb_data = _ex2_fw_data_T_2 ? ex2_reg_pc_bit_out : _ex2_wb_data_T_8; // @[Mux.scala 101:16]
-  wire  _T_88 = ~ex2_reg_div_stall; // @[Core.scala 1624:34]
-  wire  _ex2_reg_is_retired_T_4 = ex2_reg_wb_sel != 3'h6 & ex2_reg_wb_sel != 3'h2; // @[Core.scala 1628:86]
-  wire  _T_93 = ex2_en & _T_24 & ex2_reg_rf_wen; // @[Core.scala 1630:30]
-  wire  _mem1_reg_mem_wstrb_T = ex1_reg_mem_w == 3'h5; // @[Core.scala 1640:22]
-  wire  _mem1_reg_mem_wstrb_T_1 = ex1_reg_mem_w == 3'h4; // @[Core.scala 1641:22]
+  wire  _T_96 = ex2_en & _T_51 & ex2_reg_rf_wen; // @[Core.scala 1600:38]
+  wire  _mem1_reg_mem_wstrb_T = ex1_reg_mem_w == 3'h5; // @[Core.scala 1610:22]
+  wire  _mem1_reg_mem_wstrb_T_1 = ex1_reg_mem_w == 3'h4; // @[Core.scala 1611:22]
   wire [3:0] _mem1_reg_mem_wstrb_T_2 = _mem1_reg_mem_wstrb_T_1 ? 4'h3 : 4'hf; // @[Mux.scala 101:16]
   wire [3:0] _mem1_reg_mem_wstrb_T_3 = _mem1_reg_mem_wstrb_T ? 4'h1 : _mem1_reg_mem_wstrb_T_2; // @[Mux.scala 101:16]
-  wire [6:0] _GEN_45 = {{3'd0}, _mem1_reg_mem_wstrb_T_3}; // @[Core.scala 1643:8]
-  wire [6:0] _mem1_reg_mem_wstrb_T_5 = _GEN_45 << ex1_alu_out[1:0]; // @[Core.scala 1643:8]
-  wire  mem1_is_dram = ex1_alu_out[31:28] == 4'h2; // @[Core.scala 1646:70]
-  wire  _mem1_reg_is_mem_load_T = ~mem1_is_dram; // @[Core.scala 1648:31]
-  wire  _mem1_reg_is_mem_load_T_1 = ex1_reg_wb_sel == 3'h6; // @[Core.scala 1648:64]
-  wire  _mem1_reg_is_mem_store_T_1 = ex1_reg_wb_sel == 3'h2; // @[Core.scala 1649:64]
-  wire  _mem1_reg_is_dram_fence_T = ex1_reg_wb_sel == 3'h3; // @[Core.scala 1652:47]
-  wire  mem1_is_valid_inst = mem1_reg_is_valid_inst & ex2_en; // @[Core.scala 1664:51]
-  wire  _mem1_mem_stall_delay_T_1 = ~mem1_mem_stall; // @[Core.scala 1679:65]
-  wire  _T_99 = ~mem2_dram_stall; // @[Core.scala 1692:9]
-  wire  _mem2_reg_is_valid_load_T_2 = ~mem1_dram_stall; // @[Core.scala 1697:74]
-  wire  _mem2_reg_is_valid_load_T_3 = ~mem1_dram_stall & mem1_is_dram_load; // @[Core.scala 1697:91]
-  wire  _mem2_reg_mem_use_reg_T_2 = _mem1_mem_stall_delay_T_1 & _mem2_reg_is_valid_load_T_2; // @[Core.scala 1698:48]
-  wire [5:0] _mem3_wb_rdata_T = 4'h8 * mem3_reg_wb_byte_offset; // @[Core.scala 1726:51]
-  wire [31:0] mem3_wb_rdata = mem3_reg_dmem_rdata >> _mem3_wb_rdata_T; // @[Core.scala 1726:43]
-  wire  _mem3_wb_data_load_T = mem3_reg_mem_w == 3'h5; // @[Core.scala 1728:21]
+  wire [6:0] _GEN_45 = {{3'd0}, _mem1_reg_mem_wstrb_T_3}; // @[Core.scala 1613:8]
+  wire [6:0] _mem1_reg_mem_wstrb_T_5 = _GEN_45 << ex1_alu_out[1:0]; // @[Core.scala 1613:8]
+  wire  mem1_is_dram = ex1_alu_out[31:28] == 4'h2; // @[Core.scala 1616:70]
+  wire  _mem1_reg_is_mem_load_T = ~mem1_is_dram; // @[Core.scala 1618:31]
+  wire  _mem1_reg_is_mem_load_T_1 = ex1_reg_wb_sel == 3'h6; // @[Core.scala 1618:64]
+  wire  _mem1_reg_is_mem_store_T_1 = ex1_reg_wb_sel == 3'h2; // @[Core.scala 1619:64]
+  wire  _mem1_reg_is_dram_fence_T = ex1_reg_wb_sel == 3'h3; // @[Core.scala 1622:47]
+  wire  mem1_is_valid_inst = mem1_reg_is_valid_inst & ex2_en; // @[Core.scala 1634:51]
+  wire  _mem1_mem_stall_delay_T_1 = ~mem1_mem_stall; // @[Core.scala 1649:65]
+  wire  _T_99 = ~mem2_dram_stall; // @[Core.scala 1662:9]
+  wire  _mem2_reg_is_valid_load_T_2 = ~mem1_dram_stall; // @[Core.scala 1667:74]
+  wire  _mem2_reg_is_valid_load_T_3 = ~mem1_dram_stall & mem1_is_dram_load; // @[Core.scala 1667:91]
+  wire  _mem2_reg_mem_use_reg_T_2 = _mem1_mem_stall_delay_T_1 & _mem2_reg_is_valid_load_T_2; // @[Core.scala 1668:48]
+  wire [5:0] _mem3_wb_rdata_T = 4'h8 * mem3_reg_wb_byte_offset; // @[Core.scala 1696:51]
+  wire [31:0] mem3_wb_rdata = mem3_reg_dmem_rdata >> _mem3_wb_rdata_T; // @[Core.scala 1696:43]
+  wire  _mem3_wb_data_load_T = mem3_reg_mem_w == 3'h5; // @[Core.scala 1698:21]
   wire [23:0] _mem3_wb_data_load_T_3 = mem3_wb_rdata[7] ? 24'hffffff : 24'h0; // @[Bitwise.scala 74:12]
-  wire [31:0] _mem3_wb_data_load_T_5 = {_mem3_wb_data_load_T_3,mem3_wb_rdata[7:0]}; // @[Core.scala 1720:40]
-  wire  _mem3_wb_data_load_T_6 = mem3_reg_mem_w == 3'h4; // @[Core.scala 1729:21]
+  wire [31:0] _mem3_wb_data_load_T_5 = {_mem3_wb_data_load_T_3,mem3_wb_rdata[7:0]}; // @[Core.scala 1690:40]
+  wire  _mem3_wb_data_load_T_6 = mem3_reg_mem_w == 3'h4; // @[Core.scala 1699:21]
   wire [15:0] _mem3_wb_data_load_T_9 = mem3_wb_rdata[15] ? 16'hffff : 16'h0; // @[Bitwise.scala 74:12]
-  wire [31:0] _mem3_wb_data_load_T_11 = {_mem3_wb_data_load_T_9,mem3_wb_rdata[15:0]}; // @[Core.scala 1720:40]
-  wire  _mem3_wb_data_load_T_12 = mem3_reg_mem_w == 3'h7; // @[Core.scala 1730:21]
-  wire [31:0] _mem3_wb_data_load_T_15 = {24'h0,mem3_wb_rdata[7:0]}; // @[Core.scala 1723:31]
-  wire  _mem3_wb_data_load_T_16 = mem3_reg_mem_w == 3'h6; // @[Core.scala 1731:21]
-  wire [31:0] _mem3_wb_data_load_T_19 = {16'h0,mem3_wb_rdata[15:0]}; // @[Core.scala 1723:31]
+  wire [31:0] _mem3_wb_data_load_T_11 = {_mem3_wb_data_load_T_9,mem3_wb_rdata[15:0]}; // @[Core.scala 1690:40]
+  wire  _mem3_wb_data_load_T_12 = mem3_reg_mem_w == 3'h7; // @[Core.scala 1700:21]
+  wire [31:0] _mem3_wb_data_load_T_15 = {24'h0,mem3_wb_rdata[7:0]}; // @[Core.scala 1693:31]
+  wire  _mem3_wb_data_load_T_16 = mem3_reg_mem_w == 3'h6; // @[Core.scala 1701:21]
+  wire [31:0] _mem3_wb_data_load_T_19 = {16'h0,mem3_wb_rdata[15:0]}; // @[Core.scala 1693:31]
   wire [31:0] _mem3_wb_data_load_T_20 = _mem3_wb_data_load_T_16 ? _mem3_wb_data_load_T_19 : mem3_wb_rdata; // @[Mux.scala 101:16]
   wire [31:0] _mem3_wb_data_load_T_21 = _mem3_wb_data_load_T_12 ? _mem3_wb_data_load_T_15 : _mem3_wb_data_load_T_20; // @[Mux.scala 101:16]
   wire [31:0] _mem3_wb_data_load_T_22 = _mem3_wb_data_load_T_6 ? _mem3_wb_data_load_T_11 : _mem3_wb_data_load_T_21; // @[Mux.scala 101:16]
   wire [31:0] mem3_wb_data_load = _mem3_wb_data_load_T ? _mem3_wb_data_load_T_5 : _mem3_wb_data_load_T_22; // @[Mux.scala 101:16]
-  wire [63:0] _instret_T_1 = instret + 64'h2; // @[Core.scala 1742:24]
-  wire [63:0] _instret_T_3 = instret + 64'h1; // @[Core.scala 1744:24]
-  wire [38:0] _GEN_486 = reset ? $signed(39'sh0) : $signed(_GEN_431); // @[Core.scala 1323:{37,37}]
-  wire [33:0] _GEN_488 = reset ? 34'h0 : _GEN_436; // @[Core.scala 1331:{37,37}]
-  LongCounter cycle_counter ( // @[Core.scala 82:29]
+  wire [63:0] _instret_T_1 = instret + 64'h2; // @[Core.scala 1712:24]
+  wire [63:0] _instret_T_3 = instret + 64'h1; // @[Core.scala 1714:24]
+  wire [38:0] _GEN_490 = reset ? $signed(39'sh0) : $signed(_GEN_435); // @[Core.scala 1293:{37,37}]
+  wire [33:0] _GEN_492 = reset ? 34'h0 : _GEN_440; // @[Core.scala 1301:{37,37}]
+  LongCounter cycle_counter ( // @[Core.scala 86:29]
     .clock(cycle_counter_clock),
     .reset(cycle_counter_reset),
     .io_value(cycle_counter_io_value)
   );
-  MachineTimer mtimer ( // @[Core.scala 83:22]
+  MachineTimer mtimer ( // @[Core.scala 87:22]
     .clock(mtimer_clock),
     .reset(mtimer_reset),
     .io_mem_raddr(mtimer_io_mem_raddr),
@@ -2410,7 +2421,7 @@ module Core(
     .io_intr(mtimer_io_intr),
     .io_mtime(mtimer_io_mtime)
   );
-  BranchPredictor bp ( // @[Core.scala 411:18]
+  BranchPredictor bp ( // @[Core.scala 406:18]
     .clock(bp_clock),
     .reset(bp_reset),
     .io_lu_inst_pc(bp_io_lu_inst_pc),
@@ -2424,36 +2435,36 @@ module Core(
   );
   assign regfile_rrd_op1_data_MPORT_en = 1'h1;
   assign regfile_rrd_op1_data_MPORT_addr = rrd_reg_rs1_addr;
-  assign regfile_rrd_op1_data_MPORT_data = regfile[regfile_rrd_op1_data_MPORT_addr]; // @[Core.scala 80:20]
+  assign regfile_rrd_op1_data_MPORT_data = regfile[regfile_rrd_op1_data_MPORT_addr]; // @[Core.scala 84:20]
   assign regfile_rrd_op2_data_MPORT_en = 1'h1;
   assign regfile_rrd_op2_data_MPORT_addr = rrd_reg_rs2_addr;
-  assign regfile_rrd_op2_data_MPORT_data = regfile[regfile_rrd_op2_data_MPORT_addr]; // @[Core.scala 80:20]
+  assign regfile_rrd_op2_data_MPORT_data = regfile[regfile_rrd_op2_data_MPORT_addr]; // @[Core.scala 84:20]
   assign regfile_rrd_rs2_data_MPORT_en = 1'h1;
   assign regfile_rrd_rs2_data_MPORT_addr = rrd_reg_rs2_addr;
-  assign regfile_rrd_rs2_data_MPORT_data = regfile[regfile_rrd_rs2_data_MPORT_addr]; // @[Core.scala 80:20]
+  assign regfile_rrd_rs2_data_MPORT_data = regfile[regfile_rrd_rs2_data_MPORT_addr]; // @[Core.scala 84:20]
   assign regfile_io_gp_MPORT_en = 1'h1;
   assign regfile_io_gp_MPORT_addr = 5'h3;
-  assign regfile_io_gp_MPORT_data = regfile[regfile_io_gp_MPORT_addr]; // @[Core.scala 80:20]
+  assign regfile_io_gp_MPORT_data = regfile[regfile_io_gp_MPORT_addr]; // @[Core.scala 84:20]
   assign regfile_io_exit_MPORT_en = 1'h1;
   assign regfile_io_exit_MPORT_addr = 5'h11;
-  assign regfile_io_exit_MPORT_data = regfile[regfile_io_exit_MPORT_addr]; // @[Core.scala 80:20]
+  assign regfile_io_exit_MPORT_data = regfile[regfile_io_exit_MPORT_addr]; // @[Core.scala 84:20]
   assign regfile_MPORT_3_data = _ex2_fw_data_T_2 ? ex2_reg_pc_bit_out : _ex2_wb_data_T_8;
   assign regfile_MPORT_3_addr = ex2_reg_wb_addr;
   assign regfile_MPORT_3_mask = 1'h1;
-  assign regfile_MPORT_3_en = _T_93 & _ex2_reg_is_retired_T_4;
+  assign regfile_MPORT_3_en = _T_96 & ex2_reg_no_mem;
   assign regfile_MPORT_4_data = _mem3_wb_data_load_T ? _mem3_wb_data_load_T_5 : _mem3_wb_data_load_T_22;
   assign regfile_MPORT_4_addr = mem3_reg_wb_addr[4:0];
   assign regfile_MPORT_4_mask = 1'h1;
   assign regfile_MPORT_4_en = mem3_reg_is_valid_load;
   assign scoreboard_rrd_stall_MPORT_en = 1'h1;
   assign scoreboard_rrd_stall_MPORT_addr = rrd_reg_rs1_addr;
-  assign scoreboard_rrd_stall_MPORT_data = scoreboard[scoreboard_rrd_stall_MPORT_addr]; // @[Core.scala 96:25]
+  assign scoreboard_rrd_stall_MPORT_data = scoreboard[scoreboard_rrd_stall_MPORT_addr]; // @[Core.scala 100:25]
   assign scoreboard_rrd_stall_MPORT_1_en = 1'h1;
   assign scoreboard_rrd_stall_MPORT_1_addr = rrd_reg_rs2_addr;
-  assign scoreboard_rrd_stall_MPORT_1_data = scoreboard[scoreboard_rrd_stall_MPORT_1_addr]; // @[Core.scala 96:25]
+  assign scoreboard_rrd_stall_MPORT_1_data = scoreboard[scoreboard_rrd_stall_MPORT_1_addr]; // @[Core.scala 100:25]
   assign scoreboard_rrd_stall_MPORT_2_en = 1'h1;
   assign scoreboard_rrd_stall_MPORT_2_addr = rrd_reg_wb_addr;
-  assign scoreboard_rrd_stall_MPORT_2_data = scoreboard[scoreboard_rrd_stall_MPORT_2_addr]; // @[Core.scala 96:25]
+  assign scoreboard_rrd_stall_MPORT_2_data = scoreboard[scoreboard_rrd_stall_MPORT_2_addr]; // @[Core.scala 100:25]
   assign scoreboard_MPORT_data = _T_35 & _T_36;
   assign scoreboard_MPORT_addr = rrd_reg_wb_addr;
   assign scoreboard_MPORT_mask = 1'h1;
@@ -2465,80 +2476,84 @@ module Core(
   assign scoreboard_MPORT_2_data = 1'h0;
   assign scoreboard_MPORT_2_addr = ex2_reg_wb_addr;
   assign scoreboard_MPORT_2_mask = 1'h1;
-  assign scoreboard_MPORT_2_en = ex2_reg_inst3_use_reg & _T_88;
+  assign scoreboard_MPORT_2_en = ex2_reg_inst3_use_reg & _T_51;
   assign scoreboard_MPORT_5_data = 1'h0;
   assign scoreboard_MPORT_5_addr = mem3_reg_wb_addr[4:0];
   assign scoreboard_MPORT_5_mask = 1'h1;
   assign scoreboard_MPORT_5_en = mem3_reg_mem_use_reg;
-  assign io_imem_addr = if1_is_jump ? ic_next_imem_addr : _GEN_72; // @[Core.scala 318:21 320:18]
-  assign io_dmem_raddr = ex2_reg_alu_out; // @[Core.scala 1665:17]
-  assign io_dmem_ren = mem1_reg_is_mem_load & ex2_en; // @[Core.scala 1659:49]
-  assign io_dmem_waddr = ex2_reg_alu_out; // @[Core.scala 1666:17]
-  assign io_dmem_wen = mem1_reg_is_mem_store & ex2_en; // @[Core.scala 1660:50]
-  assign io_dmem_wstrb = mem1_reg_mem_wstrb; // @[Core.scala 1669:17]
-  assign io_dmem_wdata = ex2_reg_wdata; // @[Core.scala 1670:17]
-  assign io_cache_iinvalidate = mem1_reg_is_dram_fence & ex2_en; // @[Core.scala 1663:51]
-  assign io_cache_raddr = ex2_reg_alu_out; // @[Core.scala 1671:18]
-  assign io_cache_ren = mem1_reg_is_dram_load & ex2_en; // @[Core.scala 1661:50]
-  assign io_cache_waddr = ex2_reg_alu_out; // @[Core.scala 1672:18]
-  assign io_cache_wen = mem1_reg_is_dram_store & ex2_en; // @[Core.scala 1662:51]
-  assign io_cache_wstrb = mem1_reg_mem_wstrb; // @[Core.scala 1675:18]
-  assign io_cache_wdata = ex2_reg_wdata; // @[Core.scala 1676:18]
-  assign io_mtimer_mem_rdata = mtimer_io_mem_rdata; // @[Core.scala 98:17]
-  assign io_exit = ex1_reg_is_trap & ex2_reg_mcause == 32'hb & regfile_io_exit_MPORT_data == 32'h5d; // @[Core.scala 1761:73]
-  assign io_debug_signal_ex2_reg_pc = ex2_reg_pc; // @[Core.scala 1751:39]
-  assign io_debug_signal_ex2_is_valid_inst = ex2_en & ~csr_is_trap; // @[Core.scala 1235:31]
-  assign io_debug_signal_me_intr = csr_reg_is_meintr & csr_is_valid_inst; // @[Core.scala 1231:41]
-  assign io_debug_signal_mt_intr = csr_reg_is_mtintr & csr_is_valid_inst; // @[Core.scala 1232:41]
-  assign io_debug_signal_cycle_counter = cycle_counter_io_value[47:0]; // @[Core.scala 1748:64]
-  assign io_debug_signal_id_pc = id_reg_pc; // @[Core.scala 1755:39]
-  assign io_debug_signal_id_inst = ex2_reg_is_br ? 32'h13 : id_reg_inst; // @[Core.scala 511:20]
+  assign io_imem_addr = if1_is_jump ? ic_next_imem_addr : _GEN_72; // @[Core.scala 313:21 315:18]
+  assign io_dmem_raddr = ex2_reg_alu_out; // @[Core.scala 1635:17]
+  assign io_dmem_ren = mem1_reg_is_mem_load & ex2_en; // @[Core.scala 1629:49]
+  assign io_dmem_waddr = ex2_reg_alu_out; // @[Core.scala 1636:17]
+  assign io_dmem_wen = mem1_reg_is_mem_store & ex2_en; // @[Core.scala 1630:50]
+  assign io_dmem_wstrb = mem1_reg_mem_wstrb; // @[Core.scala 1639:17]
+  assign io_dmem_wdata = ex2_reg_wdata; // @[Core.scala 1640:17]
+  assign io_cache_iinvalidate = mem1_reg_is_dram_fence & ex2_en; // @[Core.scala 1633:51]
+  assign io_cache_raddr = ex2_reg_alu_out; // @[Core.scala 1641:18]
+  assign io_cache_ren = mem1_reg_is_dram_load & ex2_en; // @[Core.scala 1631:50]
+  assign io_cache_waddr = ex2_reg_alu_out; // @[Core.scala 1642:18]
+  assign io_cache_wen = mem1_reg_is_dram_store & ex2_en; // @[Core.scala 1632:51]
+  assign io_cache_wstrb = mem1_reg_mem_wstrb; // @[Core.scala 1645:18]
+  assign io_cache_wdata = ex2_reg_wdata; // @[Core.scala 1646:18]
+  assign io_mtimer_mem_rdata = mtimer_io_mem_rdata; // @[Core.scala 102:17]
+  assign io_exit = ex1_reg_is_trap & ex2_reg_mcause == 32'hb & regfile_io_exit_MPORT_data == 32'h5d; // @[Core.scala 1735:73]
+  assign io_debug_signal_ex2_reg_pc = ex2_reg_pc; // @[Core.scala 1721:39]
+  assign io_debug_signal_ex2_is_valid_inst = csr_is_valid_inst & ~csr_is_meintr & ~csr_is_mtintr; // @[Core.scala 1196:49]
+  assign io_debug_signal_me_intr = csr_reg_is_meintr & csr_is_valid_inst; // @[Core.scala 1193:41]
+  assign io_debug_signal_mt_intr = csr_reg_is_mtintr & csr_is_valid_inst; // @[Core.scala 1194:41]
+  assign io_debug_signal_trap = ex2_reg_is_trap & csr_is_valid_inst & _ex2_en_T & _ex2_en_T_2; // @[Core.scala 1195:76]
+  assign io_debug_signal_cycle_counter = cycle_counter_io_value[47:0]; // @[Core.scala 1718:64]
+  assign io_debug_signal_id_pc = id_reg_pc; // @[Core.scala 1726:39]
+  assign io_debug_signal_id_inst = ex2_reg_is_br ? 32'h13 : id_reg_inst; // @[Core.scala 502:20]
+  assign io_debug_signal_mem3_rdata = mem3_reg_dmem_rdata; // @[Core.scala 1728:39]
+  assign io_debug_signal_mem3_rvalid = mem3_reg_is_valid_load; // @[Core.scala 1729:39]
+  assign io_debug_signal_rwaddr = _ex2_fw_data_T_2 ? ex2_reg_pc_bit_out : _ex2_wb_data_T_8; // @[Mux.scala 101:16]
   assign cycle_counter_clock = clock;
   assign cycle_counter_reset = reset;
   assign mtimer_clock = clock;
   assign mtimer_reset = reset;
-  assign mtimer_io_mem_raddr = io_mtimer_mem_raddr; // @[Core.scala 98:17]
-  assign mtimer_io_mem_ren = io_mtimer_mem_ren; // @[Core.scala 98:17]
-  assign mtimer_io_mem_waddr = io_mtimer_mem_waddr; // @[Core.scala 98:17]
-  assign mtimer_io_mem_wen = io_mtimer_mem_wen; // @[Core.scala 98:17]
-  assign mtimer_io_mem_wdata = io_mtimer_mem_wdata; // @[Core.scala 98:17]
+  assign mtimer_io_mem_raddr = io_mtimer_mem_raddr; // @[Core.scala 102:17]
+  assign mtimer_io_mem_ren = io_mtimer_mem_ren; // @[Core.scala 102:17]
+  assign mtimer_io_mem_waddr = io_mtimer_mem_waddr; // @[Core.scala 102:17]
+  assign mtimer_io_mem_wen = io_mtimer_mem_wen; // @[Core.scala 102:17]
+  assign mtimer_io_mem_wdata = io_mtimer_mem_wdata; // @[Core.scala 102:17]
   assign bp_clock = clock;
   assign bp_reset = reset;
-  assign bp_io_lu_inst_pc = if1_is_jump ? if1_jump_addr : _GEN_78; // @[Core.scala 318:21 322:17]
-  assign bp_io_up_update_en = jbr_bp_en & (jbr_reg_is_cond_br_inst | jbr_reg_is_uncond_br); // @[Core.scala 1143:35]
-  assign bp_io_up_inst_pc = ex2_reg_pc; // @[Core.scala 1144:20]
-  assign bp_io_up_br_pos = jbr_reg_is_cond_br | jbr_reg_is_uncond_br; // @[Core.scala 1145:41]
+  assign bp_io_lu_inst_pc = if1_is_jump ? if1_jump_addr : _GEN_78; // @[Core.scala 313:21 317:17]
+  assign bp_io_up_update_en = jbr_bp_en & (jbr_reg_is_cond_br_inst | jbr_reg_is_uncond_br); // @[Core.scala 1115:35]
+  assign bp_io_up_inst_pc = ex2_reg_pc; // @[Core.scala 1116:20]
+  assign bp_io_up_br_pos = jbr_reg_is_cond_br | jbr_reg_is_uncond_br; // @[Core.scala 1117:41]
   assign bp_io_up_br_addr = jbr_reg_is_cond_br ? jbr_reg_cond_br_target : _bp_io_up_br_addr_T; // @[Mux.scala 101:16]
   always @(posedge clock) begin
     if (regfile_MPORT_3_en & regfile_MPORT_3_mask) begin
-      regfile[regfile_MPORT_3_addr] <= regfile_MPORT_3_data; // @[Core.scala 80:20]
+      regfile[regfile_MPORT_3_addr] <= regfile_MPORT_3_data; // @[Core.scala 84:20]
     end
     if (regfile_MPORT_4_en & regfile_MPORT_4_mask) begin
-      regfile[regfile_MPORT_4_addr] <= regfile_MPORT_4_data; // @[Core.scala 80:20]
+      regfile[regfile_MPORT_4_addr] <= regfile_MPORT_4_data; // @[Core.scala 84:20]
     end
     if (scoreboard_MPORT_en & scoreboard_MPORT_mask) begin
-      scoreboard[scoreboard_MPORT_addr] <= scoreboard_MPORT_data; // @[Core.scala 96:25]
+      scoreboard[scoreboard_MPORT_addr] <= scoreboard_MPORT_data; // @[Core.scala 100:25]
     end
     if (scoreboard_MPORT_1_en & scoreboard_MPORT_1_mask) begin
-      scoreboard[scoreboard_MPORT_1_addr] <= scoreboard_MPORT_1_data; // @[Core.scala 96:25]
+      scoreboard[scoreboard_MPORT_1_addr] <= scoreboard_MPORT_1_data; // @[Core.scala 100:25]
     end
     if (scoreboard_MPORT_2_en & scoreboard_MPORT_2_mask) begin
-      scoreboard[scoreboard_MPORT_2_addr] <= scoreboard_MPORT_2_data; // @[Core.scala 96:25]
+      scoreboard[scoreboard_MPORT_2_addr] <= scoreboard_MPORT_2_data; // @[Core.scala 100:25]
     end
     if (scoreboard_MPORT_5_en & scoreboard_MPORT_5_mask) begin
-      scoreboard[scoreboard_MPORT_5_addr] <= scoreboard_MPORT_5_data; // @[Core.scala 96:25]
+      scoreboard[scoreboard_MPORT_5_addr] <= scoreboard_MPORT_5_data; // @[Core.scala 100:25]
     end
-    if (reset) begin // @[Core.scala 85:24]
-      instret <= 64'h0; // @[Core.scala 85:24]
-    end else if (ex2_reg_is_retired & mem3_reg_is_retired) begin // @[Core.scala 1741:52]
-      instret <= _instret_T_1; // @[Core.scala 1742:13]
-    end else if (ex2_reg_is_retired | mem3_reg_is_retired) begin // @[Core.scala 1743:58]
-      instret <= _instret_T_3; // @[Core.scala 1744:13]
+    if (reset) begin // @[Core.scala 89:24]
+      instret <= 64'h0; // @[Core.scala 89:24]
+    end else if (ex2_reg_is_retired & mem3_reg_is_retired) begin // @[Core.scala 1711:52]
+      instret <= _instret_T_1; // @[Core.scala 1712:13]
+    end else if (ex2_reg_is_retired | mem3_reg_is_retired) begin // @[Core.scala 1713:58]
+      instret <= _instret_T_3; // @[Core.scala 1714:13]
     end
-    if (reset) begin // @[Core.scala 86:37]
-      csr_reg_trap_vector <= 32'h0; // @[Core.scala 86:37]
-    end else if (_if2_inst_cnt_T & ex2_reg_wb_sel == 3'h5) begin // @[Core.scala 1261:54]
-      if (ex2_reg_csr_addr == 12'h305) begin // @[Core.scala 1262:48]
+    if (reset) begin // @[Core.scala 90:37]
+      csr_reg_trap_vector <= 32'h0; // @[Core.scala 90:37]
+    end else if (_csr_is_valid_inst_T & ex2_reg_wb_sel == 3'h5) begin // @[Core.scala 1223:54]
+      if (ex2_reg_csr_addr == 12'h305) begin // @[Core.scala 1224:48]
         if (_csr_wdata_T) begin // @[Mux.scala 101:16]
           csr_reg_trap_vector <= ex2_reg_op1_data;
         end else begin
@@ -2546,86 +2561,86 @@ module Core(
         end
       end
     end
-    if (reset) begin // @[Core.scala 87:37]
-      csr_reg_mcause <= 32'h0; // @[Core.scala 87:37]
-    end else if (csr_is_meintr) begin // @[Core.scala 1284:24]
-      csr_reg_mcause <= 32'h8000000b; // @[Core.scala 1285:26]
-    end else if (csr_is_mtintr) begin // @[Core.scala 1292:30]
-      csr_reg_mcause <= 32'h80000007; // @[Core.scala 1293:26]
-    end else if (csr_is_trap) begin // @[Core.scala 1300:28]
-      csr_reg_mcause <= ex2_reg_mcause; // @[Core.scala 1301:26]
-    end
-    if (reset) begin // @[Core.scala 89:37]
-      csr_reg_mepc <= 32'h0; // @[Core.scala 89:37]
-    end else if (csr_is_meintr) begin // @[Core.scala 1284:24]
-      csr_reg_mepc <= ex2_reg_pc; // @[Core.scala 1287:26]
-    end else if (csr_is_mtintr) begin // @[Core.scala 1292:30]
-      csr_reg_mepc <= ex2_reg_pc; // @[Core.scala 1295:26]
-    end else if (csr_is_trap) begin // @[Core.scala 1300:28]
-      csr_reg_mepc <= ex2_reg_pc; // @[Core.scala 1303:26]
-    end else begin
-      csr_reg_mepc <= _GEN_361;
-    end
-    if (reset) begin // @[Core.scala 90:37]
-      csr_reg_mstatus_mie <= 1'h0; // @[Core.scala 90:37]
-    end else if (csr_is_meintr) begin // @[Core.scala 1284:24]
-      csr_reg_mstatus_mie <= 1'h0; // @[Core.scala 1289:26]
-    end else if (csr_is_mtintr) begin // @[Core.scala 1292:30]
-      csr_reg_mstatus_mie <= 1'h0; // @[Core.scala 1297:26]
-    end else if (csr_is_trap) begin // @[Core.scala 1300:28]
-      csr_reg_mstatus_mie <= 1'h0; // @[Core.scala 1305:26]
-    end else begin
-      csr_reg_mstatus_mie <= _GEN_373;
-    end
     if (reset) begin // @[Core.scala 91:37]
-      csr_reg_mstatus_mpie <= 1'h0; // @[Core.scala 91:37]
-    end else if (csr_is_meintr) begin // @[Core.scala 1284:24]
-      csr_reg_mstatus_mpie <= csr_reg_mstatus_mie; // @[Core.scala 1288:26]
-    end else if (csr_is_mtintr) begin // @[Core.scala 1292:30]
-      csr_reg_mstatus_mpie <= csr_reg_mstatus_mie; // @[Core.scala 1296:26]
-    end else if (csr_is_trap) begin // @[Core.scala 1300:28]
-      csr_reg_mstatus_mpie <= csr_reg_mstatus_mie; // @[Core.scala 1304:26]
-    end else begin
-      csr_reg_mstatus_mpie <= _GEN_372;
-    end
-    if (reset) begin // @[Core.scala 92:37]
-      csr_reg_mscratch <= 32'h0; // @[Core.scala 92:37]
-    end else if (_if2_inst_cnt_T & ex2_reg_wb_sel == 3'h5) begin // @[Core.scala 1261:54]
-      if (!(ex2_reg_csr_addr == 12'h305)) begin // @[Core.scala 1262:48]
-        if (!(ex2_reg_csr_addr == 12'h341)) begin // @[Core.scala 1264:53]
-          csr_reg_mscratch <= _GEN_331;
-        end
-      end
+      csr_reg_mcause <= 32'h0; // @[Core.scala 91:37]
+    end else if (csr_is_meintr) begin // @[Core.scala 1246:24]
+      csr_reg_mcause <= 32'h8000000b; // @[Core.scala 1247:26]
+    end else if (csr_is_mtintr) begin // @[Core.scala 1256:30]
+      csr_reg_mcause <= 32'h80000007; // @[Core.scala 1257:26]
+    end else if (csr_is_trap) begin // @[Core.scala 1266:28]
+      csr_reg_mcause <= ex2_reg_mcause; // @[Core.scala 1267:26]
     end
     if (reset) begin // @[Core.scala 93:37]
-      csr_reg_mie_meie <= 1'h0; // @[Core.scala 93:37]
-    end else if (_if2_inst_cnt_T & ex2_reg_wb_sel == 3'h5) begin // @[Core.scala 1261:54]
-      if (!(ex2_reg_csr_addr == 12'h305)) begin // @[Core.scala 1262:48]
-        if (!(ex2_reg_csr_addr == 12'h341)) begin // @[Core.scala 1264:53]
-          csr_reg_mie_meie <= _GEN_332;
-        end
-      end
+      csr_reg_mepc <= 32'h0; // @[Core.scala 93:37]
+    end else if (csr_is_meintr) begin // @[Core.scala 1246:24]
+      csr_reg_mepc <= ex2_reg_pc; // @[Core.scala 1249:26]
+    end else if (csr_is_mtintr) begin // @[Core.scala 1256:30]
+      csr_reg_mepc <= ex2_reg_pc; // @[Core.scala 1259:26]
+    end else if (csr_is_trap) begin // @[Core.scala 1266:28]
+      csr_reg_mepc <= ex2_reg_pc; // @[Core.scala 1269:26]
+    end else begin
+      csr_reg_mepc <= _GEN_357;
     end
     if (reset) begin // @[Core.scala 94:37]
-      csr_reg_mie_mtie <= 1'h0; // @[Core.scala 94:37]
-    end else if (_if2_inst_cnt_T & ex2_reg_wb_sel == 3'h5) begin // @[Core.scala 1261:54]
-      if (!(ex2_reg_csr_addr == 12'h305)) begin // @[Core.scala 1262:48]
-        if (!(ex2_reg_csr_addr == 12'h341)) begin // @[Core.scala 1264:53]
-          csr_reg_mie_mtie <= _GEN_333;
+      csr_reg_mstatus_mie <= 1'h0; // @[Core.scala 94:37]
+    end else if (csr_is_meintr) begin // @[Core.scala 1246:24]
+      csr_reg_mstatus_mie <= 1'h0; // @[Core.scala 1251:26]
+    end else if (csr_is_mtintr) begin // @[Core.scala 1256:30]
+      csr_reg_mstatus_mie <= 1'h0; // @[Core.scala 1261:26]
+    end else if (csr_is_trap) begin // @[Core.scala 1266:28]
+      csr_reg_mstatus_mie <= 1'h0; // @[Core.scala 1271:26]
+    end else begin
+      csr_reg_mstatus_mie <= _GEN_369;
+    end
+    if (reset) begin // @[Core.scala 95:37]
+      csr_reg_mstatus_mpie <= 1'h0; // @[Core.scala 95:37]
+    end else if (csr_is_meintr) begin // @[Core.scala 1246:24]
+      csr_reg_mstatus_mpie <= csr_reg_mstatus_mie; // @[Core.scala 1250:26]
+    end else if (csr_is_mtintr) begin // @[Core.scala 1256:30]
+      csr_reg_mstatus_mpie <= csr_reg_mstatus_mie; // @[Core.scala 1260:26]
+    end else if (csr_is_trap) begin // @[Core.scala 1266:28]
+      csr_reg_mstatus_mpie <= csr_reg_mstatus_mie; // @[Core.scala 1270:26]
+    end else begin
+      csr_reg_mstatus_mpie <= _GEN_368;
+    end
+    if (reset) begin // @[Core.scala 96:37]
+      csr_reg_mscratch <= 32'h0; // @[Core.scala 96:37]
+    end else if (_csr_is_valid_inst_T & ex2_reg_wb_sel == 3'h5) begin // @[Core.scala 1223:54]
+      if (!(ex2_reg_csr_addr == 12'h305)) begin // @[Core.scala 1224:48]
+        if (!(ex2_reg_csr_addr == 12'h341)) begin // @[Core.scala 1226:53]
+          csr_reg_mscratch <= _GEN_327;
         end
       end
     end
-    if (reset) begin // @[Core.scala 104:38]
-      id_reg_pc <= 32'h0; // @[Core.scala 104:38]
+    if (reset) begin // @[Core.scala 97:37]
+      csr_reg_mie_meie <= 1'h0; // @[Core.scala 97:37]
+    end else if (_csr_is_valid_inst_T & ex2_reg_wb_sel == 3'h5) begin // @[Core.scala 1223:54]
+      if (!(ex2_reg_csr_addr == 12'h305)) begin // @[Core.scala 1224:48]
+        if (!(ex2_reg_csr_addr == 12'h341)) begin // @[Core.scala 1226:53]
+          csr_reg_mie_meie <= _GEN_328;
+        end
+      end
+    end
+    if (reset) begin // @[Core.scala 98:37]
+      csr_reg_mie_mtie <= 1'h0; // @[Core.scala 98:37]
+    end else if (_csr_is_valid_inst_T & ex2_reg_wb_sel == 3'h5) begin // @[Core.scala 1223:54]
+      if (!(ex2_reg_csr_addr == 12'h305)) begin // @[Core.scala 1224:48]
+        if (!(ex2_reg_csr_addr == 12'h341)) begin // @[Core.scala 1226:53]
+          csr_reg_mie_mtie <= _GEN_329;
+        end
+      end
+    end
+    if (reset) begin // @[Core.scala 108:38]
+      id_reg_pc <= 32'h0; // @[Core.scala 108:38]
     end else if (!(id_reg_stall)) begin // @[Mux.scala 101:16]
-      if (id_reg_stall | ~(ic_read_rdy | ic_half_rdy & is_half_inst)) begin // @[Core.scala 450:19]
+      if (id_reg_stall | ~(ic_read_rdy | ic_half_rdy & is_half_inst)) begin // @[Core.scala 444:19]
         id_reg_pc <= if2_reg_pc;
       end else begin
         id_reg_pc <= ic_reg_addr_out;
       end
     end
-    if (reset) begin // @[Core.scala 106:38]
-      id_reg_inst <= 32'h0; // @[Core.scala 106:38]
+    if (reset) begin // @[Core.scala 110:38]
+      id_reg_inst <= 32'h0; // @[Core.scala 110:38]
     end else if (ex2_reg_is_br) begin // @[Mux.scala 101:16]
       id_reg_inst <= 32'h13;
     end else if (id_reg_stall) begin // @[Mux.scala 101:16]
@@ -2635,13 +2650,13 @@ module Core(
     end else begin
       id_reg_inst <= _if2_inst_T_2;
     end
-    if (reset) begin // @[Core.scala 107:38]
-      id_reg_stall <= 1'h0; // @[Core.scala 107:38]
+    if (reset) begin // @[Core.scala 111:38]
+      id_reg_stall <= 1'h0; // @[Core.scala 111:38]
     end else begin
-      id_reg_stall <= id_stall; // @[Core.scala 508:16]
+      id_reg_stall <= id_stall; // @[Core.scala 499:16]
     end
-    if (reset) begin // @[Core.scala 108:38]
-      id_reg_is_bp_pos <= 1'h0; // @[Core.scala 108:38]
+    if (reset) begin // @[Core.scala 112:38]
+      id_reg_is_bp_pos <= 1'h0; // @[Core.scala 112:38]
     end else if (!(id_reg_stall)) begin // @[Mux.scala 101:16]
       if (ex2_reg_is_br) begin // @[Mux.scala 101:16]
         id_reg_is_bp_pos <= 1'h0;
@@ -2651,240 +2666,240 @@ module Core(
         id_reg_is_bp_pos <= if2_is_bp_br & bp_io_lu_br_pos;
       end
     end
-    if (reset) begin // @[Core.scala 109:38]
-      id_reg_bp_addr <= 32'h0; // @[Core.scala 109:38]
+    if (reset) begin // @[Core.scala 113:38]
+      id_reg_bp_addr <= 32'h0; // @[Core.scala 113:38]
     end else if (!(id_reg_stall)) begin // @[Mux.scala 101:16]
-      if (id_reg_stall) begin // @[Core.scala 478:24]
+      if (id_reg_stall) begin // @[Core.scala 472:24]
         id_reg_bp_addr <= if2_reg_bp_addr;
       end else begin
         id_reg_bp_addr <= bp_io_lu_br_addr;
       end
     end
-    if (reset) begin // @[Core.scala 117:38]
-      rrd_reg_pc <= 32'h0; // @[Core.scala 117:38]
-    end else if (ex2_reg_is_br) begin // @[Core.scala 794:24]
-      rrd_reg_pc <= _GEN_146;
-    end else if (~rrd_stall & ~ex2_stall) begin // @[Core.scala 850:40]
-      rrd_reg_pc <= _GEN_146;
-    end
-    if (reset) begin // @[Core.scala 119:38]
-      rrd_reg_wb_addr <= 5'h0; // @[Core.scala 119:38]
-    end else if (ex2_reg_is_br) begin // @[Core.scala 794:24]
-      rrd_reg_wb_addr <= _GEN_154;
-    end else if (~rrd_stall & ~ex2_stall) begin // @[Core.scala 850:40]
-      rrd_reg_wb_addr <= _GEN_154;
-    end
     if (reset) begin // @[Core.scala 120:38]
-      rrd_reg_op1_sel <= 3'h0; // @[Core.scala 120:38]
-    end else if (ex2_reg_is_br) begin // @[Core.scala 794:24]
-      rrd_reg_op1_sel <= _GEN_148;
-    end else if (~rrd_stall & ~ex2_stall) begin // @[Core.scala 850:40]
-      rrd_reg_op1_sel <= _GEN_148;
+      rrd_reg_pc <= 32'h0; // @[Core.scala 120:38]
+    end else if (ex2_reg_is_br) begin // @[Core.scala 782:24]
+      rrd_reg_pc <= _GEN_143;
+    end else if (~rrd_stall & ~ex2_stall) begin // @[Core.scala 836:40]
+      rrd_reg_pc <= _GEN_143;
     end
     if (reset) begin // @[Core.scala 121:38]
-      rrd_reg_op2_sel <= 4'h0; // @[Core.scala 121:38]
-    end else if (ex2_reg_is_br) begin // @[Core.scala 794:24]
-      rrd_reg_op2_sel <= _GEN_149;
-    end else if (~rrd_stall & ~ex2_stall) begin // @[Core.scala 850:40]
-      rrd_reg_op2_sel <= _GEN_149;
+      rrd_reg_wb_addr <= 5'h0; // @[Core.scala 121:38]
+    end else if (ex2_reg_is_br) begin // @[Core.scala 782:24]
+      rrd_reg_wb_addr <= _GEN_150;
+    end else if (~rrd_stall & ~ex2_stall) begin // @[Core.scala 836:40]
+      rrd_reg_wb_addr <= _GEN_150;
     end
     if (reset) begin // @[Core.scala 122:38]
-      rrd_reg_rs1_addr <= 5'h0; // @[Core.scala 122:38]
-    end else if (ex2_reg_is_br) begin // @[Core.scala 794:24]
-      rrd_reg_rs1_addr <= _GEN_150;
-    end else if (~rrd_stall & ~ex2_stall) begin // @[Core.scala 850:40]
-      rrd_reg_rs1_addr <= _GEN_150;
+      rrd_reg_op1_sel <= 3'h0; // @[Core.scala 122:38]
+    end else if (ex2_reg_is_br) begin // @[Core.scala 782:24]
+      rrd_reg_op1_sel <= _GEN_144;
+    end else if (~rrd_stall & ~ex2_stall) begin // @[Core.scala 836:40]
+      rrd_reg_op1_sel <= _GEN_144;
     end
     if (reset) begin // @[Core.scala 123:38]
-      rrd_reg_rs2_addr <= 5'h0; // @[Core.scala 123:38]
-    end else if (ex2_reg_is_br) begin // @[Core.scala 794:24]
-      rrd_reg_rs2_addr <= _GEN_151;
-    end else if (~rrd_stall & ~ex2_stall) begin // @[Core.scala 850:40]
-      rrd_reg_rs2_addr <= _GEN_151;
+      rrd_reg_op2_sel <= 4'h0; // @[Core.scala 123:38]
+    end else if (ex2_reg_is_br) begin // @[Core.scala 782:24]
+      rrd_reg_op2_sel <= _GEN_145;
+    end else if (~rrd_stall & ~ex2_stall) begin // @[Core.scala 836:40]
+      rrd_reg_op2_sel <= _GEN_145;
     end
     if (reset) begin // @[Core.scala 124:38]
-      rrd_reg_op1_data <= 32'h0; // @[Core.scala 124:38]
-    end else if (ex2_reg_is_br) begin // @[Core.scala 794:24]
-      rrd_reg_op1_data <= _GEN_152;
-    end else if (~rrd_stall & ~ex2_stall) begin // @[Core.scala 850:40]
-      rrd_reg_op1_data <= _GEN_152;
+      rrd_reg_rs1_addr <= 5'h0; // @[Core.scala 124:38]
+    end else if (ex2_reg_is_br) begin // @[Core.scala 782:24]
+      rrd_reg_rs1_addr <= _GEN_146;
+    end else if (~rrd_stall & ~ex2_stall) begin // @[Core.scala 836:40]
+      rrd_reg_rs1_addr <= _GEN_146;
     end
     if (reset) begin // @[Core.scala 125:38]
-      rrd_reg_op2_data <= 32'h0; // @[Core.scala 125:38]
-    end else if (ex2_reg_is_br) begin // @[Core.scala 794:24]
-      rrd_reg_op2_data <= _GEN_153;
-    end else if (~rrd_stall & ~ex2_stall) begin // @[Core.scala 850:40]
-      rrd_reg_op2_data <= _GEN_153;
+      rrd_reg_rs2_addr <= 5'h0; // @[Core.scala 125:38]
+    end else if (ex2_reg_is_br) begin // @[Core.scala 782:24]
+      rrd_reg_rs2_addr <= _GEN_147;
+    end else if (~rrd_stall & ~ex2_stall) begin // @[Core.scala 836:40]
+      rrd_reg_rs2_addr <= _GEN_147;
     end
     if (reset) begin // @[Core.scala 126:38]
-      rrd_reg_exe_fun <= 5'h0; // @[Core.scala 126:38]
-    end else if (ex2_reg_is_br) begin // @[Core.scala 794:24]
-      rrd_reg_exe_fun <= 5'h0;
-    end else if (~rrd_stall & ~ex2_stall) begin // @[Core.scala 850:40]
-      if (id_reg_stall) begin // @[Core.scala 851:24]
-        rrd_reg_exe_fun <= id_reg_exe_fun_delay; // @[Core.scala 862:29]
-      end else begin
-        rrd_reg_exe_fun <= csignals_0; // @[Core.scala 889:29]
-      end
+      rrd_reg_op1_data <= 32'h0; // @[Core.scala 126:38]
+    end else if (ex2_reg_is_br) begin // @[Core.scala 782:24]
+      rrd_reg_op1_data <= _GEN_148;
+    end else if (~rrd_stall & ~ex2_stall) begin // @[Core.scala 836:40]
+      rrd_reg_op1_data <= _GEN_148;
     end
     if (reset) begin // @[Core.scala 127:38]
-      rrd_reg_rf_wen <= 1'h0; // @[Core.scala 127:38]
-    end else if (ex2_reg_is_br) begin // @[Core.scala 794:24]
-      rrd_reg_rf_wen <= 1'h0;
-    end else if (~rrd_stall & ~ex2_stall) begin // @[Core.scala 850:40]
-      if (id_reg_stall) begin // @[Core.scala 851:24]
-        rrd_reg_rf_wen <= id_reg_rf_wen_delay; // @[Core.scala 861:29]
-      end else begin
-        rrd_reg_rf_wen <= csignals_3; // @[Core.scala 888:29]
-      end
+      rrd_reg_op2_data <= 32'h0; // @[Core.scala 127:38]
+    end else if (ex2_reg_is_br) begin // @[Core.scala 782:24]
+      rrd_reg_op2_data <= _GEN_149;
+    end else if (~rrd_stall & ~ex2_stall) begin // @[Core.scala 836:40]
+      rrd_reg_op2_data <= _GEN_149;
     end
     if (reset) begin // @[Core.scala 128:38]
-      rrd_reg_wb_sel <= 3'h0; // @[Core.scala 128:38]
-    end else if (ex2_reg_is_br) begin // @[Core.scala 794:24]
-      rrd_reg_wb_sel <= 3'h0;
-    end else if (~rrd_stall & ~ex2_stall) begin // @[Core.scala 850:40]
-      if (id_reg_stall) begin // @[Core.scala 851:24]
-        rrd_reg_wb_sel <= id_reg_wb_sel_delay; // @[Core.scala 863:29]
+      rrd_reg_exe_fun <= 5'h0; // @[Core.scala 128:38]
+    end else if (ex2_reg_is_br) begin // @[Core.scala 782:24]
+      rrd_reg_exe_fun <= 5'h0;
+    end else if (~rrd_stall & ~ex2_stall) begin // @[Core.scala 836:40]
+      if (id_reg_stall) begin // @[Core.scala 837:24]
+        rrd_reg_exe_fun <= id_reg_exe_fun_delay; // @[Core.scala 847:29]
       end else begin
-        rrd_reg_wb_sel <= csignals_4; // @[Core.scala 890:29]
+        rrd_reg_exe_fun <= csignals_0; // @[Core.scala 873:29]
       end
     end
     if (reset) begin // @[Core.scala 129:38]
-      rrd_reg_csr_addr <= 12'h0; // @[Core.scala 129:38]
-    end else if (ex2_reg_is_br) begin // @[Core.scala 794:24]
-      rrd_reg_csr_addr <= _GEN_159;
-    end else if (~rrd_stall & ~ex2_stall) begin // @[Core.scala 850:40]
-      rrd_reg_csr_addr <= _GEN_159;
+      rrd_reg_rf_wen <= 1'h0; // @[Core.scala 129:38]
+    end else if (ex2_reg_is_br) begin // @[Core.scala 782:24]
+      rrd_reg_rf_wen <= 1'h0;
+    end else if (~rrd_stall & ~ex2_stall) begin // @[Core.scala 836:40]
+      if (id_reg_stall) begin // @[Core.scala 837:24]
+        rrd_reg_rf_wen <= id_reg_rf_wen_delay; // @[Core.scala 846:29]
+      end else begin
+        rrd_reg_rf_wen <= csignals_3; // @[Core.scala 872:29]
+      end
     end
     if (reset) begin // @[Core.scala 130:38]
-      rrd_reg_csr_cmd <= 2'h0; // @[Core.scala 130:38]
-    end else if (ex2_reg_is_br) begin // @[Core.scala 794:24]
-      rrd_reg_csr_cmd <= 2'h0;
-    end else if (~rrd_stall & ~ex2_stall) begin // @[Core.scala 850:40]
-      if (id_reg_stall) begin // @[Core.scala 851:24]
-        rrd_reg_csr_cmd <= id_reg_csr_cmd_delay; // @[Core.scala 866:29]
+      rrd_reg_wb_sel <= 3'h0; // @[Core.scala 130:38]
+    end else if (ex2_reg_is_br) begin // @[Core.scala 782:24]
+      rrd_reg_wb_sel <= 3'h0;
+    end else if (~rrd_stall & ~ex2_stall) begin // @[Core.scala 836:40]
+      if (id_reg_stall) begin // @[Core.scala 837:24]
+        rrd_reg_wb_sel <= id_reg_wb_sel_delay; // @[Core.scala 848:29]
       end else begin
-        rrd_reg_csr_cmd <= csignals_6; // @[Core.scala 893:29]
+        rrd_reg_wb_sel <= csignals_4; // @[Core.scala 874:29]
       end
     end
     if (reset) begin // @[Core.scala 131:38]
-      rrd_reg_imm_b_sext <= 32'h0; // @[Core.scala 131:38]
-    end else if (ex2_reg_is_br) begin // @[Core.scala 794:24]
-      rrd_reg_imm_b_sext <= _GEN_158;
-    end else if (~rrd_stall & ~ex2_stall) begin // @[Core.scala 850:40]
-      rrd_reg_imm_b_sext <= _GEN_158;
+      rrd_reg_csr_addr <= 12'h0; // @[Core.scala 131:38]
+    end else if (ex2_reg_is_br) begin // @[Core.scala 782:24]
+      rrd_reg_csr_addr <= _GEN_155;
+    end else if (~rrd_stall & ~ex2_stall) begin // @[Core.scala 836:40]
+      rrd_reg_csr_addr <= _GEN_155;
     end
     if (reset) begin // @[Core.scala 132:38]
-      rrd_reg_mem_w <= 3'h0; // @[Core.scala 132:38]
-    end else if (ex2_reg_is_br) begin // @[Core.scala 794:24]
+      rrd_reg_csr_cmd <= 2'h0; // @[Core.scala 132:38]
+    end else if (ex2_reg_is_br) begin // @[Core.scala 782:24]
+      rrd_reg_csr_cmd <= 2'h0;
+    end else if (~rrd_stall & ~ex2_stall) begin // @[Core.scala 836:40]
+      if (id_reg_stall) begin // @[Core.scala 837:24]
+        rrd_reg_csr_cmd <= id_reg_csr_cmd_delay; // @[Core.scala 851:29]
+      end else begin
+        rrd_reg_csr_cmd <= csignals_6; // @[Core.scala 877:29]
+      end
+    end
+    if (reset) begin // @[Core.scala 133:38]
+      rrd_reg_imm_b_sext <= 32'h0; // @[Core.scala 133:38]
+    end else if (ex2_reg_is_br) begin // @[Core.scala 782:24]
+      rrd_reg_imm_b_sext <= _GEN_154;
+    end else if (~rrd_stall & ~ex2_stall) begin // @[Core.scala 836:40]
+      rrd_reg_imm_b_sext <= _GEN_154;
+    end
+    if (reset) begin // @[Core.scala 134:38]
+      rrd_reg_mem_w <= 3'h0; // @[Core.scala 134:38]
+    end else if (ex2_reg_is_br) begin // @[Core.scala 782:24]
       rrd_reg_mem_w <= 3'h0;
-    end else if (~rrd_stall & ~ex2_stall) begin // @[Core.scala 850:40]
-      if (id_reg_stall) begin // @[Core.scala 851:24]
-        rrd_reg_mem_w <= id_reg_mem_w_delay; // @[Core.scala 867:29]
+    end else if (~rrd_stall & ~ex2_stall) begin // @[Core.scala 836:40]
+      if (id_reg_stall) begin // @[Core.scala 837:24]
+        rrd_reg_mem_w <= id_reg_mem_w_delay; // @[Core.scala 852:29]
       end else begin
-        rrd_reg_mem_w <= csignals_7; // @[Core.scala 894:29]
-      end
-    end
-    if (reset) begin // @[Core.scala 133:39]
-      rrd_reg_is_direct_j <= 1'h0; // @[Core.scala 133:39]
-    end else if (ex2_reg_is_br) begin // @[Core.scala 794:24]
-      rrd_reg_is_direct_j <= 1'h0;
-    end else if (~rrd_stall & ~ex2_stall) begin // @[Core.scala 850:40]
-      if (id_reg_stall) begin // @[Core.scala 851:24]
-        rrd_reg_is_direct_j <= id_reg_is_direct_j_delay; // @[Core.scala 868:29]
-      end else begin
-        rrd_reg_is_direct_j <= id_is_direct_j; // @[Core.scala 895:29]
-      end
-    end
-    if (reset) begin // @[Core.scala 134:39]
-      rrd_reg_is_br <= 1'h0; // @[Core.scala 134:39]
-    end else if (ex2_reg_is_br) begin // @[Core.scala 794:24]
-      rrd_reg_is_br <= 1'h0;
-    end else if (~rrd_stall & ~ex2_stall) begin // @[Core.scala 850:40]
-      if (id_reg_stall) begin // @[Core.scala 851:24]
-        rrd_reg_is_br <= id_reg_is_br_delay; // @[Core.scala 869:29]
-      end else begin
-        rrd_reg_is_br <= id_is_br; // @[Core.scala 896:29]
+        rrd_reg_mem_w <= csignals_7; // @[Core.scala 878:29]
       end
     end
     if (reset) begin // @[Core.scala 135:39]
-      rrd_reg_is_j <= 1'h0; // @[Core.scala 135:39]
-    end else if (ex2_reg_is_br) begin // @[Core.scala 794:24]
-      rrd_reg_is_j <= 1'h0;
-    end else if (~rrd_stall & ~ex2_stall) begin // @[Core.scala 850:40]
-      if (id_reg_stall) begin // @[Core.scala 851:24]
-        rrd_reg_is_j <= id_reg_is_j_delay; // @[Core.scala 870:29]
+      rrd_reg_is_direct_j <= 1'h0; // @[Core.scala 135:39]
+    end else if (ex2_reg_is_br) begin // @[Core.scala 782:24]
+      rrd_reg_is_direct_j <= 1'h0;
+    end else if (~rrd_stall & ~ex2_stall) begin // @[Core.scala 836:40]
+      if (id_reg_stall) begin // @[Core.scala 837:24]
+        rrd_reg_is_direct_j <= id_reg_is_direct_j_delay; // @[Core.scala 853:29]
       end else begin
-        rrd_reg_is_j <= id_is_j; // @[Core.scala 897:29]
+        rrd_reg_is_direct_j <= id_is_direct_j; // @[Core.scala 879:29]
       end
     end
     if (reset) begin // @[Core.scala 136:39]
-      rrd_reg_is_bp_pos <= 1'h0; // @[Core.scala 136:39]
-    end else if (ex2_reg_is_br) begin // @[Core.scala 794:24]
-      rrd_reg_is_bp_pos <= 1'h0;
-    end else if (~rrd_stall & ~ex2_stall) begin // @[Core.scala 850:40]
-      if (id_reg_stall) begin // @[Core.scala 851:24]
-        rrd_reg_is_bp_pos <= id_reg_is_bp_pos_delay; // @[Core.scala 871:29]
+      rrd_reg_is_br <= 1'h0; // @[Core.scala 136:39]
+    end else if (ex2_reg_is_br) begin // @[Core.scala 782:24]
+      rrd_reg_is_br <= 1'h0;
+    end else if (~rrd_stall & ~ex2_stall) begin // @[Core.scala 836:40]
+      if (id_reg_stall) begin // @[Core.scala 837:24]
+        rrd_reg_is_br <= id_reg_is_br_delay; // @[Core.scala 854:29]
       end else begin
-        rrd_reg_is_bp_pos <= id_reg_is_bp_pos; // @[Core.scala 898:29]
+        rrd_reg_is_br <= id_is_br; // @[Core.scala 880:29]
       end
     end
     if (reset) begin // @[Core.scala 137:39]
-      rrd_reg_bp_addr <= 32'h0; // @[Core.scala 137:39]
-    end else if (ex2_reg_is_br) begin // @[Core.scala 794:24]
-      rrd_reg_bp_addr <= _GEN_161;
-    end else if (~rrd_stall & ~ex2_stall) begin // @[Core.scala 850:40]
-      rrd_reg_bp_addr <= _GEN_161;
+      rrd_reg_is_j <= 1'h0; // @[Core.scala 137:39]
+    end else if (ex2_reg_is_br) begin // @[Core.scala 782:24]
+      rrd_reg_is_j <= 1'h0;
+    end else if (~rrd_stall & ~ex2_stall) begin // @[Core.scala 836:40]
+      if (id_reg_stall) begin // @[Core.scala 837:24]
+        rrd_reg_is_j <= id_reg_is_j_delay; // @[Core.scala 855:29]
+      end else begin
+        rrd_reg_is_j <= id_is_j; // @[Core.scala 881:29]
+      end
     end
     if (reset) begin // @[Core.scala 138:39]
-      rrd_reg_is_half <= 1'h0; // @[Core.scala 138:39]
-    end else if (ex2_reg_is_br) begin // @[Core.scala 794:24]
-      rrd_reg_is_half <= _GEN_162;
-    end else if (~rrd_stall & ~ex2_stall) begin // @[Core.scala 850:40]
-      rrd_reg_is_half <= _GEN_162;
+      rrd_reg_is_bp_pos <= 1'h0; // @[Core.scala 138:39]
+    end else if (ex2_reg_is_br) begin // @[Core.scala 782:24]
+      rrd_reg_is_bp_pos <= 1'h0;
+    end else if (~rrd_stall & ~ex2_stall) begin // @[Core.scala 836:40]
+      if (id_reg_stall) begin // @[Core.scala 837:24]
+        rrd_reg_is_bp_pos <= id_reg_is_bp_pos_delay; // @[Core.scala 856:29]
+      end else begin
+        rrd_reg_is_bp_pos <= id_reg_is_bp_pos; // @[Core.scala 882:29]
+      end
     end
     if (reset) begin // @[Core.scala 139:39]
-      rrd_reg_is_valid_inst <= 1'h0; // @[Core.scala 139:39]
-    end else if (ex2_reg_is_br) begin // @[Core.scala 794:24]
-      rrd_reg_is_valid_inst <= 1'h0;
-    end else if (~rrd_stall & ~ex2_stall) begin // @[Core.scala 850:40]
-      if (id_reg_stall) begin // @[Core.scala 851:24]
-        rrd_reg_is_valid_inst <= id_reg_is_valid_inst_delay; // @[Core.scala 874:29]
-      end else begin
-        rrd_reg_is_valid_inst <= _id_reg_is_valid_inst_delay_T; // @[Core.scala 901:29]
-      end
+      rrd_reg_bp_addr <= 32'h0; // @[Core.scala 139:39]
+    end else if (ex2_reg_is_br) begin // @[Core.scala 782:24]
+      rrd_reg_bp_addr <= _GEN_157;
+    end else if (~rrd_stall & ~ex2_stall) begin // @[Core.scala 836:40]
+      rrd_reg_bp_addr <= _GEN_157;
     end
     if (reset) begin // @[Core.scala 140:39]
-      rrd_reg_is_trap <= 1'h0; // @[Core.scala 140:39]
-    end else if (ex2_reg_is_br) begin // @[Core.scala 794:24]
-      rrd_reg_is_trap <= 1'h0;
-    end else if (~rrd_stall & ~ex2_stall) begin // @[Core.scala 850:40]
-      if (id_reg_stall) begin // @[Core.scala 851:24]
-        rrd_reg_is_trap <= id_reg_is_trap_delay; // @[Core.scala 875:29]
-      end else begin
-        rrd_reg_is_trap <= _id_csr_addr_T; // @[Core.scala 902:29]
-      end
+      rrd_reg_is_half <= 1'h0; // @[Core.scala 140:39]
+    end else if (ex2_reg_is_br) begin // @[Core.scala 782:24]
+      rrd_reg_is_half <= _GEN_158;
+    end else if (~rrd_stall & ~ex2_stall) begin // @[Core.scala 836:40]
+      rrd_reg_is_half <= _GEN_158;
     end
     if (reset) begin // @[Core.scala 141:39]
-      rrd_reg_mcause <= 32'h0; // @[Core.scala 141:39]
-    end else if (ex2_reg_is_br) begin // @[Core.scala 794:24]
-      rrd_reg_mcause <= _GEN_163;
-    end else if (~rrd_stall & ~ex2_stall) begin // @[Core.scala 850:40]
-      rrd_reg_mcause <= _GEN_163;
+      rrd_reg_is_valid_inst <= 1'h0; // @[Core.scala 141:39]
+    end else if (ex2_reg_is_br) begin // @[Core.scala 782:24]
+      rrd_reg_is_valid_inst <= 1'h0;
+    end else if (~rrd_stall & ~ex2_stall) begin // @[Core.scala 836:40]
+      if (id_reg_stall) begin // @[Core.scala 837:24]
+        rrd_reg_is_valid_inst <= id_reg_is_valid_inst_delay; // @[Core.scala 859:29]
+      end else begin
+        rrd_reg_is_valid_inst <= _id_reg_is_valid_inst_delay_T; // @[Core.scala 885:29]
+      end
     end
-    if (reset) begin // @[Core.scala 145:38]
-      ex1_reg_pc <= 32'h0; // @[Core.scala 145:38]
-    end else if (_T_24) begin // @[Core.scala 970:20]
-      ex1_reg_pc <= rrd_reg_pc; // @[Core.scala 972:27]
+    if (reset) begin // @[Core.scala 142:39]
+      rrd_reg_is_trap <= 1'h0; // @[Core.scala 142:39]
+    end else if (ex2_reg_is_br) begin // @[Core.scala 782:24]
+      rrd_reg_is_trap <= 1'h0;
+    end else if (~rrd_stall & ~ex2_stall) begin // @[Core.scala 836:40]
+      if (id_reg_stall) begin // @[Core.scala 837:24]
+        rrd_reg_is_trap <= id_reg_is_trap_delay; // @[Core.scala 860:29]
+      end else begin
+        rrd_reg_is_trap <= _id_csr_addr_T; // @[Core.scala 886:29]
+      end
+    end
+    if (reset) begin // @[Core.scala 143:39]
+      rrd_reg_mcause <= 32'h0; // @[Core.scala 143:39]
+    end else if (ex2_reg_is_br) begin // @[Core.scala 782:24]
+      rrd_reg_mcause <= _GEN_159;
+    end else if (~rrd_stall & ~ex2_stall) begin // @[Core.scala 836:40]
+      rrd_reg_mcause <= _GEN_159;
     end
     if (reset) begin // @[Core.scala 147:38]
-      ex1_reg_wb_addr <= 5'h0; // @[Core.scala 147:38]
-    end else if (_T_24) begin // @[Core.scala 970:20]
-      ex1_reg_wb_addr <= rrd_reg_wb_addr; // @[Core.scala 977:27]
+      ex1_reg_pc <= 32'h0; // @[Core.scala 147:38]
+    end else if (_T_24) begin // @[Core.scala 950:20]
+      ex1_reg_pc <= rrd_reg_pc; // @[Core.scala 952:27]
     end
     if (reset) begin // @[Core.scala 148:38]
-      ex1_reg_op1_data <= 32'h0; // @[Core.scala 148:38]
-    end else if (_T_24) begin // @[Core.scala 970:20]
+      ex1_reg_wb_addr <= 5'h0; // @[Core.scala 148:38]
+    end else if (_T_24) begin // @[Core.scala 950:20]
+      ex1_reg_wb_addr <= rrd_reg_wb_addr; // @[Core.scala 956:27]
+    end
+    if (reset) begin // @[Core.scala 149:38]
+      ex1_reg_op1_data <= 32'h0; // @[Core.scala 149:38]
+    end else if (_T_24) begin // @[Core.scala 950:20]
       if (_rrd_op1_data_T_2) begin // @[Mux.scala 101:16]
         ex1_reg_op1_data <= 32'h0;
       end else if (_rrd_op1_data_T_6) begin // @[Mux.scala 101:16]
@@ -2893,9 +2908,9 @@ module Core(
         ex1_reg_op1_data <= _rrd_op1_data_T_13;
       end
     end
-    if (reset) begin // @[Core.scala 149:38]
-      ex1_reg_op2_data <= 32'h0; // @[Core.scala 149:38]
-    end else if (_T_24) begin // @[Core.scala 970:20]
+    if (reset) begin // @[Core.scala 150:38]
+      ex1_reg_op2_data <= 32'h0; // @[Core.scala 150:38]
+    end else if (_T_24) begin // @[Core.scala 950:20]
       if (_rrd_op2_data_T_2) begin // @[Mux.scala 101:16]
         ex1_reg_op2_data <= 32'h0;
       end else if (_rrd_op2_data_T_6) begin // @[Mux.scala 101:16]
@@ -2904,9 +2919,9 @@ module Core(
         ex1_reg_op2_data <= _rrd_op2_data_T_13;
       end
     end
-    if (reset) begin // @[Core.scala 150:38]
-      ex1_reg_rs2_data <= 32'h0; // @[Core.scala 150:38]
-    end else if (_T_24) begin // @[Core.scala 970:20]
+    if (reset) begin // @[Core.scala 151:38]
+      ex1_reg_rs2_data <= 32'h0; // @[Core.scala 151:38]
+    end else if (_T_24) begin // @[Core.scala 950:20]
       if (_rrd_op2_data_T_1) begin // @[Mux.scala 101:16]
         ex1_reg_rs2_data <= 32'h0;
       end else if (_rrd_rs2_data_T_2) begin // @[Mux.scala 101:16]
@@ -2915,129 +2930,124 @@ module Core(
         ex1_reg_rs2_data <= _rrd_rs2_data_T_5;
       end
     end
-    if (reset) begin // @[Core.scala 151:38]
-      ex1_reg_exe_fun <= 5'h0; // @[Core.scala 151:38]
-    end else if (_T_24) begin // @[Core.scala 970:20]
-      if (ex_is_bubble) begin // @[Core.scala 979:33]
+    if (reset) begin // @[Core.scala 152:38]
+      ex1_reg_exe_fun <= 5'h0; // @[Core.scala 152:38]
+    end else if (_T_24) begin // @[Core.scala 950:20]
+      if (ex_is_bubble) begin // @[Core.scala 958:33]
         ex1_reg_exe_fun <= 5'h0;
       end else begin
         ex1_reg_exe_fun <= rrd_reg_exe_fun;
       end
     end
-    if (reset) begin // @[Core.scala 152:38]
-      ex1_reg_rf_wen <= 1'h0; // @[Core.scala 152:38]
-    end else if (_T_24) begin // @[Core.scala 970:20]
-      if (ex_is_bubble) begin // @[Core.scala 978:33]
+    if (reset) begin // @[Core.scala 153:38]
+      ex1_reg_rf_wen <= 1'h0; // @[Core.scala 153:38]
+    end else if (_T_24) begin // @[Core.scala 950:20]
+      if (ex_is_bubble) begin // @[Core.scala 957:33]
         ex1_reg_rf_wen <= 1'h0;
       end else begin
         ex1_reg_rf_wen <= rrd_reg_rf_wen;
       end
     end
-    if (reset) begin // @[Core.scala 153:38]
-      ex1_reg_wb_sel <= 3'h0; // @[Core.scala 153:38]
-    end else if (_T_24) begin // @[Core.scala 970:20]
-      if (ex_is_bubble) begin // @[Core.scala 980:33]
+    if (reset) begin // @[Core.scala 154:38]
+      ex1_reg_wb_sel <= 3'h0; // @[Core.scala 154:38]
+    end else if (_T_24) begin // @[Core.scala 950:20]
+      if (ex_is_bubble) begin // @[Core.scala 959:33]
         ex1_reg_wb_sel <= 3'h0;
       end else begin
         ex1_reg_wb_sel <= rrd_reg_wb_sel;
       end
     end
-    if (reset) begin // @[Core.scala 154:38]
-      ex1_reg_csr_addr <= 12'h0; // @[Core.scala 154:38]
-    end else if (_T_24) begin // @[Core.scala 970:20]
-      ex1_reg_csr_addr <= rrd_reg_csr_addr; // @[Core.scala 982:27]
-    end
     if (reset) begin // @[Core.scala 155:38]
-      ex1_reg_csr_cmd <= 2'h0; // @[Core.scala 155:38]
-    end else if (_T_24) begin // @[Core.scala 970:20]
-      if (ex_is_bubble) begin // @[Core.scala 983:33]
+      ex1_reg_csr_addr <= 12'h0; // @[Core.scala 155:38]
+    end else if (_T_24) begin // @[Core.scala 950:20]
+      ex1_reg_csr_addr <= rrd_reg_csr_addr; // @[Core.scala 961:27]
+    end
+    if (reset) begin // @[Core.scala 156:38]
+      ex1_reg_csr_cmd <= 2'h0; // @[Core.scala 156:38]
+    end else if (_T_24) begin // @[Core.scala 950:20]
+      if (ex_is_bubble) begin // @[Core.scala 962:33]
         ex1_reg_csr_cmd <= 2'h0;
       end else begin
         ex1_reg_csr_cmd <= rrd_reg_csr_cmd;
       end
     end
-    if (reset) begin // @[Core.scala 157:38]
-      ex1_reg_mem_w <= 3'h0; // @[Core.scala 157:38]
-    end else if (_T_24) begin // @[Core.scala 970:20]
-      ex1_reg_mem_w <= rrd_reg_mem_w; // @[Core.scala 984:27]
-    end
     if (reset) begin // @[Core.scala 158:38]
-      ex1_is_uncond_br <= 1'h0; // @[Core.scala 158:38]
-    end else if (_T_24) begin // @[Core.scala 970:20]
-      ex1_is_uncond_br <= rrd_reg_is_j; // @[Core.scala 987:27]
+      ex1_reg_mem_w <= 3'h0; // @[Core.scala 158:38]
+    end else if (_T_24) begin // @[Core.scala 950:20]
+      ex1_reg_mem_w <= rrd_reg_mem_w; // @[Core.scala 963:27]
     end
     if (reset) begin // @[Core.scala 159:38]
-      ex1_reg_is_bp_pos <= 1'h0; // @[Core.scala 159:38]
-    end else if (_T_24) begin // @[Core.scala 970:20]
-      ex1_reg_is_bp_pos <= rrd_reg_is_bp_pos; // @[Core.scala 988:27]
+      ex1_is_uncond_br <= 1'h0; // @[Core.scala 159:38]
+    end else if (_T_24) begin // @[Core.scala 950:20]
+      ex1_is_uncond_br <= rrd_reg_is_j; // @[Core.scala 965:27]
     end
     if (reset) begin // @[Core.scala 160:38]
-      ex1_reg_bp_addr <= 32'h0; // @[Core.scala 160:38]
-    end else if (_T_24) begin // @[Core.scala 970:20]
-      ex1_reg_bp_addr <= rrd_reg_bp_addr; // @[Core.scala 989:27]
+      ex1_reg_is_bp_pos <= 1'h0; // @[Core.scala 160:38]
+    end else if (_T_24) begin // @[Core.scala 950:20]
+      ex1_reg_is_bp_pos <= rrd_reg_is_bp_pos; // @[Core.scala 966:27]
     end
     if (reset) begin // @[Core.scala 161:38]
-      ex1_reg_is_half <= 1'h0; // @[Core.scala 161:38]
-    end else if (_T_24) begin // @[Core.scala 970:20]
-      ex1_reg_is_half <= rrd_reg_is_half; // @[Core.scala 990:27]
+      ex1_reg_bp_addr <= 32'h0; // @[Core.scala 161:38]
+    end else if (_T_24) begin // @[Core.scala 950:20]
+      ex1_reg_bp_addr <= rrd_reg_bp_addr; // @[Core.scala 967:27]
     end
     if (reset) begin // @[Core.scala 162:38]
-      ex1_reg_is_valid_inst <= 1'h0; // @[Core.scala 162:38]
-    end else if (_T_24) begin // @[Core.scala 970:20]
-      ex1_reg_is_valid_inst <= rrd_reg_is_valid_inst & ~ex_is_bubble; // @[Core.scala 991:27]
+      ex1_reg_is_half <= 1'h0; // @[Core.scala 162:38]
+    end else if (_T_24) begin // @[Core.scala 950:20]
+      ex1_reg_is_half <= rrd_reg_is_half; // @[Core.scala 968:27]
     end
     if (reset) begin // @[Core.scala 163:38]
-      ex1_reg_is_trap <= 1'h0; // @[Core.scala 163:38]
-    end else if (_T_24) begin // @[Core.scala 970:20]
-      if (ex_is_bubble) begin // @[Core.scala 992:33]
+      ex1_reg_is_valid_inst <= 1'h0; // @[Core.scala 163:38]
+    end else if (_T_24) begin // @[Core.scala 950:20]
+      ex1_reg_is_valid_inst <= rrd_reg_is_valid_inst & ~ex_is_bubble; // @[Core.scala 969:27]
+    end
+    if (reset) begin // @[Core.scala 164:38]
+      ex1_reg_is_trap <= 1'h0; // @[Core.scala 164:38]
+    end else if (_T_24) begin // @[Core.scala 950:20]
+      if (ex_is_bubble) begin // @[Core.scala 970:33]
         ex1_reg_is_trap <= 1'h0;
       end else begin
         ex1_reg_is_trap <= rrd_reg_is_trap;
       end
     end
-    if (reset) begin // @[Core.scala 164:38]
-      ex1_reg_mcause <= 32'h0; // @[Core.scala 164:38]
-    end else if (_T_24) begin // @[Core.scala 970:20]
-      ex1_reg_mcause <= rrd_reg_mcause; // @[Core.scala 993:27]
-    end
-    if (reset) begin // @[Core.scala 166:38]
-      ex1_reg_mem_use_reg <= 1'h0; // @[Core.scala 166:38]
-    end else if (_T_24) begin // @[Core.scala 970:20]
-      ex1_reg_mem_use_reg <= rrd_mem_use_reg; // @[Core.scala 995:27]
+    if (reset) begin // @[Core.scala 165:38]
+      ex1_reg_mcause <= 32'h0; // @[Core.scala 165:38]
+    end else if (_T_24) begin // @[Core.scala 950:20]
+      ex1_reg_mcause <= rrd_reg_mcause; // @[Core.scala 971:27]
     end
     if (reset) begin // @[Core.scala 167:38]
-      ex1_reg_inst2_use_reg <= 1'h0; // @[Core.scala 167:38]
-    end else if (_T_24) begin // @[Core.scala 970:20]
-      ex1_reg_inst2_use_reg <= rrd_inst2_use_reg; // @[Core.scala 996:27]
+      ex1_reg_mem_use_reg <= 1'h0; // @[Core.scala 167:38]
+    end else if (_T_24) begin // @[Core.scala 950:20]
+      ex1_reg_mem_use_reg <= rrd_mem_use_reg; // @[Core.scala 973:27]
     end
     if (reset) begin // @[Core.scala 168:38]
-      ex1_reg_inst3_use_reg <= 1'h0; // @[Core.scala 168:38]
-    end else if (_T_24) begin // @[Core.scala 970:20]
-      ex1_reg_inst3_use_reg <= rrd_inst3_use_reg; // @[Core.scala 997:27]
+      ex1_reg_inst2_use_reg <= 1'h0; // @[Core.scala 168:38]
+    end else if (_T_24) begin // @[Core.scala 950:20]
+      ex1_reg_inst2_use_reg <= rrd_inst2_use_reg; // @[Core.scala 974:27]
+    end
+    if (reset) begin // @[Core.scala 169:38]
+      ex1_reg_inst3_use_reg <= 1'h0; // @[Core.scala 169:38]
+    end else if (_T_24) begin // @[Core.scala 950:20]
+      ex1_reg_inst3_use_reg <= rrd_inst3_use_reg; // @[Core.scala 975:27]
     end
     if (reset) begin // @[Core.scala 170:43]
       ex1_is_cond_br_inst <= 1'h0; // @[Core.scala 170:43]
-    end else if (_T_24) begin // @[Core.scala 970:20]
-      ex1_is_cond_br_inst <= rrd_reg_is_br; // @[Core.scala 986:27]
+    end else if (_T_24) begin // @[Core.scala 950:20]
+      ex1_is_cond_br_inst <= rrd_reg_is_br; // @[Core.scala 964:27]
     end
     if (reset) begin // @[Core.scala 171:43]
-      ex1_reg_is_indirect_j <= 1'h0; // @[Core.scala 171:43]
-    end else if (_T_24) begin // @[Core.scala 970:20]
-      ex1_reg_is_indirect_j <= _ex1_reg_is_valid_inst_T_1 & rrd_is_indirect_j; // @[Core.scala 998:27]
+      ex1_cond_br_target <= 32'h0; // @[Core.scala 171:43]
+    end else if (_T_24) begin // @[Core.scala 950:20]
+      ex1_cond_br_target <= rrd_direct_jbr_target; // @[Core.scala 960:31]
     end
-    if (reset) begin // @[Core.scala 173:43]
-      ex1_cond_br_target <= 32'h0; // @[Core.scala 173:43]
-    end else if (_T_24) begin // @[Core.scala 970:20]
-      ex1_cond_br_target <= rrd_direct_jbr_target; // @[Core.scala 981:31]
+    if (reset) begin // @[Core.scala 174:41]
+      jbr_reg_bp_en <= 1'h0; // @[Core.scala 174:41]
+    end else if (_T_24) begin // @[Core.scala 1083:21]
+      jbr_reg_bp_en <= ex1_reg_is_valid_inst & _csr_is_valid_inst_T; // @[Core.scala 1084:30]
     end
-    if (reset) begin // @[Core.scala 177:41]
-      jbr_reg_bp_en <= 1'h0; // @[Core.scala 177:41]
-    end else if (_T_24) begin // @[Core.scala 1111:21]
-      jbr_reg_bp_en <= ex1_reg_is_valid_inst & _if2_inst_cnt_T; // @[Core.scala 1112:30]
-    end
-    if (reset) begin // @[Core.scala 178:41]
-      jbr_reg_is_cond_br <= 1'h0; // @[Core.scala 178:41]
-    end else if (_T_24) begin // @[Core.scala 1111:21]
+    if (reset) begin // @[Core.scala 175:41]
+      jbr_reg_is_cond_br <= 1'h0; // @[Core.scala 175:41]
+    end else if (_T_24) begin // @[Core.scala 1083:21]
       if (_ex1_is_cond_br_T) begin // @[Mux.scala 101:16]
         jbr_reg_is_cond_br <= _ex1_is_cond_br_T_1;
       end else if (_ex1_is_cond_br_T_2) begin // @[Mux.scala 101:16]
@@ -3046,109 +3056,111 @@ module Core(
         jbr_reg_is_cond_br <= _ex1_is_cond_br_T_22;
       end
     end
+    if (reset) begin // @[Core.scala 176:41]
+      jbr_reg_is_cond_br_inst <= 1'h0; // @[Core.scala 176:41]
+    end else if (_T_24) begin // @[Core.scala 1083:21]
+      jbr_reg_is_cond_br_inst <= ex1_is_cond_br_inst; // @[Core.scala 1086:30]
+    end
+    if (reset) begin // @[Core.scala 177:41]
+      jbr_reg_is_uncond_br <= 1'h0; // @[Core.scala 177:41]
+    end else if (_T_24) begin // @[Core.scala 1083:21]
+      jbr_reg_is_uncond_br <= ex1_is_uncond_br; // @[Core.scala 1087:30]
+    end
+    if (reset) begin // @[Core.scala 178:41]
+      jbr_reg_cond_br_target <= 32'h0; // @[Core.scala 178:41]
+    end else if (_T_24) begin // @[Core.scala 1083:21]
+      jbr_reg_cond_br_target <= ex1_cond_br_target; // @[Core.scala 1088:30]
+    end
     if (reset) begin // @[Core.scala 179:41]
-      jbr_reg_is_cond_br_inst <= 1'h0; // @[Core.scala 179:41]
-    end else if (_T_24) begin // @[Core.scala 1111:21]
-      jbr_reg_is_cond_br_inst <= ex1_is_cond_br_inst; // @[Core.scala 1114:30]
+      jbr_reg_uncond_br_target <= 32'h0; // @[Core.scala 179:41]
+    end else if (_T_24) begin // @[Core.scala 1083:21]
+      jbr_reg_uncond_br_target <= ex1_uncond_br_target; // @[Core.scala 1089:30]
     end
     if (reset) begin // @[Core.scala 180:41]
-      jbr_reg_is_uncond_br <= 1'h0; // @[Core.scala 180:41]
-    end else if (_T_24) begin // @[Core.scala 1111:21]
-      jbr_reg_is_uncond_br <= ex1_is_uncond_br; // @[Core.scala 1115:30]
+      jbr_reg_is_bp_pos <= 1'h0; // @[Core.scala 180:41]
+    end else if (_T_24) begin // @[Core.scala 1083:21]
+      jbr_reg_is_bp_pos <= ex1_reg_is_bp_pos; // @[Core.scala 1090:30]
     end
     if (reset) begin // @[Core.scala 181:41]
-      jbr_reg_cond_br_target <= 32'h0; // @[Core.scala 181:41]
-    end else if (_T_24) begin // @[Core.scala 1111:21]
-      jbr_reg_cond_br_target <= ex1_cond_br_target; // @[Core.scala 1116:30]
+      jbr_reg_bp_addr <= 32'h0; // @[Core.scala 181:41]
+    end else if (_T_24) begin // @[Core.scala 1083:21]
+      jbr_reg_bp_addr <= ex1_reg_bp_addr; // @[Core.scala 1091:30]
     end
     if (reset) begin // @[Core.scala 182:41]
-      jbr_reg_uncond_br_target <= 32'h0; // @[Core.scala 182:41]
-    end else if (_T_24) begin // @[Core.scala 1111:21]
-      jbr_reg_uncond_br_target <= ex1_uncond_br_target; // @[Core.scala 1117:30]
+      jbr_reg_is_half <= 1'h0; // @[Core.scala 182:41]
+    end else if (_T_24) begin // @[Core.scala 1083:21]
+      jbr_reg_is_half <= ex1_reg_is_half; // @[Core.scala 1092:30]
     end
-    if (reset) begin // @[Core.scala 183:41]
-      jbr_reg_is_bp_pos <= 1'h0; // @[Core.scala 183:41]
-    end else if (_T_24) begin // @[Core.scala 1111:21]
-      jbr_reg_is_bp_pos <= ex1_reg_is_bp_pos; // @[Core.scala 1118:30]
+    if (reset) begin // @[Core.scala 185:38]
+      ex2_reg_pc <= 32'h0; // @[Core.scala 185:38]
+    end else if (_T_24) begin // @[Core.scala 1125:21]
+      ex2_reg_pc <= ex1_reg_pc; // @[Core.scala 1126:24]
     end
-    if (reset) begin // @[Core.scala 184:41]
-      jbr_reg_bp_addr <= 32'h0; // @[Core.scala 184:41]
-    end else if (_T_24) begin // @[Core.scala 1111:21]
-      jbr_reg_bp_addr <= ex1_reg_bp_addr; // @[Core.scala 1119:30]
+    if (reset) begin // @[Core.scala 186:38]
+      ex2_reg_wb_addr <= 5'h0; // @[Core.scala 186:38]
+    end else if (_T_24) begin // @[Core.scala 1125:21]
+      ex2_reg_wb_addr <= ex1_reg_wb_addr; // @[Core.scala 1129:24]
     end
-    if (reset) begin // @[Core.scala 185:41]
-      jbr_reg_is_half <= 1'h0; // @[Core.scala 185:41]
-    end else if (_T_24) begin // @[Core.scala 1111:21]
-      jbr_reg_is_half <= ex1_reg_is_half; // @[Core.scala 1120:30]
+    if (reset) begin // @[Core.scala 187:38]
+      ex2_reg_op1_data <= 32'h0; // @[Core.scala 187:38]
+    end else if (_T_24) begin // @[Core.scala 1125:21]
+      ex2_reg_op1_data <= ex1_reg_op1_data; // @[Core.scala 1127:24]
     end
     if (reset) begin // @[Core.scala 189:38]
-      ex2_reg_pc <= 32'h0; // @[Core.scala 189:38]
-    end else if (_T_24) begin // @[Core.scala 1167:21]
-      ex2_reg_pc <= ex1_reg_pc; // @[Core.scala 1169:24]
+      ex2_reg_mullu <= 48'h0; // @[Core.scala 189:38]
+    end else if (_T_24) begin // @[Core.scala 1125:21]
+      ex2_reg_mullu <= ex1_mullu; // @[Core.scala 1131:24]
+    end
+    if (reset) begin // @[Core.scala 190:38]
+      ex2_reg_mulls <= 32'h0; // @[Core.scala 190:38]
+    end else if (_T_24) begin // @[Core.scala 1125:21]
+      ex2_reg_mulls <= ex1_mulls; // @[Core.scala 1132:24]
     end
     if (reset) begin // @[Core.scala 191:38]
-      ex2_reg_wb_addr <= 5'h0; // @[Core.scala 191:38]
-    end else if (_T_24) begin // @[Core.scala 1167:21]
-      ex2_reg_wb_addr <= ex1_reg_wb_addr; // @[Core.scala 1173:24]
+      ex2_reg_mulhuu <= 48'h0; // @[Core.scala 191:38]
+    end else if (_T_24) begin // @[Core.scala 1125:21]
+      ex2_reg_mulhuu <= ex1_mulhuu; // @[Core.scala 1133:24]
     end
     if (reset) begin // @[Core.scala 192:38]
-      ex2_reg_op1_data <= 32'h0; // @[Core.scala 192:38]
-    end else if (_T_24) begin // @[Core.scala 1167:21]
-      ex2_reg_op1_data <= ex1_reg_op1_data; // @[Core.scala 1171:24]
+      ex2_reg_mulhss <= 48'sh0; // @[Core.scala 192:38]
+    end else if (_T_24) begin // @[Core.scala 1125:21]
+      ex2_reg_mulhss <= ex1_mulhss; // @[Core.scala 1134:24]
+    end
+    if (reset) begin // @[Core.scala 193:38]
+      ex2_reg_mulhsu <= 48'sh0; // @[Core.scala 193:38]
+    end else if (_T_24) begin // @[Core.scala 1125:21]
+      ex2_reg_mulhsu <= ex1_mulhsu; // @[Core.scala 1135:24]
     end
     if (reset) begin // @[Core.scala 194:38]
-      ex2_reg_mullu <= 48'h0; // @[Core.scala 194:38]
-    end else if (_T_24) begin // @[Core.scala 1167:21]
-      ex2_reg_mullu <= ex1_mullu; // @[Core.scala 1175:24]
+      ex2_reg_exe_fun <= 5'h0; // @[Core.scala 194:38]
+    end else if (_T_24) begin // @[Core.scala 1125:21]
+      ex2_reg_exe_fun <= ex1_reg_exe_fun; // @[Core.scala 1137:24]
     end
     if (reset) begin // @[Core.scala 195:38]
-      ex2_reg_mulls <= 32'h0; // @[Core.scala 195:38]
-    end else if (_T_24) begin // @[Core.scala 1167:21]
-      ex2_reg_mulls <= ex1_mulls; // @[Core.scala 1176:24]
+      ex2_reg_rf_wen <= 1'h0; // @[Core.scala 195:38]
+    end else if (_T_24) begin // @[Core.scala 1125:21]
+      ex2_reg_rf_wen <= ex1_reg_rf_wen; // @[Core.scala 1138:24]
     end
     if (reset) begin // @[Core.scala 196:38]
-      ex2_reg_mulhuu <= 48'h0; // @[Core.scala 196:38]
-    end else if (_T_24) begin // @[Core.scala 1167:21]
-      ex2_reg_mulhuu <= ex1_mulhuu; // @[Core.scala 1177:24]
+      ex2_reg_wb_sel <= 3'h0; // @[Core.scala 196:38]
+    end else if (mem2_dram_stall & ~ex2_reg_div_stall & ex2_reg_no_mem) begin // @[Core.scala 1163:66]
+      ex2_reg_wb_sel <= 3'h0; // @[Core.scala 1165:27]
+    end else if (_T_24) begin // @[Core.scala 1125:21]
+      ex2_reg_wb_sel <= ex1_reg_wb_sel; // @[Core.scala 1139:24]
     end
     if (reset) begin // @[Core.scala 197:38]
-      ex2_reg_mulhss <= 48'sh0; // @[Core.scala 197:38]
-    end else if (_T_24) begin // @[Core.scala 1167:21]
-      ex2_reg_mulhss <= ex1_mulhss; // @[Core.scala 1178:24]
+      ex2_reg_csr_addr <= 12'h0; // @[Core.scala 197:38]
+    end else if (_T_24) begin // @[Core.scala 1125:21]
+      ex2_reg_csr_addr <= ex1_reg_csr_addr; // @[Core.scala 1158:31]
     end
     if (reset) begin // @[Core.scala 198:38]
-      ex2_reg_mulhsu <= 48'sh0; // @[Core.scala 198:38]
-    end else if (_T_24) begin // @[Core.scala 1167:21]
-      ex2_reg_mulhsu <= ex1_mulhsu; // @[Core.scala 1179:24]
+      ex2_reg_csr_cmd <= 2'h0; // @[Core.scala 198:38]
+    end else if (_T_24) begin // @[Core.scala 1125:21]
+      ex2_reg_csr_cmd <= ex1_reg_csr_cmd; // @[Core.scala 1157:31]
     end
     if (reset) begin // @[Core.scala 199:38]
-      ex2_reg_exe_fun <= 5'h0; // @[Core.scala 199:38]
-    end else if (_T_24) begin // @[Core.scala 1167:21]
-      ex2_reg_exe_fun <= ex1_reg_exe_fun; // @[Core.scala 1181:24]
-    end
-    if (reset) begin // @[Core.scala 200:38]
-      ex2_reg_rf_wen <= 1'h0; // @[Core.scala 200:38]
-    end else if (_T_24) begin // @[Core.scala 1167:21]
-      ex2_reg_rf_wen <= ex1_reg_rf_wen; // @[Core.scala 1182:24]
-    end
-    if (reset) begin // @[Core.scala 201:38]
-      ex2_reg_wb_sel <= 3'h0; // @[Core.scala 201:38]
-    end else if (_T_24) begin // @[Core.scala 1167:21]
-      ex2_reg_wb_sel <= ex1_reg_wb_sel; // @[Core.scala 1183:24]
-    end
-    if (reset) begin // @[Core.scala 202:38]
-      ex2_reg_csr_addr <= 12'h0; // @[Core.scala 202:38]
-    end else if (_T_24) begin // @[Core.scala 1167:21]
-      ex2_reg_csr_addr <= ex1_reg_csr_addr; // @[Core.scala 1201:31]
-    end
-    if (reset) begin // @[Core.scala 203:38]
-      ex2_reg_csr_cmd <= 2'h0; // @[Core.scala 203:38]
-    end else if (_T_24) begin // @[Core.scala 1167:21]
-      ex2_reg_csr_cmd <= ex1_reg_csr_cmd; // @[Core.scala 1200:31]
-    end
-    if (reset) begin // @[Core.scala 204:38]
-      ex2_reg_alu_out <= 32'h0; // @[Core.scala 204:38]
-    end else if (_T_24) begin // @[Core.scala 1167:21]
+      ex2_reg_alu_out <= 32'h0; // @[Core.scala 199:38]
+    end else if (_T_24) begin // @[Core.scala 1125:21]
       if (_ex1_alu_out_T) begin // @[Mux.scala 101:16]
         ex2_reg_alu_out <= _ex1_alu_out_T_2;
       end else if (_ex1_alu_out_T_3) begin // @[Mux.scala 101:16]
@@ -3157,11 +3169,11 @@ module Core(
         ex2_reg_alu_out <= _ex1_alu_out_T_69;
       end
     end
-    if (reset) begin // @[Core.scala 205:38]
-      ex2_reg_pc_bit_out <= 32'h0; // @[Core.scala 205:38]
-    end else if (_T_24) begin // @[Core.scala 1167:21]
+    if (reset) begin // @[Core.scala 200:38]
+      ex2_reg_pc_bit_out <= 32'h0; // @[Core.scala 200:38]
+    end else if (_T_24) begin // @[Core.scala 1125:21]
       if (_ex1_fw_data_T) begin // @[Mux.scala 101:16]
-        if (ex1_reg_is_half) begin // @[Core.scala 1031:24]
+        if (ex1_reg_is_half) begin // @[Core.scala 1008:24]
           ex2_reg_pc_bit_out <= _ex1_next_pc_T_1;
         end else begin
           ex2_reg_pc_bit_out <= _ex1_next_pc_T_3;
@@ -3172,268 +3184,279 @@ module Core(
         ex2_reg_pc_bit_out <= _ex1_pc_bit_out_T_305;
       end
     end
-    if (reset) begin // @[Core.scala 207:38]
-      ex2_reg_wdata <= 32'h0; // @[Core.scala 207:38]
-    end else if (_T_24) begin // @[Core.scala 1167:21]
-      ex2_reg_wdata <= _ex2_reg_wdata_T_2[31:0]; // @[Core.scala 1184:24]
+    if (reset) begin // @[Core.scala 201:38]
+      ex2_reg_wdata <= 32'h0; // @[Core.scala 201:38]
+    end else if (_T_24) begin // @[Core.scala 1125:21]
+      ex2_reg_wdata <= _ex2_reg_wdata_T_2[31:0]; // @[Core.scala 1141:24]
+    end
+    if (reset) begin // @[Core.scala 202:38]
+      ex2_reg_is_valid_inst <= 1'h0; // @[Core.scala 202:38]
+    end else if (mem2_dram_stall & ~ex2_reg_div_stall & ex2_reg_no_mem) begin // @[Core.scala 1163:66]
+      ex2_reg_is_valid_inst <= 1'h0; // @[Core.scala 1166:27]
+    end else if (_T_24) begin // @[Core.scala 1125:21]
+      ex2_reg_is_valid_inst <= _jbr_reg_bp_en_T_1; // @[Core.scala 1142:27]
+    end
+    if (reset) begin // @[Core.scala 203:38]
+      ex2_reg_is_trap <= 1'h0; // @[Core.scala 203:38]
+    end else if (mem2_dram_stall & ~ex2_reg_div_stall & ex2_reg_no_mem) begin // @[Core.scala 1163:66]
+      ex2_reg_is_trap <= 1'h0; // @[Core.scala 1167:27]
+    end else if (_T_24) begin // @[Core.scala 1125:21]
+      ex2_reg_is_trap <= ex1_reg_is_trap; // @[Core.scala 1143:24]
+    end
+    if (reset) begin // @[Core.scala 204:38]
+      ex2_reg_mcause <= 32'h0; // @[Core.scala 204:38]
+    end else if (_T_24) begin // @[Core.scala 1125:21]
+      ex2_reg_mcause <= ex1_reg_mcause; // @[Core.scala 1144:24]
     end
     if (reset) begin // @[Core.scala 208:38]
-      ex2_reg_is_valid_inst <= 1'h0; // @[Core.scala 208:38]
-    end else if (_T_24) begin // @[Core.scala 1167:21]
-      ex2_reg_is_valid_inst <= _jbr_reg_bp_en_T_1; // @[Core.scala 1185:27]
+      ex2_reg_divrem <= 1'h0; // @[Core.scala 208:38]
+    end else if (_T_24) begin // @[Core.scala 1125:21]
+      ex2_reg_divrem <= ex1_divrem; // @[Core.scala 1146:31]
     end
     if (reset) begin // @[Core.scala 209:38]
-      ex2_reg_is_trap <= 1'h0; // @[Core.scala 209:38]
-    end else if (_T_24) begin // @[Core.scala 1167:21]
-      ex2_reg_is_trap <= ex1_reg_is_trap; // @[Core.scala 1186:24]
+      ex2_reg_sign_op1 <= 1'h0; // @[Core.scala 209:38]
+    end else if (_T_24) begin // @[Core.scala 1125:21]
+      ex2_reg_sign_op1 <= ex1_sign_op1; // @[Core.scala 1149:31]
     end
     if (reset) begin // @[Core.scala 210:38]
-      ex2_reg_mcause <= 32'h0; // @[Core.scala 210:38]
-    end else if (_T_24) begin // @[Core.scala 1167:21]
-      ex2_reg_mcause <= ex1_reg_mcause; // @[Core.scala 1187:24]
+      ex2_reg_sign_op12 <= 1'h0; // @[Core.scala 210:38]
+    end else if (_T_24) begin // @[Core.scala 1125:21]
+      ex2_reg_sign_op12 <= ex1_sign_op12; // @[Core.scala 1150:31]
     end
-    if (reset) begin // @[Core.scala 214:42]
-      ex2_reg_divrem <= 1'h0; // @[Core.scala 214:42]
-    end else if (_T_24) begin // @[Core.scala 1167:21]
-      ex2_reg_divrem <= ex1_divrem; // @[Core.scala 1189:31]
+    if (reset) begin // @[Core.scala 211:38]
+      ex2_reg_zero_op2 <= 1'h0; // @[Core.scala 211:38]
+    end else if (_T_24) begin // @[Core.scala 1125:21]
+      ex2_reg_zero_op2 <= ex1_zero_op2; // @[Core.scala 1151:31]
     end
-    if (reset) begin // @[Core.scala 215:42]
-      ex2_reg_sign_op1 <= 1'h0; // @[Core.scala 215:42]
-    end else if (_T_24) begin // @[Core.scala 1167:21]
-      ex2_reg_sign_op1 <= ex1_sign_op1; // @[Core.scala 1192:31]
-    end
-    if (reset) begin // @[Core.scala 216:42]
-      ex2_reg_sign_op12 <= 1'h0; // @[Core.scala 216:42]
-    end else if (_T_24) begin // @[Core.scala 1167:21]
-      ex2_reg_sign_op12 <= ex1_sign_op12; // @[Core.scala 1193:31]
-    end
-    if (reset) begin // @[Core.scala 217:42]
-      ex2_reg_zero_op2 <= 1'h0; // @[Core.scala 217:42]
-    end else if (_T_24) begin // @[Core.scala 1167:21]
-      ex2_reg_zero_op2 <= ex1_zero_op2; // @[Core.scala 1194:31]
-    end
-    if (reset) begin // @[Core.scala 218:42]
-      ex2_reg_init_dividend <= 37'h0; // @[Core.scala 218:42]
-    end else if (_T_24) begin // @[Core.scala 1167:21]
-      if (_ex1_alu_out_T_38 | _ex1_alu_out_T_43) begin // @[Core.scala 1053:69]
-        if (ex1_reg_op1_data[31]) begin // @[Core.scala 1055:49]
-          ex2_reg_init_dividend <= _ex1_dividend_T_5; // @[Core.scala 1056:20]
+    if (reset) begin // @[Core.scala 212:38]
+      ex2_reg_init_dividend <= 37'h0; // @[Core.scala 212:38]
+    end else if (_T_24) begin // @[Core.scala 1125:21]
+      if (_ex1_alu_out_T_38 | _ex1_alu_out_T_43) begin // @[Core.scala 1030:69]
+        if (ex1_reg_op1_data[31]) begin // @[Core.scala 1032:49]
+          ex2_reg_init_dividend <= _ex1_dividend_T_5; // @[Core.scala 1033:20]
         end else begin
-          ex2_reg_init_dividend <= _ex1_dividend_T_8; // @[Core.scala 1058:20]
+          ex2_reg_init_dividend <= _ex1_dividend_T_8; // @[Core.scala 1035:20]
         end
-      end else if (_ex1_alu_out_T_49 | _ex1_alu_out_T_46) begin // @[Core.scala 1068:77]
-        ex2_reg_init_dividend <= _ex1_dividend_T_8; // @[Core.scala 1070:18]
+      end else if (_ex1_alu_out_T_49 | _ex1_alu_out_T_46) begin // @[Core.scala 1045:77]
+        ex2_reg_init_dividend <= _ex1_dividend_T_8; // @[Core.scala 1047:18]
       end else begin
         ex2_reg_init_dividend <= 37'h0;
       end
     end
-    if (reset) begin // @[Core.scala 219:42]
-      ex2_reg_init_divisor <= 32'h0; // @[Core.scala 219:42]
-    end else if (_T_24) begin // @[Core.scala 1167:21]
-      if (_ex1_alu_out_T_38 | _ex1_alu_out_T_43) begin // @[Core.scala 1053:69]
-        if (ex1_reg_op2_data[31]) begin // @[Core.scala 1061:49]
-          ex2_reg_init_divisor <= _ex1_divisor_T_2; // @[Core.scala 1062:19]
+    if (reset) begin // @[Core.scala 213:38]
+      ex2_reg_init_divisor <= 32'h0; // @[Core.scala 213:38]
+    end else if (_T_24) begin // @[Core.scala 1125:21]
+      if (_ex1_alu_out_T_38 | _ex1_alu_out_T_43) begin // @[Core.scala 1030:69]
+        if (ex1_reg_op2_data[31]) begin // @[Core.scala 1038:49]
+          ex2_reg_init_divisor <= _ex1_divisor_T_2; // @[Core.scala 1039:19]
         end else begin
-          ex2_reg_init_divisor <= ex1_reg_op2_data; // @[Core.scala 1065:19]
+          ex2_reg_init_divisor <= ex1_reg_op2_data; // @[Core.scala 1042:19]
         end
-      end else if (_ex1_alu_out_T_49 | _ex1_alu_out_T_46) begin // @[Core.scala 1068:77]
-        ex2_reg_init_divisor <= ex1_reg_op2_data; // @[Core.scala 1072:17]
+      end else if (_ex1_alu_out_T_49 | _ex1_alu_out_T_46) begin // @[Core.scala 1045:77]
+        ex2_reg_init_divisor <= ex1_reg_op2_data; // @[Core.scala 1049:17]
       end else begin
         ex2_reg_init_divisor <= 32'h0;
       end
     end
-    if (reset) begin // @[Core.scala 220:42]
-      ex2_reg_orig_dividend <= 32'h0; // @[Core.scala 220:42]
-    end else if (_T_24) begin // @[Core.scala 1167:21]
-      ex2_reg_orig_dividend <= ex1_reg_op1_data; // @[Core.scala 1197:31]
+    if (reset) begin // @[Core.scala 214:38]
+      ex2_reg_orig_dividend <= 32'h0; // @[Core.scala 214:38]
+    end else if (_T_24) begin // @[Core.scala 1125:21]
+      ex2_reg_orig_dividend <= ex1_reg_op1_data; // @[Core.scala 1154:31]
     end
-    if (reset) begin // @[Core.scala 221:42]
-      ex2_reg_inst3_use_reg <= 1'h0; // @[Core.scala 221:42]
-    end else if (_T_24) begin // @[Core.scala 1167:21]
-      ex2_reg_inst3_use_reg <= ex1_reg_inst3_use_reg; // @[Core.scala 1198:31]
+    if (reset) begin // @[Core.scala 215:38]
+      ex2_reg_inst3_use_reg <= 1'h0; // @[Core.scala 215:38]
+    end else if (mem2_dram_stall & ~ex2_reg_div_stall & ex2_reg_no_mem) begin // @[Core.scala 1163:66]
+      ex2_reg_inst3_use_reg <= 1'h0; // @[Core.scala 1168:27]
+    end else if (_T_24) begin // @[Core.scala 1125:21]
+      ex2_reg_inst3_use_reg <= ex1_reg_inst3_use_reg; // @[Core.scala 1155:31]
+    end
+    if (reset) begin // @[Core.scala 216:38]
+      ex2_reg_no_mem <= 1'h0; // @[Core.scala 216:38]
+    end else if (_T_24) begin // @[Core.scala 1125:21]
+      ex2_reg_no_mem <= _ex1_fw_en_next_T_2 & ex1_reg_wb_sel != 3'h2 & ex1_reg_wb_sel != 3'h3; // @[Core.scala 1140:24]
+    end
+    if (reset) begin // @[Core.scala 219:39]
+      mem1_reg_mem_wstrb <= 4'h0; // @[Core.scala 219:39]
+    end else if (_T_24) begin // @[Core.scala 1608:21]
+      mem1_reg_mem_wstrb <= _mem1_reg_mem_wstrb_T_5[3:0]; // @[Core.scala 1609:28]
+    end
+    if (reset) begin // @[Core.scala 220:39]
+      mem1_reg_mem_w <= 3'h0; // @[Core.scala 220:39]
+    end else if (_T_24) begin // @[Core.scala 1608:21]
+      mem1_reg_mem_w <= ex1_reg_mem_w; // @[Core.scala 1614:28]
+    end
+    if (reset) begin // @[Core.scala 221:39]
+      mem1_reg_mem_use_reg <= 1'h0; // @[Core.scala 221:39]
+    end else if (_T_24) begin // @[Core.scala 1608:21]
+      mem1_reg_mem_use_reg <= ex1_reg_mem_use_reg; // @[Core.scala 1615:28]
+    end
+    if (reset) begin // @[Core.scala 223:39]
+      mem1_reg_is_mem_load <= 1'h0; // @[Core.scala 223:39]
+    end else if (_T_24) begin // @[Core.scala 1608:21]
+      mem1_reg_is_mem_load <= ~mem1_is_dram & ex1_reg_wb_sel == 3'h6; // @[Core.scala 1618:28]
     end
     if (reset) begin // @[Core.scala 224:39]
-      mem1_reg_mem_wstrb <= 4'h0; // @[Core.scala 224:39]
-    end else if (_T_24) begin // @[Core.scala 1638:21]
-      mem1_reg_mem_wstrb <= _mem1_reg_mem_wstrb_T_5[3:0]; // @[Core.scala 1639:28]
+      mem1_reg_is_mem_store <= 1'h0; // @[Core.scala 224:39]
+    end else if (_T_24) begin // @[Core.scala 1608:21]
+      mem1_reg_is_mem_store <= _mem1_reg_is_mem_load_T & ex1_reg_wb_sel == 3'h2; // @[Core.scala 1619:28]
     end
     if (reset) begin // @[Core.scala 225:39]
-      mem1_reg_mem_w <= 3'h0; // @[Core.scala 225:39]
-    end else if (_T_24) begin // @[Core.scala 1638:21]
-      mem1_reg_mem_w <= ex1_reg_mem_w; // @[Core.scala 1644:28]
+      mem1_reg_is_dram_load <= 1'h0; // @[Core.scala 225:39]
+    end else if (_T_24) begin // @[Core.scala 1608:21]
+      mem1_reg_is_dram_load <= mem1_is_dram & _mem1_reg_is_mem_load_T_1; // @[Core.scala 1620:28]
     end
     if (reset) begin // @[Core.scala 226:39]
-      mem1_reg_mem_use_reg <= 1'h0; // @[Core.scala 226:39]
-    end else if (_T_24) begin // @[Core.scala 1638:21]
-      mem1_reg_mem_use_reg <= ex1_reg_mem_use_reg; // @[Core.scala 1645:28]
+      mem1_reg_is_dram_store <= 1'h0; // @[Core.scala 226:39]
+    end else if (_T_24) begin // @[Core.scala 1608:21]
+      mem1_reg_is_dram_store <= mem1_is_dram & _mem1_reg_is_mem_store_T_1; // @[Core.scala 1621:28]
+    end
+    if (reset) begin // @[Core.scala 227:39]
+      mem1_reg_is_dram_fence <= 1'h0; // @[Core.scala 227:39]
+    end else if (_T_24) begin // @[Core.scala 1608:21]
+      mem1_reg_is_dram_fence <= ex1_reg_wb_sel == 3'h3; // @[Core.scala 1622:28]
     end
     if (reset) begin // @[Core.scala 228:39]
-      mem1_reg_is_mem_load <= 1'h0; // @[Core.scala 228:39]
-    end else if (_T_24) begin // @[Core.scala 1638:21]
-      mem1_reg_is_mem_load <= ~mem1_is_dram & ex1_reg_wb_sel == 3'h6; // @[Core.scala 1648:28]
+      mem1_reg_is_valid_inst <= 1'h0; // @[Core.scala 228:39]
+    end else if (_T_24) begin // @[Core.scala 1608:21]
+      mem1_reg_is_valid_inst <= _mem1_reg_is_mem_load_T_1 | _mem1_reg_is_mem_store_T_1 | _mem1_reg_is_dram_fence_T; // @[Core.scala 1623:28]
     end
-    if (reset) begin // @[Core.scala 229:39]
-      mem1_reg_is_mem_store <= 1'h0; // @[Core.scala 229:39]
-    end else if (_T_24) begin // @[Core.scala 1638:21]
-      mem1_reg_is_mem_store <= _mem1_reg_is_mem_load_T & ex1_reg_wb_sel == 3'h2; // @[Core.scala 1649:28]
+    if (reset) begin // @[Core.scala 231:40]
+      mem2_reg_wb_byte_offset <= 2'h0; // @[Core.scala 231:40]
+    end else if (~mem2_dram_stall) begin // @[Core.scala 1662:27]
+      mem2_reg_wb_byte_offset <= ex2_reg_alu_out[1:0]; // @[Core.scala 1663:29]
     end
-    if (reset) begin // @[Core.scala 230:39]
-      mem1_reg_is_dram_load <= 1'h0; // @[Core.scala 230:39]
-    end else if (_T_24) begin // @[Core.scala 1638:21]
-      mem1_reg_is_dram_load <= mem1_is_dram & _mem1_reg_is_mem_load_T_1; // @[Core.scala 1650:28]
+    if (reset) begin // @[Core.scala 232:40]
+      mem2_reg_mem_w <= 3'h0; // @[Core.scala 232:40]
+    end else if (~mem2_dram_stall) begin // @[Core.scala 1662:27]
+      mem2_reg_mem_w <= mem1_reg_mem_w; // @[Core.scala 1664:29]
     end
-    if (reset) begin // @[Core.scala 231:39]
-      mem1_reg_is_dram_store <= 1'h0; // @[Core.scala 231:39]
-    end else if (_T_24) begin // @[Core.scala 1638:21]
-      mem1_reg_is_dram_store <= mem1_is_dram & _mem1_reg_is_mem_store_T_1; // @[Core.scala 1651:28]
+    if (reset) begin // @[Core.scala 233:40]
+      mem2_reg_dmem_rdata <= 32'h0; // @[Core.scala 233:40]
+    end else if (~mem2_dram_stall) begin // @[Core.scala 1662:27]
+      mem2_reg_dmem_rdata <= io_dmem_rdata; // @[Core.scala 1665:29]
     end
-    if (reset) begin // @[Core.scala 232:39]
-      mem1_reg_is_dram_fence <= 1'h0; // @[Core.scala 232:39]
-    end else if (_T_24) begin // @[Core.scala 1638:21]
-      mem1_reg_is_dram_fence <= ex1_reg_wb_sel == 3'h3; // @[Core.scala 1652:28]
+    if (reset) begin // @[Core.scala 234:40]
+      mem2_reg_wb_addr <= 32'h0; // @[Core.scala 234:40]
+    end else if (~mem2_dram_stall) begin // @[Core.scala 1662:27]
+      mem2_reg_wb_addr <= {{27'd0}, ex2_reg_wb_addr}; // @[Core.scala 1666:29]
     end
-    if (reset) begin // @[Core.scala 233:39]
-      mem1_reg_is_valid_inst <= 1'h0; // @[Core.scala 233:39]
-    end else if (_T_24) begin // @[Core.scala 1638:21]
-      mem1_reg_is_valid_inst <= _mem1_reg_is_mem_load_T_1 | _mem1_reg_is_mem_store_T_1 | _mem1_reg_is_dram_fence_T; // @[Core.scala 1653:28]
+    if (reset) begin // @[Core.scala 235:40]
+      mem2_reg_is_valid_load <= 1'h0; // @[Core.scala 235:40]
+    end else if (~mem2_dram_stall) begin // @[Core.scala 1662:27]
+      mem2_reg_is_valid_load <= _mem1_mem_stall_delay_T_1 & mem1_is_mem_load | ~mem1_dram_stall & mem1_is_dram_load; // @[Core.scala 1667:29]
     end
     if (reset) begin // @[Core.scala 236:40]
-      mem2_reg_wb_byte_offset <= 2'h0; // @[Core.scala 236:40]
-    end else if (~mem2_dram_stall) begin // @[Core.scala 1692:27]
-      mem2_reg_wb_byte_offset <= ex2_reg_alu_out[1:0]; // @[Core.scala 1693:29]
+      mem2_reg_mem_use_reg <= 1'h0; // @[Core.scala 236:40]
+    end else if (~mem2_dram_stall) begin // @[Core.scala 1662:27]
+      mem2_reg_mem_use_reg <= _mem1_mem_stall_delay_T_1 & _mem2_reg_is_valid_load_T_2 & mem1_reg_mem_use_reg; // @[Core.scala 1668:29]
     end
     if (reset) begin // @[Core.scala 237:40]
-      mem2_reg_mem_w <= 3'h0; // @[Core.scala 237:40]
-    end else if (~mem2_dram_stall) begin // @[Core.scala 1692:27]
-      mem2_reg_mem_w <= mem1_reg_mem_w; // @[Core.scala 1694:29]
+      mem2_reg_is_valid_inst <= 1'h0; // @[Core.scala 237:40]
+    end else if (~mem2_dram_stall) begin // @[Core.scala 1662:27]
+      mem2_reg_is_valid_inst <= _mem2_reg_mem_use_reg_T_2 & mem1_is_valid_inst; // @[Core.scala 1669:29]
     end
     if (reset) begin // @[Core.scala 238:40]
-      mem2_reg_dmem_rdata <= 32'h0; // @[Core.scala 238:40]
-    end else if (~mem2_dram_stall) begin // @[Core.scala 1692:27]
-      mem2_reg_dmem_rdata <= io_dmem_rdata; // @[Core.scala 1695:29]
-    end
-    if (reset) begin // @[Core.scala 239:40]
-      mem2_reg_wb_addr <= 32'h0; // @[Core.scala 239:40]
-    end else if (~mem2_dram_stall) begin // @[Core.scala 1692:27]
-      mem2_reg_wb_addr <= {{27'd0}, ex2_reg_wb_addr}; // @[Core.scala 1696:29]
-    end
-    if (reset) begin // @[Core.scala 240:40]
-      mem2_reg_is_valid_load <= 1'h0; // @[Core.scala 240:40]
-    end else if (~mem2_dram_stall) begin // @[Core.scala 1692:27]
-      mem2_reg_is_valid_load <= _mem1_mem_stall_delay_T_1 & mem1_is_mem_load | ~mem1_dram_stall & mem1_is_dram_load; // @[Core.scala 1697:29]
+      mem2_reg_is_dram_load <= 1'h0; // @[Core.scala 238:40]
+    end else if (~mem2_dram_stall) begin // @[Core.scala 1662:27]
+      mem2_reg_is_dram_load <= _mem2_reg_is_valid_load_T_3; // @[Core.scala 1670:29]
     end
     if (reset) begin // @[Core.scala 241:40]
-      mem2_reg_mem_use_reg <= 1'h0; // @[Core.scala 241:40]
-    end else if (~mem2_dram_stall) begin // @[Core.scala 1692:27]
-      mem2_reg_mem_use_reg <= _mem1_mem_stall_delay_T_1 & _mem2_reg_is_valid_load_T_2 & mem1_reg_mem_use_reg; // @[Core.scala 1698:29]
+      mem3_reg_wb_byte_offset <= 2'h0; // @[Core.scala 241:40]
+    end else begin
+      mem3_reg_wb_byte_offset <= mem2_reg_wb_byte_offset; // @[Core.scala 1679:27]
     end
     if (reset) begin // @[Core.scala 242:40]
-      mem2_reg_is_valid_inst <= 1'h0; // @[Core.scala 242:40]
-    end else if (~mem2_dram_stall) begin // @[Core.scala 1692:27]
-      mem2_reg_is_valid_inst <= _mem2_reg_mem_use_reg_T_2 & mem1_is_valid_inst; // @[Core.scala 1699:29]
+      mem3_reg_mem_w <= 3'h0; // @[Core.scala 242:40]
+    end else begin
+      mem3_reg_mem_w <= mem2_reg_mem_w; // @[Core.scala 1680:27]
     end
     if (reset) begin // @[Core.scala 243:40]
-      mem2_reg_is_dram_load <= 1'h0; // @[Core.scala 243:40]
-    end else if (~mem2_dram_stall) begin // @[Core.scala 1692:27]
-      mem2_reg_is_dram_load <= _mem2_reg_is_valid_load_T_3; // @[Core.scala 1700:29]
-    end
-    if (reset) begin // @[Core.scala 246:40]
-      mem3_reg_wb_byte_offset <= 2'h0; // @[Core.scala 246:40]
-    end else begin
-      mem3_reg_wb_byte_offset <= mem2_reg_wb_byte_offset; // @[Core.scala 1709:27]
-    end
-    if (reset) begin // @[Core.scala 247:40]
-      mem3_reg_mem_w <= 3'h0; // @[Core.scala 247:40]
-    end else begin
-      mem3_reg_mem_w <= mem2_reg_mem_w; // @[Core.scala 1710:27]
-    end
-    if (reset) begin // @[Core.scala 248:40]
-      mem3_reg_dmem_rdata <= 32'h0; // @[Core.scala 248:40]
-    end else if (mem2_reg_is_dram_load) begin // @[Core.scala 1711:33]
+      mem3_reg_dmem_rdata <= 32'h0; // @[Core.scala 243:40]
+    end else if (mem2_reg_is_dram_load) begin // @[Core.scala 1681:33]
       mem3_reg_dmem_rdata <= io_cache_rdata;
     end else begin
       mem3_reg_dmem_rdata <= mem2_reg_dmem_rdata;
     end
-    if (reset) begin // @[Core.scala 249:40]
-      mem3_reg_wb_addr <= 32'h0; // @[Core.scala 249:40]
+    if (reset) begin // @[Core.scala 244:40]
+      mem3_reg_wb_addr <= 32'h0; // @[Core.scala 244:40]
     end else begin
-      mem3_reg_wb_addr <= mem2_reg_wb_addr; // @[Core.scala 1712:27]
+      mem3_reg_wb_addr <= mem2_reg_wb_addr; // @[Core.scala 1682:27]
     end
-    if (reset) begin // @[Core.scala 250:40]
-      mem3_reg_is_valid_load <= 1'h0; // @[Core.scala 250:40]
+    if (reset) begin // @[Core.scala 245:40]
+      mem3_reg_is_valid_load <= 1'h0; // @[Core.scala 245:40]
     end else begin
-      mem3_reg_is_valid_load <= _T_99 & mem2_reg_is_valid_load; // @[Core.scala 1713:27]
+      mem3_reg_is_valid_load <= _T_99 & mem2_reg_is_valid_load; // @[Core.scala 1683:27]
     end
-    if (reset) begin // @[Core.scala 251:40]
-      mem3_reg_is_valid_inst <= 1'h0; // @[Core.scala 251:40]
+    if (reset) begin // @[Core.scala 246:40]
+      mem3_reg_is_valid_inst <= 1'h0; // @[Core.scala 246:40]
     end else begin
-      mem3_reg_is_valid_inst <= _T_99 & mem2_reg_is_valid_inst; // @[Core.scala 1715:27]
+      mem3_reg_is_valid_inst <= _T_99 & mem2_reg_is_valid_inst; // @[Core.scala 1685:27]
     end
-    if (reset) begin // @[Core.scala 252:40]
-      mem3_reg_mem_use_reg <= 1'h0; // @[Core.scala 252:40]
+    if (reset) begin // @[Core.scala 247:40]
+      mem3_reg_mem_use_reg <= 1'h0; // @[Core.scala 247:40]
     end else begin
-      mem3_reg_mem_use_reg <= _T_99 & mem2_reg_mem_use_reg; // @[Core.scala 1714:27]
+      mem3_reg_mem_use_reg <= _T_99 & mem2_reg_mem_use_reg; // @[Core.scala 1684:27]
     end
-    if (reset) begin // @[Core.scala 254:35]
-      if2_reg_is_bp_pos <= 1'h0; // @[Core.scala 254:35]
+    if (reset) begin // @[Core.scala 249:35]
+      if2_reg_is_bp_pos <= 1'h0; // @[Core.scala 249:35]
     end else if (ex2_reg_is_br) begin // @[Mux.scala 101:16]
       if2_reg_is_bp_pos <= 1'h0;
     end else if (!(id_reg_stall)) begin // @[Mux.scala 101:16]
       if2_reg_is_bp_pos <= if2_is_bp_br & bp_io_lu_br_pos;
     end
-    if (reset) begin // @[Core.scala 255:35]
-      if2_reg_bp_addr <= 32'h0; // @[Core.scala 255:35]
-    end else if (!(id_reg_stall)) begin // @[Core.scala 478:24]
+    if (reset) begin // @[Core.scala 250:35]
+      if2_reg_bp_addr <= 32'h0; // @[Core.scala 250:35]
+    end else if (!(id_reg_stall)) begin // @[Core.scala 472:24]
       if2_reg_bp_addr <= bp_io_lu_br_addr;
     end
-    if (reset) begin // @[Core.scala 263:37]
-      mem1_mem_stall_delay <= 1'h0; // @[Core.scala 263:37]
+    if (reset) begin // @[Core.scala 258:37]
+      mem1_mem_stall_delay <= 1'h0; // @[Core.scala 258:37]
     end else begin
-      mem1_mem_stall_delay <= mem1_is_mem_load & io_dmem_rvalid & ~mem1_mem_stall; // @[Core.scala 1679:24]
+      mem1_mem_stall_delay <= mem1_is_mem_load & io_dmem_rvalid & ~mem1_mem_stall; // @[Core.scala 1649:24]
+    end
+    if (reset) begin // @[Core.scala 259:35]
+      ex1_reg_fw_en <= 1'h0; // @[Core.scala 259:35]
+    end else if (_T_24) begin // @[Core.scala 950:20]
+      ex1_reg_fw_en <= rrd_fw_en_next; // @[Core.scala 976:27]
+    end
+    if (reset) begin // @[Core.scala 261:35]
+      ex2_reg_fw_en <= 1'h0; // @[Core.scala 261:35]
+    end else if (_T_24) begin // @[Core.scala 1125:21]
+      ex2_reg_fw_en <= ex1_fw_en_next; // @[Core.scala 1156:31]
     end
     if (reset) begin // @[Core.scala 264:35]
-      ex1_reg_fw_en <= 1'h0; // @[Core.scala 264:35]
-    end else if (_T_24) begin // @[Core.scala 970:20]
-      ex1_reg_fw_en <= rrd_fw_en_next; // @[Core.scala 999:27]
+      ex2_reg_div_stall <= 1'h0; // @[Core.scala 264:35]
+    end else if (_T_24) begin // @[Core.scala 1125:21]
+      ex2_reg_div_stall <= ex2_div_stall_next | _ex2_reg_div_stall_T_3; // @[Core.scala 1147:31]
+    end else begin
+      ex2_reg_div_stall <= ex2_div_stall_next | _ex2_reg_div_stall_T_8; // @[Core.scala 1160:23]
+    end
+    if (reset) begin // @[Core.scala 265:37]
+      ex2_reg_divrem_state <= 3'h0; // @[Core.scala 265:37]
+    end else if (3'h0 == ex2_reg_divrem_state) begin // @[Core.scala 1398:33]
+      if (ex2_reg_divrem) begin // @[Core.scala 1400:29]
+        ex2_reg_divrem_state <= {{1'd0}, _GEN_398};
+      end
+    end else if (3'h1 == ex2_reg_divrem_state) begin // @[Core.scala 1398:33]
+      if (ex2_reg_p_divisor[63:36] == 28'h0) begin // @[Core.scala 1423:66]
+        ex2_reg_divrem_state <= 3'h2; // @[Core.scala 1424:30]
+      end
+    end else if (3'h2 == ex2_reg_divrem_state) begin // @[Core.scala 1398:33]
+      ex2_reg_divrem_state <= _GEN_407;
+    end else begin
+      ex2_reg_divrem_state <= _GEN_413;
     end
     if (reset) begin // @[Core.scala 266:35]
-      ex2_reg_fw_en <= 1'h0; // @[Core.scala 266:35]
-    end else if (_T_24) begin // @[Core.scala 1167:21]
-      ex2_reg_fw_en <= ex1_fw_en_next; // @[Core.scala 1199:31]
-    end
-    if (reset) begin // @[Core.scala 269:35]
-      ex2_reg_div_stall <= 1'h0; // @[Core.scala 269:35]
-    end else if (_T_24) begin // @[Core.scala 1167:21]
-      ex2_reg_div_stall <= ex2_div_stall_next | _ex2_reg_div_stall_T_3; // @[Core.scala 1190:31]
+      ex2_reg_is_br <= 1'h0; // @[Core.scala 266:35]
     end else begin
-      ex2_reg_div_stall <= ex2_div_stall_next | _ex2_reg_div_stall_T_8; // @[Core.scala 1203:23]
+      ex2_reg_is_br <= csr_is_br | jbr_is_br; // @[Core.scala 1288:17]
     end
-    if (reset) begin // @[Core.scala 270:37]
-      ex2_reg_divrem_state <= 3'h0; // @[Core.scala 270:37]
-    end else if (3'h0 == ex2_reg_divrem_state) begin // @[Core.scala 1428:33]
-      if (ex2_reg_divrem) begin // @[Core.scala 1430:29]
-        ex2_reg_divrem_state <= {{1'd0}, _GEN_394};
-      end
-    end else if (3'h1 == ex2_reg_divrem_state) begin // @[Core.scala 1428:33]
-      if (ex2_reg_p_divisor[63:36] == 28'h0) begin // @[Core.scala 1453:66]
-        ex2_reg_divrem_state <= 3'h2; // @[Core.scala 1454:30]
-      end
-    end else if (3'h2 == ex2_reg_divrem_state) begin // @[Core.scala 1428:33]
-      ex2_reg_divrem_state <= _GEN_403;
-    end else begin
-      ex2_reg_divrem_state <= _GEN_409;
-    end
-    if (reset) begin // @[Core.scala 271:35]
-      ex2_reg_is_br <= 1'h0; // @[Core.scala 271:35]
-    end else begin
-      ex2_reg_is_br <= csr_is_br | jbr_is_br; // @[Core.scala 1318:17]
-    end
-    if (reset) begin // @[Core.scala 272:35]
-      ex2_reg_br_addr <= 32'h0; // @[Core.scala 272:35]
+    if (reset) begin // @[Core.scala 267:35]
+      ex2_reg_br_addr <= 32'h0; // @[Core.scala 267:35]
     end else if (jbr_cond_bp_fail) begin // @[Mux.scala 101:16]
       ex2_reg_br_addr <= jbr_reg_cond_br_target;
     end else if (jbr_cond_nbp_fail) begin // @[Mux.scala 101:16]
-      if (jbr_reg_is_half) begin // @[Core.scala 1138:30]
+      if (jbr_reg_is_half) begin // @[Core.scala 1110:30]
         ex2_reg_br_addr <= _ex2_reg_br_addr_T_1;
       end else begin
         ex2_reg_br_addr <= _ex2_reg_br_addr_T_3;
@@ -3443,42 +3466,42 @@ module Core(
     end else begin
       ex2_reg_br_addr <= csr_br_addr;
     end
-    if (reset) begin // @[Core.scala 277:35]
-      ex2_reg_is_retired <= 1'h0; // @[Core.scala 277:35]
+    if (reset) begin // @[Core.scala 272:35]
+      ex2_reg_is_retired <= 1'h0; // @[Core.scala 272:35]
     end else begin
-      ex2_reg_is_retired <= ex2_is_valid_inst & _T_24 & (ex2_reg_wb_sel != 3'h6 & ex2_reg_wb_sel != 3'h2); // @[Core.scala 1628:22]
+      ex2_reg_is_retired <= ex2_is_valid_inst & _T_51 & ex2_reg_no_mem; // @[Core.scala 1598:22]
     end
-    if (reset) begin // @[Core.scala 278:36]
-      mem3_reg_is_retired <= 1'h0; // @[Core.scala 278:36]
+    if (reset) begin // @[Core.scala 273:36]
+      mem3_reg_is_retired <= 1'h0; // @[Core.scala 273:36]
     end else begin
-      mem3_reg_is_retired <= mem3_reg_is_valid_inst; // @[Core.scala 1739:23]
+      mem3_reg_is_retired <= mem3_reg_is_valid_inst; // @[Core.scala 1709:23]
     end
-    if (reset) begin // @[Core.scala 289:32]
-      ic_reg_read_rdy <= 1'h0; // @[Core.scala 289:32]
-    end else if (if1_is_jump) begin // @[Core.scala 318:21]
-      ic_reg_read_rdy <= ~if1_jump_addr[1]; // @[Core.scala 324:21]
-    end else if (!(~io_imem_valid)) begin // @[Core.scala 325:98]
-      ic_reg_read_rdy <= 1'h1; // @[Core.scala 310:19]
+    if (reset) begin // @[Core.scala 284:32]
+      ic_reg_read_rdy <= 1'h0; // @[Core.scala 284:32]
+    end else if (if1_is_jump) begin // @[Core.scala 313:21]
+      ic_reg_read_rdy <= ~if1_jump_addr[1]; // @[Core.scala 319:21]
+    end else if (!(~io_imem_valid)) begin // @[Core.scala 320:98]
+      ic_reg_read_rdy <= 1'h1; // @[Core.scala 305:19]
     end
-    if (reset) begin // @[Core.scala 290:32]
-      ic_reg_half_rdy <= 1'h0; // @[Core.scala 290:32]
+    if (reset) begin // @[Core.scala 285:32]
+      ic_reg_half_rdy <= 1'h0; // @[Core.scala 285:32]
     end else begin
       ic_reg_half_rdy <= _GEN_86;
     end
-    if (reset) begin // @[Core.scala 294:33]
-      ic_reg_imem_addr <= 32'h0; // @[Core.scala 294:33]
-    end else if (if1_is_jump) begin // @[Core.scala 318:21]
-      ic_reg_imem_addr <= ic_next_imem_addr; // @[Core.scala 320:18]
-    end else if (!(~io_imem_valid)) begin // @[Core.scala 325:98]
-      if (3'h0 == ic_state) begin // @[Core.scala 331:23]
-        ic_reg_imem_addr <= ic_imem_addr_4; // @[Core.scala 333:22]
+    if (reset) begin // @[Core.scala 289:33]
+      ic_reg_imem_addr <= 32'h0; // @[Core.scala 289:33]
+    end else if (if1_is_jump) begin // @[Core.scala 313:21]
+      ic_reg_imem_addr <= ic_next_imem_addr; // @[Core.scala 315:18]
+    end else if (!(~io_imem_valid)) begin // @[Core.scala 320:98]
+      if (3'h0 == ic_state) begin // @[Core.scala 326:23]
+        ic_reg_imem_addr <= ic_imem_addr_4; // @[Core.scala 328:22]
       end else begin
         ic_reg_imem_addr <= _GEN_50;
       end
     end
-    if (reset) begin // @[Core.scala 295:32]
-      ic_reg_addr_out <= 32'h0; // @[Core.scala 295:32]
-    end else if (if1_is_jump) begin // @[Core.scala 318:21]
+    if (reset) begin // @[Core.scala 290:32]
+      ic_reg_addr_out <= 32'h0; // @[Core.scala 290:32]
+    end else if (if1_is_jump) begin // @[Core.scala 313:21]
       if (ex2_reg_is_br) begin // @[Mux.scala 101:16]
         ic_reg_addr_out <= ex2_reg_br_addr;
       end else if (if2_reg_is_bp_pos) begin // @[Mux.scala 101:16]
@@ -3486,72 +3509,72 @@ module Core(
       end else begin
         ic_reg_addr_out <= _if1_jump_addr_T;
       end
-    end else if (!(~io_imem_valid)) begin // @[Core.scala 325:98]
-      if (3'h0 == ic_state) begin // @[Core.scala 331:23]
+    end else if (!(~io_imem_valid)) begin // @[Core.scala 320:98]
+      if (3'h0 == ic_state) begin // @[Core.scala 326:23]
         ic_reg_addr_out <= _GEN_2;
       end else begin
         ic_reg_addr_out <= _GEN_55;
       end
     end
-    if (reset) begin // @[Core.scala 298:34]
-      ic_reg_inst <= 32'h0; // @[Core.scala 298:34]
-    end else if (!(if1_is_jump)) begin // @[Core.scala 318:21]
-      if (!(~io_imem_valid)) begin // @[Core.scala 325:98]
-        if (3'h0 == ic_state) begin // @[Core.scala 331:23]
-          ic_reg_inst <= io_imem_inst; // @[Core.scala 335:21]
+    if (reset) begin // @[Core.scala 293:34]
+      ic_reg_inst <= 32'h0; // @[Core.scala 293:34]
+    end else if (!(if1_is_jump)) begin // @[Core.scala 313:21]
+      if (!(~io_imem_valid)) begin // @[Core.scala 320:98]
+        if (3'h0 == ic_state) begin // @[Core.scala 326:23]
+          ic_reg_inst <= io_imem_inst; // @[Core.scala 330:21]
         end else begin
           ic_reg_inst <= _GEN_52;
         end
       end
     end
-    if (reset) begin // @[Core.scala 299:34]
-      ic_reg_inst_addr <= 32'h0; // @[Core.scala 299:34]
-    end else if (!(if1_is_jump)) begin // @[Core.scala 318:21]
-      if (!(~io_imem_valid)) begin // @[Core.scala 325:98]
-        if (3'h0 == ic_state) begin // @[Core.scala 331:23]
-          ic_reg_inst_addr <= ic_reg_imem_addr; // @[Core.scala 336:26]
+    if (reset) begin // @[Core.scala 294:34]
+      ic_reg_inst_addr <= 32'h0; // @[Core.scala 294:34]
+    end else if (!(if1_is_jump)) begin // @[Core.scala 313:21]
+      if (!(~io_imem_valid)) begin // @[Core.scala 320:98]
+        if (3'h0 == ic_state) begin // @[Core.scala 326:23]
+          ic_reg_inst_addr <= ic_reg_imem_addr; // @[Core.scala 331:26]
         end else begin
           ic_reg_inst_addr <= _GEN_53;
         end
       end
     end
-    if (reset) begin // @[Core.scala 300:34]
-      ic_reg_inst2 <= 32'h0; // @[Core.scala 300:34]
-    end else if (!(if1_is_jump)) begin // @[Core.scala 318:21]
-      if (!(~io_imem_valid)) begin // @[Core.scala 325:98]
-        if (!(3'h0 == ic_state)) begin // @[Core.scala 331:23]
+    if (reset) begin // @[Core.scala 295:34]
+      ic_reg_inst2 <= 32'h0; // @[Core.scala 295:34]
+    end else if (!(if1_is_jump)) begin // @[Core.scala 313:21]
+      if (!(~io_imem_valid)) begin // @[Core.scala 320:98]
+        if (!(3'h0 == ic_state)) begin // @[Core.scala 326:23]
           ic_reg_inst2 <= _GEN_57;
         end
       end
     end
-    if (reset) begin // @[Core.scala 301:34]
-      ic_reg_inst2_addr <= 32'h0; // @[Core.scala 301:34]
-    end else if (!(if1_is_jump)) begin // @[Core.scala 318:21]
-      if (!(~io_imem_valid)) begin // @[Core.scala 325:98]
-        if (!(3'h0 == ic_state)) begin // @[Core.scala 331:23]
+    if (reset) begin // @[Core.scala 296:34]
+      ic_reg_inst2_addr <= 32'h0; // @[Core.scala 296:34]
+    end else if (!(if1_is_jump)) begin // @[Core.scala 313:21]
+      if (!(~io_imem_valid)) begin // @[Core.scala 320:98]
+        if (!(3'h0 == ic_state)) begin // @[Core.scala 326:23]
           ic_reg_inst2_addr <= _GEN_58;
         end
       end
     end
-    if (reset) begin // @[Core.scala 303:25]
-      ic_state <= 3'h0; // @[Core.scala 303:25]
-    end else if (if1_is_jump) begin // @[Core.scala 318:21]
-      ic_state <= {{2'd0}, if1_jump_addr[1]}; // @[Core.scala 323:14]
-    end else if (!(~io_imem_valid)) begin // @[Core.scala 325:98]
-      if (3'h0 == ic_state) begin // @[Core.scala 331:23]
+    if (reset) begin // @[Core.scala 298:25]
+      ic_state <= 3'h0; // @[Core.scala 298:25]
+    end else if (if1_is_jump) begin // @[Core.scala 313:21]
+      ic_state <= {{2'd0}, if1_jump_addr[1]}; // @[Core.scala 318:14]
+    end else if (!(~io_imem_valid)) begin // @[Core.scala 320:98]
+      if (3'h0 == ic_state) begin // @[Core.scala 326:23]
         ic_state <= _GEN_3;
       end else begin
         ic_state <= _GEN_56;
       end
     end
-    if1_reg_first <= reset; // @[Core.scala 417:{30,30} 418:17]
-    if (reset) begin // @[Core.scala 443:29]
-      if2_reg_pc <= 32'h8000000; // @[Core.scala 443:29]
-    end else if (!(id_reg_stall | ~(ic_read_rdy | ic_half_rdy & is_half_inst))) begin // @[Core.scala 450:19]
+    if1_reg_first <= reset; // @[Core.scala 412:{30,30} 413:17]
+    if (reset) begin // @[Core.scala 438:29]
+      if2_reg_pc <= 32'h8000000; // @[Core.scala 438:29]
+    end else if (!(id_reg_stall | ~(ic_read_rdy | ic_half_rdy & is_half_inst))) begin // @[Core.scala 444:19]
       if2_reg_pc <= ic_reg_addr_out;
     end
-    if (reset) begin // @[Core.scala 444:29]
-      if2_reg_inst <= 32'h0; // @[Core.scala 444:29]
+    if (reset) begin // @[Core.scala 439:29]
+      if2_reg_inst <= 32'h0; // @[Core.scala 439:29]
     end else if (ex2_reg_is_br) begin // @[Mux.scala 101:16]
       if2_reg_inst <= 32'h13;
     end else if (!(id_reg_stall)) begin // @[Mux.scala 101:16]
@@ -3561,20 +3584,19 @@ module Core(
         if2_reg_inst <= _if2_inst_T_2;
       end
     end
-    csr_reg_is_meintr <= (csr_mstatus_mie_fw_en & csr_mstatus_mie_fw | csr_reg_mstatus_mie) & io_intr & (csr_mie_fw_en
-       & csr_mie_meie_fw | csr_reg_mie_meie); // @[Core.scala 1224:87]
-    csr_reg_is_mtintr <= _csr_reg_is_meintr_T_1 & mtimer_io_intr & (csr_mie_fw_en & csr_mie_mtie_fw | csr_reg_mie_mtie); // @[Core.scala 1227:94]
-    if (reset) begin // @[Core.scala 722:40]
-      id_reg_pc_delay <= 32'h0; // @[Core.scala 722:40]
-    end else if (ex2_reg_is_br) begin // @[Core.scala 749:24]
+    csr_reg_is_meintr <= _csr_reg_is_meintr_T_4 & _csr_reg_is_meintr_T_8; // @[Core.scala 1183:15]
+    csr_reg_is_mtintr <= _csr_reg_is_mtintr_T_4 & _csr_reg_is_mtintr_T_8; // @[Core.scala 1188:22]
+    if (reset) begin // @[Core.scala 713:40]
+      id_reg_pc_delay <= 32'h0; // @[Core.scala 713:40]
+    end else if (ex2_reg_is_br) begin // @[Core.scala 739:24]
       id_reg_pc_delay <= _GEN_94;
     end else begin
       id_reg_pc_delay <= _GEN_94;
     end
-    if (reset) begin // @[Core.scala 724:40]
-      id_reg_wb_addr_delay <= 5'h0; // @[Core.scala 724:40]
-    end else if (!(ex2_reg_is_br)) begin // @[Core.scala 749:24]
-      if (_ic_read_en4_T) begin // @[Core.scala 763:30]
+    if (reset) begin // @[Core.scala 714:40]
+      id_reg_wb_addr_delay <= 5'h0; // @[Core.scala 714:40]
+    end else if (!(ex2_reg_is_br)) begin // @[Core.scala 739:24]
+      if (_ic_read_en4_T) begin // @[Core.scala 752:30]
         if (_id_wb_addr_T) begin // @[Mux.scala 101:16]
           id_reg_wb_addr_delay <= id_w_wb_addr;
         end else begin
@@ -3582,10 +3604,10 @@ module Core(
         end
       end
     end
-    if (reset) begin // @[Core.scala 725:40]
-      id_reg_op1_sel_delay <= 3'h0; // @[Core.scala 725:40]
-    end else if (!(ex2_reg_is_br)) begin // @[Core.scala 749:24]
-      if (_ic_read_en4_T) begin // @[Core.scala 763:30]
+    if (reset) begin // @[Core.scala 715:40]
+      id_reg_op1_sel_delay <= 3'h0; // @[Core.scala 715:40]
+    end else if (!(ex2_reg_is_br)) begin // @[Core.scala 739:24]
+      if (_ic_read_en4_T) begin // @[Core.scala 752:30]
         if (_id_m_op1_sel_T) begin // @[Mux.scala 101:16]
           id_reg_op1_sel_delay <= 3'h0;
         end else begin
@@ -3593,10 +3615,10 @@ module Core(
         end
       end
     end
-    if (reset) begin // @[Core.scala 726:40]
-      id_reg_op2_sel_delay <= 4'h0; // @[Core.scala 726:40]
-    end else if (!(ex2_reg_is_br)) begin // @[Core.scala 749:24]
-      if (_ic_read_en4_T) begin // @[Core.scala 763:30]
+    if (reset) begin // @[Core.scala 716:40]
+      id_reg_op2_sel_delay <= 4'h0; // @[Core.scala 716:40]
+    end else if (!(ex2_reg_is_br)) begin // @[Core.scala 739:24]
+      if (_ic_read_en4_T) begin // @[Core.scala 752:30]
         if (_id_m_op2_sel_T) begin // @[Mux.scala 101:16]
           id_reg_op2_sel_delay <= 4'h1;
         end else begin
@@ -3604,10 +3626,10 @@ module Core(
         end
       end
     end
-    if (reset) begin // @[Core.scala 727:40]
-      id_reg_rs1_addr_delay <= 5'h0; // @[Core.scala 727:40]
-    end else if (!(ex2_reg_is_br)) begin // @[Core.scala 749:24]
-      if (_ic_read_en4_T) begin // @[Core.scala 763:30]
+    if (reset) begin // @[Core.scala 717:40]
+      id_reg_rs1_addr_delay <= 5'h0; // @[Core.scala 717:40]
+    end else if (!(ex2_reg_is_br)) begin // @[Core.scala 739:24]
+      if (_ic_read_en4_T) begin // @[Core.scala 752:30]
         if (_id_m_op1_sel_T) begin // @[Mux.scala 101:16]
           id_reg_rs1_addr_delay <= id_w_wb_addr;
         end else begin
@@ -3615,10 +3637,10 @@ module Core(
         end
       end
     end
-    if (reset) begin // @[Core.scala 728:40]
-      id_reg_rs2_addr_delay <= 5'h0; // @[Core.scala 728:40]
-    end else if (!(ex2_reg_is_br)) begin // @[Core.scala 749:24]
-      if (_ic_read_en4_T) begin // @[Core.scala 763:30]
+    if (reset) begin // @[Core.scala 718:40]
+      id_reg_rs2_addr_delay <= 5'h0; // @[Core.scala 718:40]
+    end else if (!(ex2_reg_is_br)) begin // @[Core.scala 739:24]
+      if (_ic_read_en4_T) begin // @[Core.scala 752:30]
         if (_id_m_op2_sel_T) begin // @[Mux.scala 101:16]
           id_reg_rs2_addr_delay <= id_c_rs2_addr;
         end else begin
@@ -3626,10 +3648,10 @@ module Core(
         end
       end
     end
-    if (reset) begin // @[Core.scala 729:40]
-      id_reg_op1_data_delay <= 32'h0; // @[Core.scala 729:40]
-    end else if (!(ex2_reg_is_br)) begin // @[Core.scala 749:24]
-      if (_ic_read_en4_T) begin // @[Core.scala 763:30]
+    if (reset) begin // @[Core.scala 719:40]
+      id_reg_op1_data_delay <= 32'h0; // @[Core.scala 719:40]
+    end else if (!(ex2_reg_is_br)) begin // @[Core.scala 739:24]
+      if (_ic_read_en4_T) begin // @[Core.scala 752:30]
         if (_id_op1_data_T) begin // @[Mux.scala 101:16]
           id_reg_op1_data_delay <= id_reg_pc;
         end else begin
@@ -3637,10 +3659,10 @@ module Core(
         end
       end
     end
-    if (reset) begin // @[Core.scala 730:40]
-      id_reg_op2_data_delay <= 32'h0; // @[Core.scala 730:40]
-    end else if (!(ex2_reg_is_br)) begin // @[Core.scala 749:24]
-      if (_ic_read_en4_T) begin // @[Core.scala 763:30]
+    if (reset) begin // @[Core.scala 720:40]
+      id_reg_op2_data_delay <= 32'h0; // @[Core.scala 720:40]
+    end else if (!(ex2_reg_is_br)) begin // @[Core.scala 739:24]
+      if (_ic_read_en4_T) begin // @[Core.scala 752:30]
         if (_id_op2_data_T) begin // @[Mux.scala 101:16]
           id_reg_op2_data_delay <= id_imm_i_sext;
         end else begin
@@ -3648,61 +3670,61 @@ module Core(
         end
       end
     end
-    if (reset) begin // @[Core.scala 731:40]
-      id_reg_exe_fun_delay <= 5'h0; // @[Core.scala 731:40]
-    end else if (ex2_reg_is_br) begin // @[Core.scala 749:24]
-      id_reg_exe_fun_delay <= 5'h0; // @[Core.scala 755:32]
-    end else if (_ic_read_en4_T) begin // @[Core.scala 763:30]
+    if (reset) begin // @[Core.scala 721:40]
+      id_reg_exe_fun_delay <= 5'h0; // @[Core.scala 721:40]
+    end else if (ex2_reg_is_br) begin // @[Core.scala 739:24]
+      id_reg_exe_fun_delay <= 5'h0; // @[Core.scala 744:32]
+    end else if (_ic_read_en4_T) begin // @[Core.scala 752:30]
       if (_csignals_T_1) begin // @[Lookup.scala 34:39]
         id_reg_exe_fun_delay <= 5'h0;
       end else begin
         id_reg_exe_fun_delay <= _csignals_T_280;
       end
     end
-    if (reset) begin // @[Core.scala 732:40]
-      id_reg_rf_wen_delay <= 1'h0; // @[Core.scala 732:40]
-    end else if (ex2_reg_is_br) begin // @[Core.scala 749:24]
-      id_reg_rf_wen_delay <= 1'h0; // @[Core.scala 754:32]
-    end else if (_ic_read_en4_T) begin // @[Core.scala 763:30]
-      id_reg_rf_wen_delay <= csignals_3; // @[Core.scala 773:29]
+    if (reset) begin // @[Core.scala 722:40]
+      id_reg_rf_wen_delay <= 1'h0; // @[Core.scala 722:40]
+    end else if (ex2_reg_is_br) begin // @[Core.scala 739:24]
+      id_reg_rf_wen_delay <= 1'h0; // @[Core.scala 743:32]
+    end else if (_ic_read_en4_T) begin // @[Core.scala 752:30]
+      id_reg_rf_wen_delay <= csignals_3; // @[Core.scala 761:29]
     end
-    if (reset) begin // @[Core.scala 733:40]
-      id_reg_wb_sel_delay <= 3'h0; // @[Core.scala 733:40]
-    end else if (ex2_reg_is_br) begin // @[Core.scala 749:24]
-      id_reg_wb_sel_delay <= 3'h0; // @[Core.scala 756:32]
-    end else if (_ic_read_en4_T) begin // @[Core.scala 763:30]
+    if (reset) begin // @[Core.scala 723:40]
+      id_reg_wb_sel_delay <= 3'h0; // @[Core.scala 723:40]
+    end else if (ex2_reg_is_br) begin // @[Core.scala 739:24]
+      id_reg_wb_sel_delay <= 3'h0; // @[Core.scala 745:32]
+    end else if (_ic_read_en4_T) begin // @[Core.scala 752:30]
       if (_csignals_T_1) begin // @[Lookup.scala 34:39]
         id_reg_wb_sel_delay <= 3'h6;
       end else begin
         id_reg_wb_sel_delay <= _csignals_T_652;
       end
     end
-    if (reset) begin // @[Core.scala 734:40]
-      id_reg_csr_addr_delay <= 12'h0; // @[Core.scala 734:40]
-    end else if (!(ex2_reg_is_br)) begin // @[Core.scala 749:24]
-      if (_ic_read_en4_T) begin // @[Core.scala 763:30]
-        if (csignals_0 == 5'h18) begin // @[Core.scala 682:24]
+    if (reset) begin // @[Core.scala 724:40]
+      id_reg_csr_addr_delay <= 12'h0; // @[Core.scala 724:40]
+    end else if (!(ex2_reg_is_br)) begin // @[Core.scala 739:24]
+      if (_ic_read_en4_T) begin // @[Core.scala 752:30]
+        if (csignals_0 == 5'h18) begin // @[Core.scala 673:24]
           id_reg_csr_addr_delay <= 12'h342;
         end else begin
           id_reg_csr_addr_delay <= id_imm_i;
         end
       end
     end
-    if (reset) begin // @[Core.scala 735:40]
-      id_reg_csr_cmd_delay <= 2'h0; // @[Core.scala 735:40]
-    end else if (ex2_reg_is_br) begin // @[Core.scala 749:24]
-      id_reg_csr_cmd_delay <= 2'h0; // @[Core.scala 757:32]
-    end else if (_ic_read_en4_T) begin // @[Core.scala 763:30]
+    if (reset) begin // @[Core.scala 725:40]
+      id_reg_csr_cmd_delay <= 2'h0; // @[Core.scala 725:40]
+    end else if (ex2_reg_is_br) begin // @[Core.scala 739:24]
+      id_reg_csr_cmd_delay <= 2'h0; // @[Core.scala 746:32]
+    end else if (_ic_read_en4_T) begin // @[Core.scala 752:30]
       if (_csignals_T_1) begin // @[Lookup.scala 34:39]
         id_reg_csr_cmd_delay <= 2'h0;
       end else begin
         id_reg_csr_cmd_delay <= _csignals_T_838;
       end
     end
-    if (reset) begin // @[Core.scala 736:40]
-      id_reg_imm_b_sext_delay <= 32'h0; // @[Core.scala 736:40]
-    end else if (!(ex2_reg_is_br)) begin // @[Core.scala 749:24]
-      if (_ic_read_en4_T) begin // @[Core.scala 763:30]
+    if (reset) begin // @[Core.scala 726:40]
+      id_reg_imm_b_sext_delay <= 32'h0; // @[Core.scala 726:40]
+    end else if (!(ex2_reg_is_br)) begin // @[Core.scala 739:24]
+      if (_ic_read_en4_T) begin // @[Core.scala 752:30]
         if (_id_wb_addr_T) begin // @[Mux.scala 101:16]
           id_reg_imm_b_sext_delay <= id_c_imm_b;
         end else begin
@@ -3710,159 +3732,159 @@ module Core(
         end
       end
     end
-    if (reset) begin // @[Core.scala 737:40]
-      id_reg_mem_w_delay <= 3'h0; // @[Core.scala 737:40]
-    end else if (ex2_reg_is_br) begin // @[Core.scala 749:24]
-      id_reg_mem_w_delay <= 3'h0; // @[Core.scala 758:32]
-    end else if (_ic_read_en4_T) begin // @[Core.scala 763:30]
+    if (reset) begin // @[Core.scala 727:40]
+      id_reg_mem_w_delay <= 3'h0; // @[Core.scala 727:40]
+    end else if (ex2_reg_is_br) begin // @[Core.scala 739:24]
+      id_reg_mem_w_delay <= 3'h0; // @[Core.scala 747:32]
+    end else if (_ic_read_en4_T) begin // @[Core.scala 752:30]
       if (_csignals_T_1) begin // @[Lookup.scala 34:39]
         id_reg_mem_w_delay <= 3'h5;
       end else begin
         id_reg_mem_w_delay <= _csignals_T_931;
       end
     end
-    if (reset) begin // @[Core.scala 738:41]
-      id_reg_is_direct_j_delay <= 1'h0; // @[Core.scala 738:41]
-    end else if (!(ex2_reg_is_br)) begin // @[Core.scala 749:24]
-      if (_ic_read_en4_T) begin // @[Core.scala 763:30]
-        id_reg_is_direct_j_delay <= id_is_direct_j; // @[Core.scala 780:30]
+    if (reset) begin // @[Core.scala 728:41]
+      id_reg_is_direct_j_delay <= 1'h0; // @[Core.scala 728:41]
+    end else if (!(ex2_reg_is_br)) begin // @[Core.scala 739:24]
+      if (_ic_read_en4_T) begin // @[Core.scala 752:30]
+        id_reg_is_direct_j_delay <= id_is_direct_j; // @[Core.scala 768:30]
       end
     end
-    if (reset) begin // @[Core.scala 739:40]
-      id_reg_is_br_delay <= 1'h0; // @[Core.scala 739:40]
-    end else if (!(ex2_reg_is_br)) begin // @[Core.scala 749:24]
-      if (_ic_read_en4_T) begin // @[Core.scala 763:30]
-        id_reg_is_br_delay <= id_is_br; // @[Core.scala 781:29]
+    if (reset) begin // @[Core.scala 729:40]
+      id_reg_is_br_delay <= 1'h0; // @[Core.scala 729:40]
+    end else if (!(ex2_reg_is_br)) begin // @[Core.scala 739:24]
+      if (_ic_read_en4_T) begin // @[Core.scala 752:30]
+        id_reg_is_br_delay <= id_is_br; // @[Core.scala 769:29]
       end
     end
-    if (reset) begin // @[Core.scala 740:40]
-      id_reg_is_j_delay <= 1'h0; // @[Core.scala 740:40]
-    end else if (ex2_reg_is_br) begin // @[Core.scala 749:24]
-      id_reg_is_j_delay <= 1'h0; // @[Core.scala 759:32]
-    end else if (_ic_read_en4_T) begin // @[Core.scala 763:30]
-      id_reg_is_j_delay <= id_is_j; // @[Core.scala 782:29]
+    if (reset) begin // @[Core.scala 730:40]
+      id_reg_is_j_delay <= 1'h0; // @[Core.scala 730:40]
+    end else if (ex2_reg_is_br) begin // @[Core.scala 739:24]
+      id_reg_is_j_delay <= 1'h0; // @[Core.scala 748:32]
+    end else if (_ic_read_en4_T) begin // @[Core.scala 752:30]
+      id_reg_is_j_delay <= id_is_j; // @[Core.scala 770:29]
     end
-    if (reset) begin // @[Core.scala 741:40]
-      id_reg_is_bp_pos_delay <= 1'h0; // @[Core.scala 741:40]
-    end else if (ex2_reg_is_br) begin // @[Core.scala 749:24]
-      id_reg_is_bp_pos_delay <= 1'h0; // @[Core.scala 760:32]
-    end else if (_ic_read_en4_T) begin // @[Core.scala 763:30]
-      id_reg_is_bp_pos_delay <= id_reg_is_bp_pos; // @[Core.scala 783:29]
+    if (reset) begin // @[Core.scala 731:40]
+      id_reg_is_bp_pos_delay <= 1'h0; // @[Core.scala 731:40]
+    end else if (ex2_reg_is_br) begin // @[Core.scala 739:24]
+      id_reg_is_bp_pos_delay <= 1'h0; // @[Core.scala 749:32]
+    end else if (_ic_read_en4_T) begin // @[Core.scala 752:30]
+      id_reg_is_bp_pos_delay <= id_reg_is_bp_pos; // @[Core.scala 771:29]
     end
-    if (reset) begin // @[Core.scala 742:40]
-      id_reg_bp_addr_delay <= 32'h0; // @[Core.scala 742:40]
-    end else if (!(ex2_reg_is_br)) begin // @[Core.scala 749:24]
-      if (_ic_read_en4_T) begin // @[Core.scala 763:30]
-        id_reg_bp_addr_delay <= id_reg_bp_addr; // @[Core.scala 784:29]
+    if (reset) begin // @[Core.scala 732:40]
+      id_reg_bp_addr_delay <= 32'h0; // @[Core.scala 732:40]
+    end else if (!(ex2_reg_is_br)) begin // @[Core.scala 739:24]
+      if (_ic_read_en4_T) begin // @[Core.scala 752:30]
+        id_reg_bp_addr_delay <= id_reg_bp_addr; // @[Core.scala 772:29]
       end
     end
-    if (reset) begin // @[Core.scala 743:40]
-      id_reg_is_half_delay <= 1'h0; // @[Core.scala 743:40]
-    end else if (!(ex2_reg_is_br)) begin // @[Core.scala 749:24]
-      if (_ic_read_en4_T) begin // @[Core.scala 763:30]
-        id_reg_is_half_delay <= id_is_half; // @[Core.scala 785:29]
+    if (reset) begin // @[Core.scala 733:40]
+      id_reg_is_half_delay <= 1'h0; // @[Core.scala 733:40]
+    end else if (!(ex2_reg_is_br)) begin // @[Core.scala 739:24]
+      if (_ic_read_en4_T) begin // @[Core.scala 752:30]
+        id_reg_is_half_delay <= id_is_half; // @[Core.scala 773:29]
       end
     end
-    if (reset) begin // @[Core.scala 744:43]
-      id_reg_is_valid_inst_delay <= 1'h0; // @[Core.scala 744:43]
-    end else if (ex2_reg_is_br) begin // @[Core.scala 749:24]
-      id_reg_is_valid_inst_delay <= 1'h0; // @[Core.scala 761:32]
-    end else if (_ic_read_en4_T) begin // @[Core.scala 763:30]
-      id_reg_is_valid_inst_delay <= id_inst != 32'h13; // @[Core.scala 786:32]
+    if (reset) begin // @[Core.scala 734:43]
+      id_reg_is_valid_inst_delay <= 1'h0; // @[Core.scala 734:43]
+    end else if (ex2_reg_is_br) begin // @[Core.scala 739:24]
+      id_reg_is_valid_inst_delay <= 1'h0; // @[Core.scala 750:32]
+    end else if (_ic_read_en4_T) begin // @[Core.scala 752:30]
+      id_reg_is_valid_inst_delay <= id_inst != 32'h13; // @[Core.scala 774:32]
     end
-    if (reset) begin // @[Core.scala 745:40]
-      id_reg_is_trap_delay <= 1'h0; // @[Core.scala 745:40]
-    end else if (ex2_reg_is_br) begin // @[Core.scala 749:24]
-      id_reg_is_trap_delay <= 1'h0; // @[Core.scala 762:32]
-    end else if (_ic_read_en4_T) begin // @[Core.scala 763:30]
-      id_reg_is_trap_delay <= _id_csr_addr_T; // @[Core.scala 787:29]
+    if (reset) begin // @[Core.scala 735:40]
+      id_reg_is_trap_delay <= 1'h0; // @[Core.scala 735:40]
+    end else if (ex2_reg_is_br) begin // @[Core.scala 739:24]
+      id_reg_is_trap_delay <= 1'h0; // @[Core.scala 751:32]
+    end else if (_ic_read_en4_T) begin // @[Core.scala 752:30]
+      id_reg_is_trap_delay <= _id_csr_addr_T; // @[Core.scala 775:29]
     end
-    if (reset) begin // @[Core.scala 746:40]
-      id_reg_mcause_delay <= 32'h0; // @[Core.scala 746:40]
-    end else if (!(ex2_reg_is_br)) begin // @[Core.scala 749:24]
-      if (_ic_read_en4_T) begin // @[Core.scala 763:30]
-        id_reg_mcause_delay <= 32'hb; // @[Core.scala 788:29]
+    if (reset) begin // @[Core.scala 736:40]
+      id_reg_mcause_delay <= 32'h0; // @[Core.scala 736:40]
+    end else if (!(ex2_reg_is_br)) begin // @[Core.scala 739:24]
+      if (_ic_read_en4_T) begin // @[Core.scala 752:30]
+        id_reg_mcause_delay <= 32'hb; // @[Core.scala 776:29]
       end
     end
-    ex2_reg_dividend <= _GEN_486[36:0]; // @[Core.scala 1323:{37,37}]
-    if (reset) begin // @[Core.scala 1324:37]
-      ex2_reg_divisor <= 36'h0; // @[Core.scala 1324:37]
-    end else if (3'h0 == ex2_reg_divrem_state) begin // @[Core.scala 1428:33]
-      ex2_reg_divisor <= _ex2_reg_divisor_T_1; // @[Core.scala 1439:28]
-    end else if (3'h1 == ex2_reg_divrem_state) begin // @[Core.scala 1428:33]
-      ex2_reg_divisor <= ex2_reg_p_divisor[37:2]; // @[Core.scala 1457:28]
+    ex2_reg_dividend <= _GEN_490[36:0]; // @[Core.scala 1293:{37,37}]
+    if (reset) begin // @[Core.scala 1294:37]
+      ex2_reg_divisor <= 36'h0; // @[Core.scala 1294:37]
+    end else if (3'h0 == ex2_reg_divrem_state) begin // @[Core.scala 1398:33]
+      ex2_reg_divisor <= _ex2_reg_divisor_T_1; // @[Core.scala 1409:28]
+    end else if (3'h1 == ex2_reg_divrem_state) begin // @[Core.scala 1398:33]
+      ex2_reg_divisor <= ex2_reg_p_divisor[37:2]; // @[Core.scala 1427:28]
     end
-    if (reset) begin // @[Core.scala 1325:37]
-      ex2_reg_p_divisor <= 64'h0; // @[Core.scala 1325:37]
-    end else if (3'h0 == ex2_reg_divrem_state) begin // @[Core.scala 1428:33]
-      ex2_reg_p_divisor <= _ex2_reg_p_divisor_T; // @[Core.scala 1440:28]
-    end else if (3'h1 == ex2_reg_divrem_state) begin // @[Core.scala 1428:33]
-      ex2_reg_p_divisor <= {{2'd0}, ex2_reg_p_divisor[63:2]}; // @[Core.scala 1456:28]
+    if (reset) begin // @[Core.scala 1295:37]
+      ex2_reg_p_divisor <= 64'h0; // @[Core.scala 1295:37]
+    end else if (3'h0 == ex2_reg_divrem_state) begin // @[Core.scala 1398:33]
+      ex2_reg_p_divisor <= _ex2_reg_p_divisor_T; // @[Core.scala 1410:28]
+    end else if (3'h1 == ex2_reg_divrem_state) begin // @[Core.scala 1398:33]
+      ex2_reg_p_divisor <= {{2'd0}, ex2_reg_p_divisor[63:2]}; // @[Core.scala 1426:28]
     end
-    if (reset) begin // @[Core.scala 1326:37]
-      ex2_reg_divrem_count <= 5'h0; // @[Core.scala 1326:37]
-    end else if (3'h0 == ex2_reg_divrem_state) begin // @[Core.scala 1428:33]
-      ex2_reg_divrem_count <= 5'h0; // @[Core.scala 1441:28]
-    end else if (3'h1 == ex2_reg_divrem_state) begin // @[Core.scala 1428:33]
-      ex2_reg_divrem_count <= _ex2_reg_divrem_count_T_1; // @[Core.scala 1458:28]
-    end else if (3'h2 == ex2_reg_divrem_state) begin // @[Core.scala 1428:33]
-      ex2_reg_divrem_count <= _ex2_reg_divrem_count_T_1; // @[Core.scala 1555:28]
+    if (reset) begin // @[Core.scala 1296:37]
+      ex2_reg_divrem_count <= 5'h0; // @[Core.scala 1296:37]
+    end else if (3'h0 == ex2_reg_divrem_state) begin // @[Core.scala 1398:33]
+      ex2_reg_divrem_count <= 5'h0; // @[Core.scala 1411:28]
+    end else if (3'h1 == ex2_reg_divrem_state) begin // @[Core.scala 1398:33]
+      ex2_reg_divrem_count <= _ex2_reg_divrem_count_T_1; // @[Core.scala 1428:28]
+    end else if (3'h2 == ex2_reg_divrem_state) begin // @[Core.scala 1398:33]
+      ex2_reg_divrem_count <= _ex2_reg_divrem_count_T_1; // @[Core.scala 1525:28]
     end
-    if (reset) begin // @[Core.scala 1327:37]
-      ex2_reg_rem_shift <= 5'h0; // @[Core.scala 1327:37]
-    end else if (3'h0 == ex2_reg_divrem_state) begin // @[Core.scala 1428:33]
-      ex2_reg_rem_shift <= 5'h0; // @[Core.scala 1442:28]
-    end else if (!(3'h1 == ex2_reg_divrem_state)) begin // @[Core.scala 1428:33]
-      if (3'h2 == ex2_reg_divrem_state) begin // @[Core.scala 1428:33]
-        ex2_reg_rem_shift <= _ex2_reg_rem_shift_T_1; // @[Core.scala 1554:25]
+    if (reset) begin // @[Core.scala 1297:37]
+      ex2_reg_rem_shift <= 5'h0; // @[Core.scala 1297:37]
+    end else if (3'h0 == ex2_reg_divrem_state) begin // @[Core.scala 1398:33]
+      ex2_reg_rem_shift <= 5'h0; // @[Core.scala 1412:28]
+    end else if (!(3'h1 == ex2_reg_divrem_state)) begin // @[Core.scala 1398:33]
+      if (3'h2 == ex2_reg_divrem_state) begin // @[Core.scala 1398:33]
+        ex2_reg_rem_shift <= _ex2_reg_rem_shift_T_1; // @[Core.scala 1524:25]
       end
     end
-    if (reset) begin // @[Core.scala 1328:37]
-      ex2_reg_extra_shift <= 1'h0; // @[Core.scala 1328:37]
-    end else if (3'h0 == ex2_reg_divrem_state) begin // @[Core.scala 1428:33]
-      if (~ex2_reg_init_divisor[1]) begin // @[Core.scala 1444:46]
-        ex2_reg_extra_shift <= 1'h0; // @[Core.scala 1445:29]
+    if (reset) begin // @[Core.scala 1298:37]
+      ex2_reg_extra_shift <= 1'h0; // @[Core.scala 1298:37]
+    end else if (3'h0 == ex2_reg_divrem_state) begin // @[Core.scala 1398:33]
+      if (~ex2_reg_init_divisor[1]) begin // @[Core.scala 1414:46]
+        ex2_reg_extra_shift <= 1'h0; // @[Core.scala 1415:29]
       end else begin
-        ex2_reg_extra_shift <= 1'h1; // @[Core.scala 1448:29]
+        ex2_reg_extra_shift <= 1'h1; // @[Core.scala 1418:29]
       end
-    end else if (3'h1 == ex2_reg_divrem_state) begin // @[Core.scala 1428:33]
-      if (~ex2_reg_p_divisor[35]) begin // @[Core.scala 1459:52]
-        ex2_reg_extra_shift <= 1'h0; // @[Core.scala 1460:29]
+    end else if (3'h1 == ex2_reg_divrem_state) begin // @[Core.scala 1398:33]
+      if (~ex2_reg_p_divisor[35]) begin // @[Core.scala 1429:52]
+        ex2_reg_extra_shift <= 1'h0; // @[Core.scala 1430:29]
       end else begin
-        ex2_reg_extra_shift <= 1'h1; // @[Core.scala 1463:29]
+        ex2_reg_extra_shift <= 1'h1; // @[Core.scala 1433:29]
       end
     end
-    if (reset) begin // @[Core.scala 1329:37]
-      ex2_reg_d <= 3'h0; // @[Core.scala 1329:37]
-    end else if (3'h0 == ex2_reg_divrem_state) begin // @[Core.scala 1428:33]
-      if (~ex2_reg_init_divisor[1]) begin // @[Core.scala 1444:46]
-        ex2_reg_d <= 3'h0; // @[Core.scala 1446:29]
+    if (reset) begin // @[Core.scala 1299:37]
+      ex2_reg_d <= 3'h0; // @[Core.scala 1299:37]
+    end else if (3'h0 == ex2_reg_divrem_state) begin // @[Core.scala 1398:33]
+      if (~ex2_reg_init_divisor[1]) begin // @[Core.scala 1414:46]
+        ex2_reg_d <= 3'h0; // @[Core.scala 1416:29]
       end else begin
-        ex2_reg_d <= _ex2_reg_d_T_1; // @[Core.scala 1449:29]
+        ex2_reg_d <= _ex2_reg_d_T_1; // @[Core.scala 1419:29]
       end
-    end else if (3'h1 == ex2_reg_divrem_state) begin // @[Core.scala 1428:33]
-      if (~ex2_reg_p_divisor[35]) begin // @[Core.scala 1459:52]
-        ex2_reg_d <= ex2_reg_p_divisor[33:31]; // @[Core.scala 1461:29]
+    end else if (3'h1 == ex2_reg_divrem_state) begin // @[Core.scala 1398:33]
+      if (~ex2_reg_p_divisor[35]) begin // @[Core.scala 1429:52]
+        ex2_reg_d <= ex2_reg_p_divisor[33:31]; // @[Core.scala 1431:29]
       end else begin
-        ex2_reg_d <= ex2_reg_p_divisor[34:32]; // @[Core.scala 1464:29]
+        ex2_reg_d <= ex2_reg_p_divisor[34:32]; // @[Core.scala 1434:29]
       end
     end
-    if (reset) begin // @[Core.scala 1330:37]
-      ex2_reg_reminder <= 32'h0; // @[Core.scala 1330:37]
-    end else if (!(3'h0 == ex2_reg_divrem_state)) begin // @[Core.scala 1428:33]
-      if (!(3'h1 == ex2_reg_divrem_state)) begin // @[Core.scala 1428:33]
-        if (!(3'h2 == ex2_reg_divrem_state)) begin // @[Core.scala 1428:33]
-          ex2_reg_reminder <= _GEN_408;
+    if (reset) begin // @[Core.scala 1300:37]
+      ex2_reg_reminder <= 32'h0; // @[Core.scala 1300:37]
+    end else if (!(3'h0 == ex2_reg_divrem_state)) begin // @[Core.scala 1398:33]
+      if (!(3'h1 == ex2_reg_divrem_state)) begin // @[Core.scala 1398:33]
+        if (!(3'h2 == ex2_reg_divrem_state)) begin // @[Core.scala 1398:33]
+          ex2_reg_reminder <= _GEN_412;
         end
       end
     end
-    ex2_reg_quotient <= _GEN_488[31:0]; // @[Core.scala 1331:{37,37}]
+    ex2_reg_quotient <= _GEN_492[31:0]; // @[Core.scala 1301:{37,37}]
     `ifndef SYNTHESIS
     `ifdef PRINTF_COND
       if (`PRINTF_COND) begin
     `endif
         if (~reset) begin
-          $fwrite(32'h80000002,"ic_reg_addr_out: %x, ic_data_out: %x\n",ic_reg_addr_out,ic_data_out); // @[Core.scala 486:9]
+          $fwrite(32'h80000002,"ic_reg_addr_out: %x, ic_data_out: %x\n",ic_reg_addr_out,ic_data_out); // @[Core.scala 478:9]
         end
     `ifdef PRINTF_COND
       end
@@ -3873,7 +3895,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_17) begin
-          $fwrite(32'h80000002,"inst: %x, ic_read_rdy: %d, ic_state: %d\n",if2_inst,ic_read_rdy,ic_state); // @[Core.scala 487:9]
+          $fwrite(32'h80000002,"inst: %x, ic_read_rdy: %d, ic_state: %d\n",if2_inst,ic_read_rdy,ic_state); // @[Core.scala 479:9]
         end
     `ifdef PRINTF_COND
       end
@@ -3884,7 +3906,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_17) begin
-          $fwrite(32'h80000002,"if2_pc           : 0x%x\n",if2_pc); // @[Core.scala 1764:9]
+          $fwrite(32'h80000002,"if2_pc           : 0x%x\n",if2_pc); // @[Core.scala 1738:9]
         end
     `ifdef PRINTF_COND
       end
@@ -3895,7 +3917,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_17) begin
-          $fwrite(32'h80000002,"if2_inst         : 0x%x\n",if2_inst); // @[Core.scala 1765:9]
+          $fwrite(32'h80000002,"if2_inst         : 0x%x\n",if2_inst); // @[Core.scala 1739:9]
         end
     `ifdef PRINTF_COND
       end
@@ -3906,7 +3928,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_17) begin
-          $fwrite(32'h80000002,"if2_reg_is_bp_pos: 0x%x\n",if2_reg_is_bp_pos); // @[Core.scala 1766:9]
+          $fwrite(32'h80000002,"if2_reg_is_bp_pos: 0x%x\n",if2_reg_is_bp_pos); // @[Core.scala 1740:9]
         end
     `ifdef PRINTF_COND
       end
@@ -3917,7 +3939,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_17) begin
-          $fwrite(32'h80000002,"bp.io.lu.br_hit  : 0x%x\n",bp_io_lu_br_hit); // @[Core.scala 1767:9]
+          $fwrite(32'h80000002,"bp.io.lu.br_hit  : 0x%x\n",bp_io_lu_br_hit); // @[Core.scala 1741:9]
         end
     `ifdef PRINTF_COND
       end
@@ -3928,7 +3950,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_17) begin
-          $fwrite(32'h80000002,"bp.io.lu.br_pos  : 0x%x\n",bp_io_lu_br_pos); // @[Core.scala 1768:9]
+          $fwrite(32'h80000002,"bp.io.lu.br_pos  : 0x%x\n",bp_io_lu_br_pos); // @[Core.scala 1742:9]
         end
     `ifdef PRINTF_COND
       end
@@ -3939,7 +3961,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_17) begin
-          $fwrite(32'h80000002,"id_reg_pc        : 0x%x\n",id_reg_pc); // @[Core.scala 1769:9]
+          $fwrite(32'h80000002,"id_reg_pc        : 0x%x\n",id_reg_pc); // @[Core.scala 1743:9]
         end
     `ifdef PRINTF_COND
       end
@@ -3950,7 +3972,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_17) begin
-          $fwrite(32'h80000002,"id_reg_inst      : 0x%x\n",id_reg_inst); // @[Core.scala 1770:9]
+          $fwrite(32'h80000002,"id_reg_inst      : 0x%x\n",id_reg_inst); // @[Core.scala 1744:9]
         end
     `ifdef PRINTF_COND
       end
@@ -3961,7 +3983,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_17) begin
-          $fwrite(32'h80000002,"id_stall         : 0x%x\n",id_stall); // @[Core.scala 1772:9]
+          $fwrite(32'h80000002,"id_stall         : 0x%x\n",id_stall); // @[Core.scala 1745:9]
         end
     `ifdef PRINTF_COND
       end
@@ -3972,7 +3994,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_17) begin
-          $fwrite(32'h80000002,"id_inst          : 0x%x\n",id_inst); // @[Core.scala 1773:9]
+          $fwrite(32'h80000002,"id_inst          : 0x%x\n",id_inst); // @[Core.scala 1746:9]
         end
     `ifdef PRINTF_COND
       end
@@ -3983,7 +4005,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_17) begin
-          $fwrite(32'h80000002,"id_wb_addr       : 0x%x\n",id_wb_addr); // @[Core.scala 1776:9]
+          $fwrite(32'h80000002,"id_wb_addr       : 0x%x\n",id_wb_addr); // @[Core.scala 1749:9]
         end
     `ifdef PRINTF_COND
       end
@@ -3994,7 +4016,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_17) begin
-          $fwrite(32'h80000002,"rrd_reg_pc       : 0x%x\n",rrd_reg_pc); // @[Core.scala 1777:9]
+          $fwrite(32'h80000002,"rrd_reg_pc       : 0x%x\n",rrd_reg_pc); // @[Core.scala 1750:9]
         end
     `ifdef PRINTF_COND
       end
@@ -4005,7 +4027,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_17) begin
-          $fwrite(32'h80000002,"rrd_reg_is_valid_: 0x%x\n",rrd_reg_is_valid_inst); // @[Core.scala 1779:9]
+          $fwrite(32'h80000002,"rrd_reg_is_valid_: 0x%x\n",rrd_reg_is_valid_inst); // @[Core.scala 1751:9]
         end
     `ifdef PRINTF_COND
       end
@@ -4016,7 +4038,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_17) begin
-          $fwrite(32'h80000002,"rrd_stall        : 0x%x\n",rrd_stall); // @[Core.scala 1780:9]
+          $fwrite(32'h80000002,"rrd_stall        : 0x%x\n",rrd_stall); // @[Core.scala 1752:9]
         end
     `ifdef PRINTF_COND
       end
@@ -4027,7 +4049,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_17) begin
-          $fwrite(32'h80000002,"rrd_op1_data     : 0x%x\n",rrd_op1_data); // @[Core.scala 1783:9]
+          $fwrite(32'h80000002,"rrd_op1_data     : 0x%x\n",rrd_op1_data); // @[Core.scala 1755:9]
         end
     `ifdef PRINTF_COND
       end
@@ -4038,7 +4060,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_17) begin
-          $fwrite(32'h80000002,"rrd_op2_data     : 0x%x\n",rrd_op2_data); // @[Core.scala 1784:9]
+          $fwrite(32'h80000002,"rrd_op2_data     : 0x%x\n",rrd_op2_data); // @[Core.scala 1756:9]
         end
     `ifdef PRINTF_COND
       end
@@ -4049,7 +4071,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_17) begin
-          $fwrite(32'h80000002,"rrd_rs2_data     : 0x%x\n",rrd_rs2_data); // @[Core.scala 1785:9]
+          $fwrite(32'h80000002,"rrd_rs2_data     : 0x%x\n",rrd_rs2_data); // @[Core.scala 1757:9]
         end
     `ifdef PRINTF_COND
       end
@@ -4060,7 +4082,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_17) begin
-          $fwrite(32'h80000002,"ex1_fw_data      : 0x%x\n",ex1_fw_data); // @[Core.scala 1789:9]
+          $fwrite(32'h80000002,"ex1_fw_data      : 0x%x\n",ex1_fw_data); // @[Core.scala 1761:9]
         end
     `ifdef PRINTF_COND
       end
@@ -4071,7 +4093,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_17) begin
-          $fwrite(32'h80000002,"ex1_reg_pc       : 0x%x\n",ex1_reg_pc); // @[Core.scala 1790:9]
+          $fwrite(32'h80000002,"ex1_reg_pc       : 0x%x\n",ex1_reg_pc); // @[Core.scala 1762:9]
         end
     `ifdef PRINTF_COND
       end
@@ -4082,7 +4104,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_17) begin
-          $fwrite(32'h80000002,"ex1_reg_is_valid_: 0x%x\n",ex1_reg_is_valid_inst); // @[Core.scala 1792:9]
+          $fwrite(32'h80000002,"ex1_reg_is_valid_: 0x%x\n",ex1_reg_is_valid_inst); // @[Core.scala 1763:9]
         end
     `ifdef PRINTF_COND
       end
@@ -4093,7 +4115,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_17) begin
-          $fwrite(32'h80000002,"ex1_reg_op1_data : 0x%x\n",ex1_reg_op1_data); // @[Core.scala 1793:9]
+          $fwrite(32'h80000002,"ex1_reg_op1_data : 0x%x\n",ex1_reg_op1_data); // @[Core.scala 1764:9]
         end
     `ifdef PRINTF_COND
       end
@@ -4104,7 +4126,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_17) begin
-          $fwrite(32'h80000002,"ex1_reg_op2_data : 0x%x\n",ex1_reg_op2_data); // @[Core.scala 1794:9]
+          $fwrite(32'h80000002,"ex1_reg_op2_data : 0x%x\n",ex1_reg_op2_data); // @[Core.scala 1765:9]
         end
     `ifdef PRINTF_COND
       end
@@ -4115,7 +4137,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_17) begin
-          $fwrite(32'h80000002,"ex1_alu_out      : 0x%x\n",ex1_alu_out); // @[Core.scala 1795:9]
+          $fwrite(32'h80000002,"ex1_alu_out      : 0x%x\n",ex1_alu_out); // @[Core.scala 1766:9]
         end
     `ifdef PRINTF_COND
       end
@@ -4126,7 +4148,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_17) begin
-          $fwrite(32'h80000002,"ex1_reg_exe_fun  : 0x%x\n",ex1_reg_exe_fun); // @[Core.scala 1796:9]
+          $fwrite(32'h80000002,"ex1_reg_exe_fun  : 0x%x\n",ex1_reg_exe_fun); // @[Core.scala 1767:9]
         end
     `ifdef PRINTF_COND
       end
@@ -4137,7 +4159,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_17) begin
-          $fwrite(32'h80000002,"ex1_reg_wb_sel   : 0x%x\n",ex1_reg_wb_sel); // @[Core.scala 1797:9]
+          $fwrite(32'h80000002,"ex1_reg_wb_sel   : 0x%x\n",ex1_reg_wb_sel); // @[Core.scala 1768:9]
         end
     `ifdef PRINTF_COND
       end
@@ -4148,7 +4170,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_17) begin
-          $fwrite(32'h80000002,"ex1_reg_wb_addr  : 0x%x\n",ex1_reg_wb_addr); // @[Core.scala 1798:9]
+          $fwrite(32'h80000002,"ex1_reg_wb_addr  : 0x%x\n",ex1_reg_wb_addr); // @[Core.scala 1769:9]
         end
     `ifdef PRINTF_COND
       end
@@ -4159,7 +4181,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_17) begin
-          $fwrite(32'h80000002,"ex1_reg_is_bp_pos: 0x%x\n",ex1_reg_is_bp_pos); // @[Core.scala 1799:9]
+          $fwrite(32'h80000002,"ex1_reg_is_bp_pos: 0x%x\n",ex1_reg_is_bp_pos); // @[Core.scala 1770:9]
         end
     `ifdef PRINTF_COND
       end
@@ -4170,7 +4192,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_17) begin
-          $fwrite(32'h80000002,"ex1_reg_bp_addr  : 0x%x\n",ex1_reg_bp_addr); // @[Core.scala 1800:9]
+          $fwrite(32'h80000002,"ex1_reg_bp_addr  : 0x%x\n",ex1_reg_bp_addr); // @[Core.scala 1771:9]
         end
     `ifdef PRINTF_COND
       end
@@ -4181,7 +4203,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_17) begin
-          $fwrite(32'h80000002,"jbr_is_br        : 0x%d\n",jbr_is_br); // @[Core.scala 1802:9]
+          $fwrite(32'h80000002,"jbr_is_br        : 0x%d\n",jbr_is_br); // @[Core.scala 1772:9]
         end
     `ifdef PRINTF_COND
       end
@@ -4192,7 +4214,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_17) begin
-          $fwrite(32'h80000002,"ex2_reg_is_br    : 0x%d\n",ex2_reg_is_br); // @[Core.scala 1803:9]
+          $fwrite(32'h80000002,"ex2_reg_is_br    : 0x%d\n",ex2_reg_is_br); // @[Core.scala 1773:9]
         end
     `ifdef PRINTF_COND
       end
@@ -4203,7 +4225,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_17) begin
-          $fwrite(32'h80000002,"ex2_reg_br_addr  : 0x%x\n",ex2_reg_br_addr); // @[Core.scala 1804:9]
+          $fwrite(32'h80000002,"ex2_reg_br_addr  : 0x%x\n",ex2_reg_br_addr); // @[Core.scala 1774:9]
         end
     `ifdef PRINTF_COND
       end
@@ -4214,7 +4236,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_17) begin
-          $fwrite(32'h80000002,"ex2_reg_pc       : 0x%x\n",ex2_reg_pc); // @[Core.scala 1805:9]
+          $fwrite(32'h80000002,"ex2_reg_pc       : 0x%x\n",ex2_reg_pc); // @[Core.scala 1775:9]
         end
     `ifdef PRINTF_COND
       end
@@ -4225,7 +4247,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_17) begin
-          $fwrite(32'h80000002,"ex2_is_valid_inst: 0x%x\n",ex2_is_valid_inst); // @[Core.scala 1807:9]
+          $fwrite(32'h80000002,"ex2_is_valid_inst: 0x%x\n",ex2_is_valid_inst); // @[Core.scala 1776:9]
         end
     `ifdef PRINTF_COND
       end
@@ -4236,7 +4258,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_17) begin
-          $fwrite(32'h80000002,"ex2_stall        : 0x%x\n",ex2_stall); // @[Core.scala 1808:9]
+          $fwrite(32'h80000002,"ex2_stall        : 0x%x\n",ex2_stall); // @[Core.scala 1777:9]
         end
     `ifdef PRINTF_COND
       end
@@ -4247,7 +4269,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_17) begin
-          $fwrite(32'h80000002,"ex2_wb_data      : 0x%x\n",ex2_wb_data); // @[Core.scala 1809:9]
+          $fwrite(32'h80000002,"ex2_wb_data      : 0x%x\n",ex2_wb_data); // @[Core.scala 1778:9]
         end
     `ifdef PRINTF_COND
       end
@@ -4258,7 +4280,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_17) begin
-          $fwrite(32'h80000002,"ex2_alu_muldiv_ou: 0x%x\n",ex2_alu_muldiv_out); // @[Core.scala 1810:9]
+          $fwrite(32'h80000002,"ex2_alu_muldiv_ou: 0x%x\n",ex2_alu_muldiv_out); // @[Core.scala 1779:9]
         end
     `ifdef PRINTF_COND
       end
@@ -4269,7 +4291,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_17) begin
-          $fwrite(32'h80000002,"ex2_reg_wb_addr  : 0x%x\n",ex2_reg_wb_addr); // @[Core.scala 1811:9]
+          $fwrite(32'h80000002,"ex2_reg_wb_addr  : 0x%x\n",ex2_reg_wb_addr); // @[Core.scala 1780:9]
         end
     `ifdef PRINTF_COND
       end
@@ -4280,7 +4302,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_17) begin
-          $fwrite(32'h80000002,"ex2_reg_wdata    : 0x%x\n",ex2_reg_wdata); // @[Core.scala 1812:9]
+          $fwrite(32'h80000002,"ex2_reg_wdata    : 0x%x\n",ex2_reg_wdata); // @[Core.scala 1781:9]
         end
     `ifdef PRINTF_COND
       end
@@ -4291,7 +4313,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_17) begin
-          $fwrite(32'h80000002,"mem1_mem_stall   : 0x%x\n",mem1_mem_stall); // @[Core.scala 1814:9]
+          $fwrite(32'h80000002,"mem1_mem_stall   : 0x%x\n",mem1_mem_stall); // @[Core.scala 1783:9]
         end
     `ifdef PRINTF_COND
       end
@@ -4302,7 +4324,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_17) begin
-          $fwrite(32'h80000002,"mem1_dram_stall  : 0x%x\n",mem1_dram_stall); // @[Core.scala 1815:9]
+          $fwrite(32'h80000002,"mem1_dram_stall  : 0x%x\n",mem1_dram_stall); // @[Core.scala 1784:9]
         end
     `ifdef PRINTF_COND
       end
@@ -4313,7 +4335,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_17) begin
-          $fwrite(32'h80000002,"mem1_is_valid_ins: 0x%x\n",mem1_is_valid_inst); // @[Core.scala 1816:9]
+          $fwrite(32'h80000002,"mem1_is_valid_ins: 0x%x\n",mem1_is_valid_inst); // @[Core.scala 1785:9]
         end
     `ifdef PRINTF_COND
       end
@@ -4324,7 +4346,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_17) begin
-          $fwrite(32'h80000002,"mem2_dram_stall  : 0x%x\n",mem2_dram_stall); // @[Core.scala 1817:9]
+          $fwrite(32'h80000002,"mem2_dram_stall  : 0x%x\n",mem2_dram_stall); // @[Core.scala 1786:9]
         end
     `ifdef PRINTF_COND
       end
@@ -4335,7 +4357,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_17) begin
-          $fwrite(32'h80000002,"mem2_reg_dmem_rda: 0x%x\n",mem2_reg_dmem_rdata); // @[Core.scala 1818:9]
+          $fwrite(32'h80000002,"mem2_reg_dmem_rda: 0x%x\n",mem2_reg_dmem_rdata); // @[Core.scala 1787:9]
         end
     `ifdef PRINTF_COND
       end
@@ -4346,7 +4368,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_17) begin
-          $fwrite(32'h80000002,"mem2_reg_is_valid: 0x%x\n",mem2_reg_is_valid_inst); // @[Core.scala 1820:9]
+          $fwrite(32'h80000002,"mem2_reg_is_valid: 0x%x\n",mem2_reg_is_valid_inst); // @[Core.scala 1789:9]
         end
     `ifdef PRINTF_COND
       end
@@ -4357,7 +4379,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_17) begin
-          $fwrite(32'h80000002,"mem3_wb_data_load: 0x%x\n",mem3_wb_data_load); // @[Core.scala 1821:9]
+          $fwrite(32'h80000002,"mem3_wb_data_load: 0x%x\n",mem3_wb_data_load); // @[Core.scala 1790:9]
         end
     `ifdef PRINTF_COND
       end
@@ -4368,7 +4390,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_17) begin
-          $fwrite(32'h80000002,"mem3_reg_is_valid: 0x%x\n",mem3_reg_is_valid_inst); // @[Core.scala 1822:9]
+          $fwrite(32'h80000002,"mem3_reg_is_valid: 0x%x\n",mem3_reg_is_valid_inst); // @[Core.scala 1791:9]
         end
     `ifdef PRINTF_COND
       end
@@ -4379,7 +4401,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_17) begin
-          $fwrite(32'h80000002,"csr_is_meintr    : %d\n",csr_is_meintr); // @[Core.scala 1824:9]
+          $fwrite(32'h80000002,"csr_is_meintr    : %d\n",csr_is_meintr); // @[Core.scala 1793:9]
         end
     `ifdef PRINTF_COND
       end
@@ -4390,7 +4412,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_17) begin
-          $fwrite(32'h80000002,"csr_is_mtintr    : %d\n",csr_is_mtintr); // @[Core.scala 1825:9]
+          $fwrite(32'h80000002,"csr_is_mtintr    : %d\n",csr_is_mtintr); // @[Core.scala 1794:9]
         end
     `ifdef PRINTF_COND
       end
@@ -4401,7 +4423,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_17) begin
-          $fwrite(32'h80000002,"csr_is_br        : %d\n",csr_is_br); // @[Core.scala 1827:9]
+          $fwrite(32'h80000002,"csr_is_trap      : %d\n",csr_is_trap); // @[Core.scala 1795:9]
         end
     `ifdef PRINTF_COND
       end
@@ -4412,7 +4434,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_17) begin
-          $fwrite(32'h80000002,"instret          : %d\n",instret); // @[Core.scala 1830:9]
+          $fwrite(32'h80000002,"csr_is_br        : %d\n",csr_is_br); // @[Core.scala 1797:9]
         end
     `ifdef PRINTF_COND
       end
@@ -4423,7 +4445,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_17) begin
-          $fwrite(32'h80000002,"cycle_counter(%d) : %d\n",io_exit,io_debug_signal_cycle_counter); // @[Core.scala 1833:9]
+          $fwrite(32'h80000002,"instret          : %d\n",instret); // @[Core.scala 1800:9]
         end
     `ifdef PRINTF_COND
       end
@@ -4434,7 +4456,18 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_17) begin
-          $fwrite(32'h80000002,"---------\n"); // @[Core.scala 1834:9]
+          $fwrite(32'h80000002,"cycle_counter(%d) : %d\n",io_exit,io_debug_signal_cycle_counter); // @[Core.scala 1803:9]
+        end
+    `ifdef PRINTF_COND
+      end
+    `endif
+    `endif // SYNTHESIS
+    `ifndef SYNTHESIS
+    `ifdef PRINTF_COND
+      if (`PRINTF_COND) begin
+    `endif
+        if (_T_17) begin
+          $fwrite(32'h80000002,"---------\n"); // @[Core.scala 1804:9]
         end
     `ifdef PRINTF_COND
       end
@@ -4606,81 +4639,81 @@ initial begin
   _RAND_61 = {1{`RANDOM}};
   ex1_is_cond_br_inst = _RAND_61[0:0];
   _RAND_62 = {1{`RANDOM}};
-  ex1_reg_is_indirect_j = _RAND_62[0:0];
+  ex1_cond_br_target = _RAND_62[31:0];
   _RAND_63 = {1{`RANDOM}};
-  ex1_cond_br_target = _RAND_63[31:0];
+  jbr_reg_bp_en = _RAND_63[0:0];
   _RAND_64 = {1{`RANDOM}};
-  jbr_reg_bp_en = _RAND_64[0:0];
+  jbr_reg_is_cond_br = _RAND_64[0:0];
   _RAND_65 = {1{`RANDOM}};
-  jbr_reg_is_cond_br = _RAND_65[0:0];
+  jbr_reg_is_cond_br_inst = _RAND_65[0:0];
   _RAND_66 = {1{`RANDOM}};
-  jbr_reg_is_cond_br_inst = _RAND_66[0:0];
+  jbr_reg_is_uncond_br = _RAND_66[0:0];
   _RAND_67 = {1{`RANDOM}};
-  jbr_reg_is_uncond_br = _RAND_67[0:0];
+  jbr_reg_cond_br_target = _RAND_67[31:0];
   _RAND_68 = {1{`RANDOM}};
-  jbr_reg_cond_br_target = _RAND_68[31:0];
+  jbr_reg_uncond_br_target = _RAND_68[31:0];
   _RAND_69 = {1{`RANDOM}};
-  jbr_reg_uncond_br_target = _RAND_69[31:0];
+  jbr_reg_is_bp_pos = _RAND_69[0:0];
   _RAND_70 = {1{`RANDOM}};
-  jbr_reg_is_bp_pos = _RAND_70[0:0];
+  jbr_reg_bp_addr = _RAND_70[31:0];
   _RAND_71 = {1{`RANDOM}};
-  jbr_reg_bp_addr = _RAND_71[31:0];
+  jbr_reg_is_half = _RAND_71[0:0];
   _RAND_72 = {1{`RANDOM}};
-  jbr_reg_is_half = _RAND_72[0:0];
+  ex2_reg_pc = _RAND_72[31:0];
   _RAND_73 = {1{`RANDOM}};
-  ex2_reg_pc = _RAND_73[31:0];
+  ex2_reg_wb_addr = _RAND_73[4:0];
   _RAND_74 = {1{`RANDOM}};
-  ex2_reg_wb_addr = _RAND_74[4:0];
-  _RAND_75 = {1{`RANDOM}};
-  ex2_reg_op1_data = _RAND_75[31:0];
-  _RAND_76 = {2{`RANDOM}};
-  ex2_reg_mullu = _RAND_76[47:0];
-  _RAND_77 = {1{`RANDOM}};
-  ex2_reg_mulls = _RAND_77[31:0];
+  ex2_reg_op1_data = _RAND_74[31:0];
+  _RAND_75 = {2{`RANDOM}};
+  ex2_reg_mullu = _RAND_75[47:0];
+  _RAND_76 = {1{`RANDOM}};
+  ex2_reg_mulls = _RAND_76[31:0];
+  _RAND_77 = {2{`RANDOM}};
+  ex2_reg_mulhuu = _RAND_77[47:0];
   _RAND_78 = {2{`RANDOM}};
-  ex2_reg_mulhuu = _RAND_78[47:0];
+  ex2_reg_mulhss = _RAND_78[47:0];
   _RAND_79 = {2{`RANDOM}};
-  ex2_reg_mulhss = _RAND_79[47:0];
-  _RAND_80 = {2{`RANDOM}};
-  ex2_reg_mulhsu = _RAND_80[47:0];
+  ex2_reg_mulhsu = _RAND_79[47:0];
+  _RAND_80 = {1{`RANDOM}};
+  ex2_reg_exe_fun = _RAND_80[4:0];
   _RAND_81 = {1{`RANDOM}};
-  ex2_reg_exe_fun = _RAND_81[4:0];
+  ex2_reg_rf_wen = _RAND_81[0:0];
   _RAND_82 = {1{`RANDOM}};
-  ex2_reg_rf_wen = _RAND_82[0:0];
+  ex2_reg_wb_sel = _RAND_82[2:0];
   _RAND_83 = {1{`RANDOM}};
-  ex2_reg_wb_sel = _RAND_83[2:0];
+  ex2_reg_csr_addr = _RAND_83[11:0];
   _RAND_84 = {1{`RANDOM}};
-  ex2_reg_csr_addr = _RAND_84[11:0];
+  ex2_reg_csr_cmd = _RAND_84[1:0];
   _RAND_85 = {1{`RANDOM}};
-  ex2_reg_csr_cmd = _RAND_85[1:0];
+  ex2_reg_alu_out = _RAND_85[31:0];
   _RAND_86 = {1{`RANDOM}};
-  ex2_reg_alu_out = _RAND_86[31:0];
+  ex2_reg_pc_bit_out = _RAND_86[31:0];
   _RAND_87 = {1{`RANDOM}};
-  ex2_reg_pc_bit_out = _RAND_87[31:0];
+  ex2_reg_wdata = _RAND_87[31:0];
   _RAND_88 = {1{`RANDOM}};
-  ex2_reg_wdata = _RAND_88[31:0];
+  ex2_reg_is_valid_inst = _RAND_88[0:0];
   _RAND_89 = {1{`RANDOM}};
-  ex2_reg_is_valid_inst = _RAND_89[0:0];
+  ex2_reg_is_trap = _RAND_89[0:0];
   _RAND_90 = {1{`RANDOM}};
-  ex2_reg_is_trap = _RAND_90[0:0];
+  ex2_reg_mcause = _RAND_90[31:0];
   _RAND_91 = {1{`RANDOM}};
-  ex2_reg_mcause = _RAND_91[31:0];
+  ex2_reg_divrem = _RAND_91[0:0];
   _RAND_92 = {1{`RANDOM}};
-  ex2_reg_divrem = _RAND_92[0:0];
+  ex2_reg_sign_op1 = _RAND_92[0:0];
   _RAND_93 = {1{`RANDOM}};
-  ex2_reg_sign_op1 = _RAND_93[0:0];
+  ex2_reg_sign_op12 = _RAND_93[0:0];
   _RAND_94 = {1{`RANDOM}};
-  ex2_reg_sign_op12 = _RAND_94[0:0];
-  _RAND_95 = {1{`RANDOM}};
-  ex2_reg_zero_op2 = _RAND_95[0:0];
-  _RAND_96 = {2{`RANDOM}};
-  ex2_reg_init_dividend = _RAND_96[36:0];
+  ex2_reg_zero_op2 = _RAND_94[0:0];
+  _RAND_95 = {2{`RANDOM}};
+  ex2_reg_init_dividend = _RAND_95[36:0];
+  _RAND_96 = {1{`RANDOM}};
+  ex2_reg_init_divisor = _RAND_96[31:0];
   _RAND_97 = {1{`RANDOM}};
-  ex2_reg_init_divisor = _RAND_97[31:0];
+  ex2_reg_orig_dividend = _RAND_97[31:0];
   _RAND_98 = {1{`RANDOM}};
-  ex2_reg_orig_dividend = _RAND_98[31:0];
+  ex2_reg_inst3_use_reg = _RAND_98[0:0];
   _RAND_99 = {1{`RANDOM}};
-  ex2_reg_inst3_use_reg = _RAND_99[0:0];
+  ex2_reg_no_mem = _RAND_99[0:0];
   _RAND_100 = {1{`RANDOM}};
   mem1_reg_mem_wstrb = _RAND_100[3:0];
   _RAND_101 = {1{`RANDOM}};
@@ -12929,13 +12962,14 @@ module RiscV(
   output         io_debugSignals_core_ex2_is_valid_inst,
   output         io_debugSignals_core_me_intr,
   output         io_debugSignals_core_mt_intr,
+  output         io_debugSignals_core_trap,
   output [47:0]  io_debugSignals_core_cycle_counter,
   output [31:0]  io_debugSignals_core_id_pc,
   output [31:0]  io_debugSignals_core_id_inst,
-  output [31:0]  io_debugSignals_rdata,
+  output [31:0]  io_debugSignals_core_mem3_rdata,
+  output         io_debugSignals_core_mem3_rvalid,
+  output [31:0]  io_debugSignals_core_rwaddr,
   output         io_debugSignals_ren,
-  output         io_debugSignals_rvalid,
-  output [31:0]  io_debugSignals_rwaddr,
   output         io_debugSignals_wen,
   output         io_debugSignals_wready,
   output [3:0]   io_debugSignals_wstrb,
@@ -12982,9 +13016,13 @@ module RiscV(
   wire  core_io_debug_signal_ex2_is_valid_inst; // @[Top.scala 78:20]
   wire  core_io_debug_signal_me_intr; // @[Top.scala 78:20]
   wire  core_io_debug_signal_mt_intr; // @[Top.scala 78:20]
+  wire  core_io_debug_signal_trap; // @[Top.scala 78:20]
   wire [47:0] core_io_debug_signal_cycle_counter; // @[Top.scala 78:20]
   wire [31:0] core_io_debug_signal_id_pc; // @[Top.scala 78:20]
   wire [31:0] core_io_debug_signal_id_inst; // @[Top.scala 78:20]
+  wire [31:0] core_io_debug_signal_mem3_rdata; // @[Top.scala 78:20]
+  wire  core_io_debug_signal_mem3_rvalid; // @[Top.scala 78:20]
+  wire [31:0] core_io_debug_signal_rwaddr; // @[Top.scala 78:20]
   wire  memory_clock; // @[Top.scala 80:22]
   wire  memory_reset; // @[Top.scala 80:22]
   wire  memory_io_imem_en; // @[Top.scala 80:22]
@@ -13236,9 +13274,13 @@ module RiscV(
     .io_debug_signal_ex2_is_valid_inst(core_io_debug_signal_ex2_is_valid_inst),
     .io_debug_signal_me_intr(core_io_debug_signal_me_intr),
     .io_debug_signal_mt_intr(core_io_debug_signal_mt_intr),
+    .io_debug_signal_trap(core_io_debug_signal_trap),
     .io_debug_signal_cycle_counter(core_io_debug_signal_cycle_counter),
     .io_debug_signal_id_pc(core_io_debug_signal_id_pc),
-    .io_debug_signal_id_inst(core_io_debug_signal_id_inst)
+    .io_debug_signal_id_inst(core_io_debug_signal_id_inst),
+    .io_debug_signal_mem3_rdata(core_io_debug_signal_mem3_rdata),
+    .io_debug_signal_mem3_rvalid(core_io_debug_signal_mem3_rvalid),
+    .io_debug_signal_rwaddr(core_io_debug_signal_rwaddr)
   );
   Memory memory ( // @[Top.scala 80:22]
     .clock(memory_clock),
@@ -13498,15 +13540,16 @@ module RiscV(
   assign io_debugSignals_core_ex2_is_valid_inst = core_io_debug_signal_ex2_is_valid_inst; // @[Top.scala 160:24]
   assign io_debugSignals_core_me_intr = core_io_debug_signal_me_intr; // @[Top.scala 160:24]
   assign io_debugSignals_core_mt_intr = core_io_debug_signal_mt_intr; // @[Top.scala 160:24]
+  assign io_debugSignals_core_trap = core_io_debug_signal_trap; // @[Top.scala 160:24]
   assign io_debugSignals_core_cycle_counter = core_io_debug_signal_cycle_counter; // @[Top.scala 160:24]
   assign io_debugSignals_core_id_pc = core_io_debug_signal_id_pc; // @[Top.scala 160:24]
   assign io_debugSignals_core_id_inst = core_io_debug_signal_id_inst; // @[Top.scala 160:24]
-  assign io_debugSignals_rdata = dmem_decoder_io_initiator_rdata; // @[Top.scala 162:26]
+  assign io_debugSignals_core_mem3_rdata = core_io_debug_signal_mem3_rdata; // @[Top.scala 160:24]
+  assign io_debugSignals_core_mem3_rvalid = core_io_debug_signal_mem3_rvalid; // @[Top.scala 160:24]
+  assign io_debugSignals_core_rwaddr = core_io_debug_signal_rwaddr; // @[Top.scala 160:24]
   assign io_debugSignals_ren = core_io_dmem_ren | core_io_cache_ren; // @[Top.scala 163:46]
-  assign io_debugSignals_rvalid = dmem_decoder_io_initiator_rvalid; // @[Top.scala 164:26]
-  assign io_debugSignals_rwaddr = core_io_dmem_waddr; // @[Top.scala 165:27]
   assign io_debugSignals_wen = core_io_dmem_wen | core_io_cache_wen; // @[Top.scala 167:46]
-  assign io_debugSignals_wready = dmem_decoder_io_initiator_wready; // @[Top.scala 168:26]
+  assign io_debugSignals_wready = memory_io_cache_wready; // @[Top.scala 168:26]
   assign io_debugSignals_wstrb = core_io_dmem_wstrb; // @[Top.scala 169:26]
   assign io_debugSignals_wdata = core_io_dmem_wdata; // @[Top.scala 166:26]
   assign io_debugSignals_mem_icache_state = memory_io_icache_state; // @[Top.scala 176:36]
