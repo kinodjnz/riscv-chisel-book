@@ -28,11 +28,11 @@ class RiscVDebugSignals extends Bundle {
   val core = new CoreDebugSignals()
 
   //val raddr  = Output(UInt(WORD_LEN.W))
-  val rdata = Output(UInt(WORD_LEN.W))
+  // val rdata = Output(UInt(WORD_LEN.W))
   val ren   = Output(Bool())
-  val rvalid = Output(Bool())
+  // val rvalid = Output(Bool())
 
-  val rwaddr  = Output(UInt(WORD_LEN.W))
+  // val rwaddr  = Output(UInt(WORD_LEN.W))
   val wen   = Output(Bool())
   val wready = Output(Bool())
   val wstrb = Output(UInt(4.W))
@@ -159,13 +159,13 @@ class RiscV(clockHz: Int) extends Module {
   // Debug signals
   io.debugSignals.core <> core.io.debug_signal
   //io.debugSignals.raddr  := core.io.dmem.raddr
-  io.debugSignals.rdata  := dmem_decoder.io.initiator.rdata
+  // io.debugSignals.rdata  := memory.io.cache.rdata // dmem_decoder.io.initiator.rdata
   io.debugSignals.ren    := core.io.dmem.ren || core.io.cache.ren
-  io.debugSignals.rvalid := dmem_decoder.io.initiator.rvalid
-  io.debugSignals.rwaddr  := core.io.dmem.waddr
+  // io.debugSignals.rvalid := memory.io.cache.rvalid // dmem_decoder.io.initiator.rvalid
+  // io.debugSignals.rwaddr  := core.io.dmem.waddr
   io.debugSignals.wdata  := core.io.dmem.wdata
   io.debugSignals.wen    := core.io.dmem.wen || core.io.cache.wen
-  io.debugSignals.wready := dmem_decoder.io.initiator.wready
+  io.debugSignals.wready := memory.io.cache.wready // dmem_decoder.io.initiator.wready
   io.debugSignals.wstrb  := core.io.dmem.wstrb
 
   // io.debugSignals.dram_init_calib_complete := io.dram.init_calib_complete

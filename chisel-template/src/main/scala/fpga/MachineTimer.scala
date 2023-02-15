@@ -9,6 +9,7 @@ class MachineTimer extends Module {
     val mem = new DmemPortIo
     val intr = Output(Bool())
     val mtime = Output(UInt(64.W))
+    val mtimecmp = Output(UInt(64.W))
   })
 
   val mtime = RegInit(0.U(64.W))
@@ -19,6 +20,7 @@ class MachineTimer extends Module {
   intr := mtime >= mtimecmp
   io.intr := intr
   io.mtime := mtime
+  io.mtimecmp := mtimecmp
 
   io.mem.rdata := "xdeadbeef".U
   io.mem.rvalid := true.B
