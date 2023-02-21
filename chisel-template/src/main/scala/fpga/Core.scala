@@ -67,7 +67,7 @@ object DmemState extends ChiselEnum {
   val Reading = Value
 }
 
-class Core(start_address: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: String = null, dram_start: BigInt = 0x2000_0000L, dram_length: BigInt = 0x1000_0000L) extends Module {
+class Core(start_address: BigInt = 0, dram_start: BigInt = 0x2000_0000L, dram_length: BigInt = 0x1000_0000L) extends Module {
   val io = IO(
     new Bundle {
       val imem = Flipped(new ImemPortIo())
@@ -106,11 +106,7 @@ class Core(start_address: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: St
   // Pipeline State Registers
 
   // IF/ID State
-  // val id_reg_pc             = RegInit(0.U(WORD_LEN.W))
-  // val id_reg_inst           = RegInit(0.U(WORD_LEN.W))
   val id_reg_stall          = RegInit(false.B)
-  // val id_reg_bp_taken       = RegInit(false.B)
-  // val id_reg_bp_taken_pc    = RegInit(0.U(WORD_LEN.W))
   val id_reg_is_trap        = RegInit(false.B)
   val id_reg_mcause         = RegInit(0.U(WORD_LEN.W))
   // val id_reg_mtval          = RegInit(0.U(WORD_LEN.W))
@@ -155,7 +151,6 @@ class Core(start_address: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: St
   val ex1_reg_wb_sel        = RegInit(0.U(WB_SEL_LEN.W))
   val ex1_reg_csr_addr      = RegInit(0.U(CSR_ADDR_LEN.W))
   val ex1_reg_csr_cmd       = RegInit(0.U(CSR_LEN.W))
-  // val ex1_reg_br_target     = RegInit(0.U(PC_LEN.W))
   val ex1_reg_mem_w         = RegInit(0.U(MW_LEN.W))
   val ex1_reg_is_j          = RegInit(false.B)
   val ex1_reg_bp_taken      = RegInit(false.B)
@@ -469,8 +464,6 @@ class Core(start_address: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: St
         io.imem.addr      := Cat(ic_imem_addr_4, 0.U(1.W))
         ic_reg_imem_addr  := ic_imem_addr_4
         ic_data_out       := Cat(io.imem.inst(WORD_LEN/2-1, 0), ic_reg_inst(WORD_LEN-1, WORD_LEN/2))
-        // ic_reg_inst2      := io.imem.inst
-        // ic_reg_inst2_addr := ic_reg_imem_addr
         ic_reg_inst       := io.imem.inst
         ic_reg_inst_addr  := ic_reg_imem_addr
         ic_reg_inst2      := ic_reg_inst
@@ -491,13 +484,9 @@ class Core(start_address: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: St
         ic_reg_bp_next_cnt2      := ic_reg_bp_next_cnt1
         ic_state := IcState.Full2Half
         when (ic_read_en2) {
-          // ic_reg_inst := io.imem.inst
-          // ic_reg_inst_addr := ic_reg_imem_addr
           ic_addr_out := ic_reg_imem_addr
           ic_state := IcState.Full
         }.elsewhen(ic_read_en4) {
-          // ic_reg_inst := io.imem.inst
-          // ic_reg_inst_addr := ic_reg_imem_addr
           ic_addr_out := Cat(ic_reg_imem_addr(PC_LEN-1, 1), 1.U(1.W))
           ic_state := IcState.FullHalf
         }
@@ -511,13 +500,9 @@ class Core(start_address: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: St
         ic_bp_taken_pc  := ic_reg_bp_next_taken_pc2
         ic_bp_cnt       := ic_reg_bp_next_cnt2
         when (ic_read_en2) {
-          // ic_reg_inst := ic_reg_inst2
-          // ic_reg_inst_addr := ic_reg_inst2_addr
           ic_addr_out := ic_reg_inst2_addr
           ic_state := IcState.Full
         }.elsewhen(ic_read_en4) {
-          // ic_reg_inst := ic_reg_inst2
-          // ic_reg_inst_addr := ic_reg_inst2_addr
           ic_addr_out := Cat(ic_reg_inst2_addr(PC_LEN-1, 1), 1.U(1.W))
           ic_state := IcState.FullHalf
         }
@@ -528,29 +513,15 @@ class Core(start_address: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: St
   //**********************************
   // Instruction Fetch (IF) 1 Stage
 
-  // val if1_reg_first = RegNext(false.B, true.B)
-  // val if1_reg_carib_counter = RegInit(caribCount.U(18.W))
-  // when (if1_reg_carib_counter =/= 0.U) {
-  //   if1_reg_carib_counter := if1_reg_carib_counter - 1.U
-  // }.otherwise {
-  //   if1_reg_first := false.B
-  // }
-
   val if1_jump_addr = MuxCase(if2_reg_bp_taken_pc, Seq(
     ex2_reg_is_br     -> ex2_reg_br_pc,
     id_reg_is_bp_fail -> id_reg_br_pc,
     // if2_reg_bp_taken  -> if2_reg_bp_taken_pc,
-    // if1_reg_first     -> start_address.U,
   ))
   val if1_is_jump = ex2_reg_is_br || id_reg_is_bp_fail || if2_reg_bp_taken
 
   ic_addr_en  := if1_is_jump
   ic_addr     := if1_jump_addr
-
-  // bp.io.lu.inst_pc := ic_addr_out
-
-  //**********************************
-  // IF1/IF2 Register
 
   //**********************************
   // Instruction Fetch (IF) 2 Stage
@@ -576,14 +547,6 @@ class Core(start_address: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: St
     (ic_half_rdy && is_half_inst) -> ic_data_out,
   ))
   if2_reg_inst := if2_inst
-  // val if2_is_cond_br_w = (if2_inst(6, 0) === 0x63.U)
-  // val if2_is_cond_br_c = (if2_inst(15, 14) === 3.U && if2_inst(1, 0) === 1.U)
-  // val if2_is_cond_br = if2_is_cond_br_w || if2_is_cond_br_c
-  // val if2_is_jal_w = (if2_inst(6, 0) === 0x6f.U)
-  // val if2_is_jal_c = (if2_inst(14, 13) === 1.U && if2_inst(1, 0) === 1.U)
-  // val if2_is_jal = if2_is_jal_w || if2_is_jal_c
-  // val if2_is_jalr = ((if2_inst(6, 0) === 0x67.U) || (if2_inst(15, 13) === 4.U && if2_inst(6, 0) === 2.U))
-  // val if2_is_bp_br = if2_is_cond_br || if2_is_jalr || if2_is_jal
   val if2_bp_taken = MuxCase(ic_bp_taken, Seq(
     ex2_reg_is_br     -> false.B,
     id_reg_stall      -> if2_reg_bp_taken,
@@ -607,16 +570,6 @@ class Core(start_address: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: St
 
   //**********************************
   // IF2/ID Register (Alias)
-  // id_reg_pc   := MuxCase(if2_pc, Seq(
-  //   id_reg_stall -> id_reg_pc,
-  // ))
-  // id_reg_inst := if2_inst
-  // id_reg_bp_taken := MuxCase(if2_bp_taken, Seq(
-  //   id_reg_stall -> id_reg_bp_taken
-  // ))
-  // id_reg_bp_taken_pc   := MuxCase(if2_bp_taken_pc, Seq(
-  //   id_reg_stall -> id_reg_bp_taken_pc
-  // ))
   val id_reg_pc          = if2_reg_pc
   val id_reg_inst        = if2_reg_inst
   val id_reg_bp_taken    = if2_reg_bp_taken

@@ -7,7 +7,7 @@ import fpga._
 import fpga.periferals._
 import common.Consts._
 
-class SimTop(memoryPath: String, with_sdc: Boolean, bpTagInitPath: String) extends Module {
+class SimTop(memoryPath: String, with_sdc: Boolean) extends Module {
   val imemSizeInBytes = 16384
   val dmemSizeInBytes = 16384
   val startAddress = 0x00000000L
@@ -16,7 +16,7 @@ class SimTop(memoryPath: String, with_sdc: Boolean, bpTagInitPath: String) exten
     val gp = Output(UInt(WORD_LEN.W))
     val exit = Output(Bool())
   })
-  val core = Module(new Core(startAddress, 10, bpTagInitPath))
+  val core = Module(new Core(startAddress))
   val memory = Module(new Memory())
   val boot_rom = Module(new BootRom(memoryPath, imemSizeInBytes))
 

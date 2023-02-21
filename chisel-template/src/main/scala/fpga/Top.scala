@@ -75,7 +75,7 @@ class RiscV(clockHz: Int) extends Module {
     //val exit = Output(Bool())
     val debugSignals = new RiscVDebugSignals()
   })
-  val core = Module(new Core(startAddress, 0x3FFFFL))
+  val core = Module(new Core(startAddress))
   
   val memory = Module(new Memory())
   val boot_rom = Module(new BootRom("bootrom.hex", imemSizeInBytes))
