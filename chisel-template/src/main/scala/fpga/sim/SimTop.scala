@@ -71,6 +71,9 @@ class SimTop(memoryPath: String, with_sdc: Boolean, bpTagInitPath: String) exten
   val icache_valid = Module(new MockICacheValid)
   memory.io.icache_valid <> icache_valid.io.icache_valid
 
+  val pht_mem = Module(new MockPHTMem)
+  core.io.pht_mem <> pht_mem.io.pht_mem
+
   core.io.intr := 0.U
   io.gp   := core.io.gp
 

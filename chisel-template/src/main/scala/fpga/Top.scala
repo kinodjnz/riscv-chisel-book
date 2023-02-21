@@ -83,6 +83,7 @@ class RiscV(clockHz: Int) extends Module {
   val sram2 = Module(new SRAM)
   val icache = Module(new ICache(log2Ceil(WORD_LEN), ICACHE_INDEX_BITS+(log2Ceil(CACHE_LINE_LEN)-log2Ceil(WORD_LEN)), log2Ceil(CACHE_LINE_LEN), ICACHE_INDEX_BITS))
   val icache_valid = Module(new ICacheValid(ICACHE_VALID_DATA_BITS, ICACHE_VALID_ADDR_BITS, ICACHE_INVALIDATE_DATA_BITS, ICACHE_INVALIDATE_ADDR_BITS))
+  val pht_mem = Module(new PHTMem(2, PHT_INDEX_BITS-1, 1, PHT_INDEX_BITS))
   val gpio = Module(new Gpio)
   val uart = Module(new Uart(clockHz))
   val sdc = Module(new Sdc)
@@ -155,6 +156,14 @@ class RiscV(clockHz: Int) extends Module {
   icache_valid.io.wdata := memory.io.icache_valid.wdata
   icache_valid.io.idata := memory.io.icache_valid.idata
   icache_valid.io.ien := memory.io.icache_valid.invalidate
+
+  pht_mem.io.clock := clock
+  pht_mem.io.ren   := core.io.pht_mem.ren
+  pht_mem.io.wen   := core.io.pht_mem.wen
+  pht_mem.io.raddr := core.io.pht_mem.raddr
+  core.io.pht_mem.rdata := pht_mem.io.rdata
+  pht_mem.io.waddr := core.io.pht_mem.waddr
+  pht_mem.io.wdata := core.io.pht_mem.wdata
 
   // Debug signals
   io.debugSignals.core <> core.io.debug_signal

@@ -67,12 +67,13 @@ object DmemState extends ChiselEnum {
   val Reading = Value
 }
 
-class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: String = null, dram_start: BigInt = 0x2000_0000L, dram_length: BigInt = 0x1000_0000L) extends Module {
+class Core(start_address: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: String = null, dram_start: BigInt = 0x2000_0000L, dram_length: BigInt = 0x1000_0000L) extends Module {
   val io = IO(
     new Bundle {
       val imem = Flipped(new ImemPortIo())
       val dmem = Flipped(new DmemPortIo())
       val cache = Flipped(new CachePort())
+      val pht_mem = Flipped(new PHTMemIo())
       val mtimer_mem = new DmemPortIo()
       val intr = Input(Bool())
       val gp   = Output(UInt(WORD_LEN.W))
@@ -87,10 +88,10 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
   val mtimer = Module(new MachineTimer)
 
   val instret = RegInit(0.U(64.W))
-  val csr_reg_trap_vector  = RegInit(0.U(WORD_LEN.W))
+  val csr_reg_trap_vector  = RegInit(0.U(PC_LEN.W))
   val csr_reg_mcause       = RegInit(0.U(WORD_LEN.W))
   // val csr_mtval         = RegInit(0.U(WORD_LEN.W))
-  val csr_reg_mepc         = RegInit(0.U(WORD_LEN.W))
+  val csr_reg_mepc         = RegInit(0.U(PC_LEN.W))
   val csr_reg_mstatus_mie  = RegInit(false.B)
   val csr_reg_mstatus_mpie = RegInit(false.B)
   val csr_reg_mscratch     = RegInit(0.U(WORD_LEN.W))
@@ -105,19 +106,18 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
   // Pipeline State Registers
 
   // IF/ID State
-  val id_reg_pc             = RegInit(0.U(WORD_LEN.W))
-  val id_reg_pc_cache       = RegInit(0.U(WORD_LEN.W))
-  val id_reg_inst           = RegInit(0.U(WORD_LEN.W))
+  // val id_reg_pc             = RegInit(0.U(WORD_LEN.W))
+  // val id_reg_inst           = RegInit(0.U(WORD_LEN.W))
   val id_reg_stall          = RegInit(false.B)
-  val id_reg_is_bp_pos      = RegInit(false.B)
-  val id_reg_bp_addr        = RegInit(0.U(WORD_LEN.W))
+  // val id_reg_bp_taken       = RegInit(false.B)
+  // val id_reg_bp_taken_pc    = RegInit(0.U(WORD_LEN.W))
   val id_reg_is_trap        = RegInit(false.B)
   val id_reg_mcause         = RegInit(0.U(WORD_LEN.W))
   // val id_reg_mtval          = RegInit(0.U(WORD_LEN.W))
   val id_reg_is_br          = RegInit(false.B)
 
   // ID/RRD State
-  val rrd_reg_pc            = RegInit(0.U(WORD_LEN.W))
+  val rrd_reg_pc            = RegInit(0.U(PC_LEN.W))
   val rrd_reg_wb_addr       = RegInit(0.U(ADDR_LEN.W))
   val rrd_reg_op1_sel       = RegInit(0.U(OP1_LEN.W))
   val rrd_reg_op2_sel       = RegInit(0.U(OP2_LEN.W))
@@ -132,19 +132,20 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
   val rrd_reg_csr_cmd       = RegInit(0.U(CSR_LEN.W))
   val rrd_reg_imm_b_sext    = RegInit(0.U(WORD_LEN.W))
   val rrd_reg_mem_w         = RegInit(0.U(MW_LEN.W))
-  val rrd_reg_is_direct_j    = RegInit(false.B)
-  val rrd_reg_is_br          = RegInit(false.B)
-  val rrd_reg_is_j           = RegInit(false.B)
-  val rrd_reg_is_bp_pos      = RegInit(false.B)
-  val rrd_reg_bp_addr        = RegInit(0.U(WORD_LEN.W))
-  val rrd_reg_is_half        = RegInit(false.B)
-  val rrd_reg_is_valid_inst  = RegInit(false.B)
-  val rrd_reg_is_trap        = RegInit(false.B)
-  val rrd_reg_mcause         = RegInit(0.U(WORD_LEN.W))
+  val rrd_reg_is_direct_j   = RegInit(false.B)
+  val rrd_reg_is_br         = RegInit(false.B)
+  val rrd_reg_is_j          = RegInit(false.B)
+  val rrd_reg_bp_taken      = RegInit(false.B)
+  val rrd_reg_bp_taken_pc   = RegInit(0.U(PC_LEN.W))
+  val rrd_reg_bp_cnt        = RegInit(0.U(2.W))
+  val rrd_reg_is_half       = RegInit(false.B)
+  val rrd_reg_is_valid_inst = RegInit(false.B)
+  val rrd_reg_is_trap       = RegInit(false.B)
+  val rrd_reg_mcause        = RegInit(0.U(WORD_LEN.W))
   // val rrd_reg_mtval          = RegInit(0.U(WORD_LEN.W))
 
   // RRD/EX1 State
-  val ex1_reg_pc            = RegInit(0.U(WORD_LEN.W))
+  val ex1_reg_pc            = RegInit(0.U(PC_LEN.W))
   val ex1_reg_wb_addr       = RegInit(0.U(ADDR_LEN.W))
   val ex1_reg_op1_data      = RegInit(0.U(WORD_LEN.W))
   val ex1_reg_op2_data      = RegInit(0.U(WORD_LEN.W))
@@ -154,11 +155,12 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
   val ex1_reg_wb_sel        = RegInit(0.U(WB_SEL_LEN.W))
   val ex1_reg_csr_addr      = RegInit(0.U(CSR_ADDR_LEN.W))
   val ex1_reg_csr_cmd       = RegInit(0.U(CSR_LEN.W))
-  val ex1_reg_br_target     = RegInit(0.U(WORD_LEN.W))
+  // val ex1_reg_br_target     = RegInit(0.U(PC_LEN.W))
   val ex1_reg_mem_w         = RegInit(0.U(MW_LEN.W))
   val ex1_reg_is_j          = RegInit(false.B)
-  val ex1_reg_is_bp_pos     = RegInit(false.B)
-  val ex1_reg_bp_addr       = RegInit(0.U(WORD_LEN.W))
+  val ex1_reg_bp_taken      = RegInit(false.B)
+  val ex1_reg_bp_taken_pc   = RegInit(0.U(PC_LEN.W))
+  val ex1_reg_bp_cnt        = RegInit(0.U(2.W))
   val ex1_reg_is_half       = RegInit(false.B)
   val ex1_reg_is_valid_inst = RegInit(false.B)
   val ex1_reg_is_trap       = RegInit(false.B)
@@ -167,22 +169,23 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
   val ex1_reg_mem_use_reg   = RegInit(false.B)
   val ex1_reg_inst2_use_reg = RegInit(false.B)
   val ex1_reg_inst3_use_reg = RegInit(false.B)
-  val ex1_reg_is_br              = RegInit(false.B)
-  val ex1_reg_direct_jbr_target  = RegInit(0.U(WORD_LEN.W))
+  val ex1_reg_is_br         = RegInit(false.B)
+  val ex1_reg_direct_jbr_pc = RegInit(0.U(PC_LEN.W))
 
   // EX1/JBR State
   val jbr_reg_bp_en            = RegInit(false.B)
   val jbr_reg_is_cond_br       = RegInit(false.B)
   val jbr_reg_is_cond_br_inst  = RegInit(false.B)
   val jbr_reg_is_uncond_br     = RegInit(false.B)
-  val jbr_reg_cond_br_target   = RegInit(0.U(WORD_LEN.W))
-  val jbr_reg_uncond_br_target = RegInit(0.U(WORD_LEN.W))
-  val jbr_reg_is_bp_pos        = RegInit(false.B)
-  val jbr_reg_bp_addr          = RegInit(0.U(WORD_LEN.W))
+  val jbr_reg_cond_br_pc       = RegInit(0.U(PC_LEN.W))
+  val jbr_reg_uncond_br_pc     = RegInit(0.U(PC_LEN.W))
+  val jbr_reg_bp_taken         = RegInit(false.B)
+  val jbr_reg_bp_taken_pc      = RegInit(0.U(PC_LEN.W))
+  val jbr_reg_bp_cnt           = RegInit(0.U(2.W))
   val jbr_reg_is_half          = RegInit(false.B)
 
   // EX1/EX2 State
-  val ex2_reg_pc            = RegInit(0.U(WORD_LEN.W))
+  val ex2_reg_pc            = RegInit(0.U(PC_LEN.W))
   val ex2_reg_wb_addr       = RegInit(0.U(ADDR_LEN.W))
   val ex2_reg_op1_data      = RegInit(0.U(WORD_LEN.W))
   val ex2_reg_rs2_data      = RegInit(0.U(WORD_LEN.W))
@@ -246,61 +249,80 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
   val mem3_reg_is_valid_inst  = RegInit(false.B)
   val mem3_reg_mem_use_reg    = RegInit(false.B)
 
-  val if2_reg_is_bp_pos  = RegInit(false.B)
-  val if2_reg_bp_addr    = RegInit(0.U(WORD_LEN.W))
-  val id_stall           = Wire(Bool())
-  val rrd_stall          = Wire(Bool())
-  val ex2_stall          = Wire(Bool())
-  val mem_stall          = Wire(Bool())
-  val mem1_mem_stall      = Wire(Bool())
-  val mem1_dram_stall     = Wire(Bool())
-  val mem2_dram_stall     = Wire(Bool())
+  val if2_reg_bp_taken     = RegInit(false.B)
+  val if2_reg_bp_taken_pc  = RegInit(0.U(PC_LEN.W))
+  val if2_reg_bp_cnt       = RegInit(0.U(2.W))
+  val id_reg_is_bp_fail    = RegInit(true.B) // jump start_address when first time
+  val id_reg_br_pc         = RegInit((start_address >> (WORD_LEN-PC_LEN)).U(PC_LEN.W))
+  val id_stall             = Wire(Bool())
+  val rrd_stall            = Wire(Bool())
+  val ex2_stall            = Wire(Bool())
+  val mem_stall            = Wire(Bool())
+  val mem1_mem_stall       = Wire(Bool())
+  val mem1_dram_stall      = Wire(Bool())
+  val mem2_dram_stall      = Wire(Bool())
   val mem1_mem_stall_delay = RegInit(false.B)
-  val ex1_reg_fw_en      = RegInit(false.B)
-  val ex1_fw_data        = Wire(UInt(WORD_LEN.W))
-  val ex2_reg_fw_en      = RegInit(false.B)
-  val ex2_fw_data        = Wire(UInt(WORD_LEN.W))
-  val ex2_div_stall_next = Wire(Bool())
-  val ex2_reg_div_stall  = RegInit(false.B)
+  val ex1_reg_fw_en        = RegInit(false.B)
+  val ex1_fw_data          = Wire(UInt(WORD_LEN.W))
+  val ex2_reg_fw_en        = RegInit(false.B)
+  val ex2_fw_data          = Wire(UInt(WORD_LEN.W))
+  val ex2_div_stall_next   = Wire(Bool())
+  val ex2_reg_div_stall    = RegInit(false.B)
   val ex2_reg_divrem_state = RegInit(DivremState.Idle)
-  val ex2_reg_is_br      = RegInit(false.B)
-  val ex2_reg_br_addr    = RegInit(0.U(WORD_LEN.W))
-  val jbr_is_br          = Wire(Bool())
-  val csr_is_br          = Wire(Bool())
-  val csr_br_addr        = Wire(UInt(WORD_LEN.W))
-  val mem1_reg_dmem_state = RegInit(DmemState.Idle)
-  val ex2_reg_is_retired = RegInit(false.B)
-  val mem3_reg_is_retired = RegInit(false.B)
-  val ex2_is_valid_inst  = Wire(Bool())
-  val ex2_en             = Wire(Bool())
+  val ex2_reg_is_br        = RegInit(false.B)
+  val ex2_reg_br_pc        = RegInit(0.U(PC_LEN.W))
+  val jbr_is_br            = Wire(Bool())
+  val csr_is_br            = Wire(Bool())
+  val csr_br_pc            = Wire(UInt(PC_LEN.W))
+  val mem1_reg_dmem_state  = RegInit(DmemState.Idle)
+  val ex2_reg_is_retired   = RegInit(false.B)
+  val mem3_reg_is_retired  = RegInit(false.B)
+  val ex2_is_valid_inst    = Wire(Bool())
+  val ex2_en               = Wire(Bool())
 
   //**********************************
-  // Instruction Cache Controller
+  // Instruction Fetch And Branch Prediction
 
-  val ic_addr_en      = Wire(Bool())
-  val ic_addr         = Wire(UInt(WORD_LEN.W))
-  val ic_read_en2     = Wire(Bool())
-  val ic_read_en4     = Wire(Bool())
-  val ic_reg_read_rdy = RegInit(false.B)
-  val ic_reg_half_rdy = RegInit(false.B)
-  val ic_read_rdy     = Wire(Bool())
-  val ic_half_rdy     = Wire(Bool())
-  val ic_data_out     = Wire(UInt(WORD_LEN.W))
-  val ic_reg_imem_addr = RegInit(0.U(WORD_LEN.W))
-  val ic_reg_addr_out = RegInit(0.U(WORD_LEN.W))
-  val ic_addr_out     = Wire(UInt(WORD_LEN.W))
+  val ic_addr_en       = Wire(Bool())
+  val ic_addr          = Wire(UInt(PC_LEN.W))
+  val ic_read_en2      = Wire(Bool())
+  val ic_read_en4      = Wire(Bool())
+  val ic_reg_read_rdy  = RegInit(false.B)
+  val ic_reg_half_rdy  = RegInit(false.B)
+  val ic_read_rdy      = Wire(Bool())
+  val ic_half_rdy      = Wire(Bool())
+  val ic_data_out      = Wire(UInt(WORD_LEN.W))
+  val ic_reg_imem_addr = RegInit(0.U(PC_LEN.W))
+  val ic_reg_addr_out  = RegInit(0.U(PC_LEN.W))
+  val ic_addr_out      = Wire(UInt(PC_LEN.W))
 
   val ic_reg_inst       = RegInit(0.U(WORD_LEN.W))
-  val ic_reg_inst_addr  = RegInit(0.U(WORD_LEN.W))
+  val ic_reg_inst_addr  = RegInit(0.U(PC_LEN.W))
   val ic_reg_inst2      = RegInit(0.U(WORD_LEN.W))
-  val ic_reg_inst2_addr = RegInit(0.U(WORD_LEN.W))
+  val ic_reg_inst2_addr = RegInit(0.U(PC_LEN.W))
 
   val ic_state = RegInit(IcState.Empty)
 
-  val ic_imem_addr_2 = Cat(ic_reg_imem_addr(WORD_LEN-1, 2), 1.U(1.W), 0.U(1.W))
-  val ic_imem_addr_4 = ic_reg_imem_addr + 4.U(WORD_LEN.W)
-  val ic_inst_addr_2 = Cat(ic_reg_inst_addr(WORD_LEN-1, 2), 1.U(1.W), 0.U(1.W))
-  io.imem.addr := ic_reg_imem_addr
+  val ic_btb = Module(new BTB(BTB_INDEX_LEN))
+  val ic_pht = Module(new PHT(PHT_INDEX_LEN))
+
+  val ic_bp_taken              = Wire(Bool())
+  val ic_bp_taken_pc           = Wire(UInt(PC_LEN.W))
+  val ic_bp_cnt                = Wire(UInt(2.W))
+  val ic_reg_bp_next_taken0    = RegInit(false.B)
+  val ic_reg_bp_next_taken_pc0 = RegInit(0.U(PC_LEN.W))
+  val ic_reg_bp_next_cnt0      = RegInit(0.U(2.W))
+  val ic_reg_bp_next_taken1    = RegInit(false.B)
+  val ic_reg_bp_next_taken_pc1 = RegInit(0.U(PC_LEN.W))
+  val ic_reg_bp_next_cnt1      = RegInit(0.U(2.W))
+  val ic_reg_bp_next_taken2    = RegInit(false.B)
+  val ic_reg_bp_next_taken_pc2 = RegInit(0.U(PC_LEN.W))
+  val ic_reg_bp_next_cnt2      = RegInit(0.U(2.W))
+
+  val ic_imem_addr_2 = Cat(ic_reg_imem_addr(PC_LEN-1, 1), 1.U(1.W))
+  val ic_imem_addr_4 = ic_reg_imem_addr + 2.U(PC_LEN.W)
+  val ic_inst_addr_2 = Cat(ic_reg_inst_addr(PC_LEN-1, 1), 1.U(1.W))
+  io.imem.addr := Cat(ic_reg_imem_addr, 0.U(1.W))
   io.imem.en := true.B
   ic_reg_read_rdy := true.B
   ic_reg_half_rdy := true.B
@@ -309,27 +331,91 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
   ic_data_out := BUBBLE
   ic_addr_out := ic_reg_addr_out
   ic_reg_addr_out := ic_addr_out
+  ic_btb.io.lu.pc := ic_reg_imem_addr
+  ic_pht.io.lu.pc := ic_reg_imem_addr
+  ic_bp_taken     := false.B
+  ic_bp_taken_pc  := 0.U
+  ic_bp_cnt       := 0.U
+  ic_pht.io.mem <> io.pht_mem
 
   when (ic_addr_en) {
-    val ic_next_imem_addr = Cat(ic_addr(WORD_LEN-1, 2), Fill(2, 0.U))
-    io.imem.addr := ic_next_imem_addr
+    val ic_next_imem_addr = Cat(ic_addr(PC_LEN-1, 1), 0.U(1.W))
+    io.imem.addr     := Cat(ic_next_imem_addr, 0.U(1.W))
     ic_reg_imem_addr := ic_next_imem_addr
-    ic_addr_out := ic_addr
-    ic_state := Mux(ic_addr(1).asBool, IcState.EmptyHalf, IcState.Empty)
-    ic_reg_read_rdy := !ic_addr(1).asBool
+    ic_addr_out      := ic_addr
+    ic_state         := Mux(ic_addr(0).asBool, IcState.EmptyHalf, IcState.Empty)
+    ic_reg_read_rdy  := !ic_addr(0).asBool
+    ic_btb.io.lu.pc  := ic_next_imem_addr
+    ic_pht.io.lu.pc  := ic_next_imem_addr
   }.elsewhen (/*ic_state =/= IcState.Full && ic_state =/= IcState.Full2Half &&*/ !io.imem.valid) {
     ic_reg_read_rdy := ic_reg_read_rdy
     ic_reg_half_rdy := ic_reg_half_rdy
-    ic_read_rdy := false.B
-    ic_half_rdy := false.B
+    ic_read_rdy     := false.B
+    ic_half_rdy     := false.B
+    switch (ic_state) {
+      is (IcState.Empty) {
+        ic_bp_taken    := ic_btb.io.lu.matches0 && ic_pht.io.lu.cnt0(0)
+        ic_bp_taken_pc := ic_btb.io.lu.taken_pc0
+        ic_bp_cnt      := ic_pht.io.lu.cnt0
+        ic_reg_bp_next_taken0    := ic_btb.io.lu.matches0 && ic_pht.io.lu.cnt0(0)
+        ic_reg_bp_next_taken_pc0 := ic_btb.io.lu.taken_pc0
+        ic_reg_bp_next_cnt0      := ic_pht.io.lu.cnt0
+        ic_reg_bp_next_taken1    := ic_btb.io.lu.matches1 && ic_pht.io.lu.cnt1(0)
+        ic_reg_bp_next_taken_pc1 := ic_btb.io.lu.taken_pc1
+        ic_reg_bp_next_cnt1      := ic_pht.io.lu.cnt1
+      }
+      is (IcState.EmptyHalf) {
+        ic_bp_taken    := ic_btb.io.lu.matches1 && ic_pht.io.lu.cnt1(0)
+        ic_bp_taken_pc := ic_btb.io.lu.taken_pc1
+        ic_bp_cnt      := ic_pht.io.lu.cnt1
+        ic_reg_bp_next_taken0    := ic_btb.io.lu.matches0 && ic_pht.io.lu.cnt0(0)
+        ic_reg_bp_next_taken_pc0 := ic_btb.io.lu.taken_pc0
+        ic_reg_bp_next_cnt0      := ic_pht.io.lu.cnt0
+        ic_reg_bp_next_taken1    := ic_btb.io.lu.matches1 && ic_pht.io.lu.cnt1(0)
+        ic_reg_bp_next_taken_pc1 := ic_btb.io.lu.taken_pc1
+        ic_reg_bp_next_cnt1      := ic_pht.io.lu.cnt1
+      }
+      is (IcState.Full) {
+        ic_bp_taken    := ic_reg_bp_next_taken0
+        ic_bp_taken_pc := ic_reg_bp_next_taken_pc0
+        ic_bp_cnt      := ic_reg_bp_next_cnt0
+      }
+      is (IcState.FullHalf) {
+        ic_bp_taken    := ic_reg_bp_next_taken1
+        ic_bp_taken_pc := ic_reg_bp_next_taken_pc1
+        ic_bp_cnt      := ic_reg_bp_next_cnt1
+        ic_reg_bp_next_taken0    := ic_btb.io.lu.matches0 && ic_pht.io.lu.cnt0(0)
+        ic_reg_bp_next_taken_pc0 := ic_btb.io.lu.taken_pc0
+        ic_reg_bp_next_cnt0      := ic_pht.io.lu.cnt0
+        ic_reg_bp_next_taken2    := ic_reg_bp_next_taken1
+        ic_reg_bp_next_taken_pc2 := ic_reg_bp_next_taken_pc1
+        ic_reg_bp_next_cnt2      := ic_reg_bp_next_cnt1
+      }
+      is (IcState.Full2Half) {
+        ic_bp_taken    := ic_reg_bp_next_taken2
+        ic_bp_taken_pc := ic_reg_bp_next_taken_pc2
+        ic_bp_cnt      := ic_reg_bp_next_cnt2
+      }
+    }
   }.otherwise {
     switch (ic_state) {
       is (IcState.Empty) {
-        io.imem.addr := ic_imem_addr_4
+        io.imem.addr     := Cat(ic_imem_addr_4, 0.U(1.W))
         ic_reg_imem_addr := ic_imem_addr_4
-        ic_reg_inst := io.imem.inst
+        ic_reg_inst      := io.imem.inst
         ic_reg_inst_addr := ic_reg_imem_addr
-        ic_data_out := io.imem.inst
+        ic_data_out      := io.imem.inst
+        ic_btb.io.lu.pc  := ic_imem_addr_4
+        ic_pht.io.lu.pc  := ic_imem_addr_4
+        ic_bp_taken      := ic_btb.io.lu.matches0 && ic_pht.io.lu.cnt0(0)
+        ic_bp_taken_pc   := ic_btb.io.lu.taken_pc0
+        ic_bp_cnt        := ic_pht.io.lu.cnt0
+        ic_reg_bp_next_taken0    := ic_btb.io.lu.matches0 && ic_pht.io.lu.cnt0(0)
+        ic_reg_bp_next_taken_pc0 := ic_btb.io.lu.taken_pc0
+        ic_reg_bp_next_cnt0      := ic_pht.io.lu.cnt0
+        ic_reg_bp_next_taken1    := ic_btb.io.lu.matches1 && ic_pht.io.lu.cnt1(0)
+        ic_reg_bp_next_taken_pc1 := ic_btb.io.lu.taken_pc1
+        ic_reg_bp_next_cnt1      := ic_pht.io.lu.cnt1
         ic_state := IcState.Full
         when (ic_read_en2) {
           ic_addr_out := ic_imem_addr_2
@@ -340,12 +426,23 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
         }
       }
       is (IcState.EmptyHalf) {
-        io.imem.addr := ic_imem_addr_4
+        io.imem.addr     := Cat(ic_imem_addr_4, 0.U(1.W))
         ic_reg_imem_addr := ic_imem_addr_4
-        ic_reg_inst := io.imem.inst
+        ic_reg_inst      := io.imem.inst
         ic_reg_inst_addr := ic_reg_imem_addr
-        ic_data_out := Cat(Fill(WORD_LEN/2-1, 0.U), io.imem.inst(WORD_LEN-1, WORD_LEN/2))
-        ic_addr_out := ic_imem_addr_2
+        ic_data_out      := Cat(Fill(WORD_LEN/2-1, 0.U), io.imem.inst(WORD_LEN-1, WORD_LEN/2))
+        ic_addr_out      := ic_imem_addr_2
+        ic_btb.io.lu.pc  := ic_imem_addr_4
+        ic_pht.io.lu.pc  := ic_imem_addr_4
+        ic_bp_taken      := ic_btb.io.lu.matches1 && ic_pht.io.lu.cnt1(0)
+        ic_bp_taken_pc   := ic_btb.io.lu.taken_pc1
+        ic_bp_cnt        := ic_pht.io.lu.cnt1
+        ic_reg_bp_next_taken0    := ic_btb.io.lu.matches0 && ic_pht.io.lu.cnt0(0)
+        ic_reg_bp_next_taken_pc0 := ic_btb.io.lu.taken_pc0
+        ic_reg_bp_next_cnt0      := ic_pht.io.lu.cnt0
+        ic_reg_bp_next_taken1    := ic_btb.io.lu.matches1 && ic_pht.io.lu.cnt1(0)
+        ic_reg_bp_next_taken_pc1 := ic_btb.io.lu.taken_pc1
+        ic_reg_bp_next_cnt1      := ic_pht.io.lu.cnt1
         ic_state := IcState.FullHalf
         when (ic_read_en2) {
           ic_addr_out := ic_imem_addr_4
@@ -353,8 +450,13 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
         }
       }
       is (IcState.Full) {
-        io.imem.addr := ic_reg_imem_addr
-        ic_data_out := ic_reg_inst
+        io.imem.addr    := Cat(ic_reg_imem_addr, 0.U(1.W))
+        ic_data_out     := ic_reg_inst
+        ic_btb.io.lu.pc := ic_reg_imem_addr
+        ic_pht.io.lu.pc := ic_reg_imem_addr
+        ic_bp_taken     := ic_reg_bp_next_taken0
+        ic_bp_taken_pc  := ic_reg_bp_next_taken_pc0
+        ic_bp_cnt       := ic_reg_bp_next_cnt0
         when (ic_read_en2) {
           ic_addr_out := ic_inst_addr_2
           ic_state := IcState.FullHalf
@@ -364,36 +466,59 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
         }
       }
       is (IcState.FullHalf) {
-        io.imem.addr := ic_imem_addr_4
-        ic_reg_imem_addr := ic_imem_addr_4
-        ic_data_out := Cat(io.imem.inst(WORD_LEN/2-1, 0), ic_reg_inst(WORD_LEN-1, WORD_LEN/2))
-        ic_reg_inst2 := io.imem.inst
-        ic_reg_inst2_addr := ic_reg_imem_addr
+        io.imem.addr      := Cat(ic_imem_addr_4, 0.U(1.W))
+        ic_reg_imem_addr  := ic_imem_addr_4
+        ic_data_out       := Cat(io.imem.inst(WORD_LEN/2-1, 0), ic_reg_inst(WORD_LEN-1, WORD_LEN/2))
+        // ic_reg_inst2      := io.imem.inst
+        // ic_reg_inst2_addr := ic_reg_imem_addr
+        ic_reg_inst       := io.imem.inst
+        ic_reg_inst_addr  := ic_reg_imem_addr
+        ic_reg_inst2      := ic_reg_inst
+        ic_reg_inst2_addr := ic_reg_inst_addr
+        ic_btb.io.lu.pc   := ic_imem_addr_4
+        ic_pht.io.lu.pc   := ic_imem_addr_4
+        ic_bp_taken       := ic_reg_bp_next_taken1
+        ic_bp_taken_pc    := ic_reg_bp_next_taken_pc1
+        ic_bp_cnt         := ic_reg_bp_next_cnt1
+        ic_reg_bp_next_taken0    := ic_btb.io.lu.matches0 && ic_pht.io.lu.cnt0(0)
+        ic_reg_bp_next_taken_pc0 := ic_btb.io.lu.taken_pc0
+        ic_reg_bp_next_cnt0      := ic_pht.io.lu.cnt0
+        ic_reg_bp_next_taken1    := ic_btb.io.lu.matches1 && ic_pht.io.lu.cnt1(0)
+        ic_reg_bp_next_taken_pc1 := ic_btb.io.lu.taken_pc1
+        ic_reg_bp_next_cnt1      := ic_pht.io.lu.cnt1
+        ic_reg_bp_next_taken2    := ic_reg_bp_next_taken1
+        ic_reg_bp_next_taken_pc2 := ic_reg_bp_next_taken_pc1
+        ic_reg_bp_next_cnt2      := ic_reg_bp_next_cnt1
         ic_state := IcState.Full2Half
         when (ic_read_en2) {
-          ic_reg_inst := io.imem.inst
-          ic_reg_inst_addr := ic_reg_imem_addr
+          // ic_reg_inst := io.imem.inst
+          // ic_reg_inst_addr := ic_reg_imem_addr
           ic_addr_out := ic_reg_imem_addr
           ic_state := IcState.Full
         }.elsewhen(ic_read_en4) {
-          ic_reg_inst := io.imem.inst
-          ic_reg_inst_addr := ic_reg_imem_addr
-          ic_addr_out := Cat(ic_reg_imem_addr(WORD_LEN-1, 2), 1.U(1.W), 0.U(1.W))
+          // ic_reg_inst := io.imem.inst
+          // ic_reg_inst_addr := ic_reg_imem_addr
+          ic_addr_out := Cat(ic_reg_imem_addr(PC_LEN-1, 1), 1.U(1.W))
           ic_state := IcState.FullHalf
         }
       }
       is (IcState.Full2Half) {
-        io.imem.addr := ic_reg_imem_addr
-        ic_data_out := Cat(ic_reg_inst2(WORD_LEN/2-1, 0), ic_reg_inst(WORD_LEN-1, WORD_LEN/2))
+        io.imem.addr    := Cat(ic_reg_imem_addr, 0.U(1.W))
+        ic_data_out     := Cat(ic_reg_inst(WORD_LEN/2-1, 0), ic_reg_inst2(WORD_LEN-1, WORD_LEN/2))
+        ic_btb.io.lu.pc := ic_reg_imem_addr
+        ic_pht.io.lu.pc := ic_reg_imem_addr
+        ic_bp_taken     := ic_reg_bp_next_taken2
+        ic_bp_taken_pc  := ic_reg_bp_next_taken_pc2
+        ic_bp_cnt       := ic_reg_bp_next_cnt2
         when (ic_read_en2) {
-          ic_reg_inst := ic_reg_inst2
-          ic_reg_inst_addr := ic_reg_inst2_addr
+          // ic_reg_inst := ic_reg_inst2
+          // ic_reg_inst_addr := ic_reg_inst2_addr
           ic_addr_out := ic_reg_inst2_addr
           ic_state := IcState.Full
         }.elsewhen(ic_read_en4) {
-          ic_reg_inst := ic_reg_inst2
-          ic_reg_inst_addr := ic_reg_inst2_addr
-          ic_addr_out := Cat(ic_reg_inst2_addr(WORD_LEN-1, 2), 1.U(1.W), 0.U(1.W))
+          // ic_reg_inst := ic_reg_inst2
+          // ic_reg_inst_addr := ic_reg_inst2_addr
+          ic_addr_out := Cat(ic_reg_inst2_addr(PC_LEN-1, 1), 1.U(1.W))
           ic_state := IcState.FullHalf
         }
       }
@@ -401,33 +526,28 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
   }
 
   //**********************************
-  // Branch Prediction Controller
-
-  val bp = Module(new BranchPredictor(BP_CACHE_LEN, bpTagInitPath))
-
-  //**********************************
   // Instruction Fetch (IF) 1 Stage
 
-  val if1_reg_carib_counter = RegInit(caribCount.U(18.W))
-  val if1_reg_first = RegInit(true.B)
-  if1_reg_first := false.B
+  // val if1_reg_first = RegNext(false.B, true.B)
+  // val if1_reg_carib_counter = RegInit(caribCount.U(18.W))
   // when (if1_reg_carib_counter =/= 0.U) {
   //   if1_reg_carib_counter := if1_reg_carib_counter - 1.U
   // }.otherwise {
   //   if1_reg_first := false.B
   // }
 
-  val if1_jump_addr = MuxCase(0.U(WORD_LEN.W), Seq(
-    ex2_reg_is_br     -> ex2_reg_br_addr,
-    if2_reg_is_bp_pos -> if2_reg_bp_addr,
-    if1_reg_first     -> startAddress.U,
+  val if1_jump_addr = MuxCase(if2_reg_bp_taken_pc, Seq(
+    ex2_reg_is_br     -> ex2_reg_br_pc,
+    id_reg_is_bp_fail -> id_reg_br_pc,
+    // if2_reg_bp_taken  -> if2_reg_bp_taken_pc,
+    // if1_reg_first     -> start_address.U,
   ))
-  val if1_is_jump = ex2_reg_is_br || if2_reg_is_bp_pos || if1_reg_first
+  val if1_is_jump = ex2_reg_is_br || id_reg_is_bp_fail || if2_reg_bp_taken
 
   ic_addr_en  := if1_is_jump
   ic_addr     := if1_jump_addr
 
-  bp.io.lu.inst_pc := ic_addr_out
+  // bp.io.lu.inst_pc := ic_addr_out
 
   //**********************************
   // IF1/IF2 Register
@@ -435,7 +555,7 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
   //**********************************
   // Instruction Fetch (IF) 2 Stage
 
-  val if2_reg_pc   = RegInit(startAddress.U(WORD_LEN.W))
+  val if2_reg_pc   = RegInit((start_address >> (WORD_LEN-PC_LEN)).U(PC_LEN.W))
   val if2_reg_inst = RegInit(0.U(WORD_LEN.W))
 
   val is_half_inst = (ic_data_out(1, 0) =/= 3.U)
@@ -449,48 +569,59 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
   val if2_inst = MuxCase(BUBBLE, Seq(
 	  // 優先順位重要！ジャンプ成立とストールが同時発生した場合、ジャンプ処理を優先
     ex2_reg_is_br     -> BUBBLE,
-    id_reg_stall      -> if2_reg_inst,
-    if2_reg_is_bp_pos -> BUBBLE,
-    ic_read_rdy   -> ic_data_out,
+    id_reg_stall      -> if2_reg_inst, // ストールとBP同時の場合、BP発生源の命令を生かすためストール優先
+    id_reg_is_bp_fail -> BUBBLE,
+    if2_reg_bp_taken  -> BUBBLE,
+    ic_read_rdy       -> ic_data_out,
     (ic_half_rdy && is_half_inst) -> ic_data_out,
   ))
   if2_reg_inst := if2_inst
-  val if2_is_cond_br_w = (if2_inst(6, 0) === 0x63.U)
-  val if2_is_cond_br_c = (if2_inst(15, 14) === 3.U && if2_inst(1, 0) === 1.U)
-  val if2_is_cond_br = if2_is_cond_br_w || if2_is_cond_br_c
-  val if2_is_jal_w = (if2_inst(6, 0) === 0x6f.U)
-  val if2_is_jal_c = (if2_inst(14, 13) === 1.U && if2_inst(1, 0) === 1.U)
-  val if2_is_jal = if2_is_jal_w || if2_is_jal_c
-  val if2_is_jalr = ((if2_inst(6, 0) === 0x67.U) || (if2_inst(15, 13) === 4.U && if2_inst(6, 0) === 2.U))
-  val if2_is_bp_br = if2_is_cond_br || if2_is_jalr || if2_is_jal
-  val if2_is_bp_pos = MuxCase(false.B, Seq(
-    ex2_reg_is_br -> false.B,
-    id_reg_stall  -> if2_reg_is_bp_pos,
-    if2_is_bp_br  -> bp.io.lu.br_pos,
+  // val if2_is_cond_br_w = (if2_inst(6, 0) === 0x63.U)
+  // val if2_is_cond_br_c = (if2_inst(15, 14) === 3.U && if2_inst(1, 0) === 1.U)
+  // val if2_is_cond_br = if2_is_cond_br_w || if2_is_cond_br_c
+  // val if2_is_jal_w = (if2_inst(6, 0) === 0x6f.U)
+  // val if2_is_jal_c = (if2_inst(14, 13) === 1.U && if2_inst(1, 0) === 1.U)
+  // val if2_is_jal = if2_is_jal_w || if2_is_jal_c
+  // val if2_is_jalr = ((if2_inst(6, 0) === 0x67.U) || (if2_inst(15, 13) === 4.U && if2_inst(6, 0) === 2.U))
+  // val if2_is_bp_br = if2_is_cond_br || if2_is_jalr || if2_is_jal
+  val if2_bp_taken = MuxCase(ic_bp_taken, Seq(
+    ex2_reg_is_br     -> false.B,
+    id_reg_stall      -> if2_reg_bp_taken,
+    id_reg_is_bp_fail -> false.B,
+    if2_reg_bp_taken  -> false.B,
   ))
-  if2_reg_is_bp_pos := if2_is_bp_pos
-  val if2_bp_addr = Mux(id_reg_stall,
-    if2_reg_bp_addr,
-    bp.io.lu.br_addr,
+  if2_reg_bp_taken := if2_bp_taken
+  val if2_bp_taken_pc = Mux(id_reg_stall,
+    if2_reg_bp_taken_pc,
+    ic_bp_taken_pc,
   )
-  if2_reg_bp_addr := if2_bp_addr
+  if2_reg_bp_taken_pc := if2_bp_taken_pc
+  val if2_bp_cnt = Mux(id_reg_stall,
+    if2_reg_bp_cnt,
+    ic_bp_cnt,
+  )
+  if2_reg_bp_cnt := if2_bp_cnt
   
-  printf(p"ic_reg_addr_out: ${Hexadecimal(ic_reg_addr_out)}, ic_data_out: ${Hexadecimal(ic_data_out)}\n")
-  printf(p"inst: ${Hexadecimal(if2_inst)}, ic_read_rdy: ${ic_read_rdy}, ic_state: ${ic_state.asUInt}\n")
+  printf(p"ic_reg_addr_out: ${Hexadecimal(Cat(ic_reg_addr_out, 0.U(1.W)))}, ic_data_out: ${Hexadecimal(ic_data_out)}\n")
+  printf(p"inst: ${Hexadecimal(if2_inst)}, ic_read_rdy: ${ic_read_rdy}, ic_state: ${ic_state.asUInt}, ic_addr_en: ${ic_addr_en.asUInt}\n")
 
   //**********************************
-  // IF2/ID Register
-  id_reg_pc   := MuxCase(if2_pc, Seq(
-    id_reg_stall -> id_reg_pc,
-  ))
-  id_reg_pc_cache  := if2_pc
-  id_reg_inst      := if2_inst
-  id_reg_is_bp_pos := MuxCase(if2_is_bp_pos, Seq(
-    id_reg_stall -> id_reg_is_bp_pos
-  ))
-  id_reg_bp_addr   := MuxCase(if2_bp_addr, Seq(
-    id_reg_stall -> id_reg_bp_addr
-  ))
+  // IF2/ID Register (Alias)
+  // id_reg_pc   := MuxCase(if2_pc, Seq(
+  //   id_reg_stall -> id_reg_pc,
+  // ))
+  // id_reg_inst := if2_inst
+  // id_reg_bp_taken := MuxCase(if2_bp_taken, Seq(
+  //   id_reg_stall -> id_reg_bp_taken
+  // ))
+  // id_reg_bp_taken_pc   := MuxCase(if2_bp_taken_pc, Seq(
+  //   id_reg_stall -> id_reg_bp_taken_pc
+  // ))
+  val id_reg_pc          = if2_reg_pc
+  val id_reg_inst        = if2_reg_inst
+  val id_reg_bp_taken    = if2_reg_bp_taken
+  val id_reg_bp_taken_pc = if2_reg_bp_taken_pc
+  val id_reg_bp_cnt      = if2_reg_bp_cnt
 
   //**********************************
   // Instruction Decode (ID) Stage
@@ -499,7 +630,7 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
   id_reg_stall := id_stall
 
   // branch,jump時にIDをBUBBLE化
-  val id_inst = Mux(ex2_reg_is_br, BUBBLE, id_reg_inst)
+  val id_inst = Mux(ex2_reg_is_br || id_reg_is_bp_fail, BUBBLE, id_reg_inst)
 
   val id_is_half = (id_inst(1, 0) =/= 3.U)
 
@@ -652,7 +783,7 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
   ))
 
   val id_op1_data = MuxCase(0.U(WORD_LEN.W), Seq(
-    (id_op1_sel === OP1_PC)     -> id_reg_pc,
+    (id_op1_sel === OP1_PC)     -> Cat(id_reg_pc, 0.U((WORD_LEN-PC_LEN).W)),
     (id_op1_sel === OP1_IMZ)    -> id_imm_z_uext,
   ))
   val id_op2_data = MuxCase(0.U(WORD_LEN.W), Seq(
@@ -710,7 +841,10 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
   val id_mcause = CSR_MCAUSE_ECALL_M
   // val id_mtval = 0.U(WORD_LEN.W)
 
-  val id_reg_pc_delay         = RegInit(0.U(WORD_LEN.W))
+  id_reg_br_pc := Mux(id_is_half, id_reg_pc + 1.U(PC_LEN.W), id_reg_pc + 2.U(PC_LEN.W))
+  id_reg_is_bp_fail := !id_reg_stall && !ex2_reg_is_br && !id_reg_is_bp_fail && !id_is_j && !id_is_br && id_reg_bp_taken
+
+  val id_reg_pc_delay         = RegInit(0.U(PC_LEN.W))
   val id_reg_wb_addr_delay    = RegInit(0.U(ADDR_LEN.W))
   val id_reg_op1_sel_delay    = RegInit(0.U(OP1_LEN.W))
   val id_reg_op2_sel_delay    = RegInit(0.U(OP2_LEN.W))
@@ -728,8 +862,9 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
   val id_reg_is_direct_j_delay = RegInit(false.B)
   val id_reg_is_br_delay      = RegInit(false.B)
   val id_reg_is_j_delay       = RegInit(false.B)
-  val id_reg_is_bp_pos_delay  = RegInit(false.B)
-  val id_reg_bp_addr_delay    = RegInit(0.U(WORD_LEN.W))
+  val id_reg_bp_taken_delay   = RegInit(false.B)
+  val id_reg_bp_taken_pc_delay = RegInit(0.U(PC_LEN.W))
+  val id_reg_bp_cnt_delay     = RegInit(0.U(2.W))
   val id_reg_is_half_delay    = RegInit(false.B)
   val id_reg_is_valid_inst_delay = RegInit(false.B)
   val id_reg_is_trap_delay    = RegInit(false.B)
@@ -746,7 +881,7 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
     id_reg_csr_cmd_delay       := CSR_X
     id_reg_mem_w_delay         := MW_X
     id_reg_is_j_delay          := false.B
-    id_reg_is_bp_pos_delay     := false.B
+    id_reg_bp_taken_delay     := false.B
     id_reg_is_valid_inst_delay := false.B
     id_reg_is_trap_delay       := false.B
   }.elsewhen (!id_reg_stall) {
@@ -768,8 +903,9 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
     id_reg_is_direct_j_delay := id_is_direct_j
     id_reg_is_br_delay      := id_is_br
     id_reg_is_j_delay       := id_is_j
-    id_reg_is_bp_pos_delay  := id_reg_is_bp_pos
-    id_reg_bp_addr_delay    := id_reg_bp_addr
+    id_reg_bp_taken_delay   := id_reg_bp_taken
+    id_reg_bp_taken_pc_delay := id_reg_bp_taken_pc
+    id_reg_bp_cnt_delay     := id_reg_bp_cnt
     id_reg_is_half_delay    := id_is_half
     id_reg_is_valid_inst_delay := id_inst =/= BUBBLE
     id_reg_is_trap_delay    := id_is_trap
@@ -799,8 +935,9 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
       rrd_reg_is_direct_j   := false.B
       rrd_reg_is_br         := false.B
       rrd_reg_is_j          := false.B
-      rrd_reg_is_bp_pos     := false.B
-      rrd_reg_bp_addr       := id_reg_bp_addr_delay
+      rrd_reg_bp_taken      := false.B
+      rrd_reg_bp_taken_pc   := id_reg_bp_taken_pc_delay
+      rrd_reg_bp_cnt        := id_reg_bp_cnt_delay
       rrd_reg_is_half       := id_reg_is_half_delay
       rrd_reg_is_valid_inst := false.B
       rrd_reg_is_trap       := false.B
@@ -825,8 +962,9 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
       rrd_reg_is_direct_j   := false.B
       rrd_reg_is_br         := false.B
       rrd_reg_is_j          := false.B
-      rrd_reg_is_bp_pos     := false.B
-      rrd_reg_bp_addr       := id_reg_bp_addr
+      rrd_reg_bp_taken      := false.B
+      rrd_reg_bp_taken_pc   := id_reg_bp_taken_pc
+      rrd_reg_bp_cnt        := id_reg_bp_cnt
       rrd_reg_is_half       := id_is_half
       rrd_reg_is_valid_inst := false.B
       rrd_reg_is_trap       := false.B
@@ -853,8 +991,9 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
       rrd_reg_is_direct_j   := id_reg_is_direct_j_delay
       rrd_reg_is_br         := id_reg_is_br_delay
       rrd_reg_is_j          := id_reg_is_j_delay
-      rrd_reg_is_bp_pos     := id_reg_is_bp_pos_delay
-      rrd_reg_bp_addr       := id_reg_bp_addr_delay
+      rrd_reg_bp_taken      := id_reg_bp_taken_delay
+      rrd_reg_bp_taken_pc   := id_reg_bp_taken_pc_delay
+      rrd_reg_bp_cnt        := id_reg_bp_cnt_delay
       rrd_reg_is_half       := id_reg_is_half_delay
       rrd_reg_is_valid_inst := id_reg_is_valid_inst_delay
       rrd_reg_is_trap       := id_reg_is_trap_delay
@@ -879,8 +1018,9 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
       rrd_reg_is_direct_j   := id_is_direct_j
       rrd_reg_is_br         := id_is_br
       rrd_reg_is_j          := id_is_j
-      rrd_reg_is_bp_pos     := id_reg_is_bp_pos
-      rrd_reg_bp_addr       := id_reg_bp_addr
+      rrd_reg_bp_taken      := id_reg_bp_taken
+      rrd_reg_bp_taken_pc   := id_reg_bp_taken_pc
+      rrd_reg_bp_cnt        := id_reg_bp_cnt
       rrd_reg_is_half       := id_is_half
       rrd_reg_is_valid_inst := id_inst =/= BUBBLE
       rrd_reg_is_trap       := id_is_trap
@@ -924,9 +1064,9 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
      (rrd_reg_rs2_addr === ex2_reg_wb_addr)) -> ex2_fw_data,
   ))
 
-  val rrd_direct_jbr_target = rrd_reg_pc + MuxCase(rrd_reg_imm_b_sext, Seq(
+  val rrd_direct_jbr_pc = rrd_reg_pc + MuxCase(rrd_reg_imm_b_sext, Seq(
     rrd_reg_is_direct_j -> rrd_reg_op2_data,
-  ))
+  ))(WORD_LEN-1, WORD_LEN-PC_LEN)
 
   val rrd_hazard = (rrd_reg_rf_wen === REN_S) && (rrd_reg_wb_addr =/= 0.U) && !rrd_stall && !ex2_reg_is_br
   val rrd_fw_en_next = rrd_hazard && ((rrd_reg_wb_sel === WB_ALU) || (rrd_reg_wb_sel === WB_PC))
@@ -957,14 +1097,15 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
     ex1_reg_rf_wen        := Mux(ex_is_bubble, REN_X, rrd_reg_rf_wen)
     ex1_reg_exe_fun       := Mux(ex_is_bubble, ALU_ADD, rrd_reg_exe_fun)
     ex1_reg_wb_sel        := Mux(ex_is_bubble, WB_X, rrd_reg_wb_sel)
-    ex1_reg_direct_jbr_target := rrd_direct_jbr_target
+    ex1_reg_direct_jbr_pc := rrd_direct_jbr_pc
     ex1_reg_csr_addr      := rrd_reg_csr_addr
     ex1_reg_csr_cmd       := Mux(ex_is_bubble, CSR_X, rrd_reg_csr_cmd)
     ex1_reg_mem_w         := rrd_reg_mem_w
     ex1_reg_is_br         := rrd_reg_is_br
     ex1_reg_is_j          := rrd_reg_is_j
-    ex1_reg_is_bp_pos     := rrd_reg_is_bp_pos
-    ex1_reg_bp_addr       := rrd_reg_bp_addr
+    ex1_reg_bp_taken      := rrd_reg_bp_taken
+    ex1_reg_bp_taken_pc   := rrd_reg_bp_taken_pc
+    ex1_reg_bp_cnt        := rrd_reg_bp_cnt
     ex1_reg_is_half       := rrd_reg_is_half
     ex1_reg_is_valid_inst := rrd_reg_is_valid_inst && !ex_is_bubble
     ex1_reg_is_trap       := Mux(ex_is_bubble, false.B, rrd_reg_is_trap)
@@ -1005,9 +1146,9 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
   val ex1_mulhss = (ex1_reg_op1_data.asSInt() * ex1_reg_op2_data(WORD_LEN-1, WORD_LEN/2).asSInt())
   val ex1_mulhsu = (ex1_reg_op1_data.asSInt() * ex1_reg_op2_data(WORD_LEN-1, WORD_LEN/2))
 
-  val ex1_next_pc = Mux(ex1_reg_is_half, ex1_reg_pc + 2.U(WORD_LEN.W), ex1_reg_pc + 4.U(WORD_LEN.W))
+  val ex1_next_pc = Mux(ex1_reg_is_half, ex1_reg_pc + 1.U(PC_LEN.W), ex1_reg_pc + 2.U(PC_LEN.W))
   val ex1_pc_bit_out = MuxCase(0.U(WORD_LEN.W), Seq(
-    (ex1_reg_wb_sel === WB_PC)      -> ex1_next_pc,
+    (ex1_reg_wb_sel === WB_PC)      -> Cat(ex1_next_pc, 0.U(1.W)),
     (ex1_reg_exe_fun === ALU_ZEXTH) -> Cat(0.U(16.W), ex1_reg_op1_data(15, 0)),
     (ex1_reg_exe_fun === ALU_CPOP)  -> PopCount(ex1_reg_op1_data),
     (ex1_reg_exe_fun === ALU_CLZ)   -> PriorityEncoder(Cat(1.U(1.W), Reverse(ex1_reg_op1_data))),
@@ -1062,12 +1203,12 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
     (ex1_reg_exe_fun === BR_BGEU) -> !(ex1_reg_op1_data < ex1_reg_op2_data)
   ))
   val ex1_is_cond_br_inst = ex1_reg_is_br
-  val ex1_is_uncond_br = ex1_reg_is_j
-  val ex1_cond_br_target = ex1_reg_direct_jbr_target
-  val ex1_uncond_br_target = ex1_alu_out & ~1.U(WORD_LEN.W)
+  val ex1_is_uncond_br    = ex1_reg_is_j
+  val ex1_cond_br_pc      = ex1_reg_direct_jbr_pc
+  val ex1_uncond_br_pc    = ex1_alu_out(WORD_LEN-1, WORD_LEN-PC_LEN)
 
   ex1_fw_data := MuxCase(ex1_alu_out, Seq(
-    (ex1_reg_wb_sel === WB_PC) -> ex1_next_pc,
+    (ex1_reg_wb_sel === WB_PC) -> Cat(ex1_next_pc, 0.U(1.W)),
   ))
 
   when (ex1_reg_inst2_use_reg) {
@@ -1085,10 +1226,11 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
     jbr_reg_is_cond_br       := ex1_is_cond_br
     jbr_reg_is_cond_br_inst  := ex1_is_cond_br_inst
     jbr_reg_is_uncond_br     := ex1_is_uncond_br
-    jbr_reg_cond_br_target   := ex1_cond_br_target
-    jbr_reg_uncond_br_target := ex1_uncond_br_target
-    jbr_reg_is_bp_pos        := ex1_reg_is_bp_pos
-    jbr_reg_bp_addr          := ex1_reg_bp_addr
+    jbr_reg_cond_br_pc       := ex1_cond_br_pc
+    jbr_reg_uncond_br_pc     := ex1_uncond_br_pc
+    jbr_reg_bp_taken         := ex1_reg_bp_taken
+    jbr_reg_bp_taken_pc      := ex1_reg_bp_taken_pc
+    jbr_reg_bp_cnt           := ex1_reg_bp_cnt
     jbr_reg_is_half          := ex1_reg_is_half
   }
 
@@ -1097,28 +1239,33 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
 
   val jbr_bp_en = jbr_reg_bp_en && !ex2_reg_is_br
   val jbr_cond_bp_fail = jbr_bp_en && (
-    (!jbr_reg_is_bp_pos && jbr_reg_is_cond_br) ||
-    (jbr_reg_is_bp_pos && jbr_reg_is_cond_br && (jbr_reg_bp_addr =/= jbr_reg_cond_br_target))
+    (!jbr_reg_bp_taken && jbr_reg_is_cond_br) ||
+    (jbr_reg_bp_taken && jbr_reg_is_cond_br && (jbr_reg_bp_taken_pc =/= jbr_reg_cond_br_pc))
   )
-  val jbr_cond_nbp_fail = jbr_bp_en && jbr_reg_is_bp_pos && jbr_reg_is_cond_br_inst && !jbr_reg_is_cond_br
+  val jbr_cond_nbp_fail = jbr_bp_en && jbr_reg_bp_taken && jbr_reg_is_cond_br_inst && !jbr_reg_is_cond_br
   val jbr_uncond_bp_fail = (jbr_bp_en && jbr_reg_is_uncond_br) && (
-    !jbr_reg_is_bp_pos ||
-    (jbr_reg_is_bp_pos && (jbr_reg_bp_addr =/= jbr_reg_uncond_br_target))
+    !jbr_reg_bp_taken ||
+    (jbr_reg_bp_taken && (jbr_reg_bp_taken_pc =/= jbr_reg_uncond_br_pc))
   )
-  ex2_reg_br_addr := MuxCase(csr_br_addr, Seq(
-    jbr_cond_bp_fail   -> jbr_reg_cond_br_target,
-    jbr_cond_nbp_fail  -> Mux(jbr_reg_is_half, ex2_reg_pc + 2.U(WORD_LEN.W), ex2_reg_pc + 4.U(WORD_LEN.W)),
-    jbr_uncond_bp_fail -> jbr_reg_uncond_br_target,
+  ex2_reg_br_pc := MuxCase(csr_br_pc, Seq(
+    jbr_cond_bp_fail   -> jbr_reg_cond_br_pc,
+    jbr_cond_nbp_fail  -> Mux(jbr_reg_is_half, ex2_reg_pc + 1.U(PC_LEN.W), ex2_reg_pc + 2.U(PC_LEN.W)),
+    jbr_uncond_bp_fail -> jbr_reg_uncond_br_pc,
   ))
   jbr_is_br := jbr_cond_bp_fail || jbr_cond_nbp_fail || jbr_uncond_bp_fail
 
-  bp.io.up.update_en := jbr_bp_en && (jbr_reg_is_cond_br_inst || jbr_reg_is_uncond_br)
-  bp.io.up.inst_pc := ex2_reg_pc
-  bp.io.up.br_pos := jbr_reg_is_cond_br || jbr_reg_is_uncond_br
-  bp.io.up.br_addr := MuxCase(DontCare, Seq(
-    jbr_reg_is_cond_br   -> jbr_reg_cond_br_target,
-    jbr_reg_is_uncond_br -> jbr_reg_uncond_br_target,
+  ic_btb.io.up.en       := jbr_bp_en && ((jbr_reg_is_cond_br_inst && jbr_reg_is_cond_br) || jbr_reg_is_uncond_br)
+  ic_btb.io.up.pc       := ex2_reg_pc
+  ic_btb.io.up.taken_pc := MuxCase(jbr_reg_uncond_br_pc, Seq(
+    jbr_reg_is_cond_br   -> jbr_reg_cond_br_pc,
+    // jbr_reg_is_uncond_br -> jbr_reg_uncond_br_pc,
   ))
+  ic_pht.io.up.en  := jbr_bp_en && (jbr_reg_is_cond_br_inst || jbr_reg_is_uncond_br)
+  ic_pht.io.up.pc  := ex2_reg_pc
+  ic_pht.io.up.cnt := Mux(jbr_reg_is_cond_br || jbr_reg_is_uncond_br,
+    Cat(jbr_reg_bp_cnt(0, 0), (!jbr_reg_bp_cnt(1) | jbr_reg_bp_cnt(0)).asUInt),
+    Cat(!jbr_reg_bp_cnt(0, 0), (jbr_reg_bp_cnt(1) & jbr_reg_bp_cnt(0)).asUInt),
+  )
 
   //**********************************
   // EX1/EX2 register
@@ -1198,14 +1345,14 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
   val csr_is_mret = csr_is_valid_inst && !csr_is_meintr && !csr_is_mtintr && (ex2_reg_exe_fun === CMD_MRET)
 
   val csr_rdata = MuxLookup(ex2_reg_csr_addr, 0.U(WORD_LEN.W), Seq(
-    CSR_ADDR_MTVEC    -> csr_reg_trap_vector,
+    CSR_ADDR_MTVEC    -> Cat(csr_reg_trap_vector, 0.U((WORD_LEN-PC_LEN).W)),
     CSR_ADDR_TIME     -> mtimer.io.mtime(31, 0),
     CSR_ADDR_CYCLE    -> cycle_counter.io.value(31, 0),
     CSR_ADDR_INSTRET  -> instret(31, 0),
     CSR_ADDR_CYCLEH   -> cycle_counter.io.value(63, 32),
     CSR_ADDR_TIMEH    -> mtimer.io.mtime(63, 32),
     CSR_ADDR_INSTRETH -> instret(63, 32),
-    CSR_ADDR_MEPC     -> csr_reg_mepc,
+    CSR_ADDR_MEPC     -> Cat(csr_reg_mepc, 0.U((WORD_LEN-PC_LEN).W)),
     CSR_ADDR_MCAUSE   -> csr_reg_mcause,
     // CSR_ADDR_MTVAL   -> csr_mtval,
     CSR_ADDR_MSTATUS  -> Cat(0.U(24.W), csr_reg_mstatus_mpie.asUInt, 0.U(3.W), csr_reg_mstatus_mie.asUInt, 0.U(3.W)),
@@ -1222,9 +1369,9 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
 
   when (!ex2_reg_is_br && ex2_reg_wb_sel === WB_CSR) {
     when (ex2_reg_csr_addr === CSR_ADDR_MTVEC) {
-      csr_reg_trap_vector := csr_wdata
+      csr_reg_trap_vector := csr_wdata(WORD_LEN-1, WORD_LEN-PC_LEN)
     }.elsewhen (ex2_reg_csr_addr === CSR_ADDR_MEPC) {
-      csr_reg_mepc := csr_wdata
+      csr_reg_mepc := csr_wdata(WORD_LEN-1, WORD_LEN-PC_LEN)
     }.elsewhen (ex2_reg_csr_addr === CSR_ADDR_MSTATUS) {
       csr_reg_mstatus_mie   := csr_wdata(3)
       csr_reg_mstatus_mpie  := csr_wdata(7)
@@ -1252,7 +1399,7 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
     csr_mstatus_mie_fw_en:= true.B
     csr_mstatus_mie_fw   := false.B
     csr_is_br            := true.B
-    csr_br_addr          := csr_reg_trap_vector
+    csr_br_pc            := csr_reg_trap_vector
   }.elsewhen (csr_is_mtintr) {
     csr_reg_mcause       := CSR_MCAUSE_MTI
     // csr_mtval         := 0.U(WORD_LEN.W)
@@ -1262,7 +1409,7 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
     csr_mstatus_mie_fw_en:= true.B
     csr_mstatus_mie_fw   := false.B
     csr_is_br            := true.B
-    csr_br_addr          := csr_reg_trap_vector
+    csr_br_pc            := csr_reg_trap_vector
   }.elsewhen (csr_is_trap) {
     csr_reg_mcause       := ex2_reg_mcause
     // csr_mtval         := ex2_reg_mtval
@@ -1272,17 +1419,17 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
     csr_mstatus_mie_fw_en:= true.B
     csr_mstatus_mie_fw   := false.B
     csr_is_br            := true.B
-    csr_br_addr          := csr_reg_trap_vector
+    csr_br_pc            := csr_reg_trap_vector
   }.elsewhen (csr_is_mret) {
     csr_reg_mstatus_mpie := true.B
     csr_reg_mstatus_mie  := csr_reg_mstatus_mpie
     csr_mstatus_mie_fw_en:= true.B
     csr_mstatus_mie_fw   := csr_reg_mstatus_mpie
     csr_is_br            := true.B
-    csr_br_addr          := csr_reg_mepc
+    csr_br_pc            := csr_reg_mepc
   }.otherwise {
     csr_is_br            := false.B
-    csr_br_addr          := DontCare
+    csr_br_pc            := DontCare
   }
 
   ex2_reg_is_br := csr_is_br || jbr_is_br
@@ -1718,12 +1865,12 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
   io.debug_signal.cycle_counter       := cycle_counter.io.value(47, 0)
   // io.debug_signal.csr_rdata        := csr_rdata
   // io.debug_signal.ex2_reg_csr_addr := ex2_reg_csr_addr
-  io.debug_signal.ex2_reg_pc          := ex2_reg_pc
+  io.debug_signal.ex2_reg_pc          := Cat(ex2_reg_pc, 0.U((WORD_LEN-PC_LEN).W))
   io.debug_signal.ex2_is_valid_inst   := ex2_en
   io.debug_signal.me_intr             := csr_is_meintr
   io.debug_signal.mt_intr             := csr_is_mtintr
   io.debug_signal.trap                := csr_is_trap
-  io.debug_signal.id_pc               := id_reg_pc
+  io.debug_signal.id_pc               := Cat(id_reg_pc, 0.U((WORD_LEN-PC_LEN).W))
   io.debug_signal.id_inst             := id_inst
   io.debug_signal.mem3_rdata          := mem3_reg_dmem_rdata
   io.debug_signal.mem3_rvalid         := mem3_reg_is_valid_load
@@ -1735,19 +1882,21 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
   io.exit := ex1_reg_is_trap && (ex2_reg_mcause === CSR_MCAUSE_ECALL_M) && (regfile(17) === 93.U(WORD_LEN.W))
 
   //printf(p"if1_reg_pc       : 0x${Hexadecimal(if1_reg_pc)}\n")
-  printf(p"if2_pc           : 0x${Hexadecimal(if2_pc)}\n")
+  printf(p"if2_pc           : 0x${Hexadecimal(Cat(if2_pc, 0.U(1.W)))}\n")
   printf(p"if2_inst         : 0x${Hexadecimal(if2_inst)}\n")
-  printf(p"if2_reg_is_bp_pos: 0x${Hexadecimal(if2_reg_is_bp_pos)}\n")
-  printf(p"bp.io.lu.br_hit  : 0x${Hexadecimal(bp.io.lu.br_hit)}\n")
-  printf(p"bp.io.lu.br_pos  : 0x${Hexadecimal(bp.io.lu.br_pos)}\n")
-  printf(p"id_reg_pc        : 0x${Hexadecimal(id_reg_pc)}\n")
+  printf(p"if2_reg_bp_taken : 0x${Hexadecimal(if2_reg_bp_taken)}\n")
+  printf(p"ic_bp_taken      : 0x${Hexadecimal(ic_bp_taken)}\n")
+  printf(p"ic_bp_taken_pc   : 0x${Hexadecimal(Cat(ic_bp_taken_pc, 0.U(1.W)))}\n")
+  printf(p"ic_bp_cnt        : 0x${Hexadecimal(ic_bp_cnt)}\n")
+  printf(p"id_reg_pc        : 0x${Hexadecimal(Cat(id_reg_pc, 0.U(1.W)))}\n")
   printf(p"id_reg_inst      : 0x${Hexadecimal(id_reg_inst)}\n")
   printf(p"id_stall         : 0x${Hexadecimal(id_stall)}\n")
   printf(p"id_inst          : 0x${Hexadecimal(id_inst)}\n")
   // printf(p"id_rs1_data      : 0x${Hexadecimal(id_rs1_data)}\n")
   // printf(p"id_rs2_data      : 0x${Hexadecimal(id_rs2_data)}\n")
-  printf(p"id_wb_addr       : 0x${Hexadecimal(id_wb_addr)}\n")
-  printf(p"rrd_reg_pc       : 0x${Hexadecimal(rrd_reg_pc)}\n")
+  // printf(p"id_wb_addr       : 0x${Hexadecimal(id_wb_addr)}\n")
+  printf(p"id_reg_is_bp_fail: 0x${Hexadecimal(id_reg_is_bp_fail)}\n")
+  printf(p"rrd_reg_pc       : 0x${Hexadecimal(Cat(rrd_reg_pc, 0.U(1.W)))}\n")
   printf(p"rrd_reg_is_valid_: 0x${Hexadecimal(rrd_reg_is_valid_inst)}\n")
   printf(p"rrd_stall        : 0x${Hexadecimal(rrd_stall)}\n")
   // printf(p"rrd_reg_rs1_addr : 0x${Hexadecimal(rrd_reg_rs1_addr)}\n")
@@ -1759,7 +1908,7 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
   // printf(p"ex1_reg_fw_en    : 0x${Hexadecimal(ex1_reg_fw_en)}\n")
   // printf(p"rrd_reg_rs1_addr  : 0x${Hexadecimal(rrd_reg_rs1_addr)}\n")
   printf(p"ex1_fw_data      : 0x${Hexadecimal(ex1_fw_data)}\n")
-  printf(p"ex1_reg_pc       : 0x${Hexadecimal(ex1_reg_pc)}\n")
+  printf(p"ex1_reg_pc       : 0x${Hexadecimal(Cat(ex1_reg_pc, 0.U(1.W)))}\n")
   printf(p"ex1_reg_is_valid_: 0x${Hexadecimal(ex1_reg_is_valid_inst)}\n")
   printf(p"ex1_reg_op1_data : 0x${Hexadecimal(ex1_reg_op1_data)}\n")
   printf(p"ex1_reg_op2_data : 0x${Hexadecimal(ex1_reg_op2_data)}\n")
@@ -1767,12 +1916,13 @@ class Core(startAddress: BigInt = 0, caribCount: BigInt = 10, bpTagInitPath: Str
   printf(p"ex1_reg_exe_fun  : 0x${Hexadecimal(ex1_reg_exe_fun)}\n")
   printf(p"ex1_reg_wb_sel   : 0x${Hexadecimal(ex1_reg_wb_sel)}\n")
   printf(p"ex1_reg_wb_addr  : 0x${Hexadecimal(ex1_reg_wb_addr)}\n")
-  printf(p"ex1_reg_is_bp_pos: 0x${Hexadecimal(ex1_reg_is_bp_pos)}\n")
-  printf(p"ex1_reg_bp_addr  : 0x${Hexadecimal(ex1_reg_bp_addr)}\n")
+  printf(p"ex1_reg_bp_taken : 0x${Hexadecimal(ex1_reg_bp_taken)}\n")
+  printf(p"ex1_reg_bp_taken_: 0x${Hexadecimal(Cat(ex1_reg_bp_taken_pc, 0.U(1.W)))}\n")
   printf(p"jbr_is_br        : 0x${jbr_is_br}\n")
+  printf(p"jbr_reg_bp_cnt   : 0x${jbr_reg_bp_cnt}\n")
   printf(p"ex2_reg_is_br    : 0x${ex2_reg_is_br}\n")
-  printf(p"ex2_reg_br_addr  : 0x${Hexadecimal(ex2_reg_br_addr)}\n")
-  printf(p"ex2_reg_pc       : 0x${Hexadecimal(ex2_reg_pc)}\n")
+  printf(p"ex2_reg_br_pc  : 0x${Hexadecimal(Cat(ex2_reg_br_pc, 0.U(1.W)))}\n")
+  printf(p"ex2_reg_pc       : 0x${Hexadecimal(Cat(ex2_reg_pc, 0.U(1.W)))}\n")
   printf(p"ex2_is_valid_inst: 0x${Hexadecimal(ex2_is_valid_inst)}\n")
   printf(p"ex2_stall        : 0x${Hexadecimal(ex2_stall)}\n")
   printf(p"ex2_wb_data      : 0x${Hexadecimal(ex2_wb_data)}\n")
