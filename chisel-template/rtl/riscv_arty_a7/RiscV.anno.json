@@ -3,13 +3,13 @@
     "class":"firrtl.transforms.DedupedResult",
     "original":"~RiscV|SRAM",
     "duplicate":"~RiscV|RiscV/sram1:SRAM",
-    "index":0.3
+    "index":0.3181818181818182
   },
   {
     "class":"firrtl.transforms.DedupedResult",
     "original":"~RiscV|SRAM_1",
     "duplicate":"~RiscV|RiscV/sram2:SRAM",
-    "index":0.35
+    "index":0.36363636363636365
   },
   {
     "class":"firrtl.EmitCircuitAnnotation",
