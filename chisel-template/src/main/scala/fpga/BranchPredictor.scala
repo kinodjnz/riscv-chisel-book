@@ -38,14 +38,14 @@ class PHTMemIo extends Bundle {
 }
 
 class PHTLookup extends Bundle {
-  val pc   = Output(UInt(WORD_LEN.W))
+  val pc   = Output(UInt(PC_LEN.W))
   val cnt0 = Input(UInt(2.W))
   val cnt1 = Input(UInt(2.W))
 }
 
 class PHTUpdate extends Bundle {
   val en  = Output(Bool())
-  val pc  = Output(UInt(WORD_LEN.W))
+  val pc  = Output(UInt(PC_LEN.W))
   val cnt = Output(UInt(2.W))
 }
 
@@ -62,13 +62,14 @@ class BTB(btb_len: Int) extends Module {
   val reg_entry1 = RegInit(0.U.asTypeOf(new BTBBundle()))
 
   val lu_pc = (io.lu.pc(PC_LEN-1-BTB_TAG_IGNORE, 1)).asTypeOf(new BTBPC())
+  val reg_lu_pc_tag = RegNext(lu_pc.tag, 0.U(BTB_TAG_LEN.W))
 
   reg_entry0 := btb0.read(lu_pc.index)
   reg_entry1 := btb1.read(lu_pc.index)
 
-  io.lu.matches0  := (reg_entry0.tag === lu_pc.tag)
+  io.lu.matches0  := (reg_entry0.tag === reg_lu_pc_tag)
   io.lu.taken_pc0 := reg_entry0.taken_pc
-  io.lu.matches1  := (reg_entry1.tag === lu_pc.tag)
+  io.lu.matches1  := (reg_entry1.tag === reg_lu_pc_tag)
   io.lu.taken_pc1 := reg_entry1.taken_pc
 
   val up_pc = (io.up.pc(PC_LEN-1-BTB_TAG_IGNORE, 1)).asTypeOf(new BTBPC())

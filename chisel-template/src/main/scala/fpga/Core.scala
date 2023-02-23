@@ -43,6 +43,10 @@ class CoreDebugSignals extends Bundle {
   val mem3_rdata    = Output(UInt(WORD_LEN.W))
   val mem3_rvalid   = Output(Bool())
   val rwaddr        = Output(UInt(WORD_LEN.W))
+  val ex2_reg_is_br = Output(Bool())
+  val id_reg_is_bp_fail = Output(Bool())
+  val if2_reg_bp_taken = Output(Bool())
+  val ic_state      = Output(UInt(3.W))
 }
 
 object IcState extends ChiselEnum {
@@ -500,10 +504,10 @@ class Core(start_address: BigInt = 0, dram_start: BigInt = 0x2000_0000L, dram_le
         ic_bp_taken_pc  := ic_reg_bp_next_taken_pc2
         ic_bp_cnt       := ic_reg_bp_next_cnt2
         when (ic_read_en2) {
-          ic_addr_out := ic_reg_inst2_addr
+          ic_addr_out := ic_reg_inst_addr
           ic_state := IcState.Full
         }.elsewhen(ic_read_en4) {
-          ic_addr_out := Cat(ic_reg_inst2_addr(PC_LEN-1, 1), 1.U(1.W))
+          ic_addr_out := Cat(ic_reg_inst_addr(PC_LEN-1, 1), 1.U(1.W))
           ic_state := IcState.FullHalf
         }
       }
@@ -547,7 +551,7 @@ class Core(start_address: BigInt = 0, dram_start: BigInt = 0x2000_0000L, dram_le
     (ic_half_rdy && is_half_inst) -> ic_data_out,
   ))
   if2_reg_inst := if2_inst
-  val if2_bp_taken = MuxCase(ic_bp_taken, Seq(
+  val if2_bp_taken = MuxCase(ic_bp_taken && (ic_read_rdy || (ic_half_rdy && is_half_inst)), Seq(
     ex2_reg_is_br     -> false.B,
     id_reg_stall      -> if2_reg_bp_taken,
     id_reg_is_bp_fail -> false.B,
@@ -1828,6 +1832,10 @@ class Core(start_address: BigInt = 0, dram_start: BigInt = 0x2000_0000L, dram_le
   io.debug_signal.mem3_rdata          := mem3_reg_dmem_rdata
   io.debug_signal.mem3_rvalid         := mem3_reg_is_valid_load
   io.debug_signal.rwaddr              := ex2_wb_data
+  io.debug_signal.ex2_reg_is_br       := ex2_reg_is_br
+  io.debug_signal.id_reg_is_bp_fail   := id_reg_is_bp_fail
+  io.debug_signal.if2_reg_bp_taken    := if2_reg_bp_taken
+  io.debug_signal.ic_state            := ic_state.asUInt
 
   //**********************************
   // IO & Debug
