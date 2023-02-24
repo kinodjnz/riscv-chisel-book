@@ -7,16 +7,16 @@ import fpga._
 import fpga.periferals._
 import common.Consts._
 
-class SimTop(memoryPath: String, with_sdc: Boolean) extends Module {
+class SimTop(memoryPath: String, with_sdc: Boolean, enable_pipeline_probe: Boolean = false) extends Module {
   val imemSizeInBytes = 16384
   val dmemSizeInBytes = 16384
   val startAddress = 0x00000000L
 
   val io = IO(new Bundle {
-    val gp = Output(UInt(WORD_LEN.W))
-    val exit = Output(Bool())
+    val sim_probe = new SimProbe(true)
+    val pipeline_probe = new PipelineProbe(enable_pipeline_probe)
   })
-  val core = Module(new Core(startAddress))
+  val core = Module(new Core(startAddress, 0x2000_0000L, 0x1000_0000L, true, enable_pipeline_probe))
   val memory = Module(new Memory())
   val boot_rom = Module(new BootRom(memoryPath, imemSizeInBytes))
 
@@ -75,8 +75,6 @@ class SimTop(memoryPath: String, with_sdc: Boolean) extends Module {
   core.io.pht_mem <> pht_mem.io.pht_mem
 
   core.io.intr := 0.U
-  io.gp   := core.io.gp
-
-  val do_exit = RegNext(core.io.exit)
-  io.exit := RegNext(do_exit)
+  io.sim_probe <> core.io.sim_probe
+  io.pipeline_probe <> core.io.pipeline_probe
 }

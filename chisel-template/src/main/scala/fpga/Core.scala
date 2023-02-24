@@ -71,7 +71,43 @@ object DmemState extends ChiselEnum {
   val Reading = Value
 }
 
-class Core(start_address: BigInt = 0, dram_start: BigInt = 0x2000_0000L, dram_length: BigInt = 0x1000_0000L) extends Module {
+class SimProbe(enable_sim_probe: Boolean) extends Bundle {
+  val len_m = if (enable_sim_probe) 1 else 0
+  val gp   = Output(UInt((WORD_LEN*len_m).W))
+  val exit = Output(UInt(len_m.W))
+}
+
+class PipelineProbe(enable_pipeline_probe: Boolean) extends Bundle {
+  val len_m = if (enable_pipeline_probe) 1 else 0
+  val if2_valid   = Output(UInt(len_m.W))
+  val if2_inst_id = Output(UInt((32*len_m).W))
+  val if2_pc      = Output(UInt((WORD_LEN*len_m).W))
+  val if2_inst    = Output(UInt((WORD_LEN*len_m).W))
+  val id_valid    = Output(UInt(len_m.W))
+  val id_inst_id  = Output(UInt((32*len_m).W))
+  val rrd_valid   = Output(UInt(len_m.W))
+  val rrd_inst_id = Output(UInt((32*len_m).W))
+  val ex1_valid   = Output(UInt(len_m.W))
+  val ex1_inst_id = Output(UInt((32*len_m).W))
+  val ex2_valid   = Output(UInt(len_m.W))
+  val ex2_inst_id = Output(UInt((32*len_m).W))
+  val ex2_retired = Output(UInt(len_m.W))
+  val mem1_valid   = Output(UInt(len_m.W))
+  val mem1_inst_id = Output(UInt((32*len_m).W))
+  val mem2_valid   = Output(UInt(len_m.W))
+  val mem2_inst_id = Output(UInt((32*len_m).W))
+  val mem3_valid   = Output(UInt(len_m.W))
+  val mem3_inst_id = Output(UInt((32*len_m).W))
+  val mem3_retired = Output(UInt(len_m.W))
+}
+
+class Core(
+  start_address: BigInt = 0,
+  dram_start: BigInt = 0x2000_0000L,
+  dram_length: BigInt = 0x1000_0000L,
+  enable_sim_probe: Boolean = false,
+  enable_pipeline_probe: Boolean = false,
+) extends Module {
   val io = IO(
     new Bundle {
       val imem = Flipped(new ImemPortIo())
@@ -80,11 +116,19 @@ class Core(start_address: BigInt = 0, dram_start: BigInt = 0x2000_0000L, dram_le
       val pht_mem = Flipped(new PHTMemIo())
       val mtimer_mem = new DmemPortIo()
       val intr = Input(Bool())
-      val gp   = Output(UInt(WORD_LEN.W))
-      val exit = Output(Bool())
       val debug_signal = new CoreDebugSignals()
+      val sim_probe = new SimProbe(enable_sim_probe)
+      val pipeline_probe = new PipelineProbe(enable_pipeline_probe)
     }
   )
+
+  val inst_id_len: Int = if (enable_pipeline_probe) 32 else 1
+  if (!enable_sim_probe) {
+    io.sim_probe := DontCare
+  }
+  if (!enable_pipeline_probe) {
+    io.pipeline_probe := DontCare
+  }
 
   val regfile = Mem(32, UInt(WORD_LEN.W))
   //val csr_regfile = Mem(4096, UInt(WORD_LEN.W)) 
@@ -278,6 +322,15 @@ class Core(start_address: BigInt = 0, dram_start: BigInt = 0x2000_0000L, dram_le
   val mem3_reg_is_retired  = RegInit(false.B)
   val ex2_is_valid_inst    = Wire(Bool())
   val ex2_en               = Wire(Bool())
+
+  val if2_reg_inst_id      = RegInit(0.U(inst_id_len.W))
+  val id_reg_inst_id_delay = RegInit(0.U(inst_id_len.W))
+  val rrd_reg_inst_id      = RegInit(0.U(inst_id_len.W))
+  val ex1_reg_inst_id      = RegInit(0.U(inst_id_len.W))
+  val ex2_reg_inst_id      = RegInit(0.U(inst_id_len.W))
+  val mem1_reg_inst_id     = RegInit(0.U(inst_id_len.W))
+  val mem2_reg_inst_id     = RegInit(0.U(inst_id_len.W))
+  val mem3_reg_inst_id     = RegInit(0.U(inst_id_len.W))
 
   //**********************************
   // Instruction Fetch And Branch Prediction
@@ -568,6 +621,18 @@ class Core(start_address: BigInt = 0, dram_start: BigInt = 0x2000_0000L, dram_le
     ic_bp_cnt,
   )
   if2_reg_bp_cnt := if2_bp_cnt
+  if (enable_pipeline_probe) {
+    val if2_vaild = !id_reg_stall && (if2_inst =/= BUBBLE)
+    val if2_inst_id = Mux(if2_vaild,
+      if2_reg_inst_id + 1.U,
+      if2_reg_inst_id,
+    )
+    if2_reg_inst_id := if2_inst_id
+    io.pipeline_probe.if2_valid   := if2_vaild
+    io.pipeline_probe.if2_inst_id := if2_inst_id
+    io.pipeline_probe.if2_pc      := Cat(if2_pc, 0.U(1.W))
+    io.pipeline_probe.if2_inst    := if2_inst
+  }
   
   printf(p"ic_reg_addr_out: ${Hexadecimal(Cat(ic_reg_addr_out, 0.U(1.W)))}, ic_data_out: ${Hexadecimal(ic_data_out)}\n")
   printf(p"inst: ${Hexadecimal(if2_inst)}, ic_read_rdy: ${ic_read_rdy}, ic_state: ${ic_state.asUInt}, ic_addr_en: ${ic_addr_en.asUInt}\n")
@@ -579,6 +644,7 @@ class Core(start_address: BigInt = 0, dram_start: BigInt = 0x2000_0000L, dram_le
   val id_reg_bp_taken    = if2_reg_bp_taken
   val id_reg_bp_taken_pc = if2_reg_bp_taken_pc
   val id_reg_bp_cnt      = if2_reg_bp_cnt
+  val id_reg_inst_id     = if2_reg_inst_id
 
   //**********************************
   // Instruction Decode (ID) Stage
@@ -801,6 +867,11 @@ class Core(start_address: BigInt = 0, dram_start: BigInt = 0x2000_0000L, dram_le
   id_reg_br_pc := Mux(id_is_half, id_reg_pc + 1.U(PC_LEN.W), id_reg_pc + 2.U(PC_LEN.W))
   id_reg_is_bp_fail := !id_reg_stall && !ex2_reg_is_br && !id_reg_is_bp_fail && !id_is_j && !id_is_br && id_reg_bp_taken
 
+  if (enable_pipeline_probe) {
+    io.pipeline_probe.id_valid   := (id_inst =/= BUBBLE)
+    io.pipeline_probe.id_inst_id := id_reg_inst_id
+  }
+
   val id_reg_pc_delay         = RegInit(0.U(PC_LEN.W))
   val id_reg_wb_addr_delay    = RegInit(0.U(ADDR_LEN.W))
   val id_reg_op1_sel_delay    = RegInit(0.U(OP1_LEN.W))
@@ -868,6 +939,9 @@ class Core(start_address: BigInt = 0, dram_start: BigInt = 0x2000_0000L, dram_le
     id_reg_is_trap_delay    := id_is_trap
     id_reg_mcause_delay     := id_mcause
     // id_reg_mtval_delay      := id_mtval
+    if (enable_pipeline_probe) {
+      id_reg_inst_id_delay  := id_reg_inst_id
+    }
   }
 
   //**********************************
@@ -900,6 +974,9 @@ class Core(start_address: BigInt = 0, dram_start: BigInt = 0x2000_0000L, dram_le
       rrd_reg_is_trap       := false.B
       rrd_reg_mcause        := id_reg_mcause_delay
       // rrd_reg_mtval         := id_reg_mtval_delay
+      if (enable_pipeline_probe) {
+        rrd_reg_inst_id     := id_reg_inst_id_delay
+      }
     }.otherwise {
       rrd_reg_pc            := id_reg_pc
       rrd_reg_op1_sel       := id_m_op1_sel
@@ -927,6 +1004,9 @@ class Core(start_address: BigInt = 0, dram_start: BigInt = 0x2000_0000L, dram_le
       rrd_reg_is_trap       := false.B
       rrd_reg_mcause        := id_mcause
       // rrd_reg_mtval         := id_mtval
+      if (enable_pipeline_probe) {
+        rrd_reg_inst_id     := id_reg_inst_id
+      }
     }
   }.elsewhen(!rrd_stall && !ex2_stall) {
     when(id_reg_stall) {
@@ -956,6 +1036,9 @@ class Core(start_address: BigInt = 0, dram_start: BigInt = 0x2000_0000L, dram_le
       rrd_reg_is_trap       := id_reg_is_trap_delay
       rrd_reg_mcause        := id_reg_mcause_delay
       // rrd_reg_mtval         := id_reg_mtval_delay
+      if (enable_pipeline_probe) {
+        rrd_reg_inst_id     := id_reg_inst_id_delay
+      }
     }.otherwise {
       rrd_reg_pc            := id_reg_pc
       rrd_reg_op1_sel       := id_m_op1_sel
@@ -983,6 +1066,9 @@ class Core(start_address: BigInt = 0, dram_start: BigInt = 0x2000_0000L, dram_le
       rrd_reg_is_trap       := id_is_trap
       rrd_reg_mcause        := id_mcause
       // rrd_reg_mtval         := id_mtval
+      if (enable_pipeline_probe) {
+        rrd_reg_inst_id     := id_reg_inst_id
+      }
     }
   }
   //**********************************
@@ -1042,6 +1128,11 @@ class Core(start_address: BigInt = 0, dram_start: BigInt = 0x2000_0000L, dram_le
       rrd_inst3_use_reg := (rrd_reg_wb_sel === WB_MD || rrd_reg_wb_sel === WB_CSR)
   }
 
+  if (enable_pipeline_probe) {
+    io.pipeline_probe.rrd_valid   := rrd_reg_is_valid_inst && !ex2_reg_is_br
+    io.pipeline_probe.rrd_inst_id := rrd_reg_inst_id
+  }
+
   //**********************************
   // RRD/EX1 register
   when(!ex2_stall) {
@@ -1072,6 +1163,9 @@ class Core(start_address: BigInt = 0, dram_start: BigInt = 0x2000_0000L, dram_le
     ex1_reg_inst2_use_reg := rrd_inst2_use_reg
     ex1_reg_inst3_use_reg := rrd_inst3_use_reg
     ex1_reg_fw_en         := rrd_fw_en_next
+    if (enable_pipeline_probe) {
+      ex1_reg_inst_id     := rrd_reg_inst_id
+    }
   }
 
   //**********************************
@@ -1175,6 +1269,11 @@ class Core(start_address: BigInt = 0, dram_start: BigInt = 0x2000_0000L, dram_le
   val ex1_hazard = (ex1_reg_rf_wen === REN_S) && (ex1_reg_wb_addr =/= 0.U) && !ex2_reg_is_br
   val ex1_fw_en_next = ex1_hazard && (ex1_reg_wb_sel =/= WB_MD) && (ex1_reg_wb_sel =/= WB_LD)
 
+  if (enable_pipeline_probe) {
+    io.pipeline_probe.ex1_valid   := ex1_reg_is_valid_inst && !ex2_reg_is_br
+    io.pipeline_probe.ex1_inst_id := ex1_reg_inst_id
+  }
+
   //**********************************
   // EX1/JBR register
   // jump, br 命令ではストールは発生しないためストール時は単に更新しない
@@ -1260,6 +1359,9 @@ class Core(start_address: BigInt = 0, dram_start: BigInt = 0x2000_0000L, dram_le
     ex2_reg_fw_en             := ex1_fw_en_next
     ex2_reg_csr_cmd           := ex1_reg_csr_cmd
     ex2_reg_csr_addr          := ex1_reg_csr_addr
+    if (enable_pipeline_probe) {
+      ex2_reg_inst_id         := ex1_reg_inst_id
+    }
   }.otherwise {
     ex2_reg_div_stall := ex2_div_stall_next ||
       (ex2_reg_divrem && (ex2_reg_divrem_state === DivremState.Idle || ex2_reg_divrem_state === DivremState.Finished))
@@ -1705,6 +1807,12 @@ class Core(start_address: BigInt = 0, dram_start: BigInt = 0x2000_0000L, dram_le
     regfile(ex2_reg_wb_addr) := ex2_wb_data
   }
 
+  if (enable_pipeline_probe) {
+    io.pipeline_probe.ex2_valid   := ex2_en && ex2_reg_no_mem
+    io.pipeline_probe.ex2_inst_id := ex2_reg_inst_id
+    io.pipeline_probe.ex2_retired := ex2_en && !ex2_reg_div_stall && ex2_reg_no_mem
+  }
+
   //**********************************
   // EX1/MEM1 register
   val dram_addr_bits: Int = log2Ceil(dram_length)
@@ -1725,6 +1833,9 @@ class Core(start_address: BigInt = 0, dram_start: BigInt = 0x2000_0000L, dram_le
     mem1_reg_is_dram_store := mem1_is_dram && (ex1_reg_wb_sel === WB_ST)
     mem1_reg_is_dram_fence := (ex1_reg_wb_sel === WB_FENCE)
     mem1_reg_is_valid_inst := (ex1_reg_wb_sel === WB_LD || ex1_reg_wb_sel === WB_ST || ex1_reg_wb_sel === WB_FENCE)
+    if (enable_pipeline_probe) {
+      mem1_reg_inst_id     := ex1_reg_inst_id
+    }
   }
 
   //**********************************
@@ -1761,6 +1872,11 @@ class Core(start_address: BigInt = 0, dram_start: BigInt = 0x2000_0000L, dram_le
     (mem1_is_dram_store && !io.cache.wready) ||
     (mem1_is_dram_fence && io.cache.ibusy)
 
+  if (enable_pipeline_probe) {
+    io.pipeline_probe.mem1_valid   := mem1_is_valid_inst
+    io.pipeline_probe.mem1_inst_id := mem1_reg_inst_id
+  }
+
   //**********************************
   // MEM1/MEM2 regsiter
   when (!mem2_dram_stall) {
@@ -1772,11 +1888,19 @@ class Core(start_address: BigInt = 0, dram_start: BigInt = 0x2000_0000L, dram_le
     mem2_reg_mem_use_reg    := !mem1_mem_stall && !mem1_dram_stall && mem1_reg_mem_use_reg
     mem2_reg_is_valid_inst  := !mem1_mem_stall && !mem1_dram_stall && mem1_is_valid_inst
     mem2_reg_is_dram_load   := !mem1_dram_stall && mem1_is_dram_load
+    if (enable_pipeline_probe) {
+      mem2_reg_inst_id     := mem1_reg_inst_id
+    }
   }
 
   //**********************************
   // Memory Access Stage 2 (MEM2)
   mem2_dram_stall := (mem2_reg_is_dram_load && !io.cache.rvalid)
+
+  if (enable_pipeline_probe) {
+    io.pipeline_probe.mem2_valid   := mem2_reg_is_valid_inst
+    io.pipeline_probe.mem2_inst_id := mem2_reg_inst_id
+  }
 
   //**********************************
   // MEM2/MEM3 regsiter
@@ -1787,6 +1911,11 @@ class Core(start_address: BigInt = 0, dram_start: BigInt = 0x2000_0000L, dram_le
   mem3_reg_is_valid_load  := !mem2_dram_stall && mem2_reg_is_valid_load
   mem3_reg_mem_use_reg    := !mem2_dram_stall && mem2_reg_mem_use_reg
   mem3_reg_is_valid_inst  := !mem2_dram_stall && mem2_reg_is_valid_inst
+  if (enable_pipeline_probe) {
+    when (!mem2_dram_stall) {
+      mem3_reg_inst_id    := mem2_reg_inst_id
+    }
+  }
 
   //**********************************
   // Memory Access Stage 3 (MEM3)
@@ -1818,6 +1947,12 @@ class Core(start_address: BigInt = 0, dram_start: BigInt = 0x2000_0000L, dram_le
     instret := instret + 1.U
   }
 
+  if (enable_pipeline_probe) {
+    io.pipeline_probe.mem3_valid   := mem3_reg_is_valid_inst
+    io.pipeline_probe.mem3_inst_id := mem3_reg_inst_id
+    io.pipeline_probe.mem3_retired := mem3_reg_is_valid_inst
+  }
+
   // Debug signals
   io.debug_signal.cycle_counter       := cycle_counter.io.value(47, 0)
   // io.debug_signal.csr_rdata        := csr_rdata
@@ -1839,8 +1974,12 @@ class Core(start_address: BigInt = 0, dram_start: BigInt = 0x2000_0000L, dram_le
 
   //**********************************
   // IO & Debug
-  io.gp := regfile(3)
-  io.exit := ex1_reg_is_trap && (ex2_reg_mcause === CSR_MCAUSE_ECALL_M) && (regfile(17) === 93.U(WORD_LEN.W))
+  if (enable_sim_probe) {
+    io.sim_probe.gp   := regfile(3)
+    val exit = ex1_reg_is_trap && (ex2_reg_mcause === CSR_MCAUSE_ECALL_M) && (regfile(17) === 93.U(WORD_LEN.W))
+    val do_exit = RegNext(exit)
+    io.sim_probe.exit := RegNext(do_exit).asUInt
+  }
 
   //printf(p"if1_reg_pc       : 0x${Hexadecimal(if1_reg_pc)}\n")
   printf(p"if2_pc           : 0x${Hexadecimal(Cat(if2_pc, 0.U(1.W)))}\n")
@@ -1911,6 +2050,6 @@ class Core(start_address: BigInt = 0, dram_start: BigInt = 0x2000_0000L, dram_le
   printf(p"instret          : ${instret}\n")
   // printf(p"mem1_is_dram_fence: ${mem1_is_dram_fence}\n")
   // printf(p"io.cache.ibusy   : ${io.cache.ibusy}\n")
-  printf(p"cycle_counter(${io.exit}) : ${io.debug_signal.cycle_counter}\n")
+  // printf(p"cycle_counter(${io.exit}) : ${io.debug_signal.cycle_counter}\n")
   printf("---------\n")
 }
