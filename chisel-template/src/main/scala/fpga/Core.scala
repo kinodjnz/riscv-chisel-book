@@ -2037,6 +2037,8 @@ class Core(
   printf(p"mem2_reg_dmem_rda: 0x${Hexadecimal(mem2_reg_dmem_rdata)}\n")
   // printf(p"mem2_reg_mem_use_: 0x${Hexadecimal(mem2_reg_mem_use_reg)}\n")
   printf(p"mem2_reg_is_valid: 0x${Hexadecimal(mem2_reg_is_valid_inst)}\n")
+  printf(p"mem2_reg_is_dram_: 0x${Hexadecimal(mem2_reg_is_dram_load)}\n")
+  printf(p"mem3_reg_dmem_rda: 0x${Hexadecimal(mem3_reg_dmem_rdata)}\n")
   printf(p"mem3_wb_data_load: 0x${Hexadecimal(mem3_wb_data_load)}\n")
   printf(p"mem3_reg_is_valid: 0x${Hexadecimal(mem3_reg_is_valid_inst)}\n")
   // printf(p"mem3_reg_mem_use_: 0x${Hexadecimal(mem3_reg_mem_use_reg)}\n")
@@ -2050,6 +2052,6 @@ class Core(
   printf(p"instret          : ${instret}\n")
   // printf(p"mem1_is_dram_fence: ${mem1_is_dram_fence}\n")
   // printf(p"io.cache.ibusy   : ${io.cache.ibusy}\n")
-  // printf(p"cycle_counter(${io.exit}) : ${io.debug_signal.cycle_counter}\n")
+  printf(p"cycle_counter    : ${io.debug_signal.cycle_counter}\n")
   printf("---------\n")
 }

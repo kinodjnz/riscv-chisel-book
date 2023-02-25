@@ -9,7 +9,7 @@ import chisel3.util.experimental.loadMemoryFromFileInline
 import chisel3.experimental.{annotate, ChiselAnnotation}
 import firrtl.annotations.MemorySynthInit
 
-class BootRom(data_memory_path: String = null, imem_size_in_bytes: Int = 2048) extends Module {
+class BootRom(data_memory_path: String = null, imem_size_in_bytes: Int = 2048, enable_sim_wstrb: Boolean = false) extends Module {
   val io = IO(new Bundle {
     val imem = new ImemPortIo()
     val dmem = new DmemPortIo()
@@ -34,7 +34,14 @@ class BootRom(data_memory_path: String = null, imem_size_in_bytes: Int = 2048) e
 
   val rwaddr = Mux(io.dmem.wen, io.dmem.waddr, io.dmem.raddr)(log2Ceil(imem_size_in_bytes) - 1, 2)
   when (io.dmem.wen) {
-    imem.write(rwaddr, io.dmem.wdata)
+    if (enable_sim_wstrb) {
+      // とりあえずchiseltestでbootromのバイトアクセスを有効化
+      val rdata = imem.read(rwaddr)
+      val wdata = Cat(VecInit((0 to 3).map(i => Mux(io.dmem.wstrb(i, i).asBool, io.dmem.wdata((WORD_LEN/4)*(i+1)-1, (WORD_LEN/4)*i), rdata((WORD_LEN/4)*(i+1)-1, (WORD_LEN/4)*i)))).reverse)
+      imem.write(rwaddr, wdata)
+    } else {
+      imem.write(rwaddr, io.dmem.wdata)
+    }
   }
   when (!io.dmem.wen && io.dmem.ren) {
     imem_rdata := imem.read(rwaddr)
