@@ -15,8 +15,8 @@ class RiscvTest extends FixtureAnyFlatSpec with ChiselScalatestTester with TestD
   behavior of "RiscV"
 
   val tests = Array(
-    // ("bootrom", 100),
     ("fizzbuzz", 5000),
+    ("dhry", 10000),
     ("mtimer", 1000),
     ("br", 1000),
     ("loop", 1000),
