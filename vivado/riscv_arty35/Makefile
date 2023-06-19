@@ -40,7 +40,7 @@ open: project/$(PROJECT_NAME).xpr
 	$(VIVADO) $<&
 
 project/$(PROJECT_NAME).xpr: $(SRCS) $(BOOTROM)
-	$(VIVADO) -mode batch -source restore_project.tcl -tclargs $(PROJECT_NAME) ${BD_NAME} ${TARGET_PART}
+	$(VIVADO) -mode batch -source riscv_arty35.tcl -tclargs $(PROJECT_NAME) ${BD_NAME} ${TARGET_PART}
 
 $(BITSTREAM) $(HARDWARE_DEF): project/$(PROJECT_NAME).xpr $(SRCS) project/$(PROJECT_NAME).srcs/sources_1/bd/$(BD_NAME)/$(BD_NAME).bd
 	$(VIVADO) -mode batch -source implement.tcl -tclargs $(PROJECT_NAME) $(BD_NAME)
