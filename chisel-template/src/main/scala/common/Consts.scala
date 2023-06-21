@@ -23,22 +23,19 @@ object Consts {
   val ALU_XOR     =  2.U(EXE_FUN_LEN.W)
   val ALU_AND     =  3.U(EXE_FUN_LEN.W)
   val ALU_OR      =  4.U(EXE_FUN_LEN.W)
-  val ALU_SLL     =  5.U(EXE_FUN_LEN.W)
-  val ALU_SRL     =  6.U(EXE_FUN_LEN.W)
-  val ALU_SRA     =  7.U(EXE_FUN_LEN.W)
-  val ALU_SLT     =  8.U(EXE_FUN_LEN.W)
-  val ALU_SLTU    =  9.U(EXE_FUN_LEN.W)
+  val ALU_FSL     =  5.U(EXE_FUN_LEN.W)
+  val ALU_FSR     =  6.U(EXE_FUN_LEN.W)
+  val ALU_SLT     =  7.U(EXE_FUN_LEN.W)
+  val ALU_SLTU    =  8.U(EXE_FUN_LEN.W)
 
-  val ALU_MAX     = 10.U(EXE_FUN_LEN.W)
-  val ALU_MAXU    = 11.U(EXE_FUN_LEN.W)
-  val ALU_MIN     = 12.U(EXE_FUN_LEN.W)
-  val ALU_MINU    = 13.U(EXE_FUN_LEN.W)
-  val ALU_XNOR    = 14.U(EXE_FUN_LEN.W)
-  val ALU_ANDN    = 15.U(EXE_FUN_LEN.W)
-  val ALU_ORN     = 16.U(EXE_FUN_LEN.W)
+  val ALU_MAX     =  9.U(EXE_FUN_LEN.W)
+  val ALU_MAXU    = 10.U(EXE_FUN_LEN.W)
+  val ALU_MIN     = 11.U(EXE_FUN_LEN.W)
+  val ALU_MINU    = 12.U(EXE_FUN_LEN.W)
+  val ALU_XNOR    = 13.U(EXE_FUN_LEN.W)
+  val ALU_ANDN    = 14.U(EXE_FUN_LEN.W)
+  val ALU_ORN     = 15.U(EXE_FUN_LEN.W)
 
-  val ALU_ROL     = 1.U(EXE_FUN_LEN.W)
-  val ALU_ROR     = 2.U(EXE_FUN_LEN.W)
   val ALU_CLZ     = 5.U(EXE_FUN_LEN.W)
   val ALU_CTZ     = 6.U(EXE_FUN_LEN.W)
   val ALU_CPOP    = 7.U(EXE_FUN_LEN.W)
@@ -48,11 +45,11 @@ object Consts {
   val ALU_ZEXTH   = 11.U(EXE_FUN_LEN.W)
   val ALU_ORCB    = 12.U(EXE_FUN_LEN.W)
 
-  val ALU_JALR    = 17.U(EXE_FUN_LEN.W)
-  val ALU_COPY1   = 18.U(EXE_FUN_LEN.W)
-  val ALU_VADDVV  = 19.U(EXE_FUN_LEN.W)
-  val VSET        = 20.U(EXE_FUN_LEN.W)
-  val ALU_PCNT    = 21.U(EXE_FUN_LEN.W)
+  // val ALU_JALR    = 17.U(EXE_FUN_LEN.W)
+  // val ALU_COPY1   = 18.U(EXE_FUN_LEN.W)
+  // val ALU_VADDVV  = 19.U(EXE_FUN_LEN.W)
+  // val VSET        = 20.U(EXE_FUN_LEN.W)
+  // val ALU_PCNT    = 21.U(EXE_FUN_LEN.W)
 
   val BR_BEQ      = 18.U(EXE_FUN_LEN.W)
   val BR_BNE      = 19.U(EXE_FUN_LEN.W)
@@ -102,16 +99,14 @@ object Consts {
   val OP2_C_IMSL  = 14.U(OP2_LEN.W)
   val OP2_C_IMSS  = 15.U(OP2_LEN.W)
 
-  val MEN_LEN = 2
-  val MEN_X   = 0.U(MEN_LEN.W)
-  val MEN_S   = 1.U(MEN_LEN.W) // スカラ命令用
-  val MEN_V   = 2.U(MEN_LEN.W) // ベクトル命令用
-  val MEN_FENCE = 3.U(MEN_LEN.W)
+  val OPS_LEN = 2
+  val OPS_Z   = 0.U(OPS_LEN.W)
+  val OPS_MSB = 1.U(OPS_LEN.W)
+  val OPS_OP1 = 2.U(OPS_LEN.W)
 
   val REN_LEN = 1
   val REN_X   = 0.U(REN_LEN.W)
-  val REN_S   = 1.U(REN_LEN.W) // スカラ命令用
-  val REN_V   = 1.U(REN_LEN.W) // ベクトル命令用
+  val REN_S   = 1.U(REN_LEN.W)
 
   val WB_SEL_LEN = 3
   val WB_X       = 0.U(WB_SEL_LEN.W)
@@ -144,9 +139,6 @@ object Consts {
   val CSR_W   = 1.U(CSR_LEN.W)
   val CSR_S   = 2.U(CSR_LEN.W)
   val CSR_C   = 3.U(CSR_LEN.W)
-  val CSR_E   = 0.U(CSR_LEN.W)
-  val CSR_V   = 0.U(CSR_LEN.W)
-  val CSR_R   = 0.U(CSR_LEN.W)
 
   val CSR_ADDR_MSTATUS  = 0x300.U(CSR_ADDR_LEN.W)
   val CSR_ADDR_MIE      = 0x304.U(CSR_ADDR_LEN.W)

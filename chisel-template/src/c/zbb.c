@@ -144,6 +144,26 @@ int main()
 	asm volatile(".word  0x6980d713"); // rev8 a4, ra
 	asm volatile("li     t2, 0xdcfe2301");
 	asm volatile("bne    a4, t2, fail");
+	asm volatile("test_24:");
+	asm volatile("li     gp, 24");
+	asm volatile("li     ra, 0x0123fedc");
+	asm volatile("li     sp, 19");
+	asm volatile(".word  0x60209733"); // rol a4, ra, sp
+	asm volatile("li     t2, 0xf6e0091f");
+	asm volatile("bne    a4, t2, fail");
+	asm volatile("test_25:");
+	asm volatile("li     gp, 25");
+	asm volatile("li     ra, 0x0123fedc");
+	asm volatile("li     sp, 19");
+	asm volatile(".word  0x6020d733"); // ror a4, ra, sp
+	asm volatile("li     t2, 0x7fdb8024");
+	asm volatile("bne    a4, t2, fail");
+	asm volatile("test_26:");
+	asm volatile("li     gp, 26");
+	asm volatile("li     ra, 0x0123fedc");
+	asm volatile(".word  0x6130d713"); // rori a4, ra, 19
+	asm volatile("li     t2, 0x7fdb8024");
+	asm volatile("bne    a4, t2, fail");
 	asm volatile("beq    a4, t2, pass");
 	asm volatile("fail:");
 	asm volatile("fence");
