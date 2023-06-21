@@ -163,9 +163,9 @@ class Core(
   // ID/RRD State
   val rrd_reg_pc            = RegInit(0.U(PC_LEN.W))
   val rrd_reg_wb_addr       = RegInit(0.U(ADDR_LEN.W))
-  val rrd_reg_op1_sel       = RegInit(0.U(OP1_LEN.W))
-  val rrd_reg_op2_sel       = RegInit(0.U(OP2_LEN.W))
-  val rrd_reg_op3_sel       = RegInit(0.U(OP3_LEN.W))
+  val rrd_reg_op1_sel       = RegInit(0.U(M_OP1_LEN.W))
+  val rrd_reg_op2_sel       = RegInit(0.U(M_OP2_LEN.W))
+  val rrd_reg_op3_sel       = RegInit(0.U(M_OP3_LEN.W))
   val rrd_reg_rs1_addr      = RegInit(0.U(ADDR_LEN.W))
   val rrd_reg_rs2_addr      = RegInit(0.U(ADDR_LEN.W))
   val rrd_reg_rs3_addr      = RegInit(0.U(ADDR_LEN.W))
@@ -695,6 +695,12 @@ class Core(
   val id_c_imm_b = Cat(Fill(24, id_inst(12)), id_inst(6, 5), id_inst(2), id_inst(11, 10), id_inst(4, 3), 0.U(1.W))
   val id_c_imm_j = Cat(Fill(21, id_inst(12)), id_inst(8), id_inst(10, 9), id_inst(6), id_inst(7), id_inst(2), id_inst(11), id_inst(5, 3), 0.U(1.W))
 
+  val id_c_imm_lsb = Cat(Fill(27, 0.U), id_inst(11, 10), id_inst(6, 5), id_inst(12))
+  val id_c_imm_lsh = Cat(Fill(28, 0.U), id_inst(10), id_inst(6, 5), 0.U(1.W))
+  val id_c_imm_sw0 = Cat(Fill(25, 0.U), id_inst(5, 3), id_inst(10), id_inst(6), Fill(2, 0.U))
+  val id_c_imm_sb0 = Cat(Fill(28, 0.U), id_inst(10), id_inst(6, 4))
+  val id_c_imm_sh0 = Cat(Fill(28, 0.U), id_inst(4), id_inst(10), id_inst(6, 5), 0.U(1.W))
+
   val csignals = ListLookup(id_inst,
                     List(ALU_X     , OP1_RS1   , OP2_RS2    , OP3_X     , REN_X, WB_X  , WBA_RD , CSR_X, MW_X),
     Array(
@@ -795,6 +801,15 @@ class Core(
       C_SWSP     -> List(ALU_ADD   , OP1_C_SP  , OP2_C_IMSS , OP3_C_RS2 , REN_X, WB_ST , WBA_C  , CSR_X, MW_W),
       C_MV       -> List(ALU_ADD   , OP1_Z     , OP2_C_RS2  , OP3_X     , REN_S, WB_ALU, WBA_C  , CSR_X, MW_X),
       C_ADD      -> List(ALU_ADD   , OP1_C_RS1 , OP2_C_RS2  , OP3_X     , REN_S, WB_ALU, WBA_C  , CSR_X, MW_X),
+      C_LB       -> List(ALU_ADD   , OP1_C_RS1P, OP2_C_IMLSB, OP3_X     , REN_S, WB_LD , WBA_CP2, CSR_X, MW_B),
+      C_LBU      -> List(ALU_ADD   , OP1_C_RS1P, OP2_C_IMLSB, OP3_X     , REN_S, WB_LD , WBA_CP2, CSR_X, MW_BU),
+      C_LH       -> List(ALU_ADD   , OP1_C_RS1P, OP2_C_IMLSH, OP3_X     , REN_S, WB_LD , WBA_CP2, CSR_X, MW_H),
+      C_LHU      -> List(ALU_ADD   , OP1_C_RS1P, OP2_C_IMLSH, OP3_X     , REN_S, WB_LD , WBA_CP2, CSR_X, MW_HU),
+      C_SH       -> List(ALU_ADD   , OP1_C_RS1P, OP2_C_IMLSH, OP3_C_RS2P, REN_X, WB_ST , WBA_C  , CSR_X, MW_H),
+      C_SW0      -> List(ALU_ADD   , OP1_C_RS1P, OP2_C_IMSW0, OP3_Z     , REN_X, WB_ST , WBA_C  , CSR_X, MW_W),
+      C_SB0      -> List(ALU_ADD   , OP1_C_RS1P, OP2_C_IMSB0, OP3_Z     , REN_X, WB_ST , WBA_C  , CSR_X, MW_B),
+      C_SH0      -> List(ALU_ADD   , OP1_C_RS1P, OP2_C_IMSH0, OP3_Z     , REN_X, WB_ST , WBA_C  , CSR_X, MW_H),
+      C_SB       -> List(ALU_ADD   , OP1_C_RS1P, OP2_C_IMLSB, OP3_C_RS2P, REN_X, WB_ST , WBA_C  , CSR_X, MW_B),
 		)
 	)
   val List(id_exe_fun, id_op1_sel, id_op2_sel, id_op3_sel, id_rf_wen, id_wb_sel, id_wba, id_csr_cmd, id_mem_w) = csignals
@@ -823,22 +838,34 @@ class Core(
     (id_op2_sel === OP2_C_IMJ)   -> id_c_imm_j,
     (id_op2_sel === OP2_C_IMSL)  -> id_c_imm_sl,
     (id_op2_sel === OP2_C_IMSS)  -> id_c_imm_ss,
+    (id_op2_sel === OP2_C_IMLSB) -> id_c_imm_lsb,
+    (id_op2_sel === OP2_C_IMLSH) -> id_c_imm_lsh,
+    (id_op2_sel === OP2_C_IMSW0) -> id_c_imm_sw0,
+    (id_op2_sel === OP2_C_IMSB0) -> id_c_imm_sb0,
+    (id_op2_sel === OP2_C_IMSH0) -> id_c_imm_sh0,
   ))
 
   val id_csr_addr = Mux(id_exe_fun === CMD_ECALL, CSR_ADDR_MCAUSE, id_inst(31,20))
 
-  val id_m_op1_sel = MuxCase(id_op1_sel, Seq(
-    (id_op1_sel === OP1_C_RS1)  -> OP1_RS1,
-    (id_op1_sel === OP1_C_SP)   -> OP1_RS1,
-    (id_op1_sel === OP1_C_RS1P) -> OP1_RS1,
+  val id_m_op1_sel = MuxCase(M_OP1_IMM, Seq(
+    (id_op1_sel === OP1_RS1)    -> M_OP1_RS1,
+    (id_op1_sel === OP1_C_RS1)  -> M_OP1_RS1,
+    (id_op1_sel === OP1_C_SP)   -> M_OP1_RS1,
+    (id_op1_sel === OP1_C_RS1P) -> M_OP1_RS1,
   ))
-  val id_m_op2_sel = MuxCase(id_op2_sel, Seq(
-    (id_op2_sel === OP2_C_RS2)  -> OP2_RS2,
-    (id_op2_sel === OP2_C_RS2P) -> OP2_RS2,
+  val id_m_op2_sel = MuxCase(M_OP2_IMM, Seq(
+    (id_op2_sel === OP2_RS2)    -> M_OP2_RS2,
+    (id_op2_sel === OP2_C_RS2)  -> M_OP2_RS2,
+    (id_op2_sel === OP2_C_RS2P) -> M_OP2_RS2,
   ))
-  val id_m_op3_sel = MuxCase(id_op3_sel, Seq(
-    (id_op3_sel === OP3_C_RS2)  -> OP3_RS2,
-    (id_op3_sel === OP3_C_RS2P) -> OP3_RS2,
+  val id_m_op3_sel = MuxCase(M_OP3_Z, Seq(
+    (id_op3_sel === OP3_Z)       -> M_OP3_Z,
+    (id_op3_sel === OP3_MSB)     -> M_OP3_MSB,
+    (id_op3_sel === OP3_OP1)     -> M_OP3_OP1,
+    (id_op3_sel === OP3_RS2)     -> M_OP3_RS2,
+    (id_op3_sel === OP3_C_RS2)   -> M_OP3_RS2,
+    (id_op3_sel === OP3_C_RS2P)  -> M_OP3_RS2,
+    (id_op3_sel === OP3_RS2_DMY) -> M_OP3_RS2,
   ))
   val id_m_rs1_addr = MuxCase(id_rs1_addr, Seq(
     (id_op1_sel === OP1_C_RS1)  -> id_c_rs1_addr,
@@ -881,9 +908,9 @@ class Core(
 
   val id_reg_pc_delay         = RegInit(0.U(PC_LEN.W))
   val id_reg_wb_addr_delay    = RegInit(0.U(ADDR_LEN.W))
-  val id_reg_op1_sel_delay    = RegInit(0.U(OP1_LEN.W))
-  val id_reg_op2_sel_delay    = RegInit(0.U(OP2_LEN.W))
-  val id_reg_op3_sel_delay    = RegInit(0.U(OP3_LEN.W))
+  val id_reg_op1_sel_delay    = RegInit(0.U(M_OP1_LEN.W))
+  val id_reg_op2_sel_delay    = RegInit(0.U(M_OP2_LEN.W))
+  val id_reg_op3_sel_delay    = RegInit(0.U(M_OP3_LEN.W))
   val id_reg_rs1_addr_delay   = RegInit(0.U(ADDR_LEN.W))
   val id_reg_rs2_addr_delay   = RegInit(0.U(ADDR_LEN.W))
   val id_reg_rs3_addr_delay   = RegInit(0.U(ADDR_LEN.W))
@@ -1094,35 +1121,34 @@ class Core(
   // Register read (RRD) Stage
 
   rrd_stall :=
-    ((rrd_reg_op1_sel === OP1_RS1) && scoreboard(rrd_reg_rs1_addr)) ||
-    ((rrd_reg_op2_sel === OP2_RS2 || rrd_reg_op3_sel === OP3_RS2) && scoreboard(rrd_reg_rs2_addr)) ||
+    ((rrd_reg_op1_sel === M_OP1_RS1) && scoreboard(rrd_reg_rs1_addr)) ||
+    ((rrd_reg_op2_sel === M_OP2_RS2 || rrd_reg_op3_sel === M_OP3_RS2) && scoreboard(rrd_reg_rs2_addr)) ||
     ((rrd_reg_rf_wen === REN_S) && scoreboard(rrd_reg_wb_addr))
 
   val rrd_op1_data = MuxCase(rrd_reg_op1_data, Seq(
-    (rrd_reg_op1_sel === OP1_RS1 && rrd_reg_rs1_addr === 0.U) -> 0.U(WORD_LEN.W),
+    (rrd_reg_op1_sel === M_OP1_RS1 && rrd_reg_rs1_addr === 0.U) -> 0.U(WORD_LEN.W),
     (ex1_reg_fw_en &&
-     (rrd_reg_op1_sel === OP1_RS1) &&
+     (rrd_reg_op1_sel === M_OP1_RS1) &&
      (rrd_reg_rs1_addr === ex1_reg_wb_addr)) -> ex1_fw_data,
     (ex2_reg_fw_en &&
-     (rrd_reg_op1_sel === OP1_RS1) &&
+     (rrd_reg_op1_sel === M_OP1_RS1) &&
      (rrd_reg_rs1_addr === ex2_reg_wb_addr)) -> ex2_fw_data,
-    (rrd_reg_op1_sel === OP1_RS1) -> regfile(rrd_reg_rs1_addr),
+    (rrd_reg_op1_sel === M_OP1_RS1) -> regfile(rrd_reg_rs1_addr),
   ))
   val rrd_op2_data = MuxCase(rrd_reg_op2_data, Seq(
-    (rrd_reg_op2_sel === OP2_RS2 && rrd_reg_rs2_addr === 0.U) -> 0.U(WORD_LEN.W),
+    (rrd_reg_op2_sel === M_OP2_RS2 && rrd_reg_rs2_addr === 0.U) -> 0.U(WORD_LEN.W),
     (ex1_reg_fw_en &&
-     (rrd_reg_op2_sel === OP2_RS2) &&
+     (rrd_reg_op2_sel === M_OP2_RS2) &&
      (rrd_reg_rs2_addr === ex1_reg_wb_addr)) -> ex1_fw_data,
     (ex2_reg_fw_en &&
-     (rrd_reg_op2_sel === OP2_RS2) &&
+     (rrd_reg_op2_sel === M_OP2_RS2) &&
      (rrd_reg_rs2_addr === ex2_reg_wb_addr)) -> ex2_fw_data,
-    (rrd_reg_op2_sel === OP2_RS2) -> regfile(rrd_reg_rs2_addr),
+    (rrd_reg_op2_sel === M_OP2_RS2) -> regfile(rrd_reg_rs2_addr),
   ))
   val rrd_op3_data = MuxCase(regfile(rrd_reg_rs3_addr), Seq(
-    (rrd_reg_op3_sel === OP3_Z)   -> 0.U(WORD_LEN.W),
-    (rrd_reg_op3_sel === OP3_MSB) -> Fill(WORD_LEN, rrd_op1_data(WORD_LEN-1, WORD_LEN-1)),
-    (rrd_reg_op3_sel === OP3_X2)  -> 0.U(WORD_LEN.W),
-    (rrd_reg_op3_sel === OP3_OP1) -> rrd_op1_data,
+    (rrd_reg_op3_sel === M_OP3_Z)   -> 0.U(WORD_LEN.W),
+    (rrd_reg_op3_sel === M_OP3_MSB) -> Fill(WORD_LEN, rrd_op1_data(WORD_LEN-1, WORD_LEN-1)),
+    (rrd_reg_op3_sel === M_OP3_OP1) -> rrd_op1_data,
     (rrd_reg_rs3_addr === 0.U)    -> 0.U(WORD_LEN.W),
     (ex1_reg_fw_en &&
      (rrd_reg_rs3_addr === ex1_reg_wb_addr)) -> ex1_fw_data,
@@ -2023,9 +2049,9 @@ class Core(
   printf(p"rrd_op1_data     : 0x${Hexadecimal(rrd_op1_data)}\n")
   printf(p"rrd_op2_data     : 0x${Hexadecimal(rrd_op2_data)}\n")
   printf(p"rrd_op3_data     : 0x${Hexadecimal(rrd_op3_data)}\n")
-  // printf(p"rrd_reg_op1_sel  : 0x${Hexadecimal(rrd_reg_op1_sel)}\n")
+  printf(p"rrd_reg_op1_sel  : 0x${Hexadecimal(rrd_reg_op1_sel)}\n")
   // printf(p"ex1_reg_fw_en    : 0x${Hexadecimal(ex1_reg_fw_en)}\n")
-  // printf(p"rrd_reg_rs1_addr  : 0x${Hexadecimal(rrd_reg_rs1_addr)}\n")
+  printf(p"rrd_reg_rs1_addr : 0x${Hexadecimal(rrd_reg_rs1_addr)}\n")
   printf(p"ex1_fw_data      : 0x${Hexadecimal(ex1_fw_data)}\n")
   printf(p"ex1_reg_pc       : 0x${Hexadecimal(Cat(ex1_reg_pc, 0.U(1.W)))}\n")
   printf(p"ex1_reg_is_valid_: 0x${Hexadecimal(ex1_reg_is_valid_inst)}\n")

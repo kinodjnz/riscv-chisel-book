@@ -23,6 +23,7 @@ class RiscvTest extends FixtureAnyFlatSpec with ChiselScalatestTester with TestD
     ("sdc_rx", 7000),
     ("sdc_tx", 7000),
     ("zbb", 1000),
+    ("xcc", 1000),
     ("icache", 200),
     ("dcache", 200),
     ("rv32ui-p-add", 1000),
