@@ -99,10 +99,15 @@ object Consts {
   val OP2_C_IMSL  = 14.U(OP2_LEN.W)
   val OP2_C_IMSS  = 15.U(OP2_LEN.W)
 
-  val OPS_LEN = 2
-  val OPS_Z   = 0.U(OPS_LEN.W)
-  val OPS_MSB = 1.U(OPS_LEN.W)
-  val OPS_OP1 = 2.U(OPS_LEN.W)
+  val OP3_LEN    = 3
+  val OP3_X      = 0.U(OP3_LEN.W)
+  val OP3_Z      = 0.U(OP3_LEN.W)
+  val OP3_MSB    = 1.U(OP3_LEN.W)
+  val OP3_X2     = 2.U(OP3_LEN.W)
+  val OP3_OP1    = 3.U(OP3_LEN.W)
+  val OP3_RS2    = 4.U(OP3_LEN.W)
+  val OP3_C_RS2P = 5.U(OP3_LEN.W)
+  val OP3_C_RS2  = 6.U(OP3_LEN.W)
 
   val REN_LEN = 1
   val REN_X   = 0.U(REN_LEN.W)
