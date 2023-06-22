@@ -1,0 +1,129 @@
+
+xcr:     file format elf32-littleriscv
+
+
+Disassembly of section .text:
+
+00000000 <_start>:
+   0:	20002137          	lui	sp,0x20002
+   4:	020000ef          	jal	ra,24 <main>
+   8:	00050193          	mv	gp,a0
+   c:	05d00893          	li	a7,93
+  10:	00000013          	nop
+  14:	00000013          	nop
+  18:	00000013          	nop
+  1c:	00000013          	nop
+  20:	00000073          	ecall
+
+Disassembly of section .text.startup:
+
+00000024 <main>:
+  24:	a009                	j	26 <test_2>
+
+00000026 <test_2>:
+  26:	4189                	li	gp,2
+  28:	4605                	li	a2,1
+  2a:	123455b7          	lui	a1,0x12345
+  2e:	67858593          	addi	a1,a1,1656 # 12345678 <pass+0x123455ee>
+  32:	fedcc6b7          	lui	a3,0xfedcc
+  36:	a9868693          	addi	a3,a3,-1384 # fedcba98 <pass+0xfedcba0e>
+  3a:	6ec5d533          	.4byte	0x6ec5d533
+  3e:	123453b7          	lui	t2,0x12345
+  42:	67838393          	addi	t2,t2,1656 # 12345678 <pass+0x123455ee>
+  46:	02751663          	bne	a0,t2,72 <fail>
+
+0000004a <test_3>:
+  4a:	418d                	li	gp,3
+  4c:	4601                	li	a2,0
+  4e:	123455b7          	lui	a1,0x12345
+  52:	67858593          	addi	a1,a1,1656 # 12345678 <pass+0x123455ee>
+  56:	fedcc6b7          	lui	a3,0xfedcc
+  5a:	a9868693          	addi	a3,a3,-1384 # fedcba98 <pass+0xfedcba0e>
+  5e:	6ec5d533          	.4byte	0x6ec5d533
+  62:	fedcc3b7          	lui	t2,0xfedcc
+  66:	a9838393          	addi	t2,t2,-1384 # fedcba98 <pass+0xfedcba0e>
+  6a:	00751463          	bne	a0,t2,72 <fail>
+  6e:	00750e63          	beq	a0,t2,8a <pass>
+
+00000072 <fail>:
+  72:	0ff0000f          	fence
+  76:	00018063          	beqz	gp,76 <fail+0x4>
+  7a:	0186                	slli	gp,gp,0x1
+  7c:	0011e193          	ori	gp,gp,1
+  80:	05d00893          	li	a7,93
+  84:	850e                	mv	a0,gp
+  86:	00000073          	ecall
+
+0000008a <pass>:
+  8a:	0ff0000f          	fence
+  8e:	4185                	li	gp,1
+  90:	05d00893          	li	a7,93
+  94:	4501                	li	a0,0
+  96:	00000073          	ecall
+  9a:	0000                	unimp
+  9c:	4501                	li	a0,0
+  9e:	8082                	ret
+
+Disassembly of section .comment:
+
+00000000 <.comment>:
+   0:	3a434347          	fmsub.d	ft6,ft6,ft4,ft7,rmm
+   4:	2820                	fld	fs0,80(s0)
+   6:	2029                	jal	10 <_start+0x10>
+   8:	3131                	jal	fffffc14 <pass+0xfffffb8a>
+   a:	312e                	fld	ft2,232(sp)
+   c:	302e                	fld	ft0,232(sp)
+	...
+
+Disassembly of section .riscv.attributes:
+
+00000000 <.riscv.attributes>:
+   0:	8541                	srai	a0,a0,0x10
+   2:	0000                	unimp
+   4:	7200                	flw	fs0,32(a2)
+   6:	7369                	lui	t1,0xffffa
+   8:	01007663          	bgeu	zero,a6,14 <_start+0x14>
+   c:	0000007b          	.4byte	0x7b
+  10:	1004                	addi	s1,sp,32
+  12:	7205                	lui	tp,0xfffe1
+  14:	3376                	fld	ft6,376(sp)
+  16:	6932                	flw	fs2,12(sp)
+  18:	7032                	flw	ft0,44(sp)
+  1a:	5f30                	lw	a2,120(a4)
+  1c:	3261                	jal	fffff9a4 <pass+0xfffff91a>
+  1e:	3070                	fld	fa2,224(s0)
+  20:	665f 7032 5f30      	.byte	0x5f, 0x66, 0x32, 0x70, 0x30, 0x5f
+  26:	3264                	fld	fs1,224(a2)
+  28:	3070                	fld	fa2,224(s0)
+  2a:	635f 7032 5f30      	.byte	0x5f, 0x63, 0x32, 0x70, 0x30, 0x5f
+  30:	3176                	fld	ft2,376(sp)
+  32:	3070                	fld	fa2,224(s0)
+  34:	7a5f 6576 3233      	.byte	0x5f, 0x7a, 0x76, 0x65, 0x33, 0x32
+  3a:	3166                	fld	ft2,120(sp)
+  3c:	3070                	fld	fa2,224(s0)
+  3e:	7a5f 6576 3233      	.byte	0x5f, 0x7a, 0x76, 0x65, 0x33, 0x32
+  44:	3178                	fld	fa4,224(a0)
+  46:	3070                	fld	fa2,224(s0)
+  48:	7a5f 6576 3436      	.byte	0x5f, 0x7a, 0x76, 0x65, 0x36, 0x34
+  4e:	3164                	fld	fs1,224(a0)
+  50:	3070                	fld	fa2,224(s0)
+  52:	7a5f 6576 3436      	.byte	0x5f, 0x7a, 0x76, 0x65, 0x36, 0x34
+  58:	3166                	fld	ft2,120(sp)
+  5a:	3070                	fld	fa2,224(s0)
+  5c:	7a5f 6576 3436      	.byte	0x5f, 0x7a, 0x76, 0x65, 0x36, 0x34
+  62:	3178                	fld	fa4,224(a0)
+  64:	3070                	fld	fa2,224(s0)
+  66:	7a5f 6c76 3231      	.byte	0x5f, 0x7a, 0x76, 0x6c, 0x31, 0x32
+  6c:	6238                	flw	fa4,64(a2)
+  6e:	7031                	c.lui	zero,0xfffec
+  70:	5f30                	lw	a2,120(a4)
+  72:	767a                	flw	fa2,188(sp)
+  74:	336c                	fld	fa1,224(a4)
+  76:	6232                	flw	ft4,12(sp)
+  78:	7031                	c.lui	zero,0xfffec
+  7a:	5f30                	lw	a2,120(a4)
+  7c:	767a                	flw	fa2,188(sp)
+  7e:	366c                	fld	fa1,232(a2)
+  80:	6234                	flw	fa3,64(a2)
+  82:	7031                	c.lui	zero,0xfffec
+  84:	0030                	addi	a2,sp,8

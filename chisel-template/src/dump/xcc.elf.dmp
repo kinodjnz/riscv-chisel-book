@@ -43,7 +43,7 @@ Disassembly of section .text.startup:
   5e:	71ca                	flw	ft3,176(sp)
   60:	31d0                	fld	fa2,160(a1)
   62:	fbb00393          	li	t2,-69
-  66:	08761263          	bne	a2,t2,ea <fail>
+  66:	24761f63          	bne	a2,t2,2c4 <fail>
 
 0000006a <test_3>:
   6a:	00000597          	auipc	a1,0x0
@@ -54,7 +54,7 @@ Disassembly of section .text.startup:
   78:	61ea                	flw	ft3,152(sp)
   7a:	61f0                	flw	fa2,68(a1)
   7c:	0dd00393          	li	t2,221
-  80:	06761563          	bne	a2,t2,ea <fail>
+  80:	24761263          	bne	a2,t2,2c4 <fail>
 
 00000084 <test_4>:
   84:	00000597          	auipc	a1,0x0
@@ -65,8 +65,8 @@ Disassembly of section .text.startup:
   92:	35ca                	fld	fa1,176(sp)
   94:	25d2                	fld	fa1,272(sp)
   96:	73f1                	lui	t2,0xffffc
-  98:	a9938393          	addi	t2,t2,-1383 # ffffba99 <pass+0xffffb997>
-  9c:	04761763          	bne	a2,t2,ea <fail>
+  98:	a9938393          	addi	t2,t2,-1383 # ffffba99 <pass+0xffffb7bd>
+  9c:	22761463          	bne	a2,t2,2c4 <fail>
 
 000000a0 <test_5>:
   a0:	00000597          	auipc	a1,0x0
@@ -77,8 +77,8 @@ Disassembly of section .text.startup:
   ae:	35ea                	fld	fa1,184(sp)
   b0:	2df2                	fld	fs11,280(sp)
   b2:	63c1                	lui	t2,0x10
-  b4:	edd38393          	addi	t2,t2,-291 # fedd <pass+0xfddb>
-  b8:	02761963          	bne	a2,t2,ea <fail>
+  b4:	edd38393          	addi	t2,t2,-291 # fedd <pass+0xfc01>
+  b8:	20761663          	bne	a2,t2,2c4 <fail>
 
 000000bc <test_6>:
   bc:	00000597          	auipc	a1,0x0
@@ -87,7 +87,7 @@ Disassembly of section .text.startup:
   c6:	3982                	fld	fs3,32(sp)
   c8:	4190                	lw	a2,0(a1)
   ca:	4381                	li	t2,0
-  cc:	00761f63          	bne	a2,t2,ea <fail>
+  cc:	1e761c63          	bne	a2,t2,2c4 <fail>
 
 000000d0 <test_7>:
   d0:	00000597          	auipc	a1,0x0
@@ -97,27 +97,242 @@ Disassembly of section .text.startup:
   dc:	3dae                	fld	fs11,232(sp)
   de:	4590                	lw	a2,8(a1)
   e0:	43c1                	li	t2,16
-  e2:	00761463          	bne	a2,t2,ea <fail>
-  e6:	00760e63          	beq	a2,t2,102 <pass>
+  e2:	1e761163          	bne	a2,t2,2c4 <fail>
 
-000000ea <fail>:
-  ea:	0ff0000f          	fence
-  ee:	00018063          	beqz	gp,ee <fail+0x4>
-  f2:	0186                	slli	gp,gp,0x1
-  f4:	0011e193          	ori	gp,gp,1
-  f8:	05d00893          	li	a7,93
-  fc:	850e                	mv	a0,gp
-  fe:	00000073          	ecall
+000000e6 <test_8>:
+  e6:	41a1                	li	gp,8
+  e8:	00030637          	lui	a2,0x30
+  ec:	e7d60613          	addi	a2,a2,-387 # 2fe7d <pass+0x2fba1>
+  f0:	aaaab5b7          	lui	a1,0xaaaab
+  f4:	aab58593          	addi	a1,a1,-1365 # aaaaaaab <pass+0xaaaaa7cf>
+  f8:	9e4d                	.2byte	0x9e4d
+  fa:	63c1                	lui	t2,0x10
+  fc:	f7f38393          	addi	t2,t2,-129 # ff7f <pass+0xfca3>
+ 100:	1c761263          	bne	a2,t2,2c4 <fail>
 
-00000102 <pass>:
- 102:	0ff0000f          	fence
- 106:	4185                	li	gp,1
- 108:	05d00893          	li	a7,93
- 10c:	4501                	li	a0,0
- 10e:	00000073          	ecall
- 112:	0000                	unimp
- 114:	4501                	li	a0,0
- 116:	8082                	ret
+00000104 <test_9>:
+ 104:	41a5                	li	gp,9
+ 106:	1234a637          	lui	a2,0x1234a
+ 10a:	abc60613          	addi	a2,a2,-1348 # 12349abc <pass+0x123497e0>
+ 10e:	9e61                	vmsge.vx	v28,v0,ra,v0.t
+ 110:	0bc00393          	li	t2,188
+ 114:	1a761863          	bne	a2,t2,2c4 <fail>
+
+00000118 <test_10>:
+ 118:	41a9                	li	gp,10
+ 11a:	1234a637          	lui	a2,0x1234a
+ 11e:	abc60613          	addi	a2,a2,-1348 # 12349abc <pass+0x123497e0>
+ 122:	9e65                	.2byte	0x9e65
+ 124:	fbc00393          	li	t2,-68
+ 128:	18761e63          	bne	a2,t2,2c4 <fail>
+
+0000012c <test_11>:
+ 12c:	41ad                	li	gp,11
+ 12e:	1234a637          	lui	a2,0x1234a
+ 132:	abc60613          	addi	a2,a2,-1348 # 12349abc <pass+0x123497e0>
+ 136:	9e69                	.2byte	0x9e69
+ 138:	63a9                	lui	t2,0xa
+ 13a:	abc38393          	addi	t2,t2,-1348 # 9abc <pass+0x97e0>
+ 13e:	18761363          	bne	a2,t2,2c4 <fail>
+
+00000142 <test_12>:
+ 142:	41b1                	li	gp,12
+ 144:	1234a637          	lui	a2,0x1234a
+ 148:	abc60613          	addi	a2,a2,-1348 # 12349abc <pass+0x123497e0>
+ 14c:	9e6d                	.2byte	0x9e6d
+ 14e:	73e9                	lui	t2,0xffffa
+ 150:	abc38393          	addi	t2,t2,-1348 # ffff9abc <pass+0xffff97e0>
+ 154:	16761863          	bne	a2,t2,2c4 <fail>
+
+00000158 <test_13>:
+ 158:	41b5                	li	gp,13
+ 15a:	1234a637          	lui	a2,0x1234a
+ 15e:	abc60613          	addi	a2,a2,-1348 # 12349abc <pass+0x123497e0>
+ 162:	9e75                	.2byte	0x9e75
+ 164:	edcb63b7          	lui	t2,0xedcb6
+ 168:	54338393          	addi	t2,t2,1347 # edcb6543 <pass+0xedcb6267>
+ 16c:	14761c63          	bne	a2,t2,2c4 <fail>
+
+00000170 <test_14>:
+ 170:	41b9                	li	gp,14
+ 172:	1234a637          	lui	a2,0x1234a
+ 176:	abc60613          	addi	a2,a2,-1348 # 12349abc <pass+0x123497e0>
+ 17a:	9e79                	.2byte	0x9e79
+ 17c:	edcb63b7          	lui	t2,0xedcb6
+ 180:	54438393          	addi	t2,t2,1348 # edcb6544 <pass+0xedcb6268>
+ 184:	14761063          	bne	a2,t2,2c4 <fail>
+
+00000188 <test_15>:
+ 188:	41bd                	li	gp,15
+ 18a:	4601                	li	a2,0
+ 18c:	98765537          	lui	a0,0x98765
+ 190:	43250513          	addi	a0,a0,1074 # 98765432 <pass+0x98765156>
+ 194:	987655b7          	lui	a1,0x98765
+ 198:	43258593          	addi	a1,a1,1074 # 98765432 <pass+0x98765156>
+ 19c:	814c                	.2byte	0x814c
+ 19e:	a011                	j	1a2 <test_15+0x1a>
+ 1a0:	a011                	j	1a4 <test_15+0x1c>
+ 1a2:	a20d                	j	2c4 <fail>
+ 1a4:	4381                	li	t2,0
+ 1a6:	10761f63          	bne	a2,t2,2c4 <fail>
+
+000001aa <test_16>:
+ 1aa:	41c1                	li	gp,16
+ 1ac:	4601                	li	a2,0
+ 1ae:	4501                	li	a0,0
+ 1b0:	4585                	li	a1,1
+ 1b2:	814c                	.2byte	0x814c
+ 1b4:	a011                	j	1b8 <test_16+0xe>
+ 1b6:	a239                	j	2c4 <fail>
+ 1b8:	4381                	li	t2,0
+ 1ba:	10761563          	bne	a2,t2,2c4 <fail>
+
+000001be <test_17>:
+ 1be:	41c5                	li	gp,17
+ 1c0:	4601                	li	a2,0
+ 1c2:	4501                	li	a0,0
+ 1c4:	4585                	li	a1,1
+ 1c6:	a14c                	fsd	fa1,128(a0)
+ 1c8:	a011                	j	1cc <test_17+0xe>
+ 1ca:	a011                	j	1ce <test_17+0x10>
+ 1cc:	a8e5                	j	2c4 <fail>
+ 1ce:	4381                	li	t2,0
+ 1d0:	0e761a63          	bne	a2,t2,2c4 <fail>
+
+000001d4 <test_18>:
+ 1d4:	41c9                	li	gp,18
+ 1d6:	4601                	li	a2,0
+ 1d8:	98765537          	lui	a0,0x98765
+ 1dc:	43250513          	addi	a0,a0,1074 # 98765432 <pass+0x98765156>
+ 1e0:	987655b7          	lui	a1,0x98765
+ 1e4:	43258593          	addi	a1,a1,1074 # 98765432 <pass+0x98765156>
+ 1e8:	a14c                	fsd	fa1,128(a0)
+ 1ea:	a011                	j	1ee <test_18+0x1a>
+ 1ec:	a8e1                	j	2c4 <fail>
+ 1ee:	4381                	li	t2,0
+ 1f0:	0c761a63          	bne	a2,t2,2c4 <fail>
+
+000001f4 <test_19>:
+ 1f4:	41cd                	li	gp,19
+ 1f6:	06000593          	li	a1,96
+ 1fa:	b1b2                	fsd	fa2,224(sp)
+ 1fc:	04000393          	li	t2,64
+ 200:	0c761263          	bne	a2,t2,2c4 <fail>
+
+00000204 <test_20>:
+ 204:	41d1                	li	gp,20
+ 206:	05a00513          	li	a0,90
+ 20a:	02a00593          	li	a1,42
+ 20e:	e992                	fsw	ft4,208(sp)
+ 210:	08400393          	li	t2,132
+ 214:	0a761863          	bne	a2,t2,2c4 <fail>
+
+00000218 <test_21>:
+ 218:	41d5                	li	gp,21
+ 21a:	4581                	li	a1,0
+ 21c:	e1b2                	fsw	fa2,192(sp)
+ 21e:	4385                	li	t2,1
+ 220:	0a761263          	bne	a2,t2,2c4 <fail>
+
+00000224 <test_22>:
+ 224:	41d9                	li	gp,22
+ 226:	4585                	li	a1,1
+ 228:	e1b2                	fsw	fa2,192(sp)
+ 22a:	4381                	li	t2,0
+ 22c:	08761c63          	bne	a2,t2,2c4 <fail>
+
+00000230 <test_23>:
+ 230:	41dd                	li	gp,23
+ 232:	4581                	li	a1,0
+ 234:	f1b2                	fsw	fa2,224(sp)
+ 236:	4381                	li	t2,0
+ 238:	08761663          	bne	a2,t2,2c4 <fail>
+
+0000023c <test_24>:
+ 23c:	41e1                	li	gp,24
+ 23e:	4585                	li	a1,1
+ 240:	f1b2                	fsw	fa2,224(sp)
+ 242:	4385                	li	t2,1
+ 244:	08761063          	bne	a2,t2,2c4 <fail>
+
+00000248 <test_25>:
+ 248:	41e5                	li	gp,25
+ 24a:	45ad                	li	a1,11
+ 24c:	f9b2                	fsw	fa2,240(sp)
+ 24e:	43a5                	li	t2,9
+ 250:	06761a63          	bne	a2,t2,2c4 <fail>
+
+00000254 <test_26>:
+ 254:	41e9                	li	gp,26
+ 256:	55ed                	li	a1,-5
+ 258:	452d                	li	a0,11
+ 25a:	e9d2                	fsw	fs4,208(sp)
+ 25c:	4385                	li	t2,1
+ 25e:	06761363          	bne	a2,t2,2c4 <fail>
+
+00000262 <test_27>:
+ 262:	41ed                	li	gp,27
+ 264:	55e5                	li	a1,-7
+ 266:	5565                	li	a0,-7
+ 268:	e9d2                	fsw	fs4,208(sp)
+ 26a:	4381                	li	t2,0
+ 26c:	04761c63          	bne	a2,t2,2c4 <fail>
+
+00000270 <test_28>:
+ 270:	41f1                	li	gp,28
+ 272:	45ad                	li	a1,11
+ 274:	556d                	li	a0,-5
+ 276:	e9d2                	fsw	fs4,208(sp)
+ 278:	4381                	li	t2,0
+ 27a:	04761563          	bne	a2,t2,2c4 <fail>
+
+0000027e <test_29>:
+ 27e:	41f5                	li	gp,29
+ 280:	987655b7          	lui	a1,0x98765
+ 284:	43258593          	addi	a1,a1,1074 # 98765432 <pass+0x98765156>
+ 288:	452d                	li	a0,11
+ 28a:	e9f2                	fsw	ft8,208(sp)
+ 28c:	4381                	li	t2,0
+ 28e:	02761b63          	bne	a2,t2,2c4 <fail>
+
+00000292 <test_30>:
+ 292:	41f9                	li	gp,30
+ 294:	987655b7          	lui	a1,0x98765
+ 298:	43258593          	addi	a1,a1,1074 # 98765432 <pass+0x98765156>
+ 29c:	98765537          	lui	a0,0x98765
+ 2a0:	43250513          	addi	a0,a0,1074 # 98765432 <pass+0x98765156>
+ 2a4:	e9f2                	fsw	ft8,208(sp)
+ 2a6:	4381                	li	t2,0
+ 2a8:	00761e63          	bne	a2,t2,2c4 <fail>
+
+000002ac <test_31>:
+ 2ac:	41fd                	li	gp,31
+ 2ae:	45ad                	li	a1,11
+ 2b0:	98765537          	lui	a0,0x98765
+ 2b4:	43250513          	addi	a0,a0,1074 # 98765432 <pass+0x98765156>
+ 2b8:	e9f2                	fsw	ft8,208(sp)
+ 2ba:	4385                	li	t2,1
+ 2bc:	00761463          	bne	a2,t2,2c4 <fail>
+ 2c0:	00760e63          	beq	a2,t2,2dc <pass>
+
+000002c4 <fail>:
+ 2c4:	0ff0000f          	fence
+ 2c8:	00018063          	beqz	gp,2c8 <fail+0x4>
+ 2cc:	0186                	slli	gp,gp,0x1
+ 2ce:	0011e193          	ori	gp,gp,1
+ 2d2:	05d00893          	li	a7,93
+ 2d6:	850e                	mv	a0,gp
+ 2d8:	00000073          	ecall
+
+000002dc <pass>:
+ 2dc:	0ff0000f          	fence
+ 2e0:	4185                	li	gp,1
+ 2e2:	05d00893          	li	a7,93
+ 2e6:	4501                	li	a0,0
+ 2e8:	00000073          	ecall
+ 2ec:	0000                	unimp
+ 2ee:	4501                	li	a0,0
+ 2f0:	8082                	ret
 	...
 
 Disassembly of section .comment:
@@ -126,7 +341,7 @@ Disassembly of section .comment:
    0:	3a434347          	fmsub.d	ft6,ft6,ft4,ft7,rmm
    4:	2820                	fld	fs0,80(s0)
    6:	2029                	jal	10 <_start+0x10>
-   8:	3131                	jal	fffffc14 <pass+0xfffffb12>
+   8:	3131                	jal	fffffc14 <pass+0xfffff938>
    a:	312e                	fld	ft2,232(sp)
    c:	302e                	fld	ft0,232(sp)
 	...
@@ -146,7 +361,7 @@ Disassembly of section .riscv.attributes:
   16:	6932                	flw	fs2,12(sp)
   18:	7032                	flw	ft0,44(sp)
   1a:	5f30                	lw	a2,120(a4)
-  1c:	3261                	jal	fffff9a4 <pass+0xfffff8a2>
+  1c:	3261                	jal	fffff9a4 <pass+0xfffff6c8>
   1e:	3070                	fld	fa2,224(s0)
   20:	665f 7032 5f30      	.byte	0x5f, 0x66, 0x32, 0x70, 0x30, 0x5f
   26:	3264                	fld	fs1,224(a2)

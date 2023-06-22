@@ -660,6 +660,7 @@ class Core(
 
   val id_rs1_addr = id_inst(19, 15)
   val id_rs2_addr = id_inst(24, 20)
+  val id_rs3_addr = id_inst(31, 27)
   val id_w_wb_addr  = id_inst(11, 7)
 
   val ex2_wb_data = Wire(UInt(WORD_LEN.W))
@@ -763,10 +764,10 @@ class Core(
       DIVU       -> List(ALU_DIVU  , OP1_RS1   , OP2_RS2    , OP3_X     , REN_S, WB_MD,  WBA_RD , CSR_X, MW_X),
       REM        -> List(ALU_REM   , OP1_RS1   , OP2_RS2    , OP3_X     , REN_S, WB_MD,  WBA_RD , CSR_X, MW_X),
       REMU       -> List(ALU_REMU  , OP1_RS1   , OP2_RS2    , OP3_X     , REN_S, WB_MD,  WBA_RD , CSR_X, MW_X),
-      MAX        -> List(ALU_MAX   , OP1_RS1   , OP2_RS2    , OP3_X     , REN_S, WB_ALU, WBA_RD , CSR_X, MW_X),
-      MAXU       -> List(ALU_MAXU  , OP1_RS1   , OP2_RS2    , OP3_X     , REN_S, WB_ALU, WBA_RD , CSR_X, MW_X),
-      MIN        -> List(ALU_MIN   , OP1_RS1   , OP2_RS2    , OP3_X     , REN_S, WB_ALU, WBA_RD , CSR_X, MW_X),
-      MINU       -> List(ALU_MINU  , OP1_RS1   , OP2_RS2    , OP3_X     , REN_S, WB_ALU, WBA_RD , CSR_X, MW_X),
+      MAX        -> List(ALU_MAX   , OP1_RS1   , OP2_RS2    , OP3_X     , REN_S, WB_BIT, WBA_RD , CSR_X, MW_X),
+      MAXU       -> List(ALU_MAXU  , OP1_RS1   , OP2_RS2    , OP3_X     , REN_S, WB_BIT, WBA_RD , CSR_X, MW_X),
+      MIN        -> List(ALU_MIN   , OP1_RS1   , OP2_RS2    , OP3_X     , REN_S, WB_BIT, WBA_RD , CSR_X, MW_X),
+      MINU       -> List(ALU_MINU  , OP1_RS1   , OP2_RS2    , OP3_X     , REN_S, WB_BIT, WBA_RD , CSR_X, MW_X),
       CLZ        -> List(ALU_CLZ   , OP1_RS1   , OP2_X      , OP3_X     , REN_S, WB_BIT, WBA_RD , CSR_X, MW_X),
       CTZ        -> List(ALU_CTZ   , OP1_RS1   , OP2_X      , OP3_X     , REN_S, WB_BIT, WBA_RD , CSR_X, MW_X),
       CPOP       -> List(ALU_CPOP  , OP1_RS1   , OP2_X      , OP3_X     , REN_S, WB_BIT, WBA_RD , CSR_X, MW_X),
@@ -780,6 +781,7 @@ class Core(
       ROL        -> List(ALU_FSL   , OP1_RS1   , OP2_RS2    , OP3_OP1   , REN_S, WB_ALU, WBA_RD , CSR_X, MW_X),
       ROR        -> List(ALU_FSR   , OP1_RS1   , OP2_RS2    , OP3_OP1   , REN_S, WB_ALU, WBA_RD , CSR_X, MW_X),
       RORI       -> List(ALU_FSR   , OP1_RS1   , OP2_IMI    , OP3_OP1   , REN_S, WB_ALU, WBA_RD , CSR_X, MW_X),
+      CMOV       -> List(ALU_CMOV  , OP1_RS1   , OP2_RS2    , OP3_RS3   , REN_S, WB_ALU, WBA_RD , CSR_X, MW_X),
       C_ILL      -> List(ALU_X     , OP1_X     , OP2_X      , OP3_X     , REN_X, WB_X  , WBA_C  , CSR_X, MW_X),
       C_ADDI4SPN -> List(ALU_ADD   , OP1_C_SP  , OP2_C_IMIW , OP3_X     , REN_S, WB_ALU, WBA_CP2, CSR_X, MW_X),
       C_ADDI16SP -> List(ALU_ADD   , OP1_C_RS1 , OP2_C_IMI16, OP3_X     , REN_S, WB_ALU, WBA_C  , CSR_X, MW_X),
@@ -896,7 +898,7 @@ class Core(
     (id_op3_sel === OP3_RS2)     -> M_OP3_RS,
     (id_op3_sel === OP3_C_RS2)   -> M_OP3_RS,
     (id_op3_sel === OP3_C_RS2P)  -> M_OP3_RS,
-    (id_op3_sel === OP3_RS2_DMY) -> M_OP3_RS,
+    (id_op3_sel === OP3_RS3)     -> M_OP3_RS,
   ))
   val id_m_rs1_addr = MuxCase(id_rs1_addr, Seq(
     (id_op1_sel === OP1_C_RS1)  -> id_c_rs1_addr,
@@ -912,6 +914,7 @@ class Core(
   val id_m_rs3_addr = MuxCase(id_rs2_addr, Seq(
     (id_op3_sel === OP3_C_RS2)  -> id_c_rs2_addr,
     (id_op3_sel === OP3_C_RS2P) -> id_c_rs2p_addr,
+    (id_op3_sel === OP3_RS3)    -> id_rs3_addr,
   ))
   val id_m_imm_b_sext = MuxCase(id_imm_b_sext, Seq(
     (id_wba === WBA_CBR) -> id_c_imm_b,
@@ -1265,13 +1268,10 @@ class Core(
     (ex1_reg_exe_fun === ALU_FSR)   -> (Cat(ex1_reg_op3_data(WORD_LEN-2, 0), ex1_reg_op1_data) >> ex1_reg_op2_data(4, 0))(WORD_LEN-1, 0),
     (ex1_reg_exe_fun === ALU_SLT)   -> (ex1_reg_op1_data.asSInt() < ex1_reg_op2_data.asSInt()).asUInt(),
     (ex1_reg_exe_fun === ALU_SLTU)  -> (ex1_reg_op1_data < ex1_reg_op2_data).asUInt(),
-    (ex1_reg_exe_fun === ALU_MAX)   -> Mux(ex1_reg_op1_data.asSInt() < ex1_reg_op2_data.asSInt(), ex1_reg_op2_data, ex1_reg_op1_data),
-    (ex1_reg_exe_fun === ALU_MAXU)  -> Mux(ex1_reg_op1_data < ex1_reg_op2_data, ex1_reg_op2_data, ex1_reg_op1_data),
-    (ex1_reg_exe_fun === ALU_MIN)   -> Mux(ex1_reg_op1_data.asSInt() < ex1_reg_op2_data.asSInt(), ex1_reg_op1_data, ex1_reg_op2_data),
-    (ex1_reg_exe_fun === ALU_MINU)  -> Mux(ex1_reg_op1_data < ex1_reg_op2_data, ex1_reg_op1_data, ex1_reg_op2_data),
     (ex1_reg_exe_fun === ALU_ANDN)  -> (ex1_reg_op1_data & ~ex1_reg_op2_data),
     (ex1_reg_exe_fun === ALU_XNOR)  -> (ex1_reg_op1_data ^ ~ex1_reg_op2_data),
     (ex1_reg_exe_fun === ALU_ORN)   -> (ex1_reg_op1_data | ~ex1_reg_op2_data),
+    (ex1_reg_exe_fun === ALU_CMOV)  -> Mux(0.U(WORD_LEN.W) < ex1_reg_op2_data, ex1_reg_op1_data, ex1_reg_op3_data),
   ))
 
   val ex1_mullu  = (ex1_reg_op1_data * ex1_reg_op2_data(WORD_LEN/2-1, 0))
@@ -1290,6 +1290,10 @@ class Core(
     (ex1_reg_exe_fun === ALU_REV8)  -> Cat(ex1_reg_op1_data(7, 0), ex1_reg_op1_data(15, 8), ex1_reg_op1_data(23, 16), ex1_reg_op1_data(31, 24)),
     (ex1_reg_exe_fun === ALU_SEXTB) -> Cat(Fill(24, ex1_reg_op1_data(7)), ex1_reg_op1_data(7, 0)),
     (ex1_reg_exe_fun === ALU_SEXTH) -> Cat(Fill(16, ex1_reg_op1_data(15)), ex1_reg_op1_data(15, 0)),
+    (ex1_reg_exe_fun === ALU_MAX)   -> Mux(ex1_reg_op1_data.asSInt() < ex1_reg_op2_data.asSInt(), ex1_reg_op2_data, ex1_reg_op1_data),
+    (ex1_reg_exe_fun === ALU_MAXU)  -> Mux(ex1_reg_op1_data < ex1_reg_op2_data, ex1_reg_op2_data, ex1_reg_op1_data),
+    (ex1_reg_exe_fun === ALU_MIN)   -> Mux(ex1_reg_op1_data.asSInt() < ex1_reg_op2_data.asSInt(), ex1_reg_op1_data, ex1_reg_op2_data),
+    (ex1_reg_exe_fun === ALU_MINU)  -> Mux(ex1_reg_op1_data < ex1_reg_op2_data, ex1_reg_op1_data, ex1_reg_op2_data),
   ))
 
   val ex1_divrem = WireDefault(false.B)
