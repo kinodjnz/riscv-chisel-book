@@ -669,6 +669,7 @@ class Core(
   val id_c_wb_addr   = id_inst(11, 7)
   val id_c_rs1p_addr = Cat(1.U(2.W), id_inst(9, 7))
   val id_c_rs2p_addr = Cat(1.U(2.W), id_inst(4, 2))
+  val id_c_rs3p_addr = Cat(1.U(2.W), id_inst(12, 10))
   val id_c_wb1p_addr = Cat(1.U(2.W), id_inst(9, 7))
   val id_c_wb2p_addr = Cat(1.U(2.W), id_inst(4, 2))
 
@@ -695,11 +696,15 @@ class Core(
   val id_c_imm_b = Cat(Fill(24, id_inst(12)), id_inst(6, 5), id_inst(2), id_inst(11, 10), id_inst(4, 3), 0.U(1.W))
   val id_c_imm_j = Cat(Fill(21, id_inst(12)), id_inst(8), id_inst(10, 9), id_inst(6), id_inst(7), id_inst(2), id_inst(11), id_inst(5, 3), 0.U(1.W))
 
+  val id_c_imm_b2 = Cat(Fill(27, id_inst(12)), id_inst(11, 10), id_inst(6, 5), 0.U(1.W))
+  val id_c_imm_u = Cat(Fill(12, 0.U), id_inst(12, 5), Fill(12, 0.U))
   val id_c_imm_lsb = Cat(Fill(27, 0.U), id_inst(11, 10), id_inst(6, 5), id_inst(12))
   val id_c_imm_lsh = Cat(Fill(28, 0.U), id_inst(10), id_inst(6, 5), 0.U(1.W))
   val id_c_imm_sw0 = Cat(Fill(25, 0.U), id_inst(5, 3), id_inst(10), id_inst(6), Fill(2, 0.U))
   val id_c_imm_sb0 = Cat(Fill(28, 0.U), id_inst(10), id_inst(6, 4))
   val id_c_imm_sh0 = Cat(Fill(28, 0.U), id_inst(4), id_inst(10), id_inst(6, 5), 0.U(1.W))
+  val id_c_imm_a2w = Cat(Fill(26, id_inst(12)), id_inst(5), id_inst(11, 10), id_inst(6), Fill(2, 0.U))
+  val id_c_imm_a2b = Cat(Fill(30, id_inst(12)), id_inst(11, 10))
 
   val csignals = ListLookup(id_inst,
                     List(ALU_X     , OP1_RS1   , OP2_RS2    , OP3_X     , REN_X, WB_X  , WBA_RD , CSR_X, MW_X),
@@ -792,8 +797,8 @@ class Core(
       C_AND      -> List(ALU_AND   , OP1_C_RS1P, OP2_C_RS2P , OP3_X     , REN_S, WB_ALU, WBA_CP1, CSR_X, MW_X),
       C_SLLI     -> List(ALU_FSL   , OP1_C_RS1 , OP2_C_IMI  , OP3_X     , REN_S, WB_ALU, WBA_C  , CSR_X, MW_X),
       C_J        -> List(ALU_ADD   , OP1_PC    , OP2_C_IMJ  , OP3_X     , REN_X, WB_PC , WBA_C  , CSR_X, MW_X),
-      C_BEQZ     -> List(BR_BEQ    , OP1_C_RS1P, OP2_Z      , OP3_X     , REN_X, WB_X  , WBA_C  , CSR_X, MW_X),
-      C_BNEZ     -> List(BR_BNE    , OP1_C_RS1P, OP2_Z      , OP3_X     , REN_X, WB_X  , WBA_C  , CSR_X, MW_X),
+      C_BEQZ     -> List(BR_BEQ    , OP1_C_RS1P, OP2_Z      , OP3_X     , REN_X, WB_X  , WBA_CBR, CSR_X, MW_X),
+      C_BNEZ     -> List(BR_BNE    , OP1_C_RS1P, OP2_Z      , OP3_X     , REN_X, WB_X  , WBA_CBR, CSR_X, MW_X),
       C_JR       -> List(ALU_ADD   , OP1_C_RS1 , OP2_Z      , OP3_X     , REN_X, WB_PC , WBA_C  , CSR_X, MW_X),
       C_JALR     -> List(ALU_ADD   , OP1_C_RS1 , OP2_Z      , OP3_X     , REN_S, WB_PC , WBA_RA , CSR_X, MW_X),
       C_JAL      -> List(ALU_ADD   , OP1_PC    , OP2_C_IMJ  , OP3_X     , REN_S, WB_PC , WBA_RA , CSR_X, MW_X),
@@ -810,6 +815,23 @@ class Core(
       C_SB0      -> List(ALU_ADD   , OP1_C_RS1P, OP2_C_IMSB0, OP3_Z     , REN_X, WB_ST , WBA_C  , CSR_X, MW_B),
       C_SH0      -> List(ALU_ADD   , OP1_C_RS1P, OP2_C_IMSH0, OP3_Z     , REN_X, WB_ST , WBA_C  , CSR_X, MW_H),
       C_SB       -> List(ALU_ADD   , OP1_C_RS1P, OP2_C_IMLSB, OP3_C_RS2P, REN_X, WB_ST , WBA_C  , CSR_X, MW_B),
+      C_AUIPC    -> List(ALU_ADD   , OP1_PC    , OP2_C_IMU  , OP3_X     , REN_S, WB_ALU, WBA_CP2, CSR_X, MW_X),
+      C_MUL      -> List(ALU_MUL   , OP1_C_RS1P, OP2_C_RS2P , OP3_X     , REN_S, WB_MD,  WBA_CP1, CSR_X, MW_X),
+      C_ZEXTB    -> List(ALU_AND   , OP1_C_RS1P, OP2_IM255  , OP3_X     , REN_S, WB_ALU, WBA_CP1, CSR_X, MW_X),
+      C_SEXTB    -> List(ALU_SEXTB , OP1_C_RS1P, OP2_X      , OP3_X     , REN_S, WB_BIT, WBA_CP1, CSR_X, MW_X),
+      C_SEXTH    -> List(ALU_SEXTH , OP1_C_RS1P, OP2_X      , OP3_X     , REN_S, WB_BIT, WBA_CP1, CSR_X, MW_X),
+      C_ZEXTH    -> List(ALU_ZEXTH , OP1_C_RS1P, OP2_X      , OP3_X     , REN_S, WB_BIT, WBA_CP1, CSR_X, MW_X),
+      C_NOT      -> List(ALU_XOR   , OP1_C_RS1P, OP2_IMALL1 , OP3_X     , REN_S, WB_ALU, WBA_CP1, CSR_X, MW_X),
+      C_NEG      -> List(ALU_SUB   , OP1_Z     , OP2_C_RS1P , OP3_X     , REN_S, WB_ALU, WBA_CP1, CSR_X, MW_X),
+      C_BEQ      -> List(BR_BEQ    , OP1_C_RS1P, OP2_C_RS2P , OP3_X     , REN_X, WB_X  , WBA_CB2, CSR_X, MW_X),
+      C_BNE      -> List(BR_BNE    , OP1_C_RS1P, OP2_C_RS2P , OP3_X     , REN_X, WB_X  , WBA_CB2, CSR_X, MW_X),
+      C_ADDI2W   -> List(ALU_ADD   , OP1_C_RS1P, OP2_C_IMA2W, OP3_X     , REN_S, WB_ALU, WBA_CP2, CSR_X, MW_X),
+      C_ADD2     -> List(ALU_ADD   , OP1_C_RS1P, OP2_C_RS3P , OP3_X     , REN_S, WB_ALU, WBA_CP2, CSR_X, MW_X),
+      C_SEQZ     -> List(ALU_SLTU  , OP1_C_RS1P, OP2_IM1    , OP3_X     , REN_S, WB_ALU, WBA_CP2, CSR_X, MW_X),
+      C_SNEZ     -> List(ALU_SLTU  , OP1_Z     , OP2_C_RS1P , OP3_X     , REN_S, WB_ALU, WBA_CP2, CSR_X, MW_X),
+      C_ADDI2B   -> List(ALU_ADD   , OP1_C_RS1P, OP2_C_IMA2B, OP3_X     , REN_S, WB_ALU, WBA_CP2, CSR_X, MW_X),
+      C_SLT      -> List(ALU_SLT   , OP1_C_RS1P, OP2_C_RS3P , OP3_X     , REN_S, WB_ALU, WBA_CP2, CSR_X, MW_X),
+      C_SLTU     -> List(ALU_SLTU  , OP1_C_RS1P, OP2_C_RS3P , OP3_X     , REN_S, WB_ALU, WBA_CP2, CSR_X, MW_X),
 		)
 	)
   val List(id_exe_fun, id_op1_sel, id_op2_sel, id_op3_sel, id_rf_wen, id_wb_sel, id_wba, id_csr_cmd, id_mem_w) = csignals
@@ -843,29 +865,38 @@ class Core(
     (id_op2_sel === OP2_C_IMSW0) -> id_c_imm_sw0,
     (id_op2_sel === OP2_C_IMSB0) -> id_c_imm_sb0,
     (id_op2_sel === OP2_C_IMSH0) -> id_c_imm_sh0,
+    (id_op2_sel === OP2_IM255)   -> 255.U(WORD_LEN.W),
+    (id_op2_sel === OP2_IMALL1)  -> Fill(WORD_LEN, 1.U),
+    (id_op2_sel === OP2_IM1)     -> 1.U(WORD_LEN.W),
+    (id_op2_sel === OP2_C_IMA2W) -> id_c_imm_a2w,
+    (id_op2_sel === OP2_C_IMA2B) -> id_c_imm_a2b,
+    (id_op2_sel === OP2_C_IMU)   -> id_c_imm_u,
   ))
 
   val id_csr_addr = Mux(id_exe_fun === CMD_ECALL, CSR_ADDR_MCAUSE, id_inst(31,20))
 
   val id_m_op1_sel = MuxCase(M_OP1_IMM, Seq(
-    (id_op1_sel === OP1_RS1)    -> M_OP1_RS1,
-    (id_op1_sel === OP1_C_RS1)  -> M_OP1_RS1,
-    (id_op1_sel === OP1_C_SP)   -> M_OP1_RS1,
-    (id_op1_sel === OP1_C_RS1P) -> M_OP1_RS1,
+    (id_op1_sel === OP1_RS1)    -> M_OP1_RS,
+    (id_op1_sel === OP1_C_RS1)  -> M_OP1_RS,
+    (id_op1_sel === OP1_C_SP)   -> M_OP1_RS,
+    (id_op1_sel === OP1_C_RS1P) -> M_OP1_RS,
   ))
   val id_m_op2_sel = MuxCase(M_OP2_IMM, Seq(
-    (id_op2_sel === OP2_RS2)    -> M_OP2_RS2,
-    (id_op2_sel === OP2_C_RS2)  -> M_OP2_RS2,
-    (id_op2_sel === OP2_C_RS2P) -> M_OP2_RS2,
+    (id_op2_sel === OP2_RS2)    -> M_OP2_RS,
+    (id_op2_sel === OP2_C_RS2)  -> M_OP2_RS,
+    (id_op2_sel === OP2_C_RS1P) -> M_OP2_RS,
+    (id_op2_sel === OP2_C_RS2P) -> M_OP2_RS,
+    (id_op2_sel === OP2_C_RS3P) -> M_OP2_RS,
+    (id_op2_sel === OP2_RS_X)   -> M_OP2_RS,
   ))
   val id_m_op3_sel = MuxCase(M_OP3_Z, Seq(
     (id_op3_sel === OP3_Z)       -> M_OP3_Z,
     (id_op3_sel === OP3_MSB)     -> M_OP3_MSB,
     (id_op3_sel === OP3_OP1)     -> M_OP3_OP1,
-    (id_op3_sel === OP3_RS2)     -> M_OP3_RS2,
-    (id_op3_sel === OP3_C_RS2)   -> M_OP3_RS2,
-    (id_op3_sel === OP3_C_RS2P)  -> M_OP3_RS2,
-    (id_op3_sel === OP3_RS2_DMY) -> M_OP3_RS2,
+    (id_op3_sel === OP3_RS2)     -> M_OP3_RS,
+    (id_op3_sel === OP3_C_RS2)   -> M_OP3_RS,
+    (id_op3_sel === OP3_C_RS2P)  -> M_OP3_RS,
+    (id_op3_sel === OP3_RS2_DMY) -> M_OP3_RS,
   ))
   val id_m_rs1_addr = MuxCase(id_rs1_addr, Seq(
     (id_op1_sel === OP1_C_RS1)  -> id_c_rs1_addr,
@@ -874,14 +905,17 @@ class Core(
   ))
   val id_m_rs2_addr = MuxCase(id_rs2_addr, Seq(
     (id_op2_sel === OP2_C_RS2)  -> id_c_rs2_addr,
+    (id_op2_sel === OP2_C_RS1P) -> id_c_rs1p_addr,
     (id_op2_sel === OP2_C_RS2P) -> id_c_rs2p_addr,
+    (id_op2_sel === OP2_C_RS3P) -> id_c_rs3p_addr,
   ))
   val id_m_rs3_addr = MuxCase(id_rs2_addr, Seq(
     (id_op3_sel === OP3_C_RS2)  -> id_c_rs2_addr,
     (id_op3_sel === OP3_C_RS2P) -> id_c_rs2p_addr,
   ))
   val id_m_imm_b_sext = MuxCase(id_imm_b_sext, Seq(
-    (id_wba === WBA_C) -> id_c_imm_b,
+    (id_wba === WBA_CBR) -> id_c_imm_b,
+    (id_wba === WBA_CB2) -> id_c_imm_b2,
   ))
 
   val id_is_direct_j = (id_op2_sel === OP2_IMJ) || (id_op2_sel === OP2_C_IMJ)
@@ -1121,29 +1155,30 @@ class Core(
   // Register read (RRD) Stage
 
   rrd_stall :=
-    ((rrd_reg_op1_sel === M_OP1_RS1) && scoreboard(rrd_reg_rs1_addr)) ||
-    ((rrd_reg_op2_sel === M_OP2_RS2 || rrd_reg_op3_sel === M_OP3_RS2) && scoreboard(rrd_reg_rs2_addr)) ||
+    ((rrd_reg_op1_sel === M_OP1_RS) && scoreboard(rrd_reg_rs1_addr)) ||
+    ((rrd_reg_op2_sel === M_OP2_RS) && scoreboard(rrd_reg_rs2_addr)) ||
+    ((rrd_reg_op3_sel === M_OP3_RS) && scoreboard(rrd_reg_rs3_addr)) ||
     ((rrd_reg_rf_wen === REN_S) && scoreboard(rrd_reg_wb_addr))
 
   val rrd_op1_data = MuxCase(rrd_reg_op1_data, Seq(
-    (rrd_reg_op1_sel === M_OP1_RS1 && rrd_reg_rs1_addr === 0.U) -> 0.U(WORD_LEN.W),
+    (rrd_reg_op1_sel === M_OP1_RS && rrd_reg_rs1_addr === 0.U) -> 0.U(WORD_LEN.W),
     (ex1_reg_fw_en &&
-     (rrd_reg_op1_sel === M_OP1_RS1) &&
+     (rrd_reg_op1_sel === M_OP1_RS) &&
      (rrd_reg_rs1_addr === ex1_reg_wb_addr)) -> ex1_fw_data,
     (ex2_reg_fw_en &&
-     (rrd_reg_op1_sel === M_OP1_RS1) &&
+     (rrd_reg_op1_sel === M_OP1_RS) &&
      (rrd_reg_rs1_addr === ex2_reg_wb_addr)) -> ex2_fw_data,
-    (rrd_reg_op1_sel === M_OP1_RS1) -> regfile(rrd_reg_rs1_addr),
+    (rrd_reg_op1_sel === M_OP1_RS) -> regfile(rrd_reg_rs1_addr),
   ))
   val rrd_op2_data = MuxCase(rrd_reg_op2_data, Seq(
-    (rrd_reg_op2_sel === M_OP2_RS2 && rrd_reg_rs2_addr === 0.U) -> 0.U(WORD_LEN.W),
+    (rrd_reg_op2_sel === M_OP2_RS && rrd_reg_rs2_addr === 0.U) -> 0.U(WORD_LEN.W),
     (ex1_reg_fw_en &&
-     (rrd_reg_op2_sel === M_OP2_RS2) &&
+     (rrd_reg_op2_sel === M_OP2_RS) &&
      (rrd_reg_rs2_addr === ex1_reg_wb_addr)) -> ex1_fw_data,
     (ex2_reg_fw_en &&
-     (rrd_reg_op2_sel === M_OP2_RS2) &&
+     (rrd_reg_op2_sel === M_OP2_RS) &&
      (rrd_reg_rs2_addr === ex2_reg_wb_addr)) -> ex2_fw_data,
-    (rrd_reg_op2_sel === M_OP2_RS2) -> regfile(rrd_reg_rs2_addr),
+    (rrd_reg_op2_sel === M_OP2_RS) -> regfile(rrd_reg_rs2_addr),
   ))
   val rrd_op3_data = MuxCase(regfile(rrd_reg_rs3_addr), Seq(
     (rrd_reg_op3_sel === M_OP3_Z)   -> 0.U(WORD_LEN.W),

@@ -81,7 +81,7 @@ object Consts {
   val OP1_C_RS1P = 7.U(OP1_LEN.W)
 
   val M_OP1_LEN = 1
-  val M_OP1_RS1 = 0.U(M_OP1_LEN.W)
+  val M_OP1_RS  = 0.U(M_OP1_LEN.W)
   val M_OP1_IMM = 1.U(M_OP1_LEN.W)
 
   val OP2_LEN     = 5
@@ -89,27 +89,36 @@ object Consts {
   val OP2_Z       =  0.U(OP2_LEN.W)
   val OP2_RS2     =  1.U(OP2_LEN.W)
   val OP2_C_RS2   =  2.U(OP2_LEN.W)
-  val OP2_C_RS2P  =  3.U(OP2_LEN.W)
+  val OP2_C_RS3P  =  3.U(OP2_LEN.W)
   val OP2_IMI     =  4.U(OP2_LEN.W)
-  val OP2_IMS     =  5.U(OP2_LEN.W)
-  val OP2_IMJ     =  6.U(OP2_LEN.W)
-  val OP2_IMU     =  7.U(OP2_LEN.W)
-  val OP2_C_IMIW  =  8.U(OP2_LEN.W)
-  val OP2_C_IMI16 =  9.U(OP2_LEN.W)
-  val OP2_C_IMI   = 10.U(OP2_LEN.W)
-  val OP2_C_IMLS  = 11.U(OP2_LEN.W)
-  val OP2_C_IMIU  = 12.U(OP2_LEN.W)
-  val OP2_C_IMJ   = 13.U(OP2_LEN.W)
-  val OP2_C_IMSL  = 14.U(OP2_LEN.W)
-  val OP2_C_IMSS  = 15.U(OP2_LEN.W)
-  val OP2_C_IMLSB = 16.U(OP2_LEN.W)
-  val OP2_C_IMLSH = 17.U(OP2_LEN.W)
-  val OP2_C_IMSW0 = 18.U(OP2_LEN.W)
-  val OP2_C_IMSB0 = 19.U(OP2_LEN.W)
-  val OP2_C_IMSH0 = 20.U(OP2_LEN.W)
+  val OP2_RS_X    =  5.U(OP2_LEN.W)
+  val OP2_C_RS2P  =  6.U(OP2_LEN.W)
+  val OP2_C_RS1P  =  7.U(OP2_LEN.W)
+  val OP2_IMS     =  8.U(OP2_LEN.W)
+  val OP2_IMJ     =  9.U(OP2_LEN.W)
+  val OP2_IMU     = 10.U(OP2_LEN.W)
+  val OP2_C_IMIW  = 11.U(OP2_LEN.W)
+  val OP2_C_IMI16 = 12.U(OP2_LEN.W)
+  val OP2_C_IMI   = 13.U(OP2_LEN.W)
+  val OP2_C_IMLS  = 14.U(OP2_LEN.W)
+  val OP2_C_IMIU  = 15.U(OP2_LEN.W)
+  val OP2_C_IMJ   = 16.U(OP2_LEN.W)
+  val OP2_C_IMSL  = 17.U(OP2_LEN.W)
+  val OP2_C_IMSS  = 18.U(OP2_LEN.W)
+  val OP2_C_IMLSB = 19.U(OP2_LEN.W)
+  val OP2_C_IMLSH = 20.U(OP2_LEN.W)
+  val OP2_C_IMSW0 = 21.U(OP2_LEN.W)
+  val OP2_C_IMSB0 = 22.U(OP2_LEN.W)
+  val OP2_C_IMSH0 = 23.U(OP2_LEN.W)
+  val OP2_IM255   = 24.U(OP2_LEN.W)
+  val OP2_IMALL1  = 25.U(OP2_LEN.W)
+  val OP2_IM1     = 26.U(OP2_LEN.W)
+  val OP2_C_IMA2W = 27.U(OP2_LEN.W)
+  val OP2_C_IMA2B = 28.U(OP2_LEN.W)
+  val OP2_C_IMU   = 29.U(OP2_LEN.W)
 
   val M_OP2_LEN = 1
-  val M_OP2_RS2 = 0.U(M_OP2_LEN.W)
+  val M_OP2_RS  = 0.U(M_OP2_LEN.W)
   val M_OP2_IMM = 1.U(M_OP2_LEN.W)
 
   val OP3_LEN     = 3
@@ -125,7 +134,7 @@ object Consts {
   val M_OP3_LEN = 2
   val M_OP3_Z   = 0.U(M_OP3_LEN.W)
   val M_OP3_MSB = 1.U(M_OP3_LEN.W)
-  val M_OP3_RS2 = 2.U(M_OP3_LEN.W)
+  val M_OP3_RS  = 2.U(M_OP3_LEN.W)
   val M_OP3_OP1 = 3.U(M_OP3_LEN.W)
 
   val REN_LEN = 1
@@ -149,6 +158,8 @@ object Consts {
   val WBA_CP1 = 2.U(WBA_LEN.W)
   val WBA_CP2 = 3.U(WBA_LEN.W)
   val WBA_RA  = 4.U(WBA_LEN.W)
+  val WBA_CBR = 6.U(WBA_LEN.W)
+  val WBA_CB2 = 7.U(WBA_LEN.W)
 
   val MW_LEN = 3
   val MW_X   = 0.U(MW_LEN.W)
