@@ -19,7 +19,7 @@ pub fn init_bss() {
 }
 
 #[no_mangle]
-pub extern "C" fn __start_rust() -> ! {
+pub extern "C" fn __start_rust() {
     // init_bss();
     super::cycle::init();
     super::main();

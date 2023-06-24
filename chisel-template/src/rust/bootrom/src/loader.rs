@@ -146,6 +146,7 @@ pub fn load_kernel(sdc: Sdc) -> u32 {
         asm!("fence.i");
         asm!("lui a0,0x20000");
         asm!("jr a0");
-        core::hint::unreachable_unchecked();
+        // core::hint::unreachable_unchecked();
     }
+    0
 }

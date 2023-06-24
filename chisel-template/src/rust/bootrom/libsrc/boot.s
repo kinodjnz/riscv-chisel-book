@@ -3,5 +3,5 @@
 .global _start
 
 _start:
-	la	sp, ramend
-	j	__start_rust
+	lui	sp, %hi(ramend)
+	jump	__start_rust, t0

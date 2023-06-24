@@ -17,13 +17,15 @@ SECTIONS
   } >imem
   .text : { 
       . = ALIGN(4);
-      *(.boot) 
-      *(.text) 
+      *(.boot)
+      *(.text)
+      *(.text.*)
       . = ALIGN(4);
   } >imem
   .rodata : { 
       . = ALIGN(4);
-      *(.rodata) 
+      *(.rodata)
+      *(.rodata.*)
       . = ALIGN(4);
   } >imem
   .sdata : { 

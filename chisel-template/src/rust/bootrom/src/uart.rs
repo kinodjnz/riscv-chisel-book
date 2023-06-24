@@ -14,15 +14,11 @@ pub fn puts(s: &[u8]) {
     }
 }
 
-pub fn print(mut x: u32) {
+pub fn print(x: u32) {
     tx(b'0');
     tx(b'x');
-    let mut buf: [u8; 9] = [0; 9];
     for i in 0..8 {
-        let d = (x % 16) as u8;
-        buf[7 - i] = if d < 10 { b'0' + d } else { b'A' - 10 + d };
-        x = x / 16;
+        let d = (x >> ((7 - i) * 4)) as u8;
+        tx(if d < 10 { b'0' + d } else { b'A' - 10 + d });
     }
-    buf[8] = b'\0';
-    puts(&buf);
 }

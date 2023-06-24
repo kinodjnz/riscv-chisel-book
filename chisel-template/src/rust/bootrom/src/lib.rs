@@ -9,7 +9,7 @@ mod uart;
 
 use sdc::Sdc;
 
-fn main() -> ! {
+fn main() {
     let result = Sdc::init_card();
     match result {
         Err(e) => {
@@ -19,9 +19,11 @@ fn main() -> ! {
         }
         Ok(sdc) => {
             let s = loader::load_kernel(sdc);
-            uart::puts(b"load failed: ");
-            uart::print(s);
-            uart::puts(b"\r\n");
+            if s != 0 {
+                uart::puts(b"load failed: ");
+                uart::print(s);
+                uart::puts(b"\r\n");
+            }
         }
     }
     loop {}
