@@ -7,7 +7,7 @@ import common.Consts._
 import java.io.FileInputStream
 import scala.collection.mutable.ArrayBuffer
 import chisel3.util.experimental.loadMemoryFromFile
-import chisel3.experimental.ChiselEnum
+import chisel3.ChiselEnum
 import CacheConsts._
 
 class ImemPortIo extends Bundle {
