@@ -1,11 +1,10 @@
 package fpga
 
 import chisel3._
-import chisel3.util._
+import chisel3.util.{MuxLookup, log2Ceil, Cat}
 import chisel3.stage.ChiselStage
 import chisel3.util.experimental.loadMemoryFromFileInline
 import chisel3.experimental.{annotate, ChiselAnnotation}
-import firrtl.annotations.MemorySynthInit
 import common.Consts._
 import DramConsts._
 import CacheConsts._

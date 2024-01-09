@@ -3,7 +3,6 @@ package fpga.periferals
 import chisel3._
 import chisel3.util._
 import common.Consts._
-import chisel3.stage.ChiselStage
 import SdcConsts._
 import fpga._
 

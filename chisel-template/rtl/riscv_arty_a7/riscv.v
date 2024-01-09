@@ -7362,13 +7362,13 @@ module Gpio(
 `ifdef RANDOMIZE_REG_INIT
   reg [31:0] _RAND_0;
 `endif // RANDOMIZE_REG_INIT
-  reg [31:0] output_; // @[Gpio.scala 15:23]
-  assign io_gpio = output_; // @[Gpio.scala 16:11]
+  reg [31:0] output_; // @[Gpio.scala 13:23]
+  assign io_gpio = output_; // @[Gpio.scala 14:11]
   always @(posedge clock) begin
-    if (reset) begin // @[Gpio.scala 15:23]
-      output_ <= 32'h0; // @[Gpio.scala 15:23]
-    end else if (io_mem_wen) begin // @[Gpio.scala 21:20]
-      output_ <= io_mem_wdata; // @[Gpio.scala 22:12]
+    if (reset) begin // @[Gpio.scala 13:23]
+      output_ <= 32'h0; // @[Gpio.scala 13:23]
+    end else if (io_mem_wen) begin // @[Gpio.scala 19:20]
+      output_ <= io_mem_wdata; // @[Gpio.scala 20:12]
     end
   end
 // Register and memory initialization
@@ -8409,347 +8409,347 @@ module Sdc(
   reg [31:0] _RAND_320;
   reg [31:0] _RAND_321;
 `endif // RANDOMIZE_REG_INIT
-  reg  reg_power; // @[Sdc.scala 89:26]
-  reg [8:0] reg_baud_divider; // @[Sdc.scala 90:33]
-  reg [8:0] reg_clk_counter; // @[Sdc.scala 91:32]
-  reg  reg_clk; // @[Sdc.scala 92:24]
-  wire  _T = reg_clk_counter == 9'h0; // @[Sdc.scala 94:27]
-  wire [8:0] _reg_clk_counter_T_1 = reg_clk_counter - 9'h1; // @[Sdc.scala 98:42]
-  wire [8:0] _GEN_0 = reg_clk_counter == 9'h0 ? reg_baud_divider : _reg_clk_counter_T_1; // @[Sdc.scala 94:36 95:23 98:23]
-  wire  _GEN_1 = reg_clk_counter == 9'h0 ? ~reg_clk : reg_clk; // @[Sdc.scala 94:36 96:15 92:24]
-  wire [8:0] _GEN_2 = reg_power ? _GEN_0 : reg_clk_counter; // @[Sdc.scala 93:20 91:32]
-  wire  _GEN_3 = reg_power & _GEN_1; // @[Sdc.scala 101:13 93:20]
-  reg  rx_res_in_progress; // @[Sdc.scala 105:35]
-  reg [7:0] rx_res_counter; // @[Sdc.scala 106:31]
-  reg  rx_res_bits_0; // @[Sdc.scala 107:24]
-  reg  rx_res_bits_1; // @[Sdc.scala 107:24]
-  reg  rx_res_bits_2; // @[Sdc.scala 107:24]
-  reg  rx_res_bits_3; // @[Sdc.scala 107:24]
-  reg  rx_res_bits_4; // @[Sdc.scala 107:24]
-  reg  rx_res_bits_5; // @[Sdc.scala 107:24]
-  reg  rx_res_bits_6; // @[Sdc.scala 107:24]
-  reg  rx_res_bits_7; // @[Sdc.scala 107:24]
-  reg  rx_res_bits_8; // @[Sdc.scala 107:24]
-  reg  rx_res_bits_9; // @[Sdc.scala 107:24]
-  reg  rx_res_bits_10; // @[Sdc.scala 107:24]
-  reg  rx_res_bits_11; // @[Sdc.scala 107:24]
-  reg  rx_res_bits_12; // @[Sdc.scala 107:24]
-  reg  rx_res_bits_13; // @[Sdc.scala 107:24]
-  reg  rx_res_bits_14; // @[Sdc.scala 107:24]
-  reg  rx_res_bits_15; // @[Sdc.scala 107:24]
-  reg  rx_res_bits_16; // @[Sdc.scala 107:24]
-  reg  rx_res_bits_17; // @[Sdc.scala 107:24]
-  reg  rx_res_bits_18; // @[Sdc.scala 107:24]
-  reg  rx_res_bits_19; // @[Sdc.scala 107:24]
-  reg  rx_res_bits_20; // @[Sdc.scala 107:24]
-  reg  rx_res_bits_21; // @[Sdc.scala 107:24]
-  reg  rx_res_bits_22; // @[Sdc.scala 107:24]
-  reg  rx_res_bits_23; // @[Sdc.scala 107:24]
-  reg  rx_res_bits_24; // @[Sdc.scala 107:24]
-  reg  rx_res_bits_25; // @[Sdc.scala 107:24]
-  reg  rx_res_bits_26; // @[Sdc.scala 107:24]
-  reg  rx_res_bits_27; // @[Sdc.scala 107:24]
-  reg  rx_res_bits_28; // @[Sdc.scala 107:24]
-  reg  rx_res_bits_29; // @[Sdc.scala 107:24]
-  reg  rx_res_bits_30; // @[Sdc.scala 107:24]
-  reg  rx_res_bits_31; // @[Sdc.scala 107:24]
-  reg  rx_res_bits_32; // @[Sdc.scala 107:24]
-  reg  rx_res_bits_33; // @[Sdc.scala 107:24]
-  reg  rx_res_bits_34; // @[Sdc.scala 107:24]
-  reg  rx_res_bits_35; // @[Sdc.scala 107:24]
-  reg  rx_res_bits_36; // @[Sdc.scala 107:24]
-  reg  rx_res_bits_37; // @[Sdc.scala 107:24]
-  reg  rx_res_bits_38; // @[Sdc.scala 107:24]
-  reg  rx_res_bits_39; // @[Sdc.scala 107:24]
-  reg  rx_res_bits_40; // @[Sdc.scala 107:24]
-  reg  rx_res_bits_41; // @[Sdc.scala 107:24]
-  reg  rx_res_bits_42; // @[Sdc.scala 107:24]
-  reg  rx_res_bits_43; // @[Sdc.scala 107:24]
-  reg  rx_res_bits_44; // @[Sdc.scala 107:24]
-  reg  rx_res_bits_45; // @[Sdc.scala 107:24]
-  reg  rx_res_bits_46; // @[Sdc.scala 107:24]
-  reg  rx_res_bits_47; // @[Sdc.scala 107:24]
-  reg  rx_res_bits_48; // @[Sdc.scala 107:24]
-  reg  rx_res_bits_49; // @[Sdc.scala 107:24]
-  reg  rx_res_bits_50; // @[Sdc.scala 107:24]
-  reg  rx_res_bits_51; // @[Sdc.scala 107:24]
-  reg  rx_res_bits_52; // @[Sdc.scala 107:24]
-  reg  rx_res_bits_53; // @[Sdc.scala 107:24]
-  reg  rx_res_bits_54; // @[Sdc.scala 107:24]
-  reg  rx_res_bits_55; // @[Sdc.scala 107:24]
-  reg  rx_res_bits_56; // @[Sdc.scala 107:24]
-  reg  rx_res_bits_57; // @[Sdc.scala 107:24]
-  reg  rx_res_bits_58; // @[Sdc.scala 107:24]
-  reg  rx_res_bits_59; // @[Sdc.scala 107:24]
-  reg  rx_res_bits_60; // @[Sdc.scala 107:24]
-  reg  rx_res_bits_61; // @[Sdc.scala 107:24]
-  reg  rx_res_bits_62; // @[Sdc.scala 107:24]
-  reg  rx_res_bits_63; // @[Sdc.scala 107:24]
-  reg  rx_res_bits_64; // @[Sdc.scala 107:24]
-  reg  rx_res_bits_65; // @[Sdc.scala 107:24]
-  reg  rx_res_bits_66; // @[Sdc.scala 107:24]
-  reg  rx_res_bits_67; // @[Sdc.scala 107:24]
-  reg  rx_res_bits_68; // @[Sdc.scala 107:24]
-  reg  rx_res_bits_69; // @[Sdc.scala 107:24]
-  reg  rx_res_bits_70; // @[Sdc.scala 107:24]
-  reg  rx_res_bits_71; // @[Sdc.scala 107:24]
-  reg  rx_res_bits_72; // @[Sdc.scala 107:24]
-  reg  rx_res_bits_73; // @[Sdc.scala 107:24]
-  reg  rx_res_bits_74; // @[Sdc.scala 107:24]
-  reg  rx_res_bits_75; // @[Sdc.scala 107:24]
-  reg  rx_res_bits_76; // @[Sdc.scala 107:24]
-  reg  rx_res_bits_77; // @[Sdc.scala 107:24]
-  reg  rx_res_bits_78; // @[Sdc.scala 107:24]
-  reg  rx_res_bits_79; // @[Sdc.scala 107:24]
-  reg  rx_res_bits_80; // @[Sdc.scala 107:24]
-  reg  rx_res_bits_81; // @[Sdc.scala 107:24]
-  reg  rx_res_bits_82; // @[Sdc.scala 107:24]
-  reg  rx_res_bits_83; // @[Sdc.scala 107:24]
-  reg  rx_res_bits_84; // @[Sdc.scala 107:24]
-  reg  rx_res_bits_85; // @[Sdc.scala 107:24]
-  reg  rx_res_bits_86; // @[Sdc.scala 107:24]
-  reg  rx_res_bits_87; // @[Sdc.scala 107:24]
-  reg  rx_res_bits_88; // @[Sdc.scala 107:24]
-  reg  rx_res_bits_89; // @[Sdc.scala 107:24]
-  reg  rx_res_bits_90; // @[Sdc.scala 107:24]
-  reg  rx_res_bits_91; // @[Sdc.scala 107:24]
-  reg  rx_res_bits_92; // @[Sdc.scala 107:24]
-  reg  rx_res_bits_93; // @[Sdc.scala 107:24]
-  reg  rx_res_bits_94; // @[Sdc.scala 107:24]
-  reg  rx_res_bits_95; // @[Sdc.scala 107:24]
-  reg  rx_res_bits_96; // @[Sdc.scala 107:24]
-  reg  rx_res_bits_97; // @[Sdc.scala 107:24]
-  reg  rx_res_bits_98; // @[Sdc.scala 107:24]
-  reg  rx_res_bits_99; // @[Sdc.scala 107:24]
-  reg  rx_res_bits_100; // @[Sdc.scala 107:24]
-  reg  rx_res_bits_101; // @[Sdc.scala 107:24]
-  reg  rx_res_bits_102; // @[Sdc.scala 107:24]
-  reg  rx_res_bits_103; // @[Sdc.scala 107:24]
-  reg  rx_res_bits_104; // @[Sdc.scala 107:24]
-  reg  rx_res_bits_105; // @[Sdc.scala 107:24]
-  reg  rx_res_bits_106; // @[Sdc.scala 107:24]
-  reg  rx_res_bits_107; // @[Sdc.scala 107:24]
-  reg  rx_res_bits_108; // @[Sdc.scala 107:24]
-  reg  rx_res_bits_109; // @[Sdc.scala 107:24]
-  reg  rx_res_bits_110; // @[Sdc.scala 107:24]
-  reg  rx_res_bits_111; // @[Sdc.scala 107:24]
-  reg  rx_res_bits_112; // @[Sdc.scala 107:24]
-  reg  rx_res_bits_113; // @[Sdc.scala 107:24]
-  reg  rx_res_bits_114; // @[Sdc.scala 107:24]
-  reg  rx_res_bits_115; // @[Sdc.scala 107:24]
-  reg  rx_res_bits_116; // @[Sdc.scala 107:24]
-  reg  rx_res_bits_117; // @[Sdc.scala 107:24]
-  reg  rx_res_bits_118; // @[Sdc.scala 107:24]
-  reg  rx_res_bits_119; // @[Sdc.scala 107:24]
-  reg  rx_res_bits_120; // @[Sdc.scala 107:24]
-  reg  rx_res_bits_121; // @[Sdc.scala 107:24]
-  reg  rx_res_bits_122; // @[Sdc.scala 107:24]
-  reg  rx_res_bits_123; // @[Sdc.scala 107:24]
-  reg  rx_res_bits_124; // @[Sdc.scala 107:24]
-  reg  rx_res_bits_125; // @[Sdc.scala 107:24]
-  reg  rx_res_bits_126; // @[Sdc.scala 107:24]
-  reg  rx_res_bits_127; // @[Sdc.scala 107:24]
-  reg  rx_res_bits_128; // @[Sdc.scala 107:24]
-  reg  rx_res_bits_129; // @[Sdc.scala 107:24]
-  reg  rx_res_bits_130; // @[Sdc.scala 107:24]
-  reg  rx_res_bits_131; // @[Sdc.scala 107:24]
-  reg  rx_res_bits_132; // @[Sdc.scala 107:24]
-  reg  rx_res_bits_133; // @[Sdc.scala 107:24]
-  reg  rx_res_bits_134; // @[Sdc.scala 107:24]
-  reg  rx_res_bits_135; // @[Sdc.scala 107:24]
-  reg  rx_res_next; // @[Sdc.scala 108:28]
-  reg [3:0] rx_res_type; // @[Sdc.scala 109:28]
-  reg [135:0] rx_res; // @[Sdc.scala 110:23]
-  reg  rx_res_ready; // @[Sdc.scala 111:29]
-  reg  rx_res_intr_en; // @[Sdc.scala 112:31]
-  reg  rx_res_crc_0; // @[Sdc.scala 113:23]
-  reg  rx_res_crc_1; // @[Sdc.scala 113:23]
-  reg  rx_res_crc_2; // @[Sdc.scala 113:23]
-  reg  rx_res_crc_3; // @[Sdc.scala 113:23]
-  reg  rx_res_crc_4; // @[Sdc.scala 113:23]
-  reg  rx_res_crc_5; // @[Sdc.scala 113:23]
-  reg  rx_res_crc_6; // @[Sdc.scala 113:23]
-  reg  rx_res_crc_error; // @[Sdc.scala 114:33]
-  reg  rx_res_crc_en; // @[Sdc.scala 115:30]
-  reg [7:0] rx_res_timer; // @[Sdc.scala 116:29]
-  reg  rx_res_timeout; // @[Sdc.scala 117:31]
-  reg [1:0] rx_res_read_counter; // @[Sdc.scala 118:36]
-  reg [31:0] tx_cmd_arg; // @[Sdc.scala 119:27]
-  reg  tx_cmd_0; // @[Sdc.scala 120:19]
-  reg  tx_cmd_1; // @[Sdc.scala 120:19]
-  reg  tx_cmd_2; // @[Sdc.scala 120:19]
-  reg  tx_cmd_3; // @[Sdc.scala 120:19]
-  reg  tx_cmd_4; // @[Sdc.scala 120:19]
-  reg  tx_cmd_5; // @[Sdc.scala 120:19]
-  reg  tx_cmd_6; // @[Sdc.scala 120:19]
-  reg  tx_cmd_7; // @[Sdc.scala 120:19]
-  reg  tx_cmd_8; // @[Sdc.scala 120:19]
-  reg  tx_cmd_9; // @[Sdc.scala 120:19]
-  reg  tx_cmd_10; // @[Sdc.scala 120:19]
-  reg  tx_cmd_11; // @[Sdc.scala 120:19]
-  reg  tx_cmd_12; // @[Sdc.scala 120:19]
-  reg  tx_cmd_13; // @[Sdc.scala 120:19]
-  reg  tx_cmd_14; // @[Sdc.scala 120:19]
-  reg  tx_cmd_15; // @[Sdc.scala 120:19]
-  reg  tx_cmd_16; // @[Sdc.scala 120:19]
-  reg  tx_cmd_17; // @[Sdc.scala 120:19]
-  reg  tx_cmd_18; // @[Sdc.scala 120:19]
-  reg  tx_cmd_19; // @[Sdc.scala 120:19]
-  reg  tx_cmd_20; // @[Sdc.scala 120:19]
-  reg  tx_cmd_21; // @[Sdc.scala 120:19]
-  reg  tx_cmd_22; // @[Sdc.scala 120:19]
-  reg  tx_cmd_23; // @[Sdc.scala 120:19]
-  reg  tx_cmd_24; // @[Sdc.scala 120:19]
-  reg  tx_cmd_25; // @[Sdc.scala 120:19]
-  reg  tx_cmd_26; // @[Sdc.scala 120:19]
-  reg  tx_cmd_27; // @[Sdc.scala 120:19]
-  reg  tx_cmd_28; // @[Sdc.scala 120:19]
-  reg  tx_cmd_29; // @[Sdc.scala 120:19]
-  reg  tx_cmd_30; // @[Sdc.scala 120:19]
-  reg  tx_cmd_31; // @[Sdc.scala 120:19]
-  reg  tx_cmd_32; // @[Sdc.scala 120:19]
-  reg  tx_cmd_33; // @[Sdc.scala 120:19]
-  reg  tx_cmd_34; // @[Sdc.scala 120:19]
-  reg  tx_cmd_35; // @[Sdc.scala 120:19]
-  reg  tx_cmd_36; // @[Sdc.scala 120:19]
-  reg  tx_cmd_37; // @[Sdc.scala 120:19]
-  reg  tx_cmd_38; // @[Sdc.scala 120:19]
-  reg  tx_cmd_39; // @[Sdc.scala 120:19]
-  reg  tx_cmd_40; // @[Sdc.scala 120:19]
-  reg  tx_cmd_41; // @[Sdc.scala 120:19]
-  reg  tx_cmd_42; // @[Sdc.scala 120:19]
-  reg  tx_cmd_43; // @[Sdc.scala 120:19]
-  reg  tx_cmd_44; // @[Sdc.scala 120:19]
-  reg  tx_cmd_45; // @[Sdc.scala 120:19]
-  reg  tx_cmd_46; // @[Sdc.scala 120:19]
-  reg  tx_cmd_47; // @[Sdc.scala 120:19]
-  reg [5:0] tx_cmd_counter; // @[Sdc.scala 121:31]
-  reg  tx_cmd_crc_0; // @[Sdc.scala 122:23]
-  reg  tx_cmd_crc_1; // @[Sdc.scala 122:23]
-  reg  tx_cmd_crc_2; // @[Sdc.scala 122:23]
-  reg  tx_cmd_crc_3; // @[Sdc.scala 122:23]
-  reg  tx_cmd_crc_4; // @[Sdc.scala 122:23]
-  reg  tx_cmd_crc_5; // @[Sdc.scala 122:23]
-  reg  tx_cmd_crc_6; // @[Sdc.scala 122:23]
-  reg [5:0] tx_cmd_timer; // @[Sdc.scala 123:29]
-  reg  reg_tx_cmd_wrt; // @[Sdc.scala 124:31]
-  reg  reg_tx_cmd_out; // @[Sdc.scala 125:31]
-  reg  rx_dat_in_progress; // @[Sdc.scala 126:35]
-  reg [10:0] rx_dat_counter; // @[Sdc.scala 127:31]
-  reg  rx_dat_start_bit; // @[Sdc.scala 128:33]
-  reg [3:0] rx_dat_bits_0; // @[Sdc.scala 129:24]
-  reg [3:0] rx_dat_bits_1; // @[Sdc.scala 129:24]
-  reg [3:0] rx_dat_bits_2; // @[Sdc.scala 129:24]
-  reg [3:0] rx_dat_bits_3; // @[Sdc.scala 129:24]
-  reg [3:0] rx_dat_bits_4; // @[Sdc.scala 129:24]
-  reg [3:0] rx_dat_bits_5; // @[Sdc.scala 129:24]
-  reg [3:0] rx_dat_bits_6; // @[Sdc.scala 129:24]
-  reg [3:0] rx_dat_bits_7; // @[Sdc.scala 129:24]
-  reg [3:0] rx_dat_next; // @[Sdc.scala 130:28]
-  reg  rx_dat_continuous; // @[Sdc.scala 131:34]
-  reg  rx_dat_ready; // @[Sdc.scala 132:29]
-  reg  rx_dat_intr_en; // @[Sdc.scala 133:31]
-  reg [3:0] rx_dat_crc_0; // @[Sdc.scala 134:23]
-  reg [3:0] rx_dat_crc_1; // @[Sdc.scala 134:23]
-  reg [3:0] rx_dat_crc_2; // @[Sdc.scala 134:23]
-  reg [3:0] rx_dat_crc_3; // @[Sdc.scala 134:23]
-  reg [3:0] rx_dat_crc_4; // @[Sdc.scala 134:23]
-  reg [3:0] rx_dat_crc_5; // @[Sdc.scala 134:23]
-  reg [3:0] rx_dat_crc_6; // @[Sdc.scala 134:23]
-  reg [3:0] rx_dat_crc_7; // @[Sdc.scala 134:23]
-  reg [3:0] rx_dat_crc_8; // @[Sdc.scala 134:23]
-  reg [3:0] rx_dat_crc_9; // @[Sdc.scala 134:23]
-  reg [3:0] rx_dat_crc_10; // @[Sdc.scala 134:23]
-  reg [3:0] rx_dat_crc_11; // @[Sdc.scala 134:23]
-  reg [3:0] rx_dat_crc_12; // @[Sdc.scala 134:23]
-  reg [3:0] rx_dat_crc_13; // @[Sdc.scala 134:23]
-  reg [3:0] rx_dat_crc_14; // @[Sdc.scala 134:23]
-  reg [3:0] rx_dat_crc_15; // @[Sdc.scala 134:23]
-  reg  rx_dat_crc_error; // @[Sdc.scala 135:33]
-  reg [18:0] rx_dat_timer; // @[Sdc.scala 136:29]
-  reg  rx_dat_timeout; // @[Sdc.scala 137:31]
-  reg  rx_dat_overrun; // @[Sdc.scala 138:31]
-  reg [7:0] rxtx_dat_counter; // @[Sdc.scala 140:33]
-  reg [7:0] rxtx_dat_index; // @[Sdc.scala 141:31]
-  reg [18:0] rx_busy_timer; // @[Sdc.scala 142:30]
-  reg  rx_busy_in_progress; // @[Sdc.scala 143:36]
-  reg  rx_dat0_next; // @[Sdc.scala 144:29]
-  reg  rx_dat_buf_read; // @[Sdc.scala 145:32]
-  reg [31:0] rx_dat_buf_cache; // @[Sdc.scala 146:33]
-  reg  reg_tx_dat_wrt; // @[Sdc.scala 147:31]
-  reg  reg_tx_dat_out; // @[Sdc.scala 148:31]
-  reg  tx_empty_intr_en; // @[Sdc.scala 149:33]
-  reg  tx_end_intr_en; // @[Sdc.scala 150:31]
-  reg [10:0] tx_dat_counter; // @[Sdc.scala 151:31]
-  reg [5:0] tx_dat_timer; // @[Sdc.scala 152:29]
-  reg [3:0] tx_dat_0; // @[Sdc.scala 153:19]
-  reg [3:0] tx_dat_1; // @[Sdc.scala 153:19]
-  reg [3:0] tx_dat_2; // @[Sdc.scala 153:19]
-  reg [3:0] tx_dat_3; // @[Sdc.scala 153:19]
-  reg [3:0] tx_dat_4; // @[Sdc.scala 153:19]
-  reg [3:0] tx_dat_5; // @[Sdc.scala 153:19]
-  reg [3:0] tx_dat_6; // @[Sdc.scala 153:19]
-  reg [3:0] tx_dat_7; // @[Sdc.scala 153:19]
-  reg [3:0] tx_dat_8; // @[Sdc.scala 153:19]
-  reg [3:0] tx_dat_9; // @[Sdc.scala 153:19]
-  reg [3:0] tx_dat_10; // @[Sdc.scala 153:19]
-  reg [3:0] tx_dat_11; // @[Sdc.scala 153:19]
-  reg [3:0] tx_dat_12; // @[Sdc.scala 153:19]
-  reg [3:0] tx_dat_13; // @[Sdc.scala 153:19]
-  reg [3:0] tx_dat_14; // @[Sdc.scala 153:19]
-  reg [3:0] tx_dat_15; // @[Sdc.scala 153:19]
-  reg [3:0] tx_dat_16; // @[Sdc.scala 153:19]
-  reg [3:0] tx_dat_17; // @[Sdc.scala 153:19]
-  reg [3:0] tx_dat_18; // @[Sdc.scala 153:19]
-  reg [3:0] tx_dat_19; // @[Sdc.scala 153:19]
-  reg [3:0] tx_dat_20; // @[Sdc.scala 153:19]
-  reg [3:0] tx_dat_21; // @[Sdc.scala 153:19]
-  reg [3:0] tx_dat_22; // @[Sdc.scala 153:19]
-  reg [3:0] tx_dat_23; // @[Sdc.scala 153:19]
-  reg [3:0] tx_dat_crc_0; // @[Sdc.scala 154:23]
-  reg [3:0] tx_dat_crc_1; // @[Sdc.scala 154:23]
-  reg [3:0] tx_dat_crc_2; // @[Sdc.scala 154:23]
-  reg [3:0] tx_dat_crc_3; // @[Sdc.scala 154:23]
-  reg [3:0] tx_dat_crc_4; // @[Sdc.scala 154:23]
-  reg [3:0] tx_dat_crc_5; // @[Sdc.scala 154:23]
-  reg [3:0] tx_dat_crc_6; // @[Sdc.scala 154:23]
-  reg [3:0] tx_dat_crc_7; // @[Sdc.scala 154:23]
-  reg [3:0] tx_dat_crc_8; // @[Sdc.scala 154:23]
-  reg [3:0] tx_dat_crc_9; // @[Sdc.scala 154:23]
-  reg [3:0] tx_dat_crc_10; // @[Sdc.scala 154:23]
-  reg [3:0] tx_dat_crc_11; // @[Sdc.scala 154:23]
-  reg [3:0] tx_dat_crc_12; // @[Sdc.scala 154:23]
-  reg [3:0] tx_dat_crc_13; // @[Sdc.scala 154:23]
-  reg [3:0] tx_dat_crc_14; // @[Sdc.scala 154:23]
-  reg [3:0] tx_dat_crc_15; // @[Sdc.scala 154:23]
-  reg [31:0] tx_dat_prepared; // @[Sdc.scala 155:32]
-  reg [1:0] tx_dat_prepare_state; // @[Sdc.scala 156:37]
-  reg  tx_dat_started; // @[Sdc.scala 157:31]
-  reg  tx_dat_in_progress; // @[Sdc.scala 159:35]
-  reg  tx_dat_end; // @[Sdc.scala 160:27]
-  reg [1:0] tx_dat_read_sel; // @[Sdc.scala 161:32]
-  reg [1:0] tx_dat_write_sel; // @[Sdc.scala 162:33]
-  reg  tx_dat_read_sel_changed; // @[Sdc.scala 163:40]
-  reg  tx_dat_write_sel_new; // @[Sdc.scala 164:37]
-  reg [3:0] tx_dat_crc_status_counter; // @[Sdc.scala 165:42]
-  reg  tx_dat_crc_status_b_0; // @[Sdc.scala 166:32]
-  reg  tx_dat_crc_status_b_1; // @[Sdc.scala 166:32]
-  reg  tx_dat_crc_status_b_2; // @[Sdc.scala 166:32]
-  reg [1:0] tx_dat_crc_status; // @[Sdc.scala 167:34]
-  reg  tx_dat_prepared_read; // @[Sdc.scala 168:37]
-  wire  _T_2 = tx_cmd_counter == 6'h0; // @[Sdc.scala 170:48]
-  wire  _T_5 = _T & reg_clk; // @[Sdc.scala 172:35]
-  wire [7:0] _rx_res_timer_T_1 = rx_res_timer - 8'h1; // @[Sdc.scala 174:38]
-  wire [7:0] _GEN_4 = rx_res_timer == 8'h1 ? 8'h0 : rx_res_counter; // @[Sdc.scala 175:37 176:26 106:31]
-  wire [135:0] _GEN_5 = rx_res_timer == 8'h1 ? 136'h0 : rx_res; // @[Sdc.scala 175:37 177:18 110:23]
-  wire  _GEN_6 = rx_res_timer == 8'h1 | rx_res_ready; // @[Sdc.scala 175:37 178:24 111:29]
-  wire  _GEN_7 = rx_res_timer == 8'h1 | rx_res_timeout; // @[Sdc.scala 175:37 179:26 117:31]
-  wire [7:0] _GEN_8 = ~rx_res_in_progress & rx_res_next ? _rx_res_timer_T_1 : rx_res_timer; // @[Sdc.scala 173:49 174:22 116:29]
-  wire [7:0] _GEN_9 = ~rx_res_in_progress & rx_res_next ? _GEN_4 : rx_res_counter; // @[Sdc.scala 106:31 173:49]
-  wire [135:0] _GEN_10 = ~rx_res_in_progress & rx_res_next ? _GEN_5 : rx_res; // @[Sdc.scala 110:23 173:49]
-  wire  _GEN_11 = ~rx_res_in_progress & rx_res_next ? _GEN_6 : rx_res_ready; // @[Sdc.scala 111:29 173:49]
-  wire  _GEN_12 = ~rx_res_in_progress & rx_res_next ? _GEN_7 : rx_res_timeout; // @[Sdc.scala 117:31 173:49]
-  wire [7:0] _rx_res_counter_T_1 = rx_res_counter - 8'h1; // @[Sdc.scala 185:42]
+  reg  reg_power; // @[Sdc.scala 88:26]
+  reg [8:0] reg_baud_divider; // @[Sdc.scala 89:33]
+  reg [8:0] reg_clk_counter; // @[Sdc.scala 90:32]
+  reg  reg_clk; // @[Sdc.scala 91:24]
+  wire  _T = reg_clk_counter == 9'h0; // @[Sdc.scala 93:27]
+  wire [8:0] _reg_clk_counter_T_1 = reg_clk_counter - 9'h1; // @[Sdc.scala 97:42]
+  wire [8:0] _GEN_0 = reg_clk_counter == 9'h0 ? reg_baud_divider : _reg_clk_counter_T_1; // @[Sdc.scala 93:36 94:23 97:23]
+  wire  _GEN_1 = reg_clk_counter == 9'h0 ? ~reg_clk : reg_clk; // @[Sdc.scala 93:36 95:15 91:24]
+  wire [8:0] _GEN_2 = reg_power ? _GEN_0 : reg_clk_counter; // @[Sdc.scala 92:20 90:32]
+  wire  _GEN_3 = reg_power & _GEN_1; // @[Sdc.scala 100:13 92:20]
+  reg  rx_res_in_progress; // @[Sdc.scala 104:35]
+  reg [7:0] rx_res_counter; // @[Sdc.scala 105:31]
+  reg  rx_res_bits_0; // @[Sdc.scala 106:24]
+  reg  rx_res_bits_1; // @[Sdc.scala 106:24]
+  reg  rx_res_bits_2; // @[Sdc.scala 106:24]
+  reg  rx_res_bits_3; // @[Sdc.scala 106:24]
+  reg  rx_res_bits_4; // @[Sdc.scala 106:24]
+  reg  rx_res_bits_5; // @[Sdc.scala 106:24]
+  reg  rx_res_bits_6; // @[Sdc.scala 106:24]
+  reg  rx_res_bits_7; // @[Sdc.scala 106:24]
+  reg  rx_res_bits_8; // @[Sdc.scala 106:24]
+  reg  rx_res_bits_9; // @[Sdc.scala 106:24]
+  reg  rx_res_bits_10; // @[Sdc.scala 106:24]
+  reg  rx_res_bits_11; // @[Sdc.scala 106:24]
+  reg  rx_res_bits_12; // @[Sdc.scala 106:24]
+  reg  rx_res_bits_13; // @[Sdc.scala 106:24]
+  reg  rx_res_bits_14; // @[Sdc.scala 106:24]
+  reg  rx_res_bits_15; // @[Sdc.scala 106:24]
+  reg  rx_res_bits_16; // @[Sdc.scala 106:24]
+  reg  rx_res_bits_17; // @[Sdc.scala 106:24]
+  reg  rx_res_bits_18; // @[Sdc.scala 106:24]
+  reg  rx_res_bits_19; // @[Sdc.scala 106:24]
+  reg  rx_res_bits_20; // @[Sdc.scala 106:24]
+  reg  rx_res_bits_21; // @[Sdc.scala 106:24]
+  reg  rx_res_bits_22; // @[Sdc.scala 106:24]
+  reg  rx_res_bits_23; // @[Sdc.scala 106:24]
+  reg  rx_res_bits_24; // @[Sdc.scala 106:24]
+  reg  rx_res_bits_25; // @[Sdc.scala 106:24]
+  reg  rx_res_bits_26; // @[Sdc.scala 106:24]
+  reg  rx_res_bits_27; // @[Sdc.scala 106:24]
+  reg  rx_res_bits_28; // @[Sdc.scala 106:24]
+  reg  rx_res_bits_29; // @[Sdc.scala 106:24]
+  reg  rx_res_bits_30; // @[Sdc.scala 106:24]
+  reg  rx_res_bits_31; // @[Sdc.scala 106:24]
+  reg  rx_res_bits_32; // @[Sdc.scala 106:24]
+  reg  rx_res_bits_33; // @[Sdc.scala 106:24]
+  reg  rx_res_bits_34; // @[Sdc.scala 106:24]
+  reg  rx_res_bits_35; // @[Sdc.scala 106:24]
+  reg  rx_res_bits_36; // @[Sdc.scala 106:24]
+  reg  rx_res_bits_37; // @[Sdc.scala 106:24]
+  reg  rx_res_bits_38; // @[Sdc.scala 106:24]
+  reg  rx_res_bits_39; // @[Sdc.scala 106:24]
+  reg  rx_res_bits_40; // @[Sdc.scala 106:24]
+  reg  rx_res_bits_41; // @[Sdc.scala 106:24]
+  reg  rx_res_bits_42; // @[Sdc.scala 106:24]
+  reg  rx_res_bits_43; // @[Sdc.scala 106:24]
+  reg  rx_res_bits_44; // @[Sdc.scala 106:24]
+  reg  rx_res_bits_45; // @[Sdc.scala 106:24]
+  reg  rx_res_bits_46; // @[Sdc.scala 106:24]
+  reg  rx_res_bits_47; // @[Sdc.scala 106:24]
+  reg  rx_res_bits_48; // @[Sdc.scala 106:24]
+  reg  rx_res_bits_49; // @[Sdc.scala 106:24]
+  reg  rx_res_bits_50; // @[Sdc.scala 106:24]
+  reg  rx_res_bits_51; // @[Sdc.scala 106:24]
+  reg  rx_res_bits_52; // @[Sdc.scala 106:24]
+  reg  rx_res_bits_53; // @[Sdc.scala 106:24]
+  reg  rx_res_bits_54; // @[Sdc.scala 106:24]
+  reg  rx_res_bits_55; // @[Sdc.scala 106:24]
+  reg  rx_res_bits_56; // @[Sdc.scala 106:24]
+  reg  rx_res_bits_57; // @[Sdc.scala 106:24]
+  reg  rx_res_bits_58; // @[Sdc.scala 106:24]
+  reg  rx_res_bits_59; // @[Sdc.scala 106:24]
+  reg  rx_res_bits_60; // @[Sdc.scala 106:24]
+  reg  rx_res_bits_61; // @[Sdc.scala 106:24]
+  reg  rx_res_bits_62; // @[Sdc.scala 106:24]
+  reg  rx_res_bits_63; // @[Sdc.scala 106:24]
+  reg  rx_res_bits_64; // @[Sdc.scala 106:24]
+  reg  rx_res_bits_65; // @[Sdc.scala 106:24]
+  reg  rx_res_bits_66; // @[Sdc.scala 106:24]
+  reg  rx_res_bits_67; // @[Sdc.scala 106:24]
+  reg  rx_res_bits_68; // @[Sdc.scala 106:24]
+  reg  rx_res_bits_69; // @[Sdc.scala 106:24]
+  reg  rx_res_bits_70; // @[Sdc.scala 106:24]
+  reg  rx_res_bits_71; // @[Sdc.scala 106:24]
+  reg  rx_res_bits_72; // @[Sdc.scala 106:24]
+  reg  rx_res_bits_73; // @[Sdc.scala 106:24]
+  reg  rx_res_bits_74; // @[Sdc.scala 106:24]
+  reg  rx_res_bits_75; // @[Sdc.scala 106:24]
+  reg  rx_res_bits_76; // @[Sdc.scala 106:24]
+  reg  rx_res_bits_77; // @[Sdc.scala 106:24]
+  reg  rx_res_bits_78; // @[Sdc.scala 106:24]
+  reg  rx_res_bits_79; // @[Sdc.scala 106:24]
+  reg  rx_res_bits_80; // @[Sdc.scala 106:24]
+  reg  rx_res_bits_81; // @[Sdc.scala 106:24]
+  reg  rx_res_bits_82; // @[Sdc.scala 106:24]
+  reg  rx_res_bits_83; // @[Sdc.scala 106:24]
+  reg  rx_res_bits_84; // @[Sdc.scala 106:24]
+  reg  rx_res_bits_85; // @[Sdc.scala 106:24]
+  reg  rx_res_bits_86; // @[Sdc.scala 106:24]
+  reg  rx_res_bits_87; // @[Sdc.scala 106:24]
+  reg  rx_res_bits_88; // @[Sdc.scala 106:24]
+  reg  rx_res_bits_89; // @[Sdc.scala 106:24]
+  reg  rx_res_bits_90; // @[Sdc.scala 106:24]
+  reg  rx_res_bits_91; // @[Sdc.scala 106:24]
+  reg  rx_res_bits_92; // @[Sdc.scala 106:24]
+  reg  rx_res_bits_93; // @[Sdc.scala 106:24]
+  reg  rx_res_bits_94; // @[Sdc.scala 106:24]
+  reg  rx_res_bits_95; // @[Sdc.scala 106:24]
+  reg  rx_res_bits_96; // @[Sdc.scala 106:24]
+  reg  rx_res_bits_97; // @[Sdc.scala 106:24]
+  reg  rx_res_bits_98; // @[Sdc.scala 106:24]
+  reg  rx_res_bits_99; // @[Sdc.scala 106:24]
+  reg  rx_res_bits_100; // @[Sdc.scala 106:24]
+  reg  rx_res_bits_101; // @[Sdc.scala 106:24]
+  reg  rx_res_bits_102; // @[Sdc.scala 106:24]
+  reg  rx_res_bits_103; // @[Sdc.scala 106:24]
+  reg  rx_res_bits_104; // @[Sdc.scala 106:24]
+  reg  rx_res_bits_105; // @[Sdc.scala 106:24]
+  reg  rx_res_bits_106; // @[Sdc.scala 106:24]
+  reg  rx_res_bits_107; // @[Sdc.scala 106:24]
+  reg  rx_res_bits_108; // @[Sdc.scala 106:24]
+  reg  rx_res_bits_109; // @[Sdc.scala 106:24]
+  reg  rx_res_bits_110; // @[Sdc.scala 106:24]
+  reg  rx_res_bits_111; // @[Sdc.scala 106:24]
+  reg  rx_res_bits_112; // @[Sdc.scala 106:24]
+  reg  rx_res_bits_113; // @[Sdc.scala 106:24]
+  reg  rx_res_bits_114; // @[Sdc.scala 106:24]
+  reg  rx_res_bits_115; // @[Sdc.scala 106:24]
+  reg  rx_res_bits_116; // @[Sdc.scala 106:24]
+  reg  rx_res_bits_117; // @[Sdc.scala 106:24]
+  reg  rx_res_bits_118; // @[Sdc.scala 106:24]
+  reg  rx_res_bits_119; // @[Sdc.scala 106:24]
+  reg  rx_res_bits_120; // @[Sdc.scala 106:24]
+  reg  rx_res_bits_121; // @[Sdc.scala 106:24]
+  reg  rx_res_bits_122; // @[Sdc.scala 106:24]
+  reg  rx_res_bits_123; // @[Sdc.scala 106:24]
+  reg  rx_res_bits_124; // @[Sdc.scala 106:24]
+  reg  rx_res_bits_125; // @[Sdc.scala 106:24]
+  reg  rx_res_bits_126; // @[Sdc.scala 106:24]
+  reg  rx_res_bits_127; // @[Sdc.scala 106:24]
+  reg  rx_res_bits_128; // @[Sdc.scala 106:24]
+  reg  rx_res_bits_129; // @[Sdc.scala 106:24]
+  reg  rx_res_bits_130; // @[Sdc.scala 106:24]
+  reg  rx_res_bits_131; // @[Sdc.scala 106:24]
+  reg  rx_res_bits_132; // @[Sdc.scala 106:24]
+  reg  rx_res_bits_133; // @[Sdc.scala 106:24]
+  reg  rx_res_bits_134; // @[Sdc.scala 106:24]
+  reg  rx_res_bits_135; // @[Sdc.scala 106:24]
+  reg  rx_res_next; // @[Sdc.scala 107:28]
+  reg [3:0] rx_res_type; // @[Sdc.scala 108:28]
+  reg [135:0] rx_res; // @[Sdc.scala 109:23]
+  reg  rx_res_ready; // @[Sdc.scala 110:29]
+  reg  rx_res_intr_en; // @[Sdc.scala 111:31]
+  reg  rx_res_crc_0; // @[Sdc.scala 112:23]
+  reg  rx_res_crc_1; // @[Sdc.scala 112:23]
+  reg  rx_res_crc_2; // @[Sdc.scala 112:23]
+  reg  rx_res_crc_3; // @[Sdc.scala 112:23]
+  reg  rx_res_crc_4; // @[Sdc.scala 112:23]
+  reg  rx_res_crc_5; // @[Sdc.scala 112:23]
+  reg  rx_res_crc_6; // @[Sdc.scala 112:23]
+  reg  rx_res_crc_error; // @[Sdc.scala 113:33]
+  reg  rx_res_crc_en; // @[Sdc.scala 114:30]
+  reg [7:0] rx_res_timer; // @[Sdc.scala 115:29]
+  reg  rx_res_timeout; // @[Sdc.scala 116:31]
+  reg [1:0] rx_res_read_counter; // @[Sdc.scala 117:36]
+  reg [31:0] tx_cmd_arg; // @[Sdc.scala 118:27]
+  reg  tx_cmd_0; // @[Sdc.scala 119:19]
+  reg  tx_cmd_1; // @[Sdc.scala 119:19]
+  reg  tx_cmd_2; // @[Sdc.scala 119:19]
+  reg  tx_cmd_3; // @[Sdc.scala 119:19]
+  reg  tx_cmd_4; // @[Sdc.scala 119:19]
+  reg  tx_cmd_5; // @[Sdc.scala 119:19]
+  reg  tx_cmd_6; // @[Sdc.scala 119:19]
+  reg  tx_cmd_7; // @[Sdc.scala 119:19]
+  reg  tx_cmd_8; // @[Sdc.scala 119:19]
+  reg  tx_cmd_9; // @[Sdc.scala 119:19]
+  reg  tx_cmd_10; // @[Sdc.scala 119:19]
+  reg  tx_cmd_11; // @[Sdc.scala 119:19]
+  reg  tx_cmd_12; // @[Sdc.scala 119:19]
+  reg  tx_cmd_13; // @[Sdc.scala 119:19]
+  reg  tx_cmd_14; // @[Sdc.scala 119:19]
+  reg  tx_cmd_15; // @[Sdc.scala 119:19]
+  reg  tx_cmd_16; // @[Sdc.scala 119:19]
+  reg  tx_cmd_17; // @[Sdc.scala 119:19]
+  reg  tx_cmd_18; // @[Sdc.scala 119:19]
+  reg  tx_cmd_19; // @[Sdc.scala 119:19]
+  reg  tx_cmd_20; // @[Sdc.scala 119:19]
+  reg  tx_cmd_21; // @[Sdc.scala 119:19]
+  reg  tx_cmd_22; // @[Sdc.scala 119:19]
+  reg  tx_cmd_23; // @[Sdc.scala 119:19]
+  reg  tx_cmd_24; // @[Sdc.scala 119:19]
+  reg  tx_cmd_25; // @[Sdc.scala 119:19]
+  reg  tx_cmd_26; // @[Sdc.scala 119:19]
+  reg  tx_cmd_27; // @[Sdc.scala 119:19]
+  reg  tx_cmd_28; // @[Sdc.scala 119:19]
+  reg  tx_cmd_29; // @[Sdc.scala 119:19]
+  reg  tx_cmd_30; // @[Sdc.scala 119:19]
+  reg  tx_cmd_31; // @[Sdc.scala 119:19]
+  reg  tx_cmd_32; // @[Sdc.scala 119:19]
+  reg  tx_cmd_33; // @[Sdc.scala 119:19]
+  reg  tx_cmd_34; // @[Sdc.scala 119:19]
+  reg  tx_cmd_35; // @[Sdc.scala 119:19]
+  reg  tx_cmd_36; // @[Sdc.scala 119:19]
+  reg  tx_cmd_37; // @[Sdc.scala 119:19]
+  reg  tx_cmd_38; // @[Sdc.scala 119:19]
+  reg  tx_cmd_39; // @[Sdc.scala 119:19]
+  reg  tx_cmd_40; // @[Sdc.scala 119:19]
+  reg  tx_cmd_41; // @[Sdc.scala 119:19]
+  reg  tx_cmd_42; // @[Sdc.scala 119:19]
+  reg  tx_cmd_43; // @[Sdc.scala 119:19]
+  reg  tx_cmd_44; // @[Sdc.scala 119:19]
+  reg  tx_cmd_45; // @[Sdc.scala 119:19]
+  reg  tx_cmd_46; // @[Sdc.scala 119:19]
+  reg  tx_cmd_47; // @[Sdc.scala 119:19]
+  reg [5:0] tx_cmd_counter; // @[Sdc.scala 120:31]
+  reg  tx_cmd_crc_0; // @[Sdc.scala 121:23]
+  reg  tx_cmd_crc_1; // @[Sdc.scala 121:23]
+  reg  tx_cmd_crc_2; // @[Sdc.scala 121:23]
+  reg  tx_cmd_crc_3; // @[Sdc.scala 121:23]
+  reg  tx_cmd_crc_4; // @[Sdc.scala 121:23]
+  reg  tx_cmd_crc_5; // @[Sdc.scala 121:23]
+  reg  tx_cmd_crc_6; // @[Sdc.scala 121:23]
+  reg [5:0] tx_cmd_timer; // @[Sdc.scala 122:29]
+  reg  reg_tx_cmd_wrt; // @[Sdc.scala 123:31]
+  reg  reg_tx_cmd_out; // @[Sdc.scala 124:31]
+  reg  rx_dat_in_progress; // @[Sdc.scala 125:35]
+  reg [10:0] rx_dat_counter; // @[Sdc.scala 126:31]
+  reg  rx_dat_start_bit; // @[Sdc.scala 127:33]
+  reg [3:0] rx_dat_bits_0; // @[Sdc.scala 128:24]
+  reg [3:0] rx_dat_bits_1; // @[Sdc.scala 128:24]
+  reg [3:0] rx_dat_bits_2; // @[Sdc.scala 128:24]
+  reg [3:0] rx_dat_bits_3; // @[Sdc.scala 128:24]
+  reg [3:0] rx_dat_bits_4; // @[Sdc.scala 128:24]
+  reg [3:0] rx_dat_bits_5; // @[Sdc.scala 128:24]
+  reg [3:0] rx_dat_bits_6; // @[Sdc.scala 128:24]
+  reg [3:0] rx_dat_bits_7; // @[Sdc.scala 128:24]
+  reg [3:0] rx_dat_next; // @[Sdc.scala 129:28]
+  reg  rx_dat_continuous; // @[Sdc.scala 130:34]
+  reg  rx_dat_ready; // @[Sdc.scala 131:29]
+  reg  rx_dat_intr_en; // @[Sdc.scala 132:31]
+  reg [3:0] rx_dat_crc_0; // @[Sdc.scala 133:23]
+  reg [3:0] rx_dat_crc_1; // @[Sdc.scala 133:23]
+  reg [3:0] rx_dat_crc_2; // @[Sdc.scala 133:23]
+  reg [3:0] rx_dat_crc_3; // @[Sdc.scala 133:23]
+  reg [3:0] rx_dat_crc_4; // @[Sdc.scala 133:23]
+  reg [3:0] rx_dat_crc_5; // @[Sdc.scala 133:23]
+  reg [3:0] rx_dat_crc_6; // @[Sdc.scala 133:23]
+  reg [3:0] rx_dat_crc_7; // @[Sdc.scala 133:23]
+  reg [3:0] rx_dat_crc_8; // @[Sdc.scala 133:23]
+  reg [3:0] rx_dat_crc_9; // @[Sdc.scala 133:23]
+  reg [3:0] rx_dat_crc_10; // @[Sdc.scala 133:23]
+  reg [3:0] rx_dat_crc_11; // @[Sdc.scala 133:23]
+  reg [3:0] rx_dat_crc_12; // @[Sdc.scala 133:23]
+  reg [3:0] rx_dat_crc_13; // @[Sdc.scala 133:23]
+  reg [3:0] rx_dat_crc_14; // @[Sdc.scala 133:23]
+  reg [3:0] rx_dat_crc_15; // @[Sdc.scala 133:23]
+  reg  rx_dat_crc_error; // @[Sdc.scala 134:33]
+  reg [18:0] rx_dat_timer; // @[Sdc.scala 135:29]
+  reg  rx_dat_timeout; // @[Sdc.scala 136:31]
+  reg  rx_dat_overrun; // @[Sdc.scala 137:31]
+  reg [7:0] rxtx_dat_counter; // @[Sdc.scala 139:33]
+  reg [7:0] rxtx_dat_index; // @[Sdc.scala 140:31]
+  reg [18:0] rx_busy_timer; // @[Sdc.scala 141:30]
+  reg  rx_busy_in_progress; // @[Sdc.scala 142:36]
+  reg  rx_dat0_next; // @[Sdc.scala 143:29]
+  reg  rx_dat_buf_read; // @[Sdc.scala 144:32]
+  reg [31:0] rx_dat_buf_cache; // @[Sdc.scala 145:33]
+  reg  reg_tx_dat_wrt; // @[Sdc.scala 146:31]
+  reg  reg_tx_dat_out; // @[Sdc.scala 147:31]
+  reg  tx_empty_intr_en; // @[Sdc.scala 148:33]
+  reg  tx_end_intr_en; // @[Sdc.scala 149:31]
+  reg [10:0] tx_dat_counter; // @[Sdc.scala 150:31]
+  reg [5:0] tx_dat_timer; // @[Sdc.scala 151:29]
+  reg [3:0] tx_dat_0; // @[Sdc.scala 152:19]
+  reg [3:0] tx_dat_1; // @[Sdc.scala 152:19]
+  reg [3:0] tx_dat_2; // @[Sdc.scala 152:19]
+  reg [3:0] tx_dat_3; // @[Sdc.scala 152:19]
+  reg [3:0] tx_dat_4; // @[Sdc.scala 152:19]
+  reg [3:0] tx_dat_5; // @[Sdc.scala 152:19]
+  reg [3:0] tx_dat_6; // @[Sdc.scala 152:19]
+  reg [3:0] tx_dat_7; // @[Sdc.scala 152:19]
+  reg [3:0] tx_dat_8; // @[Sdc.scala 152:19]
+  reg [3:0] tx_dat_9; // @[Sdc.scala 152:19]
+  reg [3:0] tx_dat_10; // @[Sdc.scala 152:19]
+  reg [3:0] tx_dat_11; // @[Sdc.scala 152:19]
+  reg [3:0] tx_dat_12; // @[Sdc.scala 152:19]
+  reg [3:0] tx_dat_13; // @[Sdc.scala 152:19]
+  reg [3:0] tx_dat_14; // @[Sdc.scala 152:19]
+  reg [3:0] tx_dat_15; // @[Sdc.scala 152:19]
+  reg [3:0] tx_dat_16; // @[Sdc.scala 152:19]
+  reg [3:0] tx_dat_17; // @[Sdc.scala 152:19]
+  reg [3:0] tx_dat_18; // @[Sdc.scala 152:19]
+  reg [3:0] tx_dat_19; // @[Sdc.scala 152:19]
+  reg [3:0] tx_dat_20; // @[Sdc.scala 152:19]
+  reg [3:0] tx_dat_21; // @[Sdc.scala 152:19]
+  reg [3:0] tx_dat_22; // @[Sdc.scala 152:19]
+  reg [3:0] tx_dat_23; // @[Sdc.scala 152:19]
+  reg [3:0] tx_dat_crc_0; // @[Sdc.scala 153:23]
+  reg [3:0] tx_dat_crc_1; // @[Sdc.scala 153:23]
+  reg [3:0] tx_dat_crc_2; // @[Sdc.scala 153:23]
+  reg [3:0] tx_dat_crc_3; // @[Sdc.scala 153:23]
+  reg [3:0] tx_dat_crc_4; // @[Sdc.scala 153:23]
+  reg [3:0] tx_dat_crc_5; // @[Sdc.scala 153:23]
+  reg [3:0] tx_dat_crc_6; // @[Sdc.scala 153:23]
+  reg [3:0] tx_dat_crc_7; // @[Sdc.scala 153:23]
+  reg [3:0] tx_dat_crc_8; // @[Sdc.scala 153:23]
+  reg [3:0] tx_dat_crc_9; // @[Sdc.scala 153:23]
+  reg [3:0] tx_dat_crc_10; // @[Sdc.scala 153:23]
+  reg [3:0] tx_dat_crc_11; // @[Sdc.scala 153:23]
+  reg [3:0] tx_dat_crc_12; // @[Sdc.scala 153:23]
+  reg [3:0] tx_dat_crc_13; // @[Sdc.scala 153:23]
+  reg [3:0] tx_dat_crc_14; // @[Sdc.scala 153:23]
+  reg [3:0] tx_dat_crc_15; // @[Sdc.scala 153:23]
+  reg [31:0] tx_dat_prepared; // @[Sdc.scala 154:32]
+  reg [1:0] tx_dat_prepare_state; // @[Sdc.scala 155:37]
+  reg  tx_dat_started; // @[Sdc.scala 156:31]
+  reg  tx_dat_in_progress; // @[Sdc.scala 158:35]
+  reg  tx_dat_end; // @[Sdc.scala 159:27]
+  reg [1:0] tx_dat_read_sel; // @[Sdc.scala 160:32]
+  reg [1:0] tx_dat_write_sel; // @[Sdc.scala 161:33]
+  reg  tx_dat_read_sel_changed; // @[Sdc.scala 162:40]
+  reg  tx_dat_write_sel_new; // @[Sdc.scala 163:37]
+  reg [3:0] tx_dat_crc_status_counter; // @[Sdc.scala 164:42]
+  reg  tx_dat_crc_status_b_0; // @[Sdc.scala 165:32]
+  reg  tx_dat_crc_status_b_1; // @[Sdc.scala 165:32]
+  reg  tx_dat_crc_status_b_2; // @[Sdc.scala 165:32]
+  reg [1:0] tx_dat_crc_status; // @[Sdc.scala 166:34]
+  reg  tx_dat_prepared_read; // @[Sdc.scala 167:37]
+  wire  _T_2 = tx_cmd_counter == 6'h0; // @[Sdc.scala 169:48]
+  wire  _T_5 = _T & reg_clk; // @[Sdc.scala 171:35]
+  wire [7:0] _rx_res_timer_T_1 = rx_res_timer - 8'h1; // @[Sdc.scala 173:38]
+  wire [7:0] _GEN_4 = rx_res_timer == 8'h1 ? 8'h0 : rx_res_counter; // @[Sdc.scala 174:37 175:26 105:31]
+  wire [135:0] _GEN_5 = rx_res_timer == 8'h1 ? 136'h0 : rx_res; // @[Sdc.scala 174:37 176:18 109:23]
+  wire  _GEN_6 = rx_res_timer == 8'h1 | rx_res_ready; // @[Sdc.scala 174:37 177:24 110:29]
+  wire  _GEN_7 = rx_res_timer == 8'h1 | rx_res_timeout; // @[Sdc.scala 174:37 178:26 116:31]
+  wire [7:0] _GEN_8 = ~rx_res_in_progress & rx_res_next ? _rx_res_timer_T_1 : rx_res_timer; // @[Sdc.scala 172:49 173:22 115:29]
+  wire [7:0] _GEN_9 = ~rx_res_in_progress & rx_res_next ? _GEN_4 : rx_res_counter; // @[Sdc.scala 105:31 172:49]
+  wire [135:0] _GEN_10 = ~rx_res_in_progress & rx_res_next ? _GEN_5 : rx_res; // @[Sdc.scala 109:23 172:49]
+  wire  _GEN_11 = ~rx_res_in_progress & rx_res_next ? _GEN_6 : rx_res_ready; // @[Sdc.scala 110:29 172:49]
+  wire  _GEN_12 = ~rx_res_in_progress & rx_res_next ? _GEN_7 : rx_res_timeout; // @[Sdc.scala 116:31 172:49]
+  wire [7:0] _rx_res_counter_T_1 = rx_res_counter - 8'h1; // @[Sdc.scala 184:42]
   wire [7:0] rx_res_lo_lo_lo_lo = {rx_res_bits_7,rx_res_bits_6,rx_res_bits_5,rx_res_bits_4,rx_res_bits_3,rx_res_bits_2,
     rx_res_bits_1,rx_res_bits_0}; // @[Cat.scala 33:92]
   wire [16:0] rx_res_lo_lo_lo = {rx_res_bits_16,rx_res_bits_15,rx_res_bits_14,rx_res_bits_13,rx_res_bits_12,
@@ -8786,770 +8786,770 @@ module Sdc(
     rx_res_lo_hi_lo,rx_res_lo_lo_hi,rx_res_lo_lo_lo,rx_res_next}; // @[Cat.scala 33:92]
   wire [6:0] _rx_res_crc_error_T = {rx_res_crc_0,rx_res_crc_1,rx_res_crc_2,rx_res_crc_3,rx_res_crc_4,rx_res_crc_5,
     rx_res_crc_6}; // @[Cat.scala 33:92]
-  wire [18:0] _GEN_13 = rx_res_type == 4'h5 ? 19'h7a120 : rx_busy_timer; // @[Sdc.scala 202:47 203:27 142:30]
-  wire  _GEN_14 = rx_res_counter == 8'h1 ? 1'h0 : 1'h1; // @[Sdc.scala 186:28 196:39 198:30]
-  wire [136:0] _GEN_15 = rx_res_counter == 8'h1 ? _rx_res_T_1 : {{1'd0}, _GEN_10}; // @[Sdc.scala 196:39 199:18]
-  wire  _GEN_16 = rx_res_counter == 8'h1 | _GEN_11; // @[Sdc.scala 196:39 200:24]
-  wire  _GEN_17 = rx_res_counter == 8'h1 ? rx_res_crc_en & _rx_res_crc_error_T != 7'h0 : rx_res_crc_error; // @[Sdc.scala 196:39 201:28 114:33]
-  wire [18:0] _GEN_18 = rx_res_counter == 8'h1 ? _GEN_13 : rx_busy_timer; // @[Sdc.scala 142:30 196:39]
-  wire [5:0] _GEN_19 = rx_res_counter == 8'h1 ? 6'h30 : tx_cmd_timer; // @[Sdc.scala 196:39 205:24 123:29]
-  wire [7:0] _GEN_156 = rx_res_in_progress | ~rx_res_next ? _rx_res_counter_T_1 : _GEN_9; // @[Sdc.scala 182:49 185:24]
-  wire  _GEN_157 = rx_res_in_progress | ~rx_res_next ? _GEN_14 : rx_res_in_progress; // @[Sdc.scala 105:35 182:49]
-  wire  _GEN_158 = rx_res_in_progress | ~rx_res_next ? rx_res_next ^ rx_res_crc_6 : rx_res_crc_0; // @[Sdc.scala 113:23 182:49 188:23]
-  wire  _GEN_159 = rx_res_in_progress | ~rx_res_next ? rx_res_crc_0 : rx_res_crc_1; // @[Sdc.scala 113:23 182:49 189:23]
-  wire  _GEN_160 = rx_res_in_progress | ~rx_res_next ? rx_res_crc_1 : rx_res_crc_2; // @[Sdc.scala 113:23 182:49 190:23]
-  wire  _GEN_161 = rx_res_in_progress | ~rx_res_next ? rx_res_crc_2 ^ rx_res_crc_6 : rx_res_crc_3; // @[Sdc.scala 113:23 182:49 191:23]
-  wire  _GEN_162 = rx_res_in_progress | ~rx_res_next ? rx_res_crc_3 : rx_res_crc_4; // @[Sdc.scala 113:23 182:49 192:23]
-  wire  _GEN_163 = rx_res_in_progress | ~rx_res_next ? rx_res_crc_4 : rx_res_crc_5; // @[Sdc.scala 113:23 182:49 193:23]
-  wire  _GEN_164 = rx_res_in_progress | ~rx_res_next ? rx_res_crc_5 : rx_res_crc_6; // @[Sdc.scala 113:23 182:49 194:23]
-  wire [136:0] _GEN_165 = rx_res_in_progress | ~rx_res_next ? _GEN_15 : {{1'd0}, _GEN_10}; // @[Sdc.scala 182:49]
-  wire  _GEN_166 = rx_res_in_progress | ~rx_res_next ? _GEN_16 : _GEN_11; // @[Sdc.scala 182:49]
-  wire  _GEN_167 = rx_res_in_progress | ~rx_res_next ? _GEN_17 : rx_res_crc_error; // @[Sdc.scala 114:33 182:49]
-  wire [18:0] _GEN_168 = rx_res_in_progress | ~rx_res_next ? _GEN_18 : rx_busy_timer; // @[Sdc.scala 142:30 182:49]
-  wire [5:0] _GEN_169 = rx_res_in_progress | ~rx_res_next ? _GEN_19 : tx_cmd_timer; // @[Sdc.scala 123:29 182:49]
-  wire [7:0] _GEN_170 = _T & reg_clk ? _GEN_8 : rx_res_timer; // @[Sdc.scala 116:29 172:47]
-  wire [7:0] _GEN_171 = _T & reg_clk ? _GEN_156 : rx_res_counter; // @[Sdc.scala 106:31 172:47]
-  wire [136:0] _GEN_172 = _T & reg_clk ? _GEN_165 : {{1'd0}, rx_res}; // @[Sdc.scala 110:23 172:47]
-  wire  _GEN_173 = _T & reg_clk ? _GEN_166 : rx_res_ready; // @[Sdc.scala 111:29 172:47]
-  wire  _GEN_174 = _T & reg_clk ? _GEN_12 : rx_res_timeout; // @[Sdc.scala 117:31 172:47]
-  wire  _GEN_311 = _T & reg_clk ? _GEN_157 : rx_res_in_progress; // @[Sdc.scala 105:35 172:47]
-  wire  _GEN_312 = _T & reg_clk ? _GEN_158 : rx_res_crc_0; // @[Sdc.scala 113:23 172:47]
-  wire  _GEN_313 = _T & reg_clk ? _GEN_159 : rx_res_crc_1; // @[Sdc.scala 113:23 172:47]
-  wire  _GEN_314 = _T & reg_clk ? _GEN_160 : rx_res_crc_2; // @[Sdc.scala 113:23 172:47]
-  wire  _GEN_315 = _T & reg_clk ? _GEN_161 : rx_res_crc_3; // @[Sdc.scala 113:23 172:47]
-  wire  _GEN_316 = _T & reg_clk ? _GEN_162 : rx_res_crc_4; // @[Sdc.scala 113:23 172:47]
-  wire  _GEN_317 = _T & reg_clk ? _GEN_163 : rx_res_crc_5; // @[Sdc.scala 113:23 172:47]
-  wire  _GEN_318 = _T & reg_clk ? _GEN_164 : rx_res_crc_6; // @[Sdc.scala 113:23 172:47]
-  wire  _GEN_319 = _T & reg_clk ? _GEN_167 : rx_res_crc_error; // @[Sdc.scala 114:33 172:47]
-  wire [18:0] _GEN_320 = _T & reg_clk ? _GEN_168 : rx_busy_timer; // @[Sdc.scala 142:30 172:47]
-  wire [7:0] _GEN_323 = rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0 ? _GEN_170 : rx_res_timer; // @[Sdc.scala 116:29 170:57]
-  wire [7:0] _GEN_324 = rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0 ? _GEN_171 : rx_res_counter; // @[Sdc.scala 106:31 170:57]
-  wire [136:0] _GEN_325 = rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0 ? _GEN_172 : {{1'd0}, rx_res}; // @[Sdc.scala 110:23 170:57]
-  wire  _GEN_326 = rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0 ? _GEN_173 : rx_res_ready; // @[Sdc.scala 111:29 170:57]
-  wire  _GEN_327 = rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0 ? _GEN_174 : rx_res_timeout; // @[Sdc.scala 117:31 170:57]
-  wire  _GEN_464 = rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0 ? _GEN_311 : rx_res_in_progress; // @[Sdc.scala 105:35 170:57]
-  wire  _GEN_465 = rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0 ? _GEN_312 : rx_res_crc_0; // @[Sdc.scala 113:23 170:57]
-  wire  _GEN_466 = rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0 ? _GEN_313 : rx_res_crc_1; // @[Sdc.scala 113:23 170:57]
-  wire  _GEN_467 = rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0 ? _GEN_314 : rx_res_crc_2; // @[Sdc.scala 113:23 170:57]
-  wire  _GEN_468 = rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0 ? _GEN_315 : rx_res_crc_3; // @[Sdc.scala 113:23 170:57]
-  wire  _GEN_469 = rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0 ? _GEN_316 : rx_res_crc_4; // @[Sdc.scala 113:23 170:57]
-  wire  _GEN_470 = rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0 ? _GEN_317 : rx_res_crc_5; // @[Sdc.scala 113:23 170:57]
-  wire  _GEN_471 = rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0 ? _GEN_318 : rx_res_crc_6; // @[Sdc.scala 113:23 170:57]
-  wire  _GEN_472 = rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0 ? _GEN_319 : rx_res_crc_error; // @[Sdc.scala 114:33 170:57]
-  wire [18:0] _GEN_473 = rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0 ? _GEN_320 : rx_busy_timer; // @[Sdc.scala 142:30 170:57]
-  wire [5:0] _tx_cmd_timer_T_1 = tx_cmd_timer - 6'h1; // @[Sdc.scala 215:34]
-  wire  _T_20 = rx_busy_timer != 19'h0 & _T & reg_clk; // @[Sdc.scala 218:64]
-  wire [5:0] _tx_cmd_counter_T_1 = tx_cmd_counter - 6'h1; // @[Sdc.scala 225:38]
-  wire  crc__0 = tx_cmd_7 ^ tx_cmd_crc_6; // @[Sdc.scala 228:17]
-  wire  crc__3 = tx_cmd_crc_2 ^ tx_cmd_crc_6; // @[Sdc.scala 231:21]
-  wire  _GEN_475 = tx_cmd_counter == 6'h9 ? tx_cmd_crc_5 : tx_cmd_1; // @[Sdc.scala 239:35 240:39 224:48]
-  wire  _GEN_476 = tx_cmd_counter == 6'h9 ? tx_cmd_crc_4 : tx_cmd_2; // @[Sdc.scala 239:35 240:39 224:48]
-  wire  _GEN_477 = tx_cmd_counter == 6'h9 ? tx_cmd_crc_3 : tx_cmd_3; // @[Sdc.scala 239:35 240:39 224:48]
-  wire  _GEN_478 = tx_cmd_counter == 6'h9 ? crc__3 : tx_cmd_4; // @[Sdc.scala 239:35 240:39 224:48]
-  wire  _GEN_479 = tx_cmd_counter == 6'h9 ? tx_cmd_crc_1 : tx_cmd_5; // @[Sdc.scala 239:35 240:39 224:48]
-  wire  _GEN_480 = tx_cmd_counter == 6'h9 ? tx_cmd_crc_0 : tx_cmd_6; // @[Sdc.scala 239:35 240:39 224:48]
-  wire  _GEN_481 = tx_cmd_counter == 6'h9 ? crc__0 : tx_cmd_7; // @[Sdc.scala 239:35 240:39 224:48]
-  wire  _GEN_482 = _T_2 & _T & reg_clk ? 1'h0 : reg_tx_cmd_wrt; // @[Sdc.scala 243:77 244:20 124:31]
-  wire  _GEN_484 = tx_cmd_counter > 6'h0 & _T & reg_clk | _GEN_482; // @[Sdc.scala 221:75 222:20]
-  wire  _GEN_486 = tx_cmd_counter > 6'h0 & _T & reg_clk ? _GEN_475 : tx_cmd_0; // @[Sdc.scala 120:19 221:75]
-  wire  _GEN_487 = tx_cmd_counter > 6'h0 & _T & reg_clk ? _GEN_476 : tx_cmd_1; // @[Sdc.scala 120:19 221:75]
-  wire  _GEN_488 = tx_cmd_counter > 6'h0 & _T & reg_clk ? _GEN_477 : tx_cmd_2; // @[Sdc.scala 120:19 221:75]
-  wire  _GEN_489 = tx_cmd_counter > 6'h0 & _T & reg_clk ? _GEN_478 : tx_cmd_3; // @[Sdc.scala 120:19 221:75]
-  wire  _GEN_490 = tx_cmd_counter > 6'h0 & _T & reg_clk ? _GEN_479 : tx_cmd_4; // @[Sdc.scala 120:19 221:75]
-  wire  _GEN_491 = tx_cmd_counter > 6'h0 & _T & reg_clk ? _GEN_480 : tx_cmd_5; // @[Sdc.scala 120:19 221:75]
-  wire  _GEN_492 = tx_cmd_counter > 6'h0 & _T & reg_clk ? _GEN_481 : tx_cmd_6; // @[Sdc.scala 120:19 221:75]
-  wire  _GEN_493 = tx_cmd_counter > 6'h0 & _T & reg_clk ? tx_cmd_8 : tx_cmd_7; // @[Sdc.scala 120:19 221:75 224:48]
-  wire  _GEN_494 = tx_cmd_counter > 6'h0 & _T & reg_clk ? tx_cmd_9 : tx_cmd_8; // @[Sdc.scala 120:19 221:75 224:48]
-  wire  _GEN_495 = tx_cmd_counter > 6'h0 & _T & reg_clk ? tx_cmd_10 : tx_cmd_9; // @[Sdc.scala 120:19 221:75 224:48]
-  wire  _GEN_496 = tx_cmd_counter > 6'h0 & _T & reg_clk ? tx_cmd_11 : tx_cmd_10; // @[Sdc.scala 120:19 221:75 224:48]
-  wire  _GEN_497 = tx_cmd_counter > 6'h0 & _T & reg_clk ? tx_cmd_12 : tx_cmd_11; // @[Sdc.scala 120:19 221:75 224:48]
-  wire  _GEN_498 = tx_cmd_counter > 6'h0 & _T & reg_clk ? tx_cmd_13 : tx_cmd_12; // @[Sdc.scala 120:19 221:75 224:48]
-  wire  _GEN_499 = tx_cmd_counter > 6'h0 & _T & reg_clk ? tx_cmd_14 : tx_cmd_13; // @[Sdc.scala 120:19 221:75 224:48]
-  wire  _GEN_500 = tx_cmd_counter > 6'h0 & _T & reg_clk ? tx_cmd_15 : tx_cmd_14; // @[Sdc.scala 120:19 221:75 224:48]
-  wire  _GEN_501 = tx_cmd_counter > 6'h0 & _T & reg_clk ? tx_cmd_16 : tx_cmd_15; // @[Sdc.scala 120:19 221:75 224:48]
-  wire  _GEN_502 = tx_cmd_counter > 6'h0 & _T & reg_clk ? tx_cmd_17 : tx_cmd_16; // @[Sdc.scala 120:19 221:75 224:48]
-  wire  _GEN_503 = tx_cmd_counter > 6'h0 & _T & reg_clk ? tx_cmd_18 : tx_cmd_17; // @[Sdc.scala 120:19 221:75 224:48]
-  wire  _GEN_504 = tx_cmd_counter > 6'h0 & _T & reg_clk ? tx_cmd_19 : tx_cmd_18; // @[Sdc.scala 120:19 221:75 224:48]
-  wire  _GEN_505 = tx_cmd_counter > 6'h0 & _T & reg_clk ? tx_cmd_20 : tx_cmd_19; // @[Sdc.scala 120:19 221:75 224:48]
-  wire  _GEN_506 = tx_cmd_counter > 6'h0 & _T & reg_clk ? tx_cmd_21 : tx_cmd_20; // @[Sdc.scala 120:19 221:75 224:48]
-  wire  _GEN_507 = tx_cmd_counter > 6'h0 & _T & reg_clk ? tx_cmd_22 : tx_cmd_21; // @[Sdc.scala 120:19 221:75 224:48]
-  wire  _GEN_508 = tx_cmd_counter > 6'h0 & _T & reg_clk ? tx_cmd_23 : tx_cmd_22; // @[Sdc.scala 120:19 221:75 224:48]
-  wire  _GEN_509 = tx_cmd_counter > 6'h0 & _T & reg_clk ? tx_cmd_24 : tx_cmd_23; // @[Sdc.scala 120:19 221:75 224:48]
-  wire  _GEN_510 = tx_cmd_counter > 6'h0 & _T & reg_clk ? tx_cmd_25 : tx_cmd_24; // @[Sdc.scala 120:19 221:75 224:48]
-  wire  _GEN_511 = tx_cmd_counter > 6'h0 & _T & reg_clk ? tx_cmd_26 : tx_cmd_25; // @[Sdc.scala 120:19 221:75 224:48]
-  wire  _GEN_512 = tx_cmd_counter > 6'h0 & _T & reg_clk ? tx_cmd_27 : tx_cmd_26; // @[Sdc.scala 120:19 221:75 224:48]
-  wire  _GEN_513 = tx_cmd_counter > 6'h0 & _T & reg_clk ? tx_cmd_28 : tx_cmd_27; // @[Sdc.scala 120:19 221:75 224:48]
-  wire  _GEN_514 = tx_cmd_counter > 6'h0 & _T & reg_clk ? tx_cmd_29 : tx_cmd_28; // @[Sdc.scala 120:19 221:75 224:48]
-  wire  _GEN_515 = tx_cmd_counter > 6'h0 & _T & reg_clk ? tx_cmd_30 : tx_cmd_29; // @[Sdc.scala 120:19 221:75 224:48]
-  wire  _GEN_516 = tx_cmd_counter > 6'h0 & _T & reg_clk ? tx_cmd_31 : tx_cmd_30; // @[Sdc.scala 120:19 221:75 224:48]
-  wire  _GEN_517 = tx_cmd_counter > 6'h0 & _T & reg_clk ? tx_cmd_32 : tx_cmd_31; // @[Sdc.scala 120:19 221:75 224:48]
-  wire  _GEN_518 = tx_cmd_counter > 6'h0 & _T & reg_clk ? tx_cmd_33 : tx_cmd_32; // @[Sdc.scala 120:19 221:75 224:48]
-  wire  _GEN_519 = tx_cmd_counter > 6'h0 & _T & reg_clk ? tx_cmd_34 : tx_cmd_33; // @[Sdc.scala 120:19 221:75 224:48]
-  wire  _GEN_520 = tx_cmd_counter > 6'h0 & _T & reg_clk ? tx_cmd_35 : tx_cmd_34; // @[Sdc.scala 120:19 221:75 224:48]
-  wire  _GEN_521 = tx_cmd_counter > 6'h0 & _T & reg_clk ? tx_cmd_36 : tx_cmd_35; // @[Sdc.scala 120:19 221:75 224:48]
-  wire  _GEN_522 = tx_cmd_counter > 6'h0 & _T & reg_clk ? tx_cmd_37 : tx_cmd_36; // @[Sdc.scala 120:19 221:75 224:48]
-  wire  _GEN_523 = tx_cmd_counter > 6'h0 & _T & reg_clk ? tx_cmd_38 : tx_cmd_37; // @[Sdc.scala 120:19 221:75 224:48]
-  wire  _GEN_524 = tx_cmd_counter > 6'h0 & _T & reg_clk ? tx_cmd_39 : tx_cmd_38; // @[Sdc.scala 120:19 221:75 224:48]
-  wire  _GEN_525 = tx_cmd_counter > 6'h0 & _T & reg_clk ? tx_cmd_40 : tx_cmd_39; // @[Sdc.scala 120:19 221:75 224:48]
-  wire  _GEN_526 = tx_cmd_counter > 6'h0 & _T & reg_clk ? tx_cmd_41 : tx_cmd_40; // @[Sdc.scala 120:19 221:75 224:48]
-  wire  _GEN_527 = tx_cmd_counter > 6'h0 & _T & reg_clk ? tx_cmd_42 : tx_cmd_41; // @[Sdc.scala 120:19 221:75 224:48]
-  wire  _GEN_528 = tx_cmd_counter > 6'h0 & _T & reg_clk ? tx_cmd_43 : tx_cmd_42; // @[Sdc.scala 120:19 221:75 224:48]
-  wire  _GEN_529 = tx_cmd_counter > 6'h0 & _T & reg_clk ? tx_cmd_44 : tx_cmd_43; // @[Sdc.scala 120:19 221:75 224:48]
-  wire  _GEN_530 = tx_cmd_counter > 6'h0 & _T & reg_clk ? tx_cmd_45 : tx_cmd_44; // @[Sdc.scala 120:19 221:75 224:48]
-  wire  _GEN_531 = tx_cmd_counter > 6'h0 & _T & reg_clk ? tx_cmd_46 : tx_cmd_45; // @[Sdc.scala 120:19 221:75 224:48]
-  wire  _GEN_532 = tx_cmd_counter > 6'h0 & _T & reg_clk ? tx_cmd_47 : tx_cmd_46; // @[Sdc.scala 120:19 221:75 224:48]
-  wire [5:0] _GEN_533 = tx_cmd_counter > 6'h0 & _T & reg_clk ? _tx_cmd_counter_T_1 : tx_cmd_counter; // @[Sdc.scala 221:75 225:20 121:31]
-  wire  _GEN_534 = tx_cmd_counter > 6'h0 & _T & reg_clk ? crc__0 : tx_cmd_crc_0; // @[Sdc.scala 221:75 236:16 122:23]
-  wire  _GEN_535 = tx_cmd_counter > 6'h0 & _T & reg_clk ? tx_cmd_crc_0 : tx_cmd_crc_1; // @[Sdc.scala 221:75 236:16 122:23]
-  wire  _GEN_536 = tx_cmd_counter > 6'h0 & _T & reg_clk ? tx_cmd_crc_1 : tx_cmd_crc_2; // @[Sdc.scala 221:75 236:16 122:23]
-  wire  _GEN_537 = tx_cmd_counter > 6'h0 & _T & reg_clk ? crc__3 : tx_cmd_crc_3; // @[Sdc.scala 221:75 236:16 122:23]
-  wire  _GEN_538 = tx_cmd_counter > 6'h0 & _T & reg_clk ? tx_cmd_crc_3 : tx_cmd_crc_4; // @[Sdc.scala 221:75 236:16 122:23]
-  wire  _GEN_539 = tx_cmd_counter > 6'h0 & _T & reg_clk ? tx_cmd_crc_4 : tx_cmd_crc_5; // @[Sdc.scala 221:75 236:16 122:23]
-  wire  _GEN_540 = tx_cmd_counter > 6'h0 & _T & reg_clk ? tx_cmd_crc_5 : tx_cmd_crc_6; // @[Sdc.scala 221:75 236:16 122:23]
-  wire  _GEN_543 = rx_busy_timer != 19'h0 & _T & reg_clk ? tx_cmd_0 : _GEN_486; // @[Sdc.scala 120:19 218:76]
-  wire  _GEN_544 = rx_busy_timer != 19'h0 & _T & reg_clk ? tx_cmd_1 : _GEN_487; // @[Sdc.scala 120:19 218:76]
-  wire  _GEN_545 = rx_busy_timer != 19'h0 & _T & reg_clk ? tx_cmd_2 : _GEN_488; // @[Sdc.scala 120:19 218:76]
-  wire  _GEN_546 = rx_busy_timer != 19'h0 & _T & reg_clk ? tx_cmd_3 : _GEN_489; // @[Sdc.scala 120:19 218:76]
-  wire  _GEN_547 = rx_busy_timer != 19'h0 & _T & reg_clk ? tx_cmd_4 : _GEN_490; // @[Sdc.scala 120:19 218:76]
-  wire  _GEN_548 = rx_busy_timer != 19'h0 & _T & reg_clk ? tx_cmd_5 : _GEN_491; // @[Sdc.scala 120:19 218:76]
-  wire  _GEN_549 = rx_busy_timer != 19'h0 & _T & reg_clk ? tx_cmd_6 : _GEN_492; // @[Sdc.scala 120:19 218:76]
-  wire  _GEN_550 = rx_busy_timer != 19'h0 & _T & reg_clk ? tx_cmd_7 : _GEN_493; // @[Sdc.scala 120:19 218:76]
-  wire  _GEN_551 = rx_busy_timer != 19'h0 & _T & reg_clk ? tx_cmd_8 : _GEN_494; // @[Sdc.scala 120:19 218:76]
-  wire  _GEN_552 = rx_busy_timer != 19'h0 & _T & reg_clk ? tx_cmd_9 : _GEN_495; // @[Sdc.scala 120:19 218:76]
-  wire  _GEN_553 = rx_busy_timer != 19'h0 & _T & reg_clk ? tx_cmd_10 : _GEN_496; // @[Sdc.scala 120:19 218:76]
-  wire  _GEN_554 = rx_busy_timer != 19'h0 & _T & reg_clk ? tx_cmd_11 : _GEN_497; // @[Sdc.scala 120:19 218:76]
-  wire  _GEN_555 = rx_busy_timer != 19'h0 & _T & reg_clk ? tx_cmd_12 : _GEN_498; // @[Sdc.scala 120:19 218:76]
-  wire  _GEN_556 = rx_busy_timer != 19'h0 & _T & reg_clk ? tx_cmd_13 : _GEN_499; // @[Sdc.scala 120:19 218:76]
-  wire  _GEN_557 = rx_busy_timer != 19'h0 & _T & reg_clk ? tx_cmd_14 : _GEN_500; // @[Sdc.scala 120:19 218:76]
-  wire  _GEN_558 = rx_busy_timer != 19'h0 & _T & reg_clk ? tx_cmd_15 : _GEN_501; // @[Sdc.scala 120:19 218:76]
-  wire  _GEN_559 = rx_busy_timer != 19'h0 & _T & reg_clk ? tx_cmd_16 : _GEN_502; // @[Sdc.scala 120:19 218:76]
-  wire  _GEN_560 = rx_busy_timer != 19'h0 & _T & reg_clk ? tx_cmd_17 : _GEN_503; // @[Sdc.scala 120:19 218:76]
-  wire  _GEN_561 = rx_busy_timer != 19'h0 & _T & reg_clk ? tx_cmd_18 : _GEN_504; // @[Sdc.scala 120:19 218:76]
-  wire  _GEN_562 = rx_busy_timer != 19'h0 & _T & reg_clk ? tx_cmd_19 : _GEN_505; // @[Sdc.scala 120:19 218:76]
-  wire  _GEN_563 = rx_busy_timer != 19'h0 & _T & reg_clk ? tx_cmd_20 : _GEN_506; // @[Sdc.scala 120:19 218:76]
-  wire  _GEN_564 = rx_busy_timer != 19'h0 & _T & reg_clk ? tx_cmd_21 : _GEN_507; // @[Sdc.scala 120:19 218:76]
-  wire  _GEN_565 = rx_busy_timer != 19'h0 & _T & reg_clk ? tx_cmd_22 : _GEN_508; // @[Sdc.scala 120:19 218:76]
-  wire  _GEN_566 = rx_busy_timer != 19'h0 & _T & reg_clk ? tx_cmd_23 : _GEN_509; // @[Sdc.scala 120:19 218:76]
-  wire  _GEN_567 = rx_busy_timer != 19'h0 & _T & reg_clk ? tx_cmd_24 : _GEN_510; // @[Sdc.scala 120:19 218:76]
-  wire  _GEN_568 = rx_busy_timer != 19'h0 & _T & reg_clk ? tx_cmd_25 : _GEN_511; // @[Sdc.scala 120:19 218:76]
-  wire  _GEN_569 = rx_busy_timer != 19'h0 & _T & reg_clk ? tx_cmd_26 : _GEN_512; // @[Sdc.scala 120:19 218:76]
-  wire  _GEN_570 = rx_busy_timer != 19'h0 & _T & reg_clk ? tx_cmd_27 : _GEN_513; // @[Sdc.scala 120:19 218:76]
-  wire  _GEN_571 = rx_busy_timer != 19'h0 & _T & reg_clk ? tx_cmd_28 : _GEN_514; // @[Sdc.scala 120:19 218:76]
-  wire  _GEN_572 = rx_busy_timer != 19'h0 & _T & reg_clk ? tx_cmd_29 : _GEN_515; // @[Sdc.scala 120:19 218:76]
-  wire  _GEN_573 = rx_busy_timer != 19'h0 & _T & reg_clk ? tx_cmd_30 : _GEN_516; // @[Sdc.scala 120:19 218:76]
-  wire  _GEN_574 = rx_busy_timer != 19'h0 & _T & reg_clk ? tx_cmd_31 : _GEN_517; // @[Sdc.scala 120:19 218:76]
-  wire  _GEN_575 = rx_busy_timer != 19'h0 & _T & reg_clk ? tx_cmd_32 : _GEN_518; // @[Sdc.scala 120:19 218:76]
-  wire  _GEN_576 = rx_busy_timer != 19'h0 & _T & reg_clk ? tx_cmd_33 : _GEN_519; // @[Sdc.scala 120:19 218:76]
-  wire  _GEN_577 = rx_busy_timer != 19'h0 & _T & reg_clk ? tx_cmd_34 : _GEN_520; // @[Sdc.scala 120:19 218:76]
-  wire  _GEN_578 = rx_busy_timer != 19'h0 & _T & reg_clk ? tx_cmd_35 : _GEN_521; // @[Sdc.scala 120:19 218:76]
-  wire  _GEN_579 = rx_busy_timer != 19'h0 & _T & reg_clk ? tx_cmd_36 : _GEN_522; // @[Sdc.scala 120:19 218:76]
-  wire  _GEN_580 = rx_busy_timer != 19'h0 & _T & reg_clk ? tx_cmd_37 : _GEN_523; // @[Sdc.scala 120:19 218:76]
-  wire  _GEN_581 = rx_busy_timer != 19'h0 & _T & reg_clk ? tx_cmd_38 : _GEN_524; // @[Sdc.scala 120:19 218:76]
-  wire  _GEN_582 = rx_busy_timer != 19'h0 & _T & reg_clk ? tx_cmd_39 : _GEN_525; // @[Sdc.scala 120:19 218:76]
-  wire  _GEN_583 = rx_busy_timer != 19'h0 & _T & reg_clk ? tx_cmd_40 : _GEN_526; // @[Sdc.scala 120:19 218:76]
-  wire  _GEN_584 = rx_busy_timer != 19'h0 & _T & reg_clk ? tx_cmd_41 : _GEN_527; // @[Sdc.scala 120:19 218:76]
-  wire  _GEN_585 = rx_busy_timer != 19'h0 & _T & reg_clk ? tx_cmd_42 : _GEN_528; // @[Sdc.scala 120:19 218:76]
-  wire  _GEN_586 = rx_busy_timer != 19'h0 & _T & reg_clk ? tx_cmd_43 : _GEN_529; // @[Sdc.scala 120:19 218:76]
-  wire  _GEN_587 = rx_busy_timer != 19'h0 & _T & reg_clk ? tx_cmd_44 : _GEN_530; // @[Sdc.scala 120:19 218:76]
-  wire  _GEN_588 = rx_busy_timer != 19'h0 & _T & reg_clk ? tx_cmd_45 : _GEN_531; // @[Sdc.scala 120:19 218:76]
-  wire  _GEN_589 = rx_busy_timer != 19'h0 & _T & reg_clk ? tx_cmd_46 : _GEN_532; // @[Sdc.scala 120:19 218:76]
-  wire [5:0] _GEN_590 = rx_busy_timer != 19'h0 & _T & reg_clk ? tx_cmd_counter : _GEN_533; // @[Sdc.scala 121:31 218:76]
-  wire  _GEN_591 = rx_busy_timer != 19'h0 & _T & reg_clk ? tx_cmd_crc_0 : _GEN_534; // @[Sdc.scala 122:23 218:76]
-  wire  _GEN_592 = rx_busy_timer != 19'h0 & _T & reg_clk ? tx_cmd_crc_1 : _GEN_535; // @[Sdc.scala 122:23 218:76]
-  wire  _GEN_593 = rx_busy_timer != 19'h0 & _T & reg_clk ? tx_cmd_crc_2 : _GEN_536; // @[Sdc.scala 122:23 218:76]
-  wire  _GEN_594 = rx_busy_timer != 19'h0 & _T & reg_clk ? tx_cmd_crc_3 : _GEN_537; // @[Sdc.scala 122:23 218:76]
-  wire  _GEN_595 = rx_busy_timer != 19'h0 & _T & reg_clk ? tx_cmd_crc_4 : _GEN_538; // @[Sdc.scala 122:23 218:76]
-  wire  _GEN_596 = rx_busy_timer != 19'h0 & _T & reg_clk ? tx_cmd_crc_5 : _GEN_539; // @[Sdc.scala 122:23 218:76]
-  wire  _GEN_597 = rx_busy_timer != 19'h0 & _T & reg_clk ? tx_cmd_crc_6 : _GEN_540; // @[Sdc.scala 122:23 218:76]
-  wire  _GEN_601 = tx_cmd_timer != 6'h0 & _T & reg_clk ? tx_cmd_0 : _GEN_543; // @[Sdc.scala 120:19 214:69]
-  wire  _GEN_602 = tx_cmd_timer != 6'h0 & _T & reg_clk ? tx_cmd_1 : _GEN_544; // @[Sdc.scala 120:19 214:69]
-  wire  _GEN_603 = tx_cmd_timer != 6'h0 & _T & reg_clk ? tx_cmd_2 : _GEN_545; // @[Sdc.scala 120:19 214:69]
-  wire  _GEN_604 = tx_cmd_timer != 6'h0 & _T & reg_clk ? tx_cmd_3 : _GEN_546; // @[Sdc.scala 120:19 214:69]
-  wire  _GEN_605 = tx_cmd_timer != 6'h0 & _T & reg_clk ? tx_cmd_4 : _GEN_547; // @[Sdc.scala 120:19 214:69]
-  wire  _GEN_606 = tx_cmd_timer != 6'h0 & _T & reg_clk ? tx_cmd_5 : _GEN_548; // @[Sdc.scala 120:19 214:69]
-  wire  _GEN_607 = tx_cmd_timer != 6'h0 & _T & reg_clk ? tx_cmd_6 : _GEN_549; // @[Sdc.scala 120:19 214:69]
-  wire  _GEN_608 = tx_cmd_timer != 6'h0 & _T & reg_clk ? tx_cmd_7 : _GEN_550; // @[Sdc.scala 120:19 214:69]
-  wire  _GEN_609 = tx_cmd_timer != 6'h0 & _T & reg_clk ? tx_cmd_8 : _GEN_551; // @[Sdc.scala 120:19 214:69]
-  wire  _GEN_610 = tx_cmd_timer != 6'h0 & _T & reg_clk ? tx_cmd_9 : _GEN_552; // @[Sdc.scala 120:19 214:69]
-  wire  _GEN_611 = tx_cmd_timer != 6'h0 & _T & reg_clk ? tx_cmd_10 : _GEN_553; // @[Sdc.scala 120:19 214:69]
-  wire  _GEN_612 = tx_cmd_timer != 6'h0 & _T & reg_clk ? tx_cmd_11 : _GEN_554; // @[Sdc.scala 120:19 214:69]
-  wire  _GEN_613 = tx_cmd_timer != 6'h0 & _T & reg_clk ? tx_cmd_12 : _GEN_555; // @[Sdc.scala 120:19 214:69]
-  wire  _GEN_614 = tx_cmd_timer != 6'h0 & _T & reg_clk ? tx_cmd_13 : _GEN_556; // @[Sdc.scala 120:19 214:69]
-  wire  _GEN_615 = tx_cmd_timer != 6'h0 & _T & reg_clk ? tx_cmd_14 : _GEN_557; // @[Sdc.scala 120:19 214:69]
-  wire  _GEN_616 = tx_cmd_timer != 6'h0 & _T & reg_clk ? tx_cmd_15 : _GEN_558; // @[Sdc.scala 120:19 214:69]
-  wire  _GEN_617 = tx_cmd_timer != 6'h0 & _T & reg_clk ? tx_cmd_16 : _GEN_559; // @[Sdc.scala 120:19 214:69]
-  wire  _GEN_618 = tx_cmd_timer != 6'h0 & _T & reg_clk ? tx_cmd_17 : _GEN_560; // @[Sdc.scala 120:19 214:69]
-  wire  _GEN_619 = tx_cmd_timer != 6'h0 & _T & reg_clk ? tx_cmd_18 : _GEN_561; // @[Sdc.scala 120:19 214:69]
-  wire  _GEN_620 = tx_cmd_timer != 6'h0 & _T & reg_clk ? tx_cmd_19 : _GEN_562; // @[Sdc.scala 120:19 214:69]
-  wire  _GEN_621 = tx_cmd_timer != 6'h0 & _T & reg_clk ? tx_cmd_20 : _GEN_563; // @[Sdc.scala 120:19 214:69]
-  wire  _GEN_622 = tx_cmd_timer != 6'h0 & _T & reg_clk ? tx_cmd_21 : _GEN_564; // @[Sdc.scala 120:19 214:69]
-  wire  _GEN_623 = tx_cmd_timer != 6'h0 & _T & reg_clk ? tx_cmd_22 : _GEN_565; // @[Sdc.scala 120:19 214:69]
-  wire  _GEN_624 = tx_cmd_timer != 6'h0 & _T & reg_clk ? tx_cmd_23 : _GEN_566; // @[Sdc.scala 120:19 214:69]
-  wire  _GEN_625 = tx_cmd_timer != 6'h0 & _T & reg_clk ? tx_cmd_24 : _GEN_567; // @[Sdc.scala 120:19 214:69]
-  wire  _GEN_626 = tx_cmd_timer != 6'h0 & _T & reg_clk ? tx_cmd_25 : _GEN_568; // @[Sdc.scala 120:19 214:69]
-  wire  _GEN_627 = tx_cmd_timer != 6'h0 & _T & reg_clk ? tx_cmd_26 : _GEN_569; // @[Sdc.scala 120:19 214:69]
-  wire  _GEN_628 = tx_cmd_timer != 6'h0 & _T & reg_clk ? tx_cmd_27 : _GEN_570; // @[Sdc.scala 120:19 214:69]
-  wire  _GEN_629 = tx_cmd_timer != 6'h0 & _T & reg_clk ? tx_cmd_28 : _GEN_571; // @[Sdc.scala 120:19 214:69]
-  wire  _GEN_630 = tx_cmd_timer != 6'h0 & _T & reg_clk ? tx_cmd_29 : _GEN_572; // @[Sdc.scala 120:19 214:69]
-  wire  _GEN_631 = tx_cmd_timer != 6'h0 & _T & reg_clk ? tx_cmd_30 : _GEN_573; // @[Sdc.scala 120:19 214:69]
-  wire  _GEN_632 = tx_cmd_timer != 6'h0 & _T & reg_clk ? tx_cmd_31 : _GEN_574; // @[Sdc.scala 120:19 214:69]
-  wire  _GEN_633 = tx_cmd_timer != 6'h0 & _T & reg_clk ? tx_cmd_32 : _GEN_575; // @[Sdc.scala 120:19 214:69]
-  wire  _GEN_634 = tx_cmd_timer != 6'h0 & _T & reg_clk ? tx_cmd_33 : _GEN_576; // @[Sdc.scala 120:19 214:69]
-  wire  _GEN_635 = tx_cmd_timer != 6'h0 & _T & reg_clk ? tx_cmd_34 : _GEN_577; // @[Sdc.scala 120:19 214:69]
-  wire  _GEN_636 = tx_cmd_timer != 6'h0 & _T & reg_clk ? tx_cmd_35 : _GEN_578; // @[Sdc.scala 120:19 214:69]
-  wire  _GEN_637 = tx_cmd_timer != 6'h0 & _T & reg_clk ? tx_cmd_36 : _GEN_579; // @[Sdc.scala 120:19 214:69]
-  wire  _GEN_638 = tx_cmd_timer != 6'h0 & _T & reg_clk ? tx_cmd_37 : _GEN_580; // @[Sdc.scala 120:19 214:69]
-  wire  _GEN_639 = tx_cmd_timer != 6'h0 & _T & reg_clk ? tx_cmd_38 : _GEN_581; // @[Sdc.scala 120:19 214:69]
-  wire  _GEN_640 = tx_cmd_timer != 6'h0 & _T & reg_clk ? tx_cmd_39 : _GEN_582; // @[Sdc.scala 120:19 214:69]
-  wire  _GEN_641 = tx_cmd_timer != 6'h0 & _T & reg_clk ? tx_cmd_40 : _GEN_583; // @[Sdc.scala 120:19 214:69]
-  wire  _GEN_642 = tx_cmd_timer != 6'h0 & _T & reg_clk ? tx_cmd_41 : _GEN_584; // @[Sdc.scala 120:19 214:69]
-  wire  _GEN_643 = tx_cmd_timer != 6'h0 & _T & reg_clk ? tx_cmd_42 : _GEN_585; // @[Sdc.scala 120:19 214:69]
-  wire  _GEN_644 = tx_cmd_timer != 6'h0 & _T & reg_clk ? tx_cmd_43 : _GEN_586; // @[Sdc.scala 120:19 214:69]
-  wire  _GEN_645 = tx_cmd_timer != 6'h0 & _T & reg_clk ? tx_cmd_44 : _GEN_587; // @[Sdc.scala 120:19 214:69]
-  wire  _GEN_646 = tx_cmd_timer != 6'h0 & _T & reg_clk ? tx_cmd_45 : _GEN_588; // @[Sdc.scala 120:19 214:69]
-  wire  _GEN_647 = tx_cmd_timer != 6'h0 & _T & reg_clk ? tx_cmd_46 : _GEN_589; // @[Sdc.scala 120:19 214:69]
-  wire [5:0] _GEN_648 = tx_cmd_timer != 6'h0 & _T & reg_clk ? tx_cmd_counter : _GEN_590; // @[Sdc.scala 121:31 214:69]
-  wire  _GEN_649 = tx_cmd_timer != 6'h0 & _T & reg_clk ? tx_cmd_crc_0 : _GEN_591; // @[Sdc.scala 122:23 214:69]
-  wire  _GEN_650 = tx_cmd_timer != 6'h0 & _T & reg_clk ? tx_cmd_crc_1 : _GEN_592; // @[Sdc.scala 122:23 214:69]
-  wire  _GEN_651 = tx_cmd_timer != 6'h0 & _T & reg_clk ? tx_cmd_crc_2 : _GEN_593; // @[Sdc.scala 122:23 214:69]
-  wire  _GEN_652 = tx_cmd_timer != 6'h0 & _T & reg_clk ? tx_cmd_crc_3 : _GEN_594; // @[Sdc.scala 122:23 214:69]
-  wire  _GEN_653 = tx_cmd_timer != 6'h0 & _T & reg_clk ? tx_cmd_crc_4 : _GEN_595; // @[Sdc.scala 122:23 214:69]
-  wire  _GEN_654 = tx_cmd_timer != 6'h0 & _T & reg_clk ? tx_cmd_crc_5 : _GEN_596; // @[Sdc.scala 122:23 214:69]
-  wire  _GEN_655 = tx_cmd_timer != 6'h0 & _T & reg_clk ? tx_cmd_crc_6 : _GEN_597; // @[Sdc.scala 122:23 214:69]
-  wire  _GEN_657 = rx_dat_buf_read ? 1'h0 : rx_dat_buf_read; // @[Sdc.scala 260:26 262:21 145:32]
-  wire [31:0] _GEN_658 = tx_dat_prepared_read ? io_sdbuf_rdata1 : tx_dat_prepared; // @[Sdc.scala 264:31 265:21 155:32]
-  wire  _GEN_659 = tx_dat_prepared_read ? 1'h0 : tx_dat_prepared_read; // @[Sdc.scala 264:31 266:26 168:37]
-  wire  _T_35 = ~rx_dat_in_progress; // @[Sdc.scala 272:13]
-  wire [18:0] _rx_dat_timer_T_1 = rx_dat_timer - 19'h1; // @[Sdc.scala 273:38]
-  wire  _T_39 = rx_dat_timer == 19'h1; // @[Sdc.scala 274:28]
-  wire [7:0] _rxtx_dat_counter_T_1 = rxtx_dat_counter + 8'h1; // @[Sdc.scala 280:48]
-  wire [10:0] _GEN_660 = rx_dat_timer == 19'h1 ? 11'h0 : rx_dat_counter; // @[Sdc.scala 274:37 275:26 127:31]
-  wire  _GEN_661 = rx_dat_timer == 19'h1 | rx_dat_ready; // @[Sdc.scala 274:37 276:24 132:29]
-  wire  _GEN_662 = rx_dat_timer == 19'h1 | rx_dat_timeout; // @[Sdc.scala 274:37 277:26 137:31]
-  wire  _GEN_664 = rx_dat_timer == 19'h1 | _GEN_657; // @[Sdc.scala 274:37 279:27]
-  wire [7:0] _GEN_665 = rx_dat_timer == 19'h1 ? _rxtx_dat_counter_T_1 : rxtx_dat_counter; // @[Sdc.scala 274:37 280:28 140:33]
-  wire [10:0] _rx_dat_counter_T_1 = rx_dat_counter - 11'h1; // @[Sdc.scala 287:42]
-  wire [3:0] _rx_dat_crc_0_T = rx_dat_next ^ rx_dat_crc_15; // @[Sdc.scala 289:38]
-  wire [3:0] _rx_dat_crc_5_T = rx_dat_crc_4 ^ rx_dat_crc_15; // @[Sdc.scala 294:40]
-  wire [3:0] _rx_dat_crc_12_T = rx_dat_crc_11 ^ rx_dat_crc_15; // @[Sdc.scala 301:42]
-  wire  _T_50 = ~rx_dat_start_bit; // @[Sdc.scala 307:17]
-  wire [7:0] _rxtx_dat_index_T_1 = rxtx_dat_index + 8'h1; // @[Sdc.scala 308:46]
+  wire [18:0] _GEN_13 = rx_res_type == 4'h5 ? 19'h7a120 : rx_busy_timer; // @[Sdc.scala 201:47 202:27 141:30]
+  wire  _GEN_14 = rx_res_counter == 8'h1 ? 1'h0 : 1'h1; // @[Sdc.scala 185:28 195:39 197:30]
+  wire [136:0] _GEN_15 = rx_res_counter == 8'h1 ? _rx_res_T_1 : {{1'd0}, _GEN_10}; // @[Sdc.scala 195:39 198:18]
+  wire  _GEN_16 = rx_res_counter == 8'h1 | _GEN_11; // @[Sdc.scala 195:39 199:24]
+  wire  _GEN_17 = rx_res_counter == 8'h1 ? rx_res_crc_en & _rx_res_crc_error_T != 7'h0 : rx_res_crc_error; // @[Sdc.scala 195:39 200:28 113:33]
+  wire [18:0] _GEN_18 = rx_res_counter == 8'h1 ? _GEN_13 : rx_busy_timer; // @[Sdc.scala 141:30 195:39]
+  wire [5:0] _GEN_19 = rx_res_counter == 8'h1 ? 6'h30 : tx_cmd_timer; // @[Sdc.scala 195:39 204:24 122:29]
+  wire [7:0] _GEN_156 = rx_res_in_progress | ~rx_res_next ? _rx_res_counter_T_1 : _GEN_9; // @[Sdc.scala 181:49 184:24]
+  wire  _GEN_157 = rx_res_in_progress | ~rx_res_next ? _GEN_14 : rx_res_in_progress; // @[Sdc.scala 104:35 181:49]
+  wire  _GEN_158 = rx_res_in_progress | ~rx_res_next ? rx_res_next ^ rx_res_crc_6 : rx_res_crc_0; // @[Sdc.scala 112:23 181:49 187:23]
+  wire  _GEN_159 = rx_res_in_progress | ~rx_res_next ? rx_res_crc_0 : rx_res_crc_1; // @[Sdc.scala 112:23 181:49 188:23]
+  wire  _GEN_160 = rx_res_in_progress | ~rx_res_next ? rx_res_crc_1 : rx_res_crc_2; // @[Sdc.scala 112:23 181:49 189:23]
+  wire  _GEN_161 = rx_res_in_progress | ~rx_res_next ? rx_res_crc_2 ^ rx_res_crc_6 : rx_res_crc_3; // @[Sdc.scala 112:23 181:49 190:23]
+  wire  _GEN_162 = rx_res_in_progress | ~rx_res_next ? rx_res_crc_3 : rx_res_crc_4; // @[Sdc.scala 112:23 181:49 191:23]
+  wire  _GEN_163 = rx_res_in_progress | ~rx_res_next ? rx_res_crc_4 : rx_res_crc_5; // @[Sdc.scala 112:23 181:49 192:23]
+  wire  _GEN_164 = rx_res_in_progress | ~rx_res_next ? rx_res_crc_5 : rx_res_crc_6; // @[Sdc.scala 112:23 181:49 193:23]
+  wire [136:0] _GEN_165 = rx_res_in_progress | ~rx_res_next ? _GEN_15 : {{1'd0}, _GEN_10}; // @[Sdc.scala 181:49]
+  wire  _GEN_166 = rx_res_in_progress | ~rx_res_next ? _GEN_16 : _GEN_11; // @[Sdc.scala 181:49]
+  wire  _GEN_167 = rx_res_in_progress | ~rx_res_next ? _GEN_17 : rx_res_crc_error; // @[Sdc.scala 113:33 181:49]
+  wire [18:0] _GEN_168 = rx_res_in_progress | ~rx_res_next ? _GEN_18 : rx_busy_timer; // @[Sdc.scala 141:30 181:49]
+  wire [5:0] _GEN_169 = rx_res_in_progress | ~rx_res_next ? _GEN_19 : tx_cmd_timer; // @[Sdc.scala 122:29 181:49]
+  wire [7:0] _GEN_170 = _T & reg_clk ? _GEN_8 : rx_res_timer; // @[Sdc.scala 115:29 171:47]
+  wire [7:0] _GEN_171 = _T & reg_clk ? _GEN_156 : rx_res_counter; // @[Sdc.scala 105:31 171:47]
+  wire [136:0] _GEN_172 = _T & reg_clk ? _GEN_165 : {{1'd0}, rx_res}; // @[Sdc.scala 109:23 171:47]
+  wire  _GEN_173 = _T & reg_clk ? _GEN_166 : rx_res_ready; // @[Sdc.scala 110:29 171:47]
+  wire  _GEN_174 = _T & reg_clk ? _GEN_12 : rx_res_timeout; // @[Sdc.scala 116:31 171:47]
+  wire  _GEN_311 = _T & reg_clk ? _GEN_157 : rx_res_in_progress; // @[Sdc.scala 104:35 171:47]
+  wire  _GEN_312 = _T & reg_clk ? _GEN_158 : rx_res_crc_0; // @[Sdc.scala 112:23 171:47]
+  wire  _GEN_313 = _T & reg_clk ? _GEN_159 : rx_res_crc_1; // @[Sdc.scala 112:23 171:47]
+  wire  _GEN_314 = _T & reg_clk ? _GEN_160 : rx_res_crc_2; // @[Sdc.scala 112:23 171:47]
+  wire  _GEN_315 = _T & reg_clk ? _GEN_161 : rx_res_crc_3; // @[Sdc.scala 112:23 171:47]
+  wire  _GEN_316 = _T & reg_clk ? _GEN_162 : rx_res_crc_4; // @[Sdc.scala 112:23 171:47]
+  wire  _GEN_317 = _T & reg_clk ? _GEN_163 : rx_res_crc_5; // @[Sdc.scala 112:23 171:47]
+  wire  _GEN_318 = _T & reg_clk ? _GEN_164 : rx_res_crc_6; // @[Sdc.scala 112:23 171:47]
+  wire  _GEN_319 = _T & reg_clk ? _GEN_167 : rx_res_crc_error; // @[Sdc.scala 113:33 171:47]
+  wire [18:0] _GEN_320 = _T & reg_clk ? _GEN_168 : rx_busy_timer; // @[Sdc.scala 141:30 171:47]
+  wire [7:0] _GEN_323 = rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0 ? _GEN_170 : rx_res_timer; // @[Sdc.scala 115:29 169:57]
+  wire [7:0] _GEN_324 = rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0 ? _GEN_171 : rx_res_counter; // @[Sdc.scala 105:31 169:57]
+  wire [136:0] _GEN_325 = rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0 ? _GEN_172 : {{1'd0}, rx_res}; // @[Sdc.scala 109:23 169:57]
+  wire  _GEN_326 = rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0 ? _GEN_173 : rx_res_ready; // @[Sdc.scala 110:29 169:57]
+  wire  _GEN_327 = rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0 ? _GEN_174 : rx_res_timeout; // @[Sdc.scala 116:31 169:57]
+  wire  _GEN_464 = rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0 ? _GEN_311 : rx_res_in_progress; // @[Sdc.scala 104:35 169:57]
+  wire  _GEN_465 = rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0 ? _GEN_312 : rx_res_crc_0; // @[Sdc.scala 112:23 169:57]
+  wire  _GEN_466 = rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0 ? _GEN_313 : rx_res_crc_1; // @[Sdc.scala 112:23 169:57]
+  wire  _GEN_467 = rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0 ? _GEN_314 : rx_res_crc_2; // @[Sdc.scala 112:23 169:57]
+  wire  _GEN_468 = rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0 ? _GEN_315 : rx_res_crc_3; // @[Sdc.scala 112:23 169:57]
+  wire  _GEN_469 = rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0 ? _GEN_316 : rx_res_crc_4; // @[Sdc.scala 112:23 169:57]
+  wire  _GEN_470 = rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0 ? _GEN_317 : rx_res_crc_5; // @[Sdc.scala 112:23 169:57]
+  wire  _GEN_471 = rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0 ? _GEN_318 : rx_res_crc_6; // @[Sdc.scala 112:23 169:57]
+  wire  _GEN_472 = rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0 ? _GEN_319 : rx_res_crc_error; // @[Sdc.scala 113:33 169:57]
+  wire [18:0] _GEN_473 = rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0 ? _GEN_320 : rx_busy_timer; // @[Sdc.scala 141:30 169:57]
+  wire [5:0] _tx_cmd_timer_T_1 = tx_cmd_timer - 6'h1; // @[Sdc.scala 214:34]
+  wire  _T_20 = rx_busy_timer != 19'h0 & _T & reg_clk; // @[Sdc.scala 217:64]
+  wire [5:0] _tx_cmd_counter_T_1 = tx_cmd_counter - 6'h1; // @[Sdc.scala 224:38]
+  wire  crc__0 = tx_cmd_7 ^ tx_cmd_crc_6; // @[Sdc.scala 227:17]
+  wire  crc__3 = tx_cmd_crc_2 ^ tx_cmd_crc_6; // @[Sdc.scala 230:21]
+  wire  _GEN_475 = tx_cmd_counter == 6'h9 ? tx_cmd_crc_5 : tx_cmd_1; // @[Sdc.scala 238:35 239:39 223:48]
+  wire  _GEN_476 = tx_cmd_counter == 6'h9 ? tx_cmd_crc_4 : tx_cmd_2; // @[Sdc.scala 238:35 239:39 223:48]
+  wire  _GEN_477 = tx_cmd_counter == 6'h9 ? tx_cmd_crc_3 : tx_cmd_3; // @[Sdc.scala 238:35 239:39 223:48]
+  wire  _GEN_478 = tx_cmd_counter == 6'h9 ? crc__3 : tx_cmd_4; // @[Sdc.scala 238:35 239:39 223:48]
+  wire  _GEN_479 = tx_cmd_counter == 6'h9 ? tx_cmd_crc_1 : tx_cmd_5; // @[Sdc.scala 238:35 239:39 223:48]
+  wire  _GEN_480 = tx_cmd_counter == 6'h9 ? tx_cmd_crc_0 : tx_cmd_6; // @[Sdc.scala 238:35 239:39 223:48]
+  wire  _GEN_481 = tx_cmd_counter == 6'h9 ? crc__0 : tx_cmd_7; // @[Sdc.scala 238:35 239:39 223:48]
+  wire  _GEN_482 = _T_2 & _T & reg_clk ? 1'h0 : reg_tx_cmd_wrt; // @[Sdc.scala 242:77 243:20 123:31]
+  wire  _GEN_484 = tx_cmd_counter > 6'h0 & _T & reg_clk | _GEN_482; // @[Sdc.scala 220:75 221:20]
+  wire  _GEN_486 = tx_cmd_counter > 6'h0 & _T & reg_clk ? _GEN_475 : tx_cmd_0; // @[Sdc.scala 119:19 220:75]
+  wire  _GEN_487 = tx_cmd_counter > 6'h0 & _T & reg_clk ? _GEN_476 : tx_cmd_1; // @[Sdc.scala 119:19 220:75]
+  wire  _GEN_488 = tx_cmd_counter > 6'h0 & _T & reg_clk ? _GEN_477 : tx_cmd_2; // @[Sdc.scala 119:19 220:75]
+  wire  _GEN_489 = tx_cmd_counter > 6'h0 & _T & reg_clk ? _GEN_478 : tx_cmd_3; // @[Sdc.scala 119:19 220:75]
+  wire  _GEN_490 = tx_cmd_counter > 6'h0 & _T & reg_clk ? _GEN_479 : tx_cmd_4; // @[Sdc.scala 119:19 220:75]
+  wire  _GEN_491 = tx_cmd_counter > 6'h0 & _T & reg_clk ? _GEN_480 : tx_cmd_5; // @[Sdc.scala 119:19 220:75]
+  wire  _GEN_492 = tx_cmd_counter > 6'h0 & _T & reg_clk ? _GEN_481 : tx_cmd_6; // @[Sdc.scala 119:19 220:75]
+  wire  _GEN_493 = tx_cmd_counter > 6'h0 & _T & reg_clk ? tx_cmd_8 : tx_cmd_7; // @[Sdc.scala 119:19 220:75 223:48]
+  wire  _GEN_494 = tx_cmd_counter > 6'h0 & _T & reg_clk ? tx_cmd_9 : tx_cmd_8; // @[Sdc.scala 119:19 220:75 223:48]
+  wire  _GEN_495 = tx_cmd_counter > 6'h0 & _T & reg_clk ? tx_cmd_10 : tx_cmd_9; // @[Sdc.scala 119:19 220:75 223:48]
+  wire  _GEN_496 = tx_cmd_counter > 6'h0 & _T & reg_clk ? tx_cmd_11 : tx_cmd_10; // @[Sdc.scala 119:19 220:75 223:48]
+  wire  _GEN_497 = tx_cmd_counter > 6'h0 & _T & reg_clk ? tx_cmd_12 : tx_cmd_11; // @[Sdc.scala 119:19 220:75 223:48]
+  wire  _GEN_498 = tx_cmd_counter > 6'h0 & _T & reg_clk ? tx_cmd_13 : tx_cmd_12; // @[Sdc.scala 119:19 220:75 223:48]
+  wire  _GEN_499 = tx_cmd_counter > 6'h0 & _T & reg_clk ? tx_cmd_14 : tx_cmd_13; // @[Sdc.scala 119:19 220:75 223:48]
+  wire  _GEN_500 = tx_cmd_counter > 6'h0 & _T & reg_clk ? tx_cmd_15 : tx_cmd_14; // @[Sdc.scala 119:19 220:75 223:48]
+  wire  _GEN_501 = tx_cmd_counter > 6'h0 & _T & reg_clk ? tx_cmd_16 : tx_cmd_15; // @[Sdc.scala 119:19 220:75 223:48]
+  wire  _GEN_502 = tx_cmd_counter > 6'h0 & _T & reg_clk ? tx_cmd_17 : tx_cmd_16; // @[Sdc.scala 119:19 220:75 223:48]
+  wire  _GEN_503 = tx_cmd_counter > 6'h0 & _T & reg_clk ? tx_cmd_18 : tx_cmd_17; // @[Sdc.scala 119:19 220:75 223:48]
+  wire  _GEN_504 = tx_cmd_counter > 6'h0 & _T & reg_clk ? tx_cmd_19 : tx_cmd_18; // @[Sdc.scala 119:19 220:75 223:48]
+  wire  _GEN_505 = tx_cmd_counter > 6'h0 & _T & reg_clk ? tx_cmd_20 : tx_cmd_19; // @[Sdc.scala 119:19 220:75 223:48]
+  wire  _GEN_506 = tx_cmd_counter > 6'h0 & _T & reg_clk ? tx_cmd_21 : tx_cmd_20; // @[Sdc.scala 119:19 220:75 223:48]
+  wire  _GEN_507 = tx_cmd_counter > 6'h0 & _T & reg_clk ? tx_cmd_22 : tx_cmd_21; // @[Sdc.scala 119:19 220:75 223:48]
+  wire  _GEN_508 = tx_cmd_counter > 6'h0 & _T & reg_clk ? tx_cmd_23 : tx_cmd_22; // @[Sdc.scala 119:19 220:75 223:48]
+  wire  _GEN_509 = tx_cmd_counter > 6'h0 & _T & reg_clk ? tx_cmd_24 : tx_cmd_23; // @[Sdc.scala 119:19 220:75 223:48]
+  wire  _GEN_510 = tx_cmd_counter > 6'h0 & _T & reg_clk ? tx_cmd_25 : tx_cmd_24; // @[Sdc.scala 119:19 220:75 223:48]
+  wire  _GEN_511 = tx_cmd_counter > 6'h0 & _T & reg_clk ? tx_cmd_26 : tx_cmd_25; // @[Sdc.scala 119:19 220:75 223:48]
+  wire  _GEN_512 = tx_cmd_counter > 6'h0 & _T & reg_clk ? tx_cmd_27 : tx_cmd_26; // @[Sdc.scala 119:19 220:75 223:48]
+  wire  _GEN_513 = tx_cmd_counter > 6'h0 & _T & reg_clk ? tx_cmd_28 : tx_cmd_27; // @[Sdc.scala 119:19 220:75 223:48]
+  wire  _GEN_514 = tx_cmd_counter > 6'h0 & _T & reg_clk ? tx_cmd_29 : tx_cmd_28; // @[Sdc.scala 119:19 220:75 223:48]
+  wire  _GEN_515 = tx_cmd_counter > 6'h0 & _T & reg_clk ? tx_cmd_30 : tx_cmd_29; // @[Sdc.scala 119:19 220:75 223:48]
+  wire  _GEN_516 = tx_cmd_counter > 6'h0 & _T & reg_clk ? tx_cmd_31 : tx_cmd_30; // @[Sdc.scala 119:19 220:75 223:48]
+  wire  _GEN_517 = tx_cmd_counter > 6'h0 & _T & reg_clk ? tx_cmd_32 : tx_cmd_31; // @[Sdc.scala 119:19 220:75 223:48]
+  wire  _GEN_518 = tx_cmd_counter > 6'h0 & _T & reg_clk ? tx_cmd_33 : tx_cmd_32; // @[Sdc.scala 119:19 220:75 223:48]
+  wire  _GEN_519 = tx_cmd_counter > 6'h0 & _T & reg_clk ? tx_cmd_34 : tx_cmd_33; // @[Sdc.scala 119:19 220:75 223:48]
+  wire  _GEN_520 = tx_cmd_counter > 6'h0 & _T & reg_clk ? tx_cmd_35 : tx_cmd_34; // @[Sdc.scala 119:19 220:75 223:48]
+  wire  _GEN_521 = tx_cmd_counter > 6'h0 & _T & reg_clk ? tx_cmd_36 : tx_cmd_35; // @[Sdc.scala 119:19 220:75 223:48]
+  wire  _GEN_522 = tx_cmd_counter > 6'h0 & _T & reg_clk ? tx_cmd_37 : tx_cmd_36; // @[Sdc.scala 119:19 220:75 223:48]
+  wire  _GEN_523 = tx_cmd_counter > 6'h0 & _T & reg_clk ? tx_cmd_38 : tx_cmd_37; // @[Sdc.scala 119:19 220:75 223:48]
+  wire  _GEN_524 = tx_cmd_counter > 6'h0 & _T & reg_clk ? tx_cmd_39 : tx_cmd_38; // @[Sdc.scala 119:19 220:75 223:48]
+  wire  _GEN_525 = tx_cmd_counter > 6'h0 & _T & reg_clk ? tx_cmd_40 : tx_cmd_39; // @[Sdc.scala 119:19 220:75 223:48]
+  wire  _GEN_526 = tx_cmd_counter > 6'h0 & _T & reg_clk ? tx_cmd_41 : tx_cmd_40; // @[Sdc.scala 119:19 220:75 223:48]
+  wire  _GEN_527 = tx_cmd_counter > 6'h0 & _T & reg_clk ? tx_cmd_42 : tx_cmd_41; // @[Sdc.scala 119:19 220:75 223:48]
+  wire  _GEN_528 = tx_cmd_counter > 6'h0 & _T & reg_clk ? tx_cmd_43 : tx_cmd_42; // @[Sdc.scala 119:19 220:75 223:48]
+  wire  _GEN_529 = tx_cmd_counter > 6'h0 & _T & reg_clk ? tx_cmd_44 : tx_cmd_43; // @[Sdc.scala 119:19 220:75 223:48]
+  wire  _GEN_530 = tx_cmd_counter > 6'h0 & _T & reg_clk ? tx_cmd_45 : tx_cmd_44; // @[Sdc.scala 119:19 220:75 223:48]
+  wire  _GEN_531 = tx_cmd_counter > 6'h0 & _T & reg_clk ? tx_cmd_46 : tx_cmd_45; // @[Sdc.scala 119:19 220:75 223:48]
+  wire  _GEN_532 = tx_cmd_counter > 6'h0 & _T & reg_clk ? tx_cmd_47 : tx_cmd_46; // @[Sdc.scala 119:19 220:75 223:48]
+  wire [5:0] _GEN_533 = tx_cmd_counter > 6'h0 & _T & reg_clk ? _tx_cmd_counter_T_1 : tx_cmd_counter; // @[Sdc.scala 220:75 224:20 120:31]
+  wire  _GEN_534 = tx_cmd_counter > 6'h0 & _T & reg_clk ? crc__0 : tx_cmd_crc_0; // @[Sdc.scala 220:75 235:16 121:23]
+  wire  _GEN_535 = tx_cmd_counter > 6'h0 & _T & reg_clk ? tx_cmd_crc_0 : tx_cmd_crc_1; // @[Sdc.scala 220:75 235:16 121:23]
+  wire  _GEN_536 = tx_cmd_counter > 6'h0 & _T & reg_clk ? tx_cmd_crc_1 : tx_cmd_crc_2; // @[Sdc.scala 220:75 235:16 121:23]
+  wire  _GEN_537 = tx_cmd_counter > 6'h0 & _T & reg_clk ? crc__3 : tx_cmd_crc_3; // @[Sdc.scala 220:75 235:16 121:23]
+  wire  _GEN_538 = tx_cmd_counter > 6'h0 & _T & reg_clk ? tx_cmd_crc_3 : tx_cmd_crc_4; // @[Sdc.scala 220:75 235:16 121:23]
+  wire  _GEN_539 = tx_cmd_counter > 6'h0 & _T & reg_clk ? tx_cmd_crc_4 : tx_cmd_crc_5; // @[Sdc.scala 220:75 235:16 121:23]
+  wire  _GEN_540 = tx_cmd_counter > 6'h0 & _T & reg_clk ? tx_cmd_crc_5 : tx_cmd_crc_6; // @[Sdc.scala 220:75 235:16 121:23]
+  wire  _GEN_543 = rx_busy_timer != 19'h0 & _T & reg_clk ? tx_cmd_0 : _GEN_486; // @[Sdc.scala 119:19 217:76]
+  wire  _GEN_544 = rx_busy_timer != 19'h0 & _T & reg_clk ? tx_cmd_1 : _GEN_487; // @[Sdc.scala 119:19 217:76]
+  wire  _GEN_545 = rx_busy_timer != 19'h0 & _T & reg_clk ? tx_cmd_2 : _GEN_488; // @[Sdc.scala 119:19 217:76]
+  wire  _GEN_546 = rx_busy_timer != 19'h0 & _T & reg_clk ? tx_cmd_3 : _GEN_489; // @[Sdc.scala 119:19 217:76]
+  wire  _GEN_547 = rx_busy_timer != 19'h0 & _T & reg_clk ? tx_cmd_4 : _GEN_490; // @[Sdc.scala 119:19 217:76]
+  wire  _GEN_548 = rx_busy_timer != 19'h0 & _T & reg_clk ? tx_cmd_5 : _GEN_491; // @[Sdc.scala 119:19 217:76]
+  wire  _GEN_549 = rx_busy_timer != 19'h0 & _T & reg_clk ? tx_cmd_6 : _GEN_492; // @[Sdc.scala 119:19 217:76]
+  wire  _GEN_550 = rx_busy_timer != 19'h0 & _T & reg_clk ? tx_cmd_7 : _GEN_493; // @[Sdc.scala 119:19 217:76]
+  wire  _GEN_551 = rx_busy_timer != 19'h0 & _T & reg_clk ? tx_cmd_8 : _GEN_494; // @[Sdc.scala 119:19 217:76]
+  wire  _GEN_552 = rx_busy_timer != 19'h0 & _T & reg_clk ? tx_cmd_9 : _GEN_495; // @[Sdc.scala 119:19 217:76]
+  wire  _GEN_553 = rx_busy_timer != 19'h0 & _T & reg_clk ? tx_cmd_10 : _GEN_496; // @[Sdc.scala 119:19 217:76]
+  wire  _GEN_554 = rx_busy_timer != 19'h0 & _T & reg_clk ? tx_cmd_11 : _GEN_497; // @[Sdc.scala 119:19 217:76]
+  wire  _GEN_555 = rx_busy_timer != 19'h0 & _T & reg_clk ? tx_cmd_12 : _GEN_498; // @[Sdc.scala 119:19 217:76]
+  wire  _GEN_556 = rx_busy_timer != 19'h0 & _T & reg_clk ? tx_cmd_13 : _GEN_499; // @[Sdc.scala 119:19 217:76]
+  wire  _GEN_557 = rx_busy_timer != 19'h0 & _T & reg_clk ? tx_cmd_14 : _GEN_500; // @[Sdc.scala 119:19 217:76]
+  wire  _GEN_558 = rx_busy_timer != 19'h0 & _T & reg_clk ? tx_cmd_15 : _GEN_501; // @[Sdc.scala 119:19 217:76]
+  wire  _GEN_559 = rx_busy_timer != 19'h0 & _T & reg_clk ? tx_cmd_16 : _GEN_502; // @[Sdc.scala 119:19 217:76]
+  wire  _GEN_560 = rx_busy_timer != 19'h0 & _T & reg_clk ? tx_cmd_17 : _GEN_503; // @[Sdc.scala 119:19 217:76]
+  wire  _GEN_561 = rx_busy_timer != 19'h0 & _T & reg_clk ? tx_cmd_18 : _GEN_504; // @[Sdc.scala 119:19 217:76]
+  wire  _GEN_562 = rx_busy_timer != 19'h0 & _T & reg_clk ? tx_cmd_19 : _GEN_505; // @[Sdc.scala 119:19 217:76]
+  wire  _GEN_563 = rx_busy_timer != 19'h0 & _T & reg_clk ? tx_cmd_20 : _GEN_506; // @[Sdc.scala 119:19 217:76]
+  wire  _GEN_564 = rx_busy_timer != 19'h0 & _T & reg_clk ? tx_cmd_21 : _GEN_507; // @[Sdc.scala 119:19 217:76]
+  wire  _GEN_565 = rx_busy_timer != 19'h0 & _T & reg_clk ? tx_cmd_22 : _GEN_508; // @[Sdc.scala 119:19 217:76]
+  wire  _GEN_566 = rx_busy_timer != 19'h0 & _T & reg_clk ? tx_cmd_23 : _GEN_509; // @[Sdc.scala 119:19 217:76]
+  wire  _GEN_567 = rx_busy_timer != 19'h0 & _T & reg_clk ? tx_cmd_24 : _GEN_510; // @[Sdc.scala 119:19 217:76]
+  wire  _GEN_568 = rx_busy_timer != 19'h0 & _T & reg_clk ? tx_cmd_25 : _GEN_511; // @[Sdc.scala 119:19 217:76]
+  wire  _GEN_569 = rx_busy_timer != 19'h0 & _T & reg_clk ? tx_cmd_26 : _GEN_512; // @[Sdc.scala 119:19 217:76]
+  wire  _GEN_570 = rx_busy_timer != 19'h0 & _T & reg_clk ? tx_cmd_27 : _GEN_513; // @[Sdc.scala 119:19 217:76]
+  wire  _GEN_571 = rx_busy_timer != 19'h0 & _T & reg_clk ? tx_cmd_28 : _GEN_514; // @[Sdc.scala 119:19 217:76]
+  wire  _GEN_572 = rx_busy_timer != 19'h0 & _T & reg_clk ? tx_cmd_29 : _GEN_515; // @[Sdc.scala 119:19 217:76]
+  wire  _GEN_573 = rx_busy_timer != 19'h0 & _T & reg_clk ? tx_cmd_30 : _GEN_516; // @[Sdc.scala 119:19 217:76]
+  wire  _GEN_574 = rx_busy_timer != 19'h0 & _T & reg_clk ? tx_cmd_31 : _GEN_517; // @[Sdc.scala 119:19 217:76]
+  wire  _GEN_575 = rx_busy_timer != 19'h0 & _T & reg_clk ? tx_cmd_32 : _GEN_518; // @[Sdc.scala 119:19 217:76]
+  wire  _GEN_576 = rx_busy_timer != 19'h0 & _T & reg_clk ? tx_cmd_33 : _GEN_519; // @[Sdc.scala 119:19 217:76]
+  wire  _GEN_577 = rx_busy_timer != 19'h0 & _T & reg_clk ? tx_cmd_34 : _GEN_520; // @[Sdc.scala 119:19 217:76]
+  wire  _GEN_578 = rx_busy_timer != 19'h0 & _T & reg_clk ? tx_cmd_35 : _GEN_521; // @[Sdc.scala 119:19 217:76]
+  wire  _GEN_579 = rx_busy_timer != 19'h0 & _T & reg_clk ? tx_cmd_36 : _GEN_522; // @[Sdc.scala 119:19 217:76]
+  wire  _GEN_580 = rx_busy_timer != 19'h0 & _T & reg_clk ? tx_cmd_37 : _GEN_523; // @[Sdc.scala 119:19 217:76]
+  wire  _GEN_581 = rx_busy_timer != 19'h0 & _T & reg_clk ? tx_cmd_38 : _GEN_524; // @[Sdc.scala 119:19 217:76]
+  wire  _GEN_582 = rx_busy_timer != 19'h0 & _T & reg_clk ? tx_cmd_39 : _GEN_525; // @[Sdc.scala 119:19 217:76]
+  wire  _GEN_583 = rx_busy_timer != 19'h0 & _T & reg_clk ? tx_cmd_40 : _GEN_526; // @[Sdc.scala 119:19 217:76]
+  wire  _GEN_584 = rx_busy_timer != 19'h0 & _T & reg_clk ? tx_cmd_41 : _GEN_527; // @[Sdc.scala 119:19 217:76]
+  wire  _GEN_585 = rx_busy_timer != 19'h0 & _T & reg_clk ? tx_cmd_42 : _GEN_528; // @[Sdc.scala 119:19 217:76]
+  wire  _GEN_586 = rx_busy_timer != 19'h0 & _T & reg_clk ? tx_cmd_43 : _GEN_529; // @[Sdc.scala 119:19 217:76]
+  wire  _GEN_587 = rx_busy_timer != 19'h0 & _T & reg_clk ? tx_cmd_44 : _GEN_530; // @[Sdc.scala 119:19 217:76]
+  wire  _GEN_588 = rx_busy_timer != 19'h0 & _T & reg_clk ? tx_cmd_45 : _GEN_531; // @[Sdc.scala 119:19 217:76]
+  wire  _GEN_589 = rx_busy_timer != 19'h0 & _T & reg_clk ? tx_cmd_46 : _GEN_532; // @[Sdc.scala 119:19 217:76]
+  wire [5:0] _GEN_590 = rx_busy_timer != 19'h0 & _T & reg_clk ? tx_cmd_counter : _GEN_533; // @[Sdc.scala 120:31 217:76]
+  wire  _GEN_591 = rx_busy_timer != 19'h0 & _T & reg_clk ? tx_cmd_crc_0 : _GEN_534; // @[Sdc.scala 121:23 217:76]
+  wire  _GEN_592 = rx_busy_timer != 19'h0 & _T & reg_clk ? tx_cmd_crc_1 : _GEN_535; // @[Sdc.scala 121:23 217:76]
+  wire  _GEN_593 = rx_busy_timer != 19'h0 & _T & reg_clk ? tx_cmd_crc_2 : _GEN_536; // @[Sdc.scala 121:23 217:76]
+  wire  _GEN_594 = rx_busy_timer != 19'h0 & _T & reg_clk ? tx_cmd_crc_3 : _GEN_537; // @[Sdc.scala 121:23 217:76]
+  wire  _GEN_595 = rx_busy_timer != 19'h0 & _T & reg_clk ? tx_cmd_crc_4 : _GEN_538; // @[Sdc.scala 121:23 217:76]
+  wire  _GEN_596 = rx_busy_timer != 19'h0 & _T & reg_clk ? tx_cmd_crc_5 : _GEN_539; // @[Sdc.scala 121:23 217:76]
+  wire  _GEN_597 = rx_busy_timer != 19'h0 & _T & reg_clk ? tx_cmd_crc_6 : _GEN_540; // @[Sdc.scala 121:23 217:76]
+  wire  _GEN_601 = tx_cmd_timer != 6'h0 & _T & reg_clk ? tx_cmd_0 : _GEN_543; // @[Sdc.scala 119:19 213:69]
+  wire  _GEN_602 = tx_cmd_timer != 6'h0 & _T & reg_clk ? tx_cmd_1 : _GEN_544; // @[Sdc.scala 119:19 213:69]
+  wire  _GEN_603 = tx_cmd_timer != 6'h0 & _T & reg_clk ? tx_cmd_2 : _GEN_545; // @[Sdc.scala 119:19 213:69]
+  wire  _GEN_604 = tx_cmd_timer != 6'h0 & _T & reg_clk ? tx_cmd_3 : _GEN_546; // @[Sdc.scala 119:19 213:69]
+  wire  _GEN_605 = tx_cmd_timer != 6'h0 & _T & reg_clk ? tx_cmd_4 : _GEN_547; // @[Sdc.scala 119:19 213:69]
+  wire  _GEN_606 = tx_cmd_timer != 6'h0 & _T & reg_clk ? tx_cmd_5 : _GEN_548; // @[Sdc.scala 119:19 213:69]
+  wire  _GEN_607 = tx_cmd_timer != 6'h0 & _T & reg_clk ? tx_cmd_6 : _GEN_549; // @[Sdc.scala 119:19 213:69]
+  wire  _GEN_608 = tx_cmd_timer != 6'h0 & _T & reg_clk ? tx_cmd_7 : _GEN_550; // @[Sdc.scala 119:19 213:69]
+  wire  _GEN_609 = tx_cmd_timer != 6'h0 & _T & reg_clk ? tx_cmd_8 : _GEN_551; // @[Sdc.scala 119:19 213:69]
+  wire  _GEN_610 = tx_cmd_timer != 6'h0 & _T & reg_clk ? tx_cmd_9 : _GEN_552; // @[Sdc.scala 119:19 213:69]
+  wire  _GEN_611 = tx_cmd_timer != 6'h0 & _T & reg_clk ? tx_cmd_10 : _GEN_553; // @[Sdc.scala 119:19 213:69]
+  wire  _GEN_612 = tx_cmd_timer != 6'h0 & _T & reg_clk ? tx_cmd_11 : _GEN_554; // @[Sdc.scala 119:19 213:69]
+  wire  _GEN_613 = tx_cmd_timer != 6'h0 & _T & reg_clk ? tx_cmd_12 : _GEN_555; // @[Sdc.scala 119:19 213:69]
+  wire  _GEN_614 = tx_cmd_timer != 6'h0 & _T & reg_clk ? tx_cmd_13 : _GEN_556; // @[Sdc.scala 119:19 213:69]
+  wire  _GEN_615 = tx_cmd_timer != 6'h0 & _T & reg_clk ? tx_cmd_14 : _GEN_557; // @[Sdc.scala 119:19 213:69]
+  wire  _GEN_616 = tx_cmd_timer != 6'h0 & _T & reg_clk ? tx_cmd_15 : _GEN_558; // @[Sdc.scala 119:19 213:69]
+  wire  _GEN_617 = tx_cmd_timer != 6'h0 & _T & reg_clk ? tx_cmd_16 : _GEN_559; // @[Sdc.scala 119:19 213:69]
+  wire  _GEN_618 = tx_cmd_timer != 6'h0 & _T & reg_clk ? tx_cmd_17 : _GEN_560; // @[Sdc.scala 119:19 213:69]
+  wire  _GEN_619 = tx_cmd_timer != 6'h0 & _T & reg_clk ? tx_cmd_18 : _GEN_561; // @[Sdc.scala 119:19 213:69]
+  wire  _GEN_620 = tx_cmd_timer != 6'h0 & _T & reg_clk ? tx_cmd_19 : _GEN_562; // @[Sdc.scala 119:19 213:69]
+  wire  _GEN_621 = tx_cmd_timer != 6'h0 & _T & reg_clk ? tx_cmd_20 : _GEN_563; // @[Sdc.scala 119:19 213:69]
+  wire  _GEN_622 = tx_cmd_timer != 6'h0 & _T & reg_clk ? tx_cmd_21 : _GEN_564; // @[Sdc.scala 119:19 213:69]
+  wire  _GEN_623 = tx_cmd_timer != 6'h0 & _T & reg_clk ? tx_cmd_22 : _GEN_565; // @[Sdc.scala 119:19 213:69]
+  wire  _GEN_624 = tx_cmd_timer != 6'h0 & _T & reg_clk ? tx_cmd_23 : _GEN_566; // @[Sdc.scala 119:19 213:69]
+  wire  _GEN_625 = tx_cmd_timer != 6'h0 & _T & reg_clk ? tx_cmd_24 : _GEN_567; // @[Sdc.scala 119:19 213:69]
+  wire  _GEN_626 = tx_cmd_timer != 6'h0 & _T & reg_clk ? tx_cmd_25 : _GEN_568; // @[Sdc.scala 119:19 213:69]
+  wire  _GEN_627 = tx_cmd_timer != 6'h0 & _T & reg_clk ? tx_cmd_26 : _GEN_569; // @[Sdc.scala 119:19 213:69]
+  wire  _GEN_628 = tx_cmd_timer != 6'h0 & _T & reg_clk ? tx_cmd_27 : _GEN_570; // @[Sdc.scala 119:19 213:69]
+  wire  _GEN_629 = tx_cmd_timer != 6'h0 & _T & reg_clk ? tx_cmd_28 : _GEN_571; // @[Sdc.scala 119:19 213:69]
+  wire  _GEN_630 = tx_cmd_timer != 6'h0 & _T & reg_clk ? tx_cmd_29 : _GEN_572; // @[Sdc.scala 119:19 213:69]
+  wire  _GEN_631 = tx_cmd_timer != 6'h0 & _T & reg_clk ? tx_cmd_30 : _GEN_573; // @[Sdc.scala 119:19 213:69]
+  wire  _GEN_632 = tx_cmd_timer != 6'h0 & _T & reg_clk ? tx_cmd_31 : _GEN_574; // @[Sdc.scala 119:19 213:69]
+  wire  _GEN_633 = tx_cmd_timer != 6'h0 & _T & reg_clk ? tx_cmd_32 : _GEN_575; // @[Sdc.scala 119:19 213:69]
+  wire  _GEN_634 = tx_cmd_timer != 6'h0 & _T & reg_clk ? tx_cmd_33 : _GEN_576; // @[Sdc.scala 119:19 213:69]
+  wire  _GEN_635 = tx_cmd_timer != 6'h0 & _T & reg_clk ? tx_cmd_34 : _GEN_577; // @[Sdc.scala 119:19 213:69]
+  wire  _GEN_636 = tx_cmd_timer != 6'h0 & _T & reg_clk ? tx_cmd_35 : _GEN_578; // @[Sdc.scala 119:19 213:69]
+  wire  _GEN_637 = tx_cmd_timer != 6'h0 & _T & reg_clk ? tx_cmd_36 : _GEN_579; // @[Sdc.scala 119:19 213:69]
+  wire  _GEN_638 = tx_cmd_timer != 6'h0 & _T & reg_clk ? tx_cmd_37 : _GEN_580; // @[Sdc.scala 119:19 213:69]
+  wire  _GEN_639 = tx_cmd_timer != 6'h0 & _T & reg_clk ? tx_cmd_38 : _GEN_581; // @[Sdc.scala 119:19 213:69]
+  wire  _GEN_640 = tx_cmd_timer != 6'h0 & _T & reg_clk ? tx_cmd_39 : _GEN_582; // @[Sdc.scala 119:19 213:69]
+  wire  _GEN_641 = tx_cmd_timer != 6'h0 & _T & reg_clk ? tx_cmd_40 : _GEN_583; // @[Sdc.scala 119:19 213:69]
+  wire  _GEN_642 = tx_cmd_timer != 6'h0 & _T & reg_clk ? tx_cmd_41 : _GEN_584; // @[Sdc.scala 119:19 213:69]
+  wire  _GEN_643 = tx_cmd_timer != 6'h0 & _T & reg_clk ? tx_cmd_42 : _GEN_585; // @[Sdc.scala 119:19 213:69]
+  wire  _GEN_644 = tx_cmd_timer != 6'h0 & _T & reg_clk ? tx_cmd_43 : _GEN_586; // @[Sdc.scala 119:19 213:69]
+  wire  _GEN_645 = tx_cmd_timer != 6'h0 & _T & reg_clk ? tx_cmd_44 : _GEN_587; // @[Sdc.scala 119:19 213:69]
+  wire  _GEN_646 = tx_cmd_timer != 6'h0 & _T & reg_clk ? tx_cmd_45 : _GEN_588; // @[Sdc.scala 119:19 213:69]
+  wire  _GEN_647 = tx_cmd_timer != 6'h0 & _T & reg_clk ? tx_cmd_46 : _GEN_589; // @[Sdc.scala 119:19 213:69]
+  wire [5:0] _GEN_648 = tx_cmd_timer != 6'h0 & _T & reg_clk ? tx_cmd_counter : _GEN_590; // @[Sdc.scala 120:31 213:69]
+  wire  _GEN_649 = tx_cmd_timer != 6'h0 & _T & reg_clk ? tx_cmd_crc_0 : _GEN_591; // @[Sdc.scala 121:23 213:69]
+  wire  _GEN_650 = tx_cmd_timer != 6'h0 & _T & reg_clk ? tx_cmd_crc_1 : _GEN_592; // @[Sdc.scala 121:23 213:69]
+  wire  _GEN_651 = tx_cmd_timer != 6'h0 & _T & reg_clk ? tx_cmd_crc_2 : _GEN_593; // @[Sdc.scala 121:23 213:69]
+  wire  _GEN_652 = tx_cmd_timer != 6'h0 & _T & reg_clk ? tx_cmd_crc_3 : _GEN_594; // @[Sdc.scala 121:23 213:69]
+  wire  _GEN_653 = tx_cmd_timer != 6'h0 & _T & reg_clk ? tx_cmd_crc_4 : _GEN_595; // @[Sdc.scala 121:23 213:69]
+  wire  _GEN_654 = tx_cmd_timer != 6'h0 & _T & reg_clk ? tx_cmd_crc_5 : _GEN_596; // @[Sdc.scala 121:23 213:69]
+  wire  _GEN_655 = tx_cmd_timer != 6'h0 & _T & reg_clk ? tx_cmd_crc_6 : _GEN_597; // @[Sdc.scala 121:23 213:69]
+  wire  _GEN_657 = rx_dat_buf_read ? 1'h0 : rx_dat_buf_read; // @[Sdc.scala 259:26 261:21 144:32]
+  wire [31:0] _GEN_658 = tx_dat_prepared_read ? io_sdbuf_rdata1 : tx_dat_prepared; // @[Sdc.scala 263:31 264:21 154:32]
+  wire  _GEN_659 = tx_dat_prepared_read ? 1'h0 : tx_dat_prepared_read; // @[Sdc.scala 263:31 265:26 167:37]
+  wire  _T_35 = ~rx_dat_in_progress; // @[Sdc.scala 271:13]
+  wire [18:0] _rx_dat_timer_T_1 = rx_dat_timer - 19'h1; // @[Sdc.scala 272:38]
+  wire  _T_39 = rx_dat_timer == 19'h1; // @[Sdc.scala 273:28]
+  wire [7:0] _rxtx_dat_counter_T_1 = rxtx_dat_counter + 8'h1; // @[Sdc.scala 279:48]
+  wire [10:0] _GEN_660 = rx_dat_timer == 19'h1 ? 11'h0 : rx_dat_counter; // @[Sdc.scala 273:37 274:26 126:31]
+  wire  _GEN_661 = rx_dat_timer == 19'h1 | rx_dat_ready; // @[Sdc.scala 273:37 275:24 131:29]
+  wire  _GEN_662 = rx_dat_timer == 19'h1 | rx_dat_timeout; // @[Sdc.scala 273:37 276:26 136:31]
+  wire  _GEN_664 = rx_dat_timer == 19'h1 | _GEN_657; // @[Sdc.scala 273:37 278:27]
+  wire [7:0] _GEN_665 = rx_dat_timer == 19'h1 ? _rxtx_dat_counter_T_1 : rxtx_dat_counter; // @[Sdc.scala 273:37 279:28 139:33]
+  wire [10:0] _rx_dat_counter_T_1 = rx_dat_counter - 11'h1; // @[Sdc.scala 286:42]
+  wire [3:0] _rx_dat_crc_0_T = rx_dat_next ^ rx_dat_crc_15; // @[Sdc.scala 288:38]
+  wire [3:0] _rx_dat_crc_5_T = rx_dat_crc_4 ^ rx_dat_crc_15; // @[Sdc.scala 293:40]
+  wire [3:0] _rx_dat_crc_12_T = rx_dat_crc_11 ^ rx_dat_crc_15; // @[Sdc.scala 300:42]
+  wire  _T_50 = ~rx_dat_start_bit; // @[Sdc.scala 306:17]
+  wire [7:0] _rxtx_dat_index_T_1 = rxtx_dat_index + 8'h1; // @[Sdc.scala 307:46]
   wire [15:0] io_sdbuf_wdata1_lo = {rx_dat_bits_5,rx_dat_bits_4,rx_dat_bits_7,rx_dat_bits_6}; // @[Cat.scala 33:92]
   wire [15:0] io_sdbuf_wdata1_hi = {rx_dat_bits_1,rx_dat_bits_0,rx_dat_bits_3,rx_dat_bits_2}; // @[Cat.scala 33:92]
-  wire [7:0] _GEN_666 = ~rx_dat_start_bit ? _rxtx_dat_index_T_1 : rxtx_dat_index; // @[Sdc.scala 307:36 308:28 141:31]
-  wire  _GEN_669 = rx_dat_counter[2:0] == 3'h1 & rx_dat_counter[10:4] != 7'h0 ? 1'h0 : rx_dat_start_bit; // @[Sdc.scala 305:78 306:28 128:33]
-  wire [7:0] _GEN_670 = rx_dat_counter[2:0] == 3'h1 & rx_dat_counter[10:4] != 7'h0 ? _GEN_666 : rxtx_dat_index; // @[Sdc.scala 141:31 305:78]
-  wire  _GEN_671 = rx_dat_counter[2:0] == 3'h1 & rx_dat_counter[10:4] != 7'h0 & _T_50; // @[Sdc.scala 252:17 305:78]
-  wire  _T_51 = rx_dat_counter == 11'h1; // @[Sdc.scala 324:30]
+  wire [7:0] _GEN_666 = ~rx_dat_start_bit ? _rxtx_dat_index_T_1 : rxtx_dat_index; // @[Sdc.scala 306:36 307:28 140:31]
+  wire  _GEN_669 = rx_dat_counter[2:0] == 3'h1 & rx_dat_counter[10:4] != 7'h0 ? 1'h0 : rx_dat_start_bit; // @[Sdc.scala 304:78 305:28 127:33]
+  wire [7:0] _GEN_670 = rx_dat_counter[2:0] == 3'h1 & rx_dat_counter[10:4] != 7'h0 ? _GEN_666 : rxtx_dat_index; // @[Sdc.scala 140:31 304:78]
+  wire  _GEN_671 = rx_dat_counter[2:0] == 3'h1 & rx_dat_counter[10:4] != 7'h0 & _T_50; // @[Sdc.scala 251:17 304:78]
+  wire  _T_51 = rx_dat_counter == 11'h1; // @[Sdc.scala 323:30]
   wire [31:0] crc_error_lo = {rx_dat_crc_8,rx_dat_crc_9,rx_dat_crc_10,rx_dat_crc_11,rx_dat_crc_12,rx_dat_crc_13,
     rx_dat_crc_14,rx_dat_crc_15}; // @[Cat.scala 33:92]
   wire [63:0] _crc_error_T = {rx_dat_crc_0,rx_dat_crc_1,rx_dat_crc_2,rx_dat_crc_3,rx_dat_crc_4,rx_dat_crc_5,rx_dat_crc_6
     ,rx_dat_crc_7,crc_error_lo}; // @[Cat.scala 33:92]
-  wire  crc_error = _crc_error_T != 64'h0; // @[Sdc.scala 330:43]
-  wire [10:0] _GEN_673 = rx_dat_continuous & ~crc_error & ~rx_dat_ready ? 11'h411 : _rx_dat_counter_T_1; // @[Sdc.scala 287:24 334:62 335:28]
-  wire [18:0] _GEN_674 = rx_dat_continuous & ~crc_error & ~rx_dat_ready ? 19'h7a120 : rx_dat_timer; // @[Sdc.scala 334:62 336:26 136:29]
-  wire  _GEN_675 = rx_dat_continuous & ~crc_error & ~rx_dat_ready | _GEN_669; // @[Sdc.scala 334:62 337:30]
-  wire [3:0] _GEN_676 = rx_dat_continuous & ~crc_error & ~rx_dat_ready ? 4'h0 : _rx_dat_crc_0_T; // @[Sdc.scala 289:23 334:62 338:24]
-  wire [3:0] _GEN_677 = rx_dat_continuous & ~crc_error & ~rx_dat_ready ? 4'h0 : rx_dat_crc_0; // @[Sdc.scala 290:23 334:62 338:24]
-  wire [3:0] _GEN_678 = rx_dat_continuous & ~crc_error & ~rx_dat_ready ? 4'h0 : rx_dat_crc_1; // @[Sdc.scala 291:23 334:62 338:24]
-  wire [3:0] _GEN_679 = rx_dat_continuous & ~crc_error & ~rx_dat_ready ? 4'h0 : rx_dat_crc_2; // @[Sdc.scala 292:23 334:62 338:24]
-  wire [3:0] _GEN_680 = rx_dat_continuous & ~crc_error & ~rx_dat_ready ? 4'h0 : rx_dat_crc_3; // @[Sdc.scala 293:23 334:62 338:24]
-  wire [3:0] _GEN_681 = rx_dat_continuous & ~crc_error & ~rx_dat_ready ? 4'h0 : _rx_dat_crc_5_T; // @[Sdc.scala 294:23 334:62 338:24]
-  wire [3:0] _GEN_682 = rx_dat_continuous & ~crc_error & ~rx_dat_ready ? 4'h0 : rx_dat_crc_5; // @[Sdc.scala 295:23 334:62 338:24]
-  wire [3:0] _GEN_683 = rx_dat_continuous & ~crc_error & ~rx_dat_ready ? 4'h0 : rx_dat_crc_6; // @[Sdc.scala 296:23 334:62 338:24]
-  wire [3:0] _GEN_684 = rx_dat_continuous & ~crc_error & ~rx_dat_ready ? 4'h0 : rx_dat_crc_7; // @[Sdc.scala 297:23 334:62 338:24]
-  wire [3:0] _GEN_685 = rx_dat_continuous & ~crc_error & ~rx_dat_ready ? 4'h0 : rx_dat_crc_8; // @[Sdc.scala 298:23 334:62 338:24]
-  wire [3:0] _GEN_686 = rx_dat_continuous & ~crc_error & ~rx_dat_ready ? 4'h0 : rx_dat_crc_9; // @[Sdc.scala 299:24 334:62 338:24]
-  wire [3:0] _GEN_687 = rx_dat_continuous & ~crc_error & ~rx_dat_ready ? 4'h0 : rx_dat_crc_10; // @[Sdc.scala 300:24 334:62 338:24]
-  wire [3:0] _GEN_688 = rx_dat_continuous & ~crc_error & ~rx_dat_ready ? 4'h0 : _rx_dat_crc_12_T; // @[Sdc.scala 301:24 334:62 338:24]
-  wire [3:0] _GEN_689 = rx_dat_continuous & ~crc_error & ~rx_dat_ready ? 4'h0 : rx_dat_crc_12; // @[Sdc.scala 302:24 334:62 338:24]
-  wire [3:0] _GEN_690 = rx_dat_continuous & ~crc_error & ~rx_dat_ready ? 4'h0 : rx_dat_crc_13; // @[Sdc.scala 303:24 334:62 338:24]
-  wire [3:0] _GEN_691 = rx_dat_continuous & ~crc_error & ~rx_dat_ready ? 4'h0 : rx_dat_crc_14; // @[Sdc.scala 304:24 334:62 338:24]
-  wire  _GEN_692 = rx_dat_counter == 11'h1 ? 1'h0 : rx_dat_in_progress; // @[Sdc.scala 324:39 325:30 126:35]
-  wire  _GEN_693 = rx_dat_counter == 11'h1 | rx_dat_ready; // @[Sdc.scala 324:39 326:24 132:29]
-  wire  _GEN_695 = rx_dat_counter == 11'h1 | _GEN_657; // @[Sdc.scala 324:39 328:27]
-  wire [7:0] _GEN_696 = rx_dat_counter == 11'h1 ? _rxtx_dat_counter_T_1 : rxtx_dat_counter; // @[Sdc.scala 324:39 329:28 140:33]
-  wire  _GEN_697 = rx_dat_counter == 11'h1 ? crc_error : rx_dat_crc_error; // @[Sdc.scala 324:39 331:28 135:33]
-  wire  _GEN_698 = rx_dat_counter == 11'h1 ? rx_dat_ready : rx_dat_overrun; // @[Sdc.scala 324:39 333:26 138:31]
-  wire [10:0] _GEN_699 = rx_dat_counter == 11'h1 ? _GEN_673 : _rx_dat_counter_T_1; // @[Sdc.scala 287:24 324:39]
-  wire [18:0] _GEN_700 = rx_dat_counter == 11'h1 ? _GEN_674 : rx_dat_timer; // @[Sdc.scala 136:29 324:39]
-  wire  _GEN_701 = rx_dat_counter == 11'h1 ? _GEN_675 : _GEN_669; // @[Sdc.scala 324:39]
-  wire [3:0] _GEN_702 = rx_dat_counter == 11'h1 ? _GEN_676 : _rx_dat_crc_0_T; // @[Sdc.scala 289:23 324:39]
-  wire [3:0] _GEN_703 = rx_dat_counter == 11'h1 ? _GEN_677 : rx_dat_crc_0; // @[Sdc.scala 290:23 324:39]
-  wire [3:0] _GEN_704 = rx_dat_counter == 11'h1 ? _GEN_678 : rx_dat_crc_1; // @[Sdc.scala 291:23 324:39]
-  wire [3:0] _GEN_705 = rx_dat_counter == 11'h1 ? _GEN_679 : rx_dat_crc_2; // @[Sdc.scala 292:23 324:39]
-  wire [3:0] _GEN_706 = rx_dat_counter == 11'h1 ? _GEN_680 : rx_dat_crc_3; // @[Sdc.scala 293:23 324:39]
-  wire [3:0] _GEN_707 = rx_dat_counter == 11'h1 ? _GEN_681 : _rx_dat_crc_5_T; // @[Sdc.scala 294:23 324:39]
-  wire [3:0] _GEN_708 = rx_dat_counter == 11'h1 ? _GEN_682 : rx_dat_crc_5; // @[Sdc.scala 295:23 324:39]
-  wire [3:0] _GEN_709 = rx_dat_counter == 11'h1 ? _GEN_683 : rx_dat_crc_6; // @[Sdc.scala 296:23 324:39]
-  wire [3:0] _GEN_710 = rx_dat_counter == 11'h1 ? _GEN_684 : rx_dat_crc_7; // @[Sdc.scala 297:23 324:39]
-  wire [3:0] _GEN_711 = rx_dat_counter == 11'h1 ? _GEN_685 : rx_dat_crc_8; // @[Sdc.scala 298:23 324:39]
-  wire [3:0] _GEN_712 = rx_dat_counter == 11'h1 ? _GEN_686 : rx_dat_crc_9; // @[Sdc.scala 299:24 324:39]
-  wire [3:0] _GEN_713 = rx_dat_counter == 11'h1 ? _GEN_687 : rx_dat_crc_10; // @[Sdc.scala 300:24 324:39]
-  wire [3:0] _GEN_714 = rx_dat_counter == 11'h1 ? _GEN_688 : _rx_dat_crc_12_T; // @[Sdc.scala 301:24 324:39]
-  wire [3:0] _GEN_715 = rx_dat_counter == 11'h1 ? _GEN_689 : rx_dat_crc_12; // @[Sdc.scala 302:24 324:39]
-  wire [3:0] _GEN_716 = rx_dat_counter == 11'h1 ? _GEN_690 : rx_dat_crc_13; // @[Sdc.scala 303:24 324:39]
-  wire [3:0] _GEN_717 = rx_dat_counter == 11'h1 ? _GEN_691 : rx_dat_crc_14; // @[Sdc.scala 304:24 324:39]
-  wire  _GEN_718 = _T_35 & ~rx_dat_next[0] | _GEN_692; // @[Sdc.scala 282:66 283:28]
-  wire [10:0] _GEN_727 = _T_35 & ~rx_dat_next[0] ? rx_dat_counter : _GEN_699; // @[Sdc.scala 127:31 282:66]
-  wire [3:0] _GEN_728 = _T_35 & ~rx_dat_next[0] ? rx_dat_crc_0 : _GEN_702; // @[Sdc.scala 134:23 282:66]
-  wire [3:0] _GEN_729 = _T_35 & ~rx_dat_next[0] ? rx_dat_crc_1 : _GEN_703; // @[Sdc.scala 134:23 282:66]
-  wire [3:0] _GEN_730 = _T_35 & ~rx_dat_next[0] ? rx_dat_crc_2 : _GEN_704; // @[Sdc.scala 134:23 282:66]
-  wire [3:0] _GEN_731 = _T_35 & ~rx_dat_next[0] ? rx_dat_crc_3 : _GEN_705; // @[Sdc.scala 134:23 282:66]
-  wire [3:0] _GEN_732 = _T_35 & ~rx_dat_next[0] ? rx_dat_crc_4 : _GEN_706; // @[Sdc.scala 134:23 282:66]
-  wire [3:0] _GEN_733 = _T_35 & ~rx_dat_next[0] ? rx_dat_crc_5 : _GEN_707; // @[Sdc.scala 134:23 282:66]
-  wire [3:0] _GEN_734 = _T_35 & ~rx_dat_next[0] ? rx_dat_crc_6 : _GEN_708; // @[Sdc.scala 134:23 282:66]
-  wire [3:0] _GEN_735 = _T_35 & ~rx_dat_next[0] ? rx_dat_crc_7 : _GEN_709; // @[Sdc.scala 134:23 282:66]
-  wire [3:0] _GEN_736 = _T_35 & ~rx_dat_next[0] ? rx_dat_crc_8 : _GEN_710; // @[Sdc.scala 134:23 282:66]
-  wire [3:0] _GEN_737 = _T_35 & ~rx_dat_next[0] ? rx_dat_crc_9 : _GEN_711; // @[Sdc.scala 134:23 282:66]
-  wire [3:0] _GEN_738 = _T_35 & ~rx_dat_next[0] ? rx_dat_crc_10 : _GEN_712; // @[Sdc.scala 134:23 282:66]
-  wire [3:0] _GEN_739 = _T_35 & ~rx_dat_next[0] ? rx_dat_crc_11 : _GEN_713; // @[Sdc.scala 134:23 282:66]
-  wire [3:0] _GEN_740 = _T_35 & ~rx_dat_next[0] ? rx_dat_crc_12 : _GEN_714; // @[Sdc.scala 134:23 282:66]
-  wire [3:0] _GEN_741 = _T_35 & ~rx_dat_next[0] ? rx_dat_crc_13 : _GEN_715; // @[Sdc.scala 134:23 282:66]
-  wire [3:0] _GEN_742 = _T_35 & ~rx_dat_next[0] ? rx_dat_crc_14 : _GEN_716; // @[Sdc.scala 134:23 282:66]
-  wire [3:0] _GEN_743 = _T_35 & ~rx_dat_next[0] ? rx_dat_crc_15 : _GEN_717; // @[Sdc.scala 134:23 282:66]
-  wire  _GEN_744 = _T_35 & ~rx_dat_next[0] ? rx_dat_start_bit : _GEN_701; // @[Sdc.scala 128:33 282:66]
-  wire [7:0] _GEN_745 = _T_35 & ~rx_dat_next[0] ? rxtx_dat_index : _GEN_670; // @[Sdc.scala 141:31 282:66]
-  wire  _GEN_746 = _T_35 & ~rx_dat_next[0] ? 1'h0 : _GEN_671; // @[Sdc.scala 252:17 282:66]
-  wire  _GEN_748 = _T_35 & ~rx_dat_next[0] ? rx_dat_ready : _GEN_693; // @[Sdc.scala 132:29 282:66]
-  wire  _GEN_749 = _T_35 & ~rx_dat_next[0] ? 1'h0 : _T_51; // @[Sdc.scala 255:17 282:66]
-  wire  _GEN_750 = _T_35 & ~rx_dat_next[0] ? _GEN_657 : _GEN_695; // @[Sdc.scala 282:66]
-  wire [7:0] _GEN_751 = _T_35 & ~rx_dat_next[0] ? rxtx_dat_counter : _GEN_696; // @[Sdc.scala 140:33 282:66]
-  wire  _GEN_752 = _T_35 & ~rx_dat_next[0] ? rx_dat_crc_error : _GEN_697; // @[Sdc.scala 135:33 282:66]
-  wire  _GEN_753 = _T_35 & ~rx_dat_next[0] ? rx_dat_overrun : _GEN_698; // @[Sdc.scala 138:31 282:66]
-  wire [18:0] _GEN_754 = _T_35 & ~rx_dat_next[0] ? rx_dat_timer : _GEN_700; // @[Sdc.scala 136:29 282:66]
-  wire [18:0] _GEN_755 = ~rx_dat_in_progress & rx_dat_next[0] ? _rx_dat_timer_T_1 : _GEN_754; // @[Sdc.scala 272:59 273:22]
-  wire [10:0] _GEN_756 = ~rx_dat_in_progress & rx_dat_next[0] ? _GEN_660 : _GEN_727; // @[Sdc.scala 272:59]
-  wire  _GEN_757 = ~rx_dat_in_progress & rx_dat_next[0] ? _GEN_661 : _GEN_748; // @[Sdc.scala 272:59]
-  wire  _GEN_758 = ~rx_dat_in_progress & rx_dat_next[0] ? _GEN_662 : rx_dat_timeout; // @[Sdc.scala 137:31 272:59]
-  wire  _GEN_759 = ~rx_dat_in_progress & rx_dat_next[0] ? _T_39 : _GEN_749; // @[Sdc.scala 272:59]
-  wire  _GEN_760 = ~rx_dat_in_progress & rx_dat_next[0] ? _GEN_664 : _GEN_750; // @[Sdc.scala 272:59]
-  wire [7:0] _GEN_761 = ~rx_dat_in_progress & rx_dat_next[0] ? _GEN_665 : _GEN_751; // @[Sdc.scala 272:59]
-  wire  _GEN_762 = ~rx_dat_in_progress & rx_dat_next[0] ? rx_dat_in_progress : _GEN_718; // @[Sdc.scala 126:35 272:59]
-  wire [3:0] _GEN_771 = ~rx_dat_in_progress & rx_dat_next[0] ? rx_dat_crc_0 : _GEN_728; // @[Sdc.scala 134:23 272:59]
-  wire [3:0] _GEN_772 = ~rx_dat_in_progress & rx_dat_next[0] ? rx_dat_crc_1 : _GEN_729; // @[Sdc.scala 134:23 272:59]
-  wire [3:0] _GEN_773 = ~rx_dat_in_progress & rx_dat_next[0] ? rx_dat_crc_2 : _GEN_730; // @[Sdc.scala 134:23 272:59]
-  wire [3:0] _GEN_774 = ~rx_dat_in_progress & rx_dat_next[0] ? rx_dat_crc_3 : _GEN_731; // @[Sdc.scala 134:23 272:59]
-  wire [3:0] _GEN_775 = ~rx_dat_in_progress & rx_dat_next[0] ? rx_dat_crc_4 : _GEN_732; // @[Sdc.scala 134:23 272:59]
-  wire [3:0] _GEN_776 = ~rx_dat_in_progress & rx_dat_next[0] ? rx_dat_crc_5 : _GEN_733; // @[Sdc.scala 134:23 272:59]
-  wire [3:0] _GEN_777 = ~rx_dat_in_progress & rx_dat_next[0] ? rx_dat_crc_6 : _GEN_734; // @[Sdc.scala 134:23 272:59]
-  wire [3:0] _GEN_778 = ~rx_dat_in_progress & rx_dat_next[0] ? rx_dat_crc_7 : _GEN_735; // @[Sdc.scala 134:23 272:59]
-  wire [3:0] _GEN_779 = ~rx_dat_in_progress & rx_dat_next[0] ? rx_dat_crc_8 : _GEN_736; // @[Sdc.scala 134:23 272:59]
-  wire [3:0] _GEN_780 = ~rx_dat_in_progress & rx_dat_next[0] ? rx_dat_crc_9 : _GEN_737; // @[Sdc.scala 134:23 272:59]
-  wire [3:0] _GEN_781 = ~rx_dat_in_progress & rx_dat_next[0] ? rx_dat_crc_10 : _GEN_738; // @[Sdc.scala 134:23 272:59]
-  wire [3:0] _GEN_782 = ~rx_dat_in_progress & rx_dat_next[0] ? rx_dat_crc_11 : _GEN_739; // @[Sdc.scala 134:23 272:59]
-  wire [3:0] _GEN_783 = ~rx_dat_in_progress & rx_dat_next[0] ? rx_dat_crc_12 : _GEN_740; // @[Sdc.scala 134:23 272:59]
-  wire [3:0] _GEN_784 = ~rx_dat_in_progress & rx_dat_next[0] ? rx_dat_crc_13 : _GEN_741; // @[Sdc.scala 134:23 272:59]
-  wire [3:0] _GEN_785 = ~rx_dat_in_progress & rx_dat_next[0] ? rx_dat_crc_14 : _GEN_742; // @[Sdc.scala 134:23 272:59]
-  wire [3:0] _GEN_786 = ~rx_dat_in_progress & rx_dat_next[0] ? rx_dat_crc_15 : _GEN_743; // @[Sdc.scala 134:23 272:59]
-  wire  _GEN_787 = ~rx_dat_in_progress & rx_dat_next[0] ? rx_dat_start_bit : _GEN_744; // @[Sdc.scala 128:33 272:59]
-  wire [7:0] _GEN_788 = ~rx_dat_in_progress & rx_dat_next[0] ? rxtx_dat_index : _GEN_745; // @[Sdc.scala 141:31 272:59]
-  wire  _GEN_789 = ~rx_dat_in_progress & rx_dat_next[0] ? 1'h0 : _GEN_746; // @[Sdc.scala 252:17 272:59]
-  wire  _GEN_791 = ~rx_dat_in_progress & rx_dat_next[0] ? rx_dat_crc_error : _GEN_752; // @[Sdc.scala 135:33 272:59]
-  wire  _GEN_792 = ~rx_dat_in_progress & rx_dat_next[0] ? rx_dat_overrun : _GEN_753; // @[Sdc.scala 138:31 272:59]
-  wire [18:0] _GEN_793 = _T_5 ? _GEN_755 : rx_dat_timer; // @[Sdc.scala 136:29 271:47]
-  wire [10:0] _GEN_794 = _T_5 ? _GEN_756 : rx_dat_counter; // @[Sdc.scala 127:31 271:47]
-  wire  _GEN_795 = _T_5 ? _GEN_757 : rx_dat_ready; // @[Sdc.scala 132:29 271:47]
-  wire  _GEN_796 = _T_5 ? _GEN_758 : rx_dat_timeout; // @[Sdc.scala 137:31 271:47]
-  wire  _GEN_797 = _T_5 & _GEN_759; // @[Sdc.scala 255:17 271:47]
-  wire  _GEN_798 = _T_5 ? _GEN_760 : _GEN_657; // @[Sdc.scala 271:47]
-  wire [7:0] _GEN_799 = _T_5 ? _GEN_761 : rxtx_dat_counter; // @[Sdc.scala 140:33 271:47]
-  wire  _GEN_800 = _T_5 ? _GEN_762 : rx_dat_in_progress; // @[Sdc.scala 126:35 271:47]
-  wire [3:0] _GEN_809 = _T_5 ? _GEN_771 : rx_dat_crc_0; // @[Sdc.scala 134:23 271:47]
-  wire [3:0] _GEN_810 = _T_5 ? _GEN_772 : rx_dat_crc_1; // @[Sdc.scala 134:23 271:47]
-  wire [3:0] _GEN_811 = _T_5 ? _GEN_773 : rx_dat_crc_2; // @[Sdc.scala 134:23 271:47]
-  wire [3:0] _GEN_812 = _T_5 ? _GEN_774 : rx_dat_crc_3; // @[Sdc.scala 134:23 271:47]
-  wire [3:0] _GEN_813 = _T_5 ? _GEN_775 : rx_dat_crc_4; // @[Sdc.scala 134:23 271:47]
-  wire [3:0] _GEN_814 = _T_5 ? _GEN_776 : rx_dat_crc_5; // @[Sdc.scala 134:23 271:47]
-  wire [3:0] _GEN_815 = _T_5 ? _GEN_777 : rx_dat_crc_6; // @[Sdc.scala 134:23 271:47]
-  wire [3:0] _GEN_816 = _T_5 ? _GEN_778 : rx_dat_crc_7; // @[Sdc.scala 134:23 271:47]
-  wire [3:0] _GEN_817 = _T_5 ? _GEN_779 : rx_dat_crc_8; // @[Sdc.scala 134:23 271:47]
-  wire [3:0] _GEN_818 = _T_5 ? _GEN_780 : rx_dat_crc_9; // @[Sdc.scala 134:23 271:47]
-  wire [3:0] _GEN_819 = _T_5 ? _GEN_781 : rx_dat_crc_10; // @[Sdc.scala 134:23 271:47]
-  wire [3:0] _GEN_820 = _T_5 ? _GEN_782 : rx_dat_crc_11; // @[Sdc.scala 134:23 271:47]
-  wire [3:0] _GEN_821 = _T_5 ? _GEN_783 : rx_dat_crc_12; // @[Sdc.scala 134:23 271:47]
-  wire [3:0] _GEN_822 = _T_5 ? _GEN_784 : rx_dat_crc_13; // @[Sdc.scala 134:23 271:47]
-  wire [3:0] _GEN_823 = _T_5 ? _GEN_785 : rx_dat_crc_14; // @[Sdc.scala 134:23 271:47]
-  wire [3:0] _GEN_824 = _T_5 ? _GEN_786 : rx_dat_crc_15; // @[Sdc.scala 134:23 271:47]
-  wire  _GEN_825 = _T_5 ? _GEN_787 : rx_dat_start_bit; // @[Sdc.scala 128:33 271:47]
-  wire [7:0] _GEN_826 = _T_5 ? _GEN_788 : rxtx_dat_index; // @[Sdc.scala 141:31 271:47]
-  wire  _GEN_827 = _T_5 & _GEN_789; // @[Sdc.scala 252:17 271:47]
-  wire  _GEN_829 = _T_5 ? _GEN_791 : rx_dat_crc_error; // @[Sdc.scala 135:33 271:47]
-  wire  _GEN_830 = _T_5 ? _GEN_792 : rx_dat_overrun; // @[Sdc.scala 138:31 271:47]
-  wire [18:0] _GEN_832 = rx_dat_counter > 11'h0 & _T_2 ? _GEN_793 : rx_dat_timer; // @[Sdc.scala 136:29 269:57]
-  wire [10:0] _GEN_833 = rx_dat_counter > 11'h0 & _T_2 ? _GEN_794 : rx_dat_counter; // @[Sdc.scala 127:31 269:57]
-  wire  _GEN_834 = rx_dat_counter > 11'h0 & _T_2 ? _GEN_795 : rx_dat_ready; // @[Sdc.scala 132:29 269:57]
-  wire  _GEN_835 = rx_dat_counter > 11'h0 & _T_2 ? _GEN_796 : rx_dat_timeout; // @[Sdc.scala 137:31 269:57]
-  wire  _GEN_836 = rx_dat_counter > 11'h0 & _T_2 & _GEN_797; // @[Sdc.scala 255:17 269:57]
-  wire  _GEN_837 = rx_dat_counter > 11'h0 & _T_2 ? _GEN_798 : _GEN_657; // @[Sdc.scala 269:57]
-  wire [7:0] _GEN_838 = rx_dat_counter > 11'h0 & _T_2 ? _GEN_799 : rxtx_dat_counter; // @[Sdc.scala 140:33 269:57]
-  wire  _GEN_839 = rx_dat_counter > 11'h0 & _T_2 ? _GEN_800 : rx_dat_in_progress; // @[Sdc.scala 126:35 269:57]
-  wire [3:0] _GEN_848 = rx_dat_counter > 11'h0 & _T_2 ? _GEN_809 : rx_dat_crc_0; // @[Sdc.scala 134:23 269:57]
-  wire [3:0] _GEN_849 = rx_dat_counter > 11'h0 & _T_2 ? _GEN_810 : rx_dat_crc_1; // @[Sdc.scala 134:23 269:57]
-  wire [3:0] _GEN_850 = rx_dat_counter > 11'h0 & _T_2 ? _GEN_811 : rx_dat_crc_2; // @[Sdc.scala 134:23 269:57]
-  wire [3:0] _GEN_851 = rx_dat_counter > 11'h0 & _T_2 ? _GEN_812 : rx_dat_crc_3; // @[Sdc.scala 134:23 269:57]
-  wire [3:0] _GEN_852 = rx_dat_counter > 11'h0 & _T_2 ? _GEN_813 : rx_dat_crc_4; // @[Sdc.scala 134:23 269:57]
-  wire [3:0] _GEN_853 = rx_dat_counter > 11'h0 & _T_2 ? _GEN_814 : rx_dat_crc_5; // @[Sdc.scala 134:23 269:57]
-  wire [3:0] _GEN_854 = rx_dat_counter > 11'h0 & _T_2 ? _GEN_815 : rx_dat_crc_6; // @[Sdc.scala 134:23 269:57]
-  wire [3:0] _GEN_855 = rx_dat_counter > 11'h0 & _T_2 ? _GEN_816 : rx_dat_crc_7; // @[Sdc.scala 134:23 269:57]
-  wire [3:0] _GEN_856 = rx_dat_counter > 11'h0 & _T_2 ? _GEN_817 : rx_dat_crc_8; // @[Sdc.scala 134:23 269:57]
-  wire [3:0] _GEN_857 = rx_dat_counter > 11'h0 & _T_2 ? _GEN_818 : rx_dat_crc_9; // @[Sdc.scala 134:23 269:57]
-  wire [3:0] _GEN_858 = rx_dat_counter > 11'h0 & _T_2 ? _GEN_819 : rx_dat_crc_10; // @[Sdc.scala 134:23 269:57]
-  wire [3:0] _GEN_859 = rx_dat_counter > 11'h0 & _T_2 ? _GEN_820 : rx_dat_crc_11; // @[Sdc.scala 134:23 269:57]
-  wire [3:0] _GEN_860 = rx_dat_counter > 11'h0 & _T_2 ? _GEN_821 : rx_dat_crc_12; // @[Sdc.scala 134:23 269:57]
-  wire [3:0] _GEN_861 = rx_dat_counter > 11'h0 & _T_2 ? _GEN_822 : rx_dat_crc_13; // @[Sdc.scala 134:23 269:57]
-  wire [3:0] _GEN_862 = rx_dat_counter > 11'h0 & _T_2 ? _GEN_823 : rx_dat_crc_14; // @[Sdc.scala 134:23 269:57]
-  wire [3:0] _GEN_863 = rx_dat_counter > 11'h0 & _T_2 ? _GEN_824 : rx_dat_crc_15; // @[Sdc.scala 134:23 269:57]
-  wire  _GEN_864 = rx_dat_counter > 11'h0 & _T_2 ? _GEN_825 : rx_dat_start_bit; // @[Sdc.scala 128:33 269:57]
-  wire [7:0] _GEN_865 = rx_dat_counter > 11'h0 & _T_2 ? _GEN_826 : rxtx_dat_index; // @[Sdc.scala 141:31 269:57]
-  wire  _GEN_868 = rx_dat_counter > 11'h0 & _T_2 ? _GEN_829 : rx_dat_crc_error; // @[Sdc.scala 135:33 269:57]
-  wire  _GEN_869 = rx_dat_counter > 11'h0 & _T_2 ? _GEN_830 : rx_dat_overrun; // @[Sdc.scala 138:31 269:57]
-  wire  _T_58 = tx_dat_read_sel_changed & tx_dat_read_sel != tx_dat_write_sel | tx_dat_write_sel_new; // @[Sdc.scala 345:77]
+  wire  crc_error = _crc_error_T != 64'h0; // @[Sdc.scala 329:43]
+  wire [10:0] _GEN_673 = rx_dat_continuous & ~crc_error & ~rx_dat_ready ? 11'h411 : _rx_dat_counter_T_1; // @[Sdc.scala 286:24 333:62 334:28]
+  wire [18:0] _GEN_674 = rx_dat_continuous & ~crc_error & ~rx_dat_ready ? 19'h7a120 : rx_dat_timer; // @[Sdc.scala 333:62 335:26 135:29]
+  wire  _GEN_675 = rx_dat_continuous & ~crc_error & ~rx_dat_ready | _GEN_669; // @[Sdc.scala 333:62 336:30]
+  wire [3:0] _GEN_676 = rx_dat_continuous & ~crc_error & ~rx_dat_ready ? 4'h0 : _rx_dat_crc_0_T; // @[Sdc.scala 288:23 333:62 337:24]
+  wire [3:0] _GEN_677 = rx_dat_continuous & ~crc_error & ~rx_dat_ready ? 4'h0 : rx_dat_crc_0; // @[Sdc.scala 289:23 333:62 337:24]
+  wire [3:0] _GEN_678 = rx_dat_continuous & ~crc_error & ~rx_dat_ready ? 4'h0 : rx_dat_crc_1; // @[Sdc.scala 290:23 333:62 337:24]
+  wire [3:0] _GEN_679 = rx_dat_continuous & ~crc_error & ~rx_dat_ready ? 4'h0 : rx_dat_crc_2; // @[Sdc.scala 291:23 333:62 337:24]
+  wire [3:0] _GEN_680 = rx_dat_continuous & ~crc_error & ~rx_dat_ready ? 4'h0 : rx_dat_crc_3; // @[Sdc.scala 292:23 333:62 337:24]
+  wire [3:0] _GEN_681 = rx_dat_continuous & ~crc_error & ~rx_dat_ready ? 4'h0 : _rx_dat_crc_5_T; // @[Sdc.scala 293:23 333:62 337:24]
+  wire [3:0] _GEN_682 = rx_dat_continuous & ~crc_error & ~rx_dat_ready ? 4'h0 : rx_dat_crc_5; // @[Sdc.scala 294:23 333:62 337:24]
+  wire [3:0] _GEN_683 = rx_dat_continuous & ~crc_error & ~rx_dat_ready ? 4'h0 : rx_dat_crc_6; // @[Sdc.scala 295:23 333:62 337:24]
+  wire [3:0] _GEN_684 = rx_dat_continuous & ~crc_error & ~rx_dat_ready ? 4'h0 : rx_dat_crc_7; // @[Sdc.scala 296:23 333:62 337:24]
+  wire [3:0] _GEN_685 = rx_dat_continuous & ~crc_error & ~rx_dat_ready ? 4'h0 : rx_dat_crc_8; // @[Sdc.scala 297:23 333:62 337:24]
+  wire [3:0] _GEN_686 = rx_dat_continuous & ~crc_error & ~rx_dat_ready ? 4'h0 : rx_dat_crc_9; // @[Sdc.scala 298:24 333:62 337:24]
+  wire [3:0] _GEN_687 = rx_dat_continuous & ~crc_error & ~rx_dat_ready ? 4'h0 : rx_dat_crc_10; // @[Sdc.scala 299:24 333:62 337:24]
+  wire [3:0] _GEN_688 = rx_dat_continuous & ~crc_error & ~rx_dat_ready ? 4'h0 : _rx_dat_crc_12_T; // @[Sdc.scala 300:24 333:62 337:24]
+  wire [3:0] _GEN_689 = rx_dat_continuous & ~crc_error & ~rx_dat_ready ? 4'h0 : rx_dat_crc_12; // @[Sdc.scala 301:24 333:62 337:24]
+  wire [3:0] _GEN_690 = rx_dat_continuous & ~crc_error & ~rx_dat_ready ? 4'h0 : rx_dat_crc_13; // @[Sdc.scala 302:24 333:62 337:24]
+  wire [3:0] _GEN_691 = rx_dat_continuous & ~crc_error & ~rx_dat_ready ? 4'h0 : rx_dat_crc_14; // @[Sdc.scala 303:24 333:62 337:24]
+  wire  _GEN_692 = rx_dat_counter == 11'h1 ? 1'h0 : rx_dat_in_progress; // @[Sdc.scala 323:39 324:30 125:35]
+  wire  _GEN_693 = rx_dat_counter == 11'h1 | rx_dat_ready; // @[Sdc.scala 323:39 325:24 131:29]
+  wire  _GEN_695 = rx_dat_counter == 11'h1 | _GEN_657; // @[Sdc.scala 323:39 327:27]
+  wire [7:0] _GEN_696 = rx_dat_counter == 11'h1 ? _rxtx_dat_counter_T_1 : rxtx_dat_counter; // @[Sdc.scala 323:39 328:28 139:33]
+  wire  _GEN_697 = rx_dat_counter == 11'h1 ? crc_error : rx_dat_crc_error; // @[Sdc.scala 323:39 330:28 134:33]
+  wire  _GEN_698 = rx_dat_counter == 11'h1 ? rx_dat_ready : rx_dat_overrun; // @[Sdc.scala 323:39 332:26 137:31]
+  wire [10:0] _GEN_699 = rx_dat_counter == 11'h1 ? _GEN_673 : _rx_dat_counter_T_1; // @[Sdc.scala 286:24 323:39]
+  wire [18:0] _GEN_700 = rx_dat_counter == 11'h1 ? _GEN_674 : rx_dat_timer; // @[Sdc.scala 135:29 323:39]
+  wire  _GEN_701 = rx_dat_counter == 11'h1 ? _GEN_675 : _GEN_669; // @[Sdc.scala 323:39]
+  wire [3:0] _GEN_702 = rx_dat_counter == 11'h1 ? _GEN_676 : _rx_dat_crc_0_T; // @[Sdc.scala 288:23 323:39]
+  wire [3:0] _GEN_703 = rx_dat_counter == 11'h1 ? _GEN_677 : rx_dat_crc_0; // @[Sdc.scala 289:23 323:39]
+  wire [3:0] _GEN_704 = rx_dat_counter == 11'h1 ? _GEN_678 : rx_dat_crc_1; // @[Sdc.scala 290:23 323:39]
+  wire [3:0] _GEN_705 = rx_dat_counter == 11'h1 ? _GEN_679 : rx_dat_crc_2; // @[Sdc.scala 291:23 323:39]
+  wire [3:0] _GEN_706 = rx_dat_counter == 11'h1 ? _GEN_680 : rx_dat_crc_3; // @[Sdc.scala 292:23 323:39]
+  wire [3:0] _GEN_707 = rx_dat_counter == 11'h1 ? _GEN_681 : _rx_dat_crc_5_T; // @[Sdc.scala 293:23 323:39]
+  wire [3:0] _GEN_708 = rx_dat_counter == 11'h1 ? _GEN_682 : rx_dat_crc_5; // @[Sdc.scala 294:23 323:39]
+  wire [3:0] _GEN_709 = rx_dat_counter == 11'h1 ? _GEN_683 : rx_dat_crc_6; // @[Sdc.scala 295:23 323:39]
+  wire [3:0] _GEN_710 = rx_dat_counter == 11'h1 ? _GEN_684 : rx_dat_crc_7; // @[Sdc.scala 296:23 323:39]
+  wire [3:0] _GEN_711 = rx_dat_counter == 11'h1 ? _GEN_685 : rx_dat_crc_8; // @[Sdc.scala 297:23 323:39]
+  wire [3:0] _GEN_712 = rx_dat_counter == 11'h1 ? _GEN_686 : rx_dat_crc_9; // @[Sdc.scala 298:24 323:39]
+  wire [3:0] _GEN_713 = rx_dat_counter == 11'h1 ? _GEN_687 : rx_dat_crc_10; // @[Sdc.scala 299:24 323:39]
+  wire [3:0] _GEN_714 = rx_dat_counter == 11'h1 ? _GEN_688 : _rx_dat_crc_12_T; // @[Sdc.scala 300:24 323:39]
+  wire [3:0] _GEN_715 = rx_dat_counter == 11'h1 ? _GEN_689 : rx_dat_crc_12; // @[Sdc.scala 301:24 323:39]
+  wire [3:0] _GEN_716 = rx_dat_counter == 11'h1 ? _GEN_690 : rx_dat_crc_13; // @[Sdc.scala 302:24 323:39]
+  wire [3:0] _GEN_717 = rx_dat_counter == 11'h1 ? _GEN_691 : rx_dat_crc_14; // @[Sdc.scala 303:24 323:39]
+  wire  _GEN_718 = _T_35 & ~rx_dat_next[0] | _GEN_692; // @[Sdc.scala 281:66 282:28]
+  wire [10:0] _GEN_727 = _T_35 & ~rx_dat_next[0] ? rx_dat_counter : _GEN_699; // @[Sdc.scala 126:31 281:66]
+  wire [3:0] _GEN_728 = _T_35 & ~rx_dat_next[0] ? rx_dat_crc_0 : _GEN_702; // @[Sdc.scala 133:23 281:66]
+  wire [3:0] _GEN_729 = _T_35 & ~rx_dat_next[0] ? rx_dat_crc_1 : _GEN_703; // @[Sdc.scala 133:23 281:66]
+  wire [3:0] _GEN_730 = _T_35 & ~rx_dat_next[0] ? rx_dat_crc_2 : _GEN_704; // @[Sdc.scala 133:23 281:66]
+  wire [3:0] _GEN_731 = _T_35 & ~rx_dat_next[0] ? rx_dat_crc_3 : _GEN_705; // @[Sdc.scala 133:23 281:66]
+  wire [3:0] _GEN_732 = _T_35 & ~rx_dat_next[0] ? rx_dat_crc_4 : _GEN_706; // @[Sdc.scala 133:23 281:66]
+  wire [3:0] _GEN_733 = _T_35 & ~rx_dat_next[0] ? rx_dat_crc_5 : _GEN_707; // @[Sdc.scala 133:23 281:66]
+  wire [3:0] _GEN_734 = _T_35 & ~rx_dat_next[0] ? rx_dat_crc_6 : _GEN_708; // @[Sdc.scala 133:23 281:66]
+  wire [3:0] _GEN_735 = _T_35 & ~rx_dat_next[0] ? rx_dat_crc_7 : _GEN_709; // @[Sdc.scala 133:23 281:66]
+  wire [3:0] _GEN_736 = _T_35 & ~rx_dat_next[0] ? rx_dat_crc_8 : _GEN_710; // @[Sdc.scala 133:23 281:66]
+  wire [3:0] _GEN_737 = _T_35 & ~rx_dat_next[0] ? rx_dat_crc_9 : _GEN_711; // @[Sdc.scala 133:23 281:66]
+  wire [3:0] _GEN_738 = _T_35 & ~rx_dat_next[0] ? rx_dat_crc_10 : _GEN_712; // @[Sdc.scala 133:23 281:66]
+  wire [3:0] _GEN_739 = _T_35 & ~rx_dat_next[0] ? rx_dat_crc_11 : _GEN_713; // @[Sdc.scala 133:23 281:66]
+  wire [3:0] _GEN_740 = _T_35 & ~rx_dat_next[0] ? rx_dat_crc_12 : _GEN_714; // @[Sdc.scala 133:23 281:66]
+  wire [3:0] _GEN_741 = _T_35 & ~rx_dat_next[0] ? rx_dat_crc_13 : _GEN_715; // @[Sdc.scala 133:23 281:66]
+  wire [3:0] _GEN_742 = _T_35 & ~rx_dat_next[0] ? rx_dat_crc_14 : _GEN_716; // @[Sdc.scala 133:23 281:66]
+  wire [3:0] _GEN_743 = _T_35 & ~rx_dat_next[0] ? rx_dat_crc_15 : _GEN_717; // @[Sdc.scala 133:23 281:66]
+  wire  _GEN_744 = _T_35 & ~rx_dat_next[0] ? rx_dat_start_bit : _GEN_701; // @[Sdc.scala 127:33 281:66]
+  wire [7:0] _GEN_745 = _T_35 & ~rx_dat_next[0] ? rxtx_dat_index : _GEN_670; // @[Sdc.scala 140:31 281:66]
+  wire  _GEN_746 = _T_35 & ~rx_dat_next[0] ? 1'h0 : _GEN_671; // @[Sdc.scala 251:17 281:66]
+  wire  _GEN_748 = _T_35 & ~rx_dat_next[0] ? rx_dat_ready : _GEN_693; // @[Sdc.scala 131:29 281:66]
+  wire  _GEN_749 = _T_35 & ~rx_dat_next[0] ? 1'h0 : _T_51; // @[Sdc.scala 254:17 281:66]
+  wire  _GEN_750 = _T_35 & ~rx_dat_next[0] ? _GEN_657 : _GEN_695; // @[Sdc.scala 281:66]
+  wire [7:0] _GEN_751 = _T_35 & ~rx_dat_next[0] ? rxtx_dat_counter : _GEN_696; // @[Sdc.scala 139:33 281:66]
+  wire  _GEN_752 = _T_35 & ~rx_dat_next[0] ? rx_dat_crc_error : _GEN_697; // @[Sdc.scala 134:33 281:66]
+  wire  _GEN_753 = _T_35 & ~rx_dat_next[0] ? rx_dat_overrun : _GEN_698; // @[Sdc.scala 137:31 281:66]
+  wire [18:0] _GEN_754 = _T_35 & ~rx_dat_next[0] ? rx_dat_timer : _GEN_700; // @[Sdc.scala 135:29 281:66]
+  wire [18:0] _GEN_755 = ~rx_dat_in_progress & rx_dat_next[0] ? _rx_dat_timer_T_1 : _GEN_754; // @[Sdc.scala 271:59 272:22]
+  wire [10:0] _GEN_756 = ~rx_dat_in_progress & rx_dat_next[0] ? _GEN_660 : _GEN_727; // @[Sdc.scala 271:59]
+  wire  _GEN_757 = ~rx_dat_in_progress & rx_dat_next[0] ? _GEN_661 : _GEN_748; // @[Sdc.scala 271:59]
+  wire  _GEN_758 = ~rx_dat_in_progress & rx_dat_next[0] ? _GEN_662 : rx_dat_timeout; // @[Sdc.scala 136:31 271:59]
+  wire  _GEN_759 = ~rx_dat_in_progress & rx_dat_next[0] ? _T_39 : _GEN_749; // @[Sdc.scala 271:59]
+  wire  _GEN_760 = ~rx_dat_in_progress & rx_dat_next[0] ? _GEN_664 : _GEN_750; // @[Sdc.scala 271:59]
+  wire [7:0] _GEN_761 = ~rx_dat_in_progress & rx_dat_next[0] ? _GEN_665 : _GEN_751; // @[Sdc.scala 271:59]
+  wire  _GEN_762 = ~rx_dat_in_progress & rx_dat_next[0] ? rx_dat_in_progress : _GEN_718; // @[Sdc.scala 125:35 271:59]
+  wire [3:0] _GEN_771 = ~rx_dat_in_progress & rx_dat_next[0] ? rx_dat_crc_0 : _GEN_728; // @[Sdc.scala 133:23 271:59]
+  wire [3:0] _GEN_772 = ~rx_dat_in_progress & rx_dat_next[0] ? rx_dat_crc_1 : _GEN_729; // @[Sdc.scala 133:23 271:59]
+  wire [3:0] _GEN_773 = ~rx_dat_in_progress & rx_dat_next[0] ? rx_dat_crc_2 : _GEN_730; // @[Sdc.scala 133:23 271:59]
+  wire [3:0] _GEN_774 = ~rx_dat_in_progress & rx_dat_next[0] ? rx_dat_crc_3 : _GEN_731; // @[Sdc.scala 133:23 271:59]
+  wire [3:0] _GEN_775 = ~rx_dat_in_progress & rx_dat_next[0] ? rx_dat_crc_4 : _GEN_732; // @[Sdc.scala 133:23 271:59]
+  wire [3:0] _GEN_776 = ~rx_dat_in_progress & rx_dat_next[0] ? rx_dat_crc_5 : _GEN_733; // @[Sdc.scala 133:23 271:59]
+  wire [3:0] _GEN_777 = ~rx_dat_in_progress & rx_dat_next[0] ? rx_dat_crc_6 : _GEN_734; // @[Sdc.scala 133:23 271:59]
+  wire [3:0] _GEN_778 = ~rx_dat_in_progress & rx_dat_next[0] ? rx_dat_crc_7 : _GEN_735; // @[Sdc.scala 133:23 271:59]
+  wire [3:0] _GEN_779 = ~rx_dat_in_progress & rx_dat_next[0] ? rx_dat_crc_8 : _GEN_736; // @[Sdc.scala 133:23 271:59]
+  wire [3:0] _GEN_780 = ~rx_dat_in_progress & rx_dat_next[0] ? rx_dat_crc_9 : _GEN_737; // @[Sdc.scala 133:23 271:59]
+  wire [3:0] _GEN_781 = ~rx_dat_in_progress & rx_dat_next[0] ? rx_dat_crc_10 : _GEN_738; // @[Sdc.scala 133:23 271:59]
+  wire [3:0] _GEN_782 = ~rx_dat_in_progress & rx_dat_next[0] ? rx_dat_crc_11 : _GEN_739; // @[Sdc.scala 133:23 271:59]
+  wire [3:0] _GEN_783 = ~rx_dat_in_progress & rx_dat_next[0] ? rx_dat_crc_12 : _GEN_740; // @[Sdc.scala 133:23 271:59]
+  wire [3:0] _GEN_784 = ~rx_dat_in_progress & rx_dat_next[0] ? rx_dat_crc_13 : _GEN_741; // @[Sdc.scala 133:23 271:59]
+  wire [3:0] _GEN_785 = ~rx_dat_in_progress & rx_dat_next[0] ? rx_dat_crc_14 : _GEN_742; // @[Sdc.scala 133:23 271:59]
+  wire [3:0] _GEN_786 = ~rx_dat_in_progress & rx_dat_next[0] ? rx_dat_crc_15 : _GEN_743; // @[Sdc.scala 133:23 271:59]
+  wire  _GEN_787 = ~rx_dat_in_progress & rx_dat_next[0] ? rx_dat_start_bit : _GEN_744; // @[Sdc.scala 127:33 271:59]
+  wire [7:0] _GEN_788 = ~rx_dat_in_progress & rx_dat_next[0] ? rxtx_dat_index : _GEN_745; // @[Sdc.scala 140:31 271:59]
+  wire  _GEN_789 = ~rx_dat_in_progress & rx_dat_next[0] ? 1'h0 : _GEN_746; // @[Sdc.scala 251:17 271:59]
+  wire  _GEN_791 = ~rx_dat_in_progress & rx_dat_next[0] ? rx_dat_crc_error : _GEN_752; // @[Sdc.scala 134:33 271:59]
+  wire  _GEN_792 = ~rx_dat_in_progress & rx_dat_next[0] ? rx_dat_overrun : _GEN_753; // @[Sdc.scala 137:31 271:59]
+  wire [18:0] _GEN_793 = _T_5 ? _GEN_755 : rx_dat_timer; // @[Sdc.scala 135:29 270:47]
+  wire [10:0] _GEN_794 = _T_5 ? _GEN_756 : rx_dat_counter; // @[Sdc.scala 126:31 270:47]
+  wire  _GEN_795 = _T_5 ? _GEN_757 : rx_dat_ready; // @[Sdc.scala 131:29 270:47]
+  wire  _GEN_796 = _T_5 ? _GEN_758 : rx_dat_timeout; // @[Sdc.scala 136:31 270:47]
+  wire  _GEN_797 = _T_5 & _GEN_759; // @[Sdc.scala 254:17 270:47]
+  wire  _GEN_798 = _T_5 ? _GEN_760 : _GEN_657; // @[Sdc.scala 270:47]
+  wire [7:0] _GEN_799 = _T_5 ? _GEN_761 : rxtx_dat_counter; // @[Sdc.scala 139:33 270:47]
+  wire  _GEN_800 = _T_5 ? _GEN_762 : rx_dat_in_progress; // @[Sdc.scala 125:35 270:47]
+  wire [3:0] _GEN_809 = _T_5 ? _GEN_771 : rx_dat_crc_0; // @[Sdc.scala 133:23 270:47]
+  wire [3:0] _GEN_810 = _T_5 ? _GEN_772 : rx_dat_crc_1; // @[Sdc.scala 133:23 270:47]
+  wire [3:0] _GEN_811 = _T_5 ? _GEN_773 : rx_dat_crc_2; // @[Sdc.scala 133:23 270:47]
+  wire [3:0] _GEN_812 = _T_5 ? _GEN_774 : rx_dat_crc_3; // @[Sdc.scala 133:23 270:47]
+  wire [3:0] _GEN_813 = _T_5 ? _GEN_775 : rx_dat_crc_4; // @[Sdc.scala 133:23 270:47]
+  wire [3:0] _GEN_814 = _T_5 ? _GEN_776 : rx_dat_crc_5; // @[Sdc.scala 133:23 270:47]
+  wire [3:0] _GEN_815 = _T_5 ? _GEN_777 : rx_dat_crc_6; // @[Sdc.scala 133:23 270:47]
+  wire [3:0] _GEN_816 = _T_5 ? _GEN_778 : rx_dat_crc_7; // @[Sdc.scala 133:23 270:47]
+  wire [3:0] _GEN_817 = _T_5 ? _GEN_779 : rx_dat_crc_8; // @[Sdc.scala 133:23 270:47]
+  wire [3:0] _GEN_818 = _T_5 ? _GEN_780 : rx_dat_crc_9; // @[Sdc.scala 133:23 270:47]
+  wire [3:0] _GEN_819 = _T_5 ? _GEN_781 : rx_dat_crc_10; // @[Sdc.scala 133:23 270:47]
+  wire [3:0] _GEN_820 = _T_5 ? _GEN_782 : rx_dat_crc_11; // @[Sdc.scala 133:23 270:47]
+  wire [3:0] _GEN_821 = _T_5 ? _GEN_783 : rx_dat_crc_12; // @[Sdc.scala 133:23 270:47]
+  wire [3:0] _GEN_822 = _T_5 ? _GEN_784 : rx_dat_crc_13; // @[Sdc.scala 133:23 270:47]
+  wire [3:0] _GEN_823 = _T_5 ? _GEN_785 : rx_dat_crc_14; // @[Sdc.scala 133:23 270:47]
+  wire [3:0] _GEN_824 = _T_5 ? _GEN_786 : rx_dat_crc_15; // @[Sdc.scala 133:23 270:47]
+  wire  _GEN_825 = _T_5 ? _GEN_787 : rx_dat_start_bit; // @[Sdc.scala 127:33 270:47]
+  wire [7:0] _GEN_826 = _T_5 ? _GEN_788 : rxtx_dat_index; // @[Sdc.scala 140:31 270:47]
+  wire  _GEN_827 = _T_5 & _GEN_789; // @[Sdc.scala 251:17 270:47]
+  wire  _GEN_829 = _T_5 ? _GEN_791 : rx_dat_crc_error; // @[Sdc.scala 134:33 270:47]
+  wire  _GEN_830 = _T_5 ? _GEN_792 : rx_dat_overrun; // @[Sdc.scala 137:31 270:47]
+  wire [18:0] _GEN_832 = rx_dat_counter > 11'h0 & _T_2 ? _GEN_793 : rx_dat_timer; // @[Sdc.scala 135:29 268:57]
+  wire [10:0] _GEN_833 = rx_dat_counter > 11'h0 & _T_2 ? _GEN_794 : rx_dat_counter; // @[Sdc.scala 126:31 268:57]
+  wire  _GEN_834 = rx_dat_counter > 11'h0 & _T_2 ? _GEN_795 : rx_dat_ready; // @[Sdc.scala 131:29 268:57]
+  wire  _GEN_835 = rx_dat_counter > 11'h0 & _T_2 ? _GEN_796 : rx_dat_timeout; // @[Sdc.scala 136:31 268:57]
+  wire  _GEN_836 = rx_dat_counter > 11'h0 & _T_2 & _GEN_797; // @[Sdc.scala 254:17 268:57]
+  wire  _GEN_837 = rx_dat_counter > 11'h0 & _T_2 ? _GEN_798 : _GEN_657; // @[Sdc.scala 268:57]
+  wire [7:0] _GEN_838 = rx_dat_counter > 11'h0 & _T_2 ? _GEN_799 : rxtx_dat_counter; // @[Sdc.scala 139:33 268:57]
+  wire  _GEN_839 = rx_dat_counter > 11'h0 & _T_2 ? _GEN_800 : rx_dat_in_progress; // @[Sdc.scala 125:35 268:57]
+  wire [3:0] _GEN_848 = rx_dat_counter > 11'h0 & _T_2 ? _GEN_809 : rx_dat_crc_0; // @[Sdc.scala 133:23 268:57]
+  wire [3:0] _GEN_849 = rx_dat_counter > 11'h0 & _T_2 ? _GEN_810 : rx_dat_crc_1; // @[Sdc.scala 133:23 268:57]
+  wire [3:0] _GEN_850 = rx_dat_counter > 11'h0 & _T_2 ? _GEN_811 : rx_dat_crc_2; // @[Sdc.scala 133:23 268:57]
+  wire [3:0] _GEN_851 = rx_dat_counter > 11'h0 & _T_2 ? _GEN_812 : rx_dat_crc_3; // @[Sdc.scala 133:23 268:57]
+  wire [3:0] _GEN_852 = rx_dat_counter > 11'h0 & _T_2 ? _GEN_813 : rx_dat_crc_4; // @[Sdc.scala 133:23 268:57]
+  wire [3:0] _GEN_853 = rx_dat_counter > 11'h0 & _T_2 ? _GEN_814 : rx_dat_crc_5; // @[Sdc.scala 133:23 268:57]
+  wire [3:0] _GEN_854 = rx_dat_counter > 11'h0 & _T_2 ? _GEN_815 : rx_dat_crc_6; // @[Sdc.scala 133:23 268:57]
+  wire [3:0] _GEN_855 = rx_dat_counter > 11'h0 & _T_2 ? _GEN_816 : rx_dat_crc_7; // @[Sdc.scala 133:23 268:57]
+  wire [3:0] _GEN_856 = rx_dat_counter > 11'h0 & _T_2 ? _GEN_817 : rx_dat_crc_8; // @[Sdc.scala 133:23 268:57]
+  wire [3:0] _GEN_857 = rx_dat_counter > 11'h0 & _T_2 ? _GEN_818 : rx_dat_crc_9; // @[Sdc.scala 133:23 268:57]
+  wire [3:0] _GEN_858 = rx_dat_counter > 11'h0 & _T_2 ? _GEN_819 : rx_dat_crc_10; // @[Sdc.scala 133:23 268:57]
+  wire [3:0] _GEN_859 = rx_dat_counter > 11'h0 & _T_2 ? _GEN_820 : rx_dat_crc_11; // @[Sdc.scala 133:23 268:57]
+  wire [3:0] _GEN_860 = rx_dat_counter > 11'h0 & _T_2 ? _GEN_821 : rx_dat_crc_12; // @[Sdc.scala 133:23 268:57]
+  wire [3:0] _GEN_861 = rx_dat_counter > 11'h0 & _T_2 ? _GEN_822 : rx_dat_crc_13; // @[Sdc.scala 133:23 268:57]
+  wire [3:0] _GEN_862 = rx_dat_counter > 11'h0 & _T_2 ? _GEN_823 : rx_dat_crc_14; // @[Sdc.scala 133:23 268:57]
+  wire [3:0] _GEN_863 = rx_dat_counter > 11'h0 & _T_2 ? _GEN_824 : rx_dat_crc_15; // @[Sdc.scala 133:23 268:57]
+  wire  _GEN_864 = rx_dat_counter > 11'h0 & _T_2 ? _GEN_825 : rx_dat_start_bit; // @[Sdc.scala 127:33 268:57]
+  wire [7:0] _GEN_865 = rx_dat_counter > 11'h0 & _T_2 ? _GEN_826 : rxtx_dat_index; // @[Sdc.scala 140:31 268:57]
+  wire  _GEN_868 = rx_dat_counter > 11'h0 & _T_2 ? _GEN_829 : rx_dat_crc_error; // @[Sdc.scala 134:33 268:57]
+  wire  _GEN_869 = rx_dat_counter > 11'h0 & _T_2 ? _GEN_830 : rx_dat_overrun; // @[Sdc.scala 137:31 268:57]
+  wire  _T_58 = tx_dat_read_sel_changed & tx_dat_read_sel != tx_dat_write_sel | tx_dat_write_sel_new; // @[Sdc.scala 344:77]
   wire [10:0] _GEN_870 = tx_dat_read_sel_changed & tx_dat_read_sel != tx_dat_write_sel | tx_dat_write_sel_new ? 11'h412
-     : tx_dat_counter; // @[Sdc.scala 345:102 346:20 151:31]
-  wire  _GEN_872 = tx_dat_read_sel_changed & tx_dat_read_sel != tx_dat_write_sel | tx_dat_write_sel_new | _GEN_659; // @[Sdc.scala 345:102 348:26]
+     : tx_dat_counter; // @[Sdc.scala 344:102 345:20 150:31]
+  wire  _GEN_872 = tx_dat_read_sel_changed & tx_dat_read_sel != tx_dat_write_sel | tx_dat_write_sel_new | _GEN_659; // @[Sdc.scala 344:102 347:26]
   wire [7:0] _GEN_873 = tx_dat_read_sel_changed & tx_dat_read_sel != tx_dat_write_sel | tx_dat_write_sel_new ?
-    _rxtx_dat_index_T_1 : _GEN_865; // @[Sdc.scala 345:102 350:20]
+    _rxtx_dat_index_T_1 : _GEN_865; // @[Sdc.scala 344:102 349:20]
   wire [1:0] _GEN_874 = tx_dat_read_sel_changed & tx_dat_read_sel != tx_dat_write_sel | tx_dat_write_sel_new ? 2'h2 :
-    tx_dat_prepare_state; // @[Sdc.scala 345:102 351:26 156:37]
+    tx_dat_prepare_state; // @[Sdc.scala 344:102 350:26 155:37]
   wire [7:0] _GEN_875 = tx_dat_read_sel_changed & tx_dat_read_sel != tx_dat_write_sel | tx_dat_write_sel_new ? 8'hff :
-    {{2'd0}, tx_dat_timer}; // @[Sdc.scala 345:102 352:18 152:29]
+    {{2'd0}, tx_dat_timer}; // @[Sdc.scala 344:102 351:18 151:29]
   wire  _GEN_876 = tx_dat_read_sel_changed & tx_dat_read_sel != tx_dat_write_sel | tx_dat_write_sel_new ? 1'h0 :
-    tx_dat_read_sel_changed; // @[Sdc.scala 345:102 353:29 163:40]
+    tx_dat_read_sel_changed; // @[Sdc.scala 344:102 352:29 162:40]
   wire  _GEN_877 = tx_dat_read_sel_changed & tx_dat_read_sel != tx_dat_write_sel | tx_dat_write_sel_new ? 1'h0 :
-    tx_dat_write_sel_new; // @[Sdc.scala 345:102 354:26 164:37]
+    tx_dat_write_sel_new; // @[Sdc.scala 344:102 353:26 163:37]
   wire  _GEN_878 = tx_dat_read_sel_changed & tx_dat_read_sel != tx_dat_write_sel | tx_dat_write_sel_new |
-    tx_dat_in_progress; // @[Sdc.scala 345:102 355:24 159:35]
-  wire  _T_59 = tx_dat_read_sel == tx_dat_write_sel; // @[Sdc.scala 357:53]
-  wire  _GEN_879 = tx_dat_read_sel_changed & tx_dat_read_sel == tx_dat_write_sel ? 1'h0 : _GEN_878; // @[Sdc.scala 357:76 358:24]
-  wire [18:0] _rx_busy_timer_T_1 = rx_busy_timer - 19'h1; // @[Sdc.scala 365:40]
-  wire [18:0] _GEN_880 = ~rx_busy_in_progress & rx_dat0_next ? _rx_busy_timer_T_1 : _GEN_473; // @[Sdc.scala 364:51 365:23]
-  wire [3:0] _tx_dat_crc_status_counter_T_1 = tx_dat_crc_status_counter - 4'h1; // @[Sdc.scala 372:66]
+    tx_dat_in_progress; // @[Sdc.scala 344:102 354:24 158:35]
+  wire  _T_59 = tx_dat_read_sel == tx_dat_write_sel; // @[Sdc.scala 356:53]
+  wire  _GEN_879 = tx_dat_read_sel_changed & tx_dat_read_sel == tx_dat_write_sel ? 1'h0 : _GEN_878; // @[Sdc.scala 356:76 357:24]
+  wire [18:0] _rx_busy_timer_T_1 = rx_busy_timer - 19'h1; // @[Sdc.scala 364:40]
+  wire [18:0] _GEN_880 = ~rx_busy_in_progress & rx_dat0_next ? _rx_busy_timer_T_1 : _GEN_473; // @[Sdc.scala 363:51 364:23]
+  wire [3:0] _tx_dat_crc_status_counter_T_1 = tx_dat_crc_status_counter - 4'h1; // @[Sdc.scala 371:66]
   wire [2:0] crc_status = {tx_dat_crc_status_b_2,tx_dat_crc_status_b_1,tx_dat_crc_status_b_0}; // @[Cat.scala 33:92]
-  wire  _tx_dat_crc_status_T = crc_status == 3'h2; // @[Sdc.scala 376:27]
-  wire  _tx_dat_crc_status_T_1 = crc_status == 3'h5; // @[Sdc.scala 377:27]
-  wire  _tx_dat_crc_status_T_2 = crc_status == 3'h6; // @[Sdc.scala 378:27]
+  wire  _tx_dat_crc_status_T = crc_status == 3'h2; // @[Sdc.scala 375:27]
+  wire  _tx_dat_crc_status_T_1 = crc_status == 3'h5; // @[Sdc.scala 376:27]
+  wire  _tx_dat_crc_status_T_2 = crc_status == 3'h6; // @[Sdc.scala 377:27]
   wire [1:0] _tx_dat_crc_status_T_3 = _tx_dat_crc_status_T_2 ? 2'h2 : 2'h3; // @[Mux.scala 101:16]
   wire [1:0] _tx_dat_crc_status_T_4 = _tx_dat_crc_status_T_1 ? 2'h1 : _tx_dat_crc_status_T_3; // @[Mux.scala 101:16]
   wire [1:0] _tx_dat_crc_status_T_5 = _tx_dat_crc_status_T ? 2'h0 : _tx_dat_crc_status_T_4; // @[Mux.scala 101:16]
-  wire [1:0] _tx_dat_read_sel_T_1 = tx_dat_read_sel + 2'h1; // @[Sdc.scala 383:48]
-  wire [1:0] _GEN_882 = tx_dat_crc_status_counter == 4'h2 ? _tx_dat_crc_status_T_5 : tx_dat_crc_status; // @[Sdc.scala 373:52 375:31 167:34]
-  wire [1:0] _GEN_884 = tx_dat_crc_status_counter == 4'h2 ? _tx_dat_read_sel_T_1 : tx_dat_read_sel; // @[Sdc.scala 373:52 383:29 161:32]
-  wire  _GEN_885 = tx_dat_crc_status_counter == 4'h2 | _GEN_876; // @[Sdc.scala 373:52 384:37]
-  wire  _GEN_886 = tx_dat_started & ~tx_dat_in_progress | tx_dat_end; // @[Sdc.scala 390:58 391:26 160:27]
-  wire  _GEN_887 = rx_dat0_next ? 1'h0 : 1'h1; // @[Sdc.scala 368:29 387:31 388:33]
-  wire [18:0] _GEN_888 = rx_dat0_next ? 19'h0 : _GEN_880; // @[Sdc.scala 387:31 389:27]
-  wire  _GEN_889 = rx_dat0_next ? _GEN_886 : tx_dat_end; // @[Sdc.scala 160:27 387:31]
-  wire [3:0] _GEN_893 = tx_dat_crc_status_counter > 4'h0 ? _tx_dat_crc_status_counter_T_1 : tx_dat_crc_status_counter; // @[Sdc.scala 369:48 372:37 165:42]
-  wire [1:0] _GEN_894 = tx_dat_crc_status_counter > 4'h0 ? _GEN_882 : tx_dat_crc_status; // @[Sdc.scala 167:34 369:48]
-  wire [1:0] _GEN_896 = tx_dat_crc_status_counter > 4'h0 ? _GEN_884 : tx_dat_read_sel; // @[Sdc.scala 161:32 369:48]
-  wire  _GEN_897 = tx_dat_crc_status_counter > 4'h0 ? _GEN_885 : _GEN_876; // @[Sdc.scala 369:48]
-  wire  _GEN_898 = tx_dat_crc_status_counter > 4'h0 | _GEN_887; // @[Sdc.scala 368:29 369:48]
-  wire [18:0] _GEN_899 = tx_dat_crc_status_counter > 4'h0 ? _GEN_880 : _GEN_888; // @[Sdc.scala 369:48]
-  wire  _GEN_900 = tx_dat_crc_status_counter > 4'h0 ? tx_dat_end : _GEN_889; // @[Sdc.scala 160:27 369:48]
-  wire [3:0] _GEN_905 = rx_busy_in_progress | ~rx_dat0_next ? _GEN_893 : tx_dat_crc_status_counter; // @[Sdc.scala 165:42 367:51]
-  wire [1:0] _GEN_908 = rx_busy_in_progress | ~rx_dat0_next ? _GEN_896 : tx_dat_read_sel; // @[Sdc.scala 161:32 367:51]
-  wire  _GEN_909 = rx_busy_in_progress | ~rx_dat0_next ? _GEN_897 : _GEN_876; // @[Sdc.scala 367:51]
-  wire [18:0] _GEN_910 = rx_busy_in_progress | ~rx_dat0_next ? _GEN_899 : _GEN_880; // @[Sdc.scala 367:51]
-  wire  _GEN_911 = rx_busy_in_progress | ~rx_dat0_next ? _GEN_900 : tx_dat_end; // @[Sdc.scala 160:27 367:51]
-  wire [18:0] _GEN_912 = _T_5 ? _GEN_910 : _GEN_473; // @[Sdc.scala 363:47]
-  wire [3:0] _GEN_917 = _T_5 ? _GEN_905 : tx_dat_crc_status_counter; // @[Sdc.scala 165:42 363:47]
-  wire [1:0] _GEN_920 = _T_5 ? _GEN_908 : tx_dat_read_sel; // @[Sdc.scala 161:32 363:47]
-  wire  _GEN_921 = _T_5 ? _GEN_909 : _GEN_876; // @[Sdc.scala 363:47]
-  wire  _GEN_922 = _T_5 ? _GEN_911 : tx_dat_end; // @[Sdc.scala 160:27 363:47]
-  wire  _GEN_923 = rx_busy_timer > 19'h0 ? io_sdc_port_dat_in[0] : rx_dat0_next; // @[Sdc.scala 361:30 362:18 144:29]
-  wire [18:0] _GEN_924 = rx_busy_timer > 19'h0 ? _GEN_912 : _GEN_473; // @[Sdc.scala 361:30]
-  wire [3:0] _GEN_929 = rx_busy_timer > 19'h0 ? _GEN_917 : tx_dat_crc_status_counter; // @[Sdc.scala 361:30 165:42]
-  wire [1:0] _GEN_932 = rx_busy_timer > 19'h0 ? _GEN_920 : tx_dat_read_sel; // @[Sdc.scala 361:30 161:32]
-  wire  _GEN_933 = rx_busy_timer > 19'h0 ? _GEN_921 : _GEN_876; // @[Sdc.scala 361:30]
-  wire  _GEN_934 = rx_busy_timer > 19'h0 ? _GEN_922 : tx_dat_end; // @[Sdc.scala 160:27 361:30]
-  wire  _GEN_935 = _T_58 ? 1'h0 : _GEN_934; // @[Sdc.scala 399:102 401:16]
-  wire [5:0] _tx_dat_timer_T_1 = tx_dat_timer - 6'h1; // @[Sdc.scala 408:34]
-  wire [10:0] _tx_dat_counter_T_1 = tx_dat_counter - 11'h1; // @[Sdc.scala 415:38]
-  wire [3:0] crc_1_0 = tx_dat_16 ^ tx_dat_crc_15; // @[Sdc.scala 418:18]
-  wire [3:0] crc_1_5 = tx_dat_crc_4 ^ tx_dat_crc_15; // @[Sdc.scala 423:21]
-  wire [3:0] crc_1_12 = tx_dat_crc_11 ^ tx_dat_crc_15; // @[Sdc.scala 430:22]
-  wire  _T_91 = tx_dat_counter[2:0] == 3'h2; // @[Sdc.scala 438:65]
-  wire [31:0] _GEN_936 = tx_dat_counter[10:4] == 7'h1 & _T_91 ? 32'h0 : _GEN_658; // @[Sdc.scala 444:80 445:23]
-  wire [1:0] _GEN_937 = tx_dat_counter[10:4] == 7'h1 & _T_91 ? 2'h1 : _GEN_874; // @[Sdc.scala 444:80 446:28]
-  wire  _GEN_938 = tx_dat_counter[10:5] != 6'h0 & tx_dat_counter[2:0] == 3'h2 | _T_58; // @[Sdc.scala 438:74 439:21]
-  wire  _GEN_939 = tx_dat_counter[10:5] != 6'h0 & tx_dat_counter[2:0] == 3'h2 | _GEN_872; // @[Sdc.scala 438:74 440:28]
-  wire [7:0] _GEN_940 = tx_dat_counter[10:5] != 6'h0 & tx_dat_counter[2:0] == 3'h2 ? _rxtx_dat_index_T_1 : _GEN_873; // @[Sdc.scala 438:74 442:22]
-  wire [1:0] _GEN_941 = tx_dat_counter[10:5] != 6'h0 & tx_dat_counter[2:0] == 3'h2 ? 2'h1 : _GEN_937; // @[Sdc.scala 438:74 443:28]
-  wire [31:0] _GEN_942 = tx_dat_counter[10:5] != 6'h0 & tx_dat_counter[2:0] == 3'h2 ? _GEN_658 : _GEN_936; // @[Sdc.scala 438:74]
-  wire [3:0] _GEN_943 = tx_dat_counter == 11'h12 ? tx_dat_crc_14 : tx_dat_1; // @[Sdc.scala 448:36 449:40 414:50]
-  wire [3:0] _GEN_944 = tx_dat_counter == 11'h12 ? tx_dat_crc_13 : tx_dat_2; // @[Sdc.scala 448:36 449:40 414:50]
-  wire [3:0] _GEN_945 = tx_dat_counter == 11'h12 ? tx_dat_crc_12 : tx_dat_3; // @[Sdc.scala 448:36 449:40 414:50]
-  wire [3:0] _GEN_946 = tx_dat_counter == 11'h12 ? crc_1_12 : tx_dat_4; // @[Sdc.scala 448:36 449:40 414:50]
-  wire [3:0] _GEN_947 = tx_dat_counter == 11'h12 ? tx_dat_crc_10 : tx_dat_5; // @[Sdc.scala 448:36 449:40 414:50]
-  wire [3:0] _GEN_948 = tx_dat_counter == 11'h12 ? tx_dat_crc_9 : tx_dat_6; // @[Sdc.scala 448:36 449:40 414:50]
-  wire [3:0] _GEN_949 = tx_dat_counter == 11'h12 ? tx_dat_crc_8 : tx_dat_7; // @[Sdc.scala 448:36 449:40 414:50]
-  wire [3:0] _GEN_950 = tx_dat_counter == 11'h12 ? tx_dat_crc_7 : tx_dat_8; // @[Sdc.scala 448:36 449:40 414:50]
-  wire [3:0] _GEN_951 = tx_dat_counter == 11'h12 ? tx_dat_crc_6 : tx_dat_9; // @[Sdc.scala 448:36 449:40 414:50]
-  wire [3:0] _GEN_952 = tx_dat_counter == 11'h12 ? tx_dat_crc_5 : tx_dat_10; // @[Sdc.scala 448:36 449:40 414:50]
-  wire [3:0] _GEN_953 = tx_dat_counter == 11'h12 ? crc_1_5 : tx_dat_11; // @[Sdc.scala 448:36 449:40 414:50]
-  wire [3:0] _GEN_954 = tx_dat_counter == 11'h12 ? tx_dat_crc_3 : tx_dat_12; // @[Sdc.scala 448:36 449:40 414:50]
-  wire [3:0] _GEN_955 = tx_dat_counter == 11'h12 ? tx_dat_crc_2 : tx_dat_13; // @[Sdc.scala 448:36 449:40 414:50]
-  wire [3:0] _GEN_956 = tx_dat_counter == 11'h12 ? tx_dat_crc_1 : tx_dat_14; // @[Sdc.scala 448:36 449:40 414:50]
-  wire [3:0] _GEN_957 = tx_dat_counter == 11'h12 ? tx_dat_crc_0 : tx_dat_15; // @[Sdc.scala 448:36 449:40 414:50]
-  wire [3:0] _GEN_958 = tx_dat_counter == 11'h12 ? crc_1_0 : tx_dat_16; // @[Sdc.scala 448:36 449:40 414:50]
-  wire [3:0] _GEN_959 = tx_dat_counter == 11'h12 ? 4'hf : tx_dat_17; // @[Sdc.scala 448:36 450:18 414:50]
-  wire  _GEN_960 = tx_dat_counter == 11'h1 ? 1'h0 : 1'h1; // @[Sdc.scala 412:20 453:35 454:22]
-  wire [18:0] _GEN_962 = tx_dat_counter == 11'h1 ? 19'h7a120 : _GEN_924; // @[Sdc.scala 453:35 456:21]
-  wire [3:0] _GEN_963 = tx_dat_counter == 11'h1 ? 4'h6 : _GEN_929; // @[Sdc.scala 453:35 457:33]
-  wire [3:0] _GEN_965 = tx_dat_counter != 11'h0 & _T & reg_clk ? tx_dat_0 : {{3'd0}, reg_tx_dat_out}; // @[Sdc.scala 148:31 411:77]
-  wire [3:0] _GEN_966 = tx_dat_counter != 11'h0 & _T & reg_clk ? _GEN_943 : tx_dat_0; // @[Sdc.scala 153:19 411:77]
-  wire [3:0] _GEN_967 = tx_dat_counter != 11'h0 & _T & reg_clk ? _GEN_944 : tx_dat_1; // @[Sdc.scala 153:19 411:77]
-  wire [3:0] _GEN_968 = tx_dat_counter != 11'h0 & _T & reg_clk ? _GEN_945 : tx_dat_2; // @[Sdc.scala 153:19 411:77]
-  wire [3:0] _GEN_969 = tx_dat_counter != 11'h0 & _T & reg_clk ? _GEN_946 : tx_dat_3; // @[Sdc.scala 153:19 411:77]
-  wire [3:0] _GEN_970 = tx_dat_counter != 11'h0 & _T & reg_clk ? _GEN_947 : tx_dat_4; // @[Sdc.scala 153:19 411:77]
-  wire [3:0] _GEN_971 = tx_dat_counter != 11'h0 & _T & reg_clk ? _GEN_948 : tx_dat_5; // @[Sdc.scala 153:19 411:77]
-  wire [3:0] _GEN_972 = tx_dat_counter != 11'h0 & _T & reg_clk ? _GEN_949 : tx_dat_6; // @[Sdc.scala 153:19 411:77]
-  wire [3:0] _GEN_973 = tx_dat_counter != 11'h0 & _T & reg_clk ? _GEN_950 : tx_dat_7; // @[Sdc.scala 153:19 411:77]
-  wire [3:0] _GEN_974 = tx_dat_counter != 11'h0 & _T & reg_clk ? _GEN_951 : tx_dat_8; // @[Sdc.scala 153:19 411:77]
-  wire [3:0] _GEN_975 = tx_dat_counter != 11'h0 & _T & reg_clk ? _GEN_952 : tx_dat_9; // @[Sdc.scala 153:19 411:77]
-  wire [3:0] _GEN_976 = tx_dat_counter != 11'h0 & _T & reg_clk ? _GEN_953 : tx_dat_10; // @[Sdc.scala 153:19 411:77]
-  wire [3:0] _GEN_977 = tx_dat_counter != 11'h0 & _T & reg_clk ? _GEN_954 : tx_dat_11; // @[Sdc.scala 153:19 411:77]
-  wire [3:0] _GEN_978 = tx_dat_counter != 11'h0 & _T & reg_clk ? _GEN_955 : tx_dat_12; // @[Sdc.scala 153:19 411:77]
-  wire [3:0] _GEN_979 = tx_dat_counter != 11'h0 & _T & reg_clk ? _GEN_956 : tx_dat_13; // @[Sdc.scala 153:19 411:77]
-  wire [3:0] _GEN_980 = tx_dat_counter != 11'h0 & _T & reg_clk ? _GEN_957 : tx_dat_14; // @[Sdc.scala 153:19 411:77]
-  wire [3:0] _GEN_981 = tx_dat_counter != 11'h0 & _T & reg_clk ? _GEN_958 : tx_dat_15; // @[Sdc.scala 153:19 411:77]
-  wire [3:0] _GEN_982 = tx_dat_counter != 11'h0 & _T & reg_clk ? _GEN_959 : tx_dat_16; // @[Sdc.scala 153:19 411:77]
-  wire  _GEN_1006 = tx_dat_counter != 11'h0 & _T & reg_clk ? _GEN_938 : _T_58; // @[Sdc.scala 411:77]
-  wire  _GEN_1007 = tx_dat_counter != 11'h0 & _T & reg_clk ? _GEN_939 : _GEN_872; // @[Sdc.scala 411:77]
-  wire [7:0] _GEN_1008 = tx_dat_counter != 11'h0 & _T & reg_clk ? _GEN_940 : _GEN_873; // @[Sdc.scala 411:77]
-  wire [1:0] _GEN_1009 = tx_dat_counter != 11'h0 & _T & reg_clk ? _GEN_941 : _GEN_874; // @[Sdc.scala 411:77]
-  wire [7:0] _GEN_1013 = tx_dat_timer != 6'h0 & _T & reg_clk ? {{2'd0}, _tx_dat_timer_T_1} : _GEN_875; // @[Sdc.scala 407:75 408:18]
-  wire [3:0] _GEN_1016 = tx_dat_timer != 6'h0 & _T & reg_clk ? tx_dat_0 : _GEN_966; // @[Sdc.scala 153:19 407:75]
-  wire [3:0] _GEN_1017 = tx_dat_timer != 6'h0 & _T & reg_clk ? tx_dat_1 : _GEN_967; // @[Sdc.scala 153:19 407:75]
-  wire [3:0] _GEN_1018 = tx_dat_timer != 6'h0 & _T & reg_clk ? tx_dat_2 : _GEN_968; // @[Sdc.scala 153:19 407:75]
-  wire [3:0] _GEN_1019 = tx_dat_timer != 6'h0 & _T & reg_clk ? tx_dat_3 : _GEN_969; // @[Sdc.scala 153:19 407:75]
-  wire [3:0] _GEN_1020 = tx_dat_timer != 6'h0 & _T & reg_clk ? tx_dat_4 : _GEN_970; // @[Sdc.scala 153:19 407:75]
-  wire [3:0] _GEN_1021 = tx_dat_timer != 6'h0 & _T & reg_clk ? tx_dat_5 : _GEN_971; // @[Sdc.scala 153:19 407:75]
-  wire [3:0] _GEN_1022 = tx_dat_timer != 6'h0 & _T & reg_clk ? tx_dat_6 : _GEN_972; // @[Sdc.scala 153:19 407:75]
-  wire [3:0] _GEN_1023 = tx_dat_timer != 6'h0 & _T & reg_clk ? tx_dat_7 : _GEN_973; // @[Sdc.scala 153:19 407:75]
-  wire [3:0] _GEN_1024 = tx_dat_timer != 6'h0 & _T & reg_clk ? tx_dat_8 : _GEN_974; // @[Sdc.scala 153:19 407:75]
-  wire [3:0] _GEN_1025 = tx_dat_timer != 6'h0 & _T & reg_clk ? tx_dat_9 : _GEN_975; // @[Sdc.scala 153:19 407:75]
-  wire [3:0] _GEN_1026 = tx_dat_timer != 6'h0 & _T & reg_clk ? tx_dat_10 : _GEN_976; // @[Sdc.scala 153:19 407:75]
-  wire [3:0] _GEN_1027 = tx_dat_timer != 6'h0 & _T & reg_clk ? tx_dat_11 : _GEN_977; // @[Sdc.scala 153:19 407:75]
-  wire [3:0] _GEN_1028 = tx_dat_timer != 6'h0 & _T & reg_clk ? tx_dat_12 : _GEN_978; // @[Sdc.scala 153:19 407:75]
-  wire [3:0] _GEN_1029 = tx_dat_timer != 6'h0 & _T & reg_clk ? tx_dat_13 : _GEN_979; // @[Sdc.scala 153:19 407:75]
-  wire [3:0] _GEN_1030 = tx_dat_timer != 6'h0 & _T & reg_clk ? tx_dat_14 : _GEN_980; // @[Sdc.scala 153:19 407:75]
-  wire [3:0] _GEN_1031 = tx_dat_timer != 6'h0 & _T & reg_clk ? tx_dat_15 : _GEN_981; // @[Sdc.scala 153:19 407:75]
-  wire [3:0] _GEN_1032 = tx_dat_timer != 6'h0 & _T & reg_clk ? tx_dat_16 : _GEN_982; // @[Sdc.scala 153:19 407:75]
-  wire  _GEN_1056 = tx_dat_timer != 6'h0 & _T & reg_clk ? _T_58 : _GEN_1006; // @[Sdc.scala 407:75]
-  wire  _GEN_1057 = tx_dat_timer != 6'h0 & _T & reg_clk ? _GEN_872 : _GEN_1007; // @[Sdc.scala 407:75]
-  wire [7:0] _GEN_1058 = tx_dat_timer != 6'h0 & _T & reg_clk ? _GEN_873 : _GEN_1008; // @[Sdc.scala 407:75]
-  wire [1:0] _GEN_1059 = tx_dat_timer != 6'h0 & _T & reg_clk ? _GEN_874 : _GEN_1009; // @[Sdc.scala 407:75]
-  wire [7:0] _GEN_1065 = _T_20 ? _GEN_875 : _GEN_1013; // @[Sdc.scala 404:70]
-  wire [3:0] _GEN_1066 = _T_20 ? tx_dat_0 : _GEN_1016; // @[Sdc.scala 153:19 404:70]
-  wire [3:0] _GEN_1067 = _T_20 ? tx_dat_1 : _GEN_1017; // @[Sdc.scala 153:19 404:70]
-  wire [3:0] _GEN_1068 = _T_20 ? tx_dat_2 : _GEN_1018; // @[Sdc.scala 153:19 404:70]
-  wire [3:0] _GEN_1069 = _T_20 ? tx_dat_3 : _GEN_1019; // @[Sdc.scala 153:19 404:70]
-  wire [3:0] _GEN_1070 = _T_20 ? tx_dat_4 : _GEN_1020; // @[Sdc.scala 153:19 404:70]
-  wire [3:0] _GEN_1071 = _T_20 ? tx_dat_5 : _GEN_1021; // @[Sdc.scala 153:19 404:70]
-  wire [3:0] _GEN_1072 = _T_20 ? tx_dat_6 : _GEN_1022; // @[Sdc.scala 153:19 404:70]
-  wire [3:0] _GEN_1073 = _T_20 ? tx_dat_7 : _GEN_1023; // @[Sdc.scala 153:19 404:70]
-  wire [3:0] _GEN_1074 = _T_20 ? tx_dat_8 : _GEN_1024; // @[Sdc.scala 153:19 404:70]
-  wire [3:0] _GEN_1075 = _T_20 ? tx_dat_9 : _GEN_1025; // @[Sdc.scala 153:19 404:70]
-  wire [3:0] _GEN_1076 = _T_20 ? tx_dat_10 : _GEN_1026; // @[Sdc.scala 153:19 404:70]
-  wire [3:0] _GEN_1077 = _T_20 ? tx_dat_11 : _GEN_1027; // @[Sdc.scala 153:19 404:70]
-  wire [3:0] _GEN_1078 = _T_20 ? tx_dat_12 : _GEN_1028; // @[Sdc.scala 153:19 404:70]
-  wire [3:0] _GEN_1079 = _T_20 ? tx_dat_13 : _GEN_1029; // @[Sdc.scala 153:19 404:70]
-  wire [3:0] _GEN_1080 = _T_20 ? tx_dat_14 : _GEN_1030; // @[Sdc.scala 153:19 404:70]
-  wire [3:0] _GEN_1081 = _T_20 ? tx_dat_15 : _GEN_1031; // @[Sdc.scala 153:19 404:70]
-  wire [3:0] _GEN_1082 = _T_20 ? tx_dat_16 : _GEN_1032; // @[Sdc.scala 153:19 404:70]
-  wire  _GEN_1106 = _T_20 ? _T_58 : _GEN_1056; // @[Sdc.scala 404:70]
-  wire  _GEN_1107 = _T_20 ? _GEN_872 : _GEN_1057; // @[Sdc.scala 404:70]
-  wire [7:0] _GEN_1108 = _T_20 ? _GEN_873 : _GEN_1058; // @[Sdc.scala 404:70]
-  wire [1:0] _GEN_1109 = _T_20 ? _GEN_874 : _GEN_1059; // @[Sdc.scala 404:70]
-  wire  _GEN_1131 = 2'h2 == tx_dat_prepare_state | _GEN_1106; // @[Sdc.scala 461:33 483:21]
-  wire  _GEN_1132 = 2'h2 == tx_dat_prepare_state | _GEN_1107; // @[Sdc.scala 461:33 484:28]
-  wire [7:0] _GEN_1133 = 2'h2 == tx_dat_prepare_state ? _rxtx_dat_index_T_1 : _GEN_1108; // @[Sdc.scala 461:33 486:22]
-  wire [7:0] _GEN_1163 = 2'h1 == tx_dat_prepare_state ? _GEN_1108 : _GEN_1133; // @[Sdc.scala 461:33]
-  wire [1:0] addr = io_mem_waddr[3:2]; // @[Sdc.scala 507:28]
-  wire [8:0] baud_divider = io_mem_wdata[8:0]; // @[Sdc.scala 510:40]
+  wire [1:0] _tx_dat_read_sel_T_1 = tx_dat_read_sel + 2'h1; // @[Sdc.scala 382:48]
+  wire [1:0] _GEN_882 = tx_dat_crc_status_counter == 4'h2 ? _tx_dat_crc_status_T_5 : tx_dat_crc_status; // @[Sdc.scala 372:52 374:31 166:34]
+  wire [1:0] _GEN_884 = tx_dat_crc_status_counter == 4'h2 ? _tx_dat_read_sel_T_1 : tx_dat_read_sel; // @[Sdc.scala 372:52 382:29 160:32]
+  wire  _GEN_885 = tx_dat_crc_status_counter == 4'h2 | _GEN_876; // @[Sdc.scala 372:52 383:37]
+  wire  _GEN_886 = tx_dat_started & ~tx_dat_in_progress | tx_dat_end; // @[Sdc.scala 389:58 390:26 159:27]
+  wire  _GEN_887 = rx_dat0_next ? 1'h0 : 1'h1; // @[Sdc.scala 367:29 386:31 387:33]
+  wire [18:0] _GEN_888 = rx_dat0_next ? 19'h0 : _GEN_880; // @[Sdc.scala 386:31 388:27]
+  wire  _GEN_889 = rx_dat0_next ? _GEN_886 : tx_dat_end; // @[Sdc.scala 159:27 386:31]
+  wire [3:0] _GEN_893 = tx_dat_crc_status_counter > 4'h0 ? _tx_dat_crc_status_counter_T_1 : tx_dat_crc_status_counter; // @[Sdc.scala 368:48 371:37 164:42]
+  wire [1:0] _GEN_894 = tx_dat_crc_status_counter > 4'h0 ? _GEN_882 : tx_dat_crc_status; // @[Sdc.scala 166:34 368:48]
+  wire [1:0] _GEN_896 = tx_dat_crc_status_counter > 4'h0 ? _GEN_884 : tx_dat_read_sel; // @[Sdc.scala 160:32 368:48]
+  wire  _GEN_897 = tx_dat_crc_status_counter > 4'h0 ? _GEN_885 : _GEN_876; // @[Sdc.scala 368:48]
+  wire  _GEN_898 = tx_dat_crc_status_counter > 4'h0 | _GEN_887; // @[Sdc.scala 367:29 368:48]
+  wire [18:0] _GEN_899 = tx_dat_crc_status_counter > 4'h0 ? _GEN_880 : _GEN_888; // @[Sdc.scala 368:48]
+  wire  _GEN_900 = tx_dat_crc_status_counter > 4'h0 ? tx_dat_end : _GEN_889; // @[Sdc.scala 159:27 368:48]
+  wire [3:0] _GEN_905 = rx_busy_in_progress | ~rx_dat0_next ? _GEN_893 : tx_dat_crc_status_counter; // @[Sdc.scala 164:42 366:51]
+  wire [1:0] _GEN_908 = rx_busy_in_progress | ~rx_dat0_next ? _GEN_896 : tx_dat_read_sel; // @[Sdc.scala 160:32 366:51]
+  wire  _GEN_909 = rx_busy_in_progress | ~rx_dat0_next ? _GEN_897 : _GEN_876; // @[Sdc.scala 366:51]
+  wire [18:0] _GEN_910 = rx_busy_in_progress | ~rx_dat0_next ? _GEN_899 : _GEN_880; // @[Sdc.scala 366:51]
+  wire  _GEN_911 = rx_busy_in_progress | ~rx_dat0_next ? _GEN_900 : tx_dat_end; // @[Sdc.scala 159:27 366:51]
+  wire [18:0] _GEN_912 = _T_5 ? _GEN_910 : _GEN_473; // @[Sdc.scala 362:47]
+  wire [3:0] _GEN_917 = _T_5 ? _GEN_905 : tx_dat_crc_status_counter; // @[Sdc.scala 164:42 362:47]
+  wire [1:0] _GEN_920 = _T_5 ? _GEN_908 : tx_dat_read_sel; // @[Sdc.scala 160:32 362:47]
+  wire  _GEN_921 = _T_5 ? _GEN_909 : _GEN_876; // @[Sdc.scala 362:47]
+  wire  _GEN_922 = _T_5 ? _GEN_911 : tx_dat_end; // @[Sdc.scala 159:27 362:47]
+  wire  _GEN_923 = rx_busy_timer > 19'h0 ? io_sdc_port_dat_in[0] : rx_dat0_next; // @[Sdc.scala 360:30 361:18 143:29]
+  wire [18:0] _GEN_924 = rx_busy_timer > 19'h0 ? _GEN_912 : _GEN_473; // @[Sdc.scala 360:30]
+  wire [3:0] _GEN_929 = rx_busy_timer > 19'h0 ? _GEN_917 : tx_dat_crc_status_counter; // @[Sdc.scala 360:30 164:42]
+  wire [1:0] _GEN_932 = rx_busy_timer > 19'h0 ? _GEN_920 : tx_dat_read_sel; // @[Sdc.scala 360:30 160:32]
+  wire  _GEN_933 = rx_busy_timer > 19'h0 ? _GEN_921 : _GEN_876; // @[Sdc.scala 360:30]
+  wire  _GEN_934 = rx_busy_timer > 19'h0 ? _GEN_922 : tx_dat_end; // @[Sdc.scala 159:27 360:30]
+  wire  _GEN_935 = _T_58 ? 1'h0 : _GEN_934; // @[Sdc.scala 398:102 400:16]
+  wire [5:0] _tx_dat_timer_T_1 = tx_dat_timer - 6'h1; // @[Sdc.scala 407:34]
+  wire [10:0] _tx_dat_counter_T_1 = tx_dat_counter - 11'h1; // @[Sdc.scala 414:38]
+  wire [3:0] crc_1_0 = tx_dat_16 ^ tx_dat_crc_15; // @[Sdc.scala 417:18]
+  wire [3:0] crc_1_5 = tx_dat_crc_4 ^ tx_dat_crc_15; // @[Sdc.scala 422:21]
+  wire [3:0] crc_1_12 = tx_dat_crc_11 ^ tx_dat_crc_15; // @[Sdc.scala 429:22]
+  wire  _T_91 = tx_dat_counter[2:0] == 3'h2; // @[Sdc.scala 437:65]
+  wire [31:0] _GEN_936 = tx_dat_counter[10:4] == 7'h1 & _T_91 ? 32'h0 : _GEN_658; // @[Sdc.scala 443:80 444:23]
+  wire [1:0] _GEN_937 = tx_dat_counter[10:4] == 7'h1 & _T_91 ? 2'h1 : _GEN_874; // @[Sdc.scala 443:80 445:28]
+  wire  _GEN_938 = tx_dat_counter[10:5] != 6'h0 & tx_dat_counter[2:0] == 3'h2 | _T_58; // @[Sdc.scala 437:74 438:21]
+  wire  _GEN_939 = tx_dat_counter[10:5] != 6'h0 & tx_dat_counter[2:0] == 3'h2 | _GEN_872; // @[Sdc.scala 437:74 439:28]
+  wire [7:0] _GEN_940 = tx_dat_counter[10:5] != 6'h0 & tx_dat_counter[2:0] == 3'h2 ? _rxtx_dat_index_T_1 : _GEN_873; // @[Sdc.scala 437:74 441:22]
+  wire [1:0] _GEN_941 = tx_dat_counter[10:5] != 6'h0 & tx_dat_counter[2:0] == 3'h2 ? 2'h1 : _GEN_937; // @[Sdc.scala 437:74 442:28]
+  wire [31:0] _GEN_942 = tx_dat_counter[10:5] != 6'h0 & tx_dat_counter[2:0] == 3'h2 ? _GEN_658 : _GEN_936; // @[Sdc.scala 437:74]
+  wire [3:0] _GEN_943 = tx_dat_counter == 11'h12 ? tx_dat_crc_14 : tx_dat_1; // @[Sdc.scala 447:36 448:40 413:50]
+  wire [3:0] _GEN_944 = tx_dat_counter == 11'h12 ? tx_dat_crc_13 : tx_dat_2; // @[Sdc.scala 447:36 448:40 413:50]
+  wire [3:0] _GEN_945 = tx_dat_counter == 11'h12 ? tx_dat_crc_12 : tx_dat_3; // @[Sdc.scala 447:36 448:40 413:50]
+  wire [3:0] _GEN_946 = tx_dat_counter == 11'h12 ? crc_1_12 : tx_dat_4; // @[Sdc.scala 447:36 448:40 413:50]
+  wire [3:0] _GEN_947 = tx_dat_counter == 11'h12 ? tx_dat_crc_10 : tx_dat_5; // @[Sdc.scala 447:36 448:40 413:50]
+  wire [3:0] _GEN_948 = tx_dat_counter == 11'h12 ? tx_dat_crc_9 : tx_dat_6; // @[Sdc.scala 447:36 448:40 413:50]
+  wire [3:0] _GEN_949 = tx_dat_counter == 11'h12 ? tx_dat_crc_8 : tx_dat_7; // @[Sdc.scala 447:36 448:40 413:50]
+  wire [3:0] _GEN_950 = tx_dat_counter == 11'h12 ? tx_dat_crc_7 : tx_dat_8; // @[Sdc.scala 447:36 448:40 413:50]
+  wire [3:0] _GEN_951 = tx_dat_counter == 11'h12 ? tx_dat_crc_6 : tx_dat_9; // @[Sdc.scala 447:36 448:40 413:50]
+  wire [3:0] _GEN_952 = tx_dat_counter == 11'h12 ? tx_dat_crc_5 : tx_dat_10; // @[Sdc.scala 447:36 448:40 413:50]
+  wire [3:0] _GEN_953 = tx_dat_counter == 11'h12 ? crc_1_5 : tx_dat_11; // @[Sdc.scala 447:36 448:40 413:50]
+  wire [3:0] _GEN_954 = tx_dat_counter == 11'h12 ? tx_dat_crc_3 : tx_dat_12; // @[Sdc.scala 447:36 448:40 413:50]
+  wire [3:0] _GEN_955 = tx_dat_counter == 11'h12 ? tx_dat_crc_2 : tx_dat_13; // @[Sdc.scala 447:36 448:40 413:50]
+  wire [3:0] _GEN_956 = tx_dat_counter == 11'h12 ? tx_dat_crc_1 : tx_dat_14; // @[Sdc.scala 447:36 448:40 413:50]
+  wire [3:0] _GEN_957 = tx_dat_counter == 11'h12 ? tx_dat_crc_0 : tx_dat_15; // @[Sdc.scala 447:36 448:40 413:50]
+  wire [3:0] _GEN_958 = tx_dat_counter == 11'h12 ? crc_1_0 : tx_dat_16; // @[Sdc.scala 447:36 448:40 413:50]
+  wire [3:0] _GEN_959 = tx_dat_counter == 11'h12 ? 4'hf : tx_dat_17; // @[Sdc.scala 447:36 449:18 413:50]
+  wire  _GEN_960 = tx_dat_counter == 11'h1 ? 1'h0 : 1'h1; // @[Sdc.scala 411:20 452:35 453:22]
+  wire [18:0] _GEN_962 = tx_dat_counter == 11'h1 ? 19'h7a120 : _GEN_924; // @[Sdc.scala 452:35 455:21]
+  wire [3:0] _GEN_963 = tx_dat_counter == 11'h1 ? 4'h6 : _GEN_929; // @[Sdc.scala 452:35 456:33]
+  wire [3:0] _GEN_965 = tx_dat_counter != 11'h0 & _T & reg_clk ? tx_dat_0 : {{3'd0}, reg_tx_dat_out}; // @[Sdc.scala 147:31 410:77]
+  wire [3:0] _GEN_966 = tx_dat_counter != 11'h0 & _T & reg_clk ? _GEN_943 : tx_dat_0; // @[Sdc.scala 152:19 410:77]
+  wire [3:0] _GEN_967 = tx_dat_counter != 11'h0 & _T & reg_clk ? _GEN_944 : tx_dat_1; // @[Sdc.scala 152:19 410:77]
+  wire [3:0] _GEN_968 = tx_dat_counter != 11'h0 & _T & reg_clk ? _GEN_945 : tx_dat_2; // @[Sdc.scala 152:19 410:77]
+  wire [3:0] _GEN_969 = tx_dat_counter != 11'h0 & _T & reg_clk ? _GEN_946 : tx_dat_3; // @[Sdc.scala 152:19 410:77]
+  wire [3:0] _GEN_970 = tx_dat_counter != 11'h0 & _T & reg_clk ? _GEN_947 : tx_dat_4; // @[Sdc.scala 152:19 410:77]
+  wire [3:0] _GEN_971 = tx_dat_counter != 11'h0 & _T & reg_clk ? _GEN_948 : tx_dat_5; // @[Sdc.scala 152:19 410:77]
+  wire [3:0] _GEN_972 = tx_dat_counter != 11'h0 & _T & reg_clk ? _GEN_949 : tx_dat_6; // @[Sdc.scala 152:19 410:77]
+  wire [3:0] _GEN_973 = tx_dat_counter != 11'h0 & _T & reg_clk ? _GEN_950 : tx_dat_7; // @[Sdc.scala 152:19 410:77]
+  wire [3:0] _GEN_974 = tx_dat_counter != 11'h0 & _T & reg_clk ? _GEN_951 : tx_dat_8; // @[Sdc.scala 152:19 410:77]
+  wire [3:0] _GEN_975 = tx_dat_counter != 11'h0 & _T & reg_clk ? _GEN_952 : tx_dat_9; // @[Sdc.scala 152:19 410:77]
+  wire [3:0] _GEN_976 = tx_dat_counter != 11'h0 & _T & reg_clk ? _GEN_953 : tx_dat_10; // @[Sdc.scala 152:19 410:77]
+  wire [3:0] _GEN_977 = tx_dat_counter != 11'h0 & _T & reg_clk ? _GEN_954 : tx_dat_11; // @[Sdc.scala 152:19 410:77]
+  wire [3:0] _GEN_978 = tx_dat_counter != 11'h0 & _T & reg_clk ? _GEN_955 : tx_dat_12; // @[Sdc.scala 152:19 410:77]
+  wire [3:0] _GEN_979 = tx_dat_counter != 11'h0 & _T & reg_clk ? _GEN_956 : tx_dat_13; // @[Sdc.scala 152:19 410:77]
+  wire [3:0] _GEN_980 = tx_dat_counter != 11'h0 & _T & reg_clk ? _GEN_957 : tx_dat_14; // @[Sdc.scala 152:19 410:77]
+  wire [3:0] _GEN_981 = tx_dat_counter != 11'h0 & _T & reg_clk ? _GEN_958 : tx_dat_15; // @[Sdc.scala 152:19 410:77]
+  wire [3:0] _GEN_982 = tx_dat_counter != 11'h0 & _T & reg_clk ? _GEN_959 : tx_dat_16; // @[Sdc.scala 152:19 410:77]
+  wire  _GEN_1006 = tx_dat_counter != 11'h0 & _T & reg_clk ? _GEN_938 : _T_58; // @[Sdc.scala 410:77]
+  wire  _GEN_1007 = tx_dat_counter != 11'h0 & _T & reg_clk ? _GEN_939 : _GEN_872; // @[Sdc.scala 410:77]
+  wire [7:0] _GEN_1008 = tx_dat_counter != 11'h0 & _T & reg_clk ? _GEN_940 : _GEN_873; // @[Sdc.scala 410:77]
+  wire [1:0] _GEN_1009 = tx_dat_counter != 11'h0 & _T & reg_clk ? _GEN_941 : _GEN_874; // @[Sdc.scala 410:77]
+  wire [7:0] _GEN_1013 = tx_dat_timer != 6'h0 & _T & reg_clk ? {{2'd0}, _tx_dat_timer_T_1} : _GEN_875; // @[Sdc.scala 406:75 407:18]
+  wire [3:0] _GEN_1016 = tx_dat_timer != 6'h0 & _T & reg_clk ? tx_dat_0 : _GEN_966; // @[Sdc.scala 152:19 406:75]
+  wire [3:0] _GEN_1017 = tx_dat_timer != 6'h0 & _T & reg_clk ? tx_dat_1 : _GEN_967; // @[Sdc.scala 152:19 406:75]
+  wire [3:0] _GEN_1018 = tx_dat_timer != 6'h0 & _T & reg_clk ? tx_dat_2 : _GEN_968; // @[Sdc.scala 152:19 406:75]
+  wire [3:0] _GEN_1019 = tx_dat_timer != 6'h0 & _T & reg_clk ? tx_dat_3 : _GEN_969; // @[Sdc.scala 152:19 406:75]
+  wire [3:0] _GEN_1020 = tx_dat_timer != 6'h0 & _T & reg_clk ? tx_dat_4 : _GEN_970; // @[Sdc.scala 152:19 406:75]
+  wire [3:0] _GEN_1021 = tx_dat_timer != 6'h0 & _T & reg_clk ? tx_dat_5 : _GEN_971; // @[Sdc.scala 152:19 406:75]
+  wire [3:0] _GEN_1022 = tx_dat_timer != 6'h0 & _T & reg_clk ? tx_dat_6 : _GEN_972; // @[Sdc.scala 152:19 406:75]
+  wire [3:0] _GEN_1023 = tx_dat_timer != 6'h0 & _T & reg_clk ? tx_dat_7 : _GEN_973; // @[Sdc.scala 152:19 406:75]
+  wire [3:0] _GEN_1024 = tx_dat_timer != 6'h0 & _T & reg_clk ? tx_dat_8 : _GEN_974; // @[Sdc.scala 152:19 406:75]
+  wire [3:0] _GEN_1025 = tx_dat_timer != 6'h0 & _T & reg_clk ? tx_dat_9 : _GEN_975; // @[Sdc.scala 152:19 406:75]
+  wire [3:0] _GEN_1026 = tx_dat_timer != 6'h0 & _T & reg_clk ? tx_dat_10 : _GEN_976; // @[Sdc.scala 152:19 406:75]
+  wire [3:0] _GEN_1027 = tx_dat_timer != 6'h0 & _T & reg_clk ? tx_dat_11 : _GEN_977; // @[Sdc.scala 152:19 406:75]
+  wire [3:0] _GEN_1028 = tx_dat_timer != 6'h0 & _T & reg_clk ? tx_dat_12 : _GEN_978; // @[Sdc.scala 152:19 406:75]
+  wire [3:0] _GEN_1029 = tx_dat_timer != 6'h0 & _T & reg_clk ? tx_dat_13 : _GEN_979; // @[Sdc.scala 152:19 406:75]
+  wire [3:0] _GEN_1030 = tx_dat_timer != 6'h0 & _T & reg_clk ? tx_dat_14 : _GEN_980; // @[Sdc.scala 152:19 406:75]
+  wire [3:0] _GEN_1031 = tx_dat_timer != 6'h0 & _T & reg_clk ? tx_dat_15 : _GEN_981; // @[Sdc.scala 152:19 406:75]
+  wire [3:0] _GEN_1032 = tx_dat_timer != 6'h0 & _T & reg_clk ? tx_dat_16 : _GEN_982; // @[Sdc.scala 152:19 406:75]
+  wire  _GEN_1056 = tx_dat_timer != 6'h0 & _T & reg_clk ? _T_58 : _GEN_1006; // @[Sdc.scala 406:75]
+  wire  _GEN_1057 = tx_dat_timer != 6'h0 & _T & reg_clk ? _GEN_872 : _GEN_1007; // @[Sdc.scala 406:75]
+  wire [7:0] _GEN_1058 = tx_dat_timer != 6'h0 & _T & reg_clk ? _GEN_873 : _GEN_1008; // @[Sdc.scala 406:75]
+  wire [1:0] _GEN_1059 = tx_dat_timer != 6'h0 & _T & reg_clk ? _GEN_874 : _GEN_1009; // @[Sdc.scala 406:75]
+  wire [7:0] _GEN_1065 = _T_20 ? _GEN_875 : _GEN_1013; // @[Sdc.scala 403:70]
+  wire [3:0] _GEN_1066 = _T_20 ? tx_dat_0 : _GEN_1016; // @[Sdc.scala 152:19 403:70]
+  wire [3:0] _GEN_1067 = _T_20 ? tx_dat_1 : _GEN_1017; // @[Sdc.scala 152:19 403:70]
+  wire [3:0] _GEN_1068 = _T_20 ? tx_dat_2 : _GEN_1018; // @[Sdc.scala 152:19 403:70]
+  wire [3:0] _GEN_1069 = _T_20 ? tx_dat_3 : _GEN_1019; // @[Sdc.scala 152:19 403:70]
+  wire [3:0] _GEN_1070 = _T_20 ? tx_dat_4 : _GEN_1020; // @[Sdc.scala 152:19 403:70]
+  wire [3:0] _GEN_1071 = _T_20 ? tx_dat_5 : _GEN_1021; // @[Sdc.scala 152:19 403:70]
+  wire [3:0] _GEN_1072 = _T_20 ? tx_dat_6 : _GEN_1022; // @[Sdc.scala 152:19 403:70]
+  wire [3:0] _GEN_1073 = _T_20 ? tx_dat_7 : _GEN_1023; // @[Sdc.scala 152:19 403:70]
+  wire [3:0] _GEN_1074 = _T_20 ? tx_dat_8 : _GEN_1024; // @[Sdc.scala 152:19 403:70]
+  wire [3:0] _GEN_1075 = _T_20 ? tx_dat_9 : _GEN_1025; // @[Sdc.scala 152:19 403:70]
+  wire [3:0] _GEN_1076 = _T_20 ? tx_dat_10 : _GEN_1026; // @[Sdc.scala 152:19 403:70]
+  wire [3:0] _GEN_1077 = _T_20 ? tx_dat_11 : _GEN_1027; // @[Sdc.scala 152:19 403:70]
+  wire [3:0] _GEN_1078 = _T_20 ? tx_dat_12 : _GEN_1028; // @[Sdc.scala 152:19 403:70]
+  wire [3:0] _GEN_1079 = _T_20 ? tx_dat_13 : _GEN_1029; // @[Sdc.scala 152:19 403:70]
+  wire [3:0] _GEN_1080 = _T_20 ? tx_dat_14 : _GEN_1030; // @[Sdc.scala 152:19 403:70]
+  wire [3:0] _GEN_1081 = _T_20 ? tx_dat_15 : _GEN_1031; // @[Sdc.scala 152:19 403:70]
+  wire [3:0] _GEN_1082 = _T_20 ? tx_dat_16 : _GEN_1032; // @[Sdc.scala 152:19 403:70]
+  wire  _GEN_1106 = _T_20 ? _T_58 : _GEN_1056; // @[Sdc.scala 403:70]
+  wire  _GEN_1107 = _T_20 ? _GEN_872 : _GEN_1057; // @[Sdc.scala 403:70]
+  wire [7:0] _GEN_1108 = _T_20 ? _GEN_873 : _GEN_1058; // @[Sdc.scala 403:70]
+  wire [1:0] _GEN_1109 = _T_20 ? _GEN_874 : _GEN_1059; // @[Sdc.scala 403:70]
+  wire  _GEN_1131 = 2'h2 == tx_dat_prepare_state | _GEN_1106; // @[Sdc.scala 460:33 482:21]
+  wire  _GEN_1132 = 2'h2 == tx_dat_prepare_state | _GEN_1107; // @[Sdc.scala 460:33 483:28]
+  wire [7:0] _GEN_1133 = 2'h2 == tx_dat_prepare_state ? _rxtx_dat_index_T_1 : _GEN_1108; // @[Sdc.scala 460:33 485:22]
+  wire [7:0] _GEN_1163 = 2'h1 == tx_dat_prepare_state ? _GEN_1108 : _GEN_1133; // @[Sdc.scala 460:33]
+  wire [1:0] addr = io_mem_waddr[3:2]; // @[Sdc.scala 506:28]
+  wire [8:0] baud_divider = io_mem_wdata[8:0]; // @[Sdc.scala 509:40]
   wire [47:0] tx_cmd_val = {2'h1,io_mem_wdata[9:4],tx_cmd_arg,7'h0,1'h1}; // @[Cat.scala 33:92]
-  wire  _GEN_1175 = io_mem_wdata[3:0] == 4'h3 ? 1'h0 : 1'h1; // @[Sdc.scala 532:25 541:59 543:27]
-  wire [7:0] _GEN_1176 = io_mem_wdata[3:0] == 4'h2 ? 8'h88 : 8'h30; // @[Sdc.scala 538:59 539:28]
-  wire  _GEN_1177 = io_mem_wdata[3:0] == 4'h2 ? 1'h0 : _GEN_1175; // @[Sdc.scala 538:59 540:27]
-  wire [7:0] _GEN_1178 = io_mem_wdata[3:0] == 4'h0 ? 8'h0 : _GEN_1176; // @[Sdc.scala 536:55 537:28]
-  wire  _GEN_1179 = io_mem_wdata[3:0] == 4'h0 | _GEN_1177; // @[Sdc.scala 532:25 536:55]
-  wire  _GEN_1180 = io_mem_wdata[12] | io_mem_wdata[13] ? 1'h0 : _GEN_839; // @[Sdc.scala 547:69 548:32]
-  wire [10:0] _GEN_1181 = io_mem_wdata[12] | io_mem_wdata[13] ? 11'h411 : 11'h0; // @[Sdc.scala 547:69 549:28 561:28]
-  wire  _GEN_1182 = io_mem_wdata[12] | io_mem_wdata[13] | _GEN_864; // @[Sdc.scala 547:69 550:30]
-  wire [3:0] _GEN_1184 = io_mem_wdata[12] | io_mem_wdata[13] ? 4'h0 : _GEN_848; // @[Sdc.scala 547:69 552:24]
-  wire [3:0] _GEN_1185 = io_mem_wdata[12] | io_mem_wdata[13] ? 4'h0 : _GEN_849; // @[Sdc.scala 547:69 552:24]
-  wire [3:0] _GEN_1186 = io_mem_wdata[12] | io_mem_wdata[13] ? 4'h0 : _GEN_850; // @[Sdc.scala 547:69 552:24]
-  wire [3:0] _GEN_1187 = io_mem_wdata[12] | io_mem_wdata[13] ? 4'h0 : _GEN_851; // @[Sdc.scala 547:69 552:24]
-  wire [3:0] _GEN_1188 = io_mem_wdata[12] | io_mem_wdata[13] ? 4'h0 : _GEN_852; // @[Sdc.scala 547:69 552:24]
-  wire [3:0] _GEN_1189 = io_mem_wdata[12] | io_mem_wdata[13] ? 4'h0 : _GEN_853; // @[Sdc.scala 547:69 552:24]
-  wire [3:0] _GEN_1190 = io_mem_wdata[12] | io_mem_wdata[13] ? 4'h0 : _GEN_854; // @[Sdc.scala 547:69 552:24]
-  wire [3:0] _GEN_1191 = io_mem_wdata[12] | io_mem_wdata[13] ? 4'h0 : _GEN_855; // @[Sdc.scala 547:69 552:24]
-  wire [3:0] _GEN_1192 = io_mem_wdata[12] | io_mem_wdata[13] ? 4'h0 : _GEN_856; // @[Sdc.scala 547:69 552:24]
-  wire [3:0] _GEN_1193 = io_mem_wdata[12] | io_mem_wdata[13] ? 4'h0 : _GEN_857; // @[Sdc.scala 547:69 552:24]
-  wire [3:0] _GEN_1194 = io_mem_wdata[12] | io_mem_wdata[13] ? 4'h0 : _GEN_858; // @[Sdc.scala 547:69 552:24]
-  wire [3:0] _GEN_1195 = io_mem_wdata[12] | io_mem_wdata[13] ? 4'h0 : _GEN_859; // @[Sdc.scala 547:69 552:24]
-  wire [3:0] _GEN_1196 = io_mem_wdata[12] | io_mem_wdata[13] ? 4'h0 : _GEN_860; // @[Sdc.scala 547:69 552:24]
-  wire [3:0] _GEN_1197 = io_mem_wdata[12] | io_mem_wdata[13] ? 4'h0 : _GEN_861; // @[Sdc.scala 547:69 552:24]
-  wire [3:0] _GEN_1198 = io_mem_wdata[12] | io_mem_wdata[13] ? 4'h0 : _GEN_862; // @[Sdc.scala 547:69 552:24]
-  wire [3:0] _GEN_1199 = io_mem_wdata[12] | io_mem_wdata[13] ? 4'h0 : _GEN_863; // @[Sdc.scala 547:69 552:24]
-  wire  _GEN_1200 = io_mem_wdata[12] | io_mem_wdata[13] ? 1'h0 : _GEN_868; // @[Sdc.scala 547:69 553:30]
-  wire [18:0] _GEN_1201 = io_mem_wdata[12] | io_mem_wdata[13] ? 19'h7a120 : _GEN_832; // @[Sdc.scala 547:69 554:26]
-  wire  _GEN_1202 = io_mem_wdata[12] | io_mem_wdata[13] ? 1'h0 : _GEN_835; // @[Sdc.scala 547:69 555:28]
-  wire  _GEN_1203 = io_mem_wdata[12] | io_mem_wdata[13] ? io_mem_wdata[13] : rx_dat_continuous; // @[Sdc.scala 547:69 556:31 131:34]
-  wire  _GEN_1204 = io_mem_wdata[12] | io_mem_wdata[13] ? 1'h0 : _GEN_869; // @[Sdc.scala 547:69 557:28]
-  wire [7:0] _GEN_1205 = io_mem_wdata[12] | io_mem_wdata[13] ? 8'h0 : _GEN_1163; // @[Sdc.scala 547:69 558:28]
-  wire [7:0] _GEN_1206 = io_mem_wdata[12] | io_mem_wdata[13] ? 8'h0 : _GEN_838; // @[Sdc.scala 547:69 559:30]
-  wire  _T_179 = io_mem_wdata[14] | io_mem_wdata[15]; // @[Sdc.scala 564:41]
-  wire [1:0] _GEN_1209 = io_mem_wdata[14] | io_mem_wdata[15] ? 2'h0 : _GEN_932; // @[Sdc.scala 564:69 567:29]
-  wire [1:0] _GEN_1210 = io_mem_wdata[14] | io_mem_wdata[15] ? 2'h0 : tx_dat_write_sel; // @[Sdc.scala 564:69 568:30 162:33]
-  wire  _GEN_1211 = io_mem_wdata[14] | io_mem_wdata[15] ? 1'h0 : _GEN_933; // @[Sdc.scala 564:69 569:37]
-  wire  _GEN_1212 = io_mem_wdata[14] | io_mem_wdata[15] ? 1'h0 : _GEN_877; // @[Sdc.scala 564:69 570:34]
-  wire  _GEN_1213 = io_mem_wdata[14] | io_mem_wdata[15] ? 1'h0 : _GEN_879; // @[Sdc.scala 564:69 571:32]
-  wire  _GEN_1214 = io_mem_wdata[14] | io_mem_wdata[15] ? 1'h0 : _GEN_935; // @[Sdc.scala 564:69 572:24]
-  wire [7:0] _GEN_1215 = io_mem_wdata[14] | io_mem_wdata[15] ? 8'h0 : _GEN_1205; // @[Sdc.scala 564:69 573:28]
-  wire [7:0] _GEN_1216 = io_mem_wdata[14] | io_mem_wdata[15] ? 8'h0 : _GEN_1206; // @[Sdc.scala 564:69 574:30]
-  wire [5:0] _GEN_1265 = io_mem_wdata[11] ? 6'h30 : _GEN_648; // @[Sdc.scala 522:40 525:26]
-  wire [3:0] _GEN_1273 = io_mem_wdata[11] ? io_mem_wdata[3:0] : rx_res_type; // @[Sdc.scala 522:40 527:23 109:28]
-  wire  _GEN_1274 = io_mem_wdata[11] ? 1'h0 : _GEN_464; // @[Sdc.scala 522:40 528:30]
-  wire  _GEN_1275 = io_mem_wdata[11] ? 1'h0 : _GEN_326; // @[Sdc.scala 522:40 529:24]
-  wire  _GEN_1283 = io_mem_wdata[11] ? 1'h0 : _GEN_472; // @[Sdc.scala 522:40 531:28]
-  wire  _GEN_1284 = io_mem_wdata[11] ? _GEN_1179 : rx_res_crc_en; // @[Sdc.scala 115:30 522:40]
-  wire [7:0] _GEN_1285 = io_mem_wdata[11] ? 8'hff : _GEN_323; // @[Sdc.scala 522:40 533:24]
-  wire  _GEN_1286 = io_mem_wdata[11] ? 1'h0 : _GEN_327; // @[Sdc.scala 522:40 534:26]
-  wire [1:0] _GEN_1287 = io_mem_wdata[11] ? 2'h0 : rx_res_read_counter; // @[Sdc.scala 522:40 535:31 118:36]
-  wire [7:0] _GEN_1288 = io_mem_wdata[11] ? _GEN_1178 : _GEN_324; // @[Sdc.scala 522:40]
-  wire  _GEN_1289 = io_mem_wdata[11] ? _GEN_1180 : _GEN_839; // @[Sdc.scala 522:40]
-  wire [10:0] _GEN_1290 = io_mem_wdata[11] ? _GEN_1181 : _GEN_833; // @[Sdc.scala 522:40]
-  wire  _GEN_1291 = io_mem_wdata[11] ? _GEN_1182 : _GEN_864; // @[Sdc.scala 522:40]
-  wire  _GEN_1292 = io_mem_wdata[11] ? 1'h0 : _GEN_834; // @[Sdc.scala 522:40]
-  wire  _GEN_1309 = io_mem_wdata[11] ? _GEN_1200 : _GEN_868; // @[Sdc.scala 522:40]
-  wire [18:0] _GEN_1310 = io_mem_wdata[11] ? _GEN_1201 : _GEN_832; // @[Sdc.scala 522:40]
-  wire  _GEN_1311 = io_mem_wdata[11] ? _GEN_1202 : _GEN_835; // @[Sdc.scala 522:40]
-  wire  _GEN_1312 = io_mem_wdata[11] ? _GEN_1203 : rx_dat_continuous; // @[Sdc.scala 131:34 522:40]
-  wire  _GEN_1313 = io_mem_wdata[11] ? _GEN_1204 : _GEN_869; // @[Sdc.scala 522:40]
-  wire [7:0] _GEN_1314 = io_mem_wdata[11] ? _GEN_1215 : _GEN_1163; // @[Sdc.scala 522:40]
-  wire [7:0] _GEN_1315 = io_mem_wdata[11] ? _GEN_1216 : _GEN_838; // @[Sdc.scala 522:40]
-  wire  _GEN_1316 = io_mem_wdata[11] ? _T_179 : tx_dat_started; // @[Sdc.scala 157:31 522:40]
-  wire [1:0] _GEN_1318 = io_mem_wdata[11] ? _GEN_1209 : _GEN_932; // @[Sdc.scala 522:40]
-  wire [1:0] _GEN_1319 = io_mem_wdata[11] ? _GEN_1210 : tx_dat_write_sel; // @[Sdc.scala 162:33 522:40]
-  wire  _GEN_1320 = io_mem_wdata[11] ? _GEN_1211 : _GEN_933; // @[Sdc.scala 522:40]
-  wire  _GEN_1321 = io_mem_wdata[11] ? _GEN_1212 : _GEN_877; // @[Sdc.scala 522:40]
-  wire  _GEN_1322 = io_mem_wdata[11] ? _GEN_1213 : _GEN_879; // @[Sdc.scala 522:40]
-  wire  _GEN_1323 = io_mem_wdata[11] ? _GEN_1214 : _GEN_935; // @[Sdc.scala 522:40]
-  wire [1:0] _T_182 = tx_dat_read_sel ^ tx_dat_write_sel; // @[Sdc.scala 585:32]
-  wire  _T_183 = _T_182 != 2'h2; // @[Sdc.scala 585:52]
-  wire [7:0] _GEN_1324 = _T_182 != 2'h2 ? _rxtx_dat_counter_T_1 : _GEN_838; // @[Sdc.scala 585:65 586:28]
-  wire  _T_185 = rxtx_dat_counter[6:0] == 7'h7f; // @[Sdc.scala 591:38]
-  wire [1:0] _tx_dat_write_sel_T_1 = tx_dat_write_sel + 2'h1; // @[Sdc.scala 592:48]
-  wire  _GEN_1327 = _T_59 | _GEN_877; // @[Sdc.scala 593:55 594:34]
-  wire [1:0] _GEN_1328 = rxtx_dat_counter[6:0] == 7'h7f ? _tx_dat_write_sel_T_1 : tx_dat_write_sel; // @[Sdc.scala 591:49 592:28 162:33]
-  wire  _GEN_1329 = rxtx_dat_counter[6:0] == 7'h7f ? _GEN_1327 : _GEN_877; // @[Sdc.scala 591:49]
-  wire [7:0] _GEN_1330 = 2'h3 == addr ? _GEN_1324 : _GEN_838; // @[Sdc.scala 508:19]
-  wire [1:0] _GEN_1333 = 2'h3 == addr ? _GEN_1328 : tx_dat_write_sel; // @[Sdc.scala 508:19 162:33]
-  wire  _GEN_1334 = 2'h3 == addr ? _GEN_1329 : _GEN_877; // @[Sdc.scala 508:19]
-  wire [31:0] _GEN_1335 = 2'h2 == addr ? io_mem_wdata : tx_cmd_arg; // @[Sdc.scala 508:19 582:20 119:27]
-  wire [7:0] _GEN_1336 = 2'h2 == addr ? _GEN_838 : _GEN_1330; // @[Sdc.scala 508:19]
-  wire  _GEN_1337 = 2'h2 == addr ? 1'h0 : 2'h3 == addr & _T_183; // @[Sdc.scala 256:17 508:19]
-  wire [1:0] _GEN_1339 = 2'h2 == addr ? tx_dat_write_sel : _GEN_1333; // @[Sdc.scala 508:19 162:33]
-  wire  _GEN_1340 = 2'h2 == addr ? _GEN_877 : _GEN_1334; // @[Sdc.scala 508:19]
-  wire  _GEN_1399 = 2'h1 == addr ? _GEN_1275 : _GEN_326; // @[Sdc.scala 508:19]
-  wire [1:0] _GEN_1411 = 2'h1 == addr ? _GEN_1287 : rx_res_read_counter; // @[Sdc.scala 508:19 118:36]
-  wire  _GEN_1416 = 2'h1 == addr ? _GEN_1292 : _GEN_834; // @[Sdc.scala 508:19]
-  wire [7:0] _GEN_1439 = 2'h1 == addr ? _GEN_1315 : _GEN_1336; // @[Sdc.scala 508:19]
-  wire  _GEN_1449 = 2'h1 == addr ? 1'h0 : _GEN_1337; // @[Sdc.scala 256:17 508:19]
-  wire  _GEN_1516 = 2'h0 == addr ? _GEN_326 : _GEN_1399; // @[Sdc.scala 508:19]
-  wire [1:0] _GEN_1528 = 2'h0 == addr ? rx_res_read_counter : _GEN_1411; // @[Sdc.scala 508:19 118:36]
-  wire  _GEN_1533 = 2'h0 == addr ? _GEN_834 : _GEN_1416; // @[Sdc.scala 508:19]
-  wire [7:0] _GEN_1556 = 2'h0 == addr ? _GEN_838 : _GEN_1439; // @[Sdc.scala 508:19]
-  wire  _GEN_1566 = 2'h0 == addr ? 1'h0 : _GEN_1449; // @[Sdc.scala 256:17 508:19]
-  wire  _GEN_1633 = io_mem_wen ? _GEN_1516 : _GEN_326; // @[Sdc.scala 506:21]
-  wire [1:0] _GEN_1645 = io_mem_wen ? _GEN_1528 : rx_res_read_counter; // @[Sdc.scala 506:21 118:36]
-  wire  _GEN_1650 = io_mem_wen ? _GEN_1533 : _GEN_834; // @[Sdc.scala 506:21]
-  wire [7:0] _GEN_1673 = io_mem_wen ? _GEN_1556 : _GEN_838; // @[Sdc.scala 506:21]
-  wire [1:0] addr_1 = io_mem_raddr[3:2]; // @[Sdc.scala 601:28]
+  wire  _GEN_1175 = io_mem_wdata[3:0] == 4'h3 ? 1'h0 : 1'h1; // @[Sdc.scala 531:25 540:59 542:27]
+  wire [7:0] _GEN_1176 = io_mem_wdata[3:0] == 4'h2 ? 8'h88 : 8'h30; // @[Sdc.scala 537:59 538:28]
+  wire  _GEN_1177 = io_mem_wdata[3:0] == 4'h2 ? 1'h0 : _GEN_1175; // @[Sdc.scala 537:59 539:27]
+  wire [7:0] _GEN_1178 = io_mem_wdata[3:0] == 4'h0 ? 8'h0 : _GEN_1176; // @[Sdc.scala 535:55 536:28]
+  wire  _GEN_1179 = io_mem_wdata[3:0] == 4'h0 | _GEN_1177; // @[Sdc.scala 531:25 535:55]
+  wire  _GEN_1180 = io_mem_wdata[12] | io_mem_wdata[13] ? 1'h0 : _GEN_839; // @[Sdc.scala 546:69 547:32]
+  wire [10:0] _GEN_1181 = io_mem_wdata[12] | io_mem_wdata[13] ? 11'h411 : 11'h0; // @[Sdc.scala 546:69 548:28 560:28]
+  wire  _GEN_1182 = io_mem_wdata[12] | io_mem_wdata[13] | _GEN_864; // @[Sdc.scala 546:69 549:30]
+  wire [3:0] _GEN_1184 = io_mem_wdata[12] | io_mem_wdata[13] ? 4'h0 : _GEN_848; // @[Sdc.scala 546:69 551:24]
+  wire [3:0] _GEN_1185 = io_mem_wdata[12] | io_mem_wdata[13] ? 4'h0 : _GEN_849; // @[Sdc.scala 546:69 551:24]
+  wire [3:0] _GEN_1186 = io_mem_wdata[12] | io_mem_wdata[13] ? 4'h0 : _GEN_850; // @[Sdc.scala 546:69 551:24]
+  wire [3:0] _GEN_1187 = io_mem_wdata[12] | io_mem_wdata[13] ? 4'h0 : _GEN_851; // @[Sdc.scala 546:69 551:24]
+  wire [3:0] _GEN_1188 = io_mem_wdata[12] | io_mem_wdata[13] ? 4'h0 : _GEN_852; // @[Sdc.scala 546:69 551:24]
+  wire [3:0] _GEN_1189 = io_mem_wdata[12] | io_mem_wdata[13] ? 4'h0 : _GEN_853; // @[Sdc.scala 546:69 551:24]
+  wire [3:0] _GEN_1190 = io_mem_wdata[12] | io_mem_wdata[13] ? 4'h0 : _GEN_854; // @[Sdc.scala 546:69 551:24]
+  wire [3:0] _GEN_1191 = io_mem_wdata[12] | io_mem_wdata[13] ? 4'h0 : _GEN_855; // @[Sdc.scala 546:69 551:24]
+  wire [3:0] _GEN_1192 = io_mem_wdata[12] | io_mem_wdata[13] ? 4'h0 : _GEN_856; // @[Sdc.scala 546:69 551:24]
+  wire [3:0] _GEN_1193 = io_mem_wdata[12] | io_mem_wdata[13] ? 4'h0 : _GEN_857; // @[Sdc.scala 546:69 551:24]
+  wire [3:0] _GEN_1194 = io_mem_wdata[12] | io_mem_wdata[13] ? 4'h0 : _GEN_858; // @[Sdc.scala 546:69 551:24]
+  wire [3:0] _GEN_1195 = io_mem_wdata[12] | io_mem_wdata[13] ? 4'h0 : _GEN_859; // @[Sdc.scala 546:69 551:24]
+  wire [3:0] _GEN_1196 = io_mem_wdata[12] | io_mem_wdata[13] ? 4'h0 : _GEN_860; // @[Sdc.scala 546:69 551:24]
+  wire [3:0] _GEN_1197 = io_mem_wdata[12] | io_mem_wdata[13] ? 4'h0 : _GEN_861; // @[Sdc.scala 546:69 551:24]
+  wire [3:0] _GEN_1198 = io_mem_wdata[12] | io_mem_wdata[13] ? 4'h0 : _GEN_862; // @[Sdc.scala 546:69 551:24]
+  wire [3:0] _GEN_1199 = io_mem_wdata[12] | io_mem_wdata[13] ? 4'h0 : _GEN_863; // @[Sdc.scala 546:69 551:24]
+  wire  _GEN_1200 = io_mem_wdata[12] | io_mem_wdata[13] ? 1'h0 : _GEN_868; // @[Sdc.scala 546:69 552:30]
+  wire [18:0] _GEN_1201 = io_mem_wdata[12] | io_mem_wdata[13] ? 19'h7a120 : _GEN_832; // @[Sdc.scala 546:69 553:26]
+  wire  _GEN_1202 = io_mem_wdata[12] | io_mem_wdata[13] ? 1'h0 : _GEN_835; // @[Sdc.scala 546:69 554:28]
+  wire  _GEN_1203 = io_mem_wdata[12] | io_mem_wdata[13] ? io_mem_wdata[13] : rx_dat_continuous; // @[Sdc.scala 546:69 555:31 130:34]
+  wire  _GEN_1204 = io_mem_wdata[12] | io_mem_wdata[13] ? 1'h0 : _GEN_869; // @[Sdc.scala 546:69 556:28]
+  wire [7:0] _GEN_1205 = io_mem_wdata[12] | io_mem_wdata[13] ? 8'h0 : _GEN_1163; // @[Sdc.scala 546:69 557:28]
+  wire [7:0] _GEN_1206 = io_mem_wdata[12] | io_mem_wdata[13] ? 8'h0 : _GEN_838; // @[Sdc.scala 546:69 558:30]
+  wire  _T_179 = io_mem_wdata[14] | io_mem_wdata[15]; // @[Sdc.scala 563:41]
+  wire [1:0] _GEN_1209 = io_mem_wdata[14] | io_mem_wdata[15] ? 2'h0 : _GEN_932; // @[Sdc.scala 563:69 566:29]
+  wire [1:0] _GEN_1210 = io_mem_wdata[14] | io_mem_wdata[15] ? 2'h0 : tx_dat_write_sel; // @[Sdc.scala 563:69 567:30 161:33]
+  wire  _GEN_1211 = io_mem_wdata[14] | io_mem_wdata[15] ? 1'h0 : _GEN_933; // @[Sdc.scala 563:69 568:37]
+  wire  _GEN_1212 = io_mem_wdata[14] | io_mem_wdata[15] ? 1'h0 : _GEN_877; // @[Sdc.scala 563:69 569:34]
+  wire  _GEN_1213 = io_mem_wdata[14] | io_mem_wdata[15] ? 1'h0 : _GEN_879; // @[Sdc.scala 563:69 570:32]
+  wire  _GEN_1214 = io_mem_wdata[14] | io_mem_wdata[15] ? 1'h0 : _GEN_935; // @[Sdc.scala 563:69 571:24]
+  wire [7:0] _GEN_1215 = io_mem_wdata[14] | io_mem_wdata[15] ? 8'h0 : _GEN_1205; // @[Sdc.scala 563:69 572:28]
+  wire [7:0] _GEN_1216 = io_mem_wdata[14] | io_mem_wdata[15] ? 8'h0 : _GEN_1206; // @[Sdc.scala 563:69 573:30]
+  wire [5:0] _GEN_1265 = io_mem_wdata[11] ? 6'h30 : _GEN_648; // @[Sdc.scala 521:40 524:26]
+  wire [3:0] _GEN_1273 = io_mem_wdata[11] ? io_mem_wdata[3:0] : rx_res_type; // @[Sdc.scala 521:40 526:23 108:28]
+  wire  _GEN_1274 = io_mem_wdata[11] ? 1'h0 : _GEN_464; // @[Sdc.scala 521:40 527:30]
+  wire  _GEN_1275 = io_mem_wdata[11] ? 1'h0 : _GEN_326; // @[Sdc.scala 521:40 528:24]
+  wire  _GEN_1283 = io_mem_wdata[11] ? 1'h0 : _GEN_472; // @[Sdc.scala 521:40 530:28]
+  wire  _GEN_1284 = io_mem_wdata[11] ? _GEN_1179 : rx_res_crc_en; // @[Sdc.scala 114:30 521:40]
+  wire [7:0] _GEN_1285 = io_mem_wdata[11] ? 8'hff : _GEN_323; // @[Sdc.scala 521:40 532:24]
+  wire  _GEN_1286 = io_mem_wdata[11] ? 1'h0 : _GEN_327; // @[Sdc.scala 521:40 533:26]
+  wire [1:0] _GEN_1287 = io_mem_wdata[11] ? 2'h0 : rx_res_read_counter; // @[Sdc.scala 521:40 534:31 117:36]
+  wire [7:0] _GEN_1288 = io_mem_wdata[11] ? _GEN_1178 : _GEN_324; // @[Sdc.scala 521:40]
+  wire  _GEN_1289 = io_mem_wdata[11] ? _GEN_1180 : _GEN_839; // @[Sdc.scala 521:40]
+  wire [10:0] _GEN_1290 = io_mem_wdata[11] ? _GEN_1181 : _GEN_833; // @[Sdc.scala 521:40]
+  wire  _GEN_1291 = io_mem_wdata[11] ? _GEN_1182 : _GEN_864; // @[Sdc.scala 521:40]
+  wire  _GEN_1292 = io_mem_wdata[11] ? 1'h0 : _GEN_834; // @[Sdc.scala 521:40]
+  wire  _GEN_1309 = io_mem_wdata[11] ? _GEN_1200 : _GEN_868; // @[Sdc.scala 521:40]
+  wire [18:0] _GEN_1310 = io_mem_wdata[11] ? _GEN_1201 : _GEN_832; // @[Sdc.scala 521:40]
+  wire  _GEN_1311 = io_mem_wdata[11] ? _GEN_1202 : _GEN_835; // @[Sdc.scala 521:40]
+  wire  _GEN_1312 = io_mem_wdata[11] ? _GEN_1203 : rx_dat_continuous; // @[Sdc.scala 130:34 521:40]
+  wire  _GEN_1313 = io_mem_wdata[11] ? _GEN_1204 : _GEN_869; // @[Sdc.scala 521:40]
+  wire [7:0] _GEN_1314 = io_mem_wdata[11] ? _GEN_1215 : _GEN_1163; // @[Sdc.scala 521:40]
+  wire [7:0] _GEN_1315 = io_mem_wdata[11] ? _GEN_1216 : _GEN_838; // @[Sdc.scala 521:40]
+  wire  _GEN_1316 = io_mem_wdata[11] ? _T_179 : tx_dat_started; // @[Sdc.scala 156:31 521:40]
+  wire [1:0] _GEN_1318 = io_mem_wdata[11] ? _GEN_1209 : _GEN_932; // @[Sdc.scala 521:40]
+  wire [1:0] _GEN_1319 = io_mem_wdata[11] ? _GEN_1210 : tx_dat_write_sel; // @[Sdc.scala 161:33 521:40]
+  wire  _GEN_1320 = io_mem_wdata[11] ? _GEN_1211 : _GEN_933; // @[Sdc.scala 521:40]
+  wire  _GEN_1321 = io_mem_wdata[11] ? _GEN_1212 : _GEN_877; // @[Sdc.scala 521:40]
+  wire  _GEN_1322 = io_mem_wdata[11] ? _GEN_1213 : _GEN_879; // @[Sdc.scala 521:40]
+  wire  _GEN_1323 = io_mem_wdata[11] ? _GEN_1214 : _GEN_935; // @[Sdc.scala 521:40]
+  wire [1:0] _T_182 = tx_dat_read_sel ^ tx_dat_write_sel; // @[Sdc.scala 584:32]
+  wire  _T_183 = _T_182 != 2'h2; // @[Sdc.scala 584:52]
+  wire [7:0] _GEN_1324 = _T_182 != 2'h2 ? _rxtx_dat_counter_T_1 : _GEN_838; // @[Sdc.scala 584:65 585:28]
+  wire  _T_185 = rxtx_dat_counter[6:0] == 7'h7f; // @[Sdc.scala 590:38]
+  wire [1:0] _tx_dat_write_sel_T_1 = tx_dat_write_sel + 2'h1; // @[Sdc.scala 591:48]
+  wire  _GEN_1327 = _T_59 | _GEN_877; // @[Sdc.scala 592:55 593:34]
+  wire [1:0] _GEN_1328 = rxtx_dat_counter[6:0] == 7'h7f ? _tx_dat_write_sel_T_1 : tx_dat_write_sel; // @[Sdc.scala 590:49 591:28 161:33]
+  wire  _GEN_1329 = rxtx_dat_counter[6:0] == 7'h7f ? _GEN_1327 : _GEN_877; // @[Sdc.scala 590:49]
+  wire [7:0] _GEN_1330 = 2'h3 == addr ? _GEN_1324 : _GEN_838; // @[Sdc.scala 507:19]
+  wire [1:0] _GEN_1333 = 2'h3 == addr ? _GEN_1328 : tx_dat_write_sel; // @[Sdc.scala 507:19 161:33]
+  wire  _GEN_1334 = 2'h3 == addr ? _GEN_1329 : _GEN_877; // @[Sdc.scala 507:19]
+  wire [31:0] _GEN_1335 = 2'h2 == addr ? io_mem_wdata : tx_cmd_arg; // @[Sdc.scala 507:19 581:20 118:27]
+  wire [7:0] _GEN_1336 = 2'h2 == addr ? _GEN_838 : _GEN_1330; // @[Sdc.scala 507:19]
+  wire  _GEN_1337 = 2'h2 == addr ? 1'h0 : 2'h3 == addr & _T_183; // @[Sdc.scala 255:17 507:19]
+  wire [1:0] _GEN_1339 = 2'h2 == addr ? tx_dat_write_sel : _GEN_1333; // @[Sdc.scala 507:19 161:33]
+  wire  _GEN_1340 = 2'h2 == addr ? _GEN_877 : _GEN_1334; // @[Sdc.scala 507:19]
+  wire  _GEN_1399 = 2'h1 == addr ? _GEN_1275 : _GEN_326; // @[Sdc.scala 507:19]
+  wire [1:0] _GEN_1411 = 2'h1 == addr ? _GEN_1287 : rx_res_read_counter; // @[Sdc.scala 507:19 117:36]
+  wire  _GEN_1416 = 2'h1 == addr ? _GEN_1292 : _GEN_834; // @[Sdc.scala 507:19]
+  wire [7:0] _GEN_1439 = 2'h1 == addr ? _GEN_1315 : _GEN_1336; // @[Sdc.scala 507:19]
+  wire  _GEN_1449 = 2'h1 == addr ? 1'h0 : _GEN_1337; // @[Sdc.scala 255:17 507:19]
+  wire  _GEN_1516 = 2'h0 == addr ? _GEN_326 : _GEN_1399; // @[Sdc.scala 507:19]
+  wire [1:0] _GEN_1528 = 2'h0 == addr ? rx_res_read_counter : _GEN_1411; // @[Sdc.scala 507:19 117:36]
+  wire  _GEN_1533 = 2'h0 == addr ? _GEN_834 : _GEN_1416; // @[Sdc.scala 507:19]
+  wire [7:0] _GEN_1556 = 2'h0 == addr ? _GEN_838 : _GEN_1439; // @[Sdc.scala 507:19]
+  wire  _GEN_1566 = 2'h0 == addr ? 1'h0 : _GEN_1449; // @[Sdc.scala 255:17 507:19]
+  wire  _GEN_1633 = io_mem_wen ? _GEN_1516 : _GEN_326; // @[Sdc.scala 505:21]
+  wire [1:0] _GEN_1645 = io_mem_wen ? _GEN_1528 : rx_res_read_counter; // @[Sdc.scala 505:21 117:36]
+  wire  _GEN_1650 = io_mem_wen ? _GEN_1533 : _GEN_834; // @[Sdc.scala 505:21]
+  wire [7:0] _GEN_1673 = io_mem_wen ? _GEN_1556 : _GEN_838; // @[Sdc.scala 505:21]
+  wire [1:0] addr_1 = io_mem_raddr[3:2]; // @[Sdc.scala 600:28]
   wire [31:0] _io_mem_rdata_T = {reg_power,11'h0,tx_end_intr_en,tx_empty_intr_en,rx_dat_intr_en,rx_res_intr_en,7'h0,
     reg_baud_divider}; // @[Cat.scala 33:92]
-  wire  _io_mem_rdata_T_1 = tx_dat_started & tx_dat_end; // @[Sdc.scala 619:26]
-  wire  _io_mem_rdata_T_4 = tx_dat_started & _T_182 == 2'h2; // @[Sdc.scala 620:26]
+  wire  _io_mem_rdata_T_1 = tx_dat_started & tx_dat_end; // @[Sdc.scala 618:26]
+  wire  _io_mem_rdata_T_4 = tx_dat_started & _T_182 == 2'h2; // @[Sdc.scala 619:26]
   wire [17:0] io_mem_rdata_lo_1 = {rx_dat_crc_error,rx_dat_ready,13'h0,rx_res_timeout,rx_res_crc_error,rx_res_ready}; // @[Cat.scala 33:92]
   wire [31:0] _io_mem_rdata_T_5 = {8'h0,tx_dat_crc_status,_io_mem_rdata_T_1,_io_mem_rdata_T_4,rx_dat_overrun,
     rx_dat_timeout,io_mem_rdata_lo_1}; // @[Cat.scala 33:92]
-  wire [1:0] _rx_res_read_counter_T_1 = rx_res_read_counter + 2'h1; // @[Sdc.scala 632:52]
+  wire [1:0] _rx_res_read_counter_T_1 = rx_res_read_counter + 2'h1; // @[Sdc.scala 631:52]
   wire [6:0] _io_mem_rdata_T_6 = {rx_res_read_counter,5'h0}; // @[Cat.scala 33:92]
-  wire [135:0] _io_mem_rdata_T_7 = rx_res >> _io_mem_rdata_T_6; // @[Sdc.scala 634:35]
-  wire  _GEN_1685 = rx_res_read_counter == 2'h3 ? 1'h0 : _GEN_1633; // @[Sdc.scala 635:46 636:26]
-  wire [31:0] _GEN_1686 = rx_res_type == 4'h2 ? _io_mem_rdata_T_7[31:0] : rx_res[39:8]; // @[Sdc.scala 633:44 634:24 639:24]
-  wire  _GEN_1687 = rx_res_type == 4'h2 & _GEN_1685; // @[Sdc.scala 633:44 640:24]
-  wire  _GEN_1688 = _T_185 ? 1'h0 : _GEN_1650; // @[Sdc.scala 650:51 651:26]
-  wire [7:0] _GEN_1689 = rx_dat_ready ? _rxtx_dat_counter_T_1 : _GEN_1673; // @[Sdc.scala 645:29 646:28]
-  wire  _GEN_1690 = rx_dat_ready | _GEN_836; // @[Sdc.scala 645:29 647:25]
-  wire  _GEN_1691 = rx_dat_ready | _GEN_837; // @[Sdc.scala 645:29 648:27]
-  wire  _GEN_1692 = rx_dat_ready ? _GEN_1688 : _GEN_1650; // @[Sdc.scala 645:29]
-  wire [31:0] _GEN_1693 = 2'h3 == addr_1 ? rx_dat_buf_cache : 32'hdeadbeef; // @[Sdc.scala 502:16 602:19 644:22]
-  wire [7:0] _GEN_1694 = 2'h3 == addr_1 ? _GEN_1689 : _GEN_1673; // @[Sdc.scala 602:19]
-  wire  _GEN_1695 = 2'h3 == addr_1 ? _GEN_1690 : _GEN_836; // @[Sdc.scala 602:19]
-  wire  _GEN_1696 = 2'h3 == addr_1 ? _GEN_1691 : _GEN_837; // @[Sdc.scala 602:19]
-  wire  _GEN_1697 = 2'h3 == addr_1 ? _GEN_1692 : _GEN_1650; // @[Sdc.scala 602:19]
-  wire [1:0] _GEN_1698 = 2'h2 == addr_1 ? _rx_res_read_counter_T_1 : _GEN_1645; // @[Sdc.scala 602:19 632:29]
-  wire [31:0] _GEN_1699 = 2'h2 == addr_1 ? _GEN_1686 : _GEN_1693; // @[Sdc.scala 602:19]
-  wire  _GEN_1700 = 2'h2 == addr_1 ? _GEN_1687 : _GEN_1633; // @[Sdc.scala 602:19]
-  wire [7:0] _GEN_1701 = 2'h2 == addr_1 ? _GEN_1673 : _GEN_1694; // @[Sdc.scala 602:19]
-  wire  _GEN_1702 = 2'h2 == addr_1 ? _GEN_836 : _GEN_1695; // @[Sdc.scala 602:19]
-  wire  _GEN_1703 = 2'h2 == addr_1 ? _GEN_837 : _GEN_1696; // @[Sdc.scala 602:19]
-  wire  _GEN_1704 = 2'h2 == addr_1 ? _GEN_1650 : _GEN_1697; // @[Sdc.scala 602:19]
-  wire [31:0] _GEN_1705 = 2'h1 == addr_1 ? _io_mem_rdata_T_5 : _GEN_1699; // @[Sdc.scala 602:19 616:22]
-  wire  _GEN_1709 = 2'h1 == addr_1 ? _GEN_836 : _GEN_1702; // @[Sdc.scala 602:19]
-  wire [31:0] _GEN_1712 = 2'h0 == addr_1 ? _io_mem_rdata_T : _GEN_1705; // @[Sdc.scala 602:19 604:22]
-  wire  _GEN_1716 = 2'h0 == addr_1 ? _GEN_836 : _GEN_1709; // @[Sdc.scala 602:19]
-  wire  _io_intr_T_1 = rx_dat_intr_en & rx_dat_ready; // @[Sdc.scala 659:21]
-  wire  _io_intr_T_2 = rx_res_intr_en & rx_res_ready | _io_intr_T_1; // @[Sdc.scala 658:47]
-  wire  _io_intr_T_6 = tx_empty_intr_en & tx_dat_started & _T_183; // @[Sdc.scala 660:41]
-  wire  _T_198 = ~reset; // @[Sdc.scala 663:9]
-  wire [136:0] _GEN_1726 = reset ? 137'h0 : _GEN_325; // @[Sdc.scala 110:{23,23}]
-  wire [3:0] _GEN_1727 = reset ? 4'h0 : _GEN_965; // @[Sdc.scala 148:{31,31}]
-  wire [7:0] _GEN_1728 = reset ? 8'h0 : _GEN_1065; // @[Sdc.scala 152:{29,29}]
-  assign io_mem_rdata = io_mem_ren ? _GEN_1712 : 32'hdeadbeef; // @[Sdc.scala 502:16 600:21]
-  assign io_sdc_port_clk = reg_clk; // @[Sdc.scala 103:19]
-  assign io_sdc_port_cmd_wrt = reg_tx_cmd_wrt; // @[Sdc.scala 211:23]
-  assign io_sdc_port_cmd_out = reg_tx_cmd_out; // @[Sdc.scala 212:23]
-  assign io_sdc_port_dat_wrt = reg_tx_dat_wrt; // @[Sdc.scala 248:23]
-  assign io_sdc_port_dat_out = {{3'd0}, reg_tx_dat_out}; // @[Sdc.scala 249:23]
-  assign io_sdbuf_ren1 = 2'h1 == tx_dat_prepare_state ? _GEN_1106 : _GEN_1131; // @[Sdc.scala 461:33]
-  assign io_sdbuf_wen1 = rx_dat_counter > 11'h0 & _T_2 & _GEN_827; // @[Sdc.scala 252:17 269:57]
-  assign io_sdbuf_addr1 = rxtx_dat_index; // @[Sdc.scala 253:18]
+  wire [135:0] _io_mem_rdata_T_7 = rx_res >> _io_mem_rdata_T_6; // @[Sdc.scala 633:35]
+  wire  _GEN_1685 = rx_res_read_counter == 2'h3 ? 1'h0 : _GEN_1633; // @[Sdc.scala 634:46 635:26]
+  wire [31:0] _GEN_1686 = rx_res_type == 4'h2 ? _io_mem_rdata_T_7[31:0] : rx_res[39:8]; // @[Sdc.scala 632:44 633:24 638:24]
+  wire  _GEN_1687 = rx_res_type == 4'h2 & _GEN_1685; // @[Sdc.scala 632:44 639:24]
+  wire  _GEN_1688 = _T_185 ? 1'h0 : _GEN_1650; // @[Sdc.scala 649:51 650:26]
+  wire [7:0] _GEN_1689 = rx_dat_ready ? _rxtx_dat_counter_T_1 : _GEN_1673; // @[Sdc.scala 644:29 645:28]
+  wire  _GEN_1690 = rx_dat_ready | _GEN_836; // @[Sdc.scala 644:29 646:25]
+  wire  _GEN_1691 = rx_dat_ready | _GEN_837; // @[Sdc.scala 644:29 647:27]
+  wire  _GEN_1692 = rx_dat_ready ? _GEN_1688 : _GEN_1650; // @[Sdc.scala 644:29]
+  wire [31:0] _GEN_1693 = 2'h3 == addr_1 ? rx_dat_buf_cache : 32'hdeadbeef; // @[Sdc.scala 501:16 601:19 643:22]
+  wire [7:0] _GEN_1694 = 2'h3 == addr_1 ? _GEN_1689 : _GEN_1673; // @[Sdc.scala 601:19]
+  wire  _GEN_1695 = 2'h3 == addr_1 ? _GEN_1690 : _GEN_836; // @[Sdc.scala 601:19]
+  wire  _GEN_1696 = 2'h3 == addr_1 ? _GEN_1691 : _GEN_837; // @[Sdc.scala 601:19]
+  wire  _GEN_1697 = 2'h3 == addr_1 ? _GEN_1692 : _GEN_1650; // @[Sdc.scala 601:19]
+  wire [1:0] _GEN_1698 = 2'h2 == addr_1 ? _rx_res_read_counter_T_1 : _GEN_1645; // @[Sdc.scala 601:19 631:29]
+  wire [31:0] _GEN_1699 = 2'h2 == addr_1 ? _GEN_1686 : _GEN_1693; // @[Sdc.scala 601:19]
+  wire  _GEN_1700 = 2'h2 == addr_1 ? _GEN_1687 : _GEN_1633; // @[Sdc.scala 601:19]
+  wire [7:0] _GEN_1701 = 2'h2 == addr_1 ? _GEN_1673 : _GEN_1694; // @[Sdc.scala 601:19]
+  wire  _GEN_1702 = 2'h2 == addr_1 ? _GEN_836 : _GEN_1695; // @[Sdc.scala 601:19]
+  wire  _GEN_1703 = 2'h2 == addr_1 ? _GEN_837 : _GEN_1696; // @[Sdc.scala 601:19]
+  wire  _GEN_1704 = 2'h2 == addr_1 ? _GEN_1650 : _GEN_1697; // @[Sdc.scala 601:19]
+  wire [31:0] _GEN_1705 = 2'h1 == addr_1 ? _io_mem_rdata_T_5 : _GEN_1699; // @[Sdc.scala 601:19 615:22]
+  wire  _GEN_1709 = 2'h1 == addr_1 ? _GEN_836 : _GEN_1702; // @[Sdc.scala 601:19]
+  wire [31:0] _GEN_1712 = 2'h0 == addr_1 ? _io_mem_rdata_T : _GEN_1705; // @[Sdc.scala 601:19 603:22]
+  wire  _GEN_1716 = 2'h0 == addr_1 ? _GEN_836 : _GEN_1709; // @[Sdc.scala 601:19]
+  wire  _io_intr_T_1 = rx_dat_intr_en & rx_dat_ready; // @[Sdc.scala 658:21]
+  wire  _io_intr_T_2 = rx_res_intr_en & rx_res_ready | _io_intr_T_1; // @[Sdc.scala 657:47]
+  wire  _io_intr_T_6 = tx_empty_intr_en & tx_dat_started & _T_183; // @[Sdc.scala 659:41]
+  wire  _T_198 = ~reset; // @[Sdc.scala 662:9]
+  wire [136:0] _GEN_1726 = reset ? 137'h0 : _GEN_325; // @[Sdc.scala 109:{23,23}]
+  wire [3:0] _GEN_1727 = reset ? 4'h0 : _GEN_965; // @[Sdc.scala 147:{31,31}]
+  wire [7:0] _GEN_1728 = reset ? 8'h0 : _GEN_1065; // @[Sdc.scala 151:{29,29}]
+  assign io_mem_rdata = io_mem_ren ? _GEN_1712 : 32'hdeadbeef; // @[Sdc.scala 501:16 599:21]
+  assign io_sdc_port_clk = reg_clk; // @[Sdc.scala 102:19]
+  assign io_sdc_port_cmd_wrt = reg_tx_cmd_wrt; // @[Sdc.scala 210:23]
+  assign io_sdc_port_cmd_out = reg_tx_cmd_out; // @[Sdc.scala 211:23]
+  assign io_sdc_port_dat_wrt = reg_tx_dat_wrt; // @[Sdc.scala 247:23]
+  assign io_sdc_port_dat_out = {{3'd0}, reg_tx_dat_out}; // @[Sdc.scala 248:23]
+  assign io_sdbuf_ren1 = 2'h1 == tx_dat_prepare_state ? _GEN_1106 : _GEN_1131; // @[Sdc.scala 460:33]
+  assign io_sdbuf_wen1 = rx_dat_counter > 11'h0 & _T_2 & _GEN_827; // @[Sdc.scala 251:17 268:57]
+  assign io_sdbuf_addr1 = rxtx_dat_index; // @[Sdc.scala 252:18]
   assign io_sdbuf_wdata1 = {io_sdbuf_wdata1_hi,io_sdbuf_wdata1_lo}; // @[Cat.scala 33:92]
-  assign io_sdbuf_ren2 = io_mem_ren ? _GEN_1716 : _GEN_836; // @[Sdc.scala 600:21]
-  assign io_sdbuf_wen2 = io_mem_wen & _GEN_1566; // @[Sdc.scala 256:17 506:21]
-  assign io_sdbuf_addr2 = rxtx_dat_counter; // @[Sdc.scala 257:18]
-  assign io_sdbuf_wdata2 = io_mem_wdata; // @[Sdc.scala 585:65 588:27]
-  assign io_intr = _io_intr_T_2 | _io_intr_T_6; // @[Sdc.scala 659:38]
+  assign io_sdbuf_ren2 = io_mem_ren ? _GEN_1716 : _GEN_836; // @[Sdc.scala 599:21]
+  assign io_sdbuf_wen2 = io_mem_wen & _GEN_1566; // @[Sdc.scala 255:17 505:21]
+  assign io_sdbuf_addr2 = rxtx_dat_counter; // @[Sdc.scala 256:18]
+  assign io_sdbuf_wdata2 = io_mem_wdata; // @[Sdc.scala 584:65 587:27]
+  assign io_intr = _io_intr_T_2 | _io_intr_T_6; // @[Sdc.scala 658:38]
   always @(posedge clock) begin
-    if (reset) begin // @[Sdc.scala 89:26]
-      reg_power <= 1'h0; // @[Sdc.scala 89:26]
-    end else if (io_mem_wen) begin // @[Sdc.scala 506:21]
-      if (2'h0 == addr) begin // @[Sdc.scala 508:19]
-        if (baud_divider != 9'h0) begin // @[Sdc.scala 511:37]
-          reg_power <= io_mem_wdata[31]; // @[Sdc.scala 512:21]
+    if (reset) begin // @[Sdc.scala 88:26]
+      reg_power <= 1'h0; // @[Sdc.scala 88:26]
+    end else if (io_mem_wen) begin // @[Sdc.scala 505:21]
+      if (2'h0 == addr) begin // @[Sdc.scala 507:19]
+        if (baud_divider != 9'h0) begin // @[Sdc.scala 510:37]
+          reg_power <= io_mem_wdata[31]; // @[Sdc.scala 511:21]
         end
       end
     end
-    if (reset) begin // @[Sdc.scala 90:33]
-      reg_baud_divider <= 9'h2; // @[Sdc.scala 90:33]
-    end else if (io_mem_wen) begin // @[Sdc.scala 506:21]
-      if (2'h0 == addr) begin // @[Sdc.scala 508:19]
-        if (baud_divider != 9'h0) begin // @[Sdc.scala 511:37]
-          reg_baud_divider <= baud_divider; // @[Sdc.scala 513:28]
+    if (reset) begin // @[Sdc.scala 89:33]
+      reg_baud_divider <= 9'h2; // @[Sdc.scala 89:33]
+    end else if (io_mem_wen) begin // @[Sdc.scala 505:21]
+      if (2'h0 == addr) begin // @[Sdc.scala 507:19]
+        if (baud_divider != 9'h0) begin // @[Sdc.scala 510:37]
+          reg_baud_divider <= baud_divider; // @[Sdc.scala 512:28]
         end
       end
     end
-    if (reset) begin // @[Sdc.scala 91:32]
-      reg_clk_counter <= 9'h2; // @[Sdc.scala 91:32]
-    end else if (io_mem_wen) begin // @[Sdc.scala 506:21]
-      if (2'h0 == addr) begin // @[Sdc.scala 508:19]
-        if (baud_divider != 9'h0) begin // @[Sdc.scala 511:37]
-          reg_clk_counter <= baud_divider; // @[Sdc.scala 514:27]
+    if (reset) begin // @[Sdc.scala 90:32]
+      reg_clk_counter <= 9'h2; // @[Sdc.scala 90:32]
+    end else if (io_mem_wen) begin // @[Sdc.scala 505:21]
+      if (2'h0 == addr) begin // @[Sdc.scala 507:19]
+        if (baud_divider != 9'h0) begin // @[Sdc.scala 510:37]
+          reg_clk_counter <= baud_divider; // @[Sdc.scala 513:27]
         end else begin
           reg_clk_counter <= _GEN_2;
         end
@@ -9559,17 +9559,17 @@ module Sdc(
     end else begin
       reg_clk_counter <= _GEN_2;
     end
-    if (reset) begin // @[Sdc.scala 92:24]
-      reg_clk <= 1'h0; // @[Sdc.scala 92:24]
+    if (reset) begin // @[Sdc.scala 91:24]
+      reg_clk <= 1'h0; // @[Sdc.scala 91:24]
     end else begin
       reg_clk <= _GEN_3;
     end
-    if (reset) begin // @[Sdc.scala 105:35]
-      rx_res_in_progress <= 1'h0; // @[Sdc.scala 105:35]
-    end else if (io_mem_wen) begin // @[Sdc.scala 506:21]
-      if (2'h0 == addr) begin // @[Sdc.scala 508:19]
+    if (reset) begin // @[Sdc.scala 104:35]
+      rx_res_in_progress <= 1'h0; // @[Sdc.scala 104:35]
+    end else if (io_mem_wen) begin // @[Sdc.scala 505:21]
+      if (2'h0 == addr) begin // @[Sdc.scala 507:19]
         rx_res_in_progress <= _GEN_464;
-      end else if (2'h1 == addr) begin // @[Sdc.scala 508:19]
+      end else if (2'h1 == addr) begin // @[Sdc.scala 507:19]
         rx_res_in_progress <= _GEN_1274;
       end else begin
         rx_res_in_progress <= _GEN_464;
@@ -9577,12 +9577,12 @@ module Sdc(
     end else begin
       rx_res_in_progress <= _GEN_464;
     end
-    if (reset) begin // @[Sdc.scala 106:31]
-      rx_res_counter <= 8'h0; // @[Sdc.scala 106:31]
-    end else if (io_mem_wen) begin // @[Sdc.scala 506:21]
-      if (2'h0 == addr) begin // @[Sdc.scala 508:19]
+    if (reset) begin // @[Sdc.scala 105:31]
+      rx_res_counter <= 8'h0; // @[Sdc.scala 105:31]
+    end else if (io_mem_wen) begin // @[Sdc.scala 505:21]
+      if (2'h0 == addr) begin // @[Sdc.scala 507:19]
         rx_res_counter <= _GEN_324;
-      end else if (2'h1 == addr) begin // @[Sdc.scala 508:19]
+      end else if (2'h1 == addr) begin // @[Sdc.scala 507:19]
         rx_res_counter <= _GEN_1288;
       end else begin
         rx_res_counter <= _GEN_324;
@@ -9590,979 +9590,979 @@ module Sdc(
     end else begin
       rx_res_counter <= _GEN_324;
     end
-    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 170:57]
-      if (_T & reg_clk) begin // @[Sdc.scala 172:47]
-        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 182:49]
-          rx_res_bits_0 <= rx_res_next; // @[Sdc.scala 184:24]
+    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 169:57]
+      if (_T & reg_clk) begin // @[Sdc.scala 171:47]
+        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 181:49]
+          rx_res_bits_0 <= rx_res_next; // @[Sdc.scala 183:24]
         end
       end
     end
-    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 170:57]
-      if (_T & reg_clk) begin // @[Sdc.scala 172:47]
-        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 182:49]
-          rx_res_bits_1 <= rx_res_bits_0; // @[Sdc.scala 183:61]
+    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 169:57]
+      if (_T & reg_clk) begin // @[Sdc.scala 171:47]
+        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 181:49]
+          rx_res_bits_1 <= rx_res_bits_0; // @[Sdc.scala 182:61]
         end
       end
     end
-    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 170:57]
-      if (_T & reg_clk) begin // @[Sdc.scala 172:47]
-        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 182:49]
-          rx_res_bits_2 <= rx_res_bits_1; // @[Sdc.scala 183:61]
+    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 169:57]
+      if (_T & reg_clk) begin // @[Sdc.scala 171:47]
+        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 181:49]
+          rx_res_bits_2 <= rx_res_bits_1; // @[Sdc.scala 182:61]
         end
       end
     end
-    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 170:57]
-      if (_T & reg_clk) begin // @[Sdc.scala 172:47]
-        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 182:49]
-          rx_res_bits_3 <= rx_res_bits_2; // @[Sdc.scala 183:61]
+    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 169:57]
+      if (_T & reg_clk) begin // @[Sdc.scala 171:47]
+        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 181:49]
+          rx_res_bits_3 <= rx_res_bits_2; // @[Sdc.scala 182:61]
         end
       end
     end
-    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 170:57]
-      if (_T & reg_clk) begin // @[Sdc.scala 172:47]
-        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 182:49]
-          rx_res_bits_4 <= rx_res_bits_3; // @[Sdc.scala 183:61]
+    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 169:57]
+      if (_T & reg_clk) begin // @[Sdc.scala 171:47]
+        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 181:49]
+          rx_res_bits_4 <= rx_res_bits_3; // @[Sdc.scala 182:61]
         end
       end
     end
-    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 170:57]
-      if (_T & reg_clk) begin // @[Sdc.scala 172:47]
-        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 182:49]
-          rx_res_bits_5 <= rx_res_bits_4; // @[Sdc.scala 183:61]
+    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 169:57]
+      if (_T & reg_clk) begin // @[Sdc.scala 171:47]
+        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 181:49]
+          rx_res_bits_5 <= rx_res_bits_4; // @[Sdc.scala 182:61]
         end
       end
     end
-    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 170:57]
-      if (_T & reg_clk) begin // @[Sdc.scala 172:47]
-        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 182:49]
-          rx_res_bits_6 <= rx_res_bits_5; // @[Sdc.scala 183:61]
+    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 169:57]
+      if (_T & reg_clk) begin // @[Sdc.scala 171:47]
+        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 181:49]
+          rx_res_bits_6 <= rx_res_bits_5; // @[Sdc.scala 182:61]
         end
       end
     end
-    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 170:57]
-      if (_T & reg_clk) begin // @[Sdc.scala 172:47]
-        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 182:49]
-          rx_res_bits_7 <= rx_res_bits_6; // @[Sdc.scala 183:61]
+    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 169:57]
+      if (_T & reg_clk) begin // @[Sdc.scala 171:47]
+        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 181:49]
+          rx_res_bits_7 <= rx_res_bits_6; // @[Sdc.scala 182:61]
         end
       end
     end
-    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 170:57]
-      if (_T & reg_clk) begin // @[Sdc.scala 172:47]
-        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 182:49]
-          rx_res_bits_8 <= rx_res_bits_7; // @[Sdc.scala 183:61]
+    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 169:57]
+      if (_T & reg_clk) begin // @[Sdc.scala 171:47]
+        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 181:49]
+          rx_res_bits_8 <= rx_res_bits_7; // @[Sdc.scala 182:61]
         end
       end
     end
-    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 170:57]
-      if (_T & reg_clk) begin // @[Sdc.scala 172:47]
-        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 182:49]
-          rx_res_bits_9 <= rx_res_bits_8; // @[Sdc.scala 183:61]
+    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 169:57]
+      if (_T & reg_clk) begin // @[Sdc.scala 171:47]
+        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 181:49]
+          rx_res_bits_9 <= rx_res_bits_8; // @[Sdc.scala 182:61]
         end
       end
     end
-    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 170:57]
-      if (_T & reg_clk) begin // @[Sdc.scala 172:47]
-        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 182:49]
-          rx_res_bits_10 <= rx_res_bits_9; // @[Sdc.scala 183:61]
+    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 169:57]
+      if (_T & reg_clk) begin // @[Sdc.scala 171:47]
+        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 181:49]
+          rx_res_bits_10 <= rx_res_bits_9; // @[Sdc.scala 182:61]
         end
       end
     end
-    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 170:57]
-      if (_T & reg_clk) begin // @[Sdc.scala 172:47]
-        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 182:49]
-          rx_res_bits_11 <= rx_res_bits_10; // @[Sdc.scala 183:61]
+    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 169:57]
+      if (_T & reg_clk) begin // @[Sdc.scala 171:47]
+        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 181:49]
+          rx_res_bits_11 <= rx_res_bits_10; // @[Sdc.scala 182:61]
         end
       end
     end
-    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 170:57]
-      if (_T & reg_clk) begin // @[Sdc.scala 172:47]
-        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 182:49]
-          rx_res_bits_12 <= rx_res_bits_11; // @[Sdc.scala 183:61]
+    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 169:57]
+      if (_T & reg_clk) begin // @[Sdc.scala 171:47]
+        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 181:49]
+          rx_res_bits_12 <= rx_res_bits_11; // @[Sdc.scala 182:61]
         end
       end
     end
-    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 170:57]
-      if (_T & reg_clk) begin // @[Sdc.scala 172:47]
-        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 182:49]
-          rx_res_bits_13 <= rx_res_bits_12; // @[Sdc.scala 183:61]
+    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 169:57]
+      if (_T & reg_clk) begin // @[Sdc.scala 171:47]
+        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 181:49]
+          rx_res_bits_13 <= rx_res_bits_12; // @[Sdc.scala 182:61]
         end
       end
     end
-    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 170:57]
-      if (_T & reg_clk) begin // @[Sdc.scala 172:47]
-        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 182:49]
-          rx_res_bits_14 <= rx_res_bits_13; // @[Sdc.scala 183:61]
+    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 169:57]
+      if (_T & reg_clk) begin // @[Sdc.scala 171:47]
+        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 181:49]
+          rx_res_bits_14 <= rx_res_bits_13; // @[Sdc.scala 182:61]
         end
       end
     end
-    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 170:57]
-      if (_T & reg_clk) begin // @[Sdc.scala 172:47]
-        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 182:49]
-          rx_res_bits_15 <= rx_res_bits_14; // @[Sdc.scala 183:61]
+    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 169:57]
+      if (_T & reg_clk) begin // @[Sdc.scala 171:47]
+        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 181:49]
+          rx_res_bits_15 <= rx_res_bits_14; // @[Sdc.scala 182:61]
         end
       end
     end
-    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 170:57]
-      if (_T & reg_clk) begin // @[Sdc.scala 172:47]
-        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 182:49]
-          rx_res_bits_16 <= rx_res_bits_15; // @[Sdc.scala 183:61]
+    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 169:57]
+      if (_T & reg_clk) begin // @[Sdc.scala 171:47]
+        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 181:49]
+          rx_res_bits_16 <= rx_res_bits_15; // @[Sdc.scala 182:61]
         end
       end
     end
-    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 170:57]
-      if (_T & reg_clk) begin // @[Sdc.scala 172:47]
-        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 182:49]
-          rx_res_bits_17 <= rx_res_bits_16; // @[Sdc.scala 183:61]
+    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 169:57]
+      if (_T & reg_clk) begin // @[Sdc.scala 171:47]
+        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 181:49]
+          rx_res_bits_17 <= rx_res_bits_16; // @[Sdc.scala 182:61]
         end
       end
     end
-    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 170:57]
-      if (_T & reg_clk) begin // @[Sdc.scala 172:47]
-        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 182:49]
-          rx_res_bits_18 <= rx_res_bits_17; // @[Sdc.scala 183:61]
+    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 169:57]
+      if (_T & reg_clk) begin // @[Sdc.scala 171:47]
+        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 181:49]
+          rx_res_bits_18 <= rx_res_bits_17; // @[Sdc.scala 182:61]
         end
       end
     end
-    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 170:57]
-      if (_T & reg_clk) begin // @[Sdc.scala 172:47]
-        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 182:49]
-          rx_res_bits_19 <= rx_res_bits_18; // @[Sdc.scala 183:61]
+    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 169:57]
+      if (_T & reg_clk) begin // @[Sdc.scala 171:47]
+        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 181:49]
+          rx_res_bits_19 <= rx_res_bits_18; // @[Sdc.scala 182:61]
         end
       end
     end
-    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 170:57]
-      if (_T & reg_clk) begin // @[Sdc.scala 172:47]
-        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 182:49]
-          rx_res_bits_20 <= rx_res_bits_19; // @[Sdc.scala 183:61]
+    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 169:57]
+      if (_T & reg_clk) begin // @[Sdc.scala 171:47]
+        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 181:49]
+          rx_res_bits_20 <= rx_res_bits_19; // @[Sdc.scala 182:61]
         end
       end
     end
-    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 170:57]
-      if (_T & reg_clk) begin // @[Sdc.scala 172:47]
-        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 182:49]
-          rx_res_bits_21 <= rx_res_bits_20; // @[Sdc.scala 183:61]
+    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 169:57]
+      if (_T & reg_clk) begin // @[Sdc.scala 171:47]
+        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 181:49]
+          rx_res_bits_21 <= rx_res_bits_20; // @[Sdc.scala 182:61]
         end
       end
     end
-    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 170:57]
-      if (_T & reg_clk) begin // @[Sdc.scala 172:47]
-        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 182:49]
-          rx_res_bits_22 <= rx_res_bits_21; // @[Sdc.scala 183:61]
+    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 169:57]
+      if (_T & reg_clk) begin // @[Sdc.scala 171:47]
+        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 181:49]
+          rx_res_bits_22 <= rx_res_bits_21; // @[Sdc.scala 182:61]
         end
       end
     end
-    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 170:57]
-      if (_T & reg_clk) begin // @[Sdc.scala 172:47]
-        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 182:49]
-          rx_res_bits_23 <= rx_res_bits_22; // @[Sdc.scala 183:61]
+    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 169:57]
+      if (_T & reg_clk) begin // @[Sdc.scala 171:47]
+        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 181:49]
+          rx_res_bits_23 <= rx_res_bits_22; // @[Sdc.scala 182:61]
         end
       end
     end
-    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 170:57]
-      if (_T & reg_clk) begin // @[Sdc.scala 172:47]
-        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 182:49]
-          rx_res_bits_24 <= rx_res_bits_23; // @[Sdc.scala 183:61]
+    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 169:57]
+      if (_T & reg_clk) begin // @[Sdc.scala 171:47]
+        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 181:49]
+          rx_res_bits_24 <= rx_res_bits_23; // @[Sdc.scala 182:61]
         end
       end
     end
-    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 170:57]
-      if (_T & reg_clk) begin // @[Sdc.scala 172:47]
-        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 182:49]
-          rx_res_bits_25 <= rx_res_bits_24; // @[Sdc.scala 183:61]
+    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 169:57]
+      if (_T & reg_clk) begin // @[Sdc.scala 171:47]
+        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 181:49]
+          rx_res_bits_25 <= rx_res_bits_24; // @[Sdc.scala 182:61]
         end
       end
     end
-    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 170:57]
-      if (_T & reg_clk) begin // @[Sdc.scala 172:47]
-        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 182:49]
-          rx_res_bits_26 <= rx_res_bits_25; // @[Sdc.scala 183:61]
+    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 169:57]
+      if (_T & reg_clk) begin // @[Sdc.scala 171:47]
+        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 181:49]
+          rx_res_bits_26 <= rx_res_bits_25; // @[Sdc.scala 182:61]
         end
       end
     end
-    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 170:57]
-      if (_T & reg_clk) begin // @[Sdc.scala 172:47]
-        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 182:49]
-          rx_res_bits_27 <= rx_res_bits_26; // @[Sdc.scala 183:61]
+    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 169:57]
+      if (_T & reg_clk) begin // @[Sdc.scala 171:47]
+        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 181:49]
+          rx_res_bits_27 <= rx_res_bits_26; // @[Sdc.scala 182:61]
         end
       end
     end
-    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 170:57]
-      if (_T & reg_clk) begin // @[Sdc.scala 172:47]
-        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 182:49]
-          rx_res_bits_28 <= rx_res_bits_27; // @[Sdc.scala 183:61]
+    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 169:57]
+      if (_T & reg_clk) begin // @[Sdc.scala 171:47]
+        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 181:49]
+          rx_res_bits_28 <= rx_res_bits_27; // @[Sdc.scala 182:61]
         end
       end
     end
-    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 170:57]
-      if (_T & reg_clk) begin // @[Sdc.scala 172:47]
-        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 182:49]
-          rx_res_bits_29 <= rx_res_bits_28; // @[Sdc.scala 183:61]
+    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 169:57]
+      if (_T & reg_clk) begin // @[Sdc.scala 171:47]
+        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 181:49]
+          rx_res_bits_29 <= rx_res_bits_28; // @[Sdc.scala 182:61]
         end
       end
     end
-    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 170:57]
-      if (_T & reg_clk) begin // @[Sdc.scala 172:47]
-        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 182:49]
-          rx_res_bits_30 <= rx_res_bits_29; // @[Sdc.scala 183:61]
+    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 169:57]
+      if (_T & reg_clk) begin // @[Sdc.scala 171:47]
+        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 181:49]
+          rx_res_bits_30 <= rx_res_bits_29; // @[Sdc.scala 182:61]
         end
       end
     end
-    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 170:57]
-      if (_T & reg_clk) begin // @[Sdc.scala 172:47]
-        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 182:49]
-          rx_res_bits_31 <= rx_res_bits_30; // @[Sdc.scala 183:61]
+    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 169:57]
+      if (_T & reg_clk) begin // @[Sdc.scala 171:47]
+        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 181:49]
+          rx_res_bits_31 <= rx_res_bits_30; // @[Sdc.scala 182:61]
         end
       end
     end
-    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 170:57]
-      if (_T & reg_clk) begin // @[Sdc.scala 172:47]
-        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 182:49]
-          rx_res_bits_32 <= rx_res_bits_31; // @[Sdc.scala 183:61]
+    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 169:57]
+      if (_T & reg_clk) begin // @[Sdc.scala 171:47]
+        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 181:49]
+          rx_res_bits_32 <= rx_res_bits_31; // @[Sdc.scala 182:61]
         end
       end
     end
-    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 170:57]
-      if (_T & reg_clk) begin // @[Sdc.scala 172:47]
-        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 182:49]
-          rx_res_bits_33 <= rx_res_bits_32; // @[Sdc.scala 183:61]
+    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 169:57]
+      if (_T & reg_clk) begin // @[Sdc.scala 171:47]
+        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 181:49]
+          rx_res_bits_33 <= rx_res_bits_32; // @[Sdc.scala 182:61]
         end
       end
     end
-    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 170:57]
-      if (_T & reg_clk) begin // @[Sdc.scala 172:47]
-        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 182:49]
-          rx_res_bits_34 <= rx_res_bits_33; // @[Sdc.scala 183:61]
+    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 169:57]
+      if (_T & reg_clk) begin // @[Sdc.scala 171:47]
+        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 181:49]
+          rx_res_bits_34 <= rx_res_bits_33; // @[Sdc.scala 182:61]
         end
       end
     end
-    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 170:57]
-      if (_T & reg_clk) begin // @[Sdc.scala 172:47]
-        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 182:49]
-          rx_res_bits_35 <= rx_res_bits_34; // @[Sdc.scala 183:61]
+    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 169:57]
+      if (_T & reg_clk) begin // @[Sdc.scala 171:47]
+        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 181:49]
+          rx_res_bits_35 <= rx_res_bits_34; // @[Sdc.scala 182:61]
         end
       end
     end
-    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 170:57]
-      if (_T & reg_clk) begin // @[Sdc.scala 172:47]
-        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 182:49]
-          rx_res_bits_36 <= rx_res_bits_35; // @[Sdc.scala 183:61]
+    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 169:57]
+      if (_T & reg_clk) begin // @[Sdc.scala 171:47]
+        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 181:49]
+          rx_res_bits_36 <= rx_res_bits_35; // @[Sdc.scala 182:61]
         end
       end
     end
-    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 170:57]
-      if (_T & reg_clk) begin // @[Sdc.scala 172:47]
-        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 182:49]
-          rx_res_bits_37 <= rx_res_bits_36; // @[Sdc.scala 183:61]
+    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 169:57]
+      if (_T & reg_clk) begin // @[Sdc.scala 171:47]
+        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 181:49]
+          rx_res_bits_37 <= rx_res_bits_36; // @[Sdc.scala 182:61]
         end
       end
     end
-    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 170:57]
-      if (_T & reg_clk) begin // @[Sdc.scala 172:47]
-        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 182:49]
-          rx_res_bits_38 <= rx_res_bits_37; // @[Sdc.scala 183:61]
+    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 169:57]
+      if (_T & reg_clk) begin // @[Sdc.scala 171:47]
+        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 181:49]
+          rx_res_bits_38 <= rx_res_bits_37; // @[Sdc.scala 182:61]
         end
       end
     end
-    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 170:57]
-      if (_T & reg_clk) begin // @[Sdc.scala 172:47]
-        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 182:49]
-          rx_res_bits_39 <= rx_res_bits_38; // @[Sdc.scala 183:61]
+    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 169:57]
+      if (_T & reg_clk) begin // @[Sdc.scala 171:47]
+        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 181:49]
+          rx_res_bits_39 <= rx_res_bits_38; // @[Sdc.scala 182:61]
         end
       end
     end
-    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 170:57]
-      if (_T & reg_clk) begin // @[Sdc.scala 172:47]
-        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 182:49]
-          rx_res_bits_40 <= rx_res_bits_39; // @[Sdc.scala 183:61]
+    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 169:57]
+      if (_T & reg_clk) begin // @[Sdc.scala 171:47]
+        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 181:49]
+          rx_res_bits_40 <= rx_res_bits_39; // @[Sdc.scala 182:61]
         end
       end
     end
-    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 170:57]
-      if (_T & reg_clk) begin // @[Sdc.scala 172:47]
-        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 182:49]
-          rx_res_bits_41 <= rx_res_bits_40; // @[Sdc.scala 183:61]
+    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 169:57]
+      if (_T & reg_clk) begin // @[Sdc.scala 171:47]
+        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 181:49]
+          rx_res_bits_41 <= rx_res_bits_40; // @[Sdc.scala 182:61]
         end
       end
     end
-    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 170:57]
-      if (_T & reg_clk) begin // @[Sdc.scala 172:47]
-        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 182:49]
-          rx_res_bits_42 <= rx_res_bits_41; // @[Sdc.scala 183:61]
+    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 169:57]
+      if (_T & reg_clk) begin // @[Sdc.scala 171:47]
+        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 181:49]
+          rx_res_bits_42 <= rx_res_bits_41; // @[Sdc.scala 182:61]
         end
       end
     end
-    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 170:57]
-      if (_T & reg_clk) begin // @[Sdc.scala 172:47]
-        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 182:49]
-          rx_res_bits_43 <= rx_res_bits_42; // @[Sdc.scala 183:61]
+    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 169:57]
+      if (_T & reg_clk) begin // @[Sdc.scala 171:47]
+        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 181:49]
+          rx_res_bits_43 <= rx_res_bits_42; // @[Sdc.scala 182:61]
         end
       end
     end
-    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 170:57]
-      if (_T & reg_clk) begin // @[Sdc.scala 172:47]
-        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 182:49]
-          rx_res_bits_44 <= rx_res_bits_43; // @[Sdc.scala 183:61]
+    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 169:57]
+      if (_T & reg_clk) begin // @[Sdc.scala 171:47]
+        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 181:49]
+          rx_res_bits_44 <= rx_res_bits_43; // @[Sdc.scala 182:61]
         end
       end
     end
-    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 170:57]
-      if (_T & reg_clk) begin // @[Sdc.scala 172:47]
-        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 182:49]
-          rx_res_bits_45 <= rx_res_bits_44; // @[Sdc.scala 183:61]
+    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 169:57]
+      if (_T & reg_clk) begin // @[Sdc.scala 171:47]
+        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 181:49]
+          rx_res_bits_45 <= rx_res_bits_44; // @[Sdc.scala 182:61]
         end
       end
     end
-    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 170:57]
-      if (_T & reg_clk) begin // @[Sdc.scala 172:47]
-        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 182:49]
-          rx_res_bits_46 <= rx_res_bits_45; // @[Sdc.scala 183:61]
+    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 169:57]
+      if (_T & reg_clk) begin // @[Sdc.scala 171:47]
+        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 181:49]
+          rx_res_bits_46 <= rx_res_bits_45; // @[Sdc.scala 182:61]
         end
       end
     end
-    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 170:57]
-      if (_T & reg_clk) begin // @[Sdc.scala 172:47]
-        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 182:49]
-          rx_res_bits_47 <= rx_res_bits_46; // @[Sdc.scala 183:61]
+    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 169:57]
+      if (_T & reg_clk) begin // @[Sdc.scala 171:47]
+        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 181:49]
+          rx_res_bits_47 <= rx_res_bits_46; // @[Sdc.scala 182:61]
         end
       end
     end
-    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 170:57]
-      if (_T & reg_clk) begin // @[Sdc.scala 172:47]
-        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 182:49]
-          rx_res_bits_48 <= rx_res_bits_47; // @[Sdc.scala 183:61]
+    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 169:57]
+      if (_T & reg_clk) begin // @[Sdc.scala 171:47]
+        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 181:49]
+          rx_res_bits_48 <= rx_res_bits_47; // @[Sdc.scala 182:61]
         end
       end
     end
-    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 170:57]
-      if (_T & reg_clk) begin // @[Sdc.scala 172:47]
-        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 182:49]
-          rx_res_bits_49 <= rx_res_bits_48; // @[Sdc.scala 183:61]
+    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 169:57]
+      if (_T & reg_clk) begin // @[Sdc.scala 171:47]
+        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 181:49]
+          rx_res_bits_49 <= rx_res_bits_48; // @[Sdc.scala 182:61]
         end
       end
     end
-    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 170:57]
-      if (_T & reg_clk) begin // @[Sdc.scala 172:47]
-        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 182:49]
-          rx_res_bits_50 <= rx_res_bits_49; // @[Sdc.scala 183:61]
+    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 169:57]
+      if (_T & reg_clk) begin // @[Sdc.scala 171:47]
+        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 181:49]
+          rx_res_bits_50 <= rx_res_bits_49; // @[Sdc.scala 182:61]
         end
       end
     end
-    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 170:57]
-      if (_T & reg_clk) begin // @[Sdc.scala 172:47]
-        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 182:49]
-          rx_res_bits_51 <= rx_res_bits_50; // @[Sdc.scala 183:61]
+    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 169:57]
+      if (_T & reg_clk) begin // @[Sdc.scala 171:47]
+        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 181:49]
+          rx_res_bits_51 <= rx_res_bits_50; // @[Sdc.scala 182:61]
         end
       end
     end
-    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 170:57]
-      if (_T & reg_clk) begin // @[Sdc.scala 172:47]
-        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 182:49]
-          rx_res_bits_52 <= rx_res_bits_51; // @[Sdc.scala 183:61]
+    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 169:57]
+      if (_T & reg_clk) begin // @[Sdc.scala 171:47]
+        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 181:49]
+          rx_res_bits_52 <= rx_res_bits_51; // @[Sdc.scala 182:61]
         end
       end
     end
-    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 170:57]
-      if (_T & reg_clk) begin // @[Sdc.scala 172:47]
-        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 182:49]
-          rx_res_bits_53 <= rx_res_bits_52; // @[Sdc.scala 183:61]
+    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 169:57]
+      if (_T & reg_clk) begin // @[Sdc.scala 171:47]
+        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 181:49]
+          rx_res_bits_53 <= rx_res_bits_52; // @[Sdc.scala 182:61]
         end
       end
     end
-    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 170:57]
-      if (_T & reg_clk) begin // @[Sdc.scala 172:47]
-        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 182:49]
-          rx_res_bits_54 <= rx_res_bits_53; // @[Sdc.scala 183:61]
+    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 169:57]
+      if (_T & reg_clk) begin // @[Sdc.scala 171:47]
+        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 181:49]
+          rx_res_bits_54 <= rx_res_bits_53; // @[Sdc.scala 182:61]
         end
       end
     end
-    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 170:57]
-      if (_T & reg_clk) begin // @[Sdc.scala 172:47]
-        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 182:49]
-          rx_res_bits_55 <= rx_res_bits_54; // @[Sdc.scala 183:61]
+    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 169:57]
+      if (_T & reg_clk) begin // @[Sdc.scala 171:47]
+        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 181:49]
+          rx_res_bits_55 <= rx_res_bits_54; // @[Sdc.scala 182:61]
         end
       end
     end
-    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 170:57]
-      if (_T & reg_clk) begin // @[Sdc.scala 172:47]
-        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 182:49]
-          rx_res_bits_56 <= rx_res_bits_55; // @[Sdc.scala 183:61]
+    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 169:57]
+      if (_T & reg_clk) begin // @[Sdc.scala 171:47]
+        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 181:49]
+          rx_res_bits_56 <= rx_res_bits_55; // @[Sdc.scala 182:61]
         end
       end
     end
-    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 170:57]
-      if (_T & reg_clk) begin // @[Sdc.scala 172:47]
-        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 182:49]
-          rx_res_bits_57 <= rx_res_bits_56; // @[Sdc.scala 183:61]
+    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 169:57]
+      if (_T & reg_clk) begin // @[Sdc.scala 171:47]
+        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 181:49]
+          rx_res_bits_57 <= rx_res_bits_56; // @[Sdc.scala 182:61]
         end
       end
     end
-    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 170:57]
-      if (_T & reg_clk) begin // @[Sdc.scala 172:47]
-        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 182:49]
-          rx_res_bits_58 <= rx_res_bits_57; // @[Sdc.scala 183:61]
+    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 169:57]
+      if (_T & reg_clk) begin // @[Sdc.scala 171:47]
+        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 181:49]
+          rx_res_bits_58 <= rx_res_bits_57; // @[Sdc.scala 182:61]
         end
       end
     end
-    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 170:57]
-      if (_T & reg_clk) begin // @[Sdc.scala 172:47]
-        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 182:49]
-          rx_res_bits_59 <= rx_res_bits_58; // @[Sdc.scala 183:61]
+    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 169:57]
+      if (_T & reg_clk) begin // @[Sdc.scala 171:47]
+        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 181:49]
+          rx_res_bits_59 <= rx_res_bits_58; // @[Sdc.scala 182:61]
         end
       end
     end
-    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 170:57]
-      if (_T & reg_clk) begin // @[Sdc.scala 172:47]
-        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 182:49]
-          rx_res_bits_60 <= rx_res_bits_59; // @[Sdc.scala 183:61]
+    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 169:57]
+      if (_T & reg_clk) begin // @[Sdc.scala 171:47]
+        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 181:49]
+          rx_res_bits_60 <= rx_res_bits_59; // @[Sdc.scala 182:61]
         end
       end
     end
-    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 170:57]
-      if (_T & reg_clk) begin // @[Sdc.scala 172:47]
-        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 182:49]
-          rx_res_bits_61 <= rx_res_bits_60; // @[Sdc.scala 183:61]
+    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 169:57]
+      if (_T & reg_clk) begin // @[Sdc.scala 171:47]
+        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 181:49]
+          rx_res_bits_61 <= rx_res_bits_60; // @[Sdc.scala 182:61]
         end
       end
     end
-    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 170:57]
-      if (_T & reg_clk) begin // @[Sdc.scala 172:47]
-        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 182:49]
-          rx_res_bits_62 <= rx_res_bits_61; // @[Sdc.scala 183:61]
+    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 169:57]
+      if (_T & reg_clk) begin // @[Sdc.scala 171:47]
+        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 181:49]
+          rx_res_bits_62 <= rx_res_bits_61; // @[Sdc.scala 182:61]
         end
       end
     end
-    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 170:57]
-      if (_T & reg_clk) begin // @[Sdc.scala 172:47]
-        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 182:49]
-          rx_res_bits_63 <= rx_res_bits_62; // @[Sdc.scala 183:61]
+    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 169:57]
+      if (_T & reg_clk) begin // @[Sdc.scala 171:47]
+        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 181:49]
+          rx_res_bits_63 <= rx_res_bits_62; // @[Sdc.scala 182:61]
         end
       end
     end
-    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 170:57]
-      if (_T & reg_clk) begin // @[Sdc.scala 172:47]
-        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 182:49]
-          rx_res_bits_64 <= rx_res_bits_63; // @[Sdc.scala 183:61]
+    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 169:57]
+      if (_T & reg_clk) begin // @[Sdc.scala 171:47]
+        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 181:49]
+          rx_res_bits_64 <= rx_res_bits_63; // @[Sdc.scala 182:61]
         end
       end
     end
-    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 170:57]
-      if (_T & reg_clk) begin // @[Sdc.scala 172:47]
-        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 182:49]
-          rx_res_bits_65 <= rx_res_bits_64; // @[Sdc.scala 183:61]
+    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 169:57]
+      if (_T & reg_clk) begin // @[Sdc.scala 171:47]
+        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 181:49]
+          rx_res_bits_65 <= rx_res_bits_64; // @[Sdc.scala 182:61]
         end
       end
     end
-    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 170:57]
-      if (_T & reg_clk) begin // @[Sdc.scala 172:47]
-        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 182:49]
-          rx_res_bits_66 <= rx_res_bits_65; // @[Sdc.scala 183:61]
+    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 169:57]
+      if (_T & reg_clk) begin // @[Sdc.scala 171:47]
+        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 181:49]
+          rx_res_bits_66 <= rx_res_bits_65; // @[Sdc.scala 182:61]
         end
       end
     end
-    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 170:57]
-      if (_T & reg_clk) begin // @[Sdc.scala 172:47]
-        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 182:49]
-          rx_res_bits_67 <= rx_res_bits_66; // @[Sdc.scala 183:61]
+    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 169:57]
+      if (_T & reg_clk) begin // @[Sdc.scala 171:47]
+        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 181:49]
+          rx_res_bits_67 <= rx_res_bits_66; // @[Sdc.scala 182:61]
         end
       end
     end
-    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 170:57]
-      if (_T & reg_clk) begin // @[Sdc.scala 172:47]
-        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 182:49]
-          rx_res_bits_68 <= rx_res_bits_67; // @[Sdc.scala 183:61]
+    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 169:57]
+      if (_T & reg_clk) begin // @[Sdc.scala 171:47]
+        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 181:49]
+          rx_res_bits_68 <= rx_res_bits_67; // @[Sdc.scala 182:61]
         end
       end
     end
-    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 170:57]
-      if (_T & reg_clk) begin // @[Sdc.scala 172:47]
-        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 182:49]
-          rx_res_bits_69 <= rx_res_bits_68; // @[Sdc.scala 183:61]
+    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 169:57]
+      if (_T & reg_clk) begin // @[Sdc.scala 171:47]
+        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 181:49]
+          rx_res_bits_69 <= rx_res_bits_68; // @[Sdc.scala 182:61]
         end
       end
     end
-    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 170:57]
-      if (_T & reg_clk) begin // @[Sdc.scala 172:47]
-        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 182:49]
-          rx_res_bits_70 <= rx_res_bits_69; // @[Sdc.scala 183:61]
+    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 169:57]
+      if (_T & reg_clk) begin // @[Sdc.scala 171:47]
+        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 181:49]
+          rx_res_bits_70 <= rx_res_bits_69; // @[Sdc.scala 182:61]
         end
       end
     end
-    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 170:57]
-      if (_T & reg_clk) begin // @[Sdc.scala 172:47]
-        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 182:49]
-          rx_res_bits_71 <= rx_res_bits_70; // @[Sdc.scala 183:61]
+    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 169:57]
+      if (_T & reg_clk) begin // @[Sdc.scala 171:47]
+        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 181:49]
+          rx_res_bits_71 <= rx_res_bits_70; // @[Sdc.scala 182:61]
         end
       end
     end
-    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 170:57]
-      if (_T & reg_clk) begin // @[Sdc.scala 172:47]
-        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 182:49]
-          rx_res_bits_72 <= rx_res_bits_71; // @[Sdc.scala 183:61]
+    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 169:57]
+      if (_T & reg_clk) begin // @[Sdc.scala 171:47]
+        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 181:49]
+          rx_res_bits_72 <= rx_res_bits_71; // @[Sdc.scala 182:61]
         end
       end
     end
-    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 170:57]
-      if (_T & reg_clk) begin // @[Sdc.scala 172:47]
-        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 182:49]
-          rx_res_bits_73 <= rx_res_bits_72; // @[Sdc.scala 183:61]
+    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 169:57]
+      if (_T & reg_clk) begin // @[Sdc.scala 171:47]
+        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 181:49]
+          rx_res_bits_73 <= rx_res_bits_72; // @[Sdc.scala 182:61]
         end
       end
     end
-    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 170:57]
-      if (_T & reg_clk) begin // @[Sdc.scala 172:47]
-        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 182:49]
-          rx_res_bits_74 <= rx_res_bits_73; // @[Sdc.scala 183:61]
+    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 169:57]
+      if (_T & reg_clk) begin // @[Sdc.scala 171:47]
+        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 181:49]
+          rx_res_bits_74 <= rx_res_bits_73; // @[Sdc.scala 182:61]
         end
       end
     end
-    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 170:57]
-      if (_T & reg_clk) begin // @[Sdc.scala 172:47]
-        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 182:49]
-          rx_res_bits_75 <= rx_res_bits_74; // @[Sdc.scala 183:61]
+    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 169:57]
+      if (_T & reg_clk) begin // @[Sdc.scala 171:47]
+        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 181:49]
+          rx_res_bits_75 <= rx_res_bits_74; // @[Sdc.scala 182:61]
         end
       end
     end
-    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 170:57]
-      if (_T & reg_clk) begin // @[Sdc.scala 172:47]
-        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 182:49]
-          rx_res_bits_76 <= rx_res_bits_75; // @[Sdc.scala 183:61]
+    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 169:57]
+      if (_T & reg_clk) begin // @[Sdc.scala 171:47]
+        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 181:49]
+          rx_res_bits_76 <= rx_res_bits_75; // @[Sdc.scala 182:61]
         end
       end
     end
-    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 170:57]
-      if (_T & reg_clk) begin // @[Sdc.scala 172:47]
-        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 182:49]
-          rx_res_bits_77 <= rx_res_bits_76; // @[Sdc.scala 183:61]
+    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 169:57]
+      if (_T & reg_clk) begin // @[Sdc.scala 171:47]
+        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 181:49]
+          rx_res_bits_77 <= rx_res_bits_76; // @[Sdc.scala 182:61]
         end
       end
     end
-    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 170:57]
-      if (_T & reg_clk) begin // @[Sdc.scala 172:47]
-        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 182:49]
-          rx_res_bits_78 <= rx_res_bits_77; // @[Sdc.scala 183:61]
+    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 169:57]
+      if (_T & reg_clk) begin // @[Sdc.scala 171:47]
+        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 181:49]
+          rx_res_bits_78 <= rx_res_bits_77; // @[Sdc.scala 182:61]
         end
       end
     end
-    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 170:57]
-      if (_T & reg_clk) begin // @[Sdc.scala 172:47]
-        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 182:49]
-          rx_res_bits_79 <= rx_res_bits_78; // @[Sdc.scala 183:61]
+    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 169:57]
+      if (_T & reg_clk) begin // @[Sdc.scala 171:47]
+        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 181:49]
+          rx_res_bits_79 <= rx_res_bits_78; // @[Sdc.scala 182:61]
         end
       end
     end
-    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 170:57]
-      if (_T & reg_clk) begin // @[Sdc.scala 172:47]
-        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 182:49]
-          rx_res_bits_80 <= rx_res_bits_79; // @[Sdc.scala 183:61]
+    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 169:57]
+      if (_T & reg_clk) begin // @[Sdc.scala 171:47]
+        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 181:49]
+          rx_res_bits_80 <= rx_res_bits_79; // @[Sdc.scala 182:61]
         end
       end
     end
-    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 170:57]
-      if (_T & reg_clk) begin // @[Sdc.scala 172:47]
-        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 182:49]
-          rx_res_bits_81 <= rx_res_bits_80; // @[Sdc.scala 183:61]
+    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 169:57]
+      if (_T & reg_clk) begin // @[Sdc.scala 171:47]
+        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 181:49]
+          rx_res_bits_81 <= rx_res_bits_80; // @[Sdc.scala 182:61]
         end
       end
     end
-    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 170:57]
-      if (_T & reg_clk) begin // @[Sdc.scala 172:47]
-        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 182:49]
-          rx_res_bits_82 <= rx_res_bits_81; // @[Sdc.scala 183:61]
+    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 169:57]
+      if (_T & reg_clk) begin // @[Sdc.scala 171:47]
+        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 181:49]
+          rx_res_bits_82 <= rx_res_bits_81; // @[Sdc.scala 182:61]
         end
       end
     end
-    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 170:57]
-      if (_T & reg_clk) begin // @[Sdc.scala 172:47]
-        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 182:49]
-          rx_res_bits_83 <= rx_res_bits_82; // @[Sdc.scala 183:61]
+    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 169:57]
+      if (_T & reg_clk) begin // @[Sdc.scala 171:47]
+        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 181:49]
+          rx_res_bits_83 <= rx_res_bits_82; // @[Sdc.scala 182:61]
         end
       end
     end
-    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 170:57]
-      if (_T & reg_clk) begin // @[Sdc.scala 172:47]
-        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 182:49]
-          rx_res_bits_84 <= rx_res_bits_83; // @[Sdc.scala 183:61]
+    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 169:57]
+      if (_T & reg_clk) begin // @[Sdc.scala 171:47]
+        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 181:49]
+          rx_res_bits_84 <= rx_res_bits_83; // @[Sdc.scala 182:61]
         end
       end
     end
-    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 170:57]
-      if (_T & reg_clk) begin // @[Sdc.scala 172:47]
-        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 182:49]
-          rx_res_bits_85 <= rx_res_bits_84; // @[Sdc.scala 183:61]
+    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 169:57]
+      if (_T & reg_clk) begin // @[Sdc.scala 171:47]
+        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 181:49]
+          rx_res_bits_85 <= rx_res_bits_84; // @[Sdc.scala 182:61]
         end
       end
     end
-    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 170:57]
-      if (_T & reg_clk) begin // @[Sdc.scala 172:47]
-        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 182:49]
-          rx_res_bits_86 <= rx_res_bits_85; // @[Sdc.scala 183:61]
+    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 169:57]
+      if (_T & reg_clk) begin // @[Sdc.scala 171:47]
+        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 181:49]
+          rx_res_bits_86 <= rx_res_bits_85; // @[Sdc.scala 182:61]
         end
       end
     end
-    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 170:57]
-      if (_T & reg_clk) begin // @[Sdc.scala 172:47]
-        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 182:49]
-          rx_res_bits_87 <= rx_res_bits_86; // @[Sdc.scala 183:61]
+    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 169:57]
+      if (_T & reg_clk) begin // @[Sdc.scala 171:47]
+        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 181:49]
+          rx_res_bits_87 <= rx_res_bits_86; // @[Sdc.scala 182:61]
         end
       end
     end
-    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 170:57]
-      if (_T & reg_clk) begin // @[Sdc.scala 172:47]
-        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 182:49]
-          rx_res_bits_88 <= rx_res_bits_87; // @[Sdc.scala 183:61]
+    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 169:57]
+      if (_T & reg_clk) begin // @[Sdc.scala 171:47]
+        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 181:49]
+          rx_res_bits_88 <= rx_res_bits_87; // @[Sdc.scala 182:61]
         end
       end
     end
-    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 170:57]
-      if (_T & reg_clk) begin // @[Sdc.scala 172:47]
-        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 182:49]
-          rx_res_bits_89 <= rx_res_bits_88; // @[Sdc.scala 183:61]
+    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 169:57]
+      if (_T & reg_clk) begin // @[Sdc.scala 171:47]
+        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 181:49]
+          rx_res_bits_89 <= rx_res_bits_88; // @[Sdc.scala 182:61]
         end
       end
     end
-    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 170:57]
-      if (_T & reg_clk) begin // @[Sdc.scala 172:47]
-        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 182:49]
-          rx_res_bits_90 <= rx_res_bits_89; // @[Sdc.scala 183:61]
+    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 169:57]
+      if (_T & reg_clk) begin // @[Sdc.scala 171:47]
+        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 181:49]
+          rx_res_bits_90 <= rx_res_bits_89; // @[Sdc.scala 182:61]
         end
       end
     end
-    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 170:57]
-      if (_T & reg_clk) begin // @[Sdc.scala 172:47]
-        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 182:49]
-          rx_res_bits_91 <= rx_res_bits_90; // @[Sdc.scala 183:61]
+    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 169:57]
+      if (_T & reg_clk) begin // @[Sdc.scala 171:47]
+        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 181:49]
+          rx_res_bits_91 <= rx_res_bits_90; // @[Sdc.scala 182:61]
         end
       end
     end
-    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 170:57]
-      if (_T & reg_clk) begin // @[Sdc.scala 172:47]
-        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 182:49]
-          rx_res_bits_92 <= rx_res_bits_91; // @[Sdc.scala 183:61]
+    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 169:57]
+      if (_T & reg_clk) begin // @[Sdc.scala 171:47]
+        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 181:49]
+          rx_res_bits_92 <= rx_res_bits_91; // @[Sdc.scala 182:61]
         end
       end
     end
-    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 170:57]
-      if (_T & reg_clk) begin // @[Sdc.scala 172:47]
-        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 182:49]
-          rx_res_bits_93 <= rx_res_bits_92; // @[Sdc.scala 183:61]
+    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 169:57]
+      if (_T & reg_clk) begin // @[Sdc.scala 171:47]
+        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 181:49]
+          rx_res_bits_93 <= rx_res_bits_92; // @[Sdc.scala 182:61]
         end
       end
     end
-    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 170:57]
-      if (_T & reg_clk) begin // @[Sdc.scala 172:47]
-        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 182:49]
-          rx_res_bits_94 <= rx_res_bits_93; // @[Sdc.scala 183:61]
+    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 169:57]
+      if (_T & reg_clk) begin // @[Sdc.scala 171:47]
+        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 181:49]
+          rx_res_bits_94 <= rx_res_bits_93; // @[Sdc.scala 182:61]
         end
       end
     end
-    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 170:57]
-      if (_T & reg_clk) begin // @[Sdc.scala 172:47]
-        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 182:49]
-          rx_res_bits_95 <= rx_res_bits_94; // @[Sdc.scala 183:61]
+    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 169:57]
+      if (_T & reg_clk) begin // @[Sdc.scala 171:47]
+        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 181:49]
+          rx_res_bits_95 <= rx_res_bits_94; // @[Sdc.scala 182:61]
         end
       end
     end
-    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 170:57]
-      if (_T & reg_clk) begin // @[Sdc.scala 172:47]
-        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 182:49]
-          rx_res_bits_96 <= rx_res_bits_95; // @[Sdc.scala 183:61]
+    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 169:57]
+      if (_T & reg_clk) begin // @[Sdc.scala 171:47]
+        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 181:49]
+          rx_res_bits_96 <= rx_res_bits_95; // @[Sdc.scala 182:61]
         end
       end
     end
-    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 170:57]
-      if (_T & reg_clk) begin // @[Sdc.scala 172:47]
-        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 182:49]
-          rx_res_bits_97 <= rx_res_bits_96; // @[Sdc.scala 183:61]
+    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 169:57]
+      if (_T & reg_clk) begin // @[Sdc.scala 171:47]
+        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 181:49]
+          rx_res_bits_97 <= rx_res_bits_96; // @[Sdc.scala 182:61]
         end
       end
     end
-    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 170:57]
-      if (_T & reg_clk) begin // @[Sdc.scala 172:47]
-        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 182:49]
-          rx_res_bits_98 <= rx_res_bits_97; // @[Sdc.scala 183:61]
+    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 169:57]
+      if (_T & reg_clk) begin // @[Sdc.scala 171:47]
+        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 181:49]
+          rx_res_bits_98 <= rx_res_bits_97; // @[Sdc.scala 182:61]
         end
       end
     end
-    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 170:57]
-      if (_T & reg_clk) begin // @[Sdc.scala 172:47]
-        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 182:49]
-          rx_res_bits_99 <= rx_res_bits_98; // @[Sdc.scala 183:61]
+    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 169:57]
+      if (_T & reg_clk) begin // @[Sdc.scala 171:47]
+        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 181:49]
+          rx_res_bits_99 <= rx_res_bits_98; // @[Sdc.scala 182:61]
         end
       end
     end
-    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 170:57]
-      if (_T & reg_clk) begin // @[Sdc.scala 172:47]
-        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 182:49]
-          rx_res_bits_100 <= rx_res_bits_99; // @[Sdc.scala 183:61]
+    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 169:57]
+      if (_T & reg_clk) begin // @[Sdc.scala 171:47]
+        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 181:49]
+          rx_res_bits_100 <= rx_res_bits_99; // @[Sdc.scala 182:61]
         end
       end
     end
-    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 170:57]
-      if (_T & reg_clk) begin // @[Sdc.scala 172:47]
-        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 182:49]
-          rx_res_bits_101 <= rx_res_bits_100; // @[Sdc.scala 183:61]
+    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 169:57]
+      if (_T & reg_clk) begin // @[Sdc.scala 171:47]
+        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 181:49]
+          rx_res_bits_101 <= rx_res_bits_100; // @[Sdc.scala 182:61]
         end
       end
     end
-    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 170:57]
-      if (_T & reg_clk) begin // @[Sdc.scala 172:47]
-        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 182:49]
-          rx_res_bits_102 <= rx_res_bits_101; // @[Sdc.scala 183:61]
+    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 169:57]
+      if (_T & reg_clk) begin // @[Sdc.scala 171:47]
+        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 181:49]
+          rx_res_bits_102 <= rx_res_bits_101; // @[Sdc.scala 182:61]
         end
       end
     end
-    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 170:57]
-      if (_T & reg_clk) begin // @[Sdc.scala 172:47]
-        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 182:49]
-          rx_res_bits_103 <= rx_res_bits_102; // @[Sdc.scala 183:61]
+    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 169:57]
+      if (_T & reg_clk) begin // @[Sdc.scala 171:47]
+        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 181:49]
+          rx_res_bits_103 <= rx_res_bits_102; // @[Sdc.scala 182:61]
         end
       end
     end
-    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 170:57]
-      if (_T & reg_clk) begin // @[Sdc.scala 172:47]
-        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 182:49]
-          rx_res_bits_104 <= rx_res_bits_103; // @[Sdc.scala 183:61]
+    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 169:57]
+      if (_T & reg_clk) begin // @[Sdc.scala 171:47]
+        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 181:49]
+          rx_res_bits_104 <= rx_res_bits_103; // @[Sdc.scala 182:61]
         end
       end
     end
-    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 170:57]
-      if (_T & reg_clk) begin // @[Sdc.scala 172:47]
-        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 182:49]
-          rx_res_bits_105 <= rx_res_bits_104; // @[Sdc.scala 183:61]
+    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 169:57]
+      if (_T & reg_clk) begin // @[Sdc.scala 171:47]
+        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 181:49]
+          rx_res_bits_105 <= rx_res_bits_104; // @[Sdc.scala 182:61]
         end
       end
     end
-    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 170:57]
-      if (_T & reg_clk) begin // @[Sdc.scala 172:47]
-        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 182:49]
-          rx_res_bits_106 <= rx_res_bits_105; // @[Sdc.scala 183:61]
+    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 169:57]
+      if (_T & reg_clk) begin // @[Sdc.scala 171:47]
+        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 181:49]
+          rx_res_bits_106 <= rx_res_bits_105; // @[Sdc.scala 182:61]
         end
       end
     end
-    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 170:57]
-      if (_T & reg_clk) begin // @[Sdc.scala 172:47]
-        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 182:49]
-          rx_res_bits_107 <= rx_res_bits_106; // @[Sdc.scala 183:61]
+    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 169:57]
+      if (_T & reg_clk) begin // @[Sdc.scala 171:47]
+        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 181:49]
+          rx_res_bits_107 <= rx_res_bits_106; // @[Sdc.scala 182:61]
         end
       end
     end
-    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 170:57]
-      if (_T & reg_clk) begin // @[Sdc.scala 172:47]
-        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 182:49]
-          rx_res_bits_108 <= rx_res_bits_107; // @[Sdc.scala 183:61]
+    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 169:57]
+      if (_T & reg_clk) begin // @[Sdc.scala 171:47]
+        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 181:49]
+          rx_res_bits_108 <= rx_res_bits_107; // @[Sdc.scala 182:61]
         end
       end
     end
-    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 170:57]
-      if (_T & reg_clk) begin // @[Sdc.scala 172:47]
-        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 182:49]
-          rx_res_bits_109 <= rx_res_bits_108; // @[Sdc.scala 183:61]
+    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 169:57]
+      if (_T & reg_clk) begin // @[Sdc.scala 171:47]
+        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 181:49]
+          rx_res_bits_109 <= rx_res_bits_108; // @[Sdc.scala 182:61]
         end
       end
     end
-    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 170:57]
-      if (_T & reg_clk) begin // @[Sdc.scala 172:47]
-        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 182:49]
-          rx_res_bits_110 <= rx_res_bits_109; // @[Sdc.scala 183:61]
+    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 169:57]
+      if (_T & reg_clk) begin // @[Sdc.scala 171:47]
+        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 181:49]
+          rx_res_bits_110 <= rx_res_bits_109; // @[Sdc.scala 182:61]
         end
       end
     end
-    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 170:57]
-      if (_T & reg_clk) begin // @[Sdc.scala 172:47]
-        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 182:49]
-          rx_res_bits_111 <= rx_res_bits_110; // @[Sdc.scala 183:61]
+    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 169:57]
+      if (_T & reg_clk) begin // @[Sdc.scala 171:47]
+        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 181:49]
+          rx_res_bits_111 <= rx_res_bits_110; // @[Sdc.scala 182:61]
         end
       end
     end
-    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 170:57]
-      if (_T & reg_clk) begin // @[Sdc.scala 172:47]
-        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 182:49]
-          rx_res_bits_112 <= rx_res_bits_111; // @[Sdc.scala 183:61]
+    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 169:57]
+      if (_T & reg_clk) begin // @[Sdc.scala 171:47]
+        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 181:49]
+          rx_res_bits_112 <= rx_res_bits_111; // @[Sdc.scala 182:61]
         end
       end
     end
-    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 170:57]
-      if (_T & reg_clk) begin // @[Sdc.scala 172:47]
-        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 182:49]
-          rx_res_bits_113 <= rx_res_bits_112; // @[Sdc.scala 183:61]
+    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 169:57]
+      if (_T & reg_clk) begin // @[Sdc.scala 171:47]
+        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 181:49]
+          rx_res_bits_113 <= rx_res_bits_112; // @[Sdc.scala 182:61]
         end
       end
     end
-    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 170:57]
-      if (_T & reg_clk) begin // @[Sdc.scala 172:47]
-        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 182:49]
-          rx_res_bits_114 <= rx_res_bits_113; // @[Sdc.scala 183:61]
+    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 169:57]
+      if (_T & reg_clk) begin // @[Sdc.scala 171:47]
+        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 181:49]
+          rx_res_bits_114 <= rx_res_bits_113; // @[Sdc.scala 182:61]
         end
       end
     end
-    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 170:57]
-      if (_T & reg_clk) begin // @[Sdc.scala 172:47]
-        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 182:49]
-          rx_res_bits_115 <= rx_res_bits_114; // @[Sdc.scala 183:61]
+    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 169:57]
+      if (_T & reg_clk) begin // @[Sdc.scala 171:47]
+        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 181:49]
+          rx_res_bits_115 <= rx_res_bits_114; // @[Sdc.scala 182:61]
         end
       end
     end
-    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 170:57]
-      if (_T & reg_clk) begin // @[Sdc.scala 172:47]
-        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 182:49]
-          rx_res_bits_116 <= rx_res_bits_115; // @[Sdc.scala 183:61]
+    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 169:57]
+      if (_T & reg_clk) begin // @[Sdc.scala 171:47]
+        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 181:49]
+          rx_res_bits_116 <= rx_res_bits_115; // @[Sdc.scala 182:61]
         end
       end
     end
-    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 170:57]
-      if (_T & reg_clk) begin // @[Sdc.scala 172:47]
-        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 182:49]
-          rx_res_bits_117 <= rx_res_bits_116; // @[Sdc.scala 183:61]
+    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 169:57]
+      if (_T & reg_clk) begin // @[Sdc.scala 171:47]
+        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 181:49]
+          rx_res_bits_117 <= rx_res_bits_116; // @[Sdc.scala 182:61]
         end
       end
     end
-    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 170:57]
-      if (_T & reg_clk) begin // @[Sdc.scala 172:47]
-        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 182:49]
-          rx_res_bits_118 <= rx_res_bits_117; // @[Sdc.scala 183:61]
+    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 169:57]
+      if (_T & reg_clk) begin // @[Sdc.scala 171:47]
+        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 181:49]
+          rx_res_bits_118 <= rx_res_bits_117; // @[Sdc.scala 182:61]
         end
       end
     end
-    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 170:57]
-      if (_T & reg_clk) begin // @[Sdc.scala 172:47]
-        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 182:49]
-          rx_res_bits_119 <= rx_res_bits_118; // @[Sdc.scala 183:61]
+    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 169:57]
+      if (_T & reg_clk) begin // @[Sdc.scala 171:47]
+        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 181:49]
+          rx_res_bits_119 <= rx_res_bits_118; // @[Sdc.scala 182:61]
         end
       end
     end
-    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 170:57]
-      if (_T & reg_clk) begin // @[Sdc.scala 172:47]
-        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 182:49]
-          rx_res_bits_120 <= rx_res_bits_119; // @[Sdc.scala 183:61]
+    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 169:57]
+      if (_T & reg_clk) begin // @[Sdc.scala 171:47]
+        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 181:49]
+          rx_res_bits_120 <= rx_res_bits_119; // @[Sdc.scala 182:61]
         end
       end
     end
-    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 170:57]
-      if (_T & reg_clk) begin // @[Sdc.scala 172:47]
-        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 182:49]
-          rx_res_bits_121 <= rx_res_bits_120; // @[Sdc.scala 183:61]
+    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 169:57]
+      if (_T & reg_clk) begin // @[Sdc.scala 171:47]
+        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 181:49]
+          rx_res_bits_121 <= rx_res_bits_120; // @[Sdc.scala 182:61]
         end
       end
     end
-    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 170:57]
-      if (_T & reg_clk) begin // @[Sdc.scala 172:47]
-        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 182:49]
-          rx_res_bits_122 <= rx_res_bits_121; // @[Sdc.scala 183:61]
+    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 169:57]
+      if (_T & reg_clk) begin // @[Sdc.scala 171:47]
+        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 181:49]
+          rx_res_bits_122 <= rx_res_bits_121; // @[Sdc.scala 182:61]
         end
       end
     end
-    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 170:57]
-      if (_T & reg_clk) begin // @[Sdc.scala 172:47]
-        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 182:49]
-          rx_res_bits_123 <= rx_res_bits_122; // @[Sdc.scala 183:61]
+    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 169:57]
+      if (_T & reg_clk) begin // @[Sdc.scala 171:47]
+        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 181:49]
+          rx_res_bits_123 <= rx_res_bits_122; // @[Sdc.scala 182:61]
         end
       end
     end
-    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 170:57]
-      if (_T & reg_clk) begin // @[Sdc.scala 172:47]
-        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 182:49]
-          rx_res_bits_124 <= rx_res_bits_123; // @[Sdc.scala 183:61]
+    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 169:57]
+      if (_T & reg_clk) begin // @[Sdc.scala 171:47]
+        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 181:49]
+          rx_res_bits_124 <= rx_res_bits_123; // @[Sdc.scala 182:61]
         end
       end
     end
-    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 170:57]
-      if (_T & reg_clk) begin // @[Sdc.scala 172:47]
-        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 182:49]
-          rx_res_bits_125 <= rx_res_bits_124; // @[Sdc.scala 183:61]
+    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 169:57]
+      if (_T & reg_clk) begin // @[Sdc.scala 171:47]
+        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 181:49]
+          rx_res_bits_125 <= rx_res_bits_124; // @[Sdc.scala 182:61]
         end
       end
     end
-    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 170:57]
-      if (_T & reg_clk) begin // @[Sdc.scala 172:47]
-        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 182:49]
-          rx_res_bits_126 <= rx_res_bits_125; // @[Sdc.scala 183:61]
+    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 169:57]
+      if (_T & reg_clk) begin // @[Sdc.scala 171:47]
+        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 181:49]
+          rx_res_bits_126 <= rx_res_bits_125; // @[Sdc.scala 182:61]
         end
       end
     end
-    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 170:57]
-      if (_T & reg_clk) begin // @[Sdc.scala 172:47]
-        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 182:49]
-          rx_res_bits_127 <= rx_res_bits_126; // @[Sdc.scala 183:61]
+    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 169:57]
+      if (_T & reg_clk) begin // @[Sdc.scala 171:47]
+        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 181:49]
+          rx_res_bits_127 <= rx_res_bits_126; // @[Sdc.scala 182:61]
         end
       end
     end
-    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 170:57]
-      if (_T & reg_clk) begin // @[Sdc.scala 172:47]
-        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 182:49]
-          rx_res_bits_128 <= rx_res_bits_127; // @[Sdc.scala 183:61]
+    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 169:57]
+      if (_T & reg_clk) begin // @[Sdc.scala 171:47]
+        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 181:49]
+          rx_res_bits_128 <= rx_res_bits_127; // @[Sdc.scala 182:61]
         end
       end
     end
-    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 170:57]
-      if (_T & reg_clk) begin // @[Sdc.scala 172:47]
-        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 182:49]
-          rx_res_bits_129 <= rx_res_bits_128; // @[Sdc.scala 183:61]
+    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 169:57]
+      if (_T & reg_clk) begin // @[Sdc.scala 171:47]
+        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 181:49]
+          rx_res_bits_129 <= rx_res_bits_128; // @[Sdc.scala 182:61]
         end
       end
     end
-    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 170:57]
-      if (_T & reg_clk) begin // @[Sdc.scala 172:47]
-        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 182:49]
-          rx_res_bits_130 <= rx_res_bits_129; // @[Sdc.scala 183:61]
+    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 169:57]
+      if (_T & reg_clk) begin // @[Sdc.scala 171:47]
+        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 181:49]
+          rx_res_bits_130 <= rx_res_bits_129; // @[Sdc.scala 182:61]
         end
       end
     end
-    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 170:57]
-      if (_T & reg_clk) begin // @[Sdc.scala 172:47]
-        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 182:49]
-          rx_res_bits_131 <= rx_res_bits_130; // @[Sdc.scala 183:61]
+    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 169:57]
+      if (_T & reg_clk) begin // @[Sdc.scala 171:47]
+        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 181:49]
+          rx_res_bits_131 <= rx_res_bits_130; // @[Sdc.scala 182:61]
         end
       end
     end
-    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 170:57]
-      if (_T & reg_clk) begin // @[Sdc.scala 172:47]
-        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 182:49]
-          rx_res_bits_132 <= rx_res_bits_131; // @[Sdc.scala 183:61]
+    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 169:57]
+      if (_T & reg_clk) begin // @[Sdc.scala 171:47]
+        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 181:49]
+          rx_res_bits_132 <= rx_res_bits_131; // @[Sdc.scala 182:61]
         end
       end
     end
-    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 170:57]
-      if (_T & reg_clk) begin // @[Sdc.scala 172:47]
-        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 182:49]
-          rx_res_bits_133 <= rx_res_bits_132; // @[Sdc.scala 183:61]
+    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 169:57]
+      if (_T & reg_clk) begin // @[Sdc.scala 171:47]
+        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 181:49]
+          rx_res_bits_133 <= rx_res_bits_132; // @[Sdc.scala 182:61]
         end
       end
     end
-    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 170:57]
-      if (_T & reg_clk) begin // @[Sdc.scala 172:47]
-        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 182:49]
-          rx_res_bits_134 <= rx_res_bits_133; // @[Sdc.scala 183:61]
+    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 169:57]
+      if (_T & reg_clk) begin // @[Sdc.scala 171:47]
+        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 181:49]
+          rx_res_bits_134 <= rx_res_bits_133; // @[Sdc.scala 182:61]
         end
       end
     end
-    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 170:57]
-      if (_T & reg_clk) begin // @[Sdc.scala 172:47]
-        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 182:49]
-          rx_res_bits_135 <= rx_res_bits_134; // @[Sdc.scala 183:61]
+    if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 169:57]
+      if (_T & reg_clk) begin // @[Sdc.scala 171:47]
+        if (rx_res_in_progress | ~rx_res_next) begin // @[Sdc.scala 181:49]
+          rx_res_bits_135 <= rx_res_bits_134; // @[Sdc.scala 182:61]
         end
       end
+    end
+    if (reset) begin // @[Sdc.scala 107:28]
+      rx_res_next <= 1'h0; // @[Sdc.scala 107:28]
+    end else if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 169:57]
+      rx_res_next <= io_sdc_port_res_in; // @[Sdc.scala 170:17]
     end
     if (reset) begin // @[Sdc.scala 108:28]
-      rx_res_next <= 1'h0; // @[Sdc.scala 108:28]
-    end else if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 170:57]
-      rx_res_next <= io_sdc_port_res_in; // @[Sdc.scala 171:17]
-    end
-    if (reset) begin // @[Sdc.scala 109:28]
-      rx_res_type <= 4'h0; // @[Sdc.scala 109:28]
-    end else if (io_mem_wen) begin // @[Sdc.scala 506:21]
-      if (!(2'h0 == addr)) begin // @[Sdc.scala 508:19]
-        if (2'h1 == addr) begin // @[Sdc.scala 508:19]
+      rx_res_type <= 4'h0; // @[Sdc.scala 108:28]
+    end else if (io_mem_wen) begin // @[Sdc.scala 505:21]
+      if (!(2'h0 == addr)) begin // @[Sdc.scala 507:19]
+        if (2'h1 == addr) begin // @[Sdc.scala 507:19]
           rx_res_type <= _GEN_1273;
         end
       end
     end
-    rx_res <= _GEN_1726[135:0]; // @[Sdc.scala 110:{23,23}]
-    if (reset) begin // @[Sdc.scala 111:29]
-      rx_res_ready <= 1'h0; // @[Sdc.scala 111:29]
-    end else if (io_mem_ren) begin // @[Sdc.scala 600:21]
-      if (2'h0 == addr_1) begin // @[Sdc.scala 602:19]
+    rx_res <= _GEN_1726[135:0]; // @[Sdc.scala 109:{23,23}]
+    if (reset) begin // @[Sdc.scala 110:29]
+      rx_res_ready <= 1'h0; // @[Sdc.scala 110:29]
+    end else if (io_mem_ren) begin // @[Sdc.scala 599:21]
+      if (2'h0 == addr_1) begin // @[Sdc.scala 601:19]
         rx_res_ready <= _GEN_1633;
-      end else if (2'h1 == addr_1) begin // @[Sdc.scala 602:19]
+      end else if (2'h1 == addr_1) begin // @[Sdc.scala 601:19]
         rx_res_ready <= _GEN_1633;
       end else begin
         rx_res_ready <= _GEN_1700;
@@ -10570,19 +10570,19 @@ module Sdc(
     end else begin
       rx_res_ready <= _GEN_1633;
     end
-    if (reset) begin // @[Sdc.scala 112:31]
-      rx_res_intr_en <= 1'h0; // @[Sdc.scala 112:31]
-    end else if (io_mem_wen) begin // @[Sdc.scala 506:21]
-      if (2'h0 == addr) begin // @[Sdc.scala 508:19]
-        rx_res_intr_en <= io_mem_wdata[16]; // @[Sdc.scala 516:26]
+    if (reset) begin // @[Sdc.scala 111:31]
+      rx_res_intr_en <= 1'h0; // @[Sdc.scala 111:31]
+    end else if (io_mem_wen) begin // @[Sdc.scala 505:21]
+      if (2'h0 == addr) begin // @[Sdc.scala 507:19]
+        rx_res_intr_en <= io_mem_wdata[16]; // @[Sdc.scala 515:26]
       end
     end
-    if (io_mem_wen) begin // @[Sdc.scala 506:21]
-      if (2'h0 == addr) begin // @[Sdc.scala 508:19]
+    if (io_mem_wen) begin // @[Sdc.scala 505:21]
+      if (2'h0 == addr) begin // @[Sdc.scala 507:19]
         rx_res_crc_0 <= _GEN_465;
-      end else if (2'h1 == addr) begin // @[Sdc.scala 508:19]
-        if (io_mem_wdata[11]) begin // @[Sdc.scala 522:40]
-          rx_res_crc_0 <= 1'h0; // @[Sdc.scala 530:22]
+      end else if (2'h1 == addr) begin // @[Sdc.scala 507:19]
+        if (io_mem_wdata[11]) begin // @[Sdc.scala 521:40]
+          rx_res_crc_0 <= 1'h0; // @[Sdc.scala 529:22]
         end else begin
           rx_res_crc_0 <= _GEN_465;
         end
@@ -10592,12 +10592,12 @@ module Sdc(
     end else begin
       rx_res_crc_0 <= _GEN_465;
     end
-    if (io_mem_wen) begin // @[Sdc.scala 506:21]
-      if (2'h0 == addr) begin // @[Sdc.scala 508:19]
+    if (io_mem_wen) begin // @[Sdc.scala 505:21]
+      if (2'h0 == addr) begin // @[Sdc.scala 507:19]
         rx_res_crc_1 <= _GEN_466;
-      end else if (2'h1 == addr) begin // @[Sdc.scala 508:19]
-        if (io_mem_wdata[11]) begin // @[Sdc.scala 522:40]
-          rx_res_crc_1 <= 1'h0; // @[Sdc.scala 530:22]
+      end else if (2'h1 == addr) begin // @[Sdc.scala 507:19]
+        if (io_mem_wdata[11]) begin // @[Sdc.scala 521:40]
+          rx_res_crc_1 <= 1'h0; // @[Sdc.scala 529:22]
         end else begin
           rx_res_crc_1 <= _GEN_466;
         end
@@ -10607,12 +10607,12 @@ module Sdc(
     end else begin
       rx_res_crc_1 <= _GEN_466;
     end
-    if (io_mem_wen) begin // @[Sdc.scala 506:21]
-      if (2'h0 == addr) begin // @[Sdc.scala 508:19]
+    if (io_mem_wen) begin // @[Sdc.scala 505:21]
+      if (2'h0 == addr) begin // @[Sdc.scala 507:19]
         rx_res_crc_2 <= _GEN_467;
-      end else if (2'h1 == addr) begin // @[Sdc.scala 508:19]
-        if (io_mem_wdata[11]) begin // @[Sdc.scala 522:40]
-          rx_res_crc_2 <= 1'h0; // @[Sdc.scala 530:22]
+      end else if (2'h1 == addr) begin // @[Sdc.scala 507:19]
+        if (io_mem_wdata[11]) begin // @[Sdc.scala 521:40]
+          rx_res_crc_2 <= 1'h0; // @[Sdc.scala 529:22]
         end else begin
           rx_res_crc_2 <= _GEN_467;
         end
@@ -10622,12 +10622,12 @@ module Sdc(
     end else begin
       rx_res_crc_2 <= _GEN_467;
     end
-    if (io_mem_wen) begin // @[Sdc.scala 506:21]
-      if (2'h0 == addr) begin // @[Sdc.scala 508:19]
+    if (io_mem_wen) begin // @[Sdc.scala 505:21]
+      if (2'h0 == addr) begin // @[Sdc.scala 507:19]
         rx_res_crc_3 <= _GEN_468;
-      end else if (2'h1 == addr) begin // @[Sdc.scala 508:19]
-        if (io_mem_wdata[11]) begin // @[Sdc.scala 522:40]
-          rx_res_crc_3 <= 1'h0; // @[Sdc.scala 530:22]
+      end else if (2'h1 == addr) begin // @[Sdc.scala 507:19]
+        if (io_mem_wdata[11]) begin // @[Sdc.scala 521:40]
+          rx_res_crc_3 <= 1'h0; // @[Sdc.scala 529:22]
         end else begin
           rx_res_crc_3 <= _GEN_468;
         end
@@ -10637,12 +10637,12 @@ module Sdc(
     end else begin
       rx_res_crc_3 <= _GEN_468;
     end
-    if (io_mem_wen) begin // @[Sdc.scala 506:21]
-      if (2'h0 == addr) begin // @[Sdc.scala 508:19]
+    if (io_mem_wen) begin // @[Sdc.scala 505:21]
+      if (2'h0 == addr) begin // @[Sdc.scala 507:19]
         rx_res_crc_4 <= _GEN_469;
-      end else if (2'h1 == addr) begin // @[Sdc.scala 508:19]
-        if (io_mem_wdata[11]) begin // @[Sdc.scala 522:40]
-          rx_res_crc_4 <= 1'h0; // @[Sdc.scala 530:22]
+      end else if (2'h1 == addr) begin // @[Sdc.scala 507:19]
+        if (io_mem_wdata[11]) begin // @[Sdc.scala 521:40]
+          rx_res_crc_4 <= 1'h0; // @[Sdc.scala 529:22]
         end else begin
           rx_res_crc_4 <= _GEN_469;
         end
@@ -10652,12 +10652,12 @@ module Sdc(
     end else begin
       rx_res_crc_4 <= _GEN_469;
     end
-    if (io_mem_wen) begin // @[Sdc.scala 506:21]
-      if (2'h0 == addr) begin // @[Sdc.scala 508:19]
+    if (io_mem_wen) begin // @[Sdc.scala 505:21]
+      if (2'h0 == addr) begin // @[Sdc.scala 507:19]
         rx_res_crc_5 <= _GEN_470;
-      end else if (2'h1 == addr) begin // @[Sdc.scala 508:19]
-        if (io_mem_wdata[11]) begin // @[Sdc.scala 522:40]
-          rx_res_crc_5 <= 1'h0; // @[Sdc.scala 530:22]
+      end else if (2'h1 == addr) begin // @[Sdc.scala 507:19]
+        if (io_mem_wdata[11]) begin // @[Sdc.scala 521:40]
+          rx_res_crc_5 <= 1'h0; // @[Sdc.scala 529:22]
         end else begin
           rx_res_crc_5 <= _GEN_470;
         end
@@ -10667,12 +10667,12 @@ module Sdc(
     end else begin
       rx_res_crc_5 <= _GEN_470;
     end
-    if (io_mem_wen) begin // @[Sdc.scala 506:21]
-      if (2'h0 == addr) begin // @[Sdc.scala 508:19]
+    if (io_mem_wen) begin // @[Sdc.scala 505:21]
+      if (2'h0 == addr) begin // @[Sdc.scala 507:19]
         rx_res_crc_6 <= _GEN_471;
-      end else if (2'h1 == addr) begin // @[Sdc.scala 508:19]
-        if (io_mem_wdata[11]) begin // @[Sdc.scala 522:40]
-          rx_res_crc_6 <= 1'h0; // @[Sdc.scala 530:22]
+      end else if (2'h1 == addr) begin // @[Sdc.scala 507:19]
+        if (io_mem_wdata[11]) begin // @[Sdc.scala 521:40]
+          rx_res_crc_6 <= 1'h0; // @[Sdc.scala 529:22]
         end else begin
           rx_res_crc_6 <= _GEN_471;
         end
@@ -10682,12 +10682,12 @@ module Sdc(
     end else begin
       rx_res_crc_6 <= _GEN_471;
     end
-    if (reset) begin // @[Sdc.scala 114:33]
-      rx_res_crc_error <= 1'h0; // @[Sdc.scala 114:33]
-    end else if (io_mem_wen) begin // @[Sdc.scala 506:21]
-      if (2'h0 == addr) begin // @[Sdc.scala 508:19]
+    if (reset) begin // @[Sdc.scala 113:33]
+      rx_res_crc_error <= 1'h0; // @[Sdc.scala 113:33]
+    end else if (io_mem_wen) begin // @[Sdc.scala 505:21]
+      if (2'h0 == addr) begin // @[Sdc.scala 507:19]
         rx_res_crc_error <= _GEN_472;
-      end else if (2'h1 == addr) begin // @[Sdc.scala 508:19]
+      end else if (2'h1 == addr) begin // @[Sdc.scala 507:19]
         rx_res_crc_error <= _GEN_1283;
       end else begin
         rx_res_crc_error <= _GEN_472;
@@ -10695,21 +10695,21 @@ module Sdc(
     end else begin
       rx_res_crc_error <= _GEN_472;
     end
-    if (reset) begin // @[Sdc.scala 115:30]
-      rx_res_crc_en <= 1'h0; // @[Sdc.scala 115:30]
-    end else if (io_mem_wen) begin // @[Sdc.scala 506:21]
-      if (!(2'h0 == addr)) begin // @[Sdc.scala 508:19]
-        if (2'h1 == addr) begin // @[Sdc.scala 508:19]
+    if (reset) begin // @[Sdc.scala 114:30]
+      rx_res_crc_en <= 1'h0; // @[Sdc.scala 114:30]
+    end else if (io_mem_wen) begin // @[Sdc.scala 505:21]
+      if (!(2'h0 == addr)) begin // @[Sdc.scala 507:19]
+        if (2'h1 == addr) begin // @[Sdc.scala 507:19]
           rx_res_crc_en <= _GEN_1284;
         end
       end
     end
-    if (reset) begin // @[Sdc.scala 116:29]
-      rx_res_timer <= 8'h0; // @[Sdc.scala 116:29]
-    end else if (io_mem_wen) begin // @[Sdc.scala 506:21]
-      if (2'h0 == addr) begin // @[Sdc.scala 508:19]
+    if (reset) begin // @[Sdc.scala 115:29]
+      rx_res_timer <= 8'h0; // @[Sdc.scala 115:29]
+    end else if (io_mem_wen) begin // @[Sdc.scala 505:21]
+      if (2'h0 == addr) begin // @[Sdc.scala 507:19]
         rx_res_timer <= _GEN_323;
-      end else if (2'h1 == addr) begin // @[Sdc.scala 508:19]
+      end else if (2'h1 == addr) begin // @[Sdc.scala 507:19]
         rx_res_timer <= _GEN_1285;
       end else begin
         rx_res_timer <= _GEN_323;
@@ -10717,12 +10717,12 @@ module Sdc(
     end else begin
       rx_res_timer <= _GEN_323;
     end
-    if (reset) begin // @[Sdc.scala 117:31]
-      rx_res_timeout <= 1'h0; // @[Sdc.scala 117:31]
-    end else if (io_mem_wen) begin // @[Sdc.scala 506:21]
-      if (2'h0 == addr) begin // @[Sdc.scala 508:19]
+    if (reset) begin // @[Sdc.scala 116:31]
+      rx_res_timeout <= 1'h0; // @[Sdc.scala 116:31]
+    end else if (io_mem_wen) begin // @[Sdc.scala 505:21]
+      if (2'h0 == addr) begin // @[Sdc.scala 507:19]
         rx_res_timeout <= _GEN_327;
-      end else if (2'h1 == addr) begin // @[Sdc.scala 508:19]
+      end else if (2'h1 == addr) begin // @[Sdc.scala 507:19]
         rx_res_timeout <= _GEN_1286;
       end else begin
         rx_res_timeout <= _GEN_327;
@@ -10730,12 +10730,12 @@ module Sdc(
     end else begin
       rx_res_timeout <= _GEN_327;
     end
-    if (reset) begin // @[Sdc.scala 118:36]
-      rx_res_read_counter <= 2'h0; // @[Sdc.scala 118:36]
-    end else if (io_mem_ren) begin // @[Sdc.scala 600:21]
-      if (2'h0 == addr_1) begin // @[Sdc.scala 602:19]
+    if (reset) begin // @[Sdc.scala 117:36]
+      rx_res_read_counter <= 2'h0; // @[Sdc.scala 117:36]
+    end else if (io_mem_ren) begin // @[Sdc.scala 599:21]
+      if (2'h0 == addr_1) begin // @[Sdc.scala 601:19]
         rx_res_read_counter <= _GEN_1645;
-      end else if (2'h1 == addr_1) begin // @[Sdc.scala 602:19]
+      end else if (2'h1 == addr_1) begin // @[Sdc.scala 601:19]
         rx_res_read_counter <= _GEN_1645;
       end else begin
         rx_res_read_counter <= _GEN_1698;
@@ -10743,21 +10743,21 @@ module Sdc(
     end else begin
       rx_res_read_counter <= _GEN_1645;
     end
-    if (reset) begin // @[Sdc.scala 119:27]
-      tx_cmd_arg <= 32'h0; // @[Sdc.scala 119:27]
-    end else if (io_mem_wen) begin // @[Sdc.scala 506:21]
-      if (!(2'h0 == addr)) begin // @[Sdc.scala 508:19]
-        if (!(2'h1 == addr)) begin // @[Sdc.scala 508:19]
+    if (reset) begin // @[Sdc.scala 118:27]
+      tx_cmd_arg <= 32'h0; // @[Sdc.scala 118:27]
+    end else if (io_mem_wen) begin // @[Sdc.scala 505:21]
+      if (!(2'h0 == addr)) begin // @[Sdc.scala 507:19]
+        if (!(2'h1 == addr)) begin // @[Sdc.scala 507:19]
           tx_cmd_arg <= _GEN_1335;
         end
       end
     end
-    if (io_mem_wen) begin // @[Sdc.scala 506:21]
-      if (2'h0 == addr) begin // @[Sdc.scala 508:19]
+    if (io_mem_wen) begin // @[Sdc.scala 505:21]
+      if (2'h0 == addr) begin // @[Sdc.scala 507:19]
         tx_cmd_0 <= _GEN_601;
-      end else if (2'h1 == addr) begin // @[Sdc.scala 508:19]
-        if (io_mem_wdata[11]) begin // @[Sdc.scala 522:40]
-          tx_cmd_0 <= tx_cmd_val[47]; // @[Sdc.scala 524:18]
+      end else if (2'h1 == addr) begin // @[Sdc.scala 507:19]
+        if (io_mem_wdata[11]) begin // @[Sdc.scala 521:40]
+          tx_cmd_0 <= tx_cmd_val[47]; // @[Sdc.scala 523:18]
         end else begin
           tx_cmd_0 <= _GEN_601;
         end
@@ -10767,12 +10767,12 @@ module Sdc(
     end else begin
       tx_cmd_0 <= _GEN_601;
     end
-    if (io_mem_wen) begin // @[Sdc.scala 506:21]
-      if (2'h0 == addr) begin // @[Sdc.scala 508:19]
+    if (io_mem_wen) begin // @[Sdc.scala 505:21]
+      if (2'h0 == addr) begin // @[Sdc.scala 507:19]
         tx_cmd_1 <= _GEN_602;
-      end else if (2'h1 == addr) begin // @[Sdc.scala 508:19]
-        if (io_mem_wdata[11]) begin // @[Sdc.scala 522:40]
-          tx_cmd_1 <= tx_cmd_val[46]; // @[Sdc.scala 524:18]
+      end else if (2'h1 == addr) begin // @[Sdc.scala 507:19]
+        if (io_mem_wdata[11]) begin // @[Sdc.scala 521:40]
+          tx_cmd_1 <= tx_cmd_val[46]; // @[Sdc.scala 523:18]
         end else begin
           tx_cmd_1 <= _GEN_602;
         end
@@ -10782,12 +10782,12 @@ module Sdc(
     end else begin
       tx_cmd_1 <= _GEN_602;
     end
-    if (io_mem_wen) begin // @[Sdc.scala 506:21]
-      if (2'h0 == addr) begin // @[Sdc.scala 508:19]
+    if (io_mem_wen) begin // @[Sdc.scala 505:21]
+      if (2'h0 == addr) begin // @[Sdc.scala 507:19]
         tx_cmd_2 <= _GEN_603;
-      end else if (2'h1 == addr) begin // @[Sdc.scala 508:19]
-        if (io_mem_wdata[11]) begin // @[Sdc.scala 522:40]
-          tx_cmd_2 <= tx_cmd_val[45]; // @[Sdc.scala 524:18]
+      end else if (2'h1 == addr) begin // @[Sdc.scala 507:19]
+        if (io_mem_wdata[11]) begin // @[Sdc.scala 521:40]
+          tx_cmd_2 <= tx_cmd_val[45]; // @[Sdc.scala 523:18]
         end else begin
           tx_cmd_2 <= _GEN_603;
         end
@@ -10797,12 +10797,12 @@ module Sdc(
     end else begin
       tx_cmd_2 <= _GEN_603;
     end
-    if (io_mem_wen) begin // @[Sdc.scala 506:21]
-      if (2'h0 == addr) begin // @[Sdc.scala 508:19]
+    if (io_mem_wen) begin // @[Sdc.scala 505:21]
+      if (2'h0 == addr) begin // @[Sdc.scala 507:19]
         tx_cmd_3 <= _GEN_604;
-      end else if (2'h1 == addr) begin // @[Sdc.scala 508:19]
-        if (io_mem_wdata[11]) begin // @[Sdc.scala 522:40]
-          tx_cmd_3 <= tx_cmd_val[44]; // @[Sdc.scala 524:18]
+      end else if (2'h1 == addr) begin // @[Sdc.scala 507:19]
+        if (io_mem_wdata[11]) begin // @[Sdc.scala 521:40]
+          tx_cmd_3 <= tx_cmd_val[44]; // @[Sdc.scala 523:18]
         end else begin
           tx_cmd_3 <= _GEN_604;
         end
@@ -10812,12 +10812,12 @@ module Sdc(
     end else begin
       tx_cmd_3 <= _GEN_604;
     end
-    if (io_mem_wen) begin // @[Sdc.scala 506:21]
-      if (2'h0 == addr) begin // @[Sdc.scala 508:19]
+    if (io_mem_wen) begin // @[Sdc.scala 505:21]
+      if (2'h0 == addr) begin // @[Sdc.scala 507:19]
         tx_cmd_4 <= _GEN_605;
-      end else if (2'h1 == addr) begin // @[Sdc.scala 508:19]
-        if (io_mem_wdata[11]) begin // @[Sdc.scala 522:40]
-          tx_cmd_4 <= tx_cmd_val[43]; // @[Sdc.scala 524:18]
+      end else if (2'h1 == addr) begin // @[Sdc.scala 507:19]
+        if (io_mem_wdata[11]) begin // @[Sdc.scala 521:40]
+          tx_cmd_4 <= tx_cmd_val[43]; // @[Sdc.scala 523:18]
         end else begin
           tx_cmd_4 <= _GEN_605;
         end
@@ -10827,12 +10827,12 @@ module Sdc(
     end else begin
       tx_cmd_4 <= _GEN_605;
     end
-    if (io_mem_wen) begin // @[Sdc.scala 506:21]
-      if (2'h0 == addr) begin // @[Sdc.scala 508:19]
+    if (io_mem_wen) begin // @[Sdc.scala 505:21]
+      if (2'h0 == addr) begin // @[Sdc.scala 507:19]
         tx_cmd_5 <= _GEN_606;
-      end else if (2'h1 == addr) begin // @[Sdc.scala 508:19]
-        if (io_mem_wdata[11]) begin // @[Sdc.scala 522:40]
-          tx_cmd_5 <= tx_cmd_val[42]; // @[Sdc.scala 524:18]
+      end else if (2'h1 == addr) begin // @[Sdc.scala 507:19]
+        if (io_mem_wdata[11]) begin // @[Sdc.scala 521:40]
+          tx_cmd_5 <= tx_cmd_val[42]; // @[Sdc.scala 523:18]
         end else begin
           tx_cmd_5 <= _GEN_606;
         end
@@ -10842,12 +10842,12 @@ module Sdc(
     end else begin
       tx_cmd_5 <= _GEN_606;
     end
-    if (io_mem_wen) begin // @[Sdc.scala 506:21]
-      if (2'h0 == addr) begin // @[Sdc.scala 508:19]
+    if (io_mem_wen) begin // @[Sdc.scala 505:21]
+      if (2'h0 == addr) begin // @[Sdc.scala 507:19]
         tx_cmd_6 <= _GEN_607;
-      end else if (2'h1 == addr) begin // @[Sdc.scala 508:19]
-        if (io_mem_wdata[11]) begin // @[Sdc.scala 522:40]
-          tx_cmd_6 <= tx_cmd_val[41]; // @[Sdc.scala 524:18]
+      end else if (2'h1 == addr) begin // @[Sdc.scala 507:19]
+        if (io_mem_wdata[11]) begin // @[Sdc.scala 521:40]
+          tx_cmd_6 <= tx_cmd_val[41]; // @[Sdc.scala 523:18]
         end else begin
           tx_cmd_6 <= _GEN_607;
         end
@@ -10857,12 +10857,12 @@ module Sdc(
     end else begin
       tx_cmd_6 <= _GEN_607;
     end
-    if (io_mem_wen) begin // @[Sdc.scala 506:21]
-      if (2'h0 == addr) begin // @[Sdc.scala 508:19]
+    if (io_mem_wen) begin // @[Sdc.scala 505:21]
+      if (2'h0 == addr) begin // @[Sdc.scala 507:19]
         tx_cmd_7 <= _GEN_608;
-      end else if (2'h1 == addr) begin // @[Sdc.scala 508:19]
-        if (io_mem_wdata[11]) begin // @[Sdc.scala 522:40]
-          tx_cmd_7 <= tx_cmd_val[40]; // @[Sdc.scala 524:18]
+      end else if (2'h1 == addr) begin // @[Sdc.scala 507:19]
+        if (io_mem_wdata[11]) begin // @[Sdc.scala 521:40]
+          tx_cmd_7 <= tx_cmd_val[40]; // @[Sdc.scala 523:18]
         end else begin
           tx_cmd_7 <= _GEN_608;
         end
@@ -10872,12 +10872,12 @@ module Sdc(
     end else begin
       tx_cmd_7 <= _GEN_608;
     end
-    if (io_mem_wen) begin // @[Sdc.scala 506:21]
-      if (2'h0 == addr) begin // @[Sdc.scala 508:19]
+    if (io_mem_wen) begin // @[Sdc.scala 505:21]
+      if (2'h0 == addr) begin // @[Sdc.scala 507:19]
         tx_cmd_8 <= _GEN_609;
-      end else if (2'h1 == addr) begin // @[Sdc.scala 508:19]
-        if (io_mem_wdata[11]) begin // @[Sdc.scala 522:40]
-          tx_cmd_8 <= tx_cmd_val[39]; // @[Sdc.scala 524:18]
+      end else if (2'h1 == addr) begin // @[Sdc.scala 507:19]
+        if (io_mem_wdata[11]) begin // @[Sdc.scala 521:40]
+          tx_cmd_8 <= tx_cmd_val[39]; // @[Sdc.scala 523:18]
         end else begin
           tx_cmd_8 <= _GEN_609;
         end
@@ -10887,12 +10887,12 @@ module Sdc(
     end else begin
       tx_cmd_8 <= _GEN_609;
     end
-    if (io_mem_wen) begin // @[Sdc.scala 506:21]
-      if (2'h0 == addr) begin // @[Sdc.scala 508:19]
+    if (io_mem_wen) begin // @[Sdc.scala 505:21]
+      if (2'h0 == addr) begin // @[Sdc.scala 507:19]
         tx_cmd_9 <= _GEN_610;
-      end else if (2'h1 == addr) begin // @[Sdc.scala 508:19]
-        if (io_mem_wdata[11]) begin // @[Sdc.scala 522:40]
-          tx_cmd_9 <= tx_cmd_val[38]; // @[Sdc.scala 524:18]
+      end else if (2'h1 == addr) begin // @[Sdc.scala 507:19]
+        if (io_mem_wdata[11]) begin // @[Sdc.scala 521:40]
+          tx_cmd_9 <= tx_cmd_val[38]; // @[Sdc.scala 523:18]
         end else begin
           tx_cmd_9 <= _GEN_610;
         end
@@ -10902,12 +10902,12 @@ module Sdc(
     end else begin
       tx_cmd_9 <= _GEN_610;
     end
-    if (io_mem_wen) begin // @[Sdc.scala 506:21]
-      if (2'h0 == addr) begin // @[Sdc.scala 508:19]
+    if (io_mem_wen) begin // @[Sdc.scala 505:21]
+      if (2'h0 == addr) begin // @[Sdc.scala 507:19]
         tx_cmd_10 <= _GEN_611;
-      end else if (2'h1 == addr) begin // @[Sdc.scala 508:19]
-        if (io_mem_wdata[11]) begin // @[Sdc.scala 522:40]
-          tx_cmd_10 <= tx_cmd_val[37]; // @[Sdc.scala 524:18]
+      end else if (2'h1 == addr) begin // @[Sdc.scala 507:19]
+        if (io_mem_wdata[11]) begin // @[Sdc.scala 521:40]
+          tx_cmd_10 <= tx_cmd_val[37]; // @[Sdc.scala 523:18]
         end else begin
           tx_cmd_10 <= _GEN_611;
         end
@@ -10917,12 +10917,12 @@ module Sdc(
     end else begin
       tx_cmd_10 <= _GEN_611;
     end
-    if (io_mem_wen) begin // @[Sdc.scala 506:21]
-      if (2'h0 == addr) begin // @[Sdc.scala 508:19]
+    if (io_mem_wen) begin // @[Sdc.scala 505:21]
+      if (2'h0 == addr) begin // @[Sdc.scala 507:19]
         tx_cmd_11 <= _GEN_612;
-      end else if (2'h1 == addr) begin // @[Sdc.scala 508:19]
-        if (io_mem_wdata[11]) begin // @[Sdc.scala 522:40]
-          tx_cmd_11 <= tx_cmd_val[36]; // @[Sdc.scala 524:18]
+      end else if (2'h1 == addr) begin // @[Sdc.scala 507:19]
+        if (io_mem_wdata[11]) begin // @[Sdc.scala 521:40]
+          tx_cmd_11 <= tx_cmd_val[36]; // @[Sdc.scala 523:18]
         end else begin
           tx_cmd_11 <= _GEN_612;
         end
@@ -10932,12 +10932,12 @@ module Sdc(
     end else begin
       tx_cmd_11 <= _GEN_612;
     end
-    if (io_mem_wen) begin // @[Sdc.scala 506:21]
-      if (2'h0 == addr) begin // @[Sdc.scala 508:19]
+    if (io_mem_wen) begin // @[Sdc.scala 505:21]
+      if (2'h0 == addr) begin // @[Sdc.scala 507:19]
         tx_cmd_12 <= _GEN_613;
-      end else if (2'h1 == addr) begin // @[Sdc.scala 508:19]
-        if (io_mem_wdata[11]) begin // @[Sdc.scala 522:40]
-          tx_cmd_12 <= tx_cmd_val[35]; // @[Sdc.scala 524:18]
+      end else if (2'h1 == addr) begin // @[Sdc.scala 507:19]
+        if (io_mem_wdata[11]) begin // @[Sdc.scala 521:40]
+          tx_cmd_12 <= tx_cmd_val[35]; // @[Sdc.scala 523:18]
         end else begin
           tx_cmd_12 <= _GEN_613;
         end
@@ -10947,12 +10947,12 @@ module Sdc(
     end else begin
       tx_cmd_12 <= _GEN_613;
     end
-    if (io_mem_wen) begin // @[Sdc.scala 506:21]
-      if (2'h0 == addr) begin // @[Sdc.scala 508:19]
+    if (io_mem_wen) begin // @[Sdc.scala 505:21]
+      if (2'h0 == addr) begin // @[Sdc.scala 507:19]
         tx_cmd_13 <= _GEN_614;
-      end else if (2'h1 == addr) begin // @[Sdc.scala 508:19]
-        if (io_mem_wdata[11]) begin // @[Sdc.scala 522:40]
-          tx_cmd_13 <= tx_cmd_val[34]; // @[Sdc.scala 524:18]
+      end else if (2'h1 == addr) begin // @[Sdc.scala 507:19]
+        if (io_mem_wdata[11]) begin // @[Sdc.scala 521:40]
+          tx_cmd_13 <= tx_cmd_val[34]; // @[Sdc.scala 523:18]
         end else begin
           tx_cmd_13 <= _GEN_614;
         end
@@ -10962,12 +10962,12 @@ module Sdc(
     end else begin
       tx_cmd_13 <= _GEN_614;
     end
-    if (io_mem_wen) begin // @[Sdc.scala 506:21]
-      if (2'h0 == addr) begin // @[Sdc.scala 508:19]
+    if (io_mem_wen) begin // @[Sdc.scala 505:21]
+      if (2'h0 == addr) begin // @[Sdc.scala 507:19]
         tx_cmd_14 <= _GEN_615;
-      end else if (2'h1 == addr) begin // @[Sdc.scala 508:19]
-        if (io_mem_wdata[11]) begin // @[Sdc.scala 522:40]
-          tx_cmd_14 <= tx_cmd_val[33]; // @[Sdc.scala 524:18]
+      end else if (2'h1 == addr) begin // @[Sdc.scala 507:19]
+        if (io_mem_wdata[11]) begin // @[Sdc.scala 521:40]
+          tx_cmd_14 <= tx_cmd_val[33]; // @[Sdc.scala 523:18]
         end else begin
           tx_cmd_14 <= _GEN_615;
         end
@@ -10977,12 +10977,12 @@ module Sdc(
     end else begin
       tx_cmd_14 <= _GEN_615;
     end
-    if (io_mem_wen) begin // @[Sdc.scala 506:21]
-      if (2'h0 == addr) begin // @[Sdc.scala 508:19]
+    if (io_mem_wen) begin // @[Sdc.scala 505:21]
+      if (2'h0 == addr) begin // @[Sdc.scala 507:19]
         tx_cmd_15 <= _GEN_616;
-      end else if (2'h1 == addr) begin // @[Sdc.scala 508:19]
-        if (io_mem_wdata[11]) begin // @[Sdc.scala 522:40]
-          tx_cmd_15 <= tx_cmd_val[32]; // @[Sdc.scala 524:18]
+      end else if (2'h1 == addr) begin // @[Sdc.scala 507:19]
+        if (io_mem_wdata[11]) begin // @[Sdc.scala 521:40]
+          tx_cmd_15 <= tx_cmd_val[32]; // @[Sdc.scala 523:18]
         end else begin
           tx_cmd_15 <= _GEN_616;
         end
@@ -10992,12 +10992,12 @@ module Sdc(
     end else begin
       tx_cmd_15 <= _GEN_616;
     end
-    if (io_mem_wen) begin // @[Sdc.scala 506:21]
-      if (2'h0 == addr) begin // @[Sdc.scala 508:19]
+    if (io_mem_wen) begin // @[Sdc.scala 505:21]
+      if (2'h0 == addr) begin // @[Sdc.scala 507:19]
         tx_cmd_16 <= _GEN_617;
-      end else if (2'h1 == addr) begin // @[Sdc.scala 508:19]
-        if (io_mem_wdata[11]) begin // @[Sdc.scala 522:40]
-          tx_cmd_16 <= tx_cmd_val[31]; // @[Sdc.scala 524:18]
+      end else if (2'h1 == addr) begin // @[Sdc.scala 507:19]
+        if (io_mem_wdata[11]) begin // @[Sdc.scala 521:40]
+          tx_cmd_16 <= tx_cmd_val[31]; // @[Sdc.scala 523:18]
         end else begin
           tx_cmd_16 <= _GEN_617;
         end
@@ -11007,12 +11007,12 @@ module Sdc(
     end else begin
       tx_cmd_16 <= _GEN_617;
     end
-    if (io_mem_wen) begin // @[Sdc.scala 506:21]
-      if (2'h0 == addr) begin // @[Sdc.scala 508:19]
+    if (io_mem_wen) begin // @[Sdc.scala 505:21]
+      if (2'h0 == addr) begin // @[Sdc.scala 507:19]
         tx_cmd_17 <= _GEN_618;
-      end else if (2'h1 == addr) begin // @[Sdc.scala 508:19]
-        if (io_mem_wdata[11]) begin // @[Sdc.scala 522:40]
-          tx_cmd_17 <= tx_cmd_val[30]; // @[Sdc.scala 524:18]
+      end else if (2'h1 == addr) begin // @[Sdc.scala 507:19]
+        if (io_mem_wdata[11]) begin // @[Sdc.scala 521:40]
+          tx_cmd_17 <= tx_cmd_val[30]; // @[Sdc.scala 523:18]
         end else begin
           tx_cmd_17 <= _GEN_618;
         end
@@ -11022,12 +11022,12 @@ module Sdc(
     end else begin
       tx_cmd_17 <= _GEN_618;
     end
-    if (io_mem_wen) begin // @[Sdc.scala 506:21]
-      if (2'h0 == addr) begin // @[Sdc.scala 508:19]
+    if (io_mem_wen) begin // @[Sdc.scala 505:21]
+      if (2'h0 == addr) begin // @[Sdc.scala 507:19]
         tx_cmd_18 <= _GEN_619;
-      end else if (2'h1 == addr) begin // @[Sdc.scala 508:19]
-        if (io_mem_wdata[11]) begin // @[Sdc.scala 522:40]
-          tx_cmd_18 <= tx_cmd_val[29]; // @[Sdc.scala 524:18]
+      end else if (2'h1 == addr) begin // @[Sdc.scala 507:19]
+        if (io_mem_wdata[11]) begin // @[Sdc.scala 521:40]
+          tx_cmd_18 <= tx_cmd_val[29]; // @[Sdc.scala 523:18]
         end else begin
           tx_cmd_18 <= _GEN_619;
         end
@@ -11037,12 +11037,12 @@ module Sdc(
     end else begin
       tx_cmd_18 <= _GEN_619;
     end
-    if (io_mem_wen) begin // @[Sdc.scala 506:21]
-      if (2'h0 == addr) begin // @[Sdc.scala 508:19]
+    if (io_mem_wen) begin // @[Sdc.scala 505:21]
+      if (2'h0 == addr) begin // @[Sdc.scala 507:19]
         tx_cmd_19 <= _GEN_620;
-      end else if (2'h1 == addr) begin // @[Sdc.scala 508:19]
-        if (io_mem_wdata[11]) begin // @[Sdc.scala 522:40]
-          tx_cmd_19 <= tx_cmd_val[28]; // @[Sdc.scala 524:18]
+      end else if (2'h1 == addr) begin // @[Sdc.scala 507:19]
+        if (io_mem_wdata[11]) begin // @[Sdc.scala 521:40]
+          tx_cmd_19 <= tx_cmd_val[28]; // @[Sdc.scala 523:18]
         end else begin
           tx_cmd_19 <= _GEN_620;
         end
@@ -11052,12 +11052,12 @@ module Sdc(
     end else begin
       tx_cmd_19 <= _GEN_620;
     end
-    if (io_mem_wen) begin // @[Sdc.scala 506:21]
-      if (2'h0 == addr) begin // @[Sdc.scala 508:19]
+    if (io_mem_wen) begin // @[Sdc.scala 505:21]
+      if (2'h0 == addr) begin // @[Sdc.scala 507:19]
         tx_cmd_20 <= _GEN_621;
-      end else if (2'h1 == addr) begin // @[Sdc.scala 508:19]
-        if (io_mem_wdata[11]) begin // @[Sdc.scala 522:40]
-          tx_cmd_20 <= tx_cmd_val[27]; // @[Sdc.scala 524:18]
+      end else if (2'h1 == addr) begin // @[Sdc.scala 507:19]
+        if (io_mem_wdata[11]) begin // @[Sdc.scala 521:40]
+          tx_cmd_20 <= tx_cmd_val[27]; // @[Sdc.scala 523:18]
         end else begin
           tx_cmd_20 <= _GEN_621;
         end
@@ -11067,12 +11067,12 @@ module Sdc(
     end else begin
       tx_cmd_20 <= _GEN_621;
     end
-    if (io_mem_wen) begin // @[Sdc.scala 506:21]
-      if (2'h0 == addr) begin // @[Sdc.scala 508:19]
+    if (io_mem_wen) begin // @[Sdc.scala 505:21]
+      if (2'h0 == addr) begin // @[Sdc.scala 507:19]
         tx_cmd_21 <= _GEN_622;
-      end else if (2'h1 == addr) begin // @[Sdc.scala 508:19]
-        if (io_mem_wdata[11]) begin // @[Sdc.scala 522:40]
-          tx_cmd_21 <= tx_cmd_val[26]; // @[Sdc.scala 524:18]
+      end else if (2'h1 == addr) begin // @[Sdc.scala 507:19]
+        if (io_mem_wdata[11]) begin // @[Sdc.scala 521:40]
+          tx_cmd_21 <= tx_cmd_val[26]; // @[Sdc.scala 523:18]
         end else begin
           tx_cmd_21 <= _GEN_622;
         end
@@ -11082,12 +11082,12 @@ module Sdc(
     end else begin
       tx_cmd_21 <= _GEN_622;
     end
-    if (io_mem_wen) begin // @[Sdc.scala 506:21]
-      if (2'h0 == addr) begin // @[Sdc.scala 508:19]
+    if (io_mem_wen) begin // @[Sdc.scala 505:21]
+      if (2'h0 == addr) begin // @[Sdc.scala 507:19]
         tx_cmd_22 <= _GEN_623;
-      end else if (2'h1 == addr) begin // @[Sdc.scala 508:19]
-        if (io_mem_wdata[11]) begin // @[Sdc.scala 522:40]
-          tx_cmd_22 <= tx_cmd_val[25]; // @[Sdc.scala 524:18]
+      end else if (2'h1 == addr) begin // @[Sdc.scala 507:19]
+        if (io_mem_wdata[11]) begin // @[Sdc.scala 521:40]
+          tx_cmd_22 <= tx_cmd_val[25]; // @[Sdc.scala 523:18]
         end else begin
           tx_cmd_22 <= _GEN_623;
         end
@@ -11097,12 +11097,12 @@ module Sdc(
     end else begin
       tx_cmd_22 <= _GEN_623;
     end
-    if (io_mem_wen) begin // @[Sdc.scala 506:21]
-      if (2'h0 == addr) begin // @[Sdc.scala 508:19]
+    if (io_mem_wen) begin // @[Sdc.scala 505:21]
+      if (2'h0 == addr) begin // @[Sdc.scala 507:19]
         tx_cmd_23 <= _GEN_624;
-      end else if (2'h1 == addr) begin // @[Sdc.scala 508:19]
-        if (io_mem_wdata[11]) begin // @[Sdc.scala 522:40]
-          tx_cmd_23 <= tx_cmd_val[24]; // @[Sdc.scala 524:18]
+      end else if (2'h1 == addr) begin // @[Sdc.scala 507:19]
+        if (io_mem_wdata[11]) begin // @[Sdc.scala 521:40]
+          tx_cmd_23 <= tx_cmd_val[24]; // @[Sdc.scala 523:18]
         end else begin
           tx_cmd_23 <= _GEN_624;
         end
@@ -11112,12 +11112,12 @@ module Sdc(
     end else begin
       tx_cmd_23 <= _GEN_624;
     end
-    if (io_mem_wen) begin // @[Sdc.scala 506:21]
-      if (2'h0 == addr) begin // @[Sdc.scala 508:19]
+    if (io_mem_wen) begin // @[Sdc.scala 505:21]
+      if (2'h0 == addr) begin // @[Sdc.scala 507:19]
         tx_cmd_24 <= _GEN_625;
-      end else if (2'h1 == addr) begin // @[Sdc.scala 508:19]
-        if (io_mem_wdata[11]) begin // @[Sdc.scala 522:40]
-          tx_cmd_24 <= tx_cmd_val[23]; // @[Sdc.scala 524:18]
+      end else if (2'h1 == addr) begin // @[Sdc.scala 507:19]
+        if (io_mem_wdata[11]) begin // @[Sdc.scala 521:40]
+          tx_cmd_24 <= tx_cmd_val[23]; // @[Sdc.scala 523:18]
         end else begin
           tx_cmd_24 <= _GEN_625;
         end
@@ -11127,12 +11127,12 @@ module Sdc(
     end else begin
       tx_cmd_24 <= _GEN_625;
     end
-    if (io_mem_wen) begin // @[Sdc.scala 506:21]
-      if (2'h0 == addr) begin // @[Sdc.scala 508:19]
+    if (io_mem_wen) begin // @[Sdc.scala 505:21]
+      if (2'h0 == addr) begin // @[Sdc.scala 507:19]
         tx_cmd_25 <= _GEN_626;
-      end else if (2'h1 == addr) begin // @[Sdc.scala 508:19]
-        if (io_mem_wdata[11]) begin // @[Sdc.scala 522:40]
-          tx_cmd_25 <= tx_cmd_val[22]; // @[Sdc.scala 524:18]
+      end else if (2'h1 == addr) begin // @[Sdc.scala 507:19]
+        if (io_mem_wdata[11]) begin // @[Sdc.scala 521:40]
+          tx_cmd_25 <= tx_cmd_val[22]; // @[Sdc.scala 523:18]
         end else begin
           tx_cmd_25 <= _GEN_626;
         end
@@ -11142,12 +11142,12 @@ module Sdc(
     end else begin
       tx_cmd_25 <= _GEN_626;
     end
-    if (io_mem_wen) begin // @[Sdc.scala 506:21]
-      if (2'h0 == addr) begin // @[Sdc.scala 508:19]
+    if (io_mem_wen) begin // @[Sdc.scala 505:21]
+      if (2'h0 == addr) begin // @[Sdc.scala 507:19]
         tx_cmd_26 <= _GEN_627;
-      end else if (2'h1 == addr) begin // @[Sdc.scala 508:19]
-        if (io_mem_wdata[11]) begin // @[Sdc.scala 522:40]
-          tx_cmd_26 <= tx_cmd_val[21]; // @[Sdc.scala 524:18]
+      end else if (2'h1 == addr) begin // @[Sdc.scala 507:19]
+        if (io_mem_wdata[11]) begin // @[Sdc.scala 521:40]
+          tx_cmd_26 <= tx_cmd_val[21]; // @[Sdc.scala 523:18]
         end else begin
           tx_cmd_26 <= _GEN_627;
         end
@@ -11157,12 +11157,12 @@ module Sdc(
     end else begin
       tx_cmd_26 <= _GEN_627;
     end
-    if (io_mem_wen) begin // @[Sdc.scala 506:21]
-      if (2'h0 == addr) begin // @[Sdc.scala 508:19]
+    if (io_mem_wen) begin // @[Sdc.scala 505:21]
+      if (2'h0 == addr) begin // @[Sdc.scala 507:19]
         tx_cmd_27 <= _GEN_628;
-      end else if (2'h1 == addr) begin // @[Sdc.scala 508:19]
-        if (io_mem_wdata[11]) begin // @[Sdc.scala 522:40]
-          tx_cmd_27 <= tx_cmd_val[20]; // @[Sdc.scala 524:18]
+      end else if (2'h1 == addr) begin // @[Sdc.scala 507:19]
+        if (io_mem_wdata[11]) begin // @[Sdc.scala 521:40]
+          tx_cmd_27 <= tx_cmd_val[20]; // @[Sdc.scala 523:18]
         end else begin
           tx_cmd_27 <= _GEN_628;
         end
@@ -11172,12 +11172,12 @@ module Sdc(
     end else begin
       tx_cmd_27 <= _GEN_628;
     end
-    if (io_mem_wen) begin // @[Sdc.scala 506:21]
-      if (2'h0 == addr) begin // @[Sdc.scala 508:19]
+    if (io_mem_wen) begin // @[Sdc.scala 505:21]
+      if (2'h0 == addr) begin // @[Sdc.scala 507:19]
         tx_cmd_28 <= _GEN_629;
-      end else if (2'h1 == addr) begin // @[Sdc.scala 508:19]
-        if (io_mem_wdata[11]) begin // @[Sdc.scala 522:40]
-          tx_cmd_28 <= tx_cmd_val[19]; // @[Sdc.scala 524:18]
+      end else if (2'h1 == addr) begin // @[Sdc.scala 507:19]
+        if (io_mem_wdata[11]) begin // @[Sdc.scala 521:40]
+          tx_cmd_28 <= tx_cmd_val[19]; // @[Sdc.scala 523:18]
         end else begin
           tx_cmd_28 <= _GEN_629;
         end
@@ -11187,12 +11187,12 @@ module Sdc(
     end else begin
       tx_cmd_28 <= _GEN_629;
     end
-    if (io_mem_wen) begin // @[Sdc.scala 506:21]
-      if (2'h0 == addr) begin // @[Sdc.scala 508:19]
+    if (io_mem_wen) begin // @[Sdc.scala 505:21]
+      if (2'h0 == addr) begin // @[Sdc.scala 507:19]
         tx_cmd_29 <= _GEN_630;
-      end else if (2'h1 == addr) begin // @[Sdc.scala 508:19]
-        if (io_mem_wdata[11]) begin // @[Sdc.scala 522:40]
-          tx_cmd_29 <= tx_cmd_val[18]; // @[Sdc.scala 524:18]
+      end else if (2'h1 == addr) begin // @[Sdc.scala 507:19]
+        if (io_mem_wdata[11]) begin // @[Sdc.scala 521:40]
+          tx_cmd_29 <= tx_cmd_val[18]; // @[Sdc.scala 523:18]
         end else begin
           tx_cmd_29 <= _GEN_630;
         end
@@ -11202,12 +11202,12 @@ module Sdc(
     end else begin
       tx_cmd_29 <= _GEN_630;
     end
-    if (io_mem_wen) begin // @[Sdc.scala 506:21]
-      if (2'h0 == addr) begin // @[Sdc.scala 508:19]
+    if (io_mem_wen) begin // @[Sdc.scala 505:21]
+      if (2'h0 == addr) begin // @[Sdc.scala 507:19]
         tx_cmd_30 <= _GEN_631;
-      end else if (2'h1 == addr) begin // @[Sdc.scala 508:19]
-        if (io_mem_wdata[11]) begin // @[Sdc.scala 522:40]
-          tx_cmd_30 <= tx_cmd_val[17]; // @[Sdc.scala 524:18]
+      end else if (2'h1 == addr) begin // @[Sdc.scala 507:19]
+        if (io_mem_wdata[11]) begin // @[Sdc.scala 521:40]
+          tx_cmd_30 <= tx_cmd_val[17]; // @[Sdc.scala 523:18]
         end else begin
           tx_cmd_30 <= _GEN_631;
         end
@@ -11217,12 +11217,12 @@ module Sdc(
     end else begin
       tx_cmd_30 <= _GEN_631;
     end
-    if (io_mem_wen) begin // @[Sdc.scala 506:21]
-      if (2'h0 == addr) begin // @[Sdc.scala 508:19]
+    if (io_mem_wen) begin // @[Sdc.scala 505:21]
+      if (2'h0 == addr) begin // @[Sdc.scala 507:19]
         tx_cmd_31 <= _GEN_632;
-      end else if (2'h1 == addr) begin // @[Sdc.scala 508:19]
-        if (io_mem_wdata[11]) begin // @[Sdc.scala 522:40]
-          tx_cmd_31 <= tx_cmd_val[16]; // @[Sdc.scala 524:18]
+      end else if (2'h1 == addr) begin // @[Sdc.scala 507:19]
+        if (io_mem_wdata[11]) begin // @[Sdc.scala 521:40]
+          tx_cmd_31 <= tx_cmd_val[16]; // @[Sdc.scala 523:18]
         end else begin
           tx_cmd_31 <= _GEN_632;
         end
@@ -11232,12 +11232,12 @@ module Sdc(
     end else begin
       tx_cmd_31 <= _GEN_632;
     end
-    if (io_mem_wen) begin // @[Sdc.scala 506:21]
-      if (2'h0 == addr) begin // @[Sdc.scala 508:19]
+    if (io_mem_wen) begin // @[Sdc.scala 505:21]
+      if (2'h0 == addr) begin // @[Sdc.scala 507:19]
         tx_cmd_32 <= _GEN_633;
-      end else if (2'h1 == addr) begin // @[Sdc.scala 508:19]
-        if (io_mem_wdata[11]) begin // @[Sdc.scala 522:40]
-          tx_cmd_32 <= tx_cmd_val[15]; // @[Sdc.scala 524:18]
+      end else if (2'h1 == addr) begin // @[Sdc.scala 507:19]
+        if (io_mem_wdata[11]) begin // @[Sdc.scala 521:40]
+          tx_cmd_32 <= tx_cmd_val[15]; // @[Sdc.scala 523:18]
         end else begin
           tx_cmd_32 <= _GEN_633;
         end
@@ -11247,12 +11247,12 @@ module Sdc(
     end else begin
       tx_cmd_32 <= _GEN_633;
     end
-    if (io_mem_wen) begin // @[Sdc.scala 506:21]
-      if (2'h0 == addr) begin // @[Sdc.scala 508:19]
+    if (io_mem_wen) begin // @[Sdc.scala 505:21]
+      if (2'h0 == addr) begin // @[Sdc.scala 507:19]
         tx_cmd_33 <= _GEN_634;
-      end else if (2'h1 == addr) begin // @[Sdc.scala 508:19]
-        if (io_mem_wdata[11]) begin // @[Sdc.scala 522:40]
-          tx_cmd_33 <= tx_cmd_val[14]; // @[Sdc.scala 524:18]
+      end else if (2'h1 == addr) begin // @[Sdc.scala 507:19]
+        if (io_mem_wdata[11]) begin // @[Sdc.scala 521:40]
+          tx_cmd_33 <= tx_cmd_val[14]; // @[Sdc.scala 523:18]
         end else begin
           tx_cmd_33 <= _GEN_634;
         end
@@ -11262,12 +11262,12 @@ module Sdc(
     end else begin
       tx_cmd_33 <= _GEN_634;
     end
-    if (io_mem_wen) begin // @[Sdc.scala 506:21]
-      if (2'h0 == addr) begin // @[Sdc.scala 508:19]
+    if (io_mem_wen) begin // @[Sdc.scala 505:21]
+      if (2'h0 == addr) begin // @[Sdc.scala 507:19]
         tx_cmd_34 <= _GEN_635;
-      end else if (2'h1 == addr) begin // @[Sdc.scala 508:19]
-        if (io_mem_wdata[11]) begin // @[Sdc.scala 522:40]
-          tx_cmd_34 <= tx_cmd_val[13]; // @[Sdc.scala 524:18]
+      end else if (2'h1 == addr) begin // @[Sdc.scala 507:19]
+        if (io_mem_wdata[11]) begin // @[Sdc.scala 521:40]
+          tx_cmd_34 <= tx_cmd_val[13]; // @[Sdc.scala 523:18]
         end else begin
           tx_cmd_34 <= _GEN_635;
         end
@@ -11277,12 +11277,12 @@ module Sdc(
     end else begin
       tx_cmd_34 <= _GEN_635;
     end
-    if (io_mem_wen) begin // @[Sdc.scala 506:21]
-      if (2'h0 == addr) begin // @[Sdc.scala 508:19]
+    if (io_mem_wen) begin // @[Sdc.scala 505:21]
+      if (2'h0 == addr) begin // @[Sdc.scala 507:19]
         tx_cmd_35 <= _GEN_636;
-      end else if (2'h1 == addr) begin // @[Sdc.scala 508:19]
-        if (io_mem_wdata[11]) begin // @[Sdc.scala 522:40]
-          tx_cmd_35 <= tx_cmd_val[12]; // @[Sdc.scala 524:18]
+      end else if (2'h1 == addr) begin // @[Sdc.scala 507:19]
+        if (io_mem_wdata[11]) begin // @[Sdc.scala 521:40]
+          tx_cmd_35 <= tx_cmd_val[12]; // @[Sdc.scala 523:18]
         end else begin
           tx_cmd_35 <= _GEN_636;
         end
@@ -11292,12 +11292,12 @@ module Sdc(
     end else begin
       tx_cmd_35 <= _GEN_636;
     end
-    if (io_mem_wen) begin // @[Sdc.scala 506:21]
-      if (2'h0 == addr) begin // @[Sdc.scala 508:19]
+    if (io_mem_wen) begin // @[Sdc.scala 505:21]
+      if (2'h0 == addr) begin // @[Sdc.scala 507:19]
         tx_cmd_36 <= _GEN_637;
-      end else if (2'h1 == addr) begin // @[Sdc.scala 508:19]
-        if (io_mem_wdata[11]) begin // @[Sdc.scala 522:40]
-          tx_cmd_36 <= tx_cmd_val[11]; // @[Sdc.scala 524:18]
+      end else if (2'h1 == addr) begin // @[Sdc.scala 507:19]
+        if (io_mem_wdata[11]) begin // @[Sdc.scala 521:40]
+          tx_cmd_36 <= tx_cmd_val[11]; // @[Sdc.scala 523:18]
         end else begin
           tx_cmd_36 <= _GEN_637;
         end
@@ -11307,12 +11307,12 @@ module Sdc(
     end else begin
       tx_cmd_36 <= _GEN_637;
     end
-    if (io_mem_wen) begin // @[Sdc.scala 506:21]
-      if (2'h0 == addr) begin // @[Sdc.scala 508:19]
+    if (io_mem_wen) begin // @[Sdc.scala 505:21]
+      if (2'h0 == addr) begin // @[Sdc.scala 507:19]
         tx_cmd_37 <= _GEN_638;
-      end else if (2'h1 == addr) begin // @[Sdc.scala 508:19]
-        if (io_mem_wdata[11]) begin // @[Sdc.scala 522:40]
-          tx_cmd_37 <= tx_cmd_val[10]; // @[Sdc.scala 524:18]
+      end else if (2'h1 == addr) begin // @[Sdc.scala 507:19]
+        if (io_mem_wdata[11]) begin // @[Sdc.scala 521:40]
+          tx_cmd_37 <= tx_cmd_val[10]; // @[Sdc.scala 523:18]
         end else begin
           tx_cmd_37 <= _GEN_638;
         end
@@ -11322,12 +11322,12 @@ module Sdc(
     end else begin
       tx_cmd_37 <= _GEN_638;
     end
-    if (io_mem_wen) begin // @[Sdc.scala 506:21]
-      if (2'h0 == addr) begin // @[Sdc.scala 508:19]
+    if (io_mem_wen) begin // @[Sdc.scala 505:21]
+      if (2'h0 == addr) begin // @[Sdc.scala 507:19]
         tx_cmd_38 <= _GEN_639;
-      end else if (2'h1 == addr) begin // @[Sdc.scala 508:19]
-        if (io_mem_wdata[11]) begin // @[Sdc.scala 522:40]
-          tx_cmd_38 <= tx_cmd_val[9]; // @[Sdc.scala 524:18]
+      end else if (2'h1 == addr) begin // @[Sdc.scala 507:19]
+        if (io_mem_wdata[11]) begin // @[Sdc.scala 521:40]
+          tx_cmd_38 <= tx_cmd_val[9]; // @[Sdc.scala 523:18]
         end else begin
           tx_cmd_38 <= _GEN_639;
         end
@@ -11337,12 +11337,12 @@ module Sdc(
     end else begin
       tx_cmd_38 <= _GEN_639;
     end
-    if (io_mem_wen) begin // @[Sdc.scala 506:21]
-      if (2'h0 == addr) begin // @[Sdc.scala 508:19]
+    if (io_mem_wen) begin // @[Sdc.scala 505:21]
+      if (2'h0 == addr) begin // @[Sdc.scala 507:19]
         tx_cmd_39 <= _GEN_640;
-      end else if (2'h1 == addr) begin // @[Sdc.scala 508:19]
-        if (io_mem_wdata[11]) begin // @[Sdc.scala 522:40]
-          tx_cmd_39 <= tx_cmd_val[8]; // @[Sdc.scala 524:18]
+      end else if (2'h1 == addr) begin // @[Sdc.scala 507:19]
+        if (io_mem_wdata[11]) begin // @[Sdc.scala 521:40]
+          tx_cmd_39 <= tx_cmd_val[8]; // @[Sdc.scala 523:18]
         end else begin
           tx_cmd_39 <= _GEN_640;
         end
@@ -11352,12 +11352,12 @@ module Sdc(
     end else begin
       tx_cmd_39 <= _GEN_640;
     end
-    if (io_mem_wen) begin // @[Sdc.scala 506:21]
-      if (2'h0 == addr) begin // @[Sdc.scala 508:19]
+    if (io_mem_wen) begin // @[Sdc.scala 505:21]
+      if (2'h0 == addr) begin // @[Sdc.scala 507:19]
         tx_cmd_40 <= _GEN_641;
-      end else if (2'h1 == addr) begin // @[Sdc.scala 508:19]
-        if (io_mem_wdata[11]) begin // @[Sdc.scala 522:40]
-          tx_cmd_40 <= tx_cmd_val[7]; // @[Sdc.scala 524:18]
+      end else if (2'h1 == addr) begin // @[Sdc.scala 507:19]
+        if (io_mem_wdata[11]) begin // @[Sdc.scala 521:40]
+          tx_cmd_40 <= tx_cmd_val[7]; // @[Sdc.scala 523:18]
         end else begin
           tx_cmd_40 <= _GEN_641;
         end
@@ -11367,12 +11367,12 @@ module Sdc(
     end else begin
       tx_cmd_40 <= _GEN_641;
     end
-    if (io_mem_wen) begin // @[Sdc.scala 506:21]
-      if (2'h0 == addr) begin // @[Sdc.scala 508:19]
+    if (io_mem_wen) begin // @[Sdc.scala 505:21]
+      if (2'h0 == addr) begin // @[Sdc.scala 507:19]
         tx_cmd_41 <= _GEN_642;
-      end else if (2'h1 == addr) begin // @[Sdc.scala 508:19]
-        if (io_mem_wdata[11]) begin // @[Sdc.scala 522:40]
-          tx_cmd_41 <= tx_cmd_val[6]; // @[Sdc.scala 524:18]
+      end else if (2'h1 == addr) begin // @[Sdc.scala 507:19]
+        if (io_mem_wdata[11]) begin // @[Sdc.scala 521:40]
+          tx_cmd_41 <= tx_cmd_val[6]; // @[Sdc.scala 523:18]
         end else begin
           tx_cmd_41 <= _GEN_642;
         end
@@ -11382,12 +11382,12 @@ module Sdc(
     end else begin
       tx_cmd_41 <= _GEN_642;
     end
-    if (io_mem_wen) begin // @[Sdc.scala 506:21]
-      if (2'h0 == addr) begin // @[Sdc.scala 508:19]
+    if (io_mem_wen) begin // @[Sdc.scala 505:21]
+      if (2'h0 == addr) begin // @[Sdc.scala 507:19]
         tx_cmd_42 <= _GEN_643;
-      end else if (2'h1 == addr) begin // @[Sdc.scala 508:19]
-        if (io_mem_wdata[11]) begin // @[Sdc.scala 522:40]
-          tx_cmd_42 <= tx_cmd_val[5]; // @[Sdc.scala 524:18]
+      end else if (2'h1 == addr) begin // @[Sdc.scala 507:19]
+        if (io_mem_wdata[11]) begin // @[Sdc.scala 521:40]
+          tx_cmd_42 <= tx_cmd_val[5]; // @[Sdc.scala 523:18]
         end else begin
           tx_cmd_42 <= _GEN_643;
         end
@@ -11397,12 +11397,12 @@ module Sdc(
     end else begin
       tx_cmd_42 <= _GEN_643;
     end
-    if (io_mem_wen) begin // @[Sdc.scala 506:21]
-      if (2'h0 == addr) begin // @[Sdc.scala 508:19]
+    if (io_mem_wen) begin // @[Sdc.scala 505:21]
+      if (2'h0 == addr) begin // @[Sdc.scala 507:19]
         tx_cmd_43 <= _GEN_644;
-      end else if (2'h1 == addr) begin // @[Sdc.scala 508:19]
-        if (io_mem_wdata[11]) begin // @[Sdc.scala 522:40]
-          tx_cmd_43 <= tx_cmd_val[4]; // @[Sdc.scala 524:18]
+      end else if (2'h1 == addr) begin // @[Sdc.scala 507:19]
+        if (io_mem_wdata[11]) begin // @[Sdc.scala 521:40]
+          tx_cmd_43 <= tx_cmd_val[4]; // @[Sdc.scala 523:18]
         end else begin
           tx_cmd_43 <= _GEN_644;
         end
@@ -11412,12 +11412,12 @@ module Sdc(
     end else begin
       tx_cmd_43 <= _GEN_644;
     end
-    if (io_mem_wen) begin // @[Sdc.scala 506:21]
-      if (2'h0 == addr) begin // @[Sdc.scala 508:19]
+    if (io_mem_wen) begin // @[Sdc.scala 505:21]
+      if (2'h0 == addr) begin // @[Sdc.scala 507:19]
         tx_cmd_44 <= _GEN_645;
-      end else if (2'h1 == addr) begin // @[Sdc.scala 508:19]
-        if (io_mem_wdata[11]) begin // @[Sdc.scala 522:40]
-          tx_cmd_44 <= tx_cmd_val[3]; // @[Sdc.scala 524:18]
+      end else if (2'h1 == addr) begin // @[Sdc.scala 507:19]
+        if (io_mem_wdata[11]) begin // @[Sdc.scala 521:40]
+          tx_cmd_44 <= tx_cmd_val[3]; // @[Sdc.scala 523:18]
         end else begin
           tx_cmd_44 <= _GEN_645;
         end
@@ -11427,12 +11427,12 @@ module Sdc(
     end else begin
       tx_cmd_44 <= _GEN_645;
     end
-    if (io_mem_wen) begin // @[Sdc.scala 506:21]
-      if (2'h0 == addr) begin // @[Sdc.scala 508:19]
+    if (io_mem_wen) begin // @[Sdc.scala 505:21]
+      if (2'h0 == addr) begin // @[Sdc.scala 507:19]
         tx_cmd_45 <= _GEN_646;
-      end else if (2'h1 == addr) begin // @[Sdc.scala 508:19]
-        if (io_mem_wdata[11]) begin // @[Sdc.scala 522:40]
-          tx_cmd_45 <= tx_cmd_val[2]; // @[Sdc.scala 524:18]
+      end else if (2'h1 == addr) begin // @[Sdc.scala 507:19]
+        if (io_mem_wdata[11]) begin // @[Sdc.scala 521:40]
+          tx_cmd_45 <= tx_cmd_val[2]; // @[Sdc.scala 523:18]
         end else begin
           tx_cmd_45 <= _GEN_646;
         end
@@ -11442,12 +11442,12 @@ module Sdc(
     end else begin
       tx_cmd_45 <= _GEN_646;
     end
-    if (io_mem_wen) begin // @[Sdc.scala 506:21]
-      if (2'h0 == addr) begin // @[Sdc.scala 508:19]
+    if (io_mem_wen) begin // @[Sdc.scala 505:21]
+      if (2'h0 == addr) begin // @[Sdc.scala 507:19]
         tx_cmd_46 <= _GEN_647;
-      end else if (2'h1 == addr) begin // @[Sdc.scala 508:19]
-        if (io_mem_wdata[11]) begin // @[Sdc.scala 522:40]
-          tx_cmd_46 <= tx_cmd_val[1]; // @[Sdc.scala 524:18]
+      end else if (2'h1 == addr) begin // @[Sdc.scala 507:19]
+        if (io_mem_wdata[11]) begin // @[Sdc.scala 521:40]
+          tx_cmd_46 <= tx_cmd_val[1]; // @[Sdc.scala 523:18]
         end else begin
           tx_cmd_46 <= _GEN_647;
         end
@@ -11457,21 +11457,21 @@ module Sdc(
     end else begin
       tx_cmd_46 <= _GEN_647;
     end
-    if (io_mem_wen) begin // @[Sdc.scala 506:21]
-      if (!(2'h0 == addr)) begin // @[Sdc.scala 508:19]
-        if (2'h1 == addr) begin // @[Sdc.scala 508:19]
-          if (io_mem_wdata[11]) begin // @[Sdc.scala 522:40]
-            tx_cmd_47 <= tx_cmd_val[0]; // @[Sdc.scala 524:18]
+    if (io_mem_wen) begin // @[Sdc.scala 505:21]
+      if (!(2'h0 == addr)) begin // @[Sdc.scala 507:19]
+        if (2'h1 == addr) begin // @[Sdc.scala 507:19]
+          if (io_mem_wdata[11]) begin // @[Sdc.scala 521:40]
+            tx_cmd_47 <= tx_cmd_val[0]; // @[Sdc.scala 523:18]
           end
         end
       end
     end
-    if (reset) begin // @[Sdc.scala 121:31]
-      tx_cmd_counter <= 6'h0; // @[Sdc.scala 121:31]
-    end else if (io_mem_wen) begin // @[Sdc.scala 506:21]
-      if (2'h0 == addr) begin // @[Sdc.scala 508:19]
+    if (reset) begin // @[Sdc.scala 120:31]
+      tx_cmd_counter <= 6'h0; // @[Sdc.scala 120:31]
+    end else if (io_mem_wen) begin // @[Sdc.scala 505:21]
+      if (2'h0 == addr) begin // @[Sdc.scala 507:19]
         tx_cmd_counter <= _GEN_648;
-      end else if (2'h1 == addr) begin // @[Sdc.scala 508:19]
+      end else if (2'h1 == addr) begin // @[Sdc.scala 507:19]
         tx_cmd_counter <= _GEN_1265;
       end else begin
         tx_cmd_counter <= _GEN_648;
@@ -11479,12 +11479,12 @@ module Sdc(
     end else begin
       tx_cmd_counter <= _GEN_648;
     end
-    if (io_mem_wen) begin // @[Sdc.scala 506:21]
-      if (2'h0 == addr) begin // @[Sdc.scala 508:19]
+    if (io_mem_wen) begin // @[Sdc.scala 505:21]
+      if (2'h0 == addr) begin // @[Sdc.scala 507:19]
         tx_cmd_crc_0 <= _GEN_649;
-      end else if (2'h1 == addr) begin // @[Sdc.scala 508:19]
-        if (io_mem_wdata[11]) begin // @[Sdc.scala 522:40]
-          tx_cmd_crc_0 <= tx_cmd_val[41]; // @[Sdc.scala 526:22]
+      end else if (2'h1 == addr) begin // @[Sdc.scala 507:19]
+        if (io_mem_wdata[11]) begin // @[Sdc.scala 521:40]
+          tx_cmd_crc_0 <= tx_cmd_val[41]; // @[Sdc.scala 525:22]
         end else begin
           tx_cmd_crc_0 <= _GEN_649;
         end
@@ -11494,12 +11494,12 @@ module Sdc(
     end else begin
       tx_cmd_crc_0 <= _GEN_649;
     end
-    if (io_mem_wen) begin // @[Sdc.scala 506:21]
-      if (2'h0 == addr) begin // @[Sdc.scala 508:19]
+    if (io_mem_wen) begin // @[Sdc.scala 505:21]
+      if (2'h0 == addr) begin // @[Sdc.scala 507:19]
         tx_cmd_crc_1 <= _GEN_650;
-      end else if (2'h1 == addr) begin // @[Sdc.scala 508:19]
-        if (io_mem_wdata[11]) begin // @[Sdc.scala 522:40]
-          tx_cmd_crc_1 <= tx_cmd_val[42]; // @[Sdc.scala 526:22]
+      end else if (2'h1 == addr) begin // @[Sdc.scala 507:19]
+        if (io_mem_wdata[11]) begin // @[Sdc.scala 521:40]
+          tx_cmd_crc_1 <= tx_cmd_val[42]; // @[Sdc.scala 525:22]
         end else begin
           tx_cmd_crc_1 <= _GEN_650;
         end
@@ -11509,12 +11509,12 @@ module Sdc(
     end else begin
       tx_cmd_crc_1 <= _GEN_650;
     end
-    if (io_mem_wen) begin // @[Sdc.scala 506:21]
-      if (2'h0 == addr) begin // @[Sdc.scala 508:19]
+    if (io_mem_wen) begin // @[Sdc.scala 505:21]
+      if (2'h0 == addr) begin // @[Sdc.scala 507:19]
         tx_cmd_crc_2 <= _GEN_651;
-      end else if (2'h1 == addr) begin // @[Sdc.scala 508:19]
-        if (io_mem_wdata[11]) begin // @[Sdc.scala 522:40]
-          tx_cmd_crc_2 <= tx_cmd_val[43]; // @[Sdc.scala 526:22]
+      end else if (2'h1 == addr) begin // @[Sdc.scala 507:19]
+        if (io_mem_wdata[11]) begin // @[Sdc.scala 521:40]
+          tx_cmd_crc_2 <= tx_cmd_val[43]; // @[Sdc.scala 525:22]
         end else begin
           tx_cmd_crc_2 <= _GEN_651;
         end
@@ -11524,12 +11524,12 @@ module Sdc(
     end else begin
       tx_cmd_crc_2 <= _GEN_651;
     end
-    if (io_mem_wen) begin // @[Sdc.scala 506:21]
-      if (2'h0 == addr) begin // @[Sdc.scala 508:19]
+    if (io_mem_wen) begin // @[Sdc.scala 505:21]
+      if (2'h0 == addr) begin // @[Sdc.scala 507:19]
         tx_cmd_crc_3 <= _GEN_652;
-      end else if (2'h1 == addr) begin // @[Sdc.scala 508:19]
-        if (io_mem_wdata[11]) begin // @[Sdc.scala 522:40]
-          tx_cmd_crc_3 <= tx_cmd_val[44]; // @[Sdc.scala 526:22]
+      end else if (2'h1 == addr) begin // @[Sdc.scala 507:19]
+        if (io_mem_wdata[11]) begin // @[Sdc.scala 521:40]
+          tx_cmd_crc_3 <= tx_cmd_val[44]; // @[Sdc.scala 525:22]
         end else begin
           tx_cmd_crc_3 <= _GEN_652;
         end
@@ -11539,12 +11539,12 @@ module Sdc(
     end else begin
       tx_cmd_crc_3 <= _GEN_652;
     end
-    if (io_mem_wen) begin // @[Sdc.scala 506:21]
-      if (2'h0 == addr) begin // @[Sdc.scala 508:19]
+    if (io_mem_wen) begin // @[Sdc.scala 505:21]
+      if (2'h0 == addr) begin // @[Sdc.scala 507:19]
         tx_cmd_crc_4 <= _GEN_653;
-      end else if (2'h1 == addr) begin // @[Sdc.scala 508:19]
-        if (io_mem_wdata[11]) begin // @[Sdc.scala 522:40]
-          tx_cmd_crc_4 <= tx_cmd_val[45]; // @[Sdc.scala 526:22]
+      end else if (2'h1 == addr) begin // @[Sdc.scala 507:19]
+        if (io_mem_wdata[11]) begin // @[Sdc.scala 521:40]
+          tx_cmd_crc_4 <= tx_cmd_val[45]; // @[Sdc.scala 525:22]
         end else begin
           tx_cmd_crc_4 <= _GEN_653;
         end
@@ -11554,12 +11554,12 @@ module Sdc(
     end else begin
       tx_cmd_crc_4 <= _GEN_653;
     end
-    if (io_mem_wen) begin // @[Sdc.scala 506:21]
-      if (2'h0 == addr) begin // @[Sdc.scala 508:19]
+    if (io_mem_wen) begin // @[Sdc.scala 505:21]
+      if (2'h0 == addr) begin // @[Sdc.scala 507:19]
         tx_cmd_crc_5 <= _GEN_654;
-      end else if (2'h1 == addr) begin // @[Sdc.scala 508:19]
-        if (io_mem_wdata[11]) begin // @[Sdc.scala 522:40]
-          tx_cmd_crc_5 <= tx_cmd_val[46]; // @[Sdc.scala 526:22]
+      end else if (2'h1 == addr) begin // @[Sdc.scala 507:19]
+        if (io_mem_wdata[11]) begin // @[Sdc.scala 521:40]
+          tx_cmd_crc_5 <= tx_cmd_val[46]; // @[Sdc.scala 525:22]
         end else begin
           tx_cmd_crc_5 <= _GEN_654;
         end
@@ -11569,12 +11569,12 @@ module Sdc(
     end else begin
       tx_cmd_crc_5 <= _GEN_654;
     end
-    if (io_mem_wen) begin // @[Sdc.scala 506:21]
-      if (2'h0 == addr) begin // @[Sdc.scala 508:19]
+    if (io_mem_wen) begin // @[Sdc.scala 505:21]
+      if (2'h0 == addr) begin // @[Sdc.scala 507:19]
         tx_cmd_crc_6 <= _GEN_655;
-      end else if (2'h1 == addr) begin // @[Sdc.scala 508:19]
-        if (io_mem_wdata[11]) begin // @[Sdc.scala 522:40]
-          tx_cmd_crc_6 <= tx_cmd_val[47]; // @[Sdc.scala 526:22]
+      end else if (2'h1 == addr) begin // @[Sdc.scala 507:19]
+        if (io_mem_wdata[11]) begin // @[Sdc.scala 521:40]
+          tx_cmd_crc_6 <= tx_cmd_val[47]; // @[Sdc.scala 525:22]
         end else begin
           tx_cmd_crc_6 <= _GEN_655;
         end
@@ -11584,35 +11584,35 @@ module Sdc(
     end else begin
       tx_cmd_crc_6 <= _GEN_655;
     end
-    if (reset) begin // @[Sdc.scala 123:29]
-      tx_cmd_timer <= 6'h0; // @[Sdc.scala 123:29]
-    end else if (tx_cmd_timer != 6'h0 & _T & reg_clk) begin // @[Sdc.scala 214:69]
-      tx_cmd_timer <= _tx_cmd_timer_T_1; // @[Sdc.scala 215:18]
-    end else if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 170:57]
-      if (_T & reg_clk) begin // @[Sdc.scala 172:47]
+    if (reset) begin // @[Sdc.scala 122:29]
+      tx_cmd_timer <= 6'h0; // @[Sdc.scala 122:29]
+    end else if (tx_cmd_timer != 6'h0 & _T & reg_clk) begin // @[Sdc.scala 213:69]
+      tx_cmd_timer <= _tx_cmd_timer_T_1; // @[Sdc.scala 214:18]
+    end else if (rx_res_counter > 8'h0 & tx_cmd_counter == 6'h0) begin // @[Sdc.scala 169:57]
+      if (_T & reg_clk) begin // @[Sdc.scala 171:47]
         tx_cmd_timer <= _GEN_169;
       end
     end
-    if (reset) begin // @[Sdc.scala 124:31]
-      reg_tx_cmd_wrt <= 1'h0; // @[Sdc.scala 124:31]
-    end else if (tx_cmd_timer != 6'h0 & _T & reg_clk) begin // @[Sdc.scala 214:69]
-      reg_tx_cmd_wrt <= 1'h0; // @[Sdc.scala 216:20]
-    end else if (rx_busy_timer != 19'h0 & _T & reg_clk) begin // @[Sdc.scala 218:76]
-      reg_tx_cmd_wrt <= 1'h0; // @[Sdc.scala 219:20]
+    if (reset) begin // @[Sdc.scala 123:31]
+      reg_tx_cmd_wrt <= 1'h0; // @[Sdc.scala 123:31]
+    end else if (tx_cmd_timer != 6'h0 & _T & reg_clk) begin // @[Sdc.scala 213:69]
+      reg_tx_cmd_wrt <= 1'h0; // @[Sdc.scala 215:20]
+    end else if (rx_busy_timer != 19'h0 & _T & reg_clk) begin // @[Sdc.scala 217:76]
+      reg_tx_cmd_wrt <= 1'h0; // @[Sdc.scala 218:20]
     end else begin
       reg_tx_cmd_wrt <= _GEN_484;
     end
-    if (reset) begin // @[Sdc.scala 125:31]
-      reg_tx_cmd_out <= 1'h0; // @[Sdc.scala 125:31]
-    end else if (tx_cmd_counter > 6'h0 & _T & reg_clk) begin // @[Sdc.scala 221:75]
-      reg_tx_cmd_out <= tx_cmd_0; // @[Sdc.scala 223:20]
+    if (reset) begin // @[Sdc.scala 124:31]
+      reg_tx_cmd_out <= 1'h0; // @[Sdc.scala 124:31]
+    end else if (tx_cmd_counter > 6'h0 & _T & reg_clk) begin // @[Sdc.scala 220:75]
+      reg_tx_cmd_out <= tx_cmd_0; // @[Sdc.scala 222:20]
     end
-    if (reset) begin // @[Sdc.scala 126:35]
-      rx_dat_in_progress <= 1'h0; // @[Sdc.scala 126:35]
-    end else if (io_mem_wen) begin // @[Sdc.scala 506:21]
-      if (2'h0 == addr) begin // @[Sdc.scala 508:19]
+    if (reset) begin // @[Sdc.scala 125:35]
+      rx_dat_in_progress <= 1'h0; // @[Sdc.scala 125:35]
+    end else if (io_mem_wen) begin // @[Sdc.scala 505:21]
+      if (2'h0 == addr) begin // @[Sdc.scala 507:19]
         rx_dat_in_progress <= _GEN_839;
-      end else if (2'h1 == addr) begin // @[Sdc.scala 508:19]
+      end else if (2'h1 == addr) begin // @[Sdc.scala 507:19]
         rx_dat_in_progress <= _GEN_1289;
       end else begin
         rx_dat_in_progress <= _GEN_839;
@@ -11620,12 +11620,12 @@ module Sdc(
     end else begin
       rx_dat_in_progress <= _GEN_839;
     end
-    if (reset) begin // @[Sdc.scala 127:31]
-      rx_dat_counter <= 11'h0; // @[Sdc.scala 127:31]
-    end else if (io_mem_wen) begin // @[Sdc.scala 506:21]
-      if (2'h0 == addr) begin // @[Sdc.scala 508:19]
+    if (reset) begin // @[Sdc.scala 126:31]
+      rx_dat_counter <= 11'h0; // @[Sdc.scala 126:31]
+    end else if (io_mem_wen) begin // @[Sdc.scala 505:21]
+      if (2'h0 == addr) begin // @[Sdc.scala 507:19]
         rx_dat_counter <= _GEN_833;
-      end else if (2'h1 == addr) begin // @[Sdc.scala 508:19]
+      end else if (2'h1 == addr) begin // @[Sdc.scala 507:19]
         rx_dat_counter <= _GEN_1290;
       end else begin
         rx_dat_counter <= _GEN_833;
@@ -11633,12 +11633,12 @@ module Sdc(
     end else begin
       rx_dat_counter <= _GEN_833;
     end
-    if (reset) begin // @[Sdc.scala 128:33]
-      rx_dat_start_bit <= 1'h0; // @[Sdc.scala 128:33]
-    end else if (io_mem_wen) begin // @[Sdc.scala 506:21]
-      if (2'h0 == addr) begin // @[Sdc.scala 508:19]
+    if (reset) begin // @[Sdc.scala 127:33]
+      rx_dat_start_bit <= 1'h0; // @[Sdc.scala 127:33]
+    end else if (io_mem_wen) begin // @[Sdc.scala 505:21]
+      if (2'h0 == addr) begin // @[Sdc.scala 507:19]
         rx_dat_start_bit <= _GEN_864;
-      end else if (2'h1 == addr) begin // @[Sdc.scala 508:19]
+      end else if (2'h1 == addr) begin // @[Sdc.scala 507:19]
         rx_dat_start_bit <= _GEN_1291;
       end else begin
         rx_dat_start_bit <= _GEN_864;
@@ -11646,98 +11646,98 @@ module Sdc(
     end else begin
       rx_dat_start_bit <= _GEN_864;
     end
-    if (rx_dat_counter > 11'h0 & _T_2) begin // @[Sdc.scala 269:57]
-      if (_T_5) begin // @[Sdc.scala 271:47]
-        if (!(~rx_dat_in_progress & rx_dat_next[0])) begin // @[Sdc.scala 272:59]
-          if (!(_T_35 & ~rx_dat_next[0])) begin // @[Sdc.scala 282:66]
-            rx_dat_bits_0 <= rx_dat_next; // @[Sdc.scala 286:24]
+    if (rx_dat_counter > 11'h0 & _T_2) begin // @[Sdc.scala 268:57]
+      if (_T_5) begin // @[Sdc.scala 270:47]
+        if (!(~rx_dat_in_progress & rx_dat_next[0])) begin // @[Sdc.scala 271:59]
+          if (!(_T_35 & ~rx_dat_next[0])) begin // @[Sdc.scala 281:66]
+            rx_dat_bits_0 <= rx_dat_next; // @[Sdc.scala 285:24]
           end
         end
       end
     end
-    if (rx_dat_counter > 11'h0 & _T_2) begin // @[Sdc.scala 269:57]
-      if (_T_5) begin // @[Sdc.scala 271:47]
-        if (!(~rx_dat_in_progress & rx_dat_next[0])) begin // @[Sdc.scala 272:59]
-          if (!(_T_35 & ~rx_dat_next[0])) begin // @[Sdc.scala 282:66]
-            rx_dat_bits_1 <= rx_dat_bits_0; // @[Sdc.scala 285:50]
+    if (rx_dat_counter > 11'h0 & _T_2) begin // @[Sdc.scala 268:57]
+      if (_T_5) begin // @[Sdc.scala 270:47]
+        if (!(~rx_dat_in_progress & rx_dat_next[0])) begin // @[Sdc.scala 271:59]
+          if (!(_T_35 & ~rx_dat_next[0])) begin // @[Sdc.scala 281:66]
+            rx_dat_bits_1 <= rx_dat_bits_0; // @[Sdc.scala 284:50]
           end
         end
       end
     end
-    if (rx_dat_counter > 11'h0 & _T_2) begin // @[Sdc.scala 269:57]
-      if (_T_5) begin // @[Sdc.scala 271:47]
-        if (!(~rx_dat_in_progress & rx_dat_next[0])) begin // @[Sdc.scala 272:59]
-          if (!(_T_35 & ~rx_dat_next[0])) begin // @[Sdc.scala 282:66]
-            rx_dat_bits_2 <= rx_dat_bits_1; // @[Sdc.scala 285:50]
+    if (rx_dat_counter > 11'h0 & _T_2) begin // @[Sdc.scala 268:57]
+      if (_T_5) begin // @[Sdc.scala 270:47]
+        if (!(~rx_dat_in_progress & rx_dat_next[0])) begin // @[Sdc.scala 271:59]
+          if (!(_T_35 & ~rx_dat_next[0])) begin // @[Sdc.scala 281:66]
+            rx_dat_bits_2 <= rx_dat_bits_1; // @[Sdc.scala 284:50]
           end
         end
       end
     end
-    if (rx_dat_counter > 11'h0 & _T_2) begin // @[Sdc.scala 269:57]
-      if (_T_5) begin // @[Sdc.scala 271:47]
-        if (!(~rx_dat_in_progress & rx_dat_next[0])) begin // @[Sdc.scala 272:59]
-          if (!(_T_35 & ~rx_dat_next[0])) begin // @[Sdc.scala 282:66]
-            rx_dat_bits_3 <= rx_dat_bits_2; // @[Sdc.scala 285:50]
+    if (rx_dat_counter > 11'h0 & _T_2) begin // @[Sdc.scala 268:57]
+      if (_T_5) begin // @[Sdc.scala 270:47]
+        if (!(~rx_dat_in_progress & rx_dat_next[0])) begin // @[Sdc.scala 271:59]
+          if (!(_T_35 & ~rx_dat_next[0])) begin // @[Sdc.scala 281:66]
+            rx_dat_bits_3 <= rx_dat_bits_2; // @[Sdc.scala 284:50]
           end
         end
       end
     end
-    if (rx_dat_counter > 11'h0 & _T_2) begin // @[Sdc.scala 269:57]
-      if (_T_5) begin // @[Sdc.scala 271:47]
-        if (!(~rx_dat_in_progress & rx_dat_next[0])) begin // @[Sdc.scala 272:59]
-          if (!(_T_35 & ~rx_dat_next[0])) begin // @[Sdc.scala 282:66]
-            rx_dat_bits_4 <= rx_dat_bits_3; // @[Sdc.scala 285:50]
+    if (rx_dat_counter > 11'h0 & _T_2) begin // @[Sdc.scala 268:57]
+      if (_T_5) begin // @[Sdc.scala 270:47]
+        if (!(~rx_dat_in_progress & rx_dat_next[0])) begin // @[Sdc.scala 271:59]
+          if (!(_T_35 & ~rx_dat_next[0])) begin // @[Sdc.scala 281:66]
+            rx_dat_bits_4 <= rx_dat_bits_3; // @[Sdc.scala 284:50]
           end
         end
       end
     end
-    if (rx_dat_counter > 11'h0 & _T_2) begin // @[Sdc.scala 269:57]
-      if (_T_5) begin // @[Sdc.scala 271:47]
-        if (!(~rx_dat_in_progress & rx_dat_next[0])) begin // @[Sdc.scala 272:59]
-          if (!(_T_35 & ~rx_dat_next[0])) begin // @[Sdc.scala 282:66]
-            rx_dat_bits_5 <= rx_dat_bits_4; // @[Sdc.scala 285:50]
+    if (rx_dat_counter > 11'h0 & _T_2) begin // @[Sdc.scala 268:57]
+      if (_T_5) begin // @[Sdc.scala 270:47]
+        if (!(~rx_dat_in_progress & rx_dat_next[0])) begin // @[Sdc.scala 271:59]
+          if (!(_T_35 & ~rx_dat_next[0])) begin // @[Sdc.scala 281:66]
+            rx_dat_bits_5 <= rx_dat_bits_4; // @[Sdc.scala 284:50]
           end
         end
       end
     end
-    if (rx_dat_counter > 11'h0 & _T_2) begin // @[Sdc.scala 269:57]
-      if (_T_5) begin // @[Sdc.scala 271:47]
-        if (!(~rx_dat_in_progress & rx_dat_next[0])) begin // @[Sdc.scala 272:59]
-          if (!(_T_35 & ~rx_dat_next[0])) begin // @[Sdc.scala 282:66]
-            rx_dat_bits_6 <= rx_dat_bits_5; // @[Sdc.scala 285:50]
+    if (rx_dat_counter > 11'h0 & _T_2) begin // @[Sdc.scala 268:57]
+      if (_T_5) begin // @[Sdc.scala 270:47]
+        if (!(~rx_dat_in_progress & rx_dat_next[0])) begin // @[Sdc.scala 271:59]
+          if (!(_T_35 & ~rx_dat_next[0])) begin // @[Sdc.scala 281:66]
+            rx_dat_bits_6 <= rx_dat_bits_5; // @[Sdc.scala 284:50]
           end
         end
       end
     end
-    if (rx_dat_counter > 11'h0 & _T_2) begin // @[Sdc.scala 269:57]
-      if (_T_5) begin // @[Sdc.scala 271:47]
-        if (!(~rx_dat_in_progress & rx_dat_next[0])) begin // @[Sdc.scala 272:59]
-          if (!(_T_35 & ~rx_dat_next[0])) begin // @[Sdc.scala 282:66]
-            rx_dat_bits_7 <= rx_dat_bits_6; // @[Sdc.scala 285:50]
+    if (rx_dat_counter > 11'h0 & _T_2) begin // @[Sdc.scala 268:57]
+      if (_T_5) begin // @[Sdc.scala 270:47]
+        if (!(~rx_dat_in_progress & rx_dat_next[0])) begin // @[Sdc.scala 271:59]
+          if (!(_T_35 & ~rx_dat_next[0])) begin // @[Sdc.scala 281:66]
+            rx_dat_bits_7 <= rx_dat_bits_6; // @[Sdc.scala 284:50]
           end
         end
       end
     end
-    if (reset) begin // @[Sdc.scala 130:28]
-      rx_dat_next <= 4'h0; // @[Sdc.scala 130:28]
-    end else if (rx_dat_counter > 11'h0 & _T_2) begin // @[Sdc.scala 269:57]
-      rx_dat_next <= io_sdc_port_dat_in; // @[Sdc.scala 270:17]
+    if (reset) begin // @[Sdc.scala 129:28]
+      rx_dat_next <= 4'h0; // @[Sdc.scala 129:28]
+    end else if (rx_dat_counter > 11'h0 & _T_2) begin // @[Sdc.scala 268:57]
+      rx_dat_next <= io_sdc_port_dat_in; // @[Sdc.scala 269:17]
     end
-    if (reset) begin // @[Sdc.scala 131:34]
-      rx_dat_continuous <= 1'h0; // @[Sdc.scala 131:34]
-    end else if (io_mem_wen) begin // @[Sdc.scala 506:21]
-      if (!(2'h0 == addr)) begin // @[Sdc.scala 508:19]
-        if (2'h1 == addr) begin // @[Sdc.scala 508:19]
+    if (reset) begin // @[Sdc.scala 130:34]
+      rx_dat_continuous <= 1'h0; // @[Sdc.scala 130:34]
+    end else if (io_mem_wen) begin // @[Sdc.scala 505:21]
+      if (!(2'h0 == addr)) begin // @[Sdc.scala 507:19]
+        if (2'h1 == addr) begin // @[Sdc.scala 507:19]
           rx_dat_continuous <= _GEN_1312;
         end
       end
     end
-    if (reset) begin // @[Sdc.scala 132:29]
-      rx_dat_ready <= 1'h0; // @[Sdc.scala 132:29]
-    end else if (io_mem_ren) begin // @[Sdc.scala 600:21]
-      if (2'h0 == addr_1) begin // @[Sdc.scala 602:19]
+    if (reset) begin // @[Sdc.scala 131:29]
+      rx_dat_ready <= 1'h0; // @[Sdc.scala 131:29]
+    end else if (io_mem_ren) begin // @[Sdc.scala 599:21]
+      if (2'h0 == addr_1) begin // @[Sdc.scala 601:19]
         rx_dat_ready <= _GEN_1650;
-      end else if (2'h1 == addr_1) begin // @[Sdc.scala 602:19]
+      end else if (2'h1 == addr_1) begin // @[Sdc.scala 601:19]
         rx_dat_ready <= _GEN_1650;
       end else begin
         rx_dat_ready <= _GEN_1704;
@@ -11745,18 +11745,18 @@ module Sdc(
     end else begin
       rx_dat_ready <= _GEN_1650;
     end
-    if (reset) begin // @[Sdc.scala 133:31]
-      rx_dat_intr_en <= 1'h0; // @[Sdc.scala 133:31]
-    end else if (io_mem_wen) begin // @[Sdc.scala 506:21]
-      if (2'h0 == addr) begin // @[Sdc.scala 508:19]
-        rx_dat_intr_en <= io_mem_wdata[17]; // @[Sdc.scala 517:26]
+    if (reset) begin // @[Sdc.scala 132:31]
+      rx_dat_intr_en <= 1'h0; // @[Sdc.scala 132:31]
+    end else if (io_mem_wen) begin // @[Sdc.scala 505:21]
+      if (2'h0 == addr) begin // @[Sdc.scala 507:19]
+        rx_dat_intr_en <= io_mem_wdata[17]; // @[Sdc.scala 516:26]
       end
     end
-    if (io_mem_wen) begin // @[Sdc.scala 506:21]
-      if (2'h0 == addr) begin // @[Sdc.scala 508:19]
+    if (io_mem_wen) begin // @[Sdc.scala 505:21]
+      if (2'h0 == addr) begin // @[Sdc.scala 507:19]
         rx_dat_crc_0 <= _GEN_848;
-      end else if (2'h1 == addr) begin // @[Sdc.scala 508:19]
-        if (io_mem_wdata[11]) begin // @[Sdc.scala 522:40]
+      end else if (2'h1 == addr) begin // @[Sdc.scala 507:19]
+        if (io_mem_wdata[11]) begin // @[Sdc.scala 521:40]
           rx_dat_crc_0 <= _GEN_1184;
         end else begin
           rx_dat_crc_0 <= _GEN_848;
@@ -11767,11 +11767,11 @@ module Sdc(
     end else begin
       rx_dat_crc_0 <= _GEN_848;
     end
-    if (io_mem_wen) begin // @[Sdc.scala 506:21]
-      if (2'h0 == addr) begin // @[Sdc.scala 508:19]
+    if (io_mem_wen) begin // @[Sdc.scala 505:21]
+      if (2'h0 == addr) begin // @[Sdc.scala 507:19]
         rx_dat_crc_1 <= _GEN_849;
-      end else if (2'h1 == addr) begin // @[Sdc.scala 508:19]
-        if (io_mem_wdata[11]) begin // @[Sdc.scala 522:40]
+      end else if (2'h1 == addr) begin // @[Sdc.scala 507:19]
+        if (io_mem_wdata[11]) begin // @[Sdc.scala 521:40]
           rx_dat_crc_1 <= _GEN_1185;
         end else begin
           rx_dat_crc_1 <= _GEN_849;
@@ -11782,11 +11782,11 @@ module Sdc(
     end else begin
       rx_dat_crc_1 <= _GEN_849;
     end
-    if (io_mem_wen) begin // @[Sdc.scala 506:21]
-      if (2'h0 == addr) begin // @[Sdc.scala 508:19]
+    if (io_mem_wen) begin // @[Sdc.scala 505:21]
+      if (2'h0 == addr) begin // @[Sdc.scala 507:19]
         rx_dat_crc_2 <= _GEN_850;
-      end else if (2'h1 == addr) begin // @[Sdc.scala 508:19]
-        if (io_mem_wdata[11]) begin // @[Sdc.scala 522:40]
+      end else if (2'h1 == addr) begin // @[Sdc.scala 507:19]
+        if (io_mem_wdata[11]) begin // @[Sdc.scala 521:40]
           rx_dat_crc_2 <= _GEN_1186;
         end else begin
           rx_dat_crc_2 <= _GEN_850;
@@ -11797,11 +11797,11 @@ module Sdc(
     end else begin
       rx_dat_crc_2 <= _GEN_850;
     end
-    if (io_mem_wen) begin // @[Sdc.scala 506:21]
-      if (2'h0 == addr) begin // @[Sdc.scala 508:19]
+    if (io_mem_wen) begin // @[Sdc.scala 505:21]
+      if (2'h0 == addr) begin // @[Sdc.scala 507:19]
         rx_dat_crc_3 <= _GEN_851;
-      end else if (2'h1 == addr) begin // @[Sdc.scala 508:19]
-        if (io_mem_wdata[11]) begin // @[Sdc.scala 522:40]
+      end else if (2'h1 == addr) begin // @[Sdc.scala 507:19]
+        if (io_mem_wdata[11]) begin // @[Sdc.scala 521:40]
           rx_dat_crc_3 <= _GEN_1187;
         end else begin
           rx_dat_crc_3 <= _GEN_851;
@@ -11812,11 +11812,11 @@ module Sdc(
     end else begin
       rx_dat_crc_3 <= _GEN_851;
     end
-    if (io_mem_wen) begin // @[Sdc.scala 506:21]
-      if (2'h0 == addr) begin // @[Sdc.scala 508:19]
+    if (io_mem_wen) begin // @[Sdc.scala 505:21]
+      if (2'h0 == addr) begin // @[Sdc.scala 507:19]
         rx_dat_crc_4 <= _GEN_852;
-      end else if (2'h1 == addr) begin // @[Sdc.scala 508:19]
-        if (io_mem_wdata[11]) begin // @[Sdc.scala 522:40]
+      end else if (2'h1 == addr) begin // @[Sdc.scala 507:19]
+        if (io_mem_wdata[11]) begin // @[Sdc.scala 521:40]
           rx_dat_crc_4 <= _GEN_1188;
         end else begin
           rx_dat_crc_4 <= _GEN_852;
@@ -11827,11 +11827,11 @@ module Sdc(
     end else begin
       rx_dat_crc_4 <= _GEN_852;
     end
-    if (io_mem_wen) begin // @[Sdc.scala 506:21]
-      if (2'h0 == addr) begin // @[Sdc.scala 508:19]
+    if (io_mem_wen) begin // @[Sdc.scala 505:21]
+      if (2'h0 == addr) begin // @[Sdc.scala 507:19]
         rx_dat_crc_5 <= _GEN_853;
-      end else if (2'h1 == addr) begin // @[Sdc.scala 508:19]
-        if (io_mem_wdata[11]) begin // @[Sdc.scala 522:40]
+      end else if (2'h1 == addr) begin // @[Sdc.scala 507:19]
+        if (io_mem_wdata[11]) begin // @[Sdc.scala 521:40]
           rx_dat_crc_5 <= _GEN_1189;
         end else begin
           rx_dat_crc_5 <= _GEN_853;
@@ -11842,11 +11842,11 @@ module Sdc(
     end else begin
       rx_dat_crc_5 <= _GEN_853;
     end
-    if (io_mem_wen) begin // @[Sdc.scala 506:21]
-      if (2'h0 == addr) begin // @[Sdc.scala 508:19]
+    if (io_mem_wen) begin // @[Sdc.scala 505:21]
+      if (2'h0 == addr) begin // @[Sdc.scala 507:19]
         rx_dat_crc_6 <= _GEN_854;
-      end else if (2'h1 == addr) begin // @[Sdc.scala 508:19]
-        if (io_mem_wdata[11]) begin // @[Sdc.scala 522:40]
+      end else if (2'h1 == addr) begin // @[Sdc.scala 507:19]
+        if (io_mem_wdata[11]) begin // @[Sdc.scala 521:40]
           rx_dat_crc_6 <= _GEN_1190;
         end else begin
           rx_dat_crc_6 <= _GEN_854;
@@ -11857,11 +11857,11 @@ module Sdc(
     end else begin
       rx_dat_crc_6 <= _GEN_854;
     end
-    if (io_mem_wen) begin // @[Sdc.scala 506:21]
-      if (2'h0 == addr) begin // @[Sdc.scala 508:19]
+    if (io_mem_wen) begin // @[Sdc.scala 505:21]
+      if (2'h0 == addr) begin // @[Sdc.scala 507:19]
         rx_dat_crc_7 <= _GEN_855;
-      end else if (2'h1 == addr) begin // @[Sdc.scala 508:19]
-        if (io_mem_wdata[11]) begin // @[Sdc.scala 522:40]
+      end else if (2'h1 == addr) begin // @[Sdc.scala 507:19]
+        if (io_mem_wdata[11]) begin // @[Sdc.scala 521:40]
           rx_dat_crc_7 <= _GEN_1191;
         end else begin
           rx_dat_crc_7 <= _GEN_855;
@@ -11872,11 +11872,11 @@ module Sdc(
     end else begin
       rx_dat_crc_7 <= _GEN_855;
     end
-    if (io_mem_wen) begin // @[Sdc.scala 506:21]
-      if (2'h0 == addr) begin // @[Sdc.scala 508:19]
+    if (io_mem_wen) begin // @[Sdc.scala 505:21]
+      if (2'h0 == addr) begin // @[Sdc.scala 507:19]
         rx_dat_crc_8 <= _GEN_856;
-      end else if (2'h1 == addr) begin // @[Sdc.scala 508:19]
-        if (io_mem_wdata[11]) begin // @[Sdc.scala 522:40]
+      end else if (2'h1 == addr) begin // @[Sdc.scala 507:19]
+        if (io_mem_wdata[11]) begin // @[Sdc.scala 521:40]
           rx_dat_crc_8 <= _GEN_1192;
         end else begin
           rx_dat_crc_8 <= _GEN_856;
@@ -11887,11 +11887,11 @@ module Sdc(
     end else begin
       rx_dat_crc_8 <= _GEN_856;
     end
-    if (io_mem_wen) begin // @[Sdc.scala 506:21]
-      if (2'h0 == addr) begin // @[Sdc.scala 508:19]
+    if (io_mem_wen) begin // @[Sdc.scala 505:21]
+      if (2'h0 == addr) begin // @[Sdc.scala 507:19]
         rx_dat_crc_9 <= _GEN_857;
-      end else if (2'h1 == addr) begin // @[Sdc.scala 508:19]
-        if (io_mem_wdata[11]) begin // @[Sdc.scala 522:40]
+      end else if (2'h1 == addr) begin // @[Sdc.scala 507:19]
+        if (io_mem_wdata[11]) begin // @[Sdc.scala 521:40]
           rx_dat_crc_9 <= _GEN_1193;
         end else begin
           rx_dat_crc_9 <= _GEN_857;
@@ -11902,11 +11902,11 @@ module Sdc(
     end else begin
       rx_dat_crc_9 <= _GEN_857;
     end
-    if (io_mem_wen) begin // @[Sdc.scala 506:21]
-      if (2'h0 == addr) begin // @[Sdc.scala 508:19]
+    if (io_mem_wen) begin // @[Sdc.scala 505:21]
+      if (2'h0 == addr) begin // @[Sdc.scala 507:19]
         rx_dat_crc_10 <= _GEN_858;
-      end else if (2'h1 == addr) begin // @[Sdc.scala 508:19]
-        if (io_mem_wdata[11]) begin // @[Sdc.scala 522:40]
+      end else if (2'h1 == addr) begin // @[Sdc.scala 507:19]
+        if (io_mem_wdata[11]) begin // @[Sdc.scala 521:40]
           rx_dat_crc_10 <= _GEN_1194;
         end else begin
           rx_dat_crc_10 <= _GEN_858;
@@ -11917,11 +11917,11 @@ module Sdc(
     end else begin
       rx_dat_crc_10 <= _GEN_858;
     end
-    if (io_mem_wen) begin // @[Sdc.scala 506:21]
-      if (2'h0 == addr) begin // @[Sdc.scala 508:19]
+    if (io_mem_wen) begin // @[Sdc.scala 505:21]
+      if (2'h0 == addr) begin // @[Sdc.scala 507:19]
         rx_dat_crc_11 <= _GEN_859;
-      end else if (2'h1 == addr) begin // @[Sdc.scala 508:19]
-        if (io_mem_wdata[11]) begin // @[Sdc.scala 522:40]
+      end else if (2'h1 == addr) begin // @[Sdc.scala 507:19]
+        if (io_mem_wdata[11]) begin // @[Sdc.scala 521:40]
           rx_dat_crc_11 <= _GEN_1195;
         end else begin
           rx_dat_crc_11 <= _GEN_859;
@@ -11932,11 +11932,11 @@ module Sdc(
     end else begin
       rx_dat_crc_11 <= _GEN_859;
     end
-    if (io_mem_wen) begin // @[Sdc.scala 506:21]
-      if (2'h0 == addr) begin // @[Sdc.scala 508:19]
+    if (io_mem_wen) begin // @[Sdc.scala 505:21]
+      if (2'h0 == addr) begin // @[Sdc.scala 507:19]
         rx_dat_crc_12 <= _GEN_860;
-      end else if (2'h1 == addr) begin // @[Sdc.scala 508:19]
-        if (io_mem_wdata[11]) begin // @[Sdc.scala 522:40]
+      end else if (2'h1 == addr) begin // @[Sdc.scala 507:19]
+        if (io_mem_wdata[11]) begin // @[Sdc.scala 521:40]
           rx_dat_crc_12 <= _GEN_1196;
         end else begin
           rx_dat_crc_12 <= _GEN_860;
@@ -11947,11 +11947,11 @@ module Sdc(
     end else begin
       rx_dat_crc_12 <= _GEN_860;
     end
-    if (io_mem_wen) begin // @[Sdc.scala 506:21]
-      if (2'h0 == addr) begin // @[Sdc.scala 508:19]
+    if (io_mem_wen) begin // @[Sdc.scala 505:21]
+      if (2'h0 == addr) begin // @[Sdc.scala 507:19]
         rx_dat_crc_13 <= _GEN_861;
-      end else if (2'h1 == addr) begin // @[Sdc.scala 508:19]
-        if (io_mem_wdata[11]) begin // @[Sdc.scala 522:40]
+      end else if (2'h1 == addr) begin // @[Sdc.scala 507:19]
+        if (io_mem_wdata[11]) begin // @[Sdc.scala 521:40]
           rx_dat_crc_13 <= _GEN_1197;
         end else begin
           rx_dat_crc_13 <= _GEN_861;
@@ -11962,11 +11962,11 @@ module Sdc(
     end else begin
       rx_dat_crc_13 <= _GEN_861;
     end
-    if (io_mem_wen) begin // @[Sdc.scala 506:21]
-      if (2'h0 == addr) begin // @[Sdc.scala 508:19]
+    if (io_mem_wen) begin // @[Sdc.scala 505:21]
+      if (2'h0 == addr) begin // @[Sdc.scala 507:19]
         rx_dat_crc_14 <= _GEN_862;
-      end else if (2'h1 == addr) begin // @[Sdc.scala 508:19]
-        if (io_mem_wdata[11]) begin // @[Sdc.scala 522:40]
+      end else if (2'h1 == addr) begin // @[Sdc.scala 507:19]
+        if (io_mem_wdata[11]) begin // @[Sdc.scala 521:40]
           rx_dat_crc_14 <= _GEN_1198;
         end else begin
           rx_dat_crc_14 <= _GEN_862;
@@ -11977,11 +11977,11 @@ module Sdc(
     end else begin
       rx_dat_crc_14 <= _GEN_862;
     end
-    if (io_mem_wen) begin // @[Sdc.scala 506:21]
-      if (2'h0 == addr) begin // @[Sdc.scala 508:19]
+    if (io_mem_wen) begin // @[Sdc.scala 505:21]
+      if (2'h0 == addr) begin // @[Sdc.scala 507:19]
         rx_dat_crc_15 <= _GEN_863;
-      end else if (2'h1 == addr) begin // @[Sdc.scala 508:19]
-        if (io_mem_wdata[11]) begin // @[Sdc.scala 522:40]
+      end else if (2'h1 == addr) begin // @[Sdc.scala 507:19]
+        if (io_mem_wdata[11]) begin // @[Sdc.scala 521:40]
           rx_dat_crc_15 <= _GEN_1199;
         end else begin
           rx_dat_crc_15 <= _GEN_863;
@@ -11992,12 +11992,12 @@ module Sdc(
     end else begin
       rx_dat_crc_15 <= _GEN_863;
     end
-    if (reset) begin // @[Sdc.scala 135:33]
-      rx_dat_crc_error <= 1'h0; // @[Sdc.scala 135:33]
-    end else if (io_mem_wen) begin // @[Sdc.scala 506:21]
-      if (2'h0 == addr) begin // @[Sdc.scala 508:19]
+    if (reset) begin // @[Sdc.scala 134:33]
+      rx_dat_crc_error <= 1'h0; // @[Sdc.scala 134:33]
+    end else if (io_mem_wen) begin // @[Sdc.scala 505:21]
+      if (2'h0 == addr) begin // @[Sdc.scala 507:19]
         rx_dat_crc_error <= _GEN_868;
-      end else if (2'h1 == addr) begin // @[Sdc.scala 508:19]
+      end else if (2'h1 == addr) begin // @[Sdc.scala 507:19]
         rx_dat_crc_error <= _GEN_1309;
       end else begin
         rx_dat_crc_error <= _GEN_868;
@@ -12005,12 +12005,12 @@ module Sdc(
     end else begin
       rx_dat_crc_error <= _GEN_868;
     end
-    if (reset) begin // @[Sdc.scala 136:29]
-      rx_dat_timer <= 19'h0; // @[Sdc.scala 136:29]
-    end else if (io_mem_wen) begin // @[Sdc.scala 506:21]
-      if (2'h0 == addr) begin // @[Sdc.scala 508:19]
+    if (reset) begin // @[Sdc.scala 135:29]
+      rx_dat_timer <= 19'h0; // @[Sdc.scala 135:29]
+    end else if (io_mem_wen) begin // @[Sdc.scala 505:21]
+      if (2'h0 == addr) begin // @[Sdc.scala 507:19]
         rx_dat_timer <= _GEN_832;
-      end else if (2'h1 == addr) begin // @[Sdc.scala 508:19]
+      end else if (2'h1 == addr) begin // @[Sdc.scala 507:19]
         rx_dat_timer <= _GEN_1310;
       end else begin
         rx_dat_timer <= _GEN_832;
@@ -12018,12 +12018,12 @@ module Sdc(
     end else begin
       rx_dat_timer <= _GEN_832;
     end
-    if (reset) begin // @[Sdc.scala 137:31]
-      rx_dat_timeout <= 1'h0; // @[Sdc.scala 137:31]
-    end else if (io_mem_wen) begin // @[Sdc.scala 506:21]
-      if (2'h0 == addr) begin // @[Sdc.scala 508:19]
+    if (reset) begin // @[Sdc.scala 136:31]
+      rx_dat_timeout <= 1'h0; // @[Sdc.scala 136:31]
+    end else if (io_mem_wen) begin // @[Sdc.scala 505:21]
+      if (2'h0 == addr) begin // @[Sdc.scala 507:19]
         rx_dat_timeout <= _GEN_835;
-      end else if (2'h1 == addr) begin // @[Sdc.scala 508:19]
+      end else if (2'h1 == addr) begin // @[Sdc.scala 507:19]
         rx_dat_timeout <= _GEN_1311;
       end else begin
         rx_dat_timeout <= _GEN_835;
@@ -12031,12 +12031,12 @@ module Sdc(
     end else begin
       rx_dat_timeout <= _GEN_835;
     end
-    if (reset) begin // @[Sdc.scala 138:31]
-      rx_dat_overrun <= 1'h0; // @[Sdc.scala 138:31]
-    end else if (io_mem_wen) begin // @[Sdc.scala 506:21]
-      if (2'h0 == addr) begin // @[Sdc.scala 508:19]
+    if (reset) begin // @[Sdc.scala 137:31]
+      rx_dat_overrun <= 1'h0; // @[Sdc.scala 137:31]
+    end else if (io_mem_wen) begin // @[Sdc.scala 505:21]
+      if (2'h0 == addr) begin // @[Sdc.scala 507:19]
         rx_dat_overrun <= _GEN_869;
-      end else if (2'h1 == addr) begin // @[Sdc.scala 508:19]
+      end else if (2'h1 == addr) begin // @[Sdc.scala 507:19]
         rx_dat_overrun <= _GEN_1313;
       end else begin
         rx_dat_overrun <= _GEN_869;
@@ -12044,12 +12044,12 @@ module Sdc(
     end else begin
       rx_dat_overrun <= _GEN_869;
     end
-    if (reset) begin // @[Sdc.scala 140:33]
-      rxtx_dat_counter <= 8'h0; // @[Sdc.scala 140:33]
-    end else if (io_mem_ren) begin // @[Sdc.scala 600:21]
-      if (2'h0 == addr_1) begin // @[Sdc.scala 602:19]
+    if (reset) begin // @[Sdc.scala 139:33]
+      rxtx_dat_counter <= 8'h0; // @[Sdc.scala 139:33]
+    end else if (io_mem_ren) begin // @[Sdc.scala 599:21]
+      if (2'h0 == addr_1) begin // @[Sdc.scala 601:19]
         rxtx_dat_counter <= _GEN_1673;
-      end else if (2'h1 == addr_1) begin // @[Sdc.scala 602:19]
+      end else if (2'h1 == addr_1) begin // @[Sdc.scala 601:19]
         rxtx_dat_counter <= _GEN_1673;
       end else begin
         rxtx_dat_counter <= _GEN_1701;
@@ -12057,12 +12057,12 @@ module Sdc(
     end else begin
       rxtx_dat_counter <= _GEN_1673;
     end
-    if (reset) begin // @[Sdc.scala 141:31]
-      rxtx_dat_index <= 8'h0; // @[Sdc.scala 141:31]
-    end else if (io_mem_wen) begin // @[Sdc.scala 506:21]
-      if (2'h0 == addr) begin // @[Sdc.scala 508:19]
+    if (reset) begin // @[Sdc.scala 140:31]
+      rxtx_dat_index <= 8'h0; // @[Sdc.scala 140:31]
+    end else if (io_mem_wen) begin // @[Sdc.scala 505:21]
+      if (2'h0 == addr) begin // @[Sdc.scala 507:19]
         rxtx_dat_index <= _GEN_1163;
-      end else if (2'h1 == addr) begin // @[Sdc.scala 508:19]
+      end else if (2'h1 == addr) begin // @[Sdc.scala 507:19]
         rxtx_dat_index <= _GEN_1314;
       end else begin
         rxtx_dat_index <= _GEN_1163;
@@ -12070,33 +12070,33 @@ module Sdc(
     end else begin
       rxtx_dat_index <= _GEN_1163;
     end
-    if (reset) begin // @[Sdc.scala 142:30]
-      rx_busy_timer <= 19'h0; // @[Sdc.scala 142:30]
-    end else if (_T_20) begin // @[Sdc.scala 404:70]
+    if (reset) begin // @[Sdc.scala 141:30]
+      rx_busy_timer <= 19'h0; // @[Sdc.scala 141:30]
+    end else if (_T_20) begin // @[Sdc.scala 403:70]
       rx_busy_timer <= _GEN_924;
-    end else if (tx_dat_timer != 6'h0 & _T & reg_clk) begin // @[Sdc.scala 407:75]
+    end else if (tx_dat_timer != 6'h0 & _T & reg_clk) begin // @[Sdc.scala 406:75]
       rx_busy_timer <= _GEN_924;
-    end else if (tx_dat_counter != 11'h0 & _T & reg_clk) begin // @[Sdc.scala 411:77]
+    end else if (tx_dat_counter != 11'h0 & _T & reg_clk) begin // @[Sdc.scala 410:77]
       rx_busy_timer <= _GEN_962;
     end else begin
       rx_busy_timer <= _GEN_924;
     end
-    if (reset) begin // @[Sdc.scala 143:36]
-      rx_busy_in_progress <= 1'h0; // @[Sdc.scala 143:36]
-    end else if (rx_busy_timer > 19'h0) begin // @[Sdc.scala 361:30]
-      if (_T_5) begin // @[Sdc.scala 363:47]
-        if (rx_busy_in_progress | ~rx_dat0_next) begin // @[Sdc.scala 367:51]
+    if (reset) begin // @[Sdc.scala 142:36]
+      rx_busy_in_progress <= 1'h0; // @[Sdc.scala 142:36]
+    end else if (rx_busy_timer > 19'h0) begin // @[Sdc.scala 360:30]
+      if (_T_5) begin // @[Sdc.scala 362:47]
+        if (rx_busy_in_progress | ~rx_dat0_next) begin // @[Sdc.scala 366:51]
           rx_busy_in_progress <= _GEN_898;
         end
       end
     end
-    rx_dat0_next <= reset | _GEN_923; // @[Sdc.scala 144:{29,29}]
-    if (reset) begin // @[Sdc.scala 145:32]
-      rx_dat_buf_read <= 1'h0; // @[Sdc.scala 145:32]
-    end else if (io_mem_ren) begin // @[Sdc.scala 600:21]
-      if (2'h0 == addr_1) begin // @[Sdc.scala 602:19]
+    rx_dat0_next <= reset | _GEN_923; // @[Sdc.scala 143:{29,29}]
+    if (reset) begin // @[Sdc.scala 144:32]
+      rx_dat_buf_read <= 1'h0; // @[Sdc.scala 144:32]
+    end else if (io_mem_ren) begin // @[Sdc.scala 599:21]
+      if (2'h0 == addr_1) begin // @[Sdc.scala 601:19]
         rx_dat_buf_read <= _GEN_837;
-      end else if (2'h1 == addr_1) begin // @[Sdc.scala 602:19]
+      end else if (2'h1 == addr_1) begin // @[Sdc.scala 601:19]
         rx_dat_buf_read <= _GEN_837;
       end else begin
         rx_dat_buf_read <= _GEN_1703;
@@ -12104,388 +12104,388 @@ module Sdc(
     end else begin
       rx_dat_buf_read <= _GEN_837;
     end
-    if (reset) begin // @[Sdc.scala 146:33]
-      rx_dat_buf_cache <= 32'h0; // @[Sdc.scala 146:33]
-    end else if (rx_dat_buf_read) begin // @[Sdc.scala 260:26]
-      rx_dat_buf_cache <= io_sdbuf_rdata2; // @[Sdc.scala 261:22]
+    if (reset) begin // @[Sdc.scala 145:33]
+      rx_dat_buf_cache <= 32'h0; // @[Sdc.scala 145:33]
+    end else if (rx_dat_buf_read) begin // @[Sdc.scala 259:26]
+      rx_dat_buf_cache <= io_sdbuf_rdata2; // @[Sdc.scala 260:22]
     end
-    if (reset) begin // @[Sdc.scala 147:31]
-      reg_tx_dat_wrt <= 1'h0; // @[Sdc.scala 147:31]
-    end else if (_T_20) begin // @[Sdc.scala 404:70]
-      reg_tx_dat_wrt <= 1'h0; // @[Sdc.scala 405:20]
-    end else if (tx_dat_timer != 6'h0 & _T & reg_clk) begin // @[Sdc.scala 407:75]
-      reg_tx_dat_wrt <= 1'h0; // @[Sdc.scala 409:20]
-    end else if (tx_dat_counter != 11'h0 & _T & reg_clk) begin // @[Sdc.scala 411:77]
+    if (reset) begin // @[Sdc.scala 146:31]
+      reg_tx_dat_wrt <= 1'h0; // @[Sdc.scala 146:31]
+    end else if (_T_20) begin // @[Sdc.scala 403:70]
+      reg_tx_dat_wrt <= 1'h0; // @[Sdc.scala 404:20]
+    end else if (tx_dat_timer != 6'h0 & _T & reg_clk) begin // @[Sdc.scala 406:75]
+      reg_tx_dat_wrt <= 1'h0; // @[Sdc.scala 408:20]
+    end else if (tx_dat_counter != 11'h0 & _T & reg_clk) begin // @[Sdc.scala 410:77]
       reg_tx_dat_wrt <= _GEN_960;
     end
-    reg_tx_dat_out <= _GEN_1727[0]; // @[Sdc.scala 148:{31,31}]
-    if (reset) begin // @[Sdc.scala 149:33]
-      tx_empty_intr_en <= 1'h0; // @[Sdc.scala 149:33]
-    end else if (io_mem_wen) begin // @[Sdc.scala 506:21]
-      if (2'h0 == addr) begin // @[Sdc.scala 508:19]
-        tx_empty_intr_en <= io_mem_wdata[18]; // @[Sdc.scala 518:26]
+    reg_tx_dat_out <= _GEN_1727[0]; // @[Sdc.scala 147:{31,31}]
+    if (reset) begin // @[Sdc.scala 148:33]
+      tx_empty_intr_en <= 1'h0; // @[Sdc.scala 148:33]
+    end else if (io_mem_wen) begin // @[Sdc.scala 505:21]
+      if (2'h0 == addr) begin // @[Sdc.scala 507:19]
+        tx_empty_intr_en <= io_mem_wdata[18]; // @[Sdc.scala 517:26]
+      end
+    end
+    if (reset) begin // @[Sdc.scala 149:31]
+      tx_end_intr_en <= 1'h0; // @[Sdc.scala 149:31]
+    end else if (io_mem_wen) begin // @[Sdc.scala 505:21]
+      if (2'h0 == addr) begin // @[Sdc.scala 507:19]
+        tx_end_intr_en <= io_mem_wdata[19]; // @[Sdc.scala 518:26]
       end
     end
     if (reset) begin // @[Sdc.scala 150:31]
-      tx_end_intr_en <= 1'h0; // @[Sdc.scala 150:31]
-    end else if (io_mem_wen) begin // @[Sdc.scala 506:21]
-      if (2'h0 == addr) begin // @[Sdc.scala 508:19]
-        tx_end_intr_en <= io_mem_wdata[19]; // @[Sdc.scala 519:26]
-      end
-    end
-    if (reset) begin // @[Sdc.scala 151:31]
-      tx_dat_counter <= 11'h0; // @[Sdc.scala 151:31]
-    end else if (_T_20) begin // @[Sdc.scala 404:70]
+      tx_dat_counter <= 11'h0; // @[Sdc.scala 150:31]
+    end else if (_T_20) begin // @[Sdc.scala 403:70]
       tx_dat_counter <= _GEN_870;
-    end else if (tx_dat_timer != 6'h0 & _T & reg_clk) begin // @[Sdc.scala 407:75]
+    end else if (tx_dat_timer != 6'h0 & _T & reg_clk) begin // @[Sdc.scala 406:75]
       tx_dat_counter <= _GEN_870;
-    end else if (tx_dat_counter != 11'h0 & _T & reg_clk) begin // @[Sdc.scala 411:77]
-      tx_dat_counter <= _tx_dat_counter_T_1; // @[Sdc.scala 415:20]
+    end else if (tx_dat_counter != 11'h0 & _T & reg_clk) begin // @[Sdc.scala 410:77]
+      tx_dat_counter <= _tx_dat_counter_T_1; // @[Sdc.scala 414:20]
     end else begin
       tx_dat_counter <= _GEN_870;
     end
-    tx_dat_timer <= _GEN_1728[5:0]; // @[Sdc.scala 152:{29,29}]
-    if (2'h1 == tx_dat_prepare_state) begin // @[Sdc.scala 461:33]
+    tx_dat_timer <= _GEN_1728[5:0]; // @[Sdc.scala 151:{29,29}]
+    if (2'h1 == tx_dat_prepare_state) begin // @[Sdc.scala 460:33]
       tx_dat_0 <= _GEN_1066;
-    end else if (2'h2 == tx_dat_prepare_state) begin // @[Sdc.scala 461:33]
-      tx_dat_0 <= 4'h0; // @[Sdc.scala 474:17]
+    end else if (2'h2 == tx_dat_prepare_state) begin // @[Sdc.scala 460:33]
+      tx_dat_0 <= 4'h0; // @[Sdc.scala 473:17]
     end else begin
       tx_dat_0 <= _GEN_1066;
     end
-    if (2'h1 == tx_dat_prepare_state) begin // @[Sdc.scala 461:33]
+    if (2'h1 == tx_dat_prepare_state) begin // @[Sdc.scala 460:33]
       tx_dat_1 <= _GEN_1067;
-    end else if (2'h2 == tx_dat_prepare_state) begin // @[Sdc.scala 461:33]
-      tx_dat_1 <= tx_dat_prepared[7:4]; // @[Sdc.scala 475:17]
+    end else if (2'h2 == tx_dat_prepare_state) begin // @[Sdc.scala 460:33]
+      tx_dat_1 <= tx_dat_prepared[7:4]; // @[Sdc.scala 474:17]
     end else begin
       tx_dat_1 <= _GEN_1067;
     end
-    if (2'h1 == tx_dat_prepare_state) begin // @[Sdc.scala 461:33]
+    if (2'h1 == tx_dat_prepare_state) begin // @[Sdc.scala 460:33]
       tx_dat_2 <= _GEN_1068;
-    end else if (2'h2 == tx_dat_prepare_state) begin // @[Sdc.scala 461:33]
-      tx_dat_2 <= tx_dat_prepared[3:0]; // @[Sdc.scala 476:17]
+    end else if (2'h2 == tx_dat_prepare_state) begin // @[Sdc.scala 460:33]
+      tx_dat_2 <= tx_dat_prepared[3:0]; // @[Sdc.scala 475:17]
     end else begin
       tx_dat_2 <= _GEN_1068;
     end
-    if (2'h1 == tx_dat_prepare_state) begin // @[Sdc.scala 461:33]
+    if (2'h1 == tx_dat_prepare_state) begin // @[Sdc.scala 460:33]
       tx_dat_3 <= _GEN_1069;
-    end else if (2'h2 == tx_dat_prepare_state) begin // @[Sdc.scala 461:33]
-      tx_dat_3 <= tx_dat_prepared[15:12]; // @[Sdc.scala 477:17]
+    end else if (2'h2 == tx_dat_prepare_state) begin // @[Sdc.scala 460:33]
+      tx_dat_3 <= tx_dat_prepared[15:12]; // @[Sdc.scala 476:17]
     end else begin
       tx_dat_3 <= _GEN_1069;
     end
-    if (2'h1 == tx_dat_prepare_state) begin // @[Sdc.scala 461:33]
+    if (2'h1 == tx_dat_prepare_state) begin // @[Sdc.scala 460:33]
       tx_dat_4 <= _GEN_1070;
-    end else if (2'h2 == tx_dat_prepare_state) begin // @[Sdc.scala 461:33]
-      tx_dat_4 <= tx_dat_prepared[11:8]; // @[Sdc.scala 478:17]
+    end else if (2'h2 == tx_dat_prepare_state) begin // @[Sdc.scala 460:33]
+      tx_dat_4 <= tx_dat_prepared[11:8]; // @[Sdc.scala 477:17]
     end else begin
       tx_dat_4 <= _GEN_1070;
     end
-    if (2'h1 == tx_dat_prepare_state) begin // @[Sdc.scala 461:33]
+    if (2'h1 == tx_dat_prepare_state) begin // @[Sdc.scala 460:33]
       tx_dat_5 <= _GEN_1071;
-    end else if (2'h2 == tx_dat_prepare_state) begin // @[Sdc.scala 461:33]
-      tx_dat_5 <= tx_dat_prepared[23:20]; // @[Sdc.scala 479:17]
+    end else if (2'h2 == tx_dat_prepare_state) begin // @[Sdc.scala 460:33]
+      tx_dat_5 <= tx_dat_prepared[23:20]; // @[Sdc.scala 478:17]
     end else begin
       tx_dat_5 <= _GEN_1071;
     end
-    if (2'h1 == tx_dat_prepare_state) begin // @[Sdc.scala 461:33]
+    if (2'h1 == tx_dat_prepare_state) begin // @[Sdc.scala 460:33]
       tx_dat_6 <= _GEN_1072;
-    end else if (2'h2 == tx_dat_prepare_state) begin // @[Sdc.scala 461:33]
-      tx_dat_6 <= tx_dat_prepared[19:16]; // @[Sdc.scala 480:17]
+    end else if (2'h2 == tx_dat_prepare_state) begin // @[Sdc.scala 460:33]
+      tx_dat_6 <= tx_dat_prepared[19:16]; // @[Sdc.scala 479:17]
     end else begin
       tx_dat_6 <= _GEN_1072;
     end
-    if (2'h1 == tx_dat_prepare_state) begin // @[Sdc.scala 461:33]
+    if (2'h1 == tx_dat_prepare_state) begin // @[Sdc.scala 460:33]
       tx_dat_7 <= _GEN_1073;
-    end else if (2'h2 == tx_dat_prepare_state) begin // @[Sdc.scala 461:33]
-      tx_dat_7 <= tx_dat_prepared[31:28]; // @[Sdc.scala 481:17]
+    end else if (2'h2 == tx_dat_prepare_state) begin // @[Sdc.scala 460:33]
+      tx_dat_7 <= tx_dat_prepared[31:28]; // @[Sdc.scala 480:17]
     end else begin
       tx_dat_7 <= _GEN_1073;
     end
-    if (2'h1 == tx_dat_prepare_state) begin // @[Sdc.scala 461:33]
+    if (2'h1 == tx_dat_prepare_state) begin // @[Sdc.scala 460:33]
       tx_dat_8 <= _GEN_1074;
-    end else if (2'h2 == tx_dat_prepare_state) begin // @[Sdc.scala 461:33]
-      tx_dat_8 <= tx_dat_prepared[27:24]; // @[Sdc.scala 482:17]
+    end else if (2'h2 == tx_dat_prepare_state) begin // @[Sdc.scala 460:33]
+      tx_dat_8 <= tx_dat_prepared[27:24]; // @[Sdc.scala 481:17]
     end else begin
       tx_dat_8 <= _GEN_1074;
     end
-    if (2'h1 == tx_dat_prepare_state) begin // @[Sdc.scala 461:33]
+    if (2'h1 == tx_dat_prepare_state) begin // @[Sdc.scala 460:33]
       tx_dat_9 <= _GEN_1075;
-    end else if (2'h2 == tx_dat_prepare_state) begin // @[Sdc.scala 461:33]
+    end else if (2'h2 == tx_dat_prepare_state) begin // @[Sdc.scala 460:33]
       tx_dat_9 <= _GEN_1075;
-    end else if (2'h3 == tx_dat_prepare_state) begin // @[Sdc.scala 461:33]
-      tx_dat_9 <= tx_dat_prepared[7:4]; // @[Sdc.scala 490:18]
+    end else if (2'h3 == tx_dat_prepare_state) begin // @[Sdc.scala 460:33]
+      tx_dat_9 <= tx_dat_prepared[7:4]; // @[Sdc.scala 489:18]
     end else begin
       tx_dat_9 <= _GEN_1075;
     end
-    if (2'h1 == tx_dat_prepare_state) begin // @[Sdc.scala 461:33]
+    if (2'h1 == tx_dat_prepare_state) begin // @[Sdc.scala 460:33]
       tx_dat_10 <= _GEN_1076;
-    end else if (2'h2 == tx_dat_prepare_state) begin // @[Sdc.scala 461:33]
+    end else if (2'h2 == tx_dat_prepare_state) begin // @[Sdc.scala 460:33]
       tx_dat_10 <= _GEN_1076;
-    end else if (2'h3 == tx_dat_prepare_state) begin // @[Sdc.scala 461:33]
-      tx_dat_10 <= tx_dat_prepared[3:0]; // @[Sdc.scala 491:18]
+    end else if (2'h3 == tx_dat_prepare_state) begin // @[Sdc.scala 460:33]
+      tx_dat_10 <= tx_dat_prepared[3:0]; // @[Sdc.scala 490:18]
     end else begin
       tx_dat_10 <= _GEN_1076;
     end
-    if (2'h1 == tx_dat_prepare_state) begin // @[Sdc.scala 461:33]
+    if (2'h1 == tx_dat_prepare_state) begin // @[Sdc.scala 460:33]
       tx_dat_11 <= _GEN_1077;
-    end else if (2'h2 == tx_dat_prepare_state) begin // @[Sdc.scala 461:33]
+    end else if (2'h2 == tx_dat_prepare_state) begin // @[Sdc.scala 460:33]
       tx_dat_11 <= _GEN_1077;
-    end else if (2'h3 == tx_dat_prepare_state) begin // @[Sdc.scala 461:33]
-      tx_dat_11 <= tx_dat_prepared[15:12]; // @[Sdc.scala 492:18]
+    end else if (2'h3 == tx_dat_prepare_state) begin // @[Sdc.scala 460:33]
+      tx_dat_11 <= tx_dat_prepared[15:12]; // @[Sdc.scala 491:18]
     end else begin
       tx_dat_11 <= _GEN_1077;
     end
-    if (2'h1 == tx_dat_prepare_state) begin // @[Sdc.scala 461:33]
+    if (2'h1 == tx_dat_prepare_state) begin // @[Sdc.scala 460:33]
       tx_dat_12 <= _GEN_1078;
-    end else if (2'h2 == tx_dat_prepare_state) begin // @[Sdc.scala 461:33]
+    end else if (2'h2 == tx_dat_prepare_state) begin // @[Sdc.scala 460:33]
       tx_dat_12 <= _GEN_1078;
-    end else if (2'h3 == tx_dat_prepare_state) begin // @[Sdc.scala 461:33]
-      tx_dat_12 <= tx_dat_prepared[11:8]; // @[Sdc.scala 493:18]
+    end else if (2'h3 == tx_dat_prepare_state) begin // @[Sdc.scala 460:33]
+      tx_dat_12 <= tx_dat_prepared[11:8]; // @[Sdc.scala 492:18]
     end else begin
       tx_dat_12 <= _GEN_1078;
     end
-    if (2'h1 == tx_dat_prepare_state) begin // @[Sdc.scala 461:33]
+    if (2'h1 == tx_dat_prepare_state) begin // @[Sdc.scala 460:33]
       tx_dat_13 <= _GEN_1079;
-    end else if (2'h2 == tx_dat_prepare_state) begin // @[Sdc.scala 461:33]
+    end else if (2'h2 == tx_dat_prepare_state) begin // @[Sdc.scala 460:33]
       tx_dat_13 <= _GEN_1079;
-    end else if (2'h3 == tx_dat_prepare_state) begin // @[Sdc.scala 461:33]
-      tx_dat_13 <= tx_dat_prepared[23:20]; // @[Sdc.scala 494:18]
+    end else if (2'h3 == tx_dat_prepare_state) begin // @[Sdc.scala 460:33]
+      tx_dat_13 <= tx_dat_prepared[23:20]; // @[Sdc.scala 493:18]
     end else begin
       tx_dat_13 <= _GEN_1079;
     end
-    if (2'h1 == tx_dat_prepare_state) begin // @[Sdc.scala 461:33]
+    if (2'h1 == tx_dat_prepare_state) begin // @[Sdc.scala 460:33]
       tx_dat_14 <= _GEN_1080;
-    end else if (2'h2 == tx_dat_prepare_state) begin // @[Sdc.scala 461:33]
+    end else if (2'h2 == tx_dat_prepare_state) begin // @[Sdc.scala 460:33]
       tx_dat_14 <= _GEN_1080;
-    end else if (2'h3 == tx_dat_prepare_state) begin // @[Sdc.scala 461:33]
-      tx_dat_14 <= tx_dat_prepared[19:16]; // @[Sdc.scala 495:18]
+    end else if (2'h3 == tx_dat_prepare_state) begin // @[Sdc.scala 460:33]
+      tx_dat_14 <= tx_dat_prepared[19:16]; // @[Sdc.scala 494:18]
     end else begin
       tx_dat_14 <= _GEN_1080;
     end
-    if (2'h1 == tx_dat_prepare_state) begin // @[Sdc.scala 461:33]
+    if (2'h1 == tx_dat_prepare_state) begin // @[Sdc.scala 460:33]
       tx_dat_15 <= _GEN_1081;
-    end else if (2'h2 == tx_dat_prepare_state) begin // @[Sdc.scala 461:33]
+    end else if (2'h2 == tx_dat_prepare_state) begin // @[Sdc.scala 460:33]
       tx_dat_15 <= _GEN_1081;
-    end else if (2'h3 == tx_dat_prepare_state) begin // @[Sdc.scala 461:33]
-      tx_dat_15 <= tx_dat_prepared[31:28]; // @[Sdc.scala 496:18]
+    end else if (2'h3 == tx_dat_prepare_state) begin // @[Sdc.scala 460:33]
+      tx_dat_15 <= tx_dat_prepared[31:28]; // @[Sdc.scala 495:18]
     end else begin
       tx_dat_15 <= _GEN_1081;
     end
-    if (2'h1 == tx_dat_prepare_state) begin // @[Sdc.scala 461:33]
-      tx_dat_16 <= tx_dat_prepared[7:4]; // @[Sdc.scala 463:18]
-    end else if (2'h2 == tx_dat_prepare_state) begin // @[Sdc.scala 461:33]
+    if (2'h1 == tx_dat_prepare_state) begin // @[Sdc.scala 460:33]
+      tx_dat_16 <= tx_dat_prepared[7:4]; // @[Sdc.scala 462:18]
+    end else if (2'h2 == tx_dat_prepare_state) begin // @[Sdc.scala 460:33]
       tx_dat_16 <= _GEN_1082;
-    end else if (2'h3 == tx_dat_prepare_state) begin // @[Sdc.scala 461:33]
-      tx_dat_16 <= tx_dat_prepared[27:24]; // @[Sdc.scala 497:18]
+    end else if (2'h3 == tx_dat_prepare_state) begin // @[Sdc.scala 460:33]
+      tx_dat_16 <= tx_dat_prepared[27:24]; // @[Sdc.scala 496:18]
     end else begin
       tx_dat_16 <= _GEN_1082;
     end
-    if (2'h1 == tx_dat_prepare_state) begin // @[Sdc.scala 461:33]
-      tx_dat_17 <= tx_dat_prepared[3:0]; // @[Sdc.scala 464:18]
-    end else if (!(_T_20)) begin // @[Sdc.scala 404:70]
-      if (!(tx_dat_timer != 6'h0 & _T & reg_clk)) begin // @[Sdc.scala 407:75]
-        if (tx_dat_counter != 11'h0 & _T & reg_clk) begin // @[Sdc.scala 411:77]
-          tx_dat_17 <= tx_dat_18; // @[Sdc.scala 414:50]
+    if (2'h1 == tx_dat_prepare_state) begin // @[Sdc.scala 460:33]
+      tx_dat_17 <= tx_dat_prepared[3:0]; // @[Sdc.scala 463:18]
+    end else if (!(_T_20)) begin // @[Sdc.scala 403:70]
+      if (!(tx_dat_timer != 6'h0 & _T & reg_clk)) begin // @[Sdc.scala 406:75]
+        if (tx_dat_counter != 11'h0 & _T & reg_clk) begin // @[Sdc.scala 410:77]
+          tx_dat_17 <= tx_dat_18; // @[Sdc.scala 413:50]
         end
       end
     end
-    if (2'h1 == tx_dat_prepare_state) begin // @[Sdc.scala 461:33]
-      tx_dat_18 <= tx_dat_prepared[15:12]; // @[Sdc.scala 465:18]
-    end else if (!(_T_20)) begin // @[Sdc.scala 404:70]
-      if (!(tx_dat_timer != 6'h0 & _T & reg_clk)) begin // @[Sdc.scala 407:75]
-        if (tx_dat_counter != 11'h0 & _T & reg_clk) begin // @[Sdc.scala 411:77]
-          tx_dat_18 <= tx_dat_19; // @[Sdc.scala 414:50]
+    if (2'h1 == tx_dat_prepare_state) begin // @[Sdc.scala 460:33]
+      tx_dat_18 <= tx_dat_prepared[15:12]; // @[Sdc.scala 464:18]
+    end else if (!(_T_20)) begin // @[Sdc.scala 403:70]
+      if (!(tx_dat_timer != 6'h0 & _T & reg_clk)) begin // @[Sdc.scala 406:75]
+        if (tx_dat_counter != 11'h0 & _T & reg_clk) begin // @[Sdc.scala 410:77]
+          tx_dat_18 <= tx_dat_19; // @[Sdc.scala 413:50]
         end
       end
     end
-    if (2'h1 == tx_dat_prepare_state) begin // @[Sdc.scala 461:33]
-      tx_dat_19 <= tx_dat_prepared[11:8]; // @[Sdc.scala 466:18]
-    end else if (!(_T_20)) begin // @[Sdc.scala 404:70]
-      if (!(tx_dat_timer != 6'h0 & _T & reg_clk)) begin // @[Sdc.scala 407:75]
-        if (tx_dat_counter != 11'h0 & _T & reg_clk) begin // @[Sdc.scala 411:77]
-          tx_dat_19 <= tx_dat_20; // @[Sdc.scala 414:50]
+    if (2'h1 == tx_dat_prepare_state) begin // @[Sdc.scala 460:33]
+      tx_dat_19 <= tx_dat_prepared[11:8]; // @[Sdc.scala 465:18]
+    end else if (!(_T_20)) begin // @[Sdc.scala 403:70]
+      if (!(tx_dat_timer != 6'h0 & _T & reg_clk)) begin // @[Sdc.scala 406:75]
+        if (tx_dat_counter != 11'h0 & _T & reg_clk) begin // @[Sdc.scala 410:77]
+          tx_dat_19 <= tx_dat_20; // @[Sdc.scala 413:50]
         end
       end
     end
-    if (2'h1 == tx_dat_prepare_state) begin // @[Sdc.scala 461:33]
-      tx_dat_20 <= tx_dat_prepared[23:20]; // @[Sdc.scala 467:18]
-    end else if (!(_T_20)) begin // @[Sdc.scala 404:70]
-      if (!(tx_dat_timer != 6'h0 & _T & reg_clk)) begin // @[Sdc.scala 407:75]
-        if (tx_dat_counter != 11'h0 & _T & reg_clk) begin // @[Sdc.scala 411:77]
-          tx_dat_20 <= tx_dat_21; // @[Sdc.scala 414:50]
+    if (2'h1 == tx_dat_prepare_state) begin // @[Sdc.scala 460:33]
+      tx_dat_20 <= tx_dat_prepared[23:20]; // @[Sdc.scala 466:18]
+    end else if (!(_T_20)) begin // @[Sdc.scala 403:70]
+      if (!(tx_dat_timer != 6'h0 & _T & reg_clk)) begin // @[Sdc.scala 406:75]
+        if (tx_dat_counter != 11'h0 & _T & reg_clk) begin // @[Sdc.scala 410:77]
+          tx_dat_20 <= tx_dat_21; // @[Sdc.scala 413:50]
         end
       end
     end
-    if (2'h1 == tx_dat_prepare_state) begin // @[Sdc.scala 461:33]
-      tx_dat_21 <= tx_dat_prepared[19:16]; // @[Sdc.scala 468:18]
-    end else if (!(_T_20)) begin // @[Sdc.scala 404:70]
-      if (!(tx_dat_timer != 6'h0 & _T & reg_clk)) begin // @[Sdc.scala 407:75]
-        if (tx_dat_counter != 11'h0 & _T & reg_clk) begin // @[Sdc.scala 411:77]
-          tx_dat_21 <= tx_dat_22; // @[Sdc.scala 414:50]
+    if (2'h1 == tx_dat_prepare_state) begin // @[Sdc.scala 460:33]
+      tx_dat_21 <= tx_dat_prepared[19:16]; // @[Sdc.scala 467:18]
+    end else if (!(_T_20)) begin // @[Sdc.scala 403:70]
+      if (!(tx_dat_timer != 6'h0 & _T & reg_clk)) begin // @[Sdc.scala 406:75]
+        if (tx_dat_counter != 11'h0 & _T & reg_clk) begin // @[Sdc.scala 410:77]
+          tx_dat_21 <= tx_dat_22; // @[Sdc.scala 413:50]
         end
       end
     end
-    if (2'h1 == tx_dat_prepare_state) begin // @[Sdc.scala 461:33]
-      tx_dat_22 <= tx_dat_prepared[31:28]; // @[Sdc.scala 469:18]
-    end else if (!(_T_20)) begin // @[Sdc.scala 404:70]
-      if (!(tx_dat_timer != 6'h0 & _T & reg_clk)) begin // @[Sdc.scala 407:75]
-        if (tx_dat_counter != 11'h0 & _T & reg_clk) begin // @[Sdc.scala 411:77]
-          tx_dat_22 <= tx_dat_23; // @[Sdc.scala 414:50]
+    if (2'h1 == tx_dat_prepare_state) begin // @[Sdc.scala 460:33]
+      tx_dat_22 <= tx_dat_prepared[31:28]; // @[Sdc.scala 468:18]
+    end else if (!(_T_20)) begin // @[Sdc.scala 403:70]
+      if (!(tx_dat_timer != 6'h0 & _T & reg_clk)) begin // @[Sdc.scala 406:75]
+        if (tx_dat_counter != 11'h0 & _T & reg_clk) begin // @[Sdc.scala 410:77]
+          tx_dat_22 <= tx_dat_23; // @[Sdc.scala 413:50]
         end
       end
     end
-    if (2'h1 == tx_dat_prepare_state) begin // @[Sdc.scala 461:33]
-      tx_dat_23 <= tx_dat_prepared[27:24]; // @[Sdc.scala 470:18]
+    if (2'h1 == tx_dat_prepare_state) begin // @[Sdc.scala 460:33]
+      tx_dat_23 <= tx_dat_prepared[27:24]; // @[Sdc.scala 469:18]
     end
-    if (!(_T_20)) begin // @[Sdc.scala 404:70]
-      if (!(tx_dat_timer != 6'h0 & _T & reg_clk)) begin // @[Sdc.scala 407:75]
-        if (tx_dat_counter != 11'h0 & _T & reg_clk) begin // @[Sdc.scala 411:77]
-          tx_dat_crc_0 <= crc_1_0; // @[Sdc.scala 435:16]
+    if (!(_T_20)) begin // @[Sdc.scala 403:70]
+      if (!(tx_dat_timer != 6'h0 & _T & reg_clk)) begin // @[Sdc.scala 406:75]
+        if (tx_dat_counter != 11'h0 & _T & reg_clk) begin // @[Sdc.scala 410:77]
+          tx_dat_crc_0 <= crc_1_0; // @[Sdc.scala 434:16]
         end
       end
     end
-    if (!(_T_20)) begin // @[Sdc.scala 404:70]
-      if (!(tx_dat_timer != 6'h0 & _T & reg_clk)) begin // @[Sdc.scala 407:75]
-        if (tx_dat_counter != 11'h0 & _T & reg_clk) begin // @[Sdc.scala 411:77]
-          tx_dat_crc_1 <= tx_dat_crc_0; // @[Sdc.scala 435:16]
+    if (!(_T_20)) begin // @[Sdc.scala 403:70]
+      if (!(tx_dat_timer != 6'h0 & _T & reg_clk)) begin // @[Sdc.scala 406:75]
+        if (tx_dat_counter != 11'h0 & _T & reg_clk) begin // @[Sdc.scala 410:77]
+          tx_dat_crc_1 <= tx_dat_crc_0; // @[Sdc.scala 434:16]
         end
       end
     end
-    if (!(_T_20)) begin // @[Sdc.scala 404:70]
-      if (!(tx_dat_timer != 6'h0 & _T & reg_clk)) begin // @[Sdc.scala 407:75]
-        if (tx_dat_counter != 11'h0 & _T & reg_clk) begin // @[Sdc.scala 411:77]
-          tx_dat_crc_2 <= tx_dat_crc_1; // @[Sdc.scala 435:16]
+    if (!(_T_20)) begin // @[Sdc.scala 403:70]
+      if (!(tx_dat_timer != 6'h0 & _T & reg_clk)) begin // @[Sdc.scala 406:75]
+        if (tx_dat_counter != 11'h0 & _T & reg_clk) begin // @[Sdc.scala 410:77]
+          tx_dat_crc_2 <= tx_dat_crc_1; // @[Sdc.scala 434:16]
         end
       end
     end
-    if (!(_T_20)) begin // @[Sdc.scala 404:70]
-      if (!(tx_dat_timer != 6'h0 & _T & reg_clk)) begin // @[Sdc.scala 407:75]
-        if (tx_dat_counter != 11'h0 & _T & reg_clk) begin // @[Sdc.scala 411:77]
-          tx_dat_crc_3 <= tx_dat_crc_2; // @[Sdc.scala 435:16]
+    if (!(_T_20)) begin // @[Sdc.scala 403:70]
+      if (!(tx_dat_timer != 6'h0 & _T & reg_clk)) begin // @[Sdc.scala 406:75]
+        if (tx_dat_counter != 11'h0 & _T & reg_clk) begin // @[Sdc.scala 410:77]
+          tx_dat_crc_3 <= tx_dat_crc_2; // @[Sdc.scala 434:16]
         end
       end
     end
-    if (!(_T_20)) begin // @[Sdc.scala 404:70]
-      if (!(tx_dat_timer != 6'h0 & _T & reg_clk)) begin // @[Sdc.scala 407:75]
-        if (tx_dat_counter != 11'h0 & _T & reg_clk) begin // @[Sdc.scala 411:77]
-          tx_dat_crc_4 <= tx_dat_crc_3; // @[Sdc.scala 435:16]
+    if (!(_T_20)) begin // @[Sdc.scala 403:70]
+      if (!(tx_dat_timer != 6'h0 & _T & reg_clk)) begin // @[Sdc.scala 406:75]
+        if (tx_dat_counter != 11'h0 & _T & reg_clk) begin // @[Sdc.scala 410:77]
+          tx_dat_crc_4 <= tx_dat_crc_3; // @[Sdc.scala 434:16]
         end
       end
     end
-    if (!(_T_20)) begin // @[Sdc.scala 404:70]
-      if (!(tx_dat_timer != 6'h0 & _T & reg_clk)) begin // @[Sdc.scala 407:75]
-        if (tx_dat_counter != 11'h0 & _T & reg_clk) begin // @[Sdc.scala 411:77]
-          tx_dat_crc_5 <= crc_1_5; // @[Sdc.scala 435:16]
+    if (!(_T_20)) begin // @[Sdc.scala 403:70]
+      if (!(tx_dat_timer != 6'h0 & _T & reg_clk)) begin // @[Sdc.scala 406:75]
+        if (tx_dat_counter != 11'h0 & _T & reg_clk) begin // @[Sdc.scala 410:77]
+          tx_dat_crc_5 <= crc_1_5; // @[Sdc.scala 434:16]
         end
       end
     end
-    if (!(_T_20)) begin // @[Sdc.scala 404:70]
-      if (!(tx_dat_timer != 6'h0 & _T & reg_clk)) begin // @[Sdc.scala 407:75]
-        if (tx_dat_counter != 11'h0 & _T & reg_clk) begin // @[Sdc.scala 411:77]
-          tx_dat_crc_6 <= tx_dat_crc_5; // @[Sdc.scala 435:16]
+    if (!(_T_20)) begin // @[Sdc.scala 403:70]
+      if (!(tx_dat_timer != 6'h0 & _T & reg_clk)) begin // @[Sdc.scala 406:75]
+        if (tx_dat_counter != 11'h0 & _T & reg_clk) begin // @[Sdc.scala 410:77]
+          tx_dat_crc_6 <= tx_dat_crc_5; // @[Sdc.scala 434:16]
         end
       end
     end
-    if (!(_T_20)) begin // @[Sdc.scala 404:70]
-      if (!(tx_dat_timer != 6'h0 & _T & reg_clk)) begin // @[Sdc.scala 407:75]
-        if (tx_dat_counter != 11'h0 & _T & reg_clk) begin // @[Sdc.scala 411:77]
-          tx_dat_crc_7 <= tx_dat_crc_6; // @[Sdc.scala 435:16]
+    if (!(_T_20)) begin // @[Sdc.scala 403:70]
+      if (!(tx_dat_timer != 6'h0 & _T & reg_clk)) begin // @[Sdc.scala 406:75]
+        if (tx_dat_counter != 11'h0 & _T & reg_clk) begin // @[Sdc.scala 410:77]
+          tx_dat_crc_7 <= tx_dat_crc_6; // @[Sdc.scala 434:16]
         end
       end
     end
-    if (!(_T_20)) begin // @[Sdc.scala 404:70]
-      if (!(tx_dat_timer != 6'h0 & _T & reg_clk)) begin // @[Sdc.scala 407:75]
-        if (tx_dat_counter != 11'h0 & _T & reg_clk) begin // @[Sdc.scala 411:77]
-          tx_dat_crc_8 <= tx_dat_crc_7; // @[Sdc.scala 435:16]
+    if (!(_T_20)) begin // @[Sdc.scala 403:70]
+      if (!(tx_dat_timer != 6'h0 & _T & reg_clk)) begin // @[Sdc.scala 406:75]
+        if (tx_dat_counter != 11'h0 & _T & reg_clk) begin // @[Sdc.scala 410:77]
+          tx_dat_crc_8 <= tx_dat_crc_7; // @[Sdc.scala 434:16]
         end
       end
     end
-    if (!(_T_20)) begin // @[Sdc.scala 404:70]
-      if (!(tx_dat_timer != 6'h0 & _T & reg_clk)) begin // @[Sdc.scala 407:75]
-        if (tx_dat_counter != 11'h0 & _T & reg_clk) begin // @[Sdc.scala 411:77]
-          tx_dat_crc_9 <= tx_dat_crc_8; // @[Sdc.scala 435:16]
+    if (!(_T_20)) begin // @[Sdc.scala 403:70]
+      if (!(tx_dat_timer != 6'h0 & _T & reg_clk)) begin // @[Sdc.scala 406:75]
+        if (tx_dat_counter != 11'h0 & _T & reg_clk) begin // @[Sdc.scala 410:77]
+          tx_dat_crc_9 <= tx_dat_crc_8; // @[Sdc.scala 434:16]
         end
       end
     end
-    if (!(_T_20)) begin // @[Sdc.scala 404:70]
-      if (!(tx_dat_timer != 6'h0 & _T & reg_clk)) begin // @[Sdc.scala 407:75]
-        if (tx_dat_counter != 11'h0 & _T & reg_clk) begin // @[Sdc.scala 411:77]
-          tx_dat_crc_10 <= tx_dat_crc_9; // @[Sdc.scala 435:16]
+    if (!(_T_20)) begin // @[Sdc.scala 403:70]
+      if (!(tx_dat_timer != 6'h0 & _T & reg_clk)) begin // @[Sdc.scala 406:75]
+        if (tx_dat_counter != 11'h0 & _T & reg_clk) begin // @[Sdc.scala 410:77]
+          tx_dat_crc_10 <= tx_dat_crc_9; // @[Sdc.scala 434:16]
         end
       end
     end
-    if (!(_T_20)) begin // @[Sdc.scala 404:70]
-      if (!(tx_dat_timer != 6'h0 & _T & reg_clk)) begin // @[Sdc.scala 407:75]
-        if (tx_dat_counter != 11'h0 & _T & reg_clk) begin // @[Sdc.scala 411:77]
-          tx_dat_crc_11 <= tx_dat_crc_10; // @[Sdc.scala 435:16]
+    if (!(_T_20)) begin // @[Sdc.scala 403:70]
+      if (!(tx_dat_timer != 6'h0 & _T & reg_clk)) begin // @[Sdc.scala 406:75]
+        if (tx_dat_counter != 11'h0 & _T & reg_clk) begin // @[Sdc.scala 410:77]
+          tx_dat_crc_11 <= tx_dat_crc_10; // @[Sdc.scala 434:16]
         end
       end
     end
-    if (!(_T_20)) begin // @[Sdc.scala 404:70]
-      if (!(tx_dat_timer != 6'h0 & _T & reg_clk)) begin // @[Sdc.scala 407:75]
-        if (tx_dat_counter != 11'h0 & _T & reg_clk) begin // @[Sdc.scala 411:77]
-          tx_dat_crc_12 <= crc_1_12; // @[Sdc.scala 435:16]
+    if (!(_T_20)) begin // @[Sdc.scala 403:70]
+      if (!(tx_dat_timer != 6'h0 & _T & reg_clk)) begin // @[Sdc.scala 406:75]
+        if (tx_dat_counter != 11'h0 & _T & reg_clk) begin // @[Sdc.scala 410:77]
+          tx_dat_crc_12 <= crc_1_12; // @[Sdc.scala 434:16]
         end
       end
     end
-    if (!(_T_20)) begin // @[Sdc.scala 404:70]
-      if (!(tx_dat_timer != 6'h0 & _T & reg_clk)) begin // @[Sdc.scala 407:75]
-        if (tx_dat_counter != 11'h0 & _T & reg_clk) begin // @[Sdc.scala 411:77]
-          tx_dat_crc_13 <= tx_dat_crc_12; // @[Sdc.scala 435:16]
+    if (!(_T_20)) begin // @[Sdc.scala 403:70]
+      if (!(tx_dat_timer != 6'h0 & _T & reg_clk)) begin // @[Sdc.scala 406:75]
+        if (tx_dat_counter != 11'h0 & _T & reg_clk) begin // @[Sdc.scala 410:77]
+          tx_dat_crc_13 <= tx_dat_crc_12; // @[Sdc.scala 434:16]
         end
       end
     end
-    if (!(_T_20)) begin // @[Sdc.scala 404:70]
-      if (!(tx_dat_timer != 6'h0 & _T & reg_clk)) begin // @[Sdc.scala 407:75]
-        if (tx_dat_counter != 11'h0 & _T & reg_clk) begin // @[Sdc.scala 411:77]
-          tx_dat_crc_14 <= tx_dat_crc_13; // @[Sdc.scala 435:16]
+    if (!(_T_20)) begin // @[Sdc.scala 403:70]
+      if (!(tx_dat_timer != 6'h0 & _T & reg_clk)) begin // @[Sdc.scala 406:75]
+        if (tx_dat_counter != 11'h0 & _T & reg_clk) begin // @[Sdc.scala 410:77]
+          tx_dat_crc_14 <= tx_dat_crc_13; // @[Sdc.scala 434:16]
         end
       end
     end
-    if (!(_T_20)) begin // @[Sdc.scala 404:70]
-      if (!(tx_dat_timer != 6'h0 & _T & reg_clk)) begin // @[Sdc.scala 407:75]
-        if (tx_dat_counter != 11'h0 & _T & reg_clk) begin // @[Sdc.scala 411:77]
-          tx_dat_crc_15 <= tx_dat_crc_14; // @[Sdc.scala 435:16]
+    if (!(_T_20)) begin // @[Sdc.scala 403:70]
+      if (!(tx_dat_timer != 6'h0 & _T & reg_clk)) begin // @[Sdc.scala 406:75]
+        if (tx_dat_counter != 11'h0 & _T & reg_clk) begin // @[Sdc.scala 410:77]
+          tx_dat_crc_15 <= tx_dat_crc_14; // @[Sdc.scala 434:16]
         end
       end
     end
-    if (reset) begin // @[Sdc.scala 155:32]
-      tx_dat_prepared <= 32'h0; // @[Sdc.scala 155:32]
-    end else if (_T_20) begin // @[Sdc.scala 404:70]
+    if (reset) begin // @[Sdc.scala 154:32]
+      tx_dat_prepared <= 32'h0; // @[Sdc.scala 154:32]
+    end else if (_T_20) begin // @[Sdc.scala 403:70]
       tx_dat_prepared <= _GEN_658;
-    end else if (tx_dat_timer != 6'h0 & _T & reg_clk) begin // @[Sdc.scala 407:75]
+    end else if (tx_dat_timer != 6'h0 & _T & reg_clk) begin // @[Sdc.scala 406:75]
       tx_dat_prepared <= _GEN_658;
-    end else if (tx_dat_counter != 11'h0 & _T & reg_clk) begin // @[Sdc.scala 411:77]
+    end else if (tx_dat_counter != 11'h0 & _T & reg_clk) begin // @[Sdc.scala 410:77]
       tx_dat_prepared <= _GEN_942;
     end else begin
       tx_dat_prepared <= _GEN_658;
     end
-    if (reset) begin // @[Sdc.scala 156:37]
-      tx_dat_prepare_state <= 2'h0; // @[Sdc.scala 156:37]
-    end else if (2'h1 == tx_dat_prepare_state) begin // @[Sdc.scala 461:33]
-      tx_dat_prepare_state <= 2'h0; // @[Sdc.scala 471:28]
-    end else if (2'h2 == tx_dat_prepare_state) begin // @[Sdc.scala 461:33]
-      tx_dat_prepare_state <= 2'h3; // @[Sdc.scala 487:28]
-    end else if (2'h3 == tx_dat_prepare_state) begin // @[Sdc.scala 461:33]
-      tx_dat_prepare_state <= 2'h0; // @[Sdc.scala 498:28]
+    if (reset) begin // @[Sdc.scala 155:37]
+      tx_dat_prepare_state <= 2'h0; // @[Sdc.scala 155:37]
+    end else if (2'h1 == tx_dat_prepare_state) begin // @[Sdc.scala 460:33]
+      tx_dat_prepare_state <= 2'h0; // @[Sdc.scala 470:28]
+    end else if (2'h2 == tx_dat_prepare_state) begin // @[Sdc.scala 460:33]
+      tx_dat_prepare_state <= 2'h3; // @[Sdc.scala 486:28]
+    end else if (2'h3 == tx_dat_prepare_state) begin // @[Sdc.scala 460:33]
+      tx_dat_prepare_state <= 2'h0; // @[Sdc.scala 497:28]
     end else begin
       tx_dat_prepare_state <= _GEN_1109;
     end
-    if (reset) begin // @[Sdc.scala 157:31]
-      tx_dat_started <= 1'h0; // @[Sdc.scala 157:31]
-    end else if (io_mem_wen) begin // @[Sdc.scala 506:21]
-      if (!(2'h0 == addr)) begin // @[Sdc.scala 508:19]
-        if (2'h1 == addr) begin // @[Sdc.scala 508:19]
+    if (reset) begin // @[Sdc.scala 156:31]
+      tx_dat_started <= 1'h0; // @[Sdc.scala 156:31]
+    end else if (io_mem_wen) begin // @[Sdc.scala 505:21]
+      if (!(2'h0 == addr)) begin // @[Sdc.scala 507:19]
+        if (2'h1 == addr) begin // @[Sdc.scala 507:19]
           tx_dat_started <= _GEN_1316;
         end
       end
     end
-    if (reset) begin // @[Sdc.scala 159:35]
-      tx_dat_in_progress <= 1'h0; // @[Sdc.scala 159:35]
-    end else if (io_mem_wen) begin // @[Sdc.scala 506:21]
-      if (2'h0 == addr) begin // @[Sdc.scala 508:19]
+    if (reset) begin // @[Sdc.scala 158:35]
+      tx_dat_in_progress <= 1'h0; // @[Sdc.scala 158:35]
+    end else if (io_mem_wen) begin // @[Sdc.scala 505:21]
+      if (2'h0 == addr) begin // @[Sdc.scala 507:19]
         tx_dat_in_progress <= _GEN_879;
-      end else if (2'h1 == addr) begin // @[Sdc.scala 508:19]
+      end else if (2'h1 == addr) begin // @[Sdc.scala 507:19]
         tx_dat_in_progress <= _GEN_1322;
       end else begin
         tx_dat_in_progress <= _GEN_879;
@@ -12493,12 +12493,12 @@ module Sdc(
     end else begin
       tx_dat_in_progress <= _GEN_879;
     end
-    if (reset) begin // @[Sdc.scala 160:27]
-      tx_dat_end <= 1'h0; // @[Sdc.scala 160:27]
-    end else if (io_mem_wen) begin // @[Sdc.scala 506:21]
-      if (2'h0 == addr) begin // @[Sdc.scala 508:19]
+    if (reset) begin // @[Sdc.scala 159:27]
+      tx_dat_end <= 1'h0; // @[Sdc.scala 159:27]
+    end else if (io_mem_wen) begin // @[Sdc.scala 505:21]
+      if (2'h0 == addr) begin // @[Sdc.scala 507:19]
         tx_dat_end <= _GEN_935;
-      end else if (2'h1 == addr) begin // @[Sdc.scala 508:19]
+      end else if (2'h1 == addr) begin // @[Sdc.scala 507:19]
         tx_dat_end <= _GEN_1323;
       end else begin
         tx_dat_end <= _GEN_935;
@@ -12506,12 +12506,12 @@ module Sdc(
     end else begin
       tx_dat_end <= _GEN_935;
     end
-    if (reset) begin // @[Sdc.scala 161:32]
-      tx_dat_read_sel <= 2'h0; // @[Sdc.scala 161:32]
-    end else if (io_mem_wen) begin // @[Sdc.scala 506:21]
-      if (2'h0 == addr) begin // @[Sdc.scala 508:19]
+    if (reset) begin // @[Sdc.scala 160:32]
+      tx_dat_read_sel <= 2'h0; // @[Sdc.scala 160:32]
+    end else if (io_mem_wen) begin // @[Sdc.scala 505:21]
+      if (2'h0 == addr) begin // @[Sdc.scala 507:19]
         tx_dat_read_sel <= _GEN_932;
-      end else if (2'h1 == addr) begin // @[Sdc.scala 508:19]
+      end else if (2'h1 == addr) begin // @[Sdc.scala 507:19]
         tx_dat_read_sel <= _GEN_1318;
       end else begin
         tx_dat_read_sel <= _GEN_932;
@@ -12519,23 +12519,23 @@ module Sdc(
     end else begin
       tx_dat_read_sel <= _GEN_932;
     end
-    if (reset) begin // @[Sdc.scala 162:33]
-      tx_dat_write_sel <= 2'h0; // @[Sdc.scala 162:33]
-    end else if (io_mem_wen) begin // @[Sdc.scala 506:21]
-      if (!(2'h0 == addr)) begin // @[Sdc.scala 508:19]
-        if (2'h1 == addr) begin // @[Sdc.scala 508:19]
+    if (reset) begin // @[Sdc.scala 161:33]
+      tx_dat_write_sel <= 2'h0; // @[Sdc.scala 161:33]
+    end else if (io_mem_wen) begin // @[Sdc.scala 505:21]
+      if (!(2'h0 == addr)) begin // @[Sdc.scala 507:19]
+        if (2'h1 == addr) begin // @[Sdc.scala 507:19]
           tx_dat_write_sel <= _GEN_1319;
         end else begin
           tx_dat_write_sel <= _GEN_1339;
         end
       end
     end
-    if (reset) begin // @[Sdc.scala 163:40]
-      tx_dat_read_sel_changed <= 1'h0; // @[Sdc.scala 163:40]
-    end else if (io_mem_wen) begin // @[Sdc.scala 506:21]
-      if (2'h0 == addr) begin // @[Sdc.scala 508:19]
+    if (reset) begin // @[Sdc.scala 162:40]
+      tx_dat_read_sel_changed <= 1'h0; // @[Sdc.scala 162:40]
+    end else if (io_mem_wen) begin // @[Sdc.scala 505:21]
+      if (2'h0 == addr) begin // @[Sdc.scala 507:19]
         tx_dat_read_sel_changed <= _GEN_933;
-      end else if (2'h1 == addr) begin // @[Sdc.scala 508:19]
+      end else if (2'h1 == addr) begin // @[Sdc.scala 507:19]
         tx_dat_read_sel_changed <= _GEN_1320;
       end else begin
         tx_dat_read_sel_changed <= _GEN_933;
@@ -12543,12 +12543,12 @@ module Sdc(
     end else begin
       tx_dat_read_sel_changed <= _GEN_933;
     end
-    if (reset) begin // @[Sdc.scala 164:37]
-      tx_dat_write_sel_new <= 1'h0; // @[Sdc.scala 164:37]
-    end else if (io_mem_wen) begin // @[Sdc.scala 506:21]
-      if (2'h0 == addr) begin // @[Sdc.scala 508:19]
+    if (reset) begin // @[Sdc.scala 163:37]
+      tx_dat_write_sel_new <= 1'h0; // @[Sdc.scala 163:37]
+    end else if (io_mem_wen) begin // @[Sdc.scala 505:21]
+      if (2'h0 == addr) begin // @[Sdc.scala 507:19]
         tx_dat_write_sel_new <= _GEN_877;
-      end else if (2'h1 == addr) begin // @[Sdc.scala 508:19]
+      end else if (2'h1 == addr) begin // @[Sdc.scala 507:19]
         tx_dat_write_sel_new <= _GEN_1321;
       end else begin
         tx_dat_write_sel_new <= _GEN_1340;
@@ -12556,59 +12556,59 @@ module Sdc(
     end else begin
       tx_dat_write_sel_new <= _GEN_877;
     end
-    if (reset) begin // @[Sdc.scala 165:42]
-      tx_dat_crc_status_counter <= 4'h0; // @[Sdc.scala 165:42]
-    end else if (_T_20) begin // @[Sdc.scala 404:70]
+    if (reset) begin // @[Sdc.scala 164:42]
+      tx_dat_crc_status_counter <= 4'h0; // @[Sdc.scala 164:42]
+    end else if (_T_20) begin // @[Sdc.scala 403:70]
       tx_dat_crc_status_counter <= _GEN_929;
-    end else if (tx_dat_timer != 6'h0 & _T & reg_clk) begin // @[Sdc.scala 407:75]
+    end else if (tx_dat_timer != 6'h0 & _T & reg_clk) begin // @[Sdc.scala 406:75]
       tx_dat_crc_status_counter <= _GEN_929;
-    end else if (tx_dat_counter != 11'h0 & _T & reg_clk) begin // @[Sdc.scala 411:77]
+    end else if (tx_dat_counter != 11'h0 & _T & reg_clk) begin // @[Sdc.scala 410:77]
       tx_dat_crc_status_counter <= _GEN_963;
     end else begin
       tx_dat_crc_status_counter <= _GEN_929;
     end
-    if (rx_busy_timer > 19'h0) begin // @[Sdc.scala 361:30]
-      if (_T_5) begin // @[Sdc.scala 363:47]
-        if (rx_busy_in_progress | ~rx_dat0_next) begin // @[Sdc.scala 367:51]
-          if (tx_dat_crc_status_counter > 4'h0) begin // @[Sdc.scala 369:48]
-            tx_dat_crc_status_b_0 <= rx_dat0_next; // @[Sdc.scala 371:34]
+    if (rx_busy_timer > 19'h0) begin // @[Sdc.scala 360:30]
+      if (_T_5) begin // @[Sdc.scala 362:47]
+        if (rx_busy_in_progress | ~rx_dat0_next) begin // @[Sdc.scala 366:51]
+          if (tx_dat_crc_status_counter > 4'h0) begin // @[Sdc.scala 368:48]
+            tx_dat_crc_status_b_0 <= rx_dat0_next; // @[Sdc.scala 370:34]
           end
         end
       end
     end
-    if (rx_busy_timer > 19'h0) begin // @[Sdc.scala 361:30]
-      if (_T_5) begin // @[Sdc.scala 363:47]
-        if (rx_busy_in_progress | ~rx_dat0_next) begin // @[Sdc.scala 367:51]
-          if (tx_dat_crc_status_counter > 4'h0) begin // @[Sdc.scala 369:48]
-            tx_dat_crc_status_b_1 <= tx_dat_crc_status_b_0; // @[Sdc.scala 370:84]
+    if (rx_busy_timer > 19'h0) begin // @[Sdc.scala 360:30]
+      if (_T_5) begin // @[Sdc.scala 362:47]
+        if (rx_busy_in_progress | ~rx_dat0_next) begin // @[Sdc.scala 366:51]
+          if (tx_dat_crc_status_counter > 4'h0) begin // @[Sdc.scala 368:48]
+            tx_dat_crc_status_b_1 <= tx_dat_crc_status_b_0; // @[Sdc.scala 369:84]
           end
         end
       end
     end
-    if (rx_busy_timer > 19'h0) begin // @[Sdc.scala 361:30]
-      if (_T_5) begin // @[Sdc.scala 363:47]
-        if (rx_busy_in_progress | ~rx_dat0_next) begin // @[Sdc.scala 367:51]
-          if (tx_dat_crc_status_counter > 4'h0) begin // @[Sdc.scala 369:48]
-            tx_dat_crc_status_b_2 <= tx_dat_crc_status_b_1; // @[Sdc.scala 370:84]
+    if (rx_busy_timer > 19'h0) begin // @[Sdc.scala 360:30]
+      if (_T_5) begin // @[Sdc.scala 362:47]
+        if (rx_busy_in_progress | ~rx_dat0_next) begin // @[Sdc.scala 366:51]
+          if (tx_dat_crc_status_counter > 4'h0) begin // @[Sdc.scala 368:48]
+            tx_dat_crc_status_b_2 <= tx_dat_crc_status_b_1; // @[Sdc.scala 369:84]
           end
         end
       end
     end
-    if (reset) begin // @[Sdc.scala 167:34]
-      tx_dat_crc_status <= 2'h0; // @[Sdc.scala 167:34]
-    end else if (rx_busy_timer > 19'h0) begin // @[Sdc.scala 361:30]
-      if (_T_5) begin // @[Sdc.scala 363:47]
-        if (rx_busy_in_progress | ~rx_dat0_next) begin // @[Sdc.scala 367:51]
+    if (reset) begin // @[Sdc.scala 166:34]
+      tx_dat_crc_status <= 2'h0; // @[Sdc.scala 166:34]
+    end else if (rx_busy_timer > 19'h0) begin // @[Sdc.scala 360:30]
+      if (_T_5) begin // @[Sdc.scala 362:47]
+        if (rx_busy_in_progress | ~rx_dat0_next) begin // @[Sdc.scala 366:51]
           tx_dat_crc_status <= _GEN_894;
         end
       end
     end
-    if (reset) begin // @[Sdc.scala 168:37]
-      tx_dat_prepared_read <= 1'h0; // @[Sdc.scala 168:37]
-    end else if (2'h1 == tx_dat_prepare_state) begin // @[Sdc.scala 461:33]
-      if (_T_20) begin // @[Sdc.scala 404:70]
+    if (reset) begin // @[Sdc.scala 167:37]
+      tx_dat_prepared_read <= 1'h0; // @[Sdc.scala 167:37]
+    end else if (2'h1 == tx_dat_prepare_state) begin // @[Sdc.scala 460:33]
+      if (_T_20) begin // @[Sdc.scala 403:70]
         tx_dat_prepared_read <= _GEN_872;
-      end else if (tx_dat_timer != 6'h0 & _T & reg_clk) begin // @[Sdc.scala 407:75]
+      end else if (tx_dat_timer != 6'h0 & _T & reg_clk) begin // @[Sdc.scala 406:75]
         tx_dat_prepared_read <= _GEN_872;
       end else begin
         tx_dat_prepared_read <= _GEN_1007;
@@ -12621,7 +12621,7 @@ module Sdc(
       if (`PRINTF_COND) begin
     `endif
         if (~reset) begin
-          $fwrite(32'h80000002,"sdc.clk           : 0x%x\n",reg_clk); // @[Sdc.scala 663:9]
+          $fwrite(32'h80000002,"sdc.clk           : 0x%x\n",reg_clk); // @[Sdc.scala 662:9]
         end
     `ifdef PRINTF_COND
       end
@@ -12632,7 +12632,7 @@ module Sdc(
       if (`PRINTF_COND) begin
     `endif
         if (_T_198) begin
-          $fwrite(32'h80000002,"sdc.cmd_wrt       : 0x%x\n",io_sdc_port_cmd_wrt); // @[Sdc.scala 664:9]
+          $fwrite(32'h80000002,"sdc.cmd_wrt       : 0x%x\n",io_sdc_port_cmd_wrt); // @[Sdc.scala 663:9]
         end
     `ifdef PRINTF_COND
       end
@@ -12643,7 +12643,7 @@ module Sdc(
       if (`PRINTF_COND) begin
     `endif
         if (_T_198) begin
-          $fwrite(32'h80000002,"sdc.cmd_out       : 0x%x\n",io_sdc_port_cmd_out); // @[Sdc.scala 665:9]
+          $fwrite(32'h80000002,"sdc.cmd_out       : 0x%x\n",io_sdc_port_cmd_out); // @[Sdc.scala 664:9]
         end
     `ifdef PRINTF_COND
       end
@@ -12654,7 +12654,7 @@ module Sdc(
       if (`PRINTF_COND) begin
     `endif
         if (_T_198) begin
-          $fwrite(32'h80000002,"rx_res_counter    : 0x%x\n",rx_res_counter); // @[Sdc.scala 666:9]
+          $fwrite(32'h80000002,"rx_res_counter    : 0x%x\n",rx_res_counter); // @[Sdc.scala 665:9]
         end
     `ifdef PRINTF_COND
       end
@@ -12665,7 +12665,7 @@ module Sdc(
       if (`PRINTF_COND) begin
     `endif
         if (_T_198) begin
-          $fwrite(32'h80000002,"rx_dat_counter    : 0x%x\n",rx_dat_counter); // @[Sdc.scala 667:9]
+          $fwrite(32'h80000002,"rx_dat_counter    : 0x%x\n",rx_dat_counter); // @[Sdc.scala 666:9]
         end
     `ifdef PRINTF_COND
       end
@@ -12676,7 +12676,7 @@ module Sdc(
       if (`PRINTF_COND) begin
     `endif
         if (_T_198) begin
-          $fwrite(32'h80000002,"rx_dat_next       : 0x%x\n",rx_dat_next); // @[Sdc.scala 668:9]
+          $fwrite(32'h80000002,"rx_dat_next       : 0x%x\n",rx_dat_next); // @[Sdc.scala 667:9]
         end
     `ifdef PRINTF_COND
       end
@@ -12687,7 +12687,7 @@ module Sdc(
       if (`PRINTF_COND) begin
     `endif
         if (_T_198) begin
-          $fwrite(32'h80000002,"tx_cmd_counter    : 0x%x\n",tx_cmd_counter); // @[Sdc.scala 669:9]
+          $fwrite(32'h80000002,"tx_cmd_counter    : 0x%x\n",tx_cmd_counter); // @[Sdc.scala 668:9]
         end
     `ifdef PRINTF_COND
       end
@@ -12698,7 +12698,7 @@ module Sdc(
       if (`PRINTF_COND) begin
     `endif
         if (_T_198) begin
-          $fwrite(32'h80000002,"tx_dat_counter    : 0x%x\n",tx_dat_counter); // @[Sdc.scala 670:9]
+          $fwrite(32'h80000002,"tx_dat_counter    : 0x%x\n",tx_dat_counter); // @[Sdc.scala 669:9]
         end
     `ifdef PRINTF_COND
       end
@@ -12709,7 +12709,7 @@ module Sdc(
       if (`PRINTF_COND) begin
     `endif
         if (_T_198) begin
-          $fwrite(32'h80000002,"tx_cmd_timer      : 0x%x\n",tx_cmd_timer); // @[Sdc.scala 671:9]
+          $fwrite(32'h80000002,"tx_cmd_timer      : 0x%x\n",tx_cmd_timer); // @[Sdc.scala 670:9]
         end
     `ifdef PRINTF_COND
       end
@@ -12720,7 +12720,7 @@ module Sdc(
       if (`PRINTF_COND) begin
     `endif
         if (_T_198) begin
-          $fwrite(32'h80000002,"rx_busy_timer     : 0x%x\n",rx_busy_timer); // @[Sdc.scala 672:9]
+          $fwrite(32'h80000002,"rx_busy_timer     : 0x%x\n",rx_busy_timer); // @[Sdc.scala 671:9]
         end
     `ifdef PRINTF_COND
       end
@@ -12731,7 +12731,7 @@ module Sdc(
       if (`PRINTF_COND) begin
     `endif
         if (_T_198) begin
-          $fwrite(32'h80000002,"tx_dat_read_sel   : 0x%x\n",tx_dat_read_sel); // @[Sdc.scala 673:9]
+          $fwrite(32'h80000002,"tx_dat_read_sel   : 0x%x\n",tx_dat_read_sel); // @[Sdc.scala 672:9]
         end
     `ifdef PRINTF_COND
       end
@@ -12742,7 +12742,7 @@ module Sdc(
       if (`PRINTF_COND) begin
     `endif
         if (_T_198) begin
-          $fwrite(32'h80000002,"tx_dat_write_sel  : 0x%x\n",tx_dat_write_sel); // @[Sdc.scala 674:9]
+          $fwrite(32'h80000002,"tx_dat_write_sel  : 0x%x\n",tx_dat_write_sel); // @[Sdc.scala 673:9]
         end
     `ifdef PRINTF_COND
       end
@@ -12753,7 +12753,7 @@ module Sdc(
       if (`PRINTF_COND) begin
     `endif
         if (_T_198) begin
-          $fwrite(32'h80000002,"tx_dat_started    : %d\n",tx_dat_started); // @[Sdc.scala 675:9]
+          $fwrite(32'h80000002,"tx_dat_started    : %d\n",tx_dat_started); // @[Sdc.scala 674:9]
         end
     `ifdef PRINTF_COND
       end
@@ -12764,7 +12764,7 @@ module Sdc(
       if (`PRINTF_COND) begin
     `endif
         if (_T_198) begin
-          $fwrite(32'h80000002,"tx_dat_in_progress: %d\n",tx_dat_in_progress); // @[Sdc.scala 676:9]
+          $fwrite(32'h80000002,"tx_dat_in_progress: %d\n",tx_dat_in_progress); // @[Sdc.scala 675:9]
         end
     `ifdef PRINTF_COND
       end
@@ -13475,27 +13475,27 @@ module InterruptController(
   reg [31:0] _RAND_1;
   reg [31:0] _RAND_2;
 `endif // RANDOMIZE_REG_INIT
-  reg [1:0] reg_intr_enable; // @[InterruptController.scala 22:34]
-  reg [1:0] reg_intr_asserted; // @[InterruptController.scala 23:34]
-  reg  reg_intr_cpu; // @[InterruptController.scala 24:34]
-  wire [1:0] inter_asserted = io_intr_periferal & reg_intr_enable; // @[InterruptController.scala 26:42]
-  wire [31:0] _GEN_0 = io_mem_raddr[2] ? {{30'd0}, reg_intr_asserted} : 32'hdeadbeef; // @[InterruptController.scala 32:16 37:33 42:22]
-  wire [31:0] _GEN_1 = ~io_mem_raddr[2] ? {{30'd0}, reg_intr_enable} : _GEN_0; // @[InterruptController.scala 37:33 39:22]
-  wire [31:0] _GEN_3 = io_mem_wen ? io_mem_wdata : {{30'd0}, reg_intr_enable}; // @[InterruptController.scala 47:21 48:21 22:34]
-  wire [31:0] _GEN_4 = reset ? 32'h0 : _GEN_3; // @[InterruptController.scala 22:{34,34}]
-  assign io_mem_rdata = io_mem_ren ? _GEN_1 : 32'hdeadbeef; // @[InterruptController.scala 32:16 36:21]
-  assign io_intr_cpu = reg_intr_cpu; // @[InterruptController.scala 30:15]
+  reg [1:0] reg_intr_enable; // @[InterruptController.scala 21:34]
+  reg [1:0] reg_intr_asserted; // @[InterruptController.scala 22:34]
+  reg  reg_intr_cpu; // @[InterruptController.scala 23:34]
+  wire [1:0] inter_asserted = io_intr_periferal & reg_intr_enable; // @[InterruptController.scala 25:42]
+  wire [31:0] _GEN_0 = io_mem_raddr[2] ? {{30'd0}, reg_intr_asserted} : 32'hdeadbeef; // @[InterruptController.scala 31:16 36:33 41:22]
+  wire [31:0] _GEN_1 = ~io_mem_raddr[2] ? {{30'd0}, reg_intr_enable} : _GEN_0; // @[InterruptController.scala 36:33 38:22]
+  wire [31:0] _GEN_3 = io_mem_wen ? io_mem_wdata : {{30'd0}, reg_intr_enable}; // @[InterruptController.scala 46:21 47:21 21:34]
+  wire [31:0] _GEN_4 = reset ? 32'h0 : _GEN_3; // @[InterruptController.scala 21:{34,34}]
+  assign io_mem_rdata = io_mem_ren ? _GEN_1 : 32'hdeadbeef; // @[InterruptController.scala 31:16 35:21]
+  assign io_intr_cpu = reg_intr_cpu; // @[InterruptController.scala 29:15]
   always @(posedge clock) begin
-    reg_intr_enable <= _GEN_4[1:0]; // @[InterruptController.scala 22:{34,34}]
-    if (reset) begin // @[InterruptController.scala 23:34]
-      reg_intr_asserted <= 2'h0; // @[InterruptController.scala 23:34]
+    reg_intr_enable <= _GEN_4[1:0]; // @[InterruptController.scala 21:{34,34}]
+    if (reset) begin // @[InterruptController.scala 22:34]
+      reg_intr_asserted <= 2'h0; // @[InterruptController.scala 22:34]
     end else begin
-      reg_intr_asserted <= inter_asserted; // @[InterruptController.scala 28:21]
+      reg_intr_asserted <= inter_asserted; // @[InterruptController.scala 27:21]
     end
-    if (reset) begin // @[InterruptController.scala 24:34]
-      reg_intr_cpu <= 1'h0; // @[InterruptController.scala 24:34]
+    if (reset) begin // @[InterruptController.scala 23:34]
+      reg_intr_cpu <= 1'h0; // @[InterruptController.scala 23:34]
     end else begin
-      reg_intr_cpu <= |inter_asserted; // @[InterruptController.scala 27:16]
+      reg_intr_cpu <= |inter_asserted; // @[InterruptController.scala 26:16]
     end
   end
 // Register and memory initialization
@@ -13553,7 +13553,7 @@ module Config(
   output [31:0] io_mem_rdata
 );
   wire [26:0] _io_mem_rdata_T_2 = io_mem_raddr[2] ? 27'h5f678fe : 27'h1234567; // @[Mux.scala 81:58]
-  assign io_mem_rdata = {{5'd0}, _io_mem_rdata_T_2}; // @[Top.scala 19:16]
+  assign io_mem_rdata = {{5'd0}, _io_mem_rdata_T_2}; // @[Top.scala 18:16]
 endmodule
 module DMemDecoder(
   input  [31:0] io_initiator_raddr,
@@ -13599,47 +13599,47 @@ module DMemDecoder(
   output [31:0] io_targets_6_raddr,
   input  [31:0] io_targets_6_rdata
 );
-  wire  _GEN_2 = 21'h10000 == io_initiator_raddr[31:11] ? io_targets_0_rvalid : 1'h1; // @[Decoder.scala 40:79 43:14 14:27]
-  wire [31:0] _GEN_3 = 21'h10000 == io_initiator_raddr[31:11] ? io_targets_0_rdata : 32'hdeadbeef; // @[Decoder.scala 40:79 44:13 15:26]
-  wire [31:0] _GEN_12 = 26'hc00000 == io_initiator_raddr[31:6] ? 32'hdeadbeef : _GEN_3; // @[Decoder.scala 40:79 44:13]
-  wire [31:0] _GEN_21 = 26'hc00040 == io_initiator_raddr[31:6] ? io_targets_2_rdata : _GEN_12; // @[Decoder.scala 40:79 44:13]
-  wire [31:0] _GEN_30 = 26'hc00080 == io_initiator_raddr[31:6] ? io_targets_3_rdata : _GEN_21; // @[Decoder.scala 40:79 44:13]
-  wire [31:0] _GEN_39 = 26'hc000c0 == io_initiator_raddr[31:6] ? io_targets_4_rdata : _GEN_30; // @[Decoder.scala 40:79 44:13]
-  wire [31:0] _GEN_48 = 26'hc00100 == io_initiator_raddr[31:6] ? io_targets_5_rdata : _GEN_39; // @[Decoder.scala 40:79 44:13]
-  assign io_initiator_rdata = 26'h1000000 == io_initiator_raddr[31:6] ? io_targets_6_rdata : _GEN_48; // @[Decoder.scala 40:79 44:13]
+  wire  _GEN_2 = 21'h10000 == io_initiator_raddr[31:11] ? io_targets_0_rvalid : 1'h1; // @[Decoder.scala 39:79 42:14 13:27]
+  wire [31:0] _GEN_3 = 21'h10000 == io_initiator_raddr[31:11] ? io_targets_0_rdata : 32'hdeadbeef; // @[Decoder.scala 39:79 43:13 14:26]
+  wire [31:0] _GEN_12 = 26'hc00000 == io_initiator_raddr[31:6] ? 32'hdeadbeef : _GEN_3; // @[Decoder.scala 39:79 43:13]
+  wire [31:0] _GEN_21 = 26'hc00040 == io_initiator_raddr[31:6] ? io_targets_2_rdata : _GEN_12; // @[Decoder.scala 39:79 43:13]
+  wire [31:0] _GEN_30 = 26'hc00080 == io_initiator_raddr[31:6] ? io_targets_3_rdata : _GEN_21; // @[Decoder.scala 39:79 43:13]
+  wire [31:0] _GEN_39 = 26'hc000c0 == io_initiator_raddr[31:6] ? io_targets_4_rdata : _GEN_30; // @[Decoder.scala 39:79 43:13]
+  wire [31:0] _GEN_48 = 26'hc00100 == io_initiator_raddr[31:6] ? io_targets_5_rdata : _GEN_39; // @[Decoder.scala 39:79 43:13]
+  assign io_initiator_rdata = 26'h1000000 == io_initiator_raddr[31:6] ? io_targets_6_rdata : _GEN_48; // @[Decoder.scala 39:79 43:13]
   assign io_initiator_rvalid = 26'h1000000 == io_initiator_raddr[31:6] | (26'hc00100 == io_initiator_raddr[31:6] | (26'hc000c0
      == io_initiator_raddr[31:6] | (26'hc00080 == io_initiator_raddr[31:6] | (26'hc00040 == io_initiator_raddr[31:6] | (26'hc00000
-     == io_initiator_raddr[31:6] | _GEN_2))))); // @[Decoder.scala 40:79 43:14]
+     == io_initiator_raddr[31:6] | _GEN_2))))); // @[Decoder.scala 39:79 42:14]
   assign io_initiator_wready = 26'h1000000 == io_initiator_waddr[31:6] | (26'hc00100 == io_initiator_waddr[31:6] | (26'hc000c0
      == io_initiator_waddr[31:6] | (26'hc00080 == io_initiator_waddr[31:6] | (26'hc00040 == io_initiator_waddr[31:6] | (26'hc00000
-     == io_initiator_waddr[31:6] | 21'h10000 == io_initiator_waddr[31:11]))))); // @[Decoder.scala 46:79 51:14]
-  assign io_targets_0_raddr = 21'h10000 == io_initiator_raddr[31:11] ? {{21'd0}, io_initiator_raddr[10:0]} : 32'h0; // @[Decoder.scala 40:79 41:13 26:28]
-  assign io_targets_0_ren = 21'h10000 == io_initiator_raddr[31:11] & io_initiator_ren; // @[Decoder.scala 40:79 42:11 27:26]
-  assign io_targets_0_waddr = 21'h10000 == io_initiator_waddr[31:11] ? {{21'd0}, io_initiator_waddr[10:0]} : 32'h0; // @[Decoder.scala 46:79 47:13 28:28]
-  assign io_targets_0_wen = 21'h10000 == io_initiator_waddr[31:11] & io_initiator_wen; // @[Decoder.scala 46:79 48:11 29:26]
-  assign io_targets_0_wdata = 21'h10000 == io_initiator_waddr[31:11] ? io_initiator_wdata : 32'hdeadbeef; // @[Decoder.scala 46:79 49:13 30:28]
-  assign io_targets_1_wen = 26'hc00000 == io_initiator_waddr[31:6] & io_initiator_wen; // @[Decoder.scala 46:79 48:11 29:26]
-  assign io_targets_1_wdata = 26'hc00000 == io_initiator_waddr[31:6] ? io_initiator_wdata : 32'hdeadbeef; // @[Decoder.scala 46:79 49:13 30:28]
-  assign io_targets_2_raddr = 26'hc00040 == io_initiator_raddr[31:6] ? {{26'd0}, io_initiator_raddr[5:0]} : 32'h0; // @[Decoder.scala 40:79 41:13 26:28]
-  assign io_targets_2_ren = 26'hc00040 == io_initiator_raddr[31:6] & io_initiator_ren; // @[Decoder.scala 40:79 42:11 27:26]
-  assign io_targets_2_waddr = 26'hc00040 == io_initiator_waddr[31:6] ? {{26'd0}, io_initiator_waddr[5:0]} : 32'h0; // @[Decoder.scala 46:79 47:13 28:28]
-  assign io_targets_2_wen = 26'hc00040 == io_initiator_waddr[31:6] & io_initiator_wen; // @[Decoder.scala 46:79 48:11 29:26]
-  assign io_targets_2_wdata = 26'hc00040 == io_initiator_waddr[31:6] ? io_initiator_wdata : 32'hdeadbeef; // @[Decoder.scala 46:79 49:13 30:28]
-  assign io_targets_3_raddr = 26'hc00080 == io_initiator_raddr[31:6] ? {{26'd0}, io_initiator_raddr[5:0]} : 32'h0; // @[Decoder.scala 40:79 41:13 26:28]
-  assign io_targets_3_ren = 26'hc00080 == io_initiator_raddr[31:6] & io_initiator_ren; // @[Decoder.scala 40:79 42:11 27:26]
-  assign io_targets_3_waddr = 26'hc00080 == io_initiator_waddr[31:6] ? {{26'd0}, io_initiator_waddr[5:0]} : 32'h0; // @[Decoder.scala 46:79 47:13 28:28]
-  assign io_targets_3_wen = 26'hc00080 == io_initiator_waddr[31:6] & io_initiator_wen; // @[Decoder.scala 46:79 48:11 29:26]
-  assign io_targets_3_wdata = 26'hc00080 == io_initiator_waddr[31:6] ? io_initiator_wdata : 32'hdeadbeef; // @[Decoder.scala 46:79 49:13 30:28]
-  assign io_targets_4_raddr = 26'hc000c0 == io_initiator_raddr[31:6] ? {{26'd0}, io_initiator_raddr[5:0]} : 32'h0; // @[Decoder.scala 40:79 41:13 26:28]
-  assign io_targets_4_ren = 26'hc000c0 == io_initiator_raddr[31:6] & io_initiator_ren; // @[Decoder.scala 40:79 42:11 27:26]
-  assign io_targets_4_waddr = 26'hc000c0 == io_initiator_waddr[31:6] ? {{26'd0}, io_initiator_waddr[5:0]} : 32'h0; // @[Decoder.scala 46:79 47:13 28:28]
-  assign io_targets_4_wen = 26'hc000c0 == io_initiator_waddr[31:6] & io_initiator_wen; // @[Decoder.scala 46:79 48:11 29:26]
-  assign io_targets_4_wdata = 26'hc000c0 == io_initiator_waddr[31:6] ? io_initiator_wdata : 32'hdeadbeef; // @[Decoder.scala 46:79 49:13 30:28]
-  assign io_targets_5_raddr = 26'hc00100 == io_initiator_raddr[31:6] ? {{26'd0}, io_initiator_raddr[5:0]} : 32'h0; // @[Decoder.scala 40:79 41:13 26:28]
-  assign io_targets_5_ren = 26'hc00100 == io_initiator_raddr[31:6] & io_initiator_ren; // @[Decoder.scala 40:79 42:11 27:26]
-  assign io_targets_5_wen = 26'hc00100 == io_initiator_waddr[31:6] & io_initiator_wen; // @[Decoder.scala 46:79 48:11 29:26]
-  assign io_targets_5_wdata = 26'hc00100 == io_initiator_waddr[31:6] ? io_initiator_wdata : 32'hdeadbeef; // @[Decoder.scala 46:79 49:13 30:28]
-  assign io_targets_6_raddr = 26'h1000000 == io_initiator_raddr[31:6] ? {{26'd0}, io_initiator_raddr[5:0]} : 32'h0; // @[Decoder.scala 40:79 41:13 26:28]
+     == io_initiator_waddr[31:6] | 21'h10000 == io_initiator_waddr[31:11]))))); // @[Decoder.scala 45:79 50:14]
+  assign io_targets_0_raddr = 21'h10000 == io_initiator_raddr[31:11] ? {{21'd0}, io_initiator_raddr[10:0]} : 32'h0; // @[Decoder.scala 39:79 40:13 25:28]
+  assign io_targets_0_ren = 21'h10000 == io_initiator_raddr[31:11] & io_initiator_ren; // @[Decoder.scala 39:79 41:11 26:26]
+  assign io_targets_0_waddr = 21'h10000 == io_initiator_waddr[31:11] ? {{21'd0}, io_initiator_waddr[10:0]} : 32'h0; // @[Decoder.scala 45:79 46:13 27:28]
+  assign io_targets_0_wen = 21'h10000 == io_initiator_waddr[31:11] & io_initiator_wen; // @[Decoder.scala 45:79 47:11 28:26]
+  assign io_targets_0_wdata = 21'h10000 == io_initiator_waddr[31:11] ? io_initiator_wdata : 32'hdeadbeef; // @[Decoder.scala 45:79 48:13 29:28]
+  assign io_targets_1_wen = 26'hc00000 == io_initiator_waddr[31:6] & io_initiator_wen; // @[Decoder.scala 45:79 47:11 28:26]
+  assign io_targets_1_wdata = 26'hc00000 == io_initiator_waddr[31:6] ? io_initiator_wdata : 32'hdeadbeef; // @[Decoder.scala 45:79 48:13 29:28]
+  assign io_targets_2_raddr = 26'hc00040 == io_initiator_raddr[31:6] ? {{26'd0}, io_initiator_raddr[5:0]} : 32'h0; // @[Decoder.scala 39:79 40:13 25:28]
+  assign io_targets_2_ren = 26'hc00040 == io_initiator_raddr[31:6] & io_initiator_ren; // @[Decoder.scala 39:79 41:11 26:26]
+  assign io_targets_2_waddr = 26'hc00040 == io_initiator_waddr[31:6] ? {{26'd0}, io_initiator_waddr[5:0]} : 32'h0; // @[Decoder.scala 45:79 46:13 27:28]
+  assign io_targets_2_wen = 26'hc00040 == io_initiator_waddr[31:6] & io_initiator_wen; // @[Decoder.scala 45:79 47:11 28:26]
+  assign io_targets_2_wdata = 26'hc00040 == io_initiator_waddr[31:6] ? io_initiator_wdata : 32'hdeadbeef; // @[Decoder.scala 45:79 48:13 29:28]
+  assign io_targets_3_raddr = 26'hc00080 == io_initiator_raddr[31:6] ? {{26'd0}, io_initiator_raddr[5:0]} : 32'h0; // @[Decoder.scala 39:79 40:13 25:28]
+  assign io_targets_3_ren = 26'hc00080 == io_initiator_raddr[31:6] & io_initiator_ren; // @[Decoder.scala 39:79 41:11 26:26]
+  assign io_targets_3_waddr = 26'hc00080 == io_initiator_waddr[31:6] ? {{26'd0}, io_initiator_waddr[5:0]} : 32'h0; // @[Decoder.scala 45:79 46:13 27:28]
+  assign io_targets_3_wen = 26'hc00080 == io_initiator_waddr[31:6] & io_initiator_wen; // @[Decoder.scala 45:79 47:11 28:26]
+  assign io_targets_3_wdata = 26'hc00080 == io_initiator_waddr[31:6] ? io_initiator_wdata : 32'hdeadbeef; // @[Decoder.scala 45:79 48:13 29:28]
+  assign io_targets_4_raddr = 26'hc000c0 == io_initiator_raddr[31:6] ? {{26'd0}, io_initiator_raddr[5:0]} : 32'h0; // @[Decoder.scala 39:79 40:13 25:28]
+  assign io_targets_4_ren = 26'hc000c0 == io_initiator_raddr[31:6] & io_initiator_ren; // @[Decoder.scala 39:79 41:11 26:26]
+  assign io_targets_4_waddr = 26'hc000c0 == io_initiator_waddr[31:6] ? {{26'd0}, io_initiator_waddr[5:0]} : 32'h0; // @[Decoder.scala 45:79 46:13 27:28]
+  assign io_targets_4_wen = 26'hc000c0 == io_initiator_waddr[31:6] & io_initiator_wen; // @[Decoder.scala 45:79 47:11 28:26]
+  assign io_targets_4_wdata = 26'hc000c0 == io_initiator_waddr[31:6] ? io_initiator_wdata : 32'hdeadbeef; // @[Decoder.scala 45:79 48:13 29:28]
+  assign io_targets_5_raddr = 26'hc00100 == io_initiator_raddr[31:6] ? {{26'd0}, io_initiator_raddr[5:0]} : 32'h0; // @[Decoder.scala 39:79 40:13 25:28]
+  assign io_targets_5_ren = 26'hc00100 == io_initiator_raddr[31:6] & io_initiator_ren; // @[Decoder.scala 39:79 41:11 26:26]
+  assign io_targets_5_wen = 26'hc00100 == io_initiator_waddr[31:6] & io_initiator_wen; // @[Decoder.scala 45:79 47:11 28:26]
+  assign io_targets_5_wdata = 26'hc00100 == io_initiator_waddr[31:6] ? io_initiator_wdata : 32'hdeadbeef; // @[Decoder.scala 45:79 48:13 29:28]
+  assign io_targets_6_raddr = 26'h1000000 == io_initiator_raddr[31:6] ? {{26'd0}, io_initiator_raddr[5:0]} : 32'h0; // @[Decoder.scala 39:79 40:13 25:28]
 endmodule
 module IMemDecoder(
   input         clock,
@@ -13658,19 +13658,19 @@ module IMemDecoder(
 `ifdef RANDOMIZE_REG_INIT
   reg [31:0] _RAND_0;
 `endif // RANDOMIZE_REG_INIT
-  reg [31:0] next_addr; // @[Decoder.scala 64:26]
-  wire  en = 21'h10000 == io_initiator_addr[31:11]; // @[Decoder.scala 79:37]
-  wire  _GEN_2 = 21'h10000 == next_addr[31:11] ? io_targets_0_valid : 1'h1; // @[Decoder.scala 83:70 84:13 62:26]
-  wire [31:0] _GEN_3 = 21'h10000 == next_addr[31:11] ? io_targets_0_inst : 32'hdeadbeef; // @[Decoder.scala 83:70 85:12 63:25]
-  wire  en_1 = 4'h2 == io_initiator_addr[31:28]; // @[Decoder.scala 79:37]
-  assign io_initiator_inst = 4'h2 == next_addr[31:28] ? io_targets_1_inst : _GEN_3; // @[Decoder.scala 83:70 85:12]
-  assign io_initiator_valid = 4'h2 == next_addr[31:28] ? io_targets_1_valid : _GEN_2; // @[Decoder.scala 83:70 84:13]
-  assign io_targets_0_en = 21'h10000 == io_initiator_addr[31:11]; // @[Decoder.scala 79:37]
-  assign io_targets_0_addr = en ? {{21'd0}, io_initiator_addr[10:0]} : 32'h0; // @[Decoder.scala 79:78 80:12 73:27]
-  assign io_targets_1_en = 4'h2 == io_initiator_addr[31:28]; // @[Decoder.scala 79:37]
-  assign io_targets_1_addr = en_1 ? {{4'd0}, io_initiator_addr[27:0]} : 32'h0; // @[Decoder.scala 79:78 80:12 73:27]
+  reg [31:0] next_addr; // @[Decoder.scala 63:26]
+  wire  en = 21'h10000 == io_initiator_addr[31:11]; // @[Decoder.scala 78:37]
+  wire  _GEN_2 = 21'h10000 == next_addr[31:11] ? io_targets_0_valid : 1'h1; // @[Decoder.scala 82:70 83:13 61:26]
+  wire [31:0] _GEN_3 = 21'h10000 == next_addr[31:11] ? io_targets_0_inst : 32'hdeadbeef; // @[Decoder.scala 82:70 84:12 62:25]
+  wire  en_1 = 4'h2 == io_initiator_addr[31:28]; // @[Decoder.scala 78:37]
+  assign io_initiator_inst = 4'h2 == next_addr[31:28] ? io_targets_1_inst : _GEN_3; // @[Decoder.scala 82:70 84:12]
+  assign io_initiator_valid = 4'h2 == next_addr[31:28] ? io_targets_1_valid : _GEN_2; // @[Decoder.scala 82:70 83:13]
+  assign io_targets_0_en = 21'h10000 == io_initiator_addr[31:11]; // @[Decoder.scala 78:37]
+  assign io_targets_0_addr = en ? {{21'd0}, io_initiator_addr[10:0]} : 32'h0; // @[Decoder.scala 78:78 79:12 72:27]
+  assign io_targets_1_en = 4'h2 == io_initiator_addr[31:28]; // @[Decoder.scala 78:37]
+  assign io_targets_1_addr = en_1 ? {{4'd0}, io_initiator_addr[27:0]} : 32'h0; // @[Decoder.scala 78:78 79:12 72:27]
   always @(posedge clock) begin
-    next_addr <= io_initiator_addr; // @[Decoder.scala 64:26]
+    next_addr <= io_initiator_addr; // @[Decoder.scala 63:26]
   end
 // Register and memory initialization
 `ifdef RANDOMIZE_GARBAGE_ASSIGN
@@ -13765,279 +13765,279 @@ module RiscV(
   output [2:0]   io_debugSignals_mem_dram_state,
   output [15:0]  io_debugSignals_mem_imem_addr
 );
-  wire  core_clock; // @[Top.scala 78:20]
-  wire  core_reset; // @[Top.scala 78:20]
-  wire [31:0] core_io_imem_addr; // @[Top.scala 78:20]
-  wire [31:0] core_io_imem_inst; // @[Top.scala 78:20]
-  wire  core_io_imem_valid; // @[Top.scala 78:20]
-  wire [31:0] core_io_dmem_raddr; // @[Top.scala 78:20]
-  wire [31:0] core_io_dmem_rdata; // @[Top.scala 78:20]
-  wire  core_io_dmem_ren; // @[Top.scala 78:20]
-  wire  core_io_dmem_rvalid; // @[Top.scala 78:20]
-  wire [31:0] core_io_dmem_waddr; // @[Top.scala 78:20]
-  wire  core_io_dmem_wen; // @[Top.scala 78:20]
-  wire  core_io_dmem_wready; // @[Top.scala 78:20]
-  wire [3:0] core_io_dmem_wstrb; // @[Top.scala 78:20]
-  wire [31:0] core_io_dmem_wdata; // @[Top.scala 78:20]
-  wire  core_io_cache_iinvalidate; // @[Top.scala 78:20]
-  wire  core_io_cache_ibusy; // @[Top.scala 78:20]
-  wire [31:0] core_io_cache_raddr; // @[Top.scala 78:20]
-  wire [31:0] core_io_cache_rdata; // @[Top.scala 78:20]
-  wire  core_io_cache_ren; // @[Top.scala 78:20]
-  wire  core_io_cache_rvalid; // @[Top.scala 78:20]
-  wire  core_io_cache_rready; // @[Top.scala 78:20]
-  wire [31:0] core_io_cache_waddr; // @[Top.scala 78:20]
-  wire  core_io_cache_wen; // @[Top.scala 78:20]
-  wire  core_io_cache_wready; // @[Top.scala 78:20]
-  wire [3:0] core_io_cache_wstrb; // @[Top.scala 78:20]
-  wire [31:0] core_io_cache_wdata; // @[Top.scala 78:20]
-  wire  core_io_pht_mem_wen; // @[Top.scala 78:20]
-  wire [11:0] core_io_pht_mem_raddr; // @[Top.scala 78:20]
-  wire [3:0] core_io_pht_mem_rdata; // @[Top.scala 78:20]
-  wire [12:0] core_io_pht_mem_waddr; // @[Top.scala 78:20]
-  wire [1:0] core_io_pht_mem_wdata; // @[Top.scala 78:20]
-  wire [31:0] core_io_mtimer_mem_raddr; // @[Top.scala 78:20]
-  wire [31:0] core_io_mtimer_mem_rdata; // @[Top.scala 78:20]
-  wire  core_io_mtimer_mem_ren; // @[Top.scala 78:20]
-  wire [31:0] core_io_mtimer_mem_waddr; // @[Top.scala 78:20]
-  wire  core_io_mtimer_mem_wen; // @[Top.scala 78:20]
-  wire [31:0] core_io_mtimer_mem_wdata; // @[Top.scala 78:20]
-  wire  core_io_intr; // @[Top.scala 78:20]
-  wire [31:0] core_io_debug_signal_ex2_reg_pc; // @[Top.scala 78:20]
-  wire  core_io_debug_signal_ex2_is_valid_inst; // @[Top.scala 78:20]
-  wire  core_io_debug_signal_me_intr; // @[Top.scala 78:20]
-  wire  core_io_debug_signal_mt_intr; // @[Top.scala 78:20]
-  wire  core_io_debug_signal_trap; // @[Top.scala 78:20]
-  wire [47:0] core_io_debug_signal_cycle_counter; // @[Top.scala 78:20]
-  wire [31:0] core_io_debug_signal_id_pc; // @[Top.scala 78:20]
-  wire [31:0] core_io_debug_signal_id_inst; // @[Top.scala 78:20]
-  wire [31:0] core_io_debug_signal_mem3_rdata; // @[Top.scala 78:20]
-  wire  core_io_debug_signal_mem3_rvalid; // @[Top.scala 78:20]
-  wire [31:0] core_io_debug_signal_rwaddr; // @[Top.scala 78:20]
-  wire  core_io_debug_signal_ex2_reg_is_br; // @[Top.scala 78:20]
-  wire  core_io_debug_signal_id_reg_is_bp_fail; // @[Top.scala 78:20]
-  wire  core_io_debug_signal_if2_reg_bp_taken; // @[Top.scala 78:20]
-  wire [2:0] core_io_debug_signal_ic_state; // @[Top.scala 78:20]
-  wire  memory_clock; // @[Top.scala 80:22]
-  wire  memory_reset; // @[Top.scala 80:22]
-  wire  memory_io_imem_en; // @[Top.scala 80:22]
-  wire [31:0] memory_io_imem_addr; // @[Top.scala 80:22]
-  wire [31:0] memory_io_imem_inst; // @[Top.scala 80:22]
-  wire  memory_io_imem_valid; // @[Top.scala 80:22]
-  wire  memory_io_cache_iinvalidate; // @[Top.scala 80:22]
-  wire  memory_io_cache_ibusy; // @[Top.scala 80:22]
-  wire [31:0] memory_io_cache_raddr; // @[Top.scala 80:22]
-  wire [31:0] memory_io_cache_rdata; // @[Top.scala 80:22]
-  wire  memory_io_cache_ren; // @[Top.scala 80:22]
-  wire  memory_io_cache_rvalid; // @[Top.scala 80:22]
-  wire  memory_io_cache_rready; // @[Top.scala 80:22]
-  wire [31:0] memory_io_cache_waddr; // @[Top.scala 80:22]
-  wire  memory_io_cache_wen; // @[Top.scala 80:22]
-  wire  memory_io_cache_wready; // @[Top.scala 80:22]
-  wire [3:0] memory_io_cache_wstrb; // @[Top.scala 80:22]
-  wire [31:0] memory_io_cache_wdata; // @[Top.scala 80:22]
-  wire  memory_io_dramPort_ren; // @[Top.scala 80:22]
-  wire  memory_io_dramPort_wen; // @[Top.scala 80:22]
-  wire [27:0] memory_io_dramPort_addr; // @[Top.scala 80:22]
-  wire [127:0] memory_io_dramPort_wdata; // @[Top.scala 80:22]
-  wire  memory_io_dramPort_init_calib_complete; // @[Top.scala 80:22]
-  wire [127:0] memory_io_dramPort_rdata; // @[Top.scala 80:22]
-  wire  memory_io_dramPort_rdata_valid; // @[Top.scala 80:22]
-  wire  memory_io_dramPort_busy; // @[Top.scala 80:22]
-  wire  memory_io_cache_array1_en; // @[Top.scala 80:22]
-  wire [31:0] memory_io_cache_array1_we; // @[Top.scala 80:22]
-  wire [6:0] memory_io_cache_array1_addr; // @[Top.scala 80:22]
-  wire [255:0] memory_io_cache_array1_wdata; // @[Top.scala 80:22]
-  wire [255:0] memory_io_cache_array1_rdata; // @[Top.scala 80:22]
-  wire  memory_io_cache_array2_en; // @[Top.scala 80:22]
-  wire [31:0] memory_io_cache_array2_we; // @[Top.scala 80:22]
-  wire [6:0] memory_io_cache_array2_addr; // @[Top.scala 80:22]
-  wire [255:0] memory_io_cache_array2_wdata; // @[Top.scala 80:22]
-  wire [255:0] memory_io_cache_array2_rdata; // @[Top.scala 80:22]
-  wire  memory_io_icache_ren; // @[Top.scala 80:22]
-  wire  memory_io_icache_wen; // @[Top.scala 80:22]
-  wire [9:0] memory_io_icache_raddr; // @[Top.scala 80:22]
-  wire [31:0] memory_io_icache_rdata; // @[Top.scala 80:22]
-  wire [6:0] memory_io_icache_waddr; // @[Top.scala 80:22]
-  wire [255:0] memory_io_icache_wdata; // @[Top.scala 80:22]
-  wire  memory_io_icache_valid_ren; // @[Top.scala 80:22]
-  wire  memory_io_icache_valid_wen; // @[Top.scala 80:22]
-  wire  memory_io_icache_valid_invalidate; // @[Top.scala 80:22]
-  wire [5:0] memory_io_icache_valid_addr; // @[Top.scala 80:22]
-  wire  memory_io_icache_valid_iaddr; // @[Top.scala 80:22]
-  wire [1:0] memory_io_icache_valid_rdata; // @[Top.scala 80:22]
-  wire [1:0] memory_io_icache_valid_wdata; // @[Top.scala 80:22]
-  wire [2:0] memory_io_icache_state; // @[Top.scala 80:22]
-  wire [2:0] memory_io_dram_state; // @[Top.scala 80:22]
-  wire  boot_rom_clock; // @[Top.scala 81:24]
-  wire  boot_rom_reset; // @[Top.scala 81:24]
-  wire  boot_rom_io_imem_en; // @[Top.scala 81:24]
-  wire [31:0] boot_rom_io_imem_addr; // @[Top.scala 81:24]
-  wire [31:0] boot_rom_io_imem_inst; // @[Top.scala 81:24]
-  wire  boot_rom_io_imem_valid; // @[Top.scala 81:24]
-  wire [31:0] boot_rom_io_dmem_raddr; // @[Top.scala 81:24]
-  wire [31:0] boot_rom_io_dmem_rdata; // @[Top.scala 81:24]
-  wire  boot_rom_io_dmem_ren; // @[Top.scala 81:24]
-  wire  boot_rom_io_dmem_rvalid; // @[Top.scala 81:24]
-  wire [31:0] boot_rom_io_dmem_waddr; // @[Top.scala 81:24]
-  wire  boot_rom_io_dmem_wen; // @[Top.scala 81:24]
-  wire [31:0] boot_rom_io_dmem_wdata; // @[Top.scala 81:24]
-  wire  sram1_clock; // @[Top.scala 82:21]
-  wire  sram1_en; // @[Top.scala 82:21]
-  wire [31:0] sram1_we; // @[Top.scala 82:21]
-  wire [6:0] sram1_addr; // @[Top.scala 82:21]
-  wire [255:0] sram1_wdata; // @[Top.scala 82:21]
-  wire [255:0] sram1_rdata; // @[Top.scala 82:21]
-  wire  sram2_clock; // @[Top.scala 83:21]
-  wire  sram2_en; // @[Top.scala 83:21]
-  wire [31:0] sram2_we; // @[Top.scala 83:21]
-  wire [6:0] sram2_addr; // @[Top.scala 83:21]
-  wire [255:0] sram2_wdata; // @[Top.scala 83:21]
-  wire [255:0] sram2_rdata; // @[Top.scala 83:21]
-  wire  icache_clock; // @[Top.scala 84:22]
-  wire  icache_ren; // @[Top.scala 84:22]
-  wire  icache_wen; // @[Top.scala 84:22]
-  wire [9:0] icache_raddr; // @[Top.scala 84:22]
-  wire [31:0] icache_rdata; // @[Top.scala 84:22]
-  wire [6:0] icache_waddr; // @[Top.scala 84:22]
-  wire [255:0] icache_wdata; // @[Top.scala 84:22]
-  wire  icache_valid_clock; // @[Top.scala 85:28]
-  wire  icache_valid_ren; // @[Top.scala 85:28]
-  wire  icache_valid_wen; // @[Top.scala 85:28]
-  wire  icache_valid_ien; // @[Top.scala 85:28]
-  wire  icache_valid_invalidate; // @[Top.scala 85:28]
-  wire [5:0] icache_valid_addr; // @[Top.scala 85:28]
-  wire  icache_valid_iaddr; // @[Top.scala 85:28]
-  wire [1:0] icache_valid_rdata; // @[Top.scala 85:28]
-  wire [1:0] icache_valid_wdata; // @[Top.scala 85:28]
-  wire [63:0] icache_valid_idata; // @[Top.scala 85:28]
-  wire [1:0] icache_valid_dummy_data; // @[Top.scala 85:28]
-  wire  pht_mem_clock; // @[Top.scala 86:23]
-  wire  pht_mem_ren; // @[Top.scala 86:23]
-  wire  pht_mem_wen; // @[Top.scala 86:23]
-  wire [11:0] pht_mem_raddr; // @[Top.scala 86:23]
-  wire [3:0] pht_mem_rdata; // @[Top.scala 86:23]
-  wire [12:0] pht_mem_waddr; // @[Top.scala 86:23]
-  wire [1:0] pht_mem_wdata; // @[Top.scala 86:23]
-  wire  gpio_clock; // @[Top.scala 87:20]
-  wire  gpio_reset; // @[Top.scala 87:20]
-  wire  gpio_io_mem_wen; // @[Top.scala 87:20]
-  wire [31:0] gpio_io_mem_wdata; // @[Top.scala 87:20]
-  wire [31:0] gpio_io_gpio; // @[Top.scala 87:20]
-  wire  uart_clock; // @[Top.scala 88:20]
-  wire  uart_reset; // @[Top.scala 88:20]
-  wire [31:0] uart_io_mem_raddr; // @[Top.scala 88:20]
-  wire [31:0] uart_io_mem_rdata; // @[Top.scala 88:20]
-  wire  uart_io_mem_ren; // @[Top.scala 88:20]
-  wire [31:0] uart_io_mem_waddr; // @[Top.scala 88:20]
-  wire  uart_io_mem_wen; // @[Top.scala 88:20]
-  wire [31:0] uart_io_mem_wdata; // @[Top.scala 88:20]
-  wire  uart_io_intr; // @[Top.scala 88:20]
-  wire  uart_io_tx; // @[Top.scala 88:20]
-  wire  uart_io_rx; // @[Top.scala 88:20]
-  wire  sdc_clock; // @[Top.scala 89:19]
-  wire  sdc_reset; // @[Top.scala 89:19]
-  wire [31:0] sdc_io_mem_raddr; // @[Top.scala 89:19]
-  wire [31:0] sdc_io_mem_rdata; // @[Top.scala 89:19]
-  wire  sdc_io_mem_ren; // @[Top.scala 89:19]
-  wire [31:0] sdc_io_mem_waddr; // @[Top.scala 89:19]
-  wire  sdc_io_mem_wen; // @[Top.scala 89:19]
-  wire [31:0] sdc_io_mem_wdata; // @[Top.scala 89:19]
-  wire  sdc_io_sdc_port_clk; // @[Top.scala 89:19]
-  wire  sdc_io_sdc_port_cmd_wrt; // @[Top.scala 89:19]
-  wire  sdc_io_sdc_port_cmd_out; // @[Top.scala 89:19]
-  wire  sdc_io_sdc_port_res_in; // @[Top.scala 89:19]
-  wire  sdc_io_sdc_port_dat_wrt; // @[Top.scala 89:19]
-  wire [3:0] sdc_io_sdc_port_dat_out; // @[Top.scala 89:19]
-  wire [3:0] sdc_io_sdc_port_dat_in; // @[Top.scala 89:19]
-  wire  sdc_io_sdbuf_ren1; // @[Top.scala 89:19]
-  wire  sdc_io_sdbuf_wen1; // @[Top.scala 89:19]
-  wire [7:0] sdc_io_sdbuf_addr1; // @[Top.scala 89:19]
-  wire [31:0] sdc_io_sdbuf_rdata1; // @[Top.scala 89:19]
-  wire [31:0] sdc_io_sdbuf_wdata1; // @[Top.scala 89:19]
-  wire  sdc_io_sdbuf_ren2; // @[Top.scala 89:19]
-  wire  sdc_io_sdbuf_wen2; // @[Top.scala 89:19]
-  wire [7:0] sdc_io_sdbuf_addr2; // @[Top.scala 89:19]
-  wire [31:0] sdc_io_sdbuf_rdata2; // @[Top.scala 89:19]
-  wire [31:0] sdc_io_sdbuf_wdata2; // @[Top.scala 89:19]
-  wire  sdc_io_intr; // @[Top.scala 89:19]
-  wire  sdbuf_clock; // @[Top.scala 90:21]
-  wire  sdbuf_ren1; // @[Top.scala 90:21]
-  wire  sdbuf_wen1; // @[Top.scala 90:21]
-  wire [7:0] sdbuf_addr1; // @[Top.scala 90:21]
-  wire [31:0] sdbuf_wdata1; // @[Top.scala 90:21]
-  wire [31:0] sdbuf_rdata1; // @[Top.scala 90:21]
-  wire  sdbuf_ren2; // @[Top.scala 90:21]
-  wire  sdbuf_wen2; // @[Top.scala 90:21]
-  wire [7:0] sdbuf_addr2; // @[Top.scala 90:21]
-  wire [31:0] sdbuf_wdata2; // @[Top.scala 90:21]
-  wire [31:0] sdbuf_rdata2; // @[Top.scala 90:21]
-  wire  intr_clock; // @[Top.scala 91:20]
-  wire  intr_reset; // @[Top.scala 91:20]
-  wire [31:0] intr_io_mem_raddr; // @[Top.scala 91:20]
-  wire [31:0] intr_io_mem_rdata; // @[Top.scala 91:20]
-  wire  intr_io_mem_ren; // @[Top.scala 91:20]
-  wire  intr_io_mem_wen; // @[Top.scala 91:20]
-  wire [31:0] intr_io_mem_wdata; // @[Top.scala 91:20]
-  wire [1:0] intr_io_intr_periferal; // @[Top.scala 91:20]
-  wire  intr_io_intr_cpu; // @[Top.scala 91:20]
-  wire [31:0] config__io_mem_raddr; // @[Top.scala 92:22]
-  wire [31:0] config__io_mem_rdata; // @[Top.scala 92:22]
-  wire [31:0] dmem_decoder_io_initiator_raddr; // @[Top.scala 94:28]
-  wire [31:0] dmem_decoder_io_initiator_rdata; // @[Top.scala 94:28]
-  wire  dmem_decoder_io_initiator_ren; // @[Top.scala 94:28]
-  wire  dmem_decoder_io_initiator_rvalid; // @[Top.scala 94:28]
-  wire [31:0] dmem_decoder_io_initiator_waddr; // @[Top.scala 94:28]
-  wire  dmem_decoder_io_initiator_wen; // @[Top.scala 94:28]
-  wire  dmem_decoder_io_initiator_wready; // @[Top.scala 94:28]
-  wire [31:0] dmem_decoder_io_initiator_wdata; // @[Top.scala 94:28]
-  wire [31:0] dmem_decoder_io_targets_0_raddr; // @[Top.scala 94:28]
-  wire [31:0] dmem_decoder_io_targets_0_rdata; // @[Top.scala 94:28]
-  wire  dmem_decoder_io_targets_0_ren; // @[Top.scala 94:28]
-  wire  dmem_decoder_io_targets_0_rvalid; // @[Top.scala 94:28]
-  wire [31:0] dmem_decoder_io_targets_0_waddr; // @[Top.scala 94:28]
-  wire  dmem_decoder_io_targets_0_wen; // @[Top.scala 94:28]
-  wire [31:0] dmem_decoder_io_targets_0_wdata; // @[Top.scala 94:28]
-  wire  dmem_decoder_io_targets_1_wen; // @[Top.scala 94:28]
-  wire [31:0] dmem_decoder_io_targets_1_wdata; // @[Top.scala 94:28]
-  wire [31:0] dmem_decoder_io_targets_2_raddr; // @[Top.scala 94:28]
-  wire [31:0] dmem_decoder_io_targets_2_rdata; // @[Top.scala 94:28]
-  wire  dmem_decoder_io_targets_2_ren; // @[Top.scala 94:28]
-  wire [31:0] dmem_decoder_io_targets_2_waddr; // @[Top.scala 94:28]
-  wire  dmem_decoder_io_targets_2_wen; // @[Top.scala 94:28]
-  wire [31:0] dmem_decoder_io_targets_2_wdata; // @[Top.scala 94:28]
-  wire [31:0] dmem_decoder_io_targets_3_raddr; // @[Top.scala 94:28]
-  wire [31:0] dmem_decoder_io_targets_3_rdata; // @[Top.scala 94:28]
-  wire  dmem_decoder_io_targets_3_ren; // @[Top.scala 94:28]
-  wire [31:0] dmem_decoder_io_targets_3_waddr; // @[Top.scala 94:28]
-  wire  dmem_decoder_io_targets_3_wen; // @[Top.scala 94:28]
-  wire [31:0] dmem_decoder_io_targets_3_wdata; // @[Top.scala 94:28]
-  wire [31:0] dmem_decoder_io_targets_4_raddr; // @[Top.scala 94:28]
-  wire [31:0] dmem_decoder_io_targets_4_rdata; // @[Top.scala 94:28]
-  wire  dmem_decoder_io_targets_4_ren; // @[Top.scala 94:28]
-  wire [31:0] dmem_decoder_io_targets_4_waddr; // @[Top.scala 94:28]
-  wire  dmem_decoder_io_targets_4_wen; // @[Top.scala 94:28]
-  wire [31:0] dmem_decoder_io_targets_4_wdata; // @[Top.scala 94:28]
-  wire [31:0] dmem_decoder_io_targets_5_raddr; // @[Top.scala 94:28]
-  wire [31:0] dmem_decoder_io_targets_5_rdata; // @[Top.scala 94:28]
-  wire  dmem_decoder_io_targets_5_ren; // @[Top.scala 94:28]
-  wire  dmem_decoder_io_targets_5_wen; // @[Top.scala 94:28]
-  wire [31:0] dmem_decoder_io_targets_5_wdata; // @[Top.scala 94:28]
-  wire [31:0] dmem_decoder_io_targets_6_raddr; // @[Top.scala 94:28]
-  wire [31:0] dmem_decoder_io_targets_6_rdata; // @[Top.scala 94:28]
-  wire  imem_decoder_clock; // @[Top.scala 113:28]
-  wire [31:0] imem_decoder_io_initiator_addr; // @[Top.scala 113:28]
-  wire [31:0] imem_decoder_io_initiator_inst; // @[Top.scala 113:28]
-  wire  imem_decoder_io_initiator_valid; // @[Top.scala 113:28]
-  wire  imem_decoder_io_targets_0_en; // @[Top.scala 113:28]
-  wire [31:0] imem_decoder_io_targets_0_addr; // @[Top.scala 113:28]
-  wire [31:0] imem_decoder_io_targets_0_inst; // @[Top.scala 113:28]
-  wire  imem_decoder_io_targets_0_valid; // @[Top.scala 113:28]
-  wire  imem_decoder_io_targets_1_en; // @[Top.scala 113:28]
-  wire [31:0] imem_decoder_io_targets_1_addr; // @[Top.scala 113:28]
-  wire [31:0] imem_decoder_io_targets_1_inst; // @[Top.scala 113:28]
-  wire  imem_decoder_io_targets_1_valid; // @[Top.scala 113:28]
-  Core core ( // @[Top.scala 78:20]
+  wire  core_clock; // @[Top.scala 77:20]
+  wire  core_reset; // @[Top.scala 77:20]
+  wire [31:0] core_io_imem_addr; // @[Top.scala 77:20]
+  wire [31:0] core_io_imem_inst; // @[Top.scala 77:20]
+  wire  core_io_imem_valid; // @[Top.scala 77:20]
+  wire [31:0] core_io_dmem_raddr; // @[Top.scala 77:20]
+  wire [31:0] core_io_dmem_rdata; // @[Top.scala 77:20]
+  wire  core_io_dmem_ren; // @[Top.scala 77:20]
+  wire  core_io_dmem_rvalid; // @[Top.scala 77:20]
+  wire [31:0] core_io_dmem_waddr; // @[Top.scala 77:20]
+  wire  core_io_dmem_wen; // @[Top.scala 77:20]
+  wire  core_io_dmem_wready; // @[Top.scala 77:20]
+  wire [3:0] core_io_dmem_wstrb; // @[Top.scala 77:20]
+  wire [31:0] core_io_dmem_wdata; // @[Top.scala 77:20]
+  wire  core_io_cache_iinvalidate; // @[Top.scala 77:20]
+  wire  core_io_cache_ibusy; // @[Top.scala 77:20]
+  wire [31:0] core_io_cache_raddr; // @[Top.scala 77:20]
+  wire [31:0] core_io_cache_rdata; // @[Top.scala 77:20]
+  wire  core_io_cache_ren; // @[Top.scala 77:20]
+  wire  core_io_cache_rvalid; // @[Top.scala 77:20]
+  wire  core_io_cache_rready; // @[Top.scala 77:20]
+  wire [31:0] core_io_cache_waddr; // @[Top.scala 77:20]
+  wire  core_io_cache_wen; // @[Top.scala 77:20]
+  wire  core_io_cache_wready; // @[Top.scala 77:20]
+  wire [3:0] core_io_cache_wstrb; // @[Top.scala 77:20]
+  wire [31:0] core_io_cache_wdata; // @[Top.scala 77:20]
+  wire  core_io_pht_mem_wen; // @[Top.scala 77:20]
+  wire [11:0] core_io_pht_mem_raddr; // @[Top.scala 77:20]
+  wire [3:0] core_io_pht_mem_rdata; // @[Top.scala 77:20]
+  wire [12:0] core_io_pht_mem_waddr; // @[Top.scala 77:20]
+  wire [1:0] core_io_pht_mem_wdata; // @[Top.scala 77:20]
+  wire [31:0] core_io_mtimer_mem_raddr; // @[Top.scala 77:20]
+  wire [31:0] core_io_mtimer_mem_rdata; // @[Top.scala 77:20]
+  wire  core_io_mtimer_mem_ren; // @[Top.scala 77:20]
+  wire [31:0] core_io_mtimer_mem_waddr; // @[Top.scala 77:20]
+  wire  core_io_mtimer_mem_wen; // @[Top.scala 77:20]
+  wire [31:0] core_io_mtimer_mem_wdata; // @[Top.scala 77:20]
+  wire  core_io_intr; // @[Top.scala 77:20]
+  wire [31:0] core_io_debug_signal_ex2_reg_pc; // @[Top.scala 77:20]
+  wire  core_io_debug_signal_ex2_is_valid_inst; // @[Top.scala 77:20]
+  wire  core_io_debug_signal_me_intr; // @[Top.scala 77:20]
+  wire  core_io_debug_signal_mt_intr; // @[Top.scala 77:20]
+  wire  core_io_debug_signal_trap; // @[Top.scala 77:20]
+  wire [47:0] core_io_debug_signal_cycle_counter; // @[Top.scala 77:20]
+  wire [31:0] core_io_debug_signal_id_pc; // @[Top.scala 77:20]
+  wire [31:0] core_io_debug_signal_id_inst; // @[Top.scala 77:20]
+  wire [31:0] core_io_debug_signal_mem3_rdata; // @[Top.scala 77:20]
+  wire  core_io_debug_signal_mem3_rvalid; // @[Top.scala 77:20]
+  wire [31:0] core_io_debug_signal_rwaddr; // @[Top.scala 77:20]
+  wire  core_io_debug_signal_ex2_reg_is_br; // @[Top.scala 77:20]
+  wire  core_io_debug_signal_id_reg_is_bp_fail; // @[Top.scala 77:20]
+  wire  core_io_debug_signal_if2_reg_bp_taken; // @[Top.scala 77:20]
+  wire [2:0] core_io_debug_signal_ic_state; // @[Top.scala 77:20]
+  wire  memory_clock; // @[Top.scala 79:22]
+  wire  memory_reset; // @[Top.scala 79:22]
+  wire  memory_io_imem_en; // @[Top.scala 79:22]
+  wire [31:0] memory_io_imem_addr; // @[Top.scala 79:22]
+  wire [31:0] memory_io_imem_inst; // @[Top.scala 79:22]
+  wire  memory_io_imem_valid; // @[Top.scala 79:22]
+  wire  memory_io_cache_iinvalidate; // @[Top.scala 79:22]
+  wire  memory_io_cache_ibusy; // @[Top.scala 79:22]
+  wire [31:0] memory_io_cache_raddr; // @[Top.scala 79:22]
+  wire [31:0] memory_io_cache_rdata; // @[Top.scala 79:22]
+  wire  memory_io_cache_ren; // @[Top.scala 79:22]
+  wire  memory_io_cache_rvalid; // @[Top.scala 79:22]
+  wire  memory_io_cache_rready; // @[Top.scala 79:22]
+  wire [31:0] memory_io_cache_waddr; // @[Top.scala 79:22]
+  wire  memory_io_cache_wen; // @[Top.scala 79:22]
+  wire  memory_io_cache_wready; // @[Top.scala 79:22]
+  wire [3:0] memory_io_cache_wstrb; // @[Top.scala 79:22]
+  wire [31:0] memory_io_cache_wdata; // @[Top.scala 79:22]
+  wire  memory_io_dramPort_ren; // @[Top.scala 79:22]
+  wire  memory_io_dramPort_wen; // @[Top.scala 79:22]
+  wire [27:0] memory_io_dramPort_addr; // @[Top.scala 79:22]
+  wire [127:0] memory_io_dramPort_wdata; // @[Top.scala 79:22]
+  wire  memory_io_dramPort_init_calib_complete; // @[Top.scala 79:22]
+  wire [127:0] memory_io_dramPort_rdata; // @[Top.scala 79:22]
+  wire  memory_io_dramPort_rdata_valid; // @[Top.scala 79:22]
+  wire  memory_io_dramPort_busy; // @[Top.scala 79:22]
+  wire  memory_io_cache_array1_en; // @[Top.scala 79:22]
+  wire [31:0] memory_io_cache_array1_we; // @[Top.scala 79:22]
+  wire [6:0] memory_io_cache_array1_addr; // @[Top.scala 79:22]
+  wire [255:0] memory_io_cache_array1_wdata; // @[Top.scala 79:22]
+  wire [255:0] memory_io_cache_array1_rdata; // @[Top.scala 79:22]
+  wire  memory_io_cache_array2_en; // @[Top.scala 79:22]
+  wire [31:0] memory_io_cache_array2_we; // @[Top.scala 79:22]
+  wire [6:0] memory_io_cache_array2_addr; // @[Top.scala 79:22]
+  wire [255:0] memory_io_cache_array2_wdata; // @[Top.scala 79:22]
+  wire [255:0] memory_io_cache_array2_rdata; // @[Top.scala 79:22]
+  wire  memory_io_icache_ren; // @[Top.scala 79:22]
+  wire  memory_io_icache_wen; // @[Top.scala 79:22]
+  wire [9:0] memory_io_icache_raddr; // @[Top.scala 79:22]
+  wire [31:0] memory_io_icache_rdata; // @[Top.scala 79:22]
+  wire [6:0] memory_io_icache_waddr; // @[Top.scala 79:22]
+  wire [255:0] memory_io_icache_wdata; // @[Top.scala 79:22]
+  wire  memory_io_icache_valid_ren; // @[Top.scala 79:22]
+  wire  memory_io_icache_valid_wen; // @[Top.scala 79:22]
+  wire  memory_io_icache_valid_invalidate; // @[Top.scala 79:22]
+  wire [5:0] memory_io_icache_valid_addr; // @[Top.scala 79:22]
+  wire  memory_io_icache_valid_iaddr; // @[Top.scala 79:22]
+  wire [1:0] memory_io_icache_valid_rdata; // @[Top.scala 79:22]
+  wire [1:0] memory_io_icache_valid_wdata; // @[Top.scala 79:22]
+  wire [2:0] memory_io_icache_state; // @[Top.scala 79:22]
+  wire [2:0] memory_io_dram_state; // @[Top.scala 79:22]
+  wire  boot_rom_clock; // @[Top.scala 80:24]
+  wire  boot_rom_reset; // @[Top.scala 80:24]
+  wire  boot_rom_io_imem_en; // @[Top.scala 80:24]
+  wire [31:0] boot_rom_io_imem_addr; // @[Top.scala 80:24]
+  wire [31:0] boot_rom_io_imem_inst; // @[Top.scala 80:24]
+  wire  boot_rom_io_imem_valid; // @[Top.scala 80:24]
+  wire [31:0] boot_rom_io_dmem_raddr; // @[Top.scala 80:24]
+  wire [31:0] boot_rom_io_dmem_rdata; // @[Top.scala 80:24]
+  wire  boot_rom_io_dmem_ren; // @[Top.scala 80:24]
+  wire  boot_rom_io_dmem_rvalid; // @[Top.scala 80:24]
+  wire [31:0] boot_rom_io_dmem_waddr; // @[Top.scala 80:24]
+  wire  boot_rom_io_dmem_wen; // @[Top.scala 80:24]
+  wire [31:0] boot_rom_io_dmem_wdata; // @[Top.scala 80:24]
+  wire  sram1_clock; // @[Top.scala 81:21]
+  wire  sram1_en; // @[Top.scala 81:21]
+  wire [31:0] sram1_we; // @[Top.scala 81:21]
+  wire [6:0] sram1_addr; // @[Top.scala 81:21]
+  wire [255:0] sram1_wdata; // @[Top.scala 81:21]
+  wire [255:0] sram1_rdata; // @[Top.scala 81:21]
+  wire  sram2_clock; // @[Top.scala 82:21]
+  wire  sram2_en; // @[Top.scala 82:21]
+  wire [31:0] sram2_we; // @[Top.scala 82:21]
+  wire [6:0] sram2_addr; // @[Top.scala 82:21]
+  wire [255:0] sram2_wdata; // @[Top.scala 82:21]
+  wire [255:0] sram2_rdata; // @[Top.scala 82:21]
+  wire  icache_clock; // @[Top.scala 83:22]
+  wire  icache_ren; // @[Top.scala 83:22]
+  wire  icache_wen; // @[Top.scala 83:22]
+  wire [9:0] icache_raddr; // @[Top.scala 83:22]
+  wire [31:0] icache_rdata; // @[Top.scala 83:22]
+  wire [6:0] icache_waddr; // @[Top.scala 83:22]
+  wire [255:0] icache_wdata; // @[Top.scala 83:22]
+  wire  icache_valid_clock; // @[Top.scala 84:28]
+  wire  icache_valid_ren; // @[Top.scala 84:28]
+  wire  icache_valid_wen; // @[Top.scala 84:28]
+  wire  icache_valid_ien; // @[Top.scala 84:28]
+  wire  icache_valid_invalidate; // @[Top.scala 84:28]
+  wire [5:0] icache_valid_addr; // @[Top.scala 84:28]
+  wire  icache_valid_iaddr; // @[Top.scala 84:28]
+  wire [1:0] icache_valid_rdata; // @[Top.scala 84:28]
+  wire [1:0] icache_valid_wdata; // @[Top.scala 84:28]
+  wire [63:0] icache_valid_idata; // @[Top.scala 84:28]
+  wire [1:0] icache_valid_dummy_data; // @[Top.scala 84:28]
+  wire  pht_mem_clock; // @[Top.scala 85:23]
+  wire  pht_mem_ren; // @[Top.scala 85:23]
+  wire  pht_mem_wen; // @[Top.scala 85:23]
+  wire [11:0] pht_mem_raddr; // @[Top.scala 85:23]
+  wire [3:0] pht_mem_rdata; // @[Top.scala 85:23]
+  wire [12:0] pht_mem_waddr; // @[Top.scala 85:23]
+  wire [1:0] pht_mem_wdata; // @[Top.scala 85:23]
+  wire  gpio_clock; // @[Top.scala 86:20]
+  wire  gpio_reset; // @[Top.scala 86:20]
+  wire  gpio_io_mem_wen; // @[Top.scala 86:20]
+  wire [31:0] gpio_io_mem_wdata; // @[Top.scala 86:20]
+  wire [31:0] gpio_io_gpio; // @[Top.scala 86:20]
+  wire  uart_clock; // @[Top.scala 87:20]
+  wire  uart_reset; // @[Top.scala 87:20]
+  wire [31:0] uart_io_mem_raddr; // @[Top.scala 87:20]
+  wire [31:0] uart_io_mem_rdata; // @[Top.scala 87:20]
+  wire  uart_io_mem_ren; // @[Top.scala 87:20]
+  wire [31:0] uart_io_mem_waddr; // @[Top.scala 87:20]
+  wire  uart_io_mem_wen; // @[Top.scala 87:20]
+  wire [31:0] uart_io_mem_wdata; // @[Top.scala 87:20]
+  wire  uart_io_intr; // @[Top.scala 87:20]
+  wire  uart_io_tx; // @[Top.scala 87:20]
+  wire  uart_io_rx; // @[Top.scala 87:20]
+  wire  sdc_clock; // @[Top.scala 88:19]
+  wire  sdc_reset; // @[Top.scala 88:19]
+  wire [31:0] sdc_io_mem_raddr; // @[Top.scala 88:19]
+  wire [31:0] sdc_io_mem_rdata; // @[Top.scala 88:19]
+  wire  sdc_io_mem_ren; // @[Top.scala 88:19]
+  wire [31:0] sdc_io_mem_waddr; // @[Top.scala 88:19]
+  wire  sdc_io_mem_wen; // @[Top.scala 88:19]
+  wire [31:0] sdc_io_mem_wdata; // @[Top.scala 88:19]
+  wire  sdc_io_sdc_port_clk; // @[Top.scala 88:19]
+  wire  sdc_io_sdc_port_cmd_wrt; // @[Top.scala 88:19]
+  wire  sdc_io_sdc_port_cmd_out; // @[Top.scala 88:19]
+  wire  sdc_io_sdc_port_res_in; // @[Top.scala 88:19]
+  wire  sdc_io_sdc_port_dat_wrt; // @[Top.scala 88:19]
+  wire [3:0] sdc_io_sdc_port_dat_out; // @[Top.scala 88:19]
+  wire [3:0] sdc_io_sdc_port_dat_in; // @[Top.scala 88:19]
+  wire  sdc_io_sdbuf_ren1; // @[Top.scala 88:19]
+  wire  sdc_io_sdbuf_wen1; // @[Top.scala 88:19]
+  wire [7:0] sdc_io_sdbuf_addr1; // @[Top.scala 88:19]
+  wire [31:0] sdc_io_sdbuf_rdata1; // @[Top.scala 88:19]
+  wire [31:0] sdc_io_sdbuf_wdata1; // @[Top.scala 88:19]
+  wire  sdc_io_sdbuf_ren2; // @[Top.scala 88:19]
+  wire  sdc_io_sdbuf_wen2; // @[Top.scala 88:19]
+  wire [7:0] sdc_io_sdbuf_addr2; // @[Top.scala 88:19]
+  wire [31:0] sdc_io_sdbuf_rdata2; // @[Top.scala 88:19]
+  wire [31:0] sdc_io_sdbuf_wdata2; // @[Top.scala 88:19]
+  wire  sdc_io_intr; // @[Top.scala 88:19]
+  wire  sdbuf_clock; // @[Top.scala 89:21]
+  wire  sdbuf_ren1; // @[Top.scala 89:21]
+  wire  sdbuf_wen1; // @[Top.scala 89:21]
+  wire [7:0] sdbuf_addr1; // @[Top.scala 89:21]
+  wire [31:0] sdbuf_wdata1; // @[Top.scala 89:21]
+  wire [31:0] sdbuf_rdata1; // @[Top.scala 89:21]
+  wire  sdbuf_ren2; // @[Top.scala 89:21]
+  wire  sdbuf_wen2; // @[Top.scala 89:21]
+  wire [7:0] sdbuf_addr2; // @[Top.scala 89:21]
+  wire [31:0] sdbuf_wdata2; // @[Top.scala 89:21]
+  wire [31:0] sdbuf_rdata2; // @[Top.scala 89:21]
+  wire  intr_clock; // @[Top.scala 90:20]
+  wire  intr_reset; // @[Top.scala 90:20]
+  wire [31:0] intr_io_mem_raddr; // @[Top.scala 90:20]
+  wire [31:0] intr_io_mem_rdata; // @[Top.scala 90:20]
+  wire  intr_io_mem_ren; // @[Top.scala 90:20]
+  wire  intr_io_mem_wen; // @[Top.scala 90:20]
+  wire [31:0] intr_io_mem_wdata; // @[Top.scala 90:20]
+  wire [1:0] intr_io_intr_periferal; // @[Top.scala 90:20]
+  wire  intr_io_intr_cpu; // @[Top.scala 90:20]
+  wire [31:0] config__io_mem_raddr; // @[Top.scala 91:22]
+  wire [31:0] config__io_mem_rdata; // @[Top.scala 91:22]
+  wire [31:0] dmem_decoder_io_initiator_raddr; // @[Top.scala 93:28]
+  wire [31:0] dmem_decoder_io_initiator_rdata; // @[Top.scala 93:28]
+  wire  dmem_decoder_io_initiator_ren; // @[Top.scala 93:28]
+  wire  dmem_decoder_io_initiator_rvalid; // @[Top.scala 93:28]
+  wire [31:0] dmem_decoder_io_initiator_waddr; // @[Top.scala 93:28]
+  wire  dmem_decoder_io_initiator_wen; // @[Top.scala 93:28]
+  wire  dmem_decoder_io_initiator_wready; // @[Top.scala 93:28]
+  wire [31:0] dmem_decoder_io_initiator_wdata; // @[Top.scala 93:28]
+  wire [31:0] dmem_decoder_io_targets_0_raddr; // @[Top.scala 93:28]
+  wire [31:0] dmem_decoder_io_targets_0_rdata; // @[Top.scala 93:28]
+  wire  dmem_decoder_io_targets_0_ren; // @[Top.scala 93:28]
+  wire  dmem_decoder_io_targets_0_rvalid; // @[Top.scala 93:28]
+  wire [31:0] dmem_decoder_io_targets_0_waddr; // @[Top.scala 93:28]
+  wire  dmem_decoder_io_targets_0_wen; // @[Top.scala 93:28]
+  wire [31:0] dmem_decoder_io_targets_0_wdata; // @[Top.scala 93:28]
+  wire  dmem_decoder_io_targets_1_wen; // @[Top.scala 93:28]
+  wire [31:0] dmem_decoder_io_targets_1_wdata; // @[Top.scala 93:28]
+  wire [31:0] dmem_decoder_io_targets_2_raddr; // @[Top.scala 93:28]
+  wire [31:0] dmem_decoder_io_targets_2_rdata; // @[Top.scala 93:28]
+  wire  dmem_decoder_io_targets_2_ren; // @[Top.scala 93:28]
+  wire [31:0] dmem_decoder_io_targets_2_waddr; // @[Top.scala 93:28]
+  wire  dmem_decoder_io_targets_2_wen; // @[Top.scala 93:28]
+  wire [31:0] dmem_decoder_io_targets_2_wdata; // @[Top.scala 93:28]
+  wire [31:0] dmem_decoder_io_targets_3_raddr; // @[Top.scala 93:28]
+  wire [31:0] dmem_decoder_io_targets_3_rdata; // @[Top.scala 93:28]
+  wire  dmem_decoder_io_targets_3_ren; // @[Top.scala 93:28]
+  wire [31:0] dmem_decoder_io_targets_3_waddr; // @[Top.scala 93:28]
+  wire  dmem_decoder_io_targets_3_wen; // @[Top.scala 93:28]
+  wire [31:0] dmem_decoder_io_targets_3_wdata; // @[Top.scala 93:28]
+  wire [31:0] dmem_decoder_io_targets_4_raddr; // @[Top.scala 93:28]
+  wire [31:0] dmem_decoder_io_targets_4_rdata; // @[Top.scala 93:28]
+  wire  dmem_decoder_io_targets_4_ren; // @[Top.scala 93:28]
+  wire [31:0] dmem_decoder_io_targets_4_waddr; // @[Top.scala 93:28]
+  wire  dmem_decoder_io_targets_4_wen; // @[Top.scala 93:28]
+  wire [31:0] dmem_decoder_io_targets_4_wdata; // @[Top.scala 93:28]
+  wire [31:0] dmem_decoder_io_targets_5_raddr; // @[Top.scala 93:28]
+  wire [31:0] dmem_decoder_io_targets_5_rdata; // @[Top.scala 93:28]
+  wire  dmem_decoder_io_targets_5_ren; // @[Top.scala 93:28]
+  wire  dmem_decoder_io_targets_5_wen; // @[Top.scala 93:28]
+  wire [31:0] dmem_decoder_io_targets_5_wdata; // @[Top.scala 93:28]
+  wire [31:0] dmem_decoder_io_targets_6_raddr; // @[Top.scala 93:28]
+  wire [31:0] dmem_decoder_io_targets_6_rdata; // @[Top.scala 93:28]
+  wire  imem_decoder_clock; // @[Top.scala 112:28]
+  wire [31:0] imem_decoder_io_initiator_addr; // @[Top.scala 112:28]
+  wire [31:0] imem_decoder_io_initiator_inst; // @[Top.scala 112:28]
+  wire  imem_decoder_io_initiator_valid; // @[Top.scala 112:28]
+  wire  imem_decoder_io_targets_0_en; // @[Top.scala 112:28]
+  wire [31:0] imem_decoder_io_targets_0_addr; // @[Top.scala 112:28]
+  wire [31:0] imem_decoder_io_targets_0_inst; // @[Top.scala 112:28]
+  wire  imem_decoder_io_targets_0_valid; // @[Top.scala 112:28]
+  wire  imem_decoder_io_targets_1_en; // @[Top.scala 112:28]
+  wire [31:0] imem_decoder_io_targets_1_addr; // @[Top.scala 112:28]
+  wire [31:0] imem_decoder_io_targets_1_inst; // @[Top.scala 112:28]
+  wire  imem_decoder_io_targets_1_valid; // @[Top.scala 112:28]
+  Core core ( // @[Top.scala 77:20]
     .clock(core_clock),
     .reset(core_reset),
     .io_imem_addr(core_io_imem_addr),
@@ -14092,7 +14092,7 @@ module RiscV(
     .io_debug_signal_if2_reg_bp_taken(core_io_debug_signal_if2_reg_bp_taken),
     .io_debug_signal_ic_state(core_io_debug_signal_ic_state)
   );
-  Memory memory ( // @[Top.scala 80:22]
+  Memory memory ( // @[Top.scala 79:22]
     .clock(memory_clock),
     .reset(memory_reset),
     .io_imem_en(memory_io_imem_en),
@@ -14145,7 +14145,7 @@ module RiscV(
     .io_icache_state(memory_io_icache_state),
     .io_dram_state(memory_io_dram_state)
   );
-  BootRom boot_rom ( // @[Top.scala 81:24]
+  BootRom boot_rom ( // @[Top.scala 80:24]
     .clock(boot_rom_clock),
     .reset(boot_rom_reset),
     .io_imem_en(boot_rom_io_imem_en),
@@ -14160,7 +14160,7 @@ module RiscV(
     .io_dmem_wen(boot_rom_io_dmem_wen),
     .io_dmem_wdata(boot_rom_io_dmem_wdata)
   );
-  SRAM #(.NUM_COL(32), .COL_WIDTH(8), .ADDR_WIDTH(7), .DATA_WIDTH(256)) sram1 ( // @[Top.scala 82:21]
+  SRAM #(.NUM_COL(32), .COL_WIDTH(8), .ADDR_WIDTH(7), .DATA_WIDTH(256)) sram1 ( // @[Top.scala 81:21]
     .clock(sram1_clock),
     .en(sram1_en),
     .we(sram1_we),
@@ -14168,7 +14168,7 @@ module RiscV(
     .wdata(sram1_wdata),
     .rdata(sram1_rdata)
   );
-  SRAM #(.NUM_COL(32), .COL_WIDTH(8), .ADDR_WIDTH(7), .DATA_WIDTH(256)) sram2 ( // @[Top.scala 83:21]
+  SRAM #(.NUM_COL(32), .COL_WIDTH(8), .ADDR_WIDTH(7), .DATA_WIDTH(256)) sram2 ( // @[Top.scala 82:21]
     .clock(sram2_clock),
     .en(sram2_en),
     .we(sram2_we),
@@ -14176,7 +14176,7 @@ module RiscV(
     .wdata(sram2_wdata),
     .rdata(sram2_rdata)
   );
-  ICache #(.RDATA_WIDTH_BITS(5), .RADDR_WIDTH(10), .WDATA_WIDTH_BITS(8), .WADDR_WIDTH(7)) icache ( // @[Top.scala 84:22]
+  ICache #(.RDATA_WIDTH_BITS(5), .RADDR_WIDTH(10), .WDATA_WIDTH_BITS(8), .WADDR_WIDTH(7)) icache ( // @[Top.scala 83:22]
     .clock(icache_clock),
     .ren(icache_ren),
     .wen(icache_wen),
@@ -14186,7 +14186,7 @@ module RiscV(
     .wdata(icache_wdata)
   );
   ICacheValid #(.DATA_WIDTH_BITS(1), .ADDR_WIDTH(6), .INVALIDATE_WIDTH_BITS(6), .INVALIDATE_ADDR_WIDTH(1)) icache_valid
-     ( // @[Top.scala 85:28]
+     ( // @[Top.scala 84:28]
     .clock(icache_valid_clock),
     .ren(icache_valid_ren),
     .wen(icache_valid_wen),
@@ -14199,7 +14199,7 @@ module RiscV(
     .idata(icache_valid_idata),
     .dummy_data(icache_valid_dummy_data)
   );
-  PHTMem #(.RDATA_WIDTH_BITS(2), .RADDR_WIDTH(12), .WDATA_WIDTH_BITS(1), .WADDR_WIDTH(13)) pht_mem ( // @[Top.scala 86:23]
+  PHTMem #(.RDATA_WIDTH_BITS(2), .RADDR_WIDTH(12), .WDATA_WIDTH_BITS(1), .WADDR_WIDTH(13)) pht_mem ( // @[Top.scala 85:23]
     .clock(pht_mem_clock),
     .ren(pht_mem_ren),
     .wen(pht_mem_wen),
@@ -14208,14 +14208,14 @@ module RiscV(
     .waddr(pht_mem_waddr),
     .wdata(pht_mem_wdata)
   );
-  Gpio gpio ( // @[Top.scala 87:20]
+  Gpio gpio ( // @[Top.scala 86:20]
     .clock(gpio_clock),
     .reset(gpio_reset),
     .io_mem_wen(gpio_io_mem_wen),
     .io_mem_wdata(gpio_io_mem_wdata),
     .io_gpio(gpio_io_gpio)
   );
-  Uart uart ( // @[Top.scala 88:20]
+  Uart uart ( // @[Top.scala 87:20]
     .clock(uart_clock),
     .reset(uart_reset),
     .io_mem_raddr(uart_io_mem_raddr),
@@ -14228,7 +14228,7 @@ module RiscV(
     .io_tx(uart_io_tx),
     .io_rx(uart_io_rx)
   );
-  Sdc sdc ( // @[Top.scala 89:19]
+  Sdc sdc ( // @[Top.scala 88:19]
     .clock(sdc_clock),
     .reset(sdc_reset),
     .io_mem_raddr(sdc_io_mem_raddr),
@@ -14256,7 +14256,7 @@ module RiscV(
     .io_sdbuf_wdata2(sdc_io_sdbuf_wdata2),
     .io_intr(sdc_io_intr)
   );
-  SdBuf #(.ADDR_WIDTH(8), .DATA_WIDTH(32)) sdbuf ( // @[Top.scala 90:21]
+  SdBuf #(.ADDR_WIDTH(8), .DATA_WIDTH(32)) sdbuf ( // @[Top.scala 89:21]
     .clock(sdbuf_clock),
     .ren1(sdbuf_ren1),
     .wen1(sdbuf_wen1),
@@ -14269,7 +14269,7 @@ module RiscV(
     .wdata2(sdbuf_wdata2),
     .rdata2(sdbuf_rdata2)
   );
-  InterruptController intr ( // @[Top.scala 91:20]
+  InterruptController intr ( // @[Top.scala 90:20]
     .clock(intr_clock),
     .reset(intr_reset),
     .io_mem_raddr(intr_io_mem_raddr),
@@ -14280,11 +14280,11 @@ module RiscV(
     .io_intr_periferal(intr_io_intr_periferal),
     .io_intr_cpu(intr_io_intr_cpu)
   );
-  Config config_ ( // @[Top.scala 92:22]
+  Config config_ ( // @[Top.scala 91:22]
     .io_mem_raddr(config__io_mem_raddr),
     .io_mem_rdata(config__io_mem_rdata)
   );
-  DMemDecoder dmem_decoder ( // @[Top.scala 94:28]
+  DMemDecoder dmem_decoder ( // @[Top.scala 93:28]
     .io_initiator_raddr(dmem_decoder_io_initiator_raddr),
     .io_initiator_rdata(dmem_decoder_io_initiator_rdata),
     .io_initiator_ren(dmem_decoder_io_initiator_ren),
@@ -14328,7 +14328,7 @@ module RiscV(
     .io_targets_6_raddr(dmem_decoder_io_targets_6_raddr),
     .io_targets_6_rdata(dmem_decoder_io_targets_6_rdata)
   );
-  IMemDecoder imem_decoder ( // @[Top.scala 113:28]
+  IMemDecoder imem_decoder ( // @[Top.scala 112:28]
     .clock(imem_decoder_clock),
     .io_initiator_addr(imem_decoder_io_initiator_addr),
     .io_initiator_inst(imem_decoder_io_initiator_inst),
@@ -14342,176 +14342,176 @@ module RiscV(
     .io_targets_1_inst(imem_decoder_io_targets_1_inst),
     .io_targets_1_valid(imem_decoder_io_targets_1_valid)
   );
-  assign io_dram_ren = memory_io_dramPort_ren; // @[Top.scala 126:11]
-  assign io_dram_wen = memory_io_dramPort_wen; // @[Top.scala 126:11]
-  assign io_dram_addr = memory_io_dramPort_addr; // @[Top.scala 126:11]
-  assign io_dram_wdata = memory_io_dramPort_wdata; // @[Top.scala 126:11]
-  assign io_dram_wmask = 16'h0; // @[Top.scala 126:11]
-  assign io_dram_user_busy = 1'h0; // @[Top.scala 126:11]
-  assign io_gpio = gpio_io_gpio[7:0]; // @[Top.scala 203:11]
-  assign io_uart_tx = uart_io_tx; // @[Top.scala 204:14]
-  assign io_sdc_port_clk = sdc_io_sdc_port_clk; // @[Top.scala 206:15]
-  assign io_sdc_port_cmd_wrt = sdc_io_sdc_port_cmd_wrt; // @[Top.scala 206:15]
-  assign io_sdc_port_cmd_out = sdc_io_sdc_port_cmd_out; // @[Top.scala 206:15]
-  assign io_sdc_port_dat_wrt = sdc_io_sdc_port_dat_wrt; // @[Top.scala 206:15]
-  assign io_sdc_port_dat_out = sdc_io_sdc_port_dat_out; // @[Top.scala 206:15]
-  assign io_debugSignals_core_ex2_reg_pc = core_io_debug_signal_ex2_reg_pc; // @[Top.scala 169:24]
-  assign io_debugSignals_core_ex2_is_valid_inst = core_io_debug_signal_ex2_is_valid_inst; // @[Top.scala 169:24]
-  assign io_debugSignals_core_me_intr = core_io_debug_signal_me_intr; // @[Top.scala 169:24]
-  assign io_debugSignals_core_mt_intr = core_io_debug_signal_mt_intr; // @[Top.scala 169:24]
-  assign io_debugSignals_core_trap = core_io_debug_signal_trap; // @[Top.scala 169:24]
-  assign io_debugSignals_core_cycle_counter = core_io_debug_signal_cycle_counter; // @[Top.scala 169:24]
-  assign io_debugSignals_core_id_pc = core_io_debug_signal_id_pc; // @[Top.scala 169:24]
-  assign io_debugSignals_core_id_inst = core_io_debug_signal_id_inst; // @[Top.scala 169:24]
-  assign io_debugSignals_core_mem3_rdata = core_io_debug_signal_mem3_rdata; // @[Top.scala 169:24]
-  assign io_debugSignals_core_mem3_rvalid = core_io_debug_signal_mem3_rvalid; // @[Top.scala 169:24]
-  assign io_debugSignals_core_rwaddr = core_io_debug_signal_rwaddr; // @[Top.scala 169:24]
-  assign io_debugSignals_core_ex2_reg_is_br = core_io_debug_signal_ex2_reg_is_br; // @[Top.scala 169:24]
-  assign io_debugSignals_core_id_reg_is_bp_fail = core_io_debug_signal_id_reg_is_bp_fail; // @[Top.scala 169:24]
-  assign io_debugSignals_core_if2_reg_bp_taken = core_io_debug_signal_if2_reg_bp_taken; // @[Top.scala 169:24]
-  assign io_debugSignals_core_ic_state = core_io_debug_signal_ic_state; // @[Top.scala 169:24]
-  assign io_debugSignals_ren = core_io_dmem_ren | core_io_cache_ren; // @[Top.scala 172:46]
-  assign io_debugSignals_wen = core_io_dmem_wen | core_io_cache_wen; // @[Top.scala 176:46]
-  assign io_debugSignals_wready = memory_io_cache_wready; // @[Top.scala 177:26]
-  assign io_debugSignals_wstrb = core_io_dmem_wstrb; // @[Top.scala 178:26]
-  assign io_debugSignals_wdata = core_io_dmem_wdata; // @[Top.scala 175:26]
-  assign io_debugSignals_mem_icache_state = memory_io_icache_state; // @[Top.scala 185:36]
-  assign io_debugSignals_mem_dram_state = memory_io_dram_state; // @[Top.scala 186:34]
-  assign io_debugSignals_mem_imem_addr = core_io_imem_addr[15:0]; // @[Top.scala 187:53]
+  assign io_dram_ren = memory_io_dramPort_ren; // @[Top.scala 125:11]
+  assign io_dram_wen = memory_io_dramPort_wen; // @[Top.scala 125:11]
+  assign io_dram_addr = memory_io_dramPort_addr; // @[Top.scala 125:11]
+  assign io_dram_wdata = memory_io_dramPort_wdata; // @[Top.scala 125:11]
+  assign io_dram_wmask = 16'h0; // @[Top.scala 125:11]
+  assign io_dram_user_busy = 1'h0; // @[Top.scala 125:11]
+  assign io_gpio = gpio_io_gpio[7:0]; // @[Top.scala 202:11]
+  assign io_uart_tx = uart_io_tx; // @[Top.scala 203:14]
+  assign io_sdc_port_clk = sdc_io_sdc_port_clk; // @[Top.scala 205:15]
+  assign io_sdc_port_cmd_wrt = sdc_io_sdc_port_cmd_wrt; // @[Top.scala 205:15]
+  assign io_sdc_port_cmd_out = sdc_io_sdc_port_cmd_out; // @[Top.scala 205:15]
+  assign io_sdc_port_dat_wrt = sdc_io_sdc_port_dat_wrt; // @[Top.scala 205:15]
+  assign io_sdc_port_dat_out = sdc_io_sdc_port_dat_out; // @[Top.scala 205:15]
+  assign io_debugSignals_core_ex2_reg_pc = core_io_debug_signal_ex2_reg_pc; // @[Top.scala 168:24]
+  assign io_debugSignals_core_ex2_is_valid_inst = core_io_debug_signal_ex2_is_valid_inst; // @[Top.scala 168:24]
+  assign io_debugSignals_core_me_intr = core_io_debug_signal_me_intr; // @[Top.scala 168:24]
+  assign io_debugSignals_core_mt_intr = core_io_debug_signal_mt_intr; // @[Top.scala 168:24]
+  assign io_debugSignals_core_trap = core_io_debug_signal_trap; // @[Top.scala 168:24]
+  assign io_debugSignals_core_cycle_counter = core_io_debug_signal_cycle_counter; // @[Top.scala 168:24]
+  assign io_debugSignals_core_id_pc = core_io_debug_signal_id_pc; // @[Top.scala 168:24]
+  assign io_debugSignals_core_id_inst = core_io_debug_signal_id_inst; // @[Top.scala 168:24]
+  assign io_debugSignals_core_mem3_rdata = core_io_debug_signal_mem3_rdata; // @[Top.scala 168:24]
+  assign io_debugSignals_core_mem3_rvalid = core_io_debug_signal_mem3_rvalid; // @[Top.scala 168:24]
+  assign io_debugSignals_core_rwaddr = core_io_debug_signal_rwaddr; // @[Top.scala 168:24]
+  assign io_debugSignals_core_ex2_reg_is_br = core_io_debug_signal_ex2_reg_is_br; // @[Top.scala 168:24]
+  assign io_debugSignals_core_id_reg_is_bp_fail = core_io_debug_signal_id_reg_is_bp_fail; // @[Top.scala 168:24]
+  assign io_debugSignals_core_if2_reg_bp_taken = core_io_debug_signal_if2_reg_bp_taken; // @[Top.scala 168:24]
+  assign io_debugSignals_core_ic_state = core_io_debug_signal_ic_state; // @[Top.scala 168:24]
+  assign io_debugSignals_ren = core_io_dmem_ren | core_io_cache_ren; // @[Top.scala 171:46]
+  assign io_debugSignals_wen = core_io_dmem_wen | core_io_cache_wen; // @[Top.scala 175:46]
+  assign io_debugSignals_wready = memory_io_cache_wready; // @[Top.scala 176:26]
+  assign io_debugSignals_wstrb = core_io_dmem_wstrb; // @[Top.scala 177:26]
+  assign io_debugSignals_wdata = core_io_dmem_wdata; // @[Top.scala 174:26]
+  assign io_debugSignals_mem_icache_state = memory_io_icache_state; // @[Top.scala 184:36]
+  assign io_debugSignals_mem_dram_state = memory_io_dram_state; // @[Top.scala 185:34]
+  assign io_debugSignals_mem_imem_addr = core_io_imem_addr[15:0]; // @[Top.scala 186:53]
   assign core_clock = clock;
   assign core_reset = reset;
-  assign core_io_imem_inst = imem_decoder_io_initiator_inst; // @[Top.scala 120:16]
-  assign core_io_imem_valid = imem_decoder_io_initiator_valid; // @[Top.scala 120:16]
-  assign core_io_dmem_rdata = dmem_decoder_io_initiator_rdata; // @[Top.scala 121:16]
-  assign core_io_dmem_rvalid = dmem_decoder_io_initiator_rvalid; // @[Top.scala 121:16]
-  assign core_io_dmem_wready = dmem_decoder_io_initiator_wready; // @[Top.scala 121:16]
-  assign core_io_cache_ibusy = memory_io_cache_ibusy; // @[Top.scala 123:17]
-  assign core_io_cache_rdata = memory_io_cache_rdata; // @[Top.scala 123:17]
-  assign core_io_cache_rvalid = memory_io_cache_rvalid; // @[Top.scala 123:17]
-  assign core_io_cache_rready = memory_io_cache_rready; // @[Top.scala 123:17]
-  assign core_io_cache_wready = memory_io_cache_wready; // @[Top.scala 123:17]
-  assign core_io_pht_mem_rdata = pht_mem_rdata; // @[Top.scala 164:25]
-  assign core_io_mtimer_mem_raddr = dmem_decoder_io_targets_3_raddr; // @[Top.scala 108:30]
-  assign core_io_mtimer_mem_ren = dmem_decoder_io_targets_3_ren; // @[Top.scala 108:30]
-  assign core_io_mtimer_mem_waddr = dmem_decoder_io_targets_3_waddr; // @[Top.scala 108:30]
-  assign core_io_mtimer_mem_wen = dmem_decoder_io_targets_3_wen; // @[Top.scala 108:30]
-  assign core_io_mtimer_mem_wdata = dmem_decoder_io_targets_3_wdata; // @[Top.scala 108:30]
-  assign core_io_intr = intr_io_intr_cpu; // @[Top.scala 209:16]
+  assign core_io_imem_inst = imem_decoder_io_initiator_inst; // @[Top.scala 119:16]
+  assign core_io_imem_valid = imem_decoder_io_initiator_valid; // @[Top.scala 119:16]
+  assign core_io_dmem_rdata = dmem_decoder_io_initiator_rdata; // @[Top.scala 120:16]
+  assign core_io_dmem_rvalid = dmem_decoder_io_initiator_rvalid; // @[Top.scala 120:16]
+  assign core_io_dmem_wready = dmem_decoder_io_initiator_wready; // @[Top.scala 120:16]
+  assign core_io_cache_ibusy = memory_io_cache_ibusy; // @[Top.scala 122:17]
+  assign core_io_cache_rdata = memory_io_cache_rdata; // @[Top.scala 122:17]
+  assign core_io_cache_rvalid = memory_io_cache_rvalid; // @[Top.scala 122:17]
+  assign core_io_cache_rready = memory_io_cache_rready; // @[Top.scala 122:17]
+  assign core_io_cache_wready = memory_io_cache_wready; // @[Top.scala 122:17]
+  assign core_io_pht_mem_rdata = pht_mem_rdata; // @[Top.scala 163:25]
+  assign core_io_mtimer_mem_raddr = dmem_decoder_io_targets_3_raddr; // @[Top.scala 107:30]
+  assign core_io_mtimer_mem_ren = dmem_decoder_io_targets_3_ren; // @[Top.scala 107:30]
+  assign core_io_mtimer_mem_waddr = dmem_decoder_io_targets_3_waddr; // @[Top.scala 107:30]
+  assign core_io_mtimer_mem_wen = dmem_decoder_io_targets_3_wen; // @[Top.scala 107:30]
+  assign core_io_mtimer_mem_wdata = dmem_decoder_io_targets_3_wdata; // @[Top.scala 107:30]
+  assign core_io_intr = intr_io_intr_cpu; // @[Top.scala 208:16]
   assign memory_clock = clock;
   assign memory_reset = reset;
-  assign memory_io_imem_en = imem_decoder_io_targets_1_en; // @[Top.scala 118:30]
-  assign memory_io_imem_addr = imem_decoder_io_targets_1_addr; // @[Top.scala 118:30]
-  assign memory_io_cache_iinvalidate = core_io_cache_iinvalidate; // @[Top.scala 123:17]
-  assign memory_io_cache_raddr = core_io_cache_raddr; // @[Top.scala 123:17]
-  assign memory_io_cache_ren = core_io_cache_ren; // @[Top.scala 123:17]
-  assign memory_io_cache_waddr = core_io_cache_waddr; // @[Top.scala 123:17]
-  assign memory_io_cache_wen = core_io_cache_wen; // @[Top.scala 123:17]
-  assign memory_io_cache_wstrb = core_io_cache_wstrb; // @[Top.scala 123:17]
-  assign memory_io_cache_wdata = core_io_cache_wdata; // @[Top.scala 123:17]
-  assign memory_io_dramPort_init_calib_complete = io_dram_init_calib_complete; // @[Top.scala 126:11]
-  assign memory_io_dramPort_rdata = io_dram_rdata; // @[Top.scala 126:11]
-  assign memory_io_dramPort_rdata_valid = io_dram_rdata_valid; // @[Top.scala 126:11]
-  assign memory_io_dramPort_busy = io_dram_busy; // @[Top.scala 126:11]
-  assign memory_io_cache_array1_rdata = sram1_rdata; // @[Top.scala 133:32]
-  assign memory_io_cache_array2_rdata = sram2_rdata; // @[Top.scala 139:32]
-  assign memory_io_icache_rdata = icache_rdata; // @[Top.scala 145:26]
-  assign memory_io_icache_valid_rdata = icache_valid_rdata; // @[Top.scala 155:32]
+  assign memory_io_imem_en = imem_decoder_io_targets_1_en; // @[Top.scala 117:30]
+  assign memory_io_imem_addr = imem_decoder_io_targets_1_addr; // @[Top.scala 117:30]
+  assign memory_io_cache_iinvalidate = core_io_cache_iinvalidate; // @[Top.scala 122:17]
+  assign memory_io_cache_raddr = core_io_cache_raddr; // @[Top.scala 122:17]
+  assign memory_io_cache_ren = core_io_cache_ren; // @[Top.scala 122:17]
+  assign memory_io_cache_waddr = core_io_cache_waddr; // @[Top.scala 122:17]
+  assign memory_io_cache_wen = core_io_cache_wen; // @[Top.scala 122:17]
+  assign memory_io_cache_wstrb = core_io_cache_wstrb; // @[Top.scala 122:17]
+  assign memory_io_cache_wdata = core_io_cache_wdata; // @[Top.scala 122:17]
+  assign memory_io_dramPort_init_calib_complete = io_dram_init_calib_complete; // @[Top.scala 125:11]
+  assign memory_io_dramPort_rdata = io_dram_rdata; // @[Top.scala 125:11]
+  assign memory_io_dramPort_rdata_valid = io_dram_rdata_valid; // @[Top.scala 125:11]
+  assign memory_io_dramPort_busy = io_dram_busy; // @[Top.scala 125:11]
+  assign memory_io_cache_array1_rdata = sram1_rdata; // @[Top.scala 132:32]
+  assign memory_io_cache_array2_rdata = sram2_rdata; // @[Top.scala 138:32]
+  assign memory_io_icache_rdata = icache_rdata; // @[Top.scala 144:26]
+  assign memory_io_icache_valid_rdata = icache_valid_rdata; // @[Top.scala 154:32]
   assign boot_rom_clock = clock;
   assign boot_rom_reset = reset;
-  assign boot_rom_io_imem_en = imem_decoder_io_targets_0_en; // @[Top.scala 117:30]
-  assign boot_rom_io_imem_addr = imem_decoder_io_targets_0_addr; // @[Top.scala 117:30]
-  assign boot_rom_io_dmem_raddr = dmem_decoder_io_targets_0_raddr; // @[Top.scala 104:30]
-  assign boot_rom_io_dmem_ren = dmem_decoder_io_targets_0_ren; // @[Top.scala 104:30]
-  assign boot_rom_io_dmem_waddr = dmem_decoder_io_targets_0_waddr; // @[Top.scala 104:30]
-  assign boot_rom_io_dmem_wen = dmem_decoder_io_targets_0_wen; // @[Top.scala 104:30]
-  assign boot_rom_io_dmem_wdata = dmem_decoder_io_targets_0_wdata; // @[Top.scala 104:30]
-  assign sram1_clock = clock; // @[Top.scala 128:18]
-  assign sram1_en = memory_io_cache_array1_en; // @[Top.scala 129:15]
-  assign sram1_we = memory_io_cache_array1_we; // @[Top.scala 130:15]
-  assign sram1_addr = memory_io_cache_array1_addr; // @[Top.scala 131:17]
-  assign sram1_wdata = memory_io_cache_array1_wdata; // @[Top.scala 132:18]
-  assign sram2_clock = clock; // @[Top.scala 134:18]
-  assign sram2_en = memory_io_cache_array2_en; // @[Top.scala 135:15]
-  assign sram2_we = memory_io_cache_array2_we; // @[Top.scala 136:15]
-  assign sram2_addr = memory_io_cache_array2_addr; // @[Top.scala 137:17]
-  assign sram2_wdata = memory_io_cache_array2_wdata; // @[Top.scala 138:18]
-  assign icache_clock = clock; // @[Top.scala 141:19]
-  assign icache_ren = memory_io_icache_ren; // @[Top.scala 142:17]
-  assign icache_wen = memory_io_icache_wen; // @[Top.scala 143:17]
-  assign icache_raddr = memory_io_icache_raddr; // @[Top.scala 144:19]
-  assign icache_waddr = memory_io_icache_waddr; // @[Top.scala 146:19]
-  assign icache_wdata = memory_io_icache_wdata; // @[Top.scala 147:19]
-  assign icache_valid_clock = clock; // @[Top.scala 149:25]
-  assign icache_valid_ren = memory_io_icache_valid_ren; // @[Top.scala 150:23]
-  assign icache_valid_wen = memory_io_icache_valid_wen; // @[Top.scala 151:23]
-  assign icache_valid_ien = memory_io_icache_valid_invalidate; // @[Top.scala 158:23]
-  assign icache_valid_invalidate = memory_io_icache_valid_invalidate; // @[Top.scala 152:30]
-  assign icache_valid_addr = memory_io_icache_valid_addr; // @[Top.scala 153:24]
-  assign icache_valid_iaddr = memory_io_icache_valid_iaddr; // @[Top.scala 154:25]
-  assign icache_valid_wdata = memory_io_icache_valid_wdata; // @[Top.scala 156:25]
-  assign icache_valid_idata = 64'h0; // @[Top.scala 157:25]
-  assign pht_mem_clock = clock; // @[Top.scala 160:20]
-  assign pht_mem_ren = 1'h1; // @[Top.scala 161:20]
-  assign pht_mem_wen = core_io_pht_mem_wen; // @[Top.scala 162:20]
-  assign pht_mem_raddr = core_io_pht_mem_raddr; // @[Top.scala 163:20]
-  assign pht_mem_waddr = core_io_pht_mem_waddr; // @[Top.scala 165:20]
-  assign pht_mem_wdata = core_io_pht_mem_wdata; // @[Top.scala 166:20]
+  assign boot_rom_io_imem_en = imem_decoder_io_targets_0_en; // @[Top.scala 116:30]
+  assign boot_rom_io_imem_addr = imem_decoder_io_targets_0_addr; // @[Top.scala 116:30]
+  assign boot_rom_io_dmem_raddr = dmem_decoder_io_targets_0_raddr; // @[Top.scala 103:30]
+  assign boot_rom_io_dmem_ren = dmem_decoder_io_targets_0_ren; // @[Top.scala 103:30]
+  assign boot_rom_io_dmem_waddr = dmem_decoder_io_targets_0_waddr; // @[Top.scala 103:30]
+  assign boot_rom_io_dmem_wen = dmem_decoder_io_targets_0_wen; // @[Top.scala 103:30]
+  assign boot_rom_io_dmem_wdata = dmem_decoder_io_targets_0_wdata; // @[Top.scala 103:30]
+  assign sram1_clock = clock; // @[Top.scala 127:18]
+  assign sram1_en = memory_io_cache_array1_en; // @[Top.scala 128:15]
+  assign sram1_we = memory_io_cache_array1_we; // @[Top.scala 129:15]
+  assign sram1_addr = memory_io_cache_array1_addr; // @[Top.scala 130:17]
+  assign sram1_wdata = memory_io_cache_array1_wdata; // @[Top.scala 131:18]
+  assign sram2_clock = clock; // @[Top.scala 133:18]
+  assign sram2_en = memory_io_cache_array2_en; // @[Top.scala 134:15]
+  assign sram2_we = memory_io_cache_array2_we; // @[Top.scala 135:15]
+  assign sram2_addr = memory_io_cache_array2_addr; // @[Top.scala 136:17]
+  assign sram2_wdata = memory_io_cache_array2_wdata; // @[Top.scala 137:18]
+  assign icache_clock = clock; // @[Top.scala 140:19]
+  assign icache_ren = memory_io_icache_ren; // @[Top.scala 141:17]
+  assign icache_wen = memory_io_icache_wen; // @[Top.scala 142:17]
+  assign icache_raddr = memory_io_icache_raddr; // @[Top.scala 143:19]
+  assign icache_waddr = memory_io_icache_waddr; // @[Top.scala 145:19]
+  assign icache_wdata = memory_io_icache_wdata; // @[Top.scala 146:19]
+  assign icache_valid_clock = clock; // @[Top.scala 148:25]
+  assign icache_valid_ren = memory_io_icache_valid_ren; // @[Top.scala 149:23]
+  assign icache_valid_wen = memory_io_icache_valid_wen; // @[Top.scala 150:23]
+  assign icache_valid_ien = memory_io_icache_valid_invalidate; // @[Top.scala 157:23]
+  assign icache_valid_invalidate = memory_io_icache_valid_invalidate; // @[Top.scala 151:30]
+  assign icache_valid_addr = memory_io_icache_valid_addr; // @[Top.scala 152:24]
+  assign icache_valid_iaddr = memory_io_icache_valid_iaddr; // @[Top.scala 153:25]
+  assign icache_valid_wdata = memory_io_icache_valid_wdata; // @[Top.scala 155:25]
+  assign icache_valid_idata = 64'h0; // @[Top.scala 156:25]
+  assign pht_mem_clock = clock; // @[Top.scala 159:20]
+  assign pht_mem_ren = 1'h1; // @[Top.scala 160:20]
+  assign pht_mem_wen = core_io_pht_mem_wen; // @[Top.scala 161:20]
+  assign pht_mem_raddr = core_io_pht_mem_raddr; // @[Top.scala 162:20]
+  assign pht_mem_waddr = core_io_pht_mem_waddr; // @[Top.scala 164:20]
+  assign pht_mem_wdata = core_io_pht_mem_wdata; // @[Top.scala 165:20]
   assign gpio_clock = clock;
   assign gpio_reset = reset;
-  assign gpio_io_mem_wen = dmem_decoder_io_targets_1_wen; // @[Top.scala 106:30]
-  assign gpio_io_mem_wdata = dmem_decoder_io_targets_1_wdata; // @[Top.scala 106:30]
+  assign gpio_io_mem_wen = dmem_decoder_io_targets_1_wen; // @[Top.scala 105:30]
+  assign gpio_io_mem_wdata = dmem_decoder_io_targets_1_wdata; // @[Top.scala 105:30]
   assign uart_clock = clock;
   assign uart_reset = reset;
-  assign uart_io_mem_raddr = dmem_decoder_io_targets_2_raddr; // @[Top.scala 107:30]
-  assign uart_io_mem_ren = dmem_decoder_io_targets_2_ren; // @[Top.scala 107:30]
-  assign uart_io_mem_waddr = dmem_decoder_io_targets_2_waddr; // @[Top.scala 107:30]
-  assign uart_io_mem_wen = dmem_decoder_io_targets_2_wen; // @[Top.scala 107:30]
-  assign uart_io_mem_wdata = dmem_decoder_io_targets_2_wdata; // @[Top.scala 107:30]
-  assign uart_io_rx = io_uart_rx; // @[Top.scala 205:14]
+  assign uart_io_mem_raddr = dmem_decoder_io_targets_2_raddr; // @[Top.scala 106:30]
+  assign uart_io_mem_ren = dmem_decoder_io_targets_2_ren; // @[Top.scala 106:30]
+  assign uart_io_mem_waddr = dmem_decoder_io_targets_2_waddr; // @[Top.scala 106:30]
+  assign uart_io_mem_wen = dmem_decoder_io_targets_2_wen; // @[Top.scala 106:30]
+  assign uart_io_mem_wdata = dmem_decoder_io_targets_2_wdata; // @[Top.scala 106:30]
+  assign uart_io_rx = io_uart_rx; // @[Top.scala 204:14]
   assign sdc_clock = clock;
   assign sdc_reset = reset;
-  assign sdc_io_mem_raddr = dmem_decoder_io_targets_4_raddr; // @[Top.scala 109:30]
-  assign sdc_io_mem_ren = dmem_decoder_io_targets_4_ren; // @[Top.scala 109:30]
-  assign sdc_io_mem_waddr = dmem_decoder_io_targets_4_waddr; // @[Top.scala 109:30]
-  assign sdc_io_mem_wen = dmem_decoder_io_targets_4_wen; // @[Top.scala 109:30]
-  assign sdc_io_mem_wdata = dmem_decoder_io_targets_4_wdata; // @[Top.scala 109:30]
-  assign sdc_io_sdc_port_res_in = io_sdc_port_res_in; // @[Top.scala 206:15]
-  assign sdc_io_sdc_port_dat_in = io_sdc_port_dat_in; // @[Top.scala 206:15]
-  assign sdc_io_sdbuf_rdata1 = sdbuf_rdata1; // @[Top.scala 216:23]
-  assign sdc_io_sdbuf_rdata2 = sdbuf_rdata2; // @[Top.scala 221:23]
-  assign sdbuf_clock = clock; // @[Top.scala 211:19]
-  assign sdbuf_ren1 = sdc_io_sdbuf_ren1; // @[Top.scala 212:19]
-  assign sdbuf_wen1 = sdc_io_sdbuf_wen1; // @[Top.scala 213:19]
-  assign sdbuf_addr1 = sdc_io_sdbuf_addr1; // @[Top.scala 214:19]
-  assign sdbuf_wdata1 = sdc_io_sdbuf_wdata1; // @[Top.scala 215:19]
-  assign sdbuf_ren2 = sdc_io_sdbuf_ren2; // @[Top.scala 217:19]
-  assign sdbuf_wen2 = sdc_io_sdbuf_wen2; // @[Top.scala 218:19]
-  assign sdbuf_addr2 = sdc_io_sdbuf_addr2; // @[Top.scala 219:19]
-  assign sdbuf_wdata2 = sdc_io_sdbuf_wdata2; // @[Top.scala 220:19]
+  assign sdc_io_mem_raddr = dmem_decoder_io_targets_4_raddr; // @[Top.scala 108:30]
+  assign sdc_io_mem_ren = dmem_decoder_io_targets_4_ren; // @[Top.scala 108:30]
+  assign sdc_io_mem_waddr = dmem_decoder_io_targets_4_waddr; // @[Top.scala 108:30]
+  assign sdc_io_mem_wen = dmem_decoder_io_targets_4_wen; // @[Top.scala 108:30]
+  assign sdc_io_mem_wdata = dmem_decoder_io_targets_4_wdata; // @[Top.scala 108:30]
+  assign sdc_io_sdc_port_res_in = io_sdc_port_res_in; // @[Top.scala 205:15]
+  assign sdc_io_sdc_port_dat_in = io_sdc_port_dat_in; // @[Top.scala 205:15]
+  assign sdc_io_sdbuf_rdata1 = sdbuf_rdata1; // @[Top.scala 215:23]
+  assign sdc_io_sdbuf_rdata2 = sdbuf_rdata2; // @[Top.scala 220:23]
+  assign sdbuf_clock = clock; // @[Top.scala 210:19]
+  assign sdbuf_ren1 = sdc_io_sdbuf_ren1; // @[Top.scala 211:19]
+  assign sdbuf_wen1 = sdc_io_sdbuf_wen1; // @[Top.scala 212:19]
+  assign sdbuf_addr1 = sdc_io_sdbuf_addr1; // @[Top.scala 213:19]
+  assign sdbuf_wdata1 = sdc_io_sdbuf_wdata1; // @[Top.scala 214:19]
+  assign sdbuf_ren2 = sdc_io_sdbuf_ren2; // @[Top.scala 216:19]
+  assign sdbuf_wen2 = sdc_io_sdbuf_wen2; // @[Top.scala 217:19]
+  assign sdbuf_addr2 = sdc_io_sdbuf_addr2; // @[Top.scala 218:19]
+  assign sdbuf_wdata2 = sdc_io_sdbuf_wdata2; // @[Top.scala 219:19]
   assign intr_clock = clock;
   assign intr_reset = reset;
-  assign intr_io_mem_raddr = dmem_decoder_io_targets_5_raddr; // @[Top.scala 110:30]
-  assign intr_io_mem_ren = dmem_decoder_io_targets_5_ren; // @[Top.scala 110:30]
-  assign intr_io_mem_wen = dmem_decoder_io_targets_5_wen; // @[Top.scala 110:30]
-  assign intr_io_mem_wdata = dmem_decoder_io_targets_5_wdata; // @[Top.scala 110:30]
+  assign intr_io_mem_raddr = dmem_decoder_io_targets_5_raddr; // @[Top.scala 109:30]
+  assign intr_io_mem_ren = dmem_decoder_io_targets_5_ren; // @[Top.scala 109:30]
+  assign intr_io_mem_wen = dmem_decoder_io_targets_5_wen; // @[Top.scala 109:30]
+  assign intr_io_mem_wdata = dmem_decoder_io_targets_5_wdata; // @[Top.scala 109:30]
   assign intr_io_intr_periferal = {sdc_io_intr,uart_io_intr}; // @[Cat.scala 33:92]
-  assign config__io_mem_raddr = dmem_decoder_io_targets_6_raddr; // @[Top.scala 111:30]
-  assign dmem_decoder_io_initiator_raddr = core_io_dmem_raddr; // @[Top.scala 121:16]
-  assign dmem_decoder_io_initiator_ren = core_io_dmem_ren; // @[Top.scala 121:16]
-  assign dmem_decoder_io_initiator_waddr = core_io_dmem_waddr; // @[Top.scala 121:16]
-  assign dmem_decoder_io_initiator_wen = core_io_dmem_wen; // @[Top.scala 121:16]
-  assign dmem_decoder_io_initiator_wdata = core_io_dmem_wdata; // @[Top.scala 121:16]
-  assign dmem_decoder_io_targets_0_rdata = boot_rom_io_dmem_rdata; // @[Top.scala 104:30]
-  assign dmem_decoder_io_targets_0_rvalid = boot_rom_io_dmem_rvalid; // @[Top.scala 104:30]
-  assign dmem_decoder_io_targets_2_rdata = uart_io_mem_rdata; // @[Top.scala 107:30]
-  assign dmem_decoder_io_targets_3_rdata = core_io_mtimer_mem_rdata; // @[Top.scala 108:30]
-  assign dmem_decoder_io_targets_4_rdata = sdc_io_mem_rdata; // @[Top.scala 109:30]
-  assign dmem_decoder_io_targets_5_rdata = intr_io_mem_rdata; // @[Top.scala 110:30]
-  assign dmem_decoder_io_targets_6_rdata = config__io_mem_rdata; // @[Top.scala 111:30]
+  assign config__io_mem_raddr = dmem_decoder_io_targets_6_raddr; // @[Top.scala 110:30]
+  assign dmem_decoder_io_initiator_raddr = core_io_dmem_raddr; // @[Top.scala 120:16]
+  assign dmem_decoder_io_initiator_ren = core_io_dmem_ren; // @[Top.scala 120:16]
+  assign dmem_decoder_io_initiator_waddr = core_io_dmem_waddr; // @[Top.scala 120:16]
+  assign dmem_decoder_io_initiator_wen = core_io_dmem_wen; // @[Top.scala 120:16]
+  assign dmem_decoder_io_initiator_wdata = core_io_dmem_wdata; // @[Top.scala 120:16]
+  assign dmem_decoder_io_targets_0_rdata = boot_rom_io_dmem_rdata; // @[Top.scala 103:30]
+  assign dmem_decoder_io_targets_0_rvalid = boot_rom_io_dmem_rvalid; // @[Top.scala 103:30]
+  assign dmem_decoder_io_targets_2_rdata = uart_io_mem_rdata; // @[Top.scala 106:30]
+  assign dmem_decoder_io_targets_3_rdata = core_io_mtimer_mem_rdata; // @[Top.scala 107:30]
+  assign dmem_decoder_io_targets_4_rdata = sdc_io_mem_rdata; // @[Top.scala 108:30]
+  assign dmem_decoder_io_targets_5_rdata = intr_io_mem_rdata; // @[Top.scala 109:30]
+  assign dmem_decoder_io_targets_6_rdata = config__io_mem_rdata; // @[Top.scala 110:30]
   assign imem_decoder_clock = clock;
-  assign imem_decoder_io_initiator_addr = core_io_imem_addr; // @[Top.scala 120:16]
-  assign imem_decoder_io_targets_0_inst = boot_rom_io_imem_inst; // @[Top.scala 117:30]
-  assign imem_decoder_io_targets_0_valid = boot_rom_io_imem_valid; // @[Top.scala 117:30]
-  assign imem_decoder_io_targets_1_inst = memory_io_imem_inst; // @[Top.scala 118:30]
-  assign imem_decoder_io_targets_1_valid = memory_io_imem_valid; // @[Top.scala 118:30]
+  assign imem_decoder_io_initiator_addr = core_io_imem_addr; // @[Top.scala 119:16]
+  assign imem_decoder_io_targets_0_inst = boot_rom_io_imem_inst; // @[Top.scala 116:30]
+  assign imem_decoder_io_targets_0_valid = boot_rom_io_imem_valid; // @[Top.scala 116:30]
+  assign imem_decoder_io_targets_1_inst = memory_io_imem_inst; // @[Top.scala 117:30]
+  assign imem_decoder_io_targets_1_valid = memory_io_imem_valid; // @[Top.scala 117:30]
 endmodule
