@@ -1,1 +1,0 @@
-../../../chisel-template/rtl/riscv/riscv.v
