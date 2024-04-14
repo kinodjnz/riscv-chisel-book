@@ -19,7 +19,7 @@ HEXDUMP := hexdump
 HEXDUMP_FLAGS := -e '"%08x\n"' -v
 
 CARGO_FLAGS := +stage1
-AS_FLAGS := --arch=riscv32 --mattr=+c,+m,+zba,+zbb,+zbs,+relax
+AS_FLAGS := --arch=riscv32 --mattr=+c,+m,+zba,+zbb,+zbs,+xcramp,+relax
 
 all: target/$(NAME).hex target/$(NAME).dump target/$(NAME).elf
 
@@ -39,7 +39,7 @@ target/%.hex: target/%.bin
 	$(HEXDUMP) $(HEXDUMP_FLAGS) $< > $@
 
 target/%.dump.nocomment: target/%.elf
-	$(OBJDUMP) -dSC --mattr=+zba,+zbb,+zbs --print-imm-hex $< > $@
+	$(OBJDUMP) -dSC --mattr=+zba,+zbb,+zbs,+xcramp --print-imm-hex $< > $@
 
 target/%.dump: target/%.dump.nocomment
 	$(ADDRESS_COMMENT) < $< > $@
