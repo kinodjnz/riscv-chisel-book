@@ -2,7 +2,8 @@ test-targets := $(patsubst %.binhex,%,$(subst ../riscv-tests/isa/,test-,$(wildca
 
 .PHONY: all-tests $(test-targest) test verilog bootrom rustfmt picocom help
 
-all-tests: $(test-targets)
+all-tests:
+	sbt "testOnly fpga.RiscvTest"
 
 $(test-targets): ## Run individual test
 	sbt "testOnly fpga.RiscvTest -- -t \"RiscV must runs $(patsubst test-%,%,$@)\""
