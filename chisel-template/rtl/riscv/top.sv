@@ -50,7 +50,7 @@ module top #(
 (* mark_debug = "true" *) logic [31:0] io_debugSignals_core_rwaddr;
 (* mark_debug = "true" *) logic        io_debugSignals_core_ex2_reg_is_br;
 (* mark_debug = "true" *) logic        io_debugSignals_core_id_reg_is_bp_fail;
-(* mark_debug = "true" *) logic        io_debugSignals_core_if2_reg_bp_taken;
+(* mark_debug = "true" *) logic        io_debugSignals_core_id_reg_bp_taken;
 (* mark_debug = "true" *) logic [2:0]  io_debugSignals_core_ic_state;
 // (* mark_debug = "true" *) logic [31:0] io_debugSignals_rdata;
 (* mark_debug = "true" *) logic        io_debugSignals_ren;

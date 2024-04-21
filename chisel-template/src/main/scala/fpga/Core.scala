@@ -45,7 +45,7 @@ class CoreDebugSignals extends Bundle {
   val rwaddr        = Output(UInt(WORD_LEN.W))
   val ex2_reg_is_br = Output(Bool())
   val id_reg_is_bp_fail = Output(Bool())
-  val if2_reg_bp_taken = Output(Bool())
+  val id_reg_bp_taken = Output(Bool())
   val ic_state      = Output(UInt(3.W))
 }
 
@@ -154,6 +154,13 @@ class Core(
   // Pipeline State Registers
 
   // IF/ID State
+  val id_reg_valid_inst     = RegInit(false.B)
+  val id_reg_inst           = RegInit(0.U(WORD_LEN.W))
+  val id_reg_bp_taken       = RegInit(false.B)
+  val id_reg_pc             = RegInit(0.U(PC_LEN.W))
+  val id_reg_bp_taken_pc    = RegInit(0.U(PC_LEN.W))
+  val id_reg_bp_cnt         = RegInit(0.U(2.W))
+
   val id_reg_stall          = RegInit(false.B)
   val id_reg_is_trap        = RegInit(false.B)
   val id_reg_mcause         = RegInit(0.U(WORD_LEN.W))
@@ -292,9 +299,6 @@ class Core(
   val mem3_reg_is_valid_inst  = RegInit(false.B)
   val mem3_reg_mem_use_reg    = RegInit(false.B)
 
-  val if2_reg_bp_taken     = RegInit(false.B)
-  val if2_reg_bp_taken_pc  = RegInit(0.U(PC_LEN.W))
-  val if2_reg_bp_cnt       = RegInit(0.U(2.W))
   val id_reg_is_bp_fail    = RegInit(true.B) // jump start_address when first time
   val id_reg_br_pc         = RegInit((start_address >> (WORD_LEN-PC_LEN)).U(PC_LEN.W))
   val id_stall             = Wire(Bool())
@@ -570,12 +574,12 @@ class Core(
   //**********************************
   // Instruction Fetch (IF) 1 Stage
 
-  val if1_jump_addr = MuxCase(if2_reg_bp_taken_pc, Seq(
+  val if1_jump_addr = MuxCase(id_reg_bp_taken_pc, Seq(
     ex2_reg_is_br     -> ex2_reg_br_pc,
     id_reg_is_bp_fail -> id_reg_br_pc,
     // if2_reg_bp_taken  -> if2_reg_bp_taken_pc,
   ))
-  val if1_is_jump = ex2_reg_is_br || id_reg_is_bp_fail || if2_reg_bp_taken
+  val if1_is_jump = ex2_reg_is_br || id_reg_is_bp_fail || id_reg_bp_taken
 
   ic_addr_en  := if1_is_jump
   ic_addr     := if1_jump_addr
@@ -583,52 +587,22 @@ class Core(
   //**********************************
   // Instruction Fetch (IF) 2 Stage
 
-  val if2_reg_pc   = RegInit((start_address >> (WORD_LEN-PC_LEN)).U(PC_LEN.W))
-  val if2_reg_inst = RegInit(0.U(WORD_LEN.W))
-
-  val is_half_inst = (ic_data_out(1, 0) =/= 3.U)
-  ic_read_en2 := !id_reg_stall && is_half_inst
-  ic_read_en4 := !id_reg_stall && !is_half_inst
-  val if2_pc = Mux(id_reg_stall || !(ic_read_rdy || (ic_half_rdy && is_half_inst)),
-    if2_reg_pc,
-    ic_reg_addr_out,
-  )
-  if2_reg_pc := if2_pc
-  val if2_inst = MuxCase(BUBBLE, Seq(
-	  // 優先順位重要！ジャンプ成立とストールが同時発生した場合、ジャンプ処理を優先
-    ex2_reg_is_br     -> BUBBLE,
-    id_reg_stall      -> if2_reg_inst, // ストールとBP同時の場合、BP発生源の命令を生かすためストール優先
-    id_reg_is_bp_fail -> BUBBLE,
-    if2_reg_bp_taken  -> BUBBLE,
-    ic_read_rdy       -> ic_data_out,
-    (ic_half_rdy && is_half_inst) -> ic_data_out,
-  ))
-  if2_reg_inst := if2_inst
-  val if2_bp_taken = MuxCase(ic_bp_taken && (ic_read_rdy || (ic_half_rdy && is_half_inst)), Seq(
-    ex2_reg_is_br     -> false.B,
-    id_reg_stall      -> if2_reg_bp_taken,
-    id_reg_is_bp_fail -> false.B,
-    if2_reg_bp_taken  -> false.B,
-  ))
-  if2_reg_bp_taken := if2_bp_taken
-  val if2_bp_taken_pc = Mux(id_reg_stall,
-    if2_reg_bp_taken_pc,
-    ic_bp_taken_pc,
-  )
-  if2_reg_bp_taken_pc := if2_bp_taken_pc
-  val if2_bp_cnt = Mux(id_reg_stall,
-    if2_reg_bp_cnt,
-    ic_bp_cnt,
-  )
-  if2_reg_bp_cnt := if2_bp_cnt
+  val if2_is_half_inst = (ic_data_out(1, 0) =/= 3.U)
+  ic_read_en2 := !id_reg_stall && if2_is_half_inst
+  ic_read_en4 := !id_reg_stall && !if2_is_half_inst
+  val if2_is_inst_read = ic_read_rdy || (ic_half_rdy && if2_is_half_inst)
+  val if2_pc = ic_reg_addr_out
+  val if2_is_valid_inst = !ex2_reg_is_br && !id_reg_is_bp_fail && !id_reg_bp_taken && if2_is_inst_read
+  val if2_inst = Mux(if2_is_valid_inst, ic_data_out, BUBBLE)
+  val if2_bp_taken = if2_is_valid_inst && ic_bp_taken
   if (enable_pipeline_probe) {
-    val if2_vaild = !id_reg_stall && (if2_inst =/= BUBBLE)
-    val if2_inst_id = Mux(if2_vaild,
+    val if2_probe_valid_inst = !id_reg_stall && if2_is_valid_inst
+    val if2_inst_id = Mux(if2_probe_valid_inst,
       if2_reg_inst_id + 1.U,
       if2_reg_inst_id,
     )
     if2_reg_inst_id := if2_inst_id
-    io.pipeline_probe.if2_valid   := if2_vaild
+    io.pipeline_probe.if2_valid   := if2_probe_valid_inst
     io.pipeline_probe.if2_inst_id := if2_inst_id
     io.pipeline_probe.if2_pc      := Cat(if2_pc, 0.U(1.W))
     io.pipeline_probe.if2_inst    := if2_inst
@@ -638,13 +612,21 @@ class Core(
   printf(p"inst: ${Hexadecimal(if2_inst)}, ic_read_rdy: ${ic_read_rdy}, ic_state: ${ic_state.asUInt}, ic_addr_en: ${ic_addr_en.asUInt}\n")
 
   //**********************************
-  // IF2/ID Register (Alias)
-  val id_reg_pc          = if2_reg_pc
-  val id_reg_inst        = if2_reg_inst
-  val id_reg_bp_taken    = if2_reg_bp_taken
-  val id_reg_bp_taken_pc = if2_reg_bp_taken_pc
-  val id_reg_bp_cnt      = if2_reg_bp_cnt
-  val id_reg_inst_id     = if2_reg_inst_id
+  // IF2/ID Register
+
+  when (ex2_reg_is_br || !id_reg_stall) {
+    // 優先順位重要！ジャンプ成立とストールが同時発生した場合、ジャンプ処理を優先
+    // ストールとBP同時の場合、BP発生源の命令を生かすためストール優先
+    id_reg_valid_inst := if2_is_valid_inst
+    id_reg_inst       := if2_inst
+    id_reg_bp_taken   := if2_bp_taken
+  }
+  when (!id_reg_stall) {
+    id_reg_pc          := ic_reg_addr_out
+    id_reg_bp_taken_pc := ic_bp_taken_pc
+    id_reg_bp_cnt      := ic_bp_cnt
+  }
+  val id_reg_inst_id = if2_reg_inst_id
 
   //**********************************
   // Instruction Decode (ID) Stage
@@ -2046,7 +2028,7 @@ class Core(
   io.debug_signal.rwaddr              := ex2_wb_data
   io.debug_signal.ex2_reg_is_br       := ex2_reg_is_br
   io.debug_signal.id_reg_is_bp_fail   := id_reg_is_bp_fail
-  io.debug_signal.if2_reg_bp_taken    := if2_reg_bp_taken
+  io.debug_signal.id_reg_bp_taken     := id_reg_bp_taken
   io.debug_signal.ic_state            := ic_state.asUInt
 
   //**********************************
@@ -2060,8 +2042,8 @@ class Core(
 
   //printf(p"if1_reg_pc       : 0x${Hexadecimal(if1_reg_pc)}\n")
   printf(p"if2_pc           : 0x${Hexadecimal(Cat(if2_pc, 0.U(1.W)))}\n")
+  printf(p"if2_is_valid_inst: 0x${Hexadecimal(if2_is_valid_inst)}\n")
   printf(p"if2_inst         : 0x${Hexadecimal(if2_inst)}\n")
-  printf(p"if2_reg_bp_taken : 0x${Hexadecimal(if2_reg_bp_taken)}\n")
   printf(p"ic_bp_taken      : 0x${Hexadecimal(ic_bp_taken)}\n")
   printf(p"ic_bp_taken_pc   : 0x${Hexadecimal(Cat(ic_bp_taken_pc, 0.U(1.W)))}\n")
   printf(p"ic_bp_cnt        : 0x${Hexadecimal(ic_bp_cnt)}\n")
@@ -2072,6 +2054,7 @@ class Core(
   // printf(p"id_rs1_data      : 0x${Hexadecimal(id_rs1_data)}\n")
   // printf(p"id_rs2_data      : 0x${Hexadecimal(id_rs2_data)}\n")
   // printf(p"id_wb_addr       : 0x${Hexadecimal(id_wb_addr)}\n")
+  printf(p"id_reg_bp_taken  : 0x${Hexadecimal(id_reg_bp_taken)}\n")
   printf(p"id_reg_is_bp_fail: 0x${Hexadecimal(id_reg_is_bp_fail)}\n")
   printf(p"rrd_reg_pc       : 0x${Hexadecimal(Cat(rrd_reg_pc, 0.U(1.W)))}\n")
   printf(p"rrd_reg_is_valid_: 0x${Hexadecimal(rrd_reg_is_valid_inst)}\n")
