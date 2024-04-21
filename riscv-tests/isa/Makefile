@@ -12,10 +12,11 @@ DUMP=$(patsubst %,%.dump,$(TARGETS))
 all: $(BINHEX) $(DUMP)
 
 $(BIN): %.bin: $(ELFDIR)/%
-	riscv64-unknown-elf-objcopy -O binary $< $@
+	riscv32-unknown-elf-objcopy -O binary $< $@
 
 %.binhex: %.bin
-	od -An -tx4 -w4 -v $< > $@
+	# od -An -tx4 -w4 -v $< > $@
+	hexdump -e '"%08x\n"' -v $< > $@
 
 $(DUMP): %.dump: $(ELFDIR)/%.dump
 	ln -s $< $@
