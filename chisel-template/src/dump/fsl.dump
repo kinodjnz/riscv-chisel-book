@@ -1,0 +1,87 @@
+
+target/fsl.elf.fat:	file format elf32-littleriscv
+
+Disassembly of section .text:
+
+00000000 <_start>:
+       0: 37 41 00 20  	lui	sp, 131076
+       4: 11 28        	jal	0x18 <main>
+       6: aa 81        	mv	gp, a0
+       8: 93 08 d0 05  	li	a7, 93
+       c: 01 00        	nop
+       e: 01 00        	nop
+      10: 01 00        	nop
+      12: 01 00        	nop
+      14: 73 00 00 00  	ecall
+
+00000018 <main>:
+      18: 09 a0        	j	0x1a <.Ltmp0>
+
+0000001a <.Ltmp0>:
+      1a: 89 41        	li	gp, 2
+      1c: 37 57 34 12  	lui	a4, 74565
+      20: 13 07 87 67  	addi	a4, a4, 1656   # 12345678
+      24: b7 e0 bc 9a  	lui	ra, 633806
+      28: 93 80 a0 ef  	addi	ra, ra, -262   # 9abcdefa
+      2c: 21 41        	li	sp, 8
+      2e: 33 16 27 0c  	fsl	a2, a4, ra, sp
+      32: b7 83 56 34  	lui	t2, 214376
+      36: 93 83 a3 89  	addi	t2, t2, -1894   # 3456789a
+      3a: 63 1b 76 06  	bne	a2, t2, 0xb0 <.Ltmp1>
+      3e: 8d 41        	li	gp, 3
+      40: 37 57 34 12  	lui	a4, 74565
+      44: 13 07 87 67  	addi	a4, a4, 1656   # 12345678
+      48: b7 e0 bc 9a  	lui	ra, 633806
+      4c: 93 80 a0 ef  	addi	ra, ra, -262   # 9abcdefa
+      50: 13 01 80 02  	li	sp, 40
+      54: 33 16 27 0c  	fsl	a2, a4, ra, sp
+      58: b7 83 56 34  	lui	t2, 214376
+      5c: 93 83 a3 89  	addi	t2, t2, -1894   # 3456789a
+      60: 63 18 76 04  	bne	a2, t2, 0xb0 <.Ltmp1>
+      64: 91 41        	li	gp, 4
+      66: 37 47 65 87  	lui	a4, 554580
+      6a: 13 07 17 32  	addi	a4, a4, 801   # 87654321
+      6e: b7 d0 ed af  	lui	ra, 720605
+      72: 93 80 90 ba  	addi	ra, ra, -1111   # afedcba9
+      76: 7d 41        	li	sp, 31
+      78: 33 16 27 0c  	fsl	a2, a4, ra, sp
+      7c: b7 e3 f6 d7  	lui	t2, 884590
+      80: 93 83 43 5d  	addi	t2, t2, 1492   # d7f6e5d4
+      84: 63 16 76 02  	bne	a2, t2, 0xb0 <.Ltmp1>
+      88: 95 41        	li	gp, 5
+      8a: 37 57 34 12  	lui	a4, 74565
+      8e: 13 07 87 67  	addi	a4, a4, 1656   # 12345678
+      92: b7 e0 bc 9a  	lui	ra, 633806
+      96: 93 80 a0 ef  	addi	ra, ra, -262   # 9abcdefa
+      9a: 01 41        	li	sp, 0
+      9c: 33 16 27 0c  	fsl	a2, a4, ra, sp
+      a0: b7 53 34 12  	lui	t2, 74565
+      a4: 93 83 83 67  	addi	t2, t2, 1656   # 12345678
+      a8: 63 14 76 00  	bne	a2, t2, 0xb0 <.Ltmp1>
+      ac: 63 01 76 02  	beq	a2, t2, 0xce <.Ltmp5>
+
+000000b0 <.Ltmp1>:
+      b0: 0f 00 f0 0f  	fence
+
+000000b4 <.Ltmp6>:
+      b4: 63 80 01 00  	beqz	gp, 0xb4 <.Ltmp6>
+      b8: 86 01        	slli	gp, gp, 1
+      ba: 93 e1 11 00  	ori	gp, gp, 1
+      be: 93 08 d0 05  	li	a7, 93
+      c2: 0e 85        	mv	a0, gp
+      c4: 73 00 00 00  	ecall
+      c8: 01 00        	nop
+      ca: 01 00        	nop
+      cc: d5 b7        	j	0xb0 <.Ltmp1>
+
+000000ce <.Ltmp5>:
+      ce: 0f 00 f0 0f  	fence
+      d2: 85 41        	li	gp, 1
+      d4: 93 08 d0 05  	li	a7, 93
+      d8: 01 45        	li	a0, 0
+      da: 73 00 00 00  	ecall
+      de: 01 00        	nop
+      e0: 01 00        	nop
+      e2: f5 b7        	j	0xce <.Ltmp5>
+      e4: 01 45        	li	a0, 0
+      e6: 82 80        	ret

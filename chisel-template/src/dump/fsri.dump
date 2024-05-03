@@ -1,0 +1,74 @@
+
+target/fsri.elf.fat:	file format elf32-littleriscv
+
+Disassembly of section .text:
+
+00000000 <_start>:
+       0: 37 41 00 20  	lui	sp, 131076
+       4: 11 28        	jal	0x18 <main>
+       6: aa 81        	mv	gp, a0
+       8: 93 08 d0 05  	li	a7, 93
+       c: 01 00        	nop
+       e: 01 00        	nop
+      10: 01 00        	nop
+      12: 01 00        	nop
+      14: 73 00 00 00  	ecall
+
+00000018 <main>:
+      18: 09 a0        	j	0x1a <.Ltmp0>
+
+0000001a <.Ltmp0>:
+      1a: 89 41        	li	gp, 2
+      1c: 37 57 34 12  	lui	a4, 74565
+      20: 13 07 87 67  	addi	a4, a4, 1656   # 12345678
+      24: b7 e0 bc 9a  	lui	ra, 633806
+      28: 93 80 a0 ef  	addi	ra, ra, -262   # 9abcdefa
+      2c: 13 56 87 0c  	fsri	a2, a4, ra, 8
+      30: b7 33 12 fa  	lui	t2, 1024291
+      34: 93 83 63 45  	addi	t2, t2, 1110   # fa123456
+      38: 63 16 76 04  	bne	a2, t2, 0x84 <.Ltmp1>
+      3c: 8d 41        	li	gp, 3
+      3e: 37 47 65 87  	lui	a4, 554580
+      42: 13 07 17 32  	addi	a4, a4, 801   # 87654321
+      46: b7 d0 ed af  	lui	ra, 720605
+      4a: 93 80 90 ba  	addi	ra, ra, -1111   # afedcba9
+      4e: 13 56 f7 0d  	fsri	a2, a4, ra, 31
+      52: b7 93 db 5f  	lui	t2, 392633
+      56: 93 83 33 75  	addi	t2, t2, 1875   # 5fdb9753
+      5a: 63 15 76 02  	bne	a2, t2, 0x84 <.Ltmp1>
+      5e: 91 41        	li	gp, 4
+      60: 37 57 34 12  	lui	a4, 74565
+      64: 13 07 87 67  	addi	a4, a4, 1656   # 12345678
+      68: b7 e0 bc 9a  	lui	ra, 633806
+      6c: 93 80 a0 ef  	addi	ra, ra, -262   # 9abcdefa
+      70: 13 56 07 0c  	fsri	a2, a4, ra, 0
+      74: b7 53 34 12  	lui	t2, 74565
+      78: 93 83 83 67  	addi	t2, t2, 1656   # 12345678
+      7c: 63 14 76 00  	bne	a2, t2, 0x84 <.Ltmp1>
+      80: 63 01 76 02  	beq	a2, t2, 0xa2 <.Ltmp4>
+
+00000084 <.Ltmp1>:
+      84: 0f 00 f0 0f  	fence
+
+00000088 <.Ltmp5>:
+      88: 63 80 01 00  	beqz	gp, 0x88 <.Ltmp5>
+      8c: 86 01        	slli	gp, gp, 1
+      8e: 93 e1 11 00  	ori	gp, gp, 1
+      92: 93 08 d0 05  	li	a7, 93
+      96: 0e 85        	mv	a0, gp
+      98: 73 00 00 00  	ecall
+      9c: 01 00        	nop
+      9e: 01 00        	nop
+      a0: d5 b7        	j	0x84 <.Ltmp1>
+
+000000a2 <.Ltmp4>:
+      a2: 0f 00 f0 0f  	fence
+      a6: 85 41        	li	gp, 1
+      a8: 93 08 d0 05  	li	a7, 93
+      ac: 01 45        	li	a0, 0
+      ae: 73 00 00 00  	ecall
+      b2: 01 00        	nop
+      b4: 01 00        	nop
+      b6: f5 b7        	j	0xa2 <.Ltmp4>
+      b8: 01 45        	li	a0, 0
+      ba: 82 80        	ret
