@@ -314,6 +314,8 @@ class Core(
   val ex1_fw_data          = Wire(UInt(WORD_LEN.W))
   val ex2_reg_fw_en        = RegInit(false.B)
   val ex2_fw_data          = Wire(UInt(WORD_LEN.W))
+  val mem3_reg_fw_en       = RegInit(false.B)
+  val mem3_fw_data         = Wire(UInt(WORD_LEN.W))
   val ex2_div_stall_next   = Wire(Bool())
   val ex2_reg_div_stall    = RegInit(false.B)
   val ex2_reg_divrem_state = RegInit(DivremState.Idle)
@@ -1149,6 +1151,9 @@ class Core(
     (ex2_reg_fw_en &&
      (rrd_reg_op1_sel === M_OP1_RS) &&
      (rrd_reg_rs1_addr === ex2_reg_wb_addr)) -> ex2_fw_data,
+    (mem3_reg_fw_en &&
+     (rrd_reg_op1_sel === M_OP1_RS) &&
+     (rrd_reg_rs1_addr === mem3_reg_wb_addr)) -> mem3_fw_data,
     (rrd_reg_op1_sel === M_OP1_RS) -> regfile(rrd_reg_rs1_addr),
   ))
   val rrd_op2_data = MuxCase(rrd_reg_op2_data, Seq(
@@ -1159,6 +1164,9 @@ class Core(
     (ex2_reg_fw_en &&
      (rrd_reg_op2_sel === M_OP2_RS) &&
      (rrd_reg_rs2_addr === ex2_reg_wb_addr)) -> ex2_fw_data,
+    (mem3_reg_fw_en &&
+     (rrd_reg_op2_sel === M_OP2_RS) &&
+     (rrd_reg_rs2_addr === mem3_reg_wb_addr)) -> mem3_fw_data,
     (rrd_reg_op2_sel === M_OP2_RS) -> regfile(rrd_reg_rs2_addr),
   ))
   val rrd_op3_data = MuxCase(regfile(rrd_reg_rs3_addr), Seq(
@@ -1170,6 +1178,8 @@ class Core(
      (rrd_reg_rs3_addr === ex1_reg_wb_addr)) -> ex1_fw_data,
     (ex2_reg_fw_en &&
      (rrd_reg_rs3_addr === ex2_reg_wb_addr)) -> ex2_fw_data,
+    (mem3_reg_fw_en &&
+     (rrd_reg_rs3_addr === mem3_reg_wb_addr)) -> mem3_fw_data,
   ))
 
   val rrd_direct_jbr_pc = rrd_reg_pc + rrd_reg_imm_b_sext(WORD_LEN-1, WORD_LEN-PC_LEN)
@@ -1957,15 +1967,22 @@ class Core(
     io.pipeline_probe.mem2_inst_id := mem2_reg_inst_id
   }
 
+  val mem2_is_valid_load = !mem2_dram_stall && mem2_reg_is_valid_load
+  val mem2_fw_en_next = mem2_is_valid_load
+  when (mem2_is_valid_load) {
+    scoreboard(mem3_reg_wb_addr) := false.B
+  }
+
   //**********************************
   // MEM2/MEM3 regsiter
   mem3_reg_wb_byte_offset := mem2_reg_wb_byte_offset
   mem3_reg_mem_w          := mem2_reg_mem_w
   mem3_reg_dmem_rdata     := Mux(mem2_reg_is_dram_load, io.cache.rdata, mem2_reg_dmem_rdata)
   mem3_reg_wb_addr        := mem2_reg_wb_addr
-  mem3_reg_is_valid_load  := !mem2_dram_stall && mem2_reg_is_valid_load
+  mem3_reg_is_valid_load  := mem2_is_valid_load
   mem3_reg_mem_use_reg    := !mem2_dram_stall && mem2_reg_mem_use_reg
   mem3_reg_is_valid_inst  := !mem2_dram_stall && mem2_reg_is_valid_inst
+  mem3_reg_fw_en          := mem2_fw_en_next
   if (enable_pipeline_probe) {
     when (!mem2_dram_stall) {
       mem3_reg_inst_id    := mem2_reg_inst_id
@@ -1988,12 +2005,13 @@ class Core(
     (mem3_reg_mem_w === MW_BU) -> zeroExtend(mem3_wb_rdata, 8),
     (mem3_reg_mem_w === MW_HU) -> zeroExtend(mem3_wb_rdata, 16),
   ))
+  mem3_fw_data := mem3_wb_data_load
   when (mem3_reg_is_valid_load) {
     regfile(mem3_reg_wb_addr) := mem3_wb_data_load
   }
-  when (mem3_reg_mem_use_reg) {
-    scoreboard(mem3_reg_wb_addr) := false.B
-  }
+  // when (mem3_reg_mem_use_reg) {
+  //   scoreboard(mem3_reg_wb_addr) := false.B
+  // }
   mem3_reg_is_retired := mem3_reg_is_valid_inst
 
   when (ex2_reg_is_retired && mem3_reg_is_retired) {
