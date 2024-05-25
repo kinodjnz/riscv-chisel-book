@@ -1181,7 +1181,7 @@ class Core(
   val rrd_direct_jbr_pc = rrd_reg_pc + rrd_reg_imm_b_sext(WORD_LEN-1, WORD_LEN-PC_LEN)
 
   val rrd_hazard = (rrd_reg_rf_wen === REN_S) && (rrd_reg_wb_addr =/= 0.U) && !rrd_stall && !ex2_reg_is_br
-  val rrd_fw_en_next = rrd_hazard && ((rrd_reg_wb_sel === WB_ALU) || (rrd_reg_wb_sel === WB_PC))
+  val rrd_fw_en_next = rrd_hazard && (rrd_reg_wb_sel === WB_ALU)
 
   val rrd_mem_use_reg   = WireDefault(false.B)
   val rrd_inst2_use_reg = WireDefault(false.B)
@@ -1191,9 +1191,9 @@ class Core(
     !ex2_stall && !rrd_stall && !ex2_reg_is_br &&
     rrd_reg_rf_wen === REN_S && rrd_reg_wb_addr =/= 0.U
   ) {
-      scoreboard(rrd_reg_wb_addr) := (rrd_reg_wb_sel =/= WB_ALU && rrd_reg_wb_sel =/= WB_PC)
-      rrd_mem_use_reg   := (rrd_reg_wb_sel === WB_LD || rrd_reg_wb_sel === WB_ST)
-      rrd_inst2_use_reg := (rrd_reg_wb_sel === WB_BIT || rrd_reg_wb_sel === WB_FENCE)
+      scoreboard(rrd_reg_wb_addr) := rrd_reg_wb_sel =/= WB_ALU
+      rrd_mem_use_reg   := rrd_reg_wb_sel === WB_LD
+      rrd_inst2_use_reg := (rrd_reg_wb_sel === WB_BIT || rrd_reg_wb_sel === WB_PC)
       rrd_inst3_use_reg := (rrd_reg_wb_sel === WB_MD || rrd_reg_wb_sel === WB_CSR)
   }
 
@@ -1325,9 +1325,7 @@ class Core(
   val ex1_is_uncond_br    = ex1_reg_is_j
   val ex1_br_pc           = Mux(ex1_is_cond_br_inst, ex1_reg_direct_jbr_pc, ex1_add_out(WORD_LEN-1, WORD_LEN-PC_LEN))
 
-  ex1_fw_data := MuxCase(ex1_alu_out, Seq(
-    (ex1_reg_wb_sel === WB_PC) -> Cat(ex1_next_pc, 0.U(1.W)),
-  ))
+  ex1_fw_data := ex1_alu_out
 
   when (ex1_reg_inst2_use_reg) {
     scoreboard(ex1_reg_wb_addr) := false.B

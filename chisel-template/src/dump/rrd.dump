@@ -1,0 +1,106 @@
+
+target/rrd.elf.fat:	file format elf32-littleriscv
+
+Disassembly of section .text:
+
+00000000 <_start>:
+       0: 37 41 00 20  	lui	sp, 131076
+       4: 11 28        	jal	0x18 <main>
+       6: aa 81        	mv	gp, a0
+       8: 93 08 d0 05  	li	a7, 93
+       c: 01 00        	nop
+       e: 01 00        	nop
+      10: 01 00        	nop
+      12: 01 00        	nop
+      14: 73 00 00 00  	ecall
+
+00000018 <main>:
+      18: 09 a0        	j	0x1a <.Ltmp0>
+
+0000001a <.Ltmp0>:
+      1a: 89 41        	li	gp, 2
+      1c: 39 47        	li	a4, 14
+      1e: a5 40        	li	ra, 9
+      20: 33 06 17 00  	add	a2, a4, ra
+      24: 05 06        	addi	a2, a2, 1
+      26: e1 43        	li	t2, 24
+      28: 63 12 76 08  	bne	a2, t2, 0xac <.Ltmp1>
+      2c: 8d 41        	li	gp, 3
+      2e: b5 40        	li	ra, 13
+      30: 13 96 20 60  	cpop	a2, ra
+      34: 05 06        	addi	a2, a2, 1
+      36: 91 43        	li	t2, 4
+      38: 63 1a 76 06  	bne	a2, t2, 0xac <.Ltmp1>
+      3c: 91 41        	li	gp, 4
+      3e: 39 47        	li	a4, 14
+      40: b5 40        	li	ra, 13
+      42: 33 76 17 0a  	maxu	a2, a4, ra
+      46: 05 06        	addi	a2, a2, 1
+      48: bd 43        	li	t2, 15
+      4a: 63 11 76 06  	bne	a2, t2, 0xac <.Ltmp1>
+      4e: 95 41        	li	gp, 5
+      50: 2d 47        	li	a4, 11
+      52: 9d 40        	li	ra, 7
+      54: 33 06 17 02  	mul	a2, a4, ra
+      58: 05 06        	addi	a2, a2, 1
+      5a: 93 03 e0 04  	li	t2, 78
+      5e: 63 17 76 04  	bne	a2, t2, 0xac <.Ltmp1>
+      62: 99 41        	li	gp, 6
+      64: 11 47        	li	a4, 4
+
+00000066 <.Ltmp6>:
+      66: 01 46        	li	a2, 0
+      68: 6f 06 40 00  	jal	a2, 0x6c <.Ltmp7>
+
+0000006c <.Ltmp7>:
+      6c: 05 06        	addi	a2, a2, 1
+      6e: 7d 17        	addi	a4, a4, -1
+      70: 7d fb        	bnez	a4, 0x66 <.Ltmp6>
+
+00000072 <.Lpcrel_hi0>:
+      72: 97 03 00 00  	auipc	t2, 0
+      76: 93 83 a3 ff  	addi	t2, t2, -6   # 0000006c
+      7a: 85 03        	addi	t2, t2, 1   # 00000073
+      7c: 63 18 76 02  	bne	a2, t2, 0xac <.Ltmp1>
+      80: 9d 41        	li	gp, 7
+      82: 13 07 90 04  	li	a4, 73
+      86: a1 40        	li	ra, 8
+      88: 33 56 17 02  	divu	a2, a4, ra
+      8c: 05 06        	addi	a2, a2, 1
+      8e: a9 43        	li	t2, 10
+      90: 63 1e 76 00  	bne	a2, t2, 0xac <.Ltmp1>
+      94: a1 41        	li	gp, 8
+      96: 05 47        	li	a4, 1
+      98: 95 47        	li	a5, 5
+      9a: b5 40        	li	ra, 13
+      9c: 33 d6 e7 0e  	cmov	a2, a4, a5, ra
+      a0: 05 06        	addi	a2, a2, 1
+      a2: 99 43        	li	t2, 6
+      a4: 63 14 76 00  	bne	a2, t2, 0xac <.Ltmp1>
+      a8: 63 01 76 02  	beq	a2, t2, 0xca <.Ltmp10>
+
+000000ac <.Ltmp1>:
+      ac: 0f 00 f0 0f  	fence
+
+000000b0 <.Ltmp11>:
+      b0: 63 80 01 00  	beqz	gp, 0xb0 <.Ltmp11>
+      b4: 86 01        	slli	gp, gp, 1
+      b6: 93 e1 11 00  	ori	gp, gp, 1
+      ba: 93 08 d0 05  	li	a7, 93
+      be: 0e 85        	mv	a0, gp
+      c0: 73 00 00 00  	ecall
+      c4: 01 00        	nop
+      c6: 01 00        	nop
+      c8: d5 b7        	j	0xac <.Ltmp1>
+
+000000ca <.Ltmp10>:
+      ca: 0f 00 f0 0f  	fence
+      ce: 85 41        	li	gp, 1
+      d0: 93 08 d0 05  	li	a7, 93
+      d4: 01 45        	li	a0, 0
+      d6: 73 00 00 00  	ecall
+      da: 01 00        	nop
+      dc: 01 00        	nop
+      de: f5 b7        	j	0xca <.Ltmp10>
+      e0: 01 45        	li	a0, 0
+      e2: 82 80        	ret

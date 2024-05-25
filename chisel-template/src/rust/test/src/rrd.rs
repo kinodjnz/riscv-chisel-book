@@ -1,0 +1,103 @@
+#![no_std]
+
+use core::arch::asm;
+
+use core::panic::PanicInfo;
+#[panic_handler]
+#[no_mangle]
+fn panic(_info: &PanicInfo) -> ! {
+    loop {}
+}
+
+#[no_mangle]
+pub extern "C" fn main() -> i32 {
+    unsafe {
+        asm!(
+            "   j       2f",
+            "2:",
+            "   li      gp, 2",
+            "   li      a4, 14",
+            "   li      ra, 9",
+            "   add     a2, a4, ra",
+            "   addi    a2, a2, 1",
+            "   li      t2, 24",
+            "   bne     a2, t2, 99f",
+            "3:",
+            "   li      gp, 3",
+            "   li      ra, 13",
+            "   cpop    a2, ra",
+            "   addi    a2, a2, 1",
+            "   li      t2, 4",
+            "   bne     a2, t2, 99f",
+            "4:",
+            "   li      gp, 4",
+            "   li      a4, 14",
+            "   li      ra, 13",
+            "   maxu    a2, a4, ra",
+            "   addi    a2, a2, 1",
+            "   li      t2, 15",
+            "   bne     a2, t2, 99f",
+            "5:",
+            "   li      gp, 5",
+            "   li      a4, 11",
+            "   li      ra, 7",
+            "   mul     a2, a4, ra",
+            "   addi    a2, a2, 1",
+            "   li      t2, 78",
+            "   bne     a2, t2, 99f",
+            "6:",
+            "   li      gp, 6",
+            "   li      a4, 4",
+            "62:",
+            "   li      a2, 0",
+            "   jal     a2, 61f",
+            "61:",
+            "   addi    a2, a2, 1",
+            "   addi    a4, a4, -1",
+            "   bne     a4, zero, 62b",
+            "   la      t2, 61b",
+            "   addi    t2, t2, 1",
+            "   bne     a2, t2, 99f",
+            "7:",
+            "   li      gp, 7",
+            "   li      a4, 73",
+            "   li      ra, 8",
+            "   divu    a2, a4, ra",
+            "   addi    a2, a2, 1",
+            "   li      t2, 10",
+            "   bne     a2, t2, 99f",
+            "8:",
+            "   li      gp, 8",
+            "   li      a4, 1",
+            "   li      a5, 5",
+            "   li      ra, 13",
+            "   cmov    a2, a4, a5, ra",
+            "   addi    a2, a2, 1",
+            "   li      t2, 6",
+            "   bne     a2, t2, 99f",
+            "   beq     a2, t2, 0f",
+            "99:",
+            "   fence",
+            "98:",
+            "   beqz    gp, 98b",
+            "   slli    gp, gp, 1",
+            "   ori     gp, gp, 1",
+            "   li      a7, 93",
+            "   mv      a0, gp",
+            "   ecall",
+            "   nop",
+            "   nop",
+            "   j       99b",
+            "0:",
+            "   fence",
+            "   li      gp, 1",
+            "   li      a7, 93",
+            "   li      a0, 0",
+            "   ecall",
+            "   nop",
+            "   nop",
+            "   j       0b",
+        );
+        0
+    }
+}
