@@ -255,6 +255,7 @@ class Core(
   val ex2_reg_is_valid_inst = RegInit(false.B)
   val ex2_reg_is_trap       = RegInit(false.B)
   val ex2_reg_mcause        = RegInit(0.U(WORD_LEN.W))
+  val ex2_reg_is_mret       = RegInit(false.B)
   // val ex2_reg_mtval         = RegInit(0.U(WORD_LEN.W))
   // val ex2_reminder          = Wire(UInt(WORD_LEN.W))
   // val ex2_quotient          = Wire(UInt(WORD_LEN.W))
@@ -718,12 +719,12 @@ class Core(
       SLTU       -> List(ALU_SLTU  , OP1_RS1   , OP2_RS2    , OP3_X     , REN_S, WB_ALU, WBA_RD , CSR_X, MW_X),
       SLTI       -> List(ALU_SLT   , OP1_RS1   , OP2_IMI    , OP3_X     , REN_S, WB_ALU, WBA_RD , CSR_X, MW_X),
       SLTIU      -> List(ALU_SLTU  , OP1_RS1   , OP2_IMI    , OP3_X     , REN_S, WB_ALU, WBA_RD , CSR_X, MW_X),
-      BEQ        -> List(BR_BEQ    , OP1_RS1   , OP2_RS2    , OP3_X     , REN_X, WB_X  , WBA_RD , CSR_X, MW_X),
-      BNE        -> List(BR_BNE    , OP1_RS1   , OP2_RS2    , OP3_X     , REN_X, WB_X  , WBA_RD , CSR_X, MW_X),
-      BGE        -> List(BR_BGE    , OP1_RS1   , OP2_RS2    , OP3_X     , REN_X, WB_X  , WBA_RD , CSR_X, MW_X),
-      BGEU       -> List(BR_BGEU   , OP1_RS1   , OP2_RS2    , OP3_X     , REN_X, WB_X  , WBA_RD , CSR_X, MW_X),
-      BLT        -> List(BR_BLT    , OP1_RS1   , OP2_RS2    , OP3_X     , REN_X, WB_X  , WBA_RD , CSR_X, MW_X),
-      BLTU       -> List(BR_BLTU   , OP1_RS1   , OP2_RS2    , OP3_X     , REN_X, WB_X  , WBA_RD , CSR_X, MW_X),
+      BEQ        -> List(BR_BEQ    , OP1_RS1   , OP2_RS2    , OP3_X     , REN_X, WB_X  , WBA_RD , CSR_X, MW_BR),
+      BNE        -> List(BR_BNE    , OP1_RS1   , OP2_RS2    , OP3_X     , REN_X, WB_X  , WBA_RD , CSR_X, MW_BR),
+      BGE        -> List(BR_BGE    , OP1_RS1   , OP2_RS2    , OP3_X     , REN_X, WB_X  , WBA_RD , CSR_X, MW_BR),
+      BGEU       -> List(BR_BGEU   , OP1_RS1   , OP2_RS2    , OP3_X     , REN_X, WB_X  , WBA_RD , CSR_X, MW_BR),
+      BLT        -> List(BR_BLT    , OP1_RS1   , OP2_RS2    , OP3_X     , REN_X, WB_X  , WBA_RD , CSR_X, MW_BR),
+      BLTU       -> List(BR_BLTU   , OP1_RS1   , OP2_RS2    , OP3_X     , REN_X, WB_X  , WBA_RD , CSR_X, MW_BR),
       JAL        -> List(ALU_ADD   , OP1_PC    , OP2_IMJ    , OP3_X     , REN_S, WB_PC , WBA_RD , CSR_X, MW_X),
       JALR       -> List(ALU_ADD   , OP1_RS1   , OP2_IMI    , OP3_X     , REN_S, WB_PC , WBA_RD , CSR_X, MW_X),
       LUI        -> List(ALU_ADD   , OP1_X     , OP2_IMU    , OP3_X     , REN_S, WB_ALU, WBA_RD , CSR_X, MW_X),
@@ -734,8 +735,8 @@ class Core(
       CSRRSI     -> List(ALU_ADD   , OP1_IMZ   , OP2_Z      , OP3_X     , REN_S, WB_CSR, WBA_RD , CSR_S, MW_X),
       CSRRC      -> List(ALU_ADD   , OP1_RS1   , OP2_Z      , OP3_X     , REN_S, WB_CSR, WBA_RD , CSR_C, MW_X),
       CSRRCI     -> List(ALU_ADD   , OP1_IMZ   , OP2_Z      , OP3_X     , REN_S, WB_CSR, WBA_RD , CSR_C, MW_X),
-      ECALL      -> List(CMD_ECALL , OP1_X     , OP2_X      , OP3_X     , REN_X, WB_X  , WBA_RD , CSR_X, MW_X),
-      MRET       -> List(CMD_MRET  , OP1_X     , OP2_X      , OP3_X     , REN_X, WB_X  , WBA_RD , CSR_X, MW_X),
+      ECALL      -> List(CMD_ECALL , OP1_X     , OP2_X      , OP3_X     , REN_X, WB_X  , WBA_RD , CSR_X, MW_CSR),
+      MRET       -> List(CMD_MRET  , OP1_X     , OP2_X      , OP3_X     , REN_X, WB_X  , WBA_RD , CSR_X, MW_CSR),
       FENCE_I    -> List(ALU_X     , OP1_X     , OP2_X      , OP3_X     , REN_X, WB_FENCE, WBA_RD, CSR_X, MW_X),
       MUL        -> List(ALU_MUL   , OP1_RS1   , OP2_RS2    , OP3_X     , REN_S, WB_MD,  WBA_RD , CSR_X, MW_X),
       MULH       -> List(ALU_MULH  , OP1_RS1   , OP2_RS2    , OP3_X     , REN_S, WB_MD,  WBA_RD , CSR_X, MW_X),
@@ -783,8 +784,8 @@ class Core(
       C_AND      -> List(ALU_AND   , OP1_C_RS1P, OP2_C_RS2P , OP3_X     , REN_S, WB_ALU, WBA_CP1, CSR_X, MW_X),
       C_SLLI     -> List(ALU_FSL   , OP1_C_RS1 , OP2_C_IMI  , OP3_X     , REN_S, WB_ALU, WBA_C  , CSR_X, MW_X),
       C_J        -> List(ALU_ADD   , OP1_PC    , OP2_C_IMJ  , OP3_X     , REN_X, WB_PC , WBA_C  , CSR_X, MW_X),
-      C_BEQZ     -> List(BR_BEQ    , OP1_C_RS1P, OP2_Z      , OP3_X     , REN_X, WB_X  , WBA_CBR, CSR_X, MW_X),
-      C_BNEZ     -> List(BR_BNE    , OP1_C_RS1P, OP2_Z      , OP3_X     , REN_X, WB_X  , WBA_CBR, CSR_X, MW_X),
+      C_BEQZ     -> List(BR_BEQ    , OP1_C_RS1P, OP2_Z      , OP3_X     , REN_X, WB_X  , WBA_CBR, CSR_X, MW_BR),
+      C_BNEZ     -> List(BR_BNE    , OP1_C_RS1P, OP2_Z      , OP3_X     , REN_X, WB_X  , WBA_CBR, CSR_X, MW_BR),
       C_JR       -> List(ALU_ADD   , OP1_C_RS1 , OP2_Z      , OP3_X     , REN_X, WB_PC , WBA_C  , CSR_X, MW_X),
       C_JALR     -> List(ALU_ADD   , OP1_C_RS1 , OP2_Z      , OP3_X     , REN_S, WB_PC , WBA_RA , CSR_X, MW_X),
       C_JAL      -> List(ALU_ADD   , OP1_PC    , OP2_C_IMJ  , OP3_X     , REN_S, WB_PC , WBA_RA , CSR_X, MW_X),
@@ -809,8 +810,8 @@ class Core(
       C_ZEXTH    -> List(ALU_ZEXTH , OP1_C_RS1P, OP2_X      , OP3_X     , REN_S, WB_BIT, WBA_CP1, CSR_X, MW_X),
       C_NOT      -> List(ALU_XOR   , OP1_C_RS1P, OP2_IMALL1 , OP3_X     , REN_S, WB_ALU, WBA_CP1, CSR_X, MW_X),
       C_NEG      -> List(ALU_SUB   , OP1_Z     , OP2_C_RS1P , OP3_X     , REN_S, WB_ALU, WBA_CP1, CSR_X, MW_X),
-      C_BEQ      -> List(BR_BEQ    , OP1_C_RS1P, OP2_C_RS2P , OP3_X     , REN_X, WB_X  , WBA_CB2, CSR_X, MW_X),
-      C_BNE      -> List(BR_BNE    , OP1_C_RS1P, OP2_C_RS2P , OP3_X     , REN_X, WB_X  , WBA_CB2, CSR_X, MW_X),
+      C_BEQ      -> List(BR_BEQ    , OP1_C_RS1P, OP2_C_RS2P , OP3_X     , REN_X, WB_X  , WBA_CB2, CSR_X, MW_BR),
+      C_BNE      -> List(BR_BNE    , OP1_C_RS1P, OP2_C_RS2P , OP3_X     , REN_X, WB_X  , WBA_CB2, CSR_X, MW_BR),
       C_ADDI2W   -> List(ALU_ADD   , OP1_C_RS1P, OP2_C_IMA2W, OP3_X     , REN_S, WB_ALU, WBA_CP2, CSR_X, MW_X),
       C_ADD2     -> List(ALU_ADD   , OP1_C_RS1P, OP2_C_RS3P , OP3_X     , REN_S, WB_ALU, WBA_CP2, CSR_X, MW_X),
       C_SEQZ     -> List(ALU_SLTU  , OP1_C_RS1P, OP2_IM1    , OP3_X     , REN_S, WB_ALU, WBA_CP2, CSR_X, MW_X),
@@ -859,7 +860,7 @@ class Core(
     (id_op2_sel === OP2_C_IMU)   -> id_c_imm_u,
   ))
 
-  val id_csr_addr = Mux(id_exe_fun === CMD_ECALL, CSR_ADDR_MCAUSE, id_inst(31,20))
+  val id_csr_addr = Mux(id_exe_fun === CMD_ECALL && id_mem_w === MW_CSR, CSR_ADDR_MCAUSE, id_inst(31,20))
 
   val id_m_op1_sel = MuxCase(M_OP1_IMM, Seq(
     (id_op1_sel === OP1_RS1)    -> M_OP1_RS,
@@ -906,16 +907,9 @@ class Core(
   ))
 
   val id_is_direct_j = (id_op2_sel === OP2_IMJ) || (id_op2_sel === OP2_C_IMJ)
-  val id_is_br = (
-    (id_exe_fun === BR_BEQ) ||
-    (id_exe_fun === BR_BNE) ||
-    (id_exe_fun === BR_BLT) ||
-    (id_exe_fun === BR_BGE) ||
-    (id_exe_fun === BR_BLTU) ||
-    (id_exe_fun === BR_BGEU)
-  )
+  val id_is_br = (id_mem_w === MW_BR)
   val id_is_j = (id_wb_sel === WB_PC)
-  val id_is_trap = (id_exe_fun === CMD_ECALL)
+  val id_is_trap = (id_exe_fun === CMD_ECALL && id_mem_w === MW_CSR)
   val id_mcause = CSR_MCAUSE_ECALL_M
   // val id_mtval = 0.U(WORD_LEN.W)
 
@@ -1288,7 +1282,7 @@ class Core(
   val ex1_orig_dividend = Wire(UInt(WORD_LEN.W))
 
   when (ex1_reg_exe_fun === ALU_DIV || ex1_reg_exe_fun === ALU_REM) {
-    ex1_divrem := true.B
+    ex1_divrem := (ex1_reg_wb_sel === WB_MD)
     when (ex1_reg_op1_data(WORD_LEN-1) === 1.U) {
       ex1_dividend := Cat(Fill(5, 0.U(1.W)), (~ex1_reg_op1_data + 1.U)(WORD_LEN-1, 0))
     }.otherwise {
@@ -1303,7 +1297,7 @@ class Core(
       ex1_sign_op12 := (ex1_sign_op1 === 1.U)
     }
   }.elsewhen (ex1_reg_exe_fun === ALU_DIVU || ex1_reg_exe_fun === ALU_REMU) {
-    ex1_divrem := true.B
+    ex1_divrem := (ex1_reg_wb_sel === WB_MD)
     ex1_dividend := Cat(Fill(5, 0.U(1.W)), ex1_reg_op1_data(WORD_LEN-1, 0))
     ex1_sign_op1 := 0.U
     ex1_divisor := ex1_reg_op2_data
@@ -1344,7 +1338,7 @@ class Core(
   // jump, br 命令ではストールは発生しないためストール時は単に更新しない
   when (!ex2_stall) {
     jbr_reg_bp_en            := ex1_reg_is_valid_inst && !ex2_reg_is_br
-    jbr_reg_is_cond_br       := ex1_is_cond_br
+    jbr_reg_is_cond_br       := ex1_is_cond_br && ex1_is_cond_br_inst
     jbr_reg_is_cond_br_inst  := ex1_is_cond_br_inst
     jbr_reg_is_uncond_br     := ex1_is_uncond_br
     jbr_reg_br_pc            := ex1_br_pc
@@ -1374,7 +1368,7 @@ class Core(
   ))
   jbr_is_br := jbr_cond_bp_fail || jbr_cond_nbp_fail || jbr_uncond_bp_fail
 
-  ic_btb.io.up.en       := jbr_bp_en && ((jbr_reg_is_cond_br_inst && jbr_reg_is_cond_br) || jbr_reg_is_uncond_br)
+  ic_btb.io.up.en       := jbr_bp_en && (jbr_reg_is_cond_br || jbr_reg_is_uncond_br)
   ic_btb.io.up.pc       := ex2_reg_pc
   ic_btb.io.up.taken_pc := jbr_reg_br_pc
   ic_pht.io.up.en       := jbr_bp_en && (jbr_reg_is_cond_br_inst || jbr_reg_is_uncond_br)
@@ -1405,6 +1399,7 @@ class Core(
     ex2_reg_is_valid_inst := ex1_reg_is_valid_inst && !ex2_reg_is_br
     ex2_reg_is_trap    := ex1_reg_is_trap
     ex2_reg_mcause     := ex1_reg_mcause
+    ex2_reg_is_mret    := (ex1_reg_exe_fun === CMD_MRET && ex1_reg_mem_w === MW_CSR)
     // ex2_reg_mtval      := ex1_reg_mtval
     ex2_reg_divrem            := ex1_divrem
     ex2_reg_div_stall         := ex2_div_stall_next ||
@@ -1461,7 +1456,7 @@ class Core(
   val csr_is_trap = ex2_reg_is_trap && csr_is_valid_inst && !csr_is_meintr && !csr_is_mtintr
   ex2_en := csr_is_valid_inst && !csr_is_meintr && !csr_is_mtintr
   ex2_is_valid_inst := ex2_en && !csr_is_trap
-  val csr_is_mret = csr_is_valid_inst && !csr_is_meintr && !csr_is_mtintr && (ex2_reg_exe_fun === CMD_MRET)
+  val csr_is_mret = csr_is_valid_inst && !csr_is_meintr && !csr_is_mtintr && ex2_reg_is_mret
 
   val csr_rdata = MuxLookup(ex2_reg_csr_addr, 0.U(WORD_LEN.W), Seq(
     CSR_ADDR_MTVEC    -> Cat(csr_reg_trap_vector, 0.U((WORD_LEN-PC_LEN).W)),

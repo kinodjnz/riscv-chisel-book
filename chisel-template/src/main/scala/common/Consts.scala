@@ -16,7 +16,7 @@ object Consts {
   val VL_ADDR       = 0xC20
   val VTYPE_ADDR    = 0xC21
 
-  val EXE_FUN_LEN = 5
+  val EXE_FUN_LEN = 4
   val ALU_X       =  0.U(EXE_FUN_LEN.W)
   val ALU_ADD     =  0.U(EXE_FUN_LEN.W)
   val ALU_XOR     =  1.U(EXE_FUN_LEN.W)
@@ -36,33 +36,33 @@ object Consts {
   val ALU_CTZ     =  5.U(EXE_FUN_LEN.W)
   val ALU_CPOP    =  6.U(EXE_FUN_LEN.W)
   val ALU_REV8    =  7.U(EXE_FUN_LEN.W)
-  val ALU_SEXTB   =  1.U(EXE_FUN_LEN.W)
-  val ALU_SEXTH   =  2.U(EXE_FUN_LEN.W)
-  val ALU_ZEXTH   =  3.U(EXE_FUN_LEN.W)
-  val ALU_ORCB    =  4.U(EXE_FUN_LEN.W)
-  val ALU_MAX     =  8.U(EXE_FUN_LEN.W)
-  val ALU_MAXU    =  9.U(EXE_FUN_LEN.W)
-  val ALU_MIN     = 10.U(EXE_FUN_LEN.W)
-  val ALU_MINU    = 11.U(EXE_FUN_LEN.W)
+  val ALU_SEXTB   =  8.U(EXE_FUN_LEN.W)
+  val ALU_SEXTH   =  9.U(EXE_FUN_LEN.W)
+  val ALU_ZEXTH   = 10.U(EXE_FUN_LEN.W)
+  val ALU_ORCB    = 11.U(EXE_FUN_LEN.W)
+  val ALU_MAX     = 12.U(EXE_FUN_LEN.W)
+  val ALU_MAXU    = 13.U(EXE_FUN_LEN.W)
+  val ALU_MIN     = 14.U(EXE_FUN_LEN.W)
+  val ALU_MINU    = 15.U(EXE_FUN_LEN.W)
 
-  val BR_BEQ      = 20.U(EXE_FUN_LEN.W)
-  val BR_BNE      = 21.U(EXE_FUN_LEN.W)
-  val BR_BLT      = 22.U(EXE_FUN_LEN.W)
-  val BR_BGE      = 23.U(EXE_FUN_LEN.W)
-  val BR_BLTU     = 24.U(EXE_FUN_LEN.W)
-  val BR_BGEU     = 25.U(EXE_FUN_LEN.W)
+  val BR_BEQ      =  8.U(EXE_FUN_LEN.W)
+  val BR_BNE      =  9.U(EXE_FUN_LEN.W)
+  val BR_BLT      = 10.U(EXE_FUN_LEN.W)
+  val BR_BGE      = 11.U(EXE_FUN_LEN.W)
+  val BR_BLTU     = 12.U(EXE_FUN_LEN.W)
+  val BR_BGEU     = 13.U(EXE_FUN_LEN.W)
 
   val ALU_MUL     =  8.U(EXE_FUN_LEN.W)
   val ALU_MULH    =  9.U(EXE_FUN_LEN.W)
   val ALU_MULHU   = 10.U(EXE_FUN_LEN.W)
   val ALU_MULHSU  = 11.U(EXE_FUN_LEN.W)
-  val ALU_DIV     = 16.U(EXE_FUN_LEN.W)
-  val ALU_REM     = 17.U(EXE_FUN_LEN.W)
-  val ALU_DIVU    = 18.U(EXE_FUN_LEN.W)
-  val ALU_REMU    = 19.U(EXE_FUN_LEN.W)
+  val ALU_DIV     = 12.U(EXE_FUN_LEN.W)
+  val ALU_REM     = 13.U(EXE_FUN_LEN.W)
+  val ALU_DIVU    = 14.U(EXE_FUN_LEN.W)
+  val ALU_REMU    = 15.U(EXE_FUN_LEN.W)
 
-  val CMD_ECALL   = 26.U(EXE_FUN_LEN.W)
-  val CMD_MRET    = 27.U(EXE_FUN_LEN.W)
+  val CMD_ECALL   = 14.U(EXE_FUN_LEN.W)
+  val CMD_MRET    = 15.U(EXE_FUN_LEN.W)
 
   val OP1_LEN    = 3
   val OP1_X      = 0.U(OP1_LEN.W)
@@ -158,6 +158,8 @@ object Consts {
   val MW_LEN = 3
   val MW_X   = 0.U(MW_LEN.W)
   val MW_W   = 0.U(MW_LEN.W)
+  val MW_BR  = 1.U(MW_LEN.W)
+  val MW_CSR = 3.U(MW_LEN.W)
   val MW_H   = 4.U(MW_LEN.W)
   val MW_B   = 5.U(MW_LEN.W)
   val MW_HU  = 6.U(MW_LEN.W)
