@@ -28,7 +28,7 @@ class DMemDecoder(targetAddressRanges: Seq[(BigInt, BigInt)]) extends Module {
     val wen = WireDefault(false.B)
     val wdata = WireDefault("xdeadbeef".U(WORD_LEN.W))
     val wstrb = WireDefault("b1111".U)
-    
+
     target.raddr := raddr
     target.ren := ren
     target.waddr := waddr

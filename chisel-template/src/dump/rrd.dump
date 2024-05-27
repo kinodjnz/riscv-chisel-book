@@ -24,27 +24,27 @@ Disassembly of section .text:
       20: 33 06 17 00  	add	a2, a4, ra
       24: 05 06        	addi	a2, a2, 1
       26: e1 43        	li	t2, 24
-      28: 63 11 76 0a  	bne	a2, t2, 0xca <.Ltmp1>
+      28: 63 13 76 0e  	bne	a2, t2, 0x10e <.Ltmp1>
       2c: 8d 41        	li	gp, 3
       2e: b5 40        	li	ra, 13
       30: 13 96 20 60  	cpop	a2, ra
       34: 05 06        	addi	a2, a2, 1
       36: 91 43        	li	t2, 4
-      38: 63 19 76 08  	bne	a2, t2, 0xca <.Ltmp1>
+      38: 63 1b 76 0c  	bne	a2, t2, 0x10e <.Ltmp1>
       3c: 91 41        	li	gp, 4
       3e: 39 47        	li	a4, 14
       40: b5 40        	li	ra, 13
       42: 33 76 17 0a  	maxu	a2, a4, ra
       46: 05 06        	addi	a2, a2, 1
       48: bd 43        	li	t2, 15
-      4a: 63 10 76 08  	bne	a2, t2, 0xca <.Ltmp1>
+      4a: 63 12 76 0c  	bne	a2, t2, 0x10e <.Ltmp1>
       4e: 95 41        	li	gp, 5
       50: 2d 47        	li	a4, 11
       52: 9d 40        	li	ra, 7
       54: 33 06 17 02  	mul	a2, a4, ra
       58: 05 06        	addi	a2, a2, 1
       5a: 93 03 e0 04  	li	t2, 78
-      5e: 63 16 76 06  	bne	a2, t2, 0xca <.Ltmp1>
+      5e: 63 18 76 0a  	bne	a2, t2, 0x10e <.Ltmp1>
       62: 99 41        	li	gp, 6
       64: 11 47        	li	a4, 4
 
@@ -61,14 +61,14 @@ Disassembly of section .text:
       72: 97 03 00 00  	auipc	t2, 0
       76: 93 83 a3 ff  	addi	t2, t2, -6   # 0000006c
       7a: 85 03        	addi	t2, t2, 1   # 00000073
-      7c: 63 17 76 04  	bne	a2, t2, 0xca <.Ltmp1>
+      7c: 63 19 76 08  	bne	a2, t2, 0x10e <.Ltmp1>
       80: 9d 41        	li	gp, 7
       82: 13 07 90 04  	li	a4, 73
       86: a1 40        	li	ra, 8
       88: 33 56 17 02  	divu	a2, a4, ra
       8c: 05 06        	addi	a2, a2, 1
       8e: a9 43        	li	t2, 10
-      90: 63 1d 76 02  	bne	a2, t2, 0xca <.Ltmp1>
+      90: 63 1f 76 06  	bne	a2, t2, 0x10e <.Ltmp1>
       94: a1 41        	li	gp, 8
       96: 05 47        	li	a4, 1
       98: 95 47        	li	a5, 5
@@ -76,8 +76,8 @@ Disassembly of section .text:
       9c: 33 d6 e7 0e  	cmov	a2, a4, a5, ra
       a0: 05 06        	addi	a2, a2, 1
       a2: 99 43        	li	t2, 6
-      a4: 63 13 76 02  	bne	a2, t2, 0xca <.Ltmp1>
-      a8: a1 41        	li	gp, 8
+      a4: 63 15 76 06  	bne	a2, t2, 0x10e <.Ltmp1>
+      a8: a5 41        	li	gp, 9
       aa: 37 17 00 20  	lui	a4, 131073
       ae: b5 40        	li	ra, 13
       b0: 23 20 17 00  	sw	ra, 0(a4)   # 20001000
@@ -88,36 +88,67 @@ Disassembly of section .text:
       bc: 10 43        	lw	a2, 0(a4)
       be: 05 06        	addi	a2, a2, 1
       c0: b9 43        	li	t2, 14
-      c2: 63 14 76 00  	bne	a2, t2, 0xca <.Ltmp1>
-      c6: 63 01 76 02  	beq	a2, t2, 0xe8 <.Ltmp11>
+      c2: 63 16 76 04  	bne	a2, t2, 0x10e <.Ltmp1>
+      c6: a9 41        	li	gp, 10
+      c8: 15 46        	li	a2, 5
+      ca: 37 17 00 20  	lui	a4, 131073
+      ce: b5 40        	li	ra, 13
+      d0: 23 20 17 00  	sw	ra, 0(a4)   # 20001000
+      d4: 29 a0        	j	0xde <.Ltmp12>
+      d6: 10 43        	lw	a2, 0(a4)
+      d8: 14 43        	lw	a3, 0(a4)
+      da: 01 00        	nop
+      dc: 01 00        	nop
 
-000000ca <.Ltmp1>:
-      ca: 0f 00 f0 0f  	fence
-
-000000ce <.Ltmp12>:
-      ce: 63 80 01 00  	beqz	gp, 0xce <.Ltmp12>
-      d2: 86 01        	slli	gp, gp, 1
-      d4: 93 e1 11 00  	ori	gp, gp, 1
-      d8: 93 08 d0 05  	li	a7, 93
-      dc: 0e 85        	mv	a0, gp
-      de: 73 00 00 00  	ecall
-      e2: 01 00        	nop
-      e4: 01 00        	nop
-      e6: d5 b7        	j	0xca <.Ltmp1>
-
-000000e8 <.Ltmp11>:
-      e8: 0f 00 f0 0f  	fence
-      ec: 85 41        	li	gp, 1
-      ee: 93 08 d0 05  	li	a7, 93
-      f2: 01 45        	li	a0, 0
-      f4: 73 00 00 00  	ecall
-      f8: 01 00        	nop
+000000de <.Ltmp12>:
+      de: 10 43        	lw	a2, 0(a4)
+      e0: 05 06        	addi	a2, a2, 1
+      e2: b9 43        	li	t2, 14
+      e4: 63 15 76 02  	bne	a2, t2, 0x10e <.Ltmp1>
+      e8: ad 41        	li	gp, 11
+      ea: 6d 47        	li	a4, 27
+      ec: 8d 47        	li	a5, 3
+      ee: 19 46        	li	a2, 6
+      f0: 39 a0        	j	0xfe <.Ltmp14>
+      f2: 33 56 f7 02  	divu	a2, a4, a5
+      f6: b3 56 f7 02  	divu	a3, a4, a5
       fa: 01 00        	nop
-      fc: f5 b7        	j	0xe8 <.Ltmp11>
-      fe: 01 45        	li	a0, 0
-     100: 82 80        	ret
+      fc: 01 00        	nop
+
+000000fe <.Ltmp14>:
+      fe: b3 56 f6 02  	divu	a3, a2, a5
+     102: 85 06        	addi	a3, a3, 1
+     104: 8d 43        	li	t2, 3
+     106: 63 94 76 00  	bne	a3, t2, 0x10e <.Ltmp1>
+     10a: 63 81 76 02  	beq	a3, t2, 0x12c <.Ltmp15>
+
+0000010e <.Ltmp1>:
+     10e: 0f 00 f0 0f  	fence
+
+00000112 <.Ltmp16>:
+     112: 63 80 01 00  	beqz	gp, 0x112 <.Ltmp16>
+     116: 86 01        	slli	gp, gp, 1
+     118: 93 e1 11 00  	ori	gp, gp, 1
+     11c: 93 08 d0 05  	li	a7, 93
+     120: 0e 85        	mv	a0, gp
+     122: 73 00 00 00  	ecall
+     126: 01 00        	nop
+     128: 01 00        	nop
+     12a: d5 b7        	j	0x10e <.Ltmp1>
+
+0000012c <.Ltmp15>:
+     12c: 0f 00 f0 0f  	fence
+     130: 85 41        	li	gp, 1
+     132: 93 08 d0 05  	li	a7, 93
+     136: 01 45        	li	a0, 0
+     138: 73 00 00 00  	ecall
+     13c: 01 00        	nop
+     13e: 01 00        	nop
+     140: f5 b7        	j	0x12c <.Ltmp15>
+     142: 01 45        	li	a0, 0
+     144: 82 80        	ret
 
 Disassembly of section .data:
 
-00000102 <.data>:
-     102: 00 00        	unimp
+00000146 <.data>:
+     146: 00 00        	unimp

@@ -318,6 +318,7 @@ class Core(
   val mem3_fw_data         = Wire(UInt(WORD_LEN.W))
   val ex2_div_stall_next   = Wire(Bool())
   val ex2_reg_div_stall    = RegInit(false.B)
+  val ex2_div_stall        = Wire(Bool())
   val ex2_reg_divrem_state = RegInit(DivremState.Idle)
   val ex2_reg_is_br        = RegInit(false.B)
   val ex2_reg_br_pc        = RegInit(0.U(PC_LEN.W))
@@ -1138,10 +1139,12 @@ class Core(
   // Register read (RRD) Stage
 
   rrd_stall :=
-    ((rrd_reg_op1_sel === M_OP1_RS) && scoreboard(rrd_reg_rs1_addr)) ||
-    ((rrd_reg_op2_sel === M_OP2_RS) && scoreboard(rrd_reg_rs2_addr)) ||
-    ((rrd_reg_op3_sel === M_OP3_RS) && scoreboard(rrd_reg_rs3_addr)) ||
-    ((rrd_reg_rf_wen === REN_S) && scoreboard(rrd_reg_wb_addr))
+    !ex2_reg_is_br && (
+      ((rrd_reg_op1_sel === M_OP1_RS) && scoreboard(rrd_reg_rs1_addr)) ||
+      ((rrd_reg_op2_sel === M_OP2_RS) && scoreboard(rrd_reg_rs2_addr)) ||
+      ((rrd_reg_op3_sel === M_OP3_RS) && scoreboard(rrd_reg_rs3_addr)) ||
+      ((rrd_reg_rf_wen === REN_S) && scoreboard(rrd_reg_wb_addr))
+    )
 
   val rrd_op1_data = MuxCase(rrd_reg_op1_data, Seq(
     (rrd_reg_op1_sel === M_OP1_RS && rrd_reg_rs1_addr === 0.U) -> 0.U(WORD_LEN.W),
@@ -1331,7 +1334,7 @@ class Core(
 
   ex1_fw_data := ex1_alu_out
 
-  when (ex1_reg_inst2_use_reg) {
+  when (ex1_reg_inst2_use_reg || (ex2_reg_is_br && (ex1_reg_mem_use_reg || ex1_reg_inst3_use_reg))) {
     scoreboard(ex1_reg_wb_addr) := false.B
   }
 
@@ -1431,6 +1434,7 @@ class Core(
     ex2_reg_div_stall := ex2_div_stall_next ||
       (ex2_reg_divrem && (ex2_reg_divrem_state === DivremState.Idle || ex2_reg_divrem_state === DivremState.Finished))
   }
+  ex2_div_stall := ex2_en && ex2_reg_div_stall
   when (mem2_dram_stall && !ex2_reg_div_stall && ex2_reg_no_mem) {
     // ALU/BIT/MD/CSR/JBRのEX2ステージを実行中にメモリストールがあってもWBに進むので、2回実行しないようにEX2を空にする
     ex2_reg_wb_sel        := WB_X
@@ -1439,7 +1443,7 @@ class Core(
     ex2_reg_inst3_use_reg := false.B
   }
 
-  ex2_stall := mem_stall || ex2_reg_div_stall
+  ex2_stall := mem_stall || ex2_div_stall
 
   //**********************************
   // EX2 CSR Stage
@@ -1668,7 +1672,7 @@ class Core(
 
   switch (ex2_reg_divrem_state) {
     is (DivremState.Idle) {
-      when (ex2_reg_divrem) {
+      when (ex2_reg_divrem && ex2_en) {
         when (ex2_reg_init_divisor(WORD_LEN-1, 2) === 0.U) {
           ex2_reg_divrem_state := DivremState.Dividing
         }.otherwise {
@@ -1862,11 +1866,11 @@ class Core(
     ex2_reg_pc_bit_out,
     ex2_reg_alu_out,
   )
-  when (ex2_reg_inst3_use_reg && !ex2_reg_div_stall) {
+  when ((ex2_reg_inst3_use_reg && !ex2_div_stall) || (ex2_reg_is_br && mem1_reg_mem_use_reg)) {
     scoreboard(ex2_reg_wb_addr) := false.B
   }
 
-  ex2_reg_is_retired := ex2_is_valid_inst && !ex2_reg_div_stall && ex2_reg_no_mem
+  ex2_reg_is_retired := ex2_is_valid_inst && !ex2_div_stall && ex2_reg_no_mem
 
   when (ex2_en && !ex2_reg_div_stall && ex2_reg_rf_wen === REN_S && ex2_reg_no_mem) {
     regfile(ex2_reg_wb_addr) := ex2_wb_data
@@ -1970,7 +1974,7 @@ class Core(
   val mem2_is_valid_load = !mem2_dram_stall && mem2_reg_is_valid_load
   val mem2_fw_en_next = mem2_is_valid_load
   when (mem2_is_valid_load) {
-    scoreboard(mem3_reg_wb_addr) := false.B
+    scoreboard(mem2_reg_wb_addr) := false.B
   }
 
   //**********************************
