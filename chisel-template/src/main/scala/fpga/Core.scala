@@ -1888,8 +1888,8 @@ class Core(
 
   when (!ex2_stall) {
     mem1_reg_mem_wstrb     := (MuxCase("b1111".U, Seq(
-      (ex1_reg_mem_w === MW_B) -> "b0001".U,
-      (ex1_reg_mem_w === MW_H) -> "b0011".U,
+      (ex1_reg_mem_w === MW_B || ex1_reg_mem_w === MW_BU) -> "b0001".U,
+      (ex1_reg_mem_w === MW_H || ex1_reg_mem_w === MW_HU) -> "b0011".U,
       //(ex1_reg_mem_w === MW_W) -> "b1111".U,
     )) << (ex1_add_out(1, 0)))(3, 0)
     mem1_reg_mem_w         := ex1_reg_mem_w
