@@ -1600,79 +1600,6 @@ class Core(
   // ex2_reminder := ex2_reg_reminder
   ex2_div_stall_next := false.B
 
-  /*
-  val (q_input, q_output) = pla(Seq(
-    // d: 0
-    (BitPat("b0000000?"), BitPat("b00")),
-    (BitPat("b0000001?"), BitPat("b01")),
-    (BitPat("b0000010?"), BitPat("b01")),
-    (BitPat("b0000011?"), BitPat("b1?")),
-    (BitPat("b000010??"), BitPat("b1?")),
-    (BitPat("b000011??"), BitPat("b??")),
-    (BitPat("b0001????"), BitPat("b??")),
-    // d: 1
-    (BitPat("b0010000?"), BitPat("b00")),
-    (BitPat("b0010001?"), BitPat("b01")),
-    (BitPat("b0010010?"), BitPat("b01")),
-    (BitPat("b00100110"), BitPat("b01")),
-    (BitPat("b00100111"), BitPat("b1?")),
-    (BitPat("b001010??"), BitPat("b1?")),
-    (BitPat("b0010110?"), BitPat("b1?")),
-    (BitPat("b0010111?"), BitPat("b??")),
-    (BitPat("b0011????"), BitPat("b??")),
-    // d: 2
-    (BitPat("b0100000?"), BitPat("b00")),
-    (BitPat("b0100001?"), BitPat("b01")),
-    (BitPat("b010001??"), BitPat("b01")),
-    (BitPat("b01001???"), BitPat("b1?")),
-    (BitPat("b0101????"), BitPat("b??")),
-    // d: 3
-    (BitPat("b0110000?"), BitPat("b00")),
-    (BitPat("b0110001?"), BitPat("b01")),
-    (BitPat("b011001??"), BitPat("b01")),
-    (BitPat("b01101???"), BitPat("b1?")),
-    (BitPat("b0111????"), BitPat("b??")),
-    // d: 4
-    (BitPat("b100000??"), BitPat("b00")),
-    (BitPat("b100001??"), BitPat("b01")),
-    (BitPat("b1000100?"), BitPat("b01")),
-    (BitPat("b1000101?"), BitPat("b1?")),
-    (BitPat("b100011??"), BitPat("b1?")),
-    (BitPat("b1001000?"), BitPat("b1?")),
-    (BitPat("b1001001?"), BitPat("b??")),
-    (BitPat("b100101??"), BitPat("b??")),
-    (BitPat("b10011???"), BitPat("b??")),
-    // d: 5
-    (BitPat("b101000??"), BitPat("b00")),
-    (BitPat("b101001??"), BitPat("b01")),
-    (BitPat("b1010100?"), BitPat("b01")),
-    (BitPat("b1010101?"), BitPat("b1?")),
-    (BitPat("b101011??"), BitPat("b1?")),
-    (BitPat("b101100??"), BitPat("b1?")),
-    (BitPat("b101101??"), BitPat("b??")),
-    (BitPat("b10111???"), BitPat("b??")),
-    // d: 6
-    (BitPat("b110000??"), BitPat("b00")),
-    (BitPat("b110001??"), BitPat("b01")),
-    (BitPat("b1100100?"), BitPat("b01")),
-    (BitPat("b1100101?"), BitPat("b1?")),
-    (BitPat("b110011??"), BitPat("b1?")),
-    (BitPat("b110100??"), BitPat("b1?")),
-    (BitPat("b110101??"), BitPat("b??")),
-    (BitPat("b11011???"), BitPat("b??")),
-    // d: 7
-    (BitPat("b111000??"), BitPat("b00")),
-    (BitPat("b111001??"), BitPat("b01")),
-    (BitPat("b111010??"), BitPat("b01")),
-    (BitPat("b111011??"), BitPat("b1?")),
-    (BitPat("b111100??"), BitPat("b1?")),
-    (BitPat("b1111010?"), BitPat("b1?")),
-    (BitPat("b1111011?"), BitPat("b??")),
-    (BitPat("b11111???"), BitPat("b??")),
-  ))
-  q_input := 0.U(8.W)
-  */
-
   switch (ex2_reg_divrem_state) {
     is (DivremState.Idle) {
       when (ex2_reg_divrem && ex2_en) {
@@ -1724,62 +1651,22 @@ class Core(
           ~ex2_reg_dividend(WORD_LEN+2, WORD_LEN-2),
         ),
       )
-      // q_input := Cat(ex2_reg_d, p)
-      // val ex2_q = q_output
-      val ex2_q = MuxLookup(ex2_reg_d, 0.U(2.W), Seq(
-        0.U -> MuxLookup(p, 0.U(2.W), Seq(
-          0.U  -> 0.U, 1.U  -> 0.U, 2.U  -> 1.U, 3.U  -> 1.U,
-          4.U  -> 1.U, 5.U  -> 1.U, 6.U  -> 2.U, 7.U  -> 2.U,
-          8.U  -> 2.U, 9.U  -> 2.U, 10.U -> 2.U, 11.U -> 2.U,
-        )),
-        1.U -> MuxLookup(p, 0.U(2.W), Seq(
-          0.U  -> 0.U, 1.U  -> 0.U, 2.U  -> 1.U, 3.U  -> 1.U,
-          4.U  -> 1.U, 5.U  -> 1.U, 6.U  -> 1.U, 7.U  -> 2.U,
-          8.U  -> 2.U, 9.U  -> 2.U, 10.U -> 2.U, 11.U -> 2.U,
-          12.U -> 2.U, 13.U -> 2.U,
-        )),
-        2.U -> MuxLookup(p, 0.U(2.W), Seq(
-          0.U  -> 0.U, 1.U  -> 0.U, 2.U  -> 1.U, 3.U  -> 1.U,
-          4.U  -> 1.U, 5.U  -> 1.U, 6.U  -> 1.U, 7.U  -> 1.U,
-          8.U  -> 2.U, 9.U  -> 2.U, 10.U -> 2.U, 11.U -> 2.U,
-          12.U -> 2.U, 13.U -> 2.U, 14.U -> 2.U, 15.U -> 2.U,
-        )),
-        3.U -> MuxLookup(p, 0.U(2.W), Seq(
-          0.U  -> 0.U, 1.U  -> 0.U, 2.U  -> 1.U, 3.U  -> 1.U,
-          4.U  -> 1.U, 5.U  -> 1.U, 6.U  -> 1.U, 7.U  -> 1.U,
-          8.U  -> 2.U, 9.U  -> 2.U, 10.U -> 2.U, 11.U -> 2.U,
-          12.U -> 2.U, 13.U -> 2.U, 14.U -> 2.U, 15.U -> 2.U,
-        )),
-        4.U -> MuxLookup(p, 0.U(2.W), Seq(
-          0.U  -> 0.U, 1.U  -> 0.U, 2.U  -> 0.U, 3.U  -> 0.U,
-          4.U  -> 1.U, 5.U  -> 1.U, 6.U  -> 1.U, 7.U  -> 1.U,
-          8.U  -> 1.U, 9.U  -> 1.U, 10.U -> 2.U, 11.U -> 2.U,
-          12.U -> 2.U, 13.U -> 2.U, 14.U -> 2.U, 15.U -> 2.U,
-          16.U -> 2.U, 17.U -> 2.U,
-        )),
-        5.U -> MuxLookup(p, 0.U(2.W), Seq(
-          0.U  -> 0.U, 1.U  -> 0.U, 2.U  -> 0.U, 3.U  -> 0.U,
-          4.U  -> 1.U, 5.U  -> 1.U, 6.U  -> 1.U, 7.U  -> 1.U,
-          8.U  -> 1.U, 9.U  -> 1.U, 10.U -> 2.U, 11.U -> 2.U,
-          12.U -> 2.U, 13.U -> 2.U, 14.U -> 2.U, 15.U -> 2.U,
-          16.U -> 2.U, 17.U -> 2.U, 18.U -> 2.U, 19.U -> 2.U,
-        )),
-        6.U -> MuxLookup(p, 0.U(2.W), Seq(
-          0.U  -> 0.U, 1.U  -> 0.U, 2.U  -> 0.U, 3.U  -> 0.U,
-          4.U  -> 1.U, 5.U  -> 1.U, 6.U  -> 1.U, 7.U  -> 1.U,
-          8.U  -> 1.U, 9.U  -> 1.U, 10.U -> 2.U, 11.U -> 2.U,
-          12.U -> 2.U, 13.U -> 2.U, 14.U -> 2.U, 15.U -> 2.U,
-          16.U -> 2.U, 17.U -> 2.U, 18.U -> 2.U, 19.U -> 2.U,
-        )),
-        7.U -> MuxLookup(p, 0.U(2.W), Seq(
-          0.U  -> 0.U, 1.U  -> 0.U, 2.U  -> 0.U, 3.U  -> 0.U,
-          4.U  -> 1.U, 5.U  -> 1.U, 6.U  -> 1.U, 7.U  -> 1.U,
-          8.U  -> 1.U, 9.U  -> 1.U, 10.U -> 1.U, 11.U -> 1.U,
-          12.U -> 2.U, 13.U -> 2.U, 14.U -> 2.U, 15.U -> 2.U,
-          16.U -> 2.U, 17.U -> 2.U, 18.U -> 2.U, 19.U -> 2.U,
-          20.U -> 2.U, 21.U -> 2.U,
-        )),
-      ))
+      val div_table = Seq(
+          Seq(0, 0, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2),
+          Seq(0, 0, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2),
+          Seq(0, 0, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2),
+          Seq(0, 0, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2),
+          Seq(0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2),
+          Seq(0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2),
+          Seq(0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2),
+          Seq(0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2),
+      )
+      val ex2_q = MuxLookup(ex2_reg_d, 0.U(2.W))(
+        div_table.zipWithIndex.map{
+          case (v, i) => i.U -> MuxLookup(p, 0.U(2.W))(v.zipWithIndex.map { case (x, i) => i.U -> x.U })
+        }
+      )
+
       when (ex2_reg_dividend(WORD_LEN+4) === 0.U) {
         ex2_reg_dividend := MuxCase(ex2_reg_dividend << 2, Seq(
           (ex2_q(0) === 1.U) -> ((ex2_reg_dividend - Cat(0.U(1.W), ex2_reg_divisor).asSInt) << 2),
