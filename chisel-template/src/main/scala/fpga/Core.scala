@@ -284,11 +284,12 @@ class Core(
   // MEM1/MEM2 State
   val mem2_reg_wb_byte_offset = RegInit(0.U(2.W))
   val mem2_reg_mem_w          = RegInit(0.U(MW_LEN.W))
-  val mem2_reg_dmem_rdata     = RegInit(0.U(WORD_LEN.W))
+  // val mem2_reg_dmem_rdata     = RegInit(0.U(WORD_LEN.W))
   val mem2_reg_wb_addr        = RegInit(0.U(WORD_LEN.W))
   val mem2_reg_is_valid_load  = RegInit(false.B)
   val mem2_reg_mem_use_reg    = RegInit(false.B)
   val mem2_reg_is_valid_inst  = RegInit(false.B)
+  val mem2_reg_is_mem_load    = RegInit(false.B)
   val mem2_reg_is_dram_load   = RegInit(false.B)
 
   // MEM2/MEM3 State
@@ -306,10 +307,12 @@ class Core(
   val rrd_stall            = Wire(Bool())
   val ex2_stall            = Wire(Bool())
   val mem_stall            = Wire(Bool())
+  val mem2_stall           = Wire(Bool())
   val mem1_mem_stall       = Wire(Bool())
   val mem1_dram_stall      = Wire(Bool())
-  val mem2_dram_stall      = Wire(Bool())
-  val mem1_mem_stall_delay = RegInit(false.B)
+  // val mem2_mem_stall       = Wire(Bool())
+  // val mem2_dram_stall      = Wire(Bool())
+  // val mem1_mem_stall_delay = RegInit(false.B)
   val ex1_reg_fw_en        = RegInit(false.B)
   val ex1_fw_data          = Wire(UInt(WORD_LEN.W))
   val ex2_reg_fw_en        = RegInit(false.B)
@@ -1435,7 +1438,7 @@ class Core(
       (ex2_reg_divrem && (ex2_reg_divrem_state === DivremState.Idle || ex2_reg_divrem_state === DivremState.Finished))
   }
   ex2_div_stall := ex2_en && ex2_reg_div_stall
-  when (mem2_dram_stall && !ex2_reg_div_stall && ex2_reg_no_mem) {
+  when (mem2_stall && !ex2_reg_div_stall && ex2_reg_no_mem) {
     // ALU/BIT/MD/CSR/JBRのEX2ステージを実行中にメモリストールがあってもWBに進むので、2回実行しないようにEX2を空にする
     ex2_reg_wb_sel        := WB_X
     ex2_reg_is_valid_inst := false.B
@@ -1930,11 +1933,12 @@ class Core(
   io.cache.wdata := ex2_reg_wdata
   io.cache.iinvalidate := mem1_is_dram_fence
 
-  mem1_mem_stall_delay := mem1_is_mem_load && io.dmem.rvalid && !mem1_mem_stall // 読めた直後はストール
-  mem1_mem_stall := (mem1_is_mem_load && (!io.dmem.rvalid || mem1_mem_stall_delay)) || (mem1_is_mem_store && !io.dmem.wready)
+  // mem1_mem_stall_delay := mem1_is_mem_load && io.dmem.rvalid && !mem1_mem_stall // 読めた直後はストール
+  // mem1_mem_stall := (mem1_is_mem_load && (!io.dmem.rvalid || mem1_mem_stall_delay)) || (mem1_is_mem_store && !io.dmem.wready)
+  mem1_mem_stall := (mem1_is_mem_load && !io.dmem.rready) || (mem1_is_mem_store && !io.dmem.wready)
   mem1_dram_stall := false.B
 
-  mem_stall := mem1_mem_stall || mem1_dram_stall || mem2_dram_stall
+  mem_stall := mem1_mem_stall || mem1_dram_stall || mem2_stall
 
   mem1_dram_stall :=
     (mem1_is_dram_load && !io.cache.rready) ||
@@ -1948,14 +1952,15 @@ class Core(
 
   //**********************************
   // MEM1/MEM2 regsiter
-  when (!mem2_dram_stall) {
+  when (!mem2_stall) {
     mem2_reg_wb_byte_offset := ex2_reg_alu_out(1, 0)
     mem2_reg_mem_w          := mem1_reg_mem_w
-    mem2_reg_dmem_rdata     := io.dmem.rdata
+    // mem2_reg_dmem_rdata     := io.dmem.rdata
     mem2_reg_wb_addr        := ex2_reg_wb_addr
     mem2_reg_is_valid_load  := (!mem1_mem_stall && mem1_is_mem_load) || (!mem1_dram_stall && mem1_is_dram_load)
     mem2_reg_mem_use_reg    := !mem1_mem_stall && !mem1_dram_stall && mem1_reg_mem_use_reg
     mem2_reg_is_valid_inst  := !mem1_mem_stall && !mem1_dram_stall && mem1_is_valid_inst
+    mem2_reg_is_mem_load    := !mem1_mem_stall && mem1_is_mem_load
     mem2_reg_is_dram_load   := !mem1_dram_stall && mem1_is_dram_load
     if (enable_pipeline_probe) {
       mem2_reg_inst_id     := mem1_reg_inst_id
@@ -1964,14 +1969,16 @@ class Core(
 
   //**********************************
   // Memory Access Stage 2 (MEM2)
-  mem2_dram_stall := (mem2_reg_is_dram_load && !io.cache.rvalid)
+  val mem2_mem_stall = (mem2_reg_is_mem_load && !io.dmem.rvalid)
+  val mem2_dram_stall = (mem2_reg_is_dram_load && !io.cache.rvalid)
+  mem2_stall := mem2_mem_stall || mem2_dram_stall
 
   if (enable_pipeline_probe) {
     io.pipeline_probe.mem2_valid   := mem2_reg_is_valid_inst
     io.pipeline_probe.mem2_inst_id := mem2_reg_inst_id
   }
 
-  val mem2_is_valid_load = !mem2_dram_stall && mem2_reg_is_valid_load
+  val mem2_is_valid_load = !mem2_stall && mem2_reg_is_valid_load
   val mem2_fw_en_next = mem2_is_valid_load
   when (mem2_is_valid_load) {
     scoreboard(mem2_reg_wb_addr) := false.B
@@ -1981,14 +1988,14 @@ class Core(
   // MEM2/MEM3 regsiter
   mem3_reg_wb_byte_offset := mem2_reg_wb_byte_offset
   mem3_reg_mem_w          := mem2_reg_mem_w
-  mem3_reg_dmem_rdata     := Mux(mem2_reg_is_dram_load, io.cache.rdata, mem2_reg_dmem_rdata)
+  mem3_reg_dmem_rdata     := Mux(mem2_reg_is_dram_load, io.cache.rdata, io.dmem.rdata)
   mem3_reg_wb_addr        := mem2_reg_wb_addr
-  mem3_reg_is_valid_load  := mem2_is_valid_load
-  mem3_reg_mem_use_reg    := !mem2_dram_stall && mem2_reg_mem_use_reg
-  mem3_reg_is_valid_inst  := !mem2_dram_stall && mem2_reg_is_valid_inst
+  mem3_reg_is_valid_load  := !mem2_stall && mem2_is_valid_load
+  // mem3_reg_mem_use_reg    := !mem2_dram_stall && mem2_reg_mem_use_reg
+  mem3_reg_is_valid_inst  := !mem2_stall && mem2_reg_is_valid_inst
   mem3_reg_fw_en          := mem2_fw_en_next
   if (enable_pipeline_probe) {
-    when (!mem2_dram_stall) {
+    when (!mem2_stall) {
       mem3_reg_inst_id    := mem2_reg_inst_id
     }
   }
@@ -2111,10 +2118,12 @@ class Core(
   printf(p"mem1_mem_stall   : 0x${Hexadecimal(mem1_mem_stall)}\n")
   printf(p"mem1_dram_stall  : 0x${Hexadecimal(mem1_dram_stall)}\n")
   printf(p"mem1_is_valid_ins: 0x${Hexadecimal(mem1_is_valid_inst)}\n")
+  printf(p"mem2_mem_stall   : 0x${Hexadecimal(mem2_mem_stall)}\n")
   printf(p"mem2_dram_stall  : 0x${Hexadecimal(mem2_dram_stall)}\n")
-  printf(p"mem2_reg_dmem_rda: 0x${Hexadecimal(mem2_reg_dmem_rdata)}\n")
+  // printf(p"mem2_reg_dmem_rda: 0x${Hexadecimal(mem2_reg_dmem_rdata)}\n")
   // printf(p"mem2_reg_mem_use_: 0x${Hexadecimal(mem2_reg_mem_use_reg)}\n")
   printf(p"mem2_reg_is_valid: 0x${Hexadecimal(mem2_reg_is_valid_inst)}\n")
+  printf(p"mem2_reg_is_mem_l: 0x${Hexadecimal(mem2_reg_is_mem_load)}\n")
   printf(p"mem2_reg_is_dram_: 0x${Hexadecimal(mem2_reg_is_dram_load)}\n")
   printf(p"mem3_reg_dmem_rda: 0x${Hexadecimal(mem3_reg_dmem_rdata)}\n")
   printf(p"mem3_wb_data_load: 0x${Hexadecimal(mem3_wb_data_load)}\n")

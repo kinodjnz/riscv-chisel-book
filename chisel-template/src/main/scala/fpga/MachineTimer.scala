@@ -15,6 +15,7 @@ class MachineTimer extends Module {
   val mtime = RegInit(0.U(64.W))
   val mtimecmp = RegInit(0xFFFFFFFFL.U(64.W))
   val intr = RegInit(false.B)
+  val rdata = RegInit(0.U(32.W))
 
   mtime := mtime + 1.U
   intr := mtime >= mtimecmp
@@ -22,26 +23,27 @@ class MachineTimer extends Module {
   io.mtime := mtime
   io.mtimecmp := mtimecmp
 
-  io.mem.rdata := "xdeadbeef".U
+  io.mem.rdata := rdata
   io.mem.rvalid := true.B
+  io.mem.rready := true.B
   io.mem.wready := true.B
 
-  when (io.mem.ren) {
+  // when (io.mem.ren) {
     switch (io.mem.raddr(3, 2)) {
       is (0.U) {
-        io.mem.rdata := mtime(31, 0)
+        rdata := mtime(31, 0)
       }
       is (1.U) {
-        io.mem.rdata := mtime(63, 32)
+        rdata := mtime(63, 32)
       }
       is (2.U) {
-        io.mem.rdata := mtimecmp(31, 0)
+        rdata := mtimecmp(31, 0)
       }
       is (3.U) {
-        io.mem.rdata := mtimecmp(63, 32)
+        rdata := mtimecmp(63, 32)
       }
     }
-  }
+  // }
 
   when (io.mem.wen) {
     switch (io.mem.waddr(3, 2)) {

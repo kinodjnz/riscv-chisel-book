@@ -1,0 +1,69 @@
+
+target/lw.elf.fat:	file format elf32-littleriscv
+
+Disassembly of section .text:
+
+00000000 <_start>:
+       0: 37 41 00 20  	lui	sp, 131076
+       4: 31 28        	jal	0x20 <main>
+       6: aa 81        	mv	gp, a0
+       8: 93 08 d0 05  	li	a7, 93
+       c: 01 00        	nop
+       e: 01 00        	nop
+      10: 01 00        	nop
+      12: 01 00        	nop
+      14: 73 00 00 00  	ecall
+		...
+
+00000020 <main>:
+      20: 09 a0        	j	0x22 <.Ltmp0>
+
+00000022 <.Ltmp0>:
+      22: 89 41        	li	gp, 2
+
+00000024 <.Lpcrel_hi0>:
+      24: 97 00 00 00  	auipc	ra, 0
+      28: 93 80 c0 06  	addi	ra, ra, 108   # 00000090
+      2c: 03 a6 00 00  	lw	a2, 0(ra)   # 00000024
+      30: 83 a6 40 00  	lw	a3, 4(ra)   # 00000028
+      34: 03 a7 00 00  	lw	a4, 0(ra)
+      38: 83 a7 40 00  	lw	a5, 4(ra)
+      3c: b7 03 ff 00  	lui	t2, 4080
+      40: 93 83 f3 0f  	addi	t2, t2, 255   # 00ff00ff
+      44: 63 19 76 00  	bne	a2, t2, 0x56 <.Ltmp2>
+      48: b7 f3 0f f0  	lui	t2, 983295
+      4c: bd 03        	addi	t2, t2, 15   # f00ff00f
+      4e: 63 94 76 00  	bne	a3, t2, 0x56 <.Ltmp2>
+      52: 63 81 76 02  	beq	a3, t2, 0x74 <.Ltmp3>
+
+00000056 <.Ltmp2>:
+      56: 0f 00 f0 0f  	fence
+
+0000005a <.Ltmp4>:
+      5a: 63 80 01 00  	beqz	gp, 0x5a <.Ltmp4>
+      5e: 86 01        	slli	gp, gp, 1
+      60: 93 e1 11 00  	ori	gp, gp, 1
+      64: 93 08 d0 05  	li	a7, 93
+      68: 0e 85        	mv	a0, gp
+      6a: 73 00 00 00  	ecall
+      6e: 01 00        	nop
+      70: 01 00        	nop
+      72: d5 b7        	j	0x56 <.Ltmp2>
+
+00000074 <.Ltmp3>:
+      74: 0f 00 f0 0f  	fence
+      78: 85 41        	li	gp, 1
+      7a: 93 08 d0 05  	li	a7, 93
+      7e: 01 45        	li	a0, 0
+      80: 73 00 00 00  	ecall
+      84: 01 00        	nop
+      86: 01 00        	nop
+      88: f5 b7        	j	0x74 <.Ltmp3>
+      8a: 13 00 00 00  	nop
+      8e: 01 00        	nop
+
+00000090 <.Ltmp1>:
+      90: ff 00 ff 00  	<unknown>
+      94: 0f f0 0f f0  	<unknown>
+      98: 01 45        	li	a0, 0
+      9a: 82 80        	ret

@@ -22,7 +22,7 @@ class DmemPortIo extends Bundle {
   val rdata  = Output(UInt(WORD_LEN.W))
   val ren    = Input(Bool())
   val rvalid = Output(Bool())
-  // val rready = Output(Bool())
+  val rready = Output(Bool())
 
   val waddr  = Input(UInt(WORD_LEN.W))
   val wen    = Input(Bool())

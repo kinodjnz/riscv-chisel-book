@@ -118,21 +118,24 @@ class Uart(clockHz: Int, baudRate: Int = 115200) extends Module {
     rx_data_ready := true.B
   }
 
-  io.mem.rdata := "xdeadbeef".U
+  val rdata = RegInit(0.U(WORD_LEN.W))
+
+  io.mem.rdata := rdata
   io.mem.rvalid := true.B
+  io.mem.rready := true.B
   io.mem.wready := true.B
 
-  when (io.mem.ren) {
+  // when (io.mem.ren) {
     switch (io.mem.raddr(2, 2)) {
       is (0.U) {
-        io.mem.rdata := Cat(0.U(27.W), rx.io.overrun.asUInt, rx_data_ready.asUInt, (!tx_empty).asUInt, rx_intr_en.asUInt, tx_intr_en.asUInt)
+        rdata := Cat(0.U(27.W), rx.io.overrun.asUInt, rx_data_ready.asUInt, (!tx_empty).asUInt, rx_intr_en.asUInt, tx_intr_en.asUInt)
       }
       is (1.U) {
-        io.mem.rdata := rx_data
+        rdata := rx_data
         rx_data_ready := false.B
       }
     }
-  }
+  // }
 
   when (io.mem.wen) {
     switch (io.mem.waddr(2, 2)) {

@@ -30,9 +30,10 @@ class InterruptController() extends Module {
 
   io.mem.rdata := "xdeadbeef".U
   io.mem.rvalid := true.B
+  io.mem.rready := true.B
   io.mem.wready := true.B
 
-  when (io.mem.ren) {
+  // when (io.mem.ren) {
     switch (io.mem.raddr(2, 2)) {
       is (0.U) {
         io.mem.rdata := reg_intr_enable
@@ -41,7 +42,7 @@ class InterruptController() extends Module {
         io.mem.rdata := reg_intr_asserted
       }
     }
-  }
+  // }
 
   when (io.mem.wen) {
     reg_intr_enable := io.mem.wdata

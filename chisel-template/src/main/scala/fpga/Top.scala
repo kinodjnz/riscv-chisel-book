@@ -20,6 +20,7 @@ class Config(clockHz: Int) extends Module {
     1.U -> clockHz.U,
   ))
   io.mem.rvalid := true.B
+  io.mem.rready := true.B
   io.mem.wready := true.B
 }
 

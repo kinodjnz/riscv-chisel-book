@@ -89,6 +89,7 @@ class Sdc() extends Module {
   val reg_baud_divider = RegInit(2.U(9.W)) // actual divider = (d + 1) * 2
   val reg_clk_counter = RegInit(2.U(9.W))
   val reg_clk = RegInit(false.B)
+  val reg_rdata = RegInit(0.U(WORD_LEN.W))
   when (reg_power) {
     when (reg_clk_counter === 0.U) {
       reg_clk_counter := reg_baud_divider
@@ -498,8 +499,9 @@ class Sdc() extends Module {
     }
   }
 
-  io.mem.rdata := "xdeadbeef".U
+  io.mem.rdata := reg_rdata // "xdeadbeef".U
   io.mem.rvalid := true.B
+  io.mem.rready := true.B
   io.mem.wready := true.B
 
   when (io.mem.wen) {
@@ -600,7 +602,7 @@ class Sdc() extends Module {
     val addr = io.mem.raddr(3, 2)
     switch (addr) {
       is (0.U) {
-        io.mem.rdata := Cat(
+        reg_rdata := Cat(
           reg_power.asUInt,
           0.U(11.W),
           tx_end_intr_en.asUInt,
@@ -612,7 +614,7 @@ class Sdc() extends Module {
         )
       }
       is (1.U) {
-        io.mem.rdata := Cat(
+        reg_rdata := Cat(
           0.U(8.W),
           tx_dat_crc_status,
           tx_dat_started && tx_dat_end,
@@ -630,22 +632,22 @@ class Sdc() extends Module {
       is (2.U) {
         rx_res_read_counter := rx_res_read_counter + 1.U
         when (rx_res_type === RES_TYPE_R2) {
-          io.mem.rdata := (rx_res >> Cat(rx_res_read_counter, 0.U(5.W)))(31, 0)
+          reg_rdata := (rx_res >> Cat(rx_res_read_counter, 0.U(5.W)))(31, 0)
           when (rx_res_read_counter === 3.U) {
             rx_res_ready := false.B
           }
         }.otherwise {
-          io.mem.rdata := rx_res(39, 8)
+          reg_rdata := rx_res(39, 8)
           rx_res_ready := false.B
         }
       }
       is (3.U) {
-        io.mem.rdata := rx_dat_buf_cache
+        reg_rdata := rx_dat_buf_cache
         when (rx_dat_ready) {
           rxtx_dat_counter := rxtx_dat_counter + 1.U
           io.sdbuf.ren2 := true.B
           rx_dat_buf_read := true.B
-          // io.mem.rdata := rxtx_dat.read(rxtx_dat_counter)
+          // reg_rdata := rxtx_dat.read(rxtx_dat_counter)
           when (rxtx_dat_counter(6, 0) === 127.U) {
             rx_dat_ready := false.B
           }
