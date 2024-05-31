@@ -61,9 +61,9 @@ class SimTop(memoryPath: String, with_sdc: Boolean, enable_pipeline_probe: Boole
   val dram = Module(new MockDram(null, dmemSizeInBytes))
   memory.io.dramPort <> dram.io.dram
 
-  val sram = Module(new MockSram())
-  memory.io.cache_array1 <> sram.io.cache_array1
-  memory.io.cache_array2 <> sram.io.cache_array2
+  val dcache = Module(new MockDCache)
+  memory.io.cache_array1 <> dcache.io.cache_array1
+  memory.io.cache_array2 <> dcache.io.cache_array2
 
   val icache = Module(new MockICache)
   memory.io.icache <> icache.io.icache

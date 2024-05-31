@@ -100,9 +100,11 @@ class ICachePort extends Bundle {
 }
 
 class DCachePort extends Bundle {
-  val en    = Input(Bool())
+  val ren   = Input(Bool())
+  val wen   = Input(Bool())
   val we    = Input(UInt((CACHE_LINE_LEN/8).W))
-  val addr  = Input(UInt(DCACHE_INDEX_BITS.W))
+  val raddr = Input(UInt(DCACHE_INDEX_BITS.W))
+  val waddr = Input(UInt(DCACHE_INDEX_BITS.W))
   val wdata = Input(UInt(CACHE_LINE_LEN.W))
   val rdata = Output(UInt(CACHE_LINE_LEN.W))
 }
@@ -521,13 +523,17 @@ class Memory() extends Module {
   dram_d_wen := false.B
   dram_d_addr := DontCare
   dram_d_wdata := DontCare
-  io.cache_array1.en    := false.B
-  io.cache_array1.we    := DontCare
-  io.cache_array1.addr  := DontCare
+  io.cache_array1.ren   := false.B
+  io.cache_array1.wen   := false.B
+  io.cache_array1.we    := 0.U
+  io.cache_array1.raddr := DontCare
+  io.cache_array1.waddr := reg_req_addr.index
   io.cache_array1.wdata := DontCare
-  io.cache_array2.en    := false.B
-  io.cache_array2.we    := DontCare
-  io.cache_array2.addr  := DontCare
+  io.cache_array2.ren   := false.B
+  io.cache_array2.wen   := false.B
+  io.cache_array2.we    := 0.U
+  io.cache_array2.raddr := DontCare
+  io.cache_array2.waddr := reg_req_addr.index
   io.cache_array2.wdata := DontCare
   // reg_dcache_read := false.B
   dcache_snoop_line := DontCare
@@ -568,12 +574,10 @@ class Memory() extends Module {
         val req_addr = dcache_snoop_addr
         reg_req_addr := req_addr
         reg_tag := tag_array.read(req_addr.index)
-        io.cache_array1.en := true.B
-        io.cache_array1.addr := req_addr.index
-        io.cache_array1.we := 0.U
-        io.cache_array2.en := true.B
-        io.cache_array2.addr := req_addr.index
-        io.cache_array2.we := 0.U
+        io.cache_array1.ren := true.B
+        io.cache_array1.raddr := req_addr.index
+        io.cache_array2.ren := true.B
+        io.cache_array2.raddr := req_addr.index
         dcache_state := DCacheState.SnoopRead
       }.otherwise {
         io.cache.rready := true.B
@@ -585,12 +589,10 @@ class Memory() extends Module {
         reg_ren := io.cache.ren
         reg_tag := tag_array.read(req_addr.index)
         reg_lru := lru_array.read(req_addr.index)
-        io.cache_array1.addr := req_addr.index
-        io.cache_array1.en := true.B
-        io.cache_array1.we := 0.U
-        io.cache_array2.addr := req_addr.index
-        io.cache_array2.en := true.B
-        io.cache_array2.we := 0.U
+        io.cache_array1.ren := true.B
+        io.cache_array1.raddr := req_addr.index
+        io.cache_array2.ren := true.B
+        io.cache_array2.raddr := req_addr.index
         // reg_dcache_read := true.B
         when (io.cache.ren || io.cache.wen) {
           when (io.cache.ren) {
@@ -634,12 +636,10 @@ class Memory() extends Module {
           val req_addr = dcache_snoop_addr
           reg_req_addr := req_addr
           reg_tag := tag_array.read(req_addr.index)
-          io.cache_array1.addr := req_addr.index
-          io.cache_array1.en := true.B
-          io.cache_array1.we := 0.U
-          io.cache_array2.addr := req_addr.index
-          io.cache_array2.en := true.B
-          io.cache_array2.we := 0.U
+          io.cache_array1.ren := true.B
+          io.cache_array1.raddr := req_addr.index
+          io.cache_array2.ren := true.B
+          io.cache_array2.raddr := req_addr.index
           dcache_state := DCacheState.SnoopRead
         }.otherwise {
           io.cache.rready := true.B
@@ -651,12 +651,10 @@ class Memory() extends Module {
           reg_ren := io.cache.ren
           reg_tag := tag_array.read(req_addr.index)
           reg_lru := lru_array.read(req_addr.index)
-          io.cache_array1.addr := req_addr.index
-          io.cache_array1.en := true.B
-          io.cache_array1.we := 0.U
-          io.cache_array2.addr := req_addr.index
-          io.cache_array2.en := true.B
-          io.cache_array2.we := 0.U
+          io.cache_array1.ren := true.B
+          io.cache_array1.raddr := req_addr.index
+          io.cache_array2.ren := true.B
+          io.cache_array2.raddr := req_addr.index
           // reg_dcache_read := true.B
           when (io.cache.ren) {
               dcache_state := DCacheState.LookupForRead
@@ -722,21 +720,53 @@ class Memory() extends Module {
       // val line2 = Mux(reg_dcache_read, io.cache_array2.rdata, reg_line2)
       val wstrb = shiftLineMask(reg_wstrb, Cat(reg_req_addr.line_off(CACHE_LINE_BITS-1, 2), 0.U(2.W)))
       val wdata = (extendToLine(reg_wdata) << Cat(reg_req_addr.line_off(CACHE_LINE_BITS-1, 2), 0.U(5.W)))(CACHE_LINE_LEN-1, 0)
-      io.cache_array1.addr := reg_req_addr.index
+      io.cache_array1.waddr := reg_req_addr.index
       io.cache_array1.wdata := wdata
       io.cache_array1.we := wstrb
-      io.cache_array2.addr := reg_req_addr.index
+      io.cache_array2.waddr := reg_req_addr.index
       io.cache_array2.wdata := wdata
       io.cache_array2.we := wstrb
       dram_d_wdata := cold_line
-      when (reg_tag(0) === reg_req_addr.tag) {
-        io.cache_array1.en := true.B
-        lru_array.write(reg_req_addr.index, Cat(0.U, true.B, reg_lru.dirty2).asTypeOf(new LruBundle()))
-        dcache_state := DCacheState.Ready
-      }.elsewhen (reg_tag(1) === reg_req_addr.tag) {
-        io.cache_array2.en := true.B
-        lru_array.write(reg_req_addr.index, Cat(1.U, reg_lru.dirty1, true.B).asTypeOf(new LruBundle()))
-        dcache_state := DCacheState.Ready
+      when (reg_tag(0) === reg_req_addr.tag || reg_tag(1) === reg_req_addr.tag) {
+        when (reg_tag(0) === reg_req_addr.tag) {
+          io.cache_array1.wen := true.B
+          lru_array.write(reg_req_addr.index, Cat(0.U, true.B, reg_lru.dirty2).asTypeOf(new LruBundle()))
+        }.otherwise {
+          io.cache_array2.wen := true.B
+          lru_array.write(reg_req_addr.index, Cat(1.U, reg_lru.dirty1, true.B).asTypeOf(new LruBundle()))
+        }
+        when (dcache_snoop_en) {
+          val req_addr = dcache_snoop_addr
+          reg_req_addr := req_addr
+          reg_tag := tag_array.read(req_addr.index)
+          io.cache_array1.ren := true.B
+          io.cache_array1.raddr := req_addr.index
+          io.cache_array2.ren := true.B
+          io.cache_array2.raddr := req_addr.index
+          dcache_state := DCacheState.SnoopRead
+        }.otherwise {
+          io.cache.rready := true.B
+          io.cache.wready := true.B
+          val req_addr = Mux(io.cache.ren, io.cache.raddr, io.cache.waddr).asTypeOf(new DCacheAddrBundle())
+          reg_req_addr := req_addr
+          reg_wdata := io.cache.wdata
+          reg_wstrb := io.cache.wstrb
+          reg_ren := io.cache.ren
+          reg_tag := tag_array.read(req_addr.index)
+          reg_lru := lru_array.read(req_addr.index)
+          io.cache_array1.ren := true.B
+          io.cache_array1.raddr := req_addr.index
+          io.cache_array2.ren := true.B
+          io.cache_array2.raddr := req_addr.index
+          // reg_dcache_read := true.B
+          when (io.cache.ren) {
+              dcache_state := DCacheState.LookupForRead
+          }.elsewhen (io.cache.wen) {
+              dcache_state := DCacheState.LookupForWrite
+          }.otherwise {
+            dcache_state := DCacheState.Ready
+          }
+        }
       }.elsewhen ((reg_lru.way_hot === 1.U && reg_lru.dirty1) || (reg_lru.way_hot === 0.U && reg_lru.dirty2)) {
         when (dram_d_busy) {
           dcache_state := DCacheState.WriteBack
@@ -769,48 +799,46 @@ class Memory() extends Module {
       }
     }
     is (DCacheState.WaitingReadDram) {
+      val line = dram_rdata
+      io.cache.rdata := (line >> Cat(reg_req_addr.line_off(CACHE_LINE_BITS-1, 2), 0.U(5.W)))(WORD_LEN-1, 0)
+      io.cache_array1.we := Fill(CACHE_LINE_LEN/8, 1.U(1.W))
+      io.cache_array1.waddr := reg_req_addr.index
+      io.cache_array2.we := Fill(CACHE_LINE_LEN/8, 1.U(1.W))
+      io.cache_array2.waddr := reg_req_addr.index
       when (dram_d_rdata_valid) {
-        val line = dram_rdata
         io.cache.rready := false.B
         io.cache.wready := false.B
-        io.cache.rdata := (line >> Cat(reg_req_addr.line_off(CACHE_LINE_BITS-1, 2), 0.U(5.W)))(WORD_LEN-1, 0)
         when (reg_ren /*&& !io.cache.ren && io.cache.raddr === reg_req_addr.asUInt*/) {
           io.cache.rvalid := true.B
         }
-        when (reg_lru.way_hot === 1.U && reg_ren) {
-          tag_array.write(reg_req_addr.index, VecInit(reg_req_addr.tag, reg_tag(1)))
-          io.cache_array1.en := true.B
-          io.cache_array1.we := Fill(CACHE_LINE_LEN/8, 1.U(1.W))
-          io.cache_array1.addr := reg_req_addr.index
+        when (reg_ren) {
           io.cache_array1.wdata := line
-          lru_array.write(reg_req_addr.index, Cat(0.U, false.B, reg_lru.dirty2).asTypeOf(new LruBundle()))
-        }.elsewhen (reg_lru.way_hot === 0.U && reg_ren) {
-          tag_array.write(reg_req_addr.index, VecInit(reg_tag(0), reg_req_addr.tag))
-          io.cache_array2.en := true.B
-          io.cache_array2.we := Fill(CACHE_LINE_LEN/8, 1.U(1.W))
-          io.cache_array2.addr := reg_req_addr.index
           io.cache_array2.wdata := line
-          lru_array.write(reg_req_addr.index, Cat(1.U, reg_lru.dirty1, false.B).asTypeOf(new LruBundle()))
+          when (reg_lru.way_hot === 1.U && reg_ren) {
+            tag_array.write(reg_req_addr.index, VecInit(reg_req_addr.tag, reg_tag(1)))
+            io.cache_array1.wen := true.B
+            lru_array.write(reg_req_addr.index, Cat(0.U, false.B, reg_lru.dirty2).asTypeOf(new LruBundle()))
+          }.otherwise {
+            tag_array.write(reg_req_addr.index, VecInit(reg_tag(0), reg_req_addr.tag))
+            io.cache_array2.wen := true.B
+            lru_array.write(reg_req_addr.index, Cat(1.U, reg_lru.dirty1, false.B).asTypeOf(new LruBundle()))
+          }
         }.otherwise {
           val wstrb = shiftLineMask(reg_wstrb, Cat(reg_req_addr.line_off(CACHE_LINE_BITS-1, 2), 0.U(2.W)))
           val wdata = extendToLine(reg_wdata) << Cat(reg_req_addr.line_off(CACHE_LINE_BITS-1, 2), 0.U(5.W))
+          io.cache_array1.wdata := Cat((0 to CACHE_LINE_LEN/8-1).map(i => {
+            Mux(wstrb(i), wdata(i*8+7, i*8), line(i*8+7, i*8))
+          }).reverse)
+          io.cache_array2.wdata := Cat((0 to CACHE_LINE_LEN/8-1).map(i => {
+            Mux(wstrb(i), wdata(i*8+7, i*8), line(i*8+7, i*8))
+          }).reverse)
           when (reg_lru.way_hot === 1.U) {
             tag_array.write(reg_req_addr.index, VecInit(reg_req_addr.tag, reg_tag(1)))
-            io.cache_array1.en := true.B
-            io.cache_array1.we := Fill(CACHE_LINE_LEN/8, 1.U(1.W))
-            io.cache_array1.addr := reg_req_addr.index
-            io.cache_array1.wdata := Cat((0 to CACHE_LINE_LEN/8-1).map(i => {
-              Mux(wstrb(i), wdata(i*8+7, i*8), line(i*8+7, i*8))
-            }).reverse)
+            io.cache_array1.wen := true.B
             lru_array.write(reg_req_addr.index, Cat(0.U, true.B, reg_lru.dirty2).asTypeOf(new LruBundle()))
           }.otherwise {
             tag_array.write(reg_req_addr.index, VecInit(reg_tag(0), reg_req_addr.tag))
-            io.cache_array2.en := true.B
-            io.cache_array2.we := Fill(CACHE_LINE_LEN/8, 1.U(1.W))
-            io.cache_array2.addr := reg_req_addr.index
-            io.cache_array2.wdata := Cat((0 to CACHE_LINE_LEN/8-1).map(i => {
-              Mux(wstrb(i), wdata(i*8+7, i*8), line(i*8+7, i*8))
-            }).reverse)
+            io.cache_array2.wen := true.B
             lru_array.write(reg_req_addr.index, Cat(1.U, reg_lru.dirty1, true.B).asTypeOf(new LruBundle()))
           }
         }

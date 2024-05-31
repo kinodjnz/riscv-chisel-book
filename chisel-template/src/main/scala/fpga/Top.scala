@@ -79,8 +79,8 @@ class RiscV(clockHz: Int) extends Module {
   
   val memory = Module(new Memory())
   val boot_rom = Module(new BootRom("bootrom.hex", imemSizeInBytes))
-  val sram1 = Module(new SRAM)
-  val sram2 = Module(new SRAM)
+  val dcache1 = Module(new DCache)
+  val dcache2 = Module(new DCache)
   val icache = Module(new ICache(log2Ceil(WORD_LEN), ICACHE_INDEX_BITS+(log2Ceil(CACHE_LINE_LEN)-log2Ceil(WORD_LEN)), log2Ceil(CACHE_LINE_LEN), ICACHE_INDEX_BITS))
   val icache_valid = Module(new ICacheValid(ICACHE_VALID_DATA_BITS, ICACHE_VALID_ADDR_BITS, ICACHE_INVALIDATE_DATA_BITS, ICACHE_INVALIDATE_ADDR_BITS))
   val pht_mem = Module(new PHTMem(2, PHT_INDEX_BITS-1, 1, PHT_INDEX_BITS))
@@ -125,18 +125,22 @@ class RiscV(clockHz: Int) extends Module {
   // dram
   io.dram <> memory.io.dramPort
 
-  sram1.io.clock := clock
-  sram1.io.en := memory.io.cache_array1.en
-  sram1.io.we := memory.io.cache_array1.we
-  sram1.io.addr := memory.io.cache_array1.addr
-  sram1.io.wdata := memory.io.cache_array1.wdata
-  memory.io.cache_array1.rdata := sram1.io.rdata
-  sram2.io.clock := clock
-  sram2.io.en := memory.io.cache_array2.en
-  sram2.io.we := memory.io.cache_array2.we
-  sram2.io.addr := memory.io.cache_array2.addr
-  sram2.io.wdata := memory.io.cache_array2.wdata
-  memory.io.cache_array2.rdata := sram2.io.rdata
+  dcache1.io.clock := clock
+  dcache1.io.ren := memory.io.cache_array1.ren
+  dcache1.io.wen := memory.io.cache_array1.wen
+  dcache1.io.we := memory.io.cache_array1.we
+  dcache1.io.raddr := memory.io.cache_array1.raddr
+  dcache1.io.waddr := memory.io.cache_array1.waddr
+  dcache1.io.wdata := memory.io.cache_array1.wdata
+  memory.io.cache_array1.rdata := dcache1.io.rdata
+  dcache2.io.clock := clock
+  dcache2.io.ren := memory.io.cache_array2.ren
+  dcache2.io.wen := memory.io.cache_array2.wen
+  dcache2.io.we := memory.io.cache_array2.we
+  dcache2.io.raddr := memory.io.cache_array2.raddr
+  dcache2.io.waddr := memory.io.cache_array2.waddr
+  dcache2.io.wdata := memory.io.cache_array2.wdata
+  memory.io.cache_array2.rdata := dcache2.io.rdata
 
   icache.io.clock := clock
   icache.io.ren := memory.io.icache.ren
