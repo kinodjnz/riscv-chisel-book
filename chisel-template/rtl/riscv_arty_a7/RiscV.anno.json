@@ -1,14 +1,14 @@
 [
   {
     "class":"firrtl.transforms.DedupedResult",
-    "original":"~RiscV|SRAM",
-    "duplicate":"~RiscV|RiscV/sram1:SRAM",
+    "original":"~RiscV|DCache",
+    "duplicate":"~RiscV|RiscV/dcache1:DCache",
     "index":0.3181818181818182
   },
   {
     "class":"firrtl.transforms.DedupedResult",
-    "original":"~RiscV|SRAM_1",
-    "duplicate":"~RiscV|RiscV/sram2:SRAM",
+    "original":"~RiscV|DCache_1",
+    "duplicate":"~RiscV|RiscV/dcache2:DCache",
     "index":0.36363636363636365
   },
   {
@@ -22,13 +22,13 @@
     "class":"chisel3.experimental.EnumAnnotations$EnumDefAnnotation",
     "typeName":"fpga.DCacheState",
     "definition":{
-      "Read":5,
       "Ready":0,
-      "WaitingRead":6,
       "LookupForRead":2,
       "LookupForWrite":3,
-      "RespondRead":4,
-      "SnoopRead":1
+      "ReadDramReq":5,
+      "SnoopRead":1,
+      "WaitingReadDram":6,
+      "WriteBack":4
     }
   },
   {
