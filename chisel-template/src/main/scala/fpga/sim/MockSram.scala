@@ -15,15 +15,18 @@ class MockSram extends Module {
   val dmem1 = Mem(DCACHE_LINES, Vec(CACHE_LINE_LEN/8, UInt(8.W)))
   val dmem2 = Mem(DCACHE_LINES, Vec(CACHE_LINE_LEN/8, UInt(8.W)))
 
-  io.cache_array1.rdata := DontCare
-  io.cache_array2.rdata := DontCare
+  val rdata1 = RegInit(0.U(CACHE_LINE_LEN.W))
+  val rdata2 = RegInit(0.U(CACHE_LINE_LEN.W))
+
+  io.cache_array1.rdata := rdata1
+  io.cache_array2.rdata := rdata2
   when (io.cache_array1.en) {
     dmem1.write(
       io.cache_array1.addr,
       VecInit((0 to CACHE_LINE_LEN/8-1).map(i => io.cache_array1.wdata(i*8+7, i*8))),
       io.cache_array1.we.asBools
     )
-    io.cache_array1.rdata := Cat(dmem1.read(io.cache_array1.addr).reverse)
+    rdata1 := Cat(dmem1.read(io.cache_array1.addr).reverse)
   }
   when (io.cache_array2.en) {
     dmem2.write(
@@ -31,6 +34,6 @@ class MockSram extends Module {
       VecInit((0 to CACHE_LINE_LEN/8-1).map(i => io.cache_array2.wdata(i*8+7, i*8))),
       io.cache_array2.we.asBools
     )
-    io.cache_array2.rdata := Cat(dmem2.read(io.cache_array2.addr).reverse)
+    rdata2 := Cat(dmem2.read(io.cache_array2.addr).reverse)
   }
 }

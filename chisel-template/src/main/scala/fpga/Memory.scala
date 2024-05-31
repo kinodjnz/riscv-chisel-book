@@ -64,11 +64,15 @@ object DCacheState extends ChiselEnum {
   val SnoopRead = Value
   val LookupForRead = Value
   val LookupForWrite = Value
-  val RespondRead = Value
-  val Read = Value
-  val WaitingRead = Value
+  val WriteBack = Value
+  val ReadDramReq = Value
+  val WaitingReadDram = Value
 }
 
+//       31 30 29 28 27 26 25 24 23 22 21 20 19 18 17 16 15 14 13 12 11 10  9  8  7  6  5  4  3  2  1  0
+//      +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
+// addr |   unused  |                      tag                      |       index        |   line_off   |
+//      +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
 object CacheConsts {
   val CACHE_LINE_LEN = 256
   val CACHE_LINE_BITS = log2Ceil(CACHE_LINE_LEN/8)
@@ -497,14 +501,16 @@ class Memory() extends Module {
 
   val dcache_state = RegInit(DCacheState.Ready)
   val reg_tag = RegInit(VecInit(0.U(DCACHE_TAG_BITS.W), 0.U(DCACHE_TAG_BITS.W)))
-  val reg_line1 = RegInit(0.U(CACHE_LINE_LEN.W))
-  val reg_line2 = RegInit(0.U(CACHE_LINE_LEN.W))
+  // val reg_line1 = RegInit(0.U(CACHE_LINE_LEN.W))
+  // val reg_line2 = RegInit(0.U(CACHE_LINE_LEN.W))
+  val reg_line = RegInit(0.U(CACHE_LINE_LEN.W))
+  val cold_line = Wire(UInt(CACHE_LINE_LEN.W))
   val reg_lru = RegInit(0.U.asTypeOf(new LruBundle()))
   val reg_req_addr = RegInit(0.U.asTypeOf(new DCacheAddrBundle()))
   val reg_wdata = RegInit(0.U(WORD_LEN.W))
   val reg_wstrb = RegInit(0.U(4.W))
   val reg_ren = RegInit(true.B)
-  val reg_dcache_read = RegInit(false.B)
+  // val reg_dcache_read = RegInit(false.B)
   val reg_read_word = RegInit(0.U(WORD_LEN.W))
 
   io.cache.rready := false.B
@@ -523,7 +529,7 @@ class Memory() extends Module {
   io.cache_array2.we    := DontCare
   io.cache_array2.addr  := DontCare
   io.cache_array2.wdata := DontCare
-  reg_dcache_read := false.B
+  // reg_dcache_read := false.B
   dcache_snoop_line := DontCare
   dcache_snoop_status := DCacheSnoopStatus.Busy
 
@@ -539,6 +545,22 @@ class Memory() extends Module {
   def shiftLineMask(wstrb: UInt, shift: UInt) = {
     (extendToLineMask(wstrb) << shift)(CACHE_LINE_LEN/8-1, 0)
   }
+
+  // when (reg_dcache_read) {
+  //   reg_line1 := io.cache_array1.rdata
+  //   reg_line2 := io.cache_array2.rdata
+  // }
+  // val line1 = Mux(reg_dcache_read, io.cache_array1.rdata, reg_line1)
+  // val line2 = Mux(reg_dcache_read, io.cache_array2.rdata, reg_line2)
+  val line1 = io.cache_array1.rdata
+  val line2 = io.cache_array2.rdata
+  when (reg_tag(0) === reg_req_addr.tag) {
+    reg_read_word := (line1 >> Cat(reg_req_addr.line_off(CACHE_LINE_BITS-1, 2), 0.U(5.W)))(WORD_LEN-1, 0)
+  }.otherwise {
+    reg_read_word := (line2 >> Cat(reg_req_addr.line_off(CACHE_LINE_BITS-1, 2), 0.U(5.W)))(WORD_LEN-1, 0)
+  }
+  cold_line := Mux(reg_lru.way_hot === 1.U, line1, line2)
+  reg_line := cold_line
 
   switch (dcache_state) {
     is (DCacheState.Ready) {
@@ -561,16 +583,16 @@ class Memory() extends Module {
         reg_wdata := io.cache.wdata
         reg_wstrb := io.cache.wstrb
         reg_ren := io.cache.ren
+        reg_tag := tag_array.read(req_addr.index)
+        reg_lru := lru_array.read(req_addr.index)
+        io.cache_array1.addr := req_addr.index
+        io.cache_array1.en := true.B
+        io.cache_array1.we := 0.U
+        io.cache_array2.addr := req_addr.index
+        io.cache_array2.en := true.B
+        io.cache_array2.we := 0.U
+        // reg_dcache_read := true.B
         when (io.cache.ren || io.cache.wen) {
-          reg_tag := tag_array.read(req_addr.index)
-          io.cache_array1.en := true.B
-          io.cache_array1.addr := req_addr.index
-          io.cache_array1.we := 0.U
-          io.cache_array2.en := true.B
-          io.cache_array2.addr := req_addr.index
-          io.cache_array2.we := 0.U
-          reg_dcache_read := true.B
-          reg_lru := lru_array.read(req_addr.index)
           when (io.cache.ren) {
             dcache_state := DCacheState.LookupForRead
           }.otherwise {
@@ -592,133 +614,161 @@ class Memory() extends Module {
       dcache_state := DCacheState.Ready
     }
     is (DCacheState.LookupForRead) {
-      when (reg_dcache_read) {
-        reg_line1 := io.cache_array1.rdata
-        reg_line2 := io.cache_array2.rdata
-      }
-      val line1 = Mux(reg_dcache_read, io.cache_array1.rdata, reg_line1)
-      val line2 = Mux(reg_dcache_read, io.cache_array2.rdata, reg_line2)
-      when (reg_tag(0) === reg_req_addr.tag) {
-        reg_read_word := (line1 >> Cat(reg_req_addr.line_off(CACHE_LINE_BITS-1, 2), 0.U(5.W)))(WORD_LEN-1, 0)
-        dcache_state := DCacheState.RespondRead
-      }.elsewhen (reg_tag(1) === reg_req_addr.tag) {
-        reg_read_word := (line2 >> Cat(reg_req_addr.line_off(CACHE_LINE_BITS-1, 2), 0.U(5.W)))(WORD_LEN-1, 0)
-        dcache_state := DCacheState.RespondRead
+      // when (reg_dcache_read) {
+      //   reg_line1 := io.cache_array1.rdata
+      //   reg_line2 := io.cache_array2.rdata
+      // }
+      // val line1 = Mux(reg_dcache_read, io.cache_array1.rdata, reg_line1)
+      // val line2 = Mux(reg_dcache_read, io.cache_array2.rdata, reg_line2)
+      dram_d_wdata := cold_line
+      when (reg_tag(0) === reg_req_addr.tag || reg_tag(1) === reg_req_addr.tag) {
+        io.cache.rvalid := true.B
+        when (reg_tag(0) === reg_req_addr.tag) {
+          // reg_read_word := (line1 >> Cat(reg_req_addr.line_off(CACHE_LINE_BITS-1, 2), 0.U(5.W)))(WORD_LEN-1, 0)
+          io.cache.rdata := (io.cache_array1.rdata >> Cat(reg_req_addr.line_off(CACHE_LINE_BITS-1, 2), 0.U(5.W)))(WORD_LEN-1, 0)
+        }.otherwise {
+          // reg_read_word := (line2 >> Cat(reg_req_addr.line_off(CACHE_LINE_BITS-1, 2), 0.U(5.W)))(WORD_LEN-1, 0)
+          io.cache.rdata := (io.cache_array2.rdata >> Cat(reg_req_addr.line_off(CACHE_LINE_BITS-1, 2), 0.U(5.W)))(WORD_LEN-1, 0)
+        }
+        when (dcache_snoop_en) {
+          val req_addr = dcache_snoop_addr
+          reg_req_addr := req_addr
+          reg_tag := tag_array.read(req_addr.index)
+          io.cache_array1.addr := req_addr.index
+          io.cache_array1.en := true.B
+          io.cache_array1.we := 0.U
+          io.cache_array2.addr := req_addr.index
+          io.cache_array2.en := true.B
+          io.cache_array2.we := 0.U
+          dcache_state := DCacheState.SnoopRead
+        }.otherwise {
+          io.cache.rready := true.B
+          io.cache.wready := true.B
+          val req_addr = Mux(io.cache.ren, io.cache.raddr, io.cache.waddr).asTypeOf(new DCacheAddrBundle())
+          reg_req_addr := req_addr
+          reg_wdata := io.cache.wdata
+          reg_wstrb := io.cache.wstrb
+          reg_ren := io.cache.ren
+          reg_tag := tag_array.read(req_addr.index)
+          reg_lru := lru_array.read(req_addr.index)
+          io.cache_array1.addr := req_addr.index
+          io.cache_array1.en := true.B
+          io.cache_array1.we := 0.U
+          io.cache_array2.addr := req_addr.index
+          io.cache_array2.en := true.B
+          io.cache_array2.we := 0.U
+          // reg_dcache_read := true.B
+          when (io.cache.ren) {
+              dcache_state := DCacheState.LookupForRead
+          }.elsewhen (io.cache.wen) {
+              dcache_state := DCacheState.LookupForWrite
+          }.otherwise {
+            dcache_state := DCacheState.Ready
+          }
+        }
       }.elsewhen ((reg_lru.way_hot === 1.U && reg_lru.dirty1) || (reg_lru.way_hot === 0.U && reg_lru.dirty2)) {
+        when (dram_d_busy) {
+          dcache_state := DCacheState.WriteBack
+        }.otherwise {
+          dram_d_wen := true.B
+          dcache_state := DCacheState.ReadDramReq
+        }
+        when (reg_lru.way_hot === 1.U) {
+          dram_d_addr := Cat(reg_tag(0)(DCACHE_TAG_BITS-1, 0), reg_req_addr.index)
+          // dram_d_wdata := line1
+        }.otherwise {
+          dram_d_addr := Cat(reg_tag(1)(DCACHE_TAG_BITS-1, 0), reg_req_addr.index)
+          // dram_d_wdata := line2
+        }
+      }.otherwise {
+        when (dram_d_busy) {
+          dcache_state := DCacheState.WriteBack
+        }.otherwise {
+          dram_d_ren := true.B
+          dcache_state := DCacheState.WaitingReadDram
+        }
+        dram_d_addr := Cat(reg_req_addr.tag(DCACHE_TAG_BITS-1, 0), reg_req_addr.index)
+      }
+    }
+    is (DCacheState.WriteBack) {
+      reg_line := reg_line
+      dram_d_wdata := reg_line
+      when ((reg_lru.way_hot === 1.U && reg_lru.dirty1) || (reg_lru.way_hot === 0.U && reg_lru.dirty2)) {
         when (!dram_d_busy) {
           dram_d_wen := true.B
-          when (reg_lru.way_hot === 1.U) {
-            dram_d_addr := Cat(reg_tag(0)(DCACHE_TAG_BITS-1, 0), reg_req_addr.index)
-            dram_d_wdata := line1
-          }.otherwise {
-            dram_d_addr := Cat(reg_tag(1)(DCACHE_TAG_BITS-1, 0), reg_req_addr.index)
-            dram_d_wdata := line2
-          }
-          dcache_state := DCacheState.Read
+          dcache_state := DCacheState.ReadDramReq
+        }
+        when (reg_lru.way_hot === 1.U) {
+          dram_d_addr := Cat(reg_tag(0)(DCACHE_TAG_BITS-1, 0), reg_req_addr.index)
+          // dram_d_wdata := reg_line
+        }.otherwise {
+          dram_d_addr := Cat(reg_tag(1)(DCACHE_TAG_BITS-1, 0), reg_req_addr.index)
+          // dram_d_wdata := reg_line
         }
       }.otherwise {
         when (!dram_d_busy) {
           dram_d_ren := true.B
-          dram_d_addr := Cat(reg_req_addr.tag(DCACHE_TAG_BITS-1, 0), reg_req_addr.index)
-          dcache_state := DCacheState.WaitingRead
+          dcache_state := DCacheState.WaitingReadDram
         }
-      }
-    }
-    is (DCacheState.RespondRead) {
-      io.cache.rvalid := true.B
-      io.cache.rdata  := reg_read_word
-      when (dcache_snoop_en) {
-        val req_addr = dcache_snoop_addr
-        reg_req_addr := req_addr
-        reg_tag := tag_array.read(req_addr.index)
-        io.cache_array1.en := true.B
-        io.cache_array1.addr := req_addr.index
-        io.cache_array1.we := 0.U
-        io.cache_array2.en := true.B
-        io.cache_array2.addr := req_addr.index
-        io.cache_array2.we := 0.U
-        dcache_state := DCacheState.SnoopRead
-      }.otherwise {
-        io.cache.rready := true.B
-        io.cache.wready := true.B
-        val req_addr = Mux(io.cache.ren, io.cache.raddr, io.cache.waddr).asTypeOf(new DCacheAddrBundle())
-        reg_req_addr := req_addr
-        reg_wdata := io.cache.wdata
-        reg_wstrb := io.cache.wstrb
-        reg_ren := io.cache.ren
-        when (io.cache.ren || io.cache.wen) {
-          reg_tag := tag_array.read(req_addr.index)
-          io.cache_array1.en := true.B
-          io.cache_array1.addr := req_addr.index
-          io.cache_array1.we := 0.U
-          io.cache_array2.en := true.B
-          io.cache_array2.addr := req_addr.index
-          io.cache_array2.we := 0.U
-          reg_dcache_read := true.B
-          reg_lru := lru_array.read(req_addr.index)
-          when (io.cache.ren) {
-            dcache_state := DCacheState.LookupForRead
-          }.otherwise {
-            dcache_state := DCacheState.LookupForWrite
-          }
-        }.otherwise {
-          dcache_state := DCacheState.Ready
-        }
+        dram_d_addr := Cat(reg_req_addr.tag(DCACHE_TAG_BITS-1, 0), reg_req_addr.index)
       }
     }
     is (DCacheState.LookupForWrite) {
-      when (reg_dcache_read) {
-        reg_line1 := io.cache_array1.rdata
-        reg_line2 := io.cache_array2.rdata
-      }
-      val line1 = Mux(reg_dcache_read, io.cache_array1.rdata, reg_line1)
-      val line2 = Mux(reg_dcache_read, io.cache_array2.rdata, reg_line2)
+      // when (reg_dcache_read) {
+      //   reg_line1 := io.cache_array1.rdata
+      //   reg_line2 := io.cache_array2.rdata
+      // }
+      // val line1 = Mux(reg_dcache_read, io.cache_array1.rdata, reg_line1)
+      // val line2 = Mux(reg_dcache_read, io.cache_array2.rdata, reg_line2)
+      val wstrb = shiftLineMask(reg_wstrb, Cat(reg_req_addr.line_off(CACHE_LINE_BITS-1, 2), 0.U(2.W)))
+      val wdata = (extendToLine(reg_wdata) << Cat(reg_req_addr.line_off(CACHE_LINE_BITS-1, 2), 0.U(5.W)))(CACHE_LINE_LEN-1, 0)
+      io.cache_array1.addr := reg_req_addr.index
+      io.cache_array1.wdata := wdata
+      io.cache_array1.we := wstrb
+      io.cache_array2.addr := reg_req_addr.index
+      io.cache_array2.wdata := wdata
+      io.cache_array2.we := wstrb
+      dram_d_wdata := cold_line
       when (reg_tag(0) === reg_req_addr.tag) {
-        val wstrb = shiftLineMask(reg_wstrb, Cat(reg_req_addr.line_off(CACHE_LINE_BITS-1, 2), 0.U(2.W)))
-        val wdata = (extendToLine(reg_wdata) << Cat(reg_req_addr.line_off(CACHE_LINE_BITS-1, 2), 0.U(5.W)))(CACHE_LINE_LEN-1, 0)
         io.cache_array1.en := true.B
-        io.cache_array1.we := wstrb
-        io.cache_array1.addr := reg_req_addr.index
-        io.cache_array1.wdata := wdata
         lru_array.write(reg_req_addr.index, Cat(0.U, true.B, reg_lru.dirty2).asTypeOf(new LruBundle()))
         dcache_state := DCacheState.Ready
       }.elsewhen (reg_tag(1) === reg_req_addr.tag) {
-        val wstrb = shiftLineMask(reg_wstrb, Cat(reg_req_addr.line_off(CACHE_LINE_BITS-1, 2), 0.U(2.W)))
-        val wdata = extendToLine(reg_wdata) << Cat(reg_req_addr.line_off(CACHE_LINE_BITS-1, 2), 0.U(5.W))
         io.cache_array2.en := true.B
-        io.cache_array2.we := wstrb
-        io.cache_array2.addr := reg_req_addr.index
-        io.cache_array2.wdata := wdata
         lru_array.write(reg_req_addr.index, Cat(1.U, reg_lru.dirty1, true.B).asTypeOf(new LruBundle()))
         dcache_state := DCacheState.Ready
       }.elsewhen ((reg_lru.way_hot === 1.U && reg_lru.dirty1) || (reg_lru.way_hot === 0.U && reg_lru.dirty2)) {
-        when (!dram_d_busy) {
+        when (dram_d_busy) {
+          dcache_state := DCacheState.WriteBack
+        }.otherwise {
           dram_d_wen := true.B
-          when (reg_lru.way_hot === 1.U) {
-            dram_d_addr := Cat(reg_tag(0)(DCACHE_TAG_BITS-1, 0), reg_req_addr.index)
-            dram_d_wdata := line1
-          }.otherwise {
-            dram_d_addr := Cat(reg_tag(1)(DCACHE_TAG_BITS-1, 0), reg_req_addr.index)
-            dram_d_wdata := line2
-          }
-          dcache_state := DCacheState.Read
+          dcache_state := DCacheState.ReadDramReq
+        }
+        when (reg_lru.way_hot === 1.U) {
+          dram_d_addr := Cat(reg_tag(0)(DCACHE_TAG_BITS-1, 0), reg_req_addr.index)
+          // dram_d_wdata := line1
+        }.otherwise {
+          dram_d_addr := Cat(reg_tag(1)(DCACHE_TAG_BITS-1, 0), reg_req_addr.index)
+          // dram_d_wdata := line2
         }
       }.otherwise {
-        when (!dram_d_busy) {
+        when (dram_d_busy) {
+          dcache_state := DCacheState.WriteBack
+        }.otherwise {
           dram_d_ren := true.B
-          dram_d_addr := Cat(reg_req_addr.tag(DCACHE_TAG_BITS-1, 0), reg_req_addr.index)
-          dcache_state := DCacheState.WaitingRead
+          dcache_state := DCacheState.WaitingReadDram
         }
+        dram_d_addr := Cat(reg_req_addr.tag(DCACHE_TAG_BITS-1, 0), reg_req_addr.index)
       }
     }
-    is (DCacheState.Read) {
+    is (DCacheState.ReadDramReq) {
       when (!dram_d_busy) {
         dram_d_ren := true.B
         dram_d_addr := Cat(reg_req_addr.tag(DCACHE_TAG_BITS-1, 0), reg_req_addr.index)
-        dcache_state := DCacheState.WaitingRead
+        dcache_state := DCacheState.WaitingReadDram
       }
     }
-    is (DCacheState.WaitingRead) {
+    is (DCacheState.WaitingReadDram) {
       when (dram_d_rdata_valid) {
         val line = dram_rdata
         io.cache.rready := false.B
@@ -786,6 +836,17 @@ class Memory() extends Module {
   // printf(p"io.cache.wen     : ${io.cache.wen}\n")
   // printf(p"io.cache.raddr   : 0x${Hexadecimal(io.cache.raddr)}\n")
   // printf(p"io.cache.waddr   : 0x${Hexadecimal(io.cache.waddr)}\n")
+  // printf(p"io.cache.rdata   : 0x${Hexadecimal(io.cache.rdata)}\n")
+  // printf(p"io.cache_array1.en  : ${io.cache_array1.en}\n")
+  // printf(p"io.cache_array1.we  : ${io.cache_array1.we}\n")
+  // printf(p"io.cache_array1.addr: 0x${Hexadecimal(io.cache_array1.addr)}\n")
+  // printf(p"io.cache_array1.rdat: 0x${Hexadecimal(io.cache_array1.rdata)}\n")
+  // printf(p"io.cache_array1.wdat: 0x${Hexadecimal(io.cache_array1.wdata)}\n")
+  // printf(p"io.cache_array2.en  : ${io.cache_array2.en}\n")
+  // printf(p"io.cache_array2.we  : ${io.cache_array2.we}\n")
+  // printf(p"io.cache_array2.addr: 0x${Hexadecimal(io.cache_array2.addr)}\n")
+  // printf(p"io.cache_array2.rdat: 0x${Hexadecimal(io.cache_array2.rdata)}\n")
+  // printf(p"io.cache_array2.wdat: 0x${Hexadecimal(io.cache_array2.wdata)}\n")
   // printf(p"reg_req_addr    : 0x${Hexadecimal(reg_req_addr.asUInt)}\n")
   // printf(p"reg_req_addr.tag: 0x${Hexadecimal(reg_req_addr.tag)}\n")
   // printf(p"reg_req_addr.ind: 0x${Hexadecimal(reg_req_addr.index)}\n")
