@@ -226,9 +226,12 @@ class Core(
 
   // EX1/JBR State
   val jbr_reg_bp_en            = RegInit(false.B)
-  val jbr_reg_is_cond_br       = RegInit(false.B)
-  val jbr_reg_is_cond_br_inst  = RegInit(false.B)
-  val jbr_reg_is_uncond_br     = RegInit(false.B)
+  // val jbr_reg_is_cond_br       = RegInit(false.B)
+  // val jbr_reg_is_cond_br_inst  = RegInit(false.B)
+  // val jbr_reg_is_uncond_br     = RegInit(false.B)
+  val jbr_reg_is_jbr           = RegInit(false.B)
+  val jbr_reg_is_jbr_inst      = RegInit(false.B)
+  val jbr_reg_bp_failure       = RegInit(false.B)
   val jbr_reg_br_pc            = RegInit(0.U(PC_LEN.W))
   val jbr_reg_bp_taken         = RegInit(false.B)
   val jbr_reg_bp_taken_pc      = RegInit(0.U(PC_LEN.W))
@@ -1323,7 +1326,8 @@ class Core(
   ex1_orig_dividend := ex1_reg_op1_data
 
   // branch
-  val ex1_is_cond_br = MuxCase(false.B, Seq(
+  val ex1_is_cond_br = Wire(Bool())
+  ex1_is_cond_br := MuxCase(DontCare, Seq(
     (ex1_reg_exe_fun === BR_BEQ)  ->  (ex1_reg_op1_data === ex1_reg_op2_data),
     (ex1_reg_exe_fun === BR_BNE)  -> !(ex1_reg_op1_data === ex1_reg_op2_data),
     (ex1_reg_exe_fun === BR_BLT)  ->  (ex1_reg_op1_data.asSInt < ex1_reg_op2_data.asSInt),
@@ -1333,7 +1337,13 @@ class Core(
   ))
   val ex1_is_cond_br_inst = ex1_reg_is_br
   val ex1_is_uncond_br    = ex1_reg_is_j
-  val ex1_br_pc           = Mux(ex1_is_cond_br_inst, ex1_reg_direct_jbr_pc, ex1_add_out(WORD_LEN-1, WORD_LEN-PC_LEN))
+  // val ex1_br_pc           = Mux(ex1_is_cond_br_inst, ex1_reg_direct_jbr_pc, ex1_add_out(WORD_LEN-1, WORD_LEN-PC_LEN))
+  val ex1_br_pc = MuxCase(ex1_next_pc, Seq(
+    (ex1_is_cond_br_inst && ex1_is_cond_br) -> ex1_reg_direct_jbr_pc,
+    ex1_is_uncond_br                        -> ex1_add_out(WORD_LEN-1, WORD_LEN-PC_LEN),
+  ))
+  val ex1_predict_pc = Mux(ex1_reg_bp_taken, ex1_reg_bp_taken_pc, ex1_next_pc)
+  val ex1_bp_failure = ex1_br_pc =/= ex1_predict_pc
 
   ex1_fw_data := ex1_alu_out
 
@@ -1354,12 +1364,15 @@ class Core(
   // jump, br 命令ではストールは発生しないためストール時は単に更新しない
   when (!ex2_stall) {
     jbr_reg_bp_en            := ex1_reg_is_valid_inst && !ex2_reg_is_br
-    jbr_reg_is_cond_br       := ex1_is_cond_br && ex1_is_cond_br_inst
-    jbr_reg_is_cond_br_inst  := ex1_is_cond_br_inst
-    jbr_reg_is_uncond_br     := ex1_is_uncond_br
+    jbr_reg_is_jbr           := ex1_is_cond_br && ex1_is_cond_br_inst || ex1_is_uncond_br
+    jbr_reg_is_jbr_inst      := ex1_is_cond_br_inst || ex1_is_uncond_br
+    // jbr_reg_is_cond_br       := ex1_is_cond_br && ex1_is_cond_br_inst
+    // jbr_reg_is_cond_br_inst  := ex1_is_cond_br_inst
+    // jbr_reg_is_uncond_br     := ex1_is_uncond_br
+    jbr_reg_bp_failure       := ex1_bp_failure
     jbr_reg_br_pc            := ex1_br_pc
     jbr_reg_bp_taken         := ex1_reg_bp_taken
-    jbr_reg_bp_taken_pc      := ex1_reg_bp_taken_pc
+    // jbr_reg_bp_taken_pc      := ex1_reg_bp_taken_pc
     jbr_reg_bp_cnt           := ex1_reg_bp_cnt
     jbr_reg_is_half          := ex1_reg_is_half
   }
@@ -1368,28 +1381,33 @@ class Core(
   // Execute Jump/Branch (JBR) Stage
 
   val jbr_bp_en = jbr_reg_bp_en && !ex2_reg_is_br
-  val jbr_cond_bp_fail = jbr_bp_en && (
-    (!jbr_reg_bp_taken && jbr_reg_is_cond_br) ||
-    (jbr_reg_bp_taken && jbr_reg_is_cond_br && (jbr_reg_bp_taken_pc =/= jbr_reg_br_pc))
-  )
-  val jbr_cond_nbp_fail = jbr_bp_en && jbr_reg_bp_taken && jbr_reg_is_cond_br_inst && !jbr_reg_is_cond_br
-  val jbr_uncond_bp_fail = (jbr_bp_en && jbr_reg_is_uncond_br) && (
-    !jbr_reg_bp_taken ||
-    (jbr_reg_bp_taken && (jbr_reg_bp_taken_pc =/= jbr_reg_br_pc))
-  )
-  ex2_reg_br_pc := MuxCase(csr_br_pc, Seq(
-    jbr_cond_bp_fail   -> jbr_reg_br_pc,
-    jbr_cond_nbp_fail  -> Mux(jbr_reg_is_half, ex2_reg_pc + 1.U(PC_LEN.W), ex2_reg_pc + 2.U(PC_LEN.W)),
-    jbr_uncond_bp_fail -> jbr_reg_br_pc,
-  ))
-  jbr_is_br := jbr_cond_bp_fail || jbr_cond_nbp_fail || jbr_uncond_bp_fail
+  // val jbr_cond_bp_fail = jbr_bp_en && (
+  //   (!jbr_reg_bp_taken && jbr_reg_is_cond_br) ||
+  //   (jbr_reg_bp_taken && jbr_reg_is_cond_br && (jbr_reg_bp_taken_pc =/= jbr_reg_br_pc))
+  // )
+  // val jbr_cond_nbp_fail = jbr_bp_en && jbr_reg_bp_taken && jbr_reg_is_cond_br_inst && !jbr_reg_is_cond_br
+  // val jbr_uncond_bp_fail = (jbr_bp_en && jbr_reg_is_uncond_br) && (
+  //   !jbr_reg_bp_taken ||
+  //   (jbr_reg_bp_taken && (jbr_reg_bp_taken_pc =/= jbr_reg_br_pc))
+  // )
+  // ex2_reg_br_pc := MuxCase(csr_br_pc, Seq(
+  //   jbr_cond_bp_fail   -> jbr_reg_br_pc,
+  //   jbr_cond_nbp_fail  -> Mux(jbr_reg_is_half, ex2_reg_pc + 1.U(PC_LEN.W), ex2_reg_pc + 2.U(PC_LEN.W)),
+  //   jbr_uncond_bp_fail -> jbr_reg_br_pc,
+  // ))
+  ex2_reg_br_pc := Mux(csr_is_br, csr_br_pc, jbr_reg_br_pc)
+  // jbr_is_br := jbr_cond_bp_fail || jbr_cond_nbp_fail || jbr_uncond_bp_fail
+  jbr_is_br := jbr_bp_en && jbr_reg_bp_failure
 
-  ic_btb.io.up.en       := jbr_bp_en && (jbr_reg_is_cond_br || jbr_reg_is_uncond_br)
+  // ic_btb.io.up.en       := jbr_bp_en && (jbr_reg_is_cond_br || jbr_reg_is_uncond_br)
+  ic_btb.io.up.en       := jbr_bp_en && jbr_reg_is_jbr
   ic_btb.io.up.pc       := ex2_reg_pc
   ic_btb.io.up.taken_pc := jbr_reg_br_pc
-  ic_pht.io.up.en       := jbr_bp_en && (jbr_reg_is_cond_br_inst || jbr_reg_is_uncond_br)
+  // ic_pht.io.up.en       := jbr_bp_en && (jbr_reg_is_cond_br_inst || jbr_reg_is_uncond_br)
+  ic_pht.io.up.en       := jbr_bp_en && jbr_reg_is_jbr_inst
   ic_pht.io.up.pc       := ex2_reg_pc
-  ic_pht.io.up.cnt      := Mux(jbr_reg_is_cond_br || jbr_reg_is_uncond_br,
+  // ic_pht.io.up.cnt      := Mux(jbr_reg_is_cond_br || jbr_reg_is_uncond_br,
+  ic_pht.io.up.cnt      := Mux(jbr_reg_is_jbr,
     Cat(jbr_reg_bp_cnt(0, 0), (!jbr_reg_bp_cnt(1) | jbr_reg_bp_cnt(0)).asUInt),
     Cat(!jbr_reg_bp_cnt(0, 0), (jbr_reg_bp_cnt(1) & jbr_reg_bp_cnt(0)).asUInt),
   )
@@ -1475,7 +1493,7 @@ class Core(
   ex2_is_valid_inst := ex2_en && !csr_is_trap
   val csr_is_mret = csr_is_valid_inst && !csr_is_meintr && !csr_is_mtintr && ex2_reg_is_mret
 
-  val csr_rdata = MuxLookup(ex2_reg_csr_addr, 0.U(WORD_LEN.W), Seq(
+  val csr_rdata = MuxLookup(ex2_reg_csr_addr, 0.U(WORD_LEN.W))(Seq(
     CSR_ADDR_MTVEC    -> Cat(csr_reg_trap_vector, 0.U((WORD_LEN-PC_LEN).W)),
     CSR_ADDR_TIME     -> mtimer.io.mtime(31, 0),
     CSR_ADDR_CYCLE    -> cycle_counter.io.value(31, 0),
