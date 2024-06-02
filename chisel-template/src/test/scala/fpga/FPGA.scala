@@ -43,7 +43,7 @@ class RiscvTest extends FixtureAnyFlatSpec with ChiselScalatestTester with TestD
     ("rv32ui-p-blt", 1000),
     ("rv32ui-p-bltu", 1000),
     ("rv32ui-p-bne", 1000),
-    // ("rv32ui-p-fence_i", 1000),
+    ("rv32ui-p-fence_i", 1000),
     ("rv32ui-p-jal", 1000),
     ("rv32ui-p-jalr", 1000),
     ("rv32ui-p-lb", 1000),
