@@ -482,19 +482,19 @@ class Memory() extends Module {
       io.icache_valid.iaddr := 1.U(1.W)
       io.icache_valid.idata := 0.U((1 << ICACHE_INVALIDATE_DATA_BITS).W)
       i_reg_cur_tag_index := Fill(ICACHE_TAG_BITS+ICACHE_INDEX_BITS, 1.U(1.W))
-      val req_addr = io.imem.addr.asTypeOf(new ICacheAddrBundle())
-      i_reg_req_addr := req_addr
-      i_reg_addr_match := true.B
-      when (io.imem.en) {
-        i_reg_tag := i_tag_array.read(req_addr.index)
-        io.icache.ren := true.B
-        io.icache.raddr := Cat(req_addr.index, req_addr.line_off(CACHE_LINE_BITS-1, 2))
-        io.icache_valid.ren := true.B
-        io.icache_valid.addr := req_addr.index(ICACHE_INDEX_BITS-1, ICACHE_INVALIDATE_ADDR_BITS)
-        icache_state := ICacheState.Lookup
-      }.otherwise {
+      // val req_addr = io.imem.addr.asTypeOf(new ICacheAddrBundle())
+      // i_reg_req_addr := req_addr
+      // i_reg_addr_match := true.B
+      // when (io.imem.en) {
+      //   i_reg_tag := i_tag_array.read(req_addr.index)
+      //   io.icache.ren := true.B
+      //   io.icache.raddr := Cat(req_addr.index, req_addr.line_off(CACHE_LINE_BITS-1, 2))
+      //   io.icache_valid.ren := true.B
+      //   io.icache_valid.addr := req_addr.index(ICACHE_INDEX_BITS-1, ICACHE_INVALIDATE_ADDR_BITS)
+      //   icache_state := ICacheState.Lookup
+      // }.otherwise {
         icache_state := ICacheState.Ready
-      }
+      // }
     }
   }
 
