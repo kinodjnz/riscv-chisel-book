@@ -238,7 +238,6 @@ class Core(
   val ex2_reg_wb_sel        = RegInit(0.U(WB_SEL_LEN.W))
   val ex2_reg_alu_out       = RegInit(0.U(WORD_LEN.W))
   val ex2_reg_pc_bit_out    = RegInit(0.U(WORD_LEN.W))
-  val ex2_reg_wdata         = RegInit(0.U(WORD_LEN.W))
   val ex2_reg_is_valid_inst = RegInit(false.B)
   // val ex2_reminder          = Wire(UInt(WORD_LEN.W))
   // val ex2_quotient          = Wire(UInt(WORD_LEN.W))
@@ -254,6 +253,7 @@ class Core(
 
   // EX1/MEM1 State
   val mem1_reg_mem_wstrb     = RegInit(0.U((WORD_LEN/8).W))
+  val mem1_reg_wdata         = RegInit(0.U(WORD_LEN.W))
   val mem1_reg_mem_w         = RegInit(0.U(MW_LEN.W))
   val mem1_reg_mem_use_reg   = RegInit(false.B)
   val mem1_reg_is_dram       = RegInit(false.B)
@@ -1500,7 +1500,6 @@ class Core(
     ex2_reg_rf_wen     := Mux(ex1_en, ex1_reg_rf_wen, REN_X)
     ex2_reg_wb_sel     := ex1_reg_wb_sel
     ex2_reg_no_mem     := (ex1_reg_wb_sel =/= WB_LD && ex1_reg_wb_sel =/= WB_ST && ex1_reg_wb_sel =/= WB_FENCE) && ex1_en
-    ex2_reg_wdata      := (ex1_reg_op3_data << (8.U * ex1_add_out(1, 0)))(WORD_LEN-1, 0)
     ex2_reg_is_valid_inst := ex1_is_valid_inst
     ex2_reg_divrem            := ex1_divrem && ex1_en
     ex2_reg_div_stall         := ex2_div_stall_next ||
@@ -1748,6 +1747,7 @@ class Core(
       (ex1_reg_mem_w === MW_H || ex1_reg_mem_w === MW_HU) -> "b0011".U,
       //(ex1_reg_mem_w === MW_W) -> "b1111".U,
     )) << (ex1_add_out(1, 0)))(3, 0)
+    mem1_reg_wdata         := (ex1_reg_op3_data << (8.U * ex1_add_out(1, 0)))(WORD_LEN-1, 0)
     mem1_reg_mem_w         := ex1_reg_mem_w
     mem1_reg_mem_use_reg   := ex1_reg_mem_use_reg && ex1_en
     val mem1_is_dram       = ex1_add_out(WORD_LEN-1, dram_addr_bits) === dram_start.U(WORD_LEN-1, dram_addr_bits)
@@ -1771,13 +1771,13 @@ class Core(
   io.dmem.ren   := mem1_reg_is_mem_load
   io.dmem.wen   := mem1_reg_is_mem_store
   io.dmem.wstrb := mem1_reg_mem_wstrb
-  io.dmem.wdata := ex2_reg_wdata
+  io.dmem.wdata := mem1_reg_wdata
   io.cache.raddr := ex2_reg_alu_out
   io.cache.waddr := ex2_reg_alu_out
   io.cache.ren   := mem1_reg_is_dram_load
   io.cache.wen   := mem1_reg_is_dram_store
   io.cache.wstrb := mem1_reg_mem_wstrb
-  io.cache.wdata := ex2_reg_wdata
+  io.cache.wdata := mem1_reg_wdata
   io.cache.iinvalidate := mem1_reg_is_dram_fence
 
   mem1_mem_stall := (mem1_reg_is_mem_load && !io.dmem.rready) || (mem1_reg_is_mem_store && !io.dmem.wready)
@@ -1958,8 +1958,8 @@ class Core(
   printf(p"ex2_wb_data      : 0x${Hexadecimal(ex2_wb_data)}\n")
   printf(p"ex2_alu_muldiv_ou: 0x${Hexadecimal(ex2_alu_muldiv_out)}\n")
   printf(p"ex2_reg_wb_addr  : 0x${Hexadecimal(ex2_reg_wb_addr)}\n")
-  printf(p"ex2_reg_wdata    : 0x${Hexadecimal(ex2_reg_wdata)}\n")
   // printf(p"mem1_reg_mem_w    : 0x${Hexadecimal(mem1_reg_mem_w)}\n")
+  printf(p"mem1_reg_wdata    : 0x${Hexadecimal(mem1_reg_wdata)}\n")
   printf(p"mem1_mem_stall   : 0x${Hexadecimal(mem1_mem_stall)}\n")
   printf(p"mem1_dram_stall  : 0x${Hexadecimal(mem1_dram_stall)}\n")
   printf(p"mem1_is_valid_ins: 0x${Hexadecimal(mem1_reg_is_valid_inst)}\n")
