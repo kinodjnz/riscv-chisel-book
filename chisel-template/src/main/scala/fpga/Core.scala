@@ -252,7 +252,7 @@ class Core(
   val ex2_reg_no_mem        = RegInit(false.B)
 
   // EX1/MEM1 State
-  val mem1_reg_mem_wstrb     = RegInit(0.U((WORD_LEN/8).W))
+  val mem1_reg_mem_wstrb     = RegInit(0.U(7.W))
   val mem1_reg_wdata         = RegInit(0.U(WORD_LEN.W))
   val mem1_reg_mem_w         = RegInit(0.U(MW_LEN.W))
   val mem1_reg_mem_use_reg   = RegInit(false.B)
@@ -263,6 +263,7 @@ class Core(
   val mem1_reg_is_dram_store = RegInit(false.B)
   val mem1_reg_is_dram_fence = RegInit(false.B)
   val mem1_reg_is_valid_inst = RegInit(false.B)
+  val mem1_reg_unaligned     = RegInit(false.B)
 
   // MEM1/MEM2 State
   val mem2_reg_wb_byte_offset = RegInit(0.U(2.W))
@@ -274,15 +275,19 @@ class Core(
   val mem2_reg_is_valid_inst  = RegInit(false.B)
   val mem2_reg_is_mem_load    = RegInit(false.B)
   val mem2_reg_is_dram_load   = RegInit(false.B)
+  val mem2_reg_unaligned      = RegInit(false.B)
 
   // MEM2/MEM3 State
   val mem3_reg_wb_byte_offset = RegInit(0.U(2.W))
   val mem3_reg_mem_w          = RegInit(0.U(MW_LEN.W))
   val mem3_reg_dmem_rdata     = RegInit(0.U(WORD_LEN.W))
+  val mem3_reg_rdata_high     = RegInit(0.U(24.W))
   val mem3_reg_wb_addr        = RegInit(0.U(WORD_LEN.W))
   val mem3_reg_is_valid_load  = RegInit(false.B)
   val mem3_reg_is_valid_inst  = RegInit(false.B)
   val mem3_reg_mem_use_reg    = RegInit(false.B)
+  val mem3_reg_unaligned      = RegInit(false.B)
+  val mem3_reg_is_aligned_lw  = RegInit(false.B)
 
   val id_reg_is_bp_fail    = RegInit(true.B) // jump start_address when first time
   val id_reg_br_pc         = RegInit((start_address >> (WORD_LEN-PC_LEN)).U(PC_LEN.W))
@@ -820,7 +825,9 @@ class Core(
     (id_op1_sel === OP1_PC)     -> Cat(id_reg_pc, 0.U((WORD_LEN-PC_LEN).W)),
     (id_op1_sel === OP1_IMZ)    -> id_imm_z_uext,
   ))
-  val id_op2_data = MuxCase(0.U(WORD_LEN.W), Seq(
+  val id_op2_data = Wire(UInt(WORD_LEN.W))
+  id_op2_data := MuxCase(DontCare, Seq(
+    (id_op2_sel === OP2_Z)       -> 0.U(WORD_LEN.W),
     (id_op2_sel === OP2_IMI)     -> id_imm_i_sext,
     (id_op2_sel === OP2_IMS)     -> id_imm_s_sext,
     (id_op2_sel === OP2_IMJ)     -> id_imm_j_sext,
@@ -1746,8 +1753,12 @@ class Core(
       (ex1_reg_mem_w === MW_B || ex1_reg_mem_w === MW_BU) -> "b0001".U,
       (ex1_reg_mem_w === MW_H || ex1_reg_mem_w === MW_HU) -> "b0011".U,
       //(ex1_reg_mem_w === MW_W) -> "b1111".U,
-    )) << (ex1_add_out(1, 0)))(3, 0)
-    mem1_reg_wdata         := (ex1_reg_op3_data << (8.U * ex1_add_out(1, 0)))(WORD_LEN-1, 0)
+    )) << (ex1_add_out(1, 0)))(6, 0)
+    mem1_reg_unaligned     := MuxCase(ex1_add_out(1, 0) =/= "b00".U, Seq(
+      (ex1_reg_mem_w === MW_B || ex1_reg_mem_w === MW_BU) -> false.B,
+      (ex1_reg_mem_w === MW_H || ex1_reg_mem_w === MW_HU) -> (ex1_add_out(1, 0) === "b11".U),
+    )) && (ex1_reg_wb_sel === WB_LD || ex1_reg_wb_sel === WB_ST) && ex1_en
+    mem1_reg_wdata         := (Cat(ex1_reg_op3_data, ex1_reg_op3_data(31, 8)) << (8.U * ex1_add_out(1, 0)))(WORD_LEN+23, WORD_LEN-8)
     mem1_reg_mem_w         := ex1_reg_mem_w
     mem1_reg_mem_use_reg   := ex1_reg_mem_use_reg && ex1_en
     val mem1_is_dram       = ex1_add_out(WORD_LEN-1, dram_addr_bits) === dram_start.U(WORD_LEN-1, dram_addr_bits)
@@ -1766,29 +1777,33 @@ class Core(
   //**********************************
   // Memory Access Stage 1 (MEM1)
 
-  io.dmem.raddr := ex2_reg_alu_out
-  io.dmem.waddr := ex2_reg_alu_out
+  when (!mem1_mem_stall && !mem1_dram_stall && mem1_reg_unaligned) {
+    mem1_reg_unaligned       := false.B
+  }
+
+  val mem_addr  = Mux(mem1_reg_unaligned, ex2_reg_alu_out + 4.U, ex2_reg_alu_out)
+  val mem_wstrb = Mux(mem1_reg_unaligned, Cat(0.U(1.W), mem1_reg_mem_wstrb(6, 4)), mem1_reg_mem_wstrb(3, 0))
+  io.dmem.raddr := mem_addr
+  io.dmem.waddr := mem_addr
   io.dmem.ren   := mem1_reg_is_mem_load
   io.dmem.wen   := mem1_reg_is_mem_store
-  io.dmem.wstrb := mem1_reg_mem_wstrb
+  io.dmem.wstrb := mem_wstrb
   io.dmem.wdata := mem1_reg_wdata
-  io.cache.raddr := ex2_reg_alu_out
-  io.cache.waddr := ex2_reg_alu_out
+  io.cache.raddr := mem_addr
+  io.cache.waddr := mem_addr
   io.cache.ren   := mem1_reg_is_dram_load
   io.cache.wen   := mem1_reg_is_dram_store
-  io.cache.wstrb := mem1_reg_mem_wstrb
+  io.cache.wstrb := mem_wstrb
   io.cache.wdata := mem1_reg_wdata
   io.cache.iinvalidate := mem1_reg_is_dram_fence
 
   mem1_mem_stall := (mem1_reg_is_mem_load && !io.dmem.rready) || (mem1_reg_is_mem_store && !io.dmem.wready)
-  mem1_dram_stall := false.B
-
-  mem_stall := mem1_mem_stall || mem1_dram_stall || mem2_stall
-
   mem1_dram_stall :=
     (mem1_reg_is_dram_load && !io.cache.rready) ||
     (mem1_reg_is_dram_store && !io.cache.wready) ||
     (mem1_reg_is_dram_fence && io.cache.ibusy)
+
+  mem_stall := mem1_mem_stall || mem1_dram_stall || mem1_reg_unaligned || mem2_stall
 
   if (enable_pipeline_probe) {
     io.pipeline_probe.mem1_valid   := mem1_reg_is_valid_inst
@@ -1807,6 +1822,7 @@ class Core(
     mem2_reg_is_valid_inst  := !mem1_mem_stall && !mem1_dram_stall && mem1_reg_is_valid_inst
     mem2_reg_is_mem_load    := !mem1_mem_stall && mem1_reg_is_mem_load
     mem2_reg_is_dram_load   := !mem1_dram_stall && mem1_reg_is_dram_load
+    mem2_reg_unaligned      := mem1_reg_unaligned
     if (enable_pipeline_probe) {
       mem2_reg_inst_id     := mem1_reg_inst_id
     }
@@ -1819,13 +1835,16 @@ class Core(
   mem2_stall := mem2_mem_stall || mem2_dram_stall
 
   if (enable_pipeline_probe) {
-    io.pipeline_probe.mem2_valid   := mem2_reg_is_valid_inst
+    io.pipeline_probe.mem2_valid   := !mem2_reg_unaligned && mem2_reg_is_valid_inst
     io.pipeline_probe.mem2_inst_id := mem2_reg_inst_id
   }
 
-  val mem2_is_valid_load = !mem2_stall && mem2_reg_is_valid_load
-  val mem2_fw_en_next = mem2_is_valid_load
-  when (mem2_is_valid_load) {
+  val mem2_is_valid_load = !mem2_stall && !mem2_reg_unaligned && mem2_reg_is_valid_load
+  val mem2_is_aligned_lw = !mem2_stall && mem2_reg_is_valid_load && mem2_reg_wb_byte_offset === "b00".U &&
+    mem2_reg_mem_w =/= MW_B && mem2_reg_mem_w =/= MW_BU &&
+    mem2_reg_mem_w =/= MW_H && mem2_reg_mem_w =/= MW_HU
+  val mem2_fw_en_next = mem2_is_aligned_lw
+  when (mem2_is_aligned_lw) {
     scoreboard(mem2_reg_wb_addr) := false.B
   }
 
@@ -1835,10 +1854,12 @@ class Core(
   mem3_reg_mem_w          := mem2_reg_mem_w
   mem3_reg_dmem_rdata     := Mux(mem2_reg_is_dram_load, io.cache.rdata, io.dmem.rdata)
   mem3_reg_wb_addr        := mem2_reg_wb_addr
-  mem3_reg_is_valid_load  := !mem2_stall && mem2_is_valid_load
+  mem3_reg_is_valid_load  := !mem2_stall && !mem2_reg_unaligned && mem2_is_valid_load
   // mem3_reg_mem_use_reg    := !mem2_dram_stall && mem2_reg_mem_use_reg
-  mem3_reg_is_valid_inst  := !mem2_stall && mem2_reg_is_valid_inst
+  mem3_reg_is_valid_inst  := !mem2_stall && !mem2_reg_unaligned && mem2_reg_is_valid_inst
   mem3_reg_fw_en          := mem2_fw_en_next
+  mem3_reg_unaligned      := mem2_reg_unaligned
+  mem3_reg_is_aligned_lw  := mem2_is_aligned_lw
   if (enable_pipeline_probe) {
     when (!mem2_stall) {
       mem3_reg_inst_id    := mem2_reg_inst_id
@@ -1854,20 +1875,23 @@ class Core(
       Fill(WORD_LEN - w, 0.U) ## value(w - 1, 0)
   }
 
-  val mem3_wb_rdata = mem3_reg_dmem_rdata >> (8.U * mem3_reg_wb_byte_offset)
+  when (mem3_reg_unaligned) {
+    mem3_reg_rdata_high := mem3_reg_dmem_rdata(23, 0)
+  }
+  val mem3_wb_rdata = (Cat(mem3_reg_rdata_high, mem3_reg_dmem_rdata) >> (8.U * mem3_reg_wb_byte_offset))(WORD_LEN-1, 0)
   val mem3_wb_data_load = MuxCase(mem3_wb_rdata, Seq(
     (mem3_reg_mem_w === MW_B)  -> signExtend(mem3_wb_rdata, 8),
     (mem3_reg_mem_w === MW_H)  -> signExtend(mem3_wb_rdata, 16),
     (mem3_reg_mem_w === MW_BU) -> zeroExtend(mem3_wb_rdata, 8),
     (mem3_reg_mem_w === MW_HU) -> zeroExtend(mem3_wb_rdata, 16),
   ))
-  mem3_fw_data := mem3_wb_data_load
+  mem3_fw_data := mem3_reg_dmem_rdata
   when (mem3_reg_is_valid_load) {
     regfile(mem3_reg_wb_addr) := mem3_wb_data_load
   }
-  // when (mem3_reg_mem_use_reg) {
-  //   scoreboard(mem3_reg_wb_addr) := false.B
-  // }
+  when (mem3_reg_is_valid_inst && !mem3_reg_is_aligned_lw && !mem3_reg_unaligned) {
+    scoreboard(mem3_reg_wb_addr) := false.B
+  }
   mem3_reg_is_retired := mem3_reg_is_valid_inst
 
   when (ex2_reg_is_retired && mem3_reg_is_retired) {
@@ -1962,6 +1986,7 @@ class Core(
   printf(p"mem1_reg_wdata    : 0x${Hexadecimal(mem1_reg_wdata)}\n")
   printf(p"mem1_mem_stall   : 0x${Hexadecimal(mem1_mem_stall)}\n")
   printf(p"mem1_dram_stall  : 0x${Hexadecimal(mem1_dram_stall)}\n")
+  printf(p"mem1_reg_unaligne: 0x${Hexadecimal(mem1_reg_unaligned)}\n")
   printf(p"mem1_is_valid_ins: 0x${Hexadecimal(mem1_reg_is_valid_inst)}\n")
   printf(p"mem2_mem_stall   : 0x${Hexadecimal(mem2_mem_stall)}\n")
   printf(p"mem2_dram_stall  : 0x${Hexadecimal(mem2_dram_stall)}\n")
@@ -1970,8 +1995,12 @@ class Core(
   printf(p"mem2_reg_is_valid: 0x${Hexadecimal(mem2_reg_is_valid_inst)}\n")
   printf(p"mem2_reg_is_mem_l: 0x${Hexadecimal(mem2_reg_is_mem_load)}\n")
   printf(p"mem2_reg_is_dram_: 0x${Hexadecimal(mem2_reg_is_dram_load)}\n")
+  printf(p"mem2_reg_unaligne: 0x${Hexadecimal(mem2_reg_unaligned)}\n")
+  printf(p"mem2_is_aligned_l: 0x${Hexadecimal(mem2_is_aligned_lw)}\n")
   printf(p"mem3_reg_dmem_rda: 0x${Hexadecimal(mem3_reg_dmem_rdata)}\n")
   printf(p"mem3_wb_data_load: 0x${Hexadecimal(mem3_wb_data_load)}\n")
+  printf(p"mem3_reg_unaligne: 0x${Hexadecimal(mem3_reg_unaligned)}\n")
+  printf(p"mem3_reg_is_align: 0x${Hexadecimal(mem3_reg_is_aligned_lw)}\n")
   printf(p"mem3_reg_is_valid: 0x${Hexadecimal(mem3_reg_is_valid_inst)}\n")
   // printf(p"mem3_reg_mem_use_: 0x${Hexadecimal(mem3_reg_mem_use_reg)}\n")
   printf(p"csr_is_meintr    : ${csr_is_meintr}\n")

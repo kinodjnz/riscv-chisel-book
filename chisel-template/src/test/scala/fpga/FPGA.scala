@@ -98,6 +98,10 @@ class RiscvTest extends FixtureAnyFlatSpec with ChiselScalatestTester with TestD
     ("rv32uzbb-p-sext_h", 1000),
     ("rv32uzbb-p-xnor", 1000),
     ("rv32uzbb-p-zext_h", 1000),
+    ("rv32mi-p-lh-misaligned", 1000),
+    ("rv32mi-p-lw-misaligned", 1000),
+    ("rv32mi-p-sh-misaligned", 1000),
+    ("rv32mi-p-sw-misaligned", 1000),
   )
   for ((code, timeOut) <- tests) {
     it must f"runs ${code}" in { td: TestData =>

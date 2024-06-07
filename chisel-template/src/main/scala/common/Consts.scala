@@ -79,7 +79,7 @@ object Consts {
   val M_OP1_IMM = 1.U(M_OP1_LEN.W)
 
   val OP2_LEN     = 5
-  val OP2_X       =  0.U(OP2_LEN.W)
+  val OP2_X       = 30.U(OP2_LEN.W)
   val OP2_Z       =  0.U(OP2_LEN.W)
   val OP2_RS2     =  1.U(OP2_LEN.W)
   val OP2_C_RS2   =  2.U(OP2_LEN.W)
