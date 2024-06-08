@@ -627,7 +627,8 @@ class Core(
   id_reg_stall := id_stall
 
   // branch,jump時にIDをBUBBLE化
-  val id_inst = Mux(ex2_reg_is_br || id_reg_is_bp_fail, BUBBLE, id_reg_inst)
+  // val id_inst = Mux(ex2_reg_is_br || id_reg_is_bp_fail, BUBBLE, id_reg_inst)
+  val id_inst = id_reg_inst
 
   val id_is_half = (id_inst(1, 0) =/= 3.U)
 
@@ -943,7 +944,7 @@ class Core(
   val id_reg_mcause_delay     = RegInit(0.U(WORD_LEN.W))
   // val id_reg_mtval_delay      = RegInit(0.U(WORD_LEN.W))
 
-  when (ex2_reg_is_br) {
+  when (ex2_reg_is_br || id_reg_is_bp_fail) {
     when (!id_reg_stall) {
       id_reg_pc_delay          := id_reg_pc
       id_reg_op1_sel_delay    := id_m_op1_sel
@@ -1009,7 +1010,7 @@ class Core(
 
   //**********************************
   // ID/RRD register
-  when (ex2_reg_is_br) {
+  when (ex2_reg_is_br || id_reg_is_bp_fail) {
     when(id_reg_stall) {
       rrd_reg_pc            := id_reg_pc_delay
       rrd_reg_op1_sel       := id_reg_op1_sel_delay
