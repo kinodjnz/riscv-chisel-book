@@ -32,6 +32,7 @@ object Consts {
   val ALU_ORN     = 11.U(EXE_FUN_LEN.W)
   val ALU_CMOV    = 15.U(EXE_FUN_LEN.W)
 
+  val ALU_BSCTH   =  3.U(EXE_FUN_LEN.W)
   val ALU_CLZ     =  4.U(EXE_FUN_LEN.W)
   val ALU_CTZ     =  5.U(EXE_FUN_LEN.W)
   val ALU_CPOP    =  6.U(EXE_FUN_LEN.W)

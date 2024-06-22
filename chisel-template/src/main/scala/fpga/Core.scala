@@ -155,7 +155,7 @@ class Core(
 
   // IF/ID State
   val id_reg_valid_inst     = RegInit(false.B)
-  val id_reg_inst           = RegInit(0.U(WORD_LEN.W))
+  val id_reg_inst           = RegInit(BUBBLE)
   val id_reg_bp_taken       = RegInit(false.B)
   val id_reg_pc             = RegInit(0.U(PC_LEN.W))
   val id_reg_bp_taken_pc    = RegInit(0.U(PC_LEN.W))
@@ -269,7 +269,7 @@ class Core(
   val mem2_reg_wb_byte_offset = RegInit(0.U(2.W))
   val mem2_reg_mem_w          = RegInit(0.U(MW_LEN.W))
   // val mem2_reg_dmem_rdata     = RegInit(0.U(WORD_LEN.W))
-  val mem2_reg_wb_addr        = RegInit(0.U(WORD_LEN.W))
+  val mem2_reg_wb_addr        = RegInit(0.U(ADDR_LEN.W))
   val mem2_reg_is_valid_load  = RegInit(false.B)
   val mem2_reg_mem_use_reg    = RegInit(false.B)
   val mem2_reg_is_valid_inst  = RegInit(false.B)
@@ -282,7 +282,7 @@ class Core(
   val mem3_reg_mem_w          = RegInit(0.U(MW_LEN.W))
   val mem3_reg_dmem_rdata     = RegInit(0.U(WORD_LEN.W))
   val mem3_reg_rdata_high     = RegInit(0.U(24.W))
-  val mem3_reg_wb_addr        = RegInit(0.U(WORD_LEN.W))
+  val mem3_reg_wb_addr        = RegInit(0.U(ADDR_LEN.W))
   val mem3_reg_is_valid_load  = RegInit(false.B)
   val mem3_reg_is_valid_inst  = RegInit(false.B)
   val mem3_reg_mem_use_reg    = RegInit(false.B)
@@ -319,7 +319,7 @@ class Core(
   val ex1_en               = Wire(Bool())
   val ex2_reg_en           = RegInit(false.B)
 
-  val if2_reg_inst_id      = RegInit(0.U(inst_id_len.W))
+  val if2_reg_inst_id      = RegInit(Fill(inst_id_len, 1.U(1.W)))
   val id_reg_inst_id_delay = RegInit(0.U(inst_id_len.W))
   val rrd_reg_inst_id      = RegInit(0.U(inst_id_len.W))
   val ex1_reg_inst_id      = RegInit(0.U(inst_id_len.W))
@@ -755,6 +755,7 @@ class Core(
       ROL        -> List(ALU_FSL   , OP1_RS1   , OP2_RS2    , OP3_OP1   , REN_S, WB_ALU, WBA_RD , CSR_X, MW_X),
       ROR        -> List(ALU_FSR   , OP1_RS1   , OP2_RS2    , OP3_OP1   , REN_S, WB_ALU, WBA_RD , CSR_X, MW_X),
       RORI       -> List(ALU_FSR   , OP1_RS1   , OP2_IMI    , OP3_OP1   , REN_S, WB_ALU, WBA_RD , CSR_X, MW_X),
+      BSCTH      -> List(ALU_BSCTH , OP1_RS1   , OP2_RS2    , OP3_X     , REN_S, WB_BIT, WBA_RD , CSR_X, MW_X),
       CMOV       -> List(ALU_CMOV  , OP1_RS1   , OP2_RS2    , OP3_RS3   , REN_S, WB_ALU, WBA_RD , CSR_X, MW_X),
       FSL        -> List(ALU_FSL   , OP1_RS1   , OP2_RS2    , OP3_RS3   , REN_S, WB_ALU, WBA_RD , CSR_X, MW_X),
       FSR        -> List(ALU_FSR   , OP1_RS1   , OP2_RS2    , OP3_RS3   , REN_S, WB_ALU, WBA_RD , CSR_X, MW_X),
@@ -1279,6 +1280,14 @@ class Core(
   val ex1_mulhss = (ex1_reg_op1_data.asSInt * ex1_reg_op2_data(WORD_LEN-1, WORD_LEN/2).asSInt)
   val ex1_mulhsu = (ex1_reg_op1_data.asSInt * ex1_reg_op2_data(WORD_LEN-1, WORD_LEN/2))
 
+  def scatter_bit(value: UInt, mask: UInt, bit: Int): UInt = {
+    if (bit == 0) {
+      Mux(mask(bit).asBool, value(0), 0.U(1.W))
+    } else {
+      Mux(mask(bit).asBool, (value >> PopCount(mask(bit - 1, 0)))(0), 0.U(1.W))
+    }
+  }
+
   val ex1_next_pc = Mux(ex1_reg_is_half, ex1_reg_pc + 1.U(PC_LEN.W), ex1_reg_pc + 2.U(PC_LEN.W))
   val ex1_pc_bit_out = MuxCase(0.U(WORD_LEN.W), Seq(
     (ex1_reg_wb_sel === WB_PC)      -> Cat(ex1_next_pc, 0.U(1.W)),
@@ -1293,6 +1302,7 @@ class Core(
     (ex1_reg_exe_fun === ALU_MAXU)  -> Mux(ex1_reg_op1_data < ex1_reg_op2_data, ex1_reg_op2_data, ex1_reg_op1_data),
     (ex1_reg_exe_fun === ALU_MIN)   -> Mux(ex1_reg_op1_data.asSInt < ex1_reg_op2_data.asSInt, ex1_reg_op1_data, ex1_reg_op2_data),
     (ex1_reg_exe_fun === ALU_MINU)  -> Mux(ex1_reg_op1_data < ex1_reg_op2_data, ex1_reg_op1_data, ex1_reg_op2_data),
+    (ex1_reg_exe_fun === ALU_BSCTH) -> Cat((0 until 16).reverse.map(bit => scatter_bit(ex1_reg_op1_data, ex1_reg_op2_data, bit))),
   ))
 
   val ex1_divrem = WireDefault(false.B)
@@ -1890,7 +1900,7 @@ class Core(
   when (mem3_reg_is_valid_load) {
     regfile(mem3_reg_wb_addr) := mem3_wb_data_load
   }
-  when (mem3_reg_is_valid_inst && !mem3_reg_is_aligned_lw && !mem3_reg_unaligned) {
+  when (mem3_reg_is_valid_load && !mem3_reg_is_aligned_lw) {
     scoreboard(mem3_reg_wb_addr) := false.B
   }
   mem3_reg_is_retired := mem3_reg_is_valid_inst
@@ -1962,6 +1972,10 @@ class Core(
   printf(p"rrd_reg_op1_sel  : 0x${Hexadecimal(rrd_reg_op1_sel)}\n")
   // printf(p"ex1_reg_fw_en    : 0x${Hexadecimal(ex1_reg_fw_en)}\n")
   printf(p"rrd_reg_rs1_addr : 0x${Hexadecimal(rrd_reg_rs1_addr)}\n")
+  printf(p"rrd_reg_wb_addr : 0x${Hexadecimal(rrd_reg_wb_addr)}\n")
+  printf(p"rrd_reg_rf_wen : 0x${Hexadecimal(rrd_reg_rf_wen)}\n")
+  printf(p"rrd_reg_wb_sel : 0x${Hexadecimal(rrd_reg_wb_sel)}\n")
+  printf(p"scoreboard      : 0x${Hexadecimal(Cat((0 until 32).map(i => scoreboard(i).asUInt)))}\n")
   printf(p"ex1_fw_data      : 0x${Hexadecimal(ex1_fw_data)}\n")
   printf(p"ex1_reg_pc       : 0x${Hexadecimal(Cat(ex1_reg_pc, 0.U(1.W)))}\n")
   printf(p"ex1_reg_is_valid_: 0x${Hexadecimal(ex1_reg_is_valid_inst)}\n")
@@ -1998,11 +2012,13 @@ class Core(
   printf(p"mem2_reg_is_dram_: 0x${Hexadecimal(mem2_reg_is_dram_load)}\n")
   printf(p"mem2_reg_unaligne: 0x${Hexadecimal(mem2_reg_unaligned)}\n")
   printf(p"mem2_is_aligned_l: 0x${Hexadecimal(mem2_is_aligned_lw)}\n")
+  printf(p"mem2_reg_wb_addr : 0x${Hexadecimal(mem2_reg_wb_addr)}\n")
   printf(p"mem3_reg_dmem_rda: 0x${Hexadecimal(mem3_reg_dmem_rdata)}\n")
   printf(p"mem3_wb_data_load: 0x${Hexadecimal(mem3_wb_data_load)}\n")
   printf(p"mem3_reg_unaligne: 0x${Hexadecimal(mem3_reg_unaligned)}\n")
   printf(p"mem3_reg_is_align: 0x${Hexadecimal(mem3_reg_is_aligned_lw)}\n")
   printf(p"mem3_reg_is_valid: 0x${Hexadecimal(mem3_reg_is_valid_inst)}\n")
+  printf(p"mem3_reg_wb_addr : 0x${Hexadecimal(mem3_reg_wb_addr)}\n")
   // printf(p"mem3_reg_mem_use_: 0x${Hexadecimal(mem3_reg_mem_use_reg)}\n")
   printf(p"csr_is_meintr    : ${csr_is_meintr}\n")
   printf(p"csr_is_mtintr    : ${csr_is_mtintr}\n")

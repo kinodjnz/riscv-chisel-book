@@ -1,0 +1,60 @@
+
+target/bsct.elf.fat:	file format elf32-littleriscv
+
+Disassembly of section .text:
+
+00000000 <_start>:
+       0: 37 41 00 20  	lui	sp, 131076
+       4: 11 28        	jal	0x18 <main>
+       6: aa 81        	mv	gp, a0
+       8: 93 08 d0 05  	li	a7, 93
+       c: 01 00        	nop
+       e: 01 00        	nop
+      10: 01 00        	nop
+      12: 01 00        	nop
+      14: 73 00 00 00  	ecall
+
+00000018 <main>:
+      18: 09 a0        	j	0x1a <.Ltmp0>
+
+0000001a <.Ltmp0>:
+      1a: 89 41        	li	gp, 2
+      1c: 93 00 90 03  	li	ra, 57
+      20: 37 61 20 01  	lui	sp, 4614
+      24: 13 01 91 05  	addi	sp, sp, 89
+      28: 33 96 20 4a  	bsct.h	a2, ra, sp
+      2c: 99 63        	lui	t2, 6
+      2e: 93 83 13 04  	addi	t2, t2, 65   # 00006041
+      32: 63 14 76 00  	bne	a2, t2, 0x3a <.Ltmp1>
+      36: 63 01 76 02  	beq	a2, t2, 0x58 <.Ltmp2>
+
+0000003a <.Ltmp1>:
+      3a: 0f 00 f0 0f  	fence
+
+0000003e <.Ltmp3>:
+      3e: 63 80 01 00  	beqz	gp, 0x3e <.Ltmp3>
+      42: 86 01        	slli	gp, gp, 1
+      44: 93 e1 11 00  	ori	gp, gp, 1
+      48: 93 08 d0 05  	li	a7, 93
+      4c: 0e 85        	mv	a0, gp
+      4e: 73 00 00 00  	ecall
+      52: 01 00        	nop
+      54: 01 00        	nop
+      56: d5 b7        	j	0x3a <.Ltmp1>
+
+00000058 <.Ltmp2>:
+      58: 0f 00 f0 0f  	fence
+      5c: 85 41        	li	gp, 1
+      5e: 93 08 d0 05  	li	a7, 93
+      62: 01 45        	li	a0, 0
+      64: 73 00 00 00  	ecall
+      68: 01 00        	nop
+      6a: 01 00        	nop
+      6c: f5 b7        	j	0x58 <.Ltmp2>
+      6e: 01 45        	li	a0, 0
+      70: 82 80        	ret
+
+Disassembly of section .data:
+
+00000072 <.data>:
+      72: 00 00        	unimp
