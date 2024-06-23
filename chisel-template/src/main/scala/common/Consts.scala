@@ -30,6 +30,7 @@ object Consts {
   val ALU_XNOR    =  9.U(EXE_FUN_LEN.W)
   val ALU_ANDN    = 10.U(EXE_FUN_LEN.W)
   val ALU_ORN     = 11.U(EXE_FUN_LEN.W)
+  val ALU_SHADD   = 12.U(EXE_FUN_LEN.W)
   val ALU_CMOV    = 15.U(EXE_FUN_LEN.W)
 
   val ALU_BSCTH   =  3.U(EXE_FUN_LEN.W)
