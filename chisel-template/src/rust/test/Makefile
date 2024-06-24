@@ -17,7 +17,7 @@ ASOPT = --arch=$(ARCH) --mattr=+c,+m,$(INSN_OPT),+relax
 ADDRESS_COMMENT = ../address_comment.rb
 
 target/lib%.a: src/bin/%.rs
-	rustc --target=$(TARGET)  -C target-feature=+zbb,+xcramp,+relax -C opt-level=s -C lto=true -C codegen-units=1 -C panic=abort --crate-type=staticlib --out-dir=target $<
+	rustc --target=$(TARGET) -C relocation-model=pic -C target-feature=+zba,+zbs,+zbb,+xcramp,+relax -C opt-level=s -C lto=true -C codegen-units=1 -C panic=abort --crate-type=staticlib --out-dir=target $<
 	# rustc --target=$(TARGET) -C relocation-model=pic -C target-feature=+zbb,+xcramp,+relax -C opt-level=s -C lto=true -C codegen-units=1 -C panic=abort --crate-type=staticlib --out-dir=target $<
 
 target/%.o: src/%.S
