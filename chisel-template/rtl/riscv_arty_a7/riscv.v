@@ -537,26 +537,26 @@ module Core(
   reg [31:0] _RAND_67;
   reg [31:0] _RAND_68;
   reg [31:0] _RAND_69;
-  reg [63:0] _RAND_70;
+  reg [31:0] _RAND_70;
   reg [31:0] _RAND_71;
-  reg [63:0] _RAND_72;
-  reg [63:0] _RAND_73;
+  reg [31:0] _RAND_72;
+  reg [31:0] _RAND_73;
   reg [63:0] _RAND_74;
   reg [31:0] _RAND_75;
-  reg [31:0] _RAND_76;
-  reg [31:0] _RAND_77;
-  reg [31:0] _RAND_78;
+  reg [63:0] _RAND_76;
+  reg [63:0] _RAND_77;
+  reg [63:0] _RAND_78;
   reg [31:0] _RAND_79;
   reg [31:0] _RAND_80;
   reg [31:0] _RAND_81;
   reg [31:0] _RAND_82;
   reg [31:0] _RAND_83;
   reg [31:0] _RAND_84;
-  reg [63:0] _RAND_85;
+  reg [31:0] _RAND_85;
   reg [31:0] _RAND_86;
   reg [31:0] _RAND_87;
   reg [31:0] _RAND_88;
-  reg [31:0] _RAND_89;
+  reg [63:0] _RAND_89;
   reg [31:0] _RAND_90;
   reg [31:0] _RAND_91;
   reg [31:0] _RAND_92;
@@ -640,15 +640,21 @@ module Core(
   reg [31:0] _RAND_170;
   reg [31:0] _RAND_171;
   reg [31:0] _RAND_172;
-  reg [63:0] _RAND_173;
-  reg [63:0] _RAND_174;
-  reg [63:0] _RAND_175;
+  reg [31:0] _RAND_173;
+  reg [31:0] _RAND_174;
+  reg [31:0] _RAND_175;
   reg [31:0] _RAND_176;
   reg [31:0] _RAND_177;
   reg [31:0] _RAND_178;
-  reg [31:0] _RAND_179;
-  reg [31:0] _RAND_180;
-  reg [31:0] _RAND_181;
+  reg [63:0] _RAND_179;
+  reg [63:0] _RAND_180;
+  reg [63:0] _RAND_181;
+  reg [31:0] _RAND_182;
+  reg [31:0] _RAND_183;
+  reg [31:0] _RAND_184;
+  reg [31:0] _RAND_185;
+  reg [31:0] _RAND_186;
+  reg [31:0] _RAND_187;
 `endif // RANDOMIZE_REG_INIT
   reg [31:0] regfile [0:31]; // @[src/main/scala/fpga/Core.scala 133:20]
   wire  regfile_rrd_op1_data_MPORT_en; // @[src/main/scala/fpga/Core.scala 133:20]
@@ -809,27 +815,27 @@ module Core(
   wire [4:0] scoreboard_MPORT_6_addr; // @[src/main/scala/fpga/Core.scala 149:25]
   wire  scoreboard_MPORT_6_mask; // @[src/main/scala/fpga/Core.scala 149:25]
   wire  scoreboard_MPORT_6_en; // @[src/main/scala/fpga/Core.scala 149:25]
-  wire  ic_btb_clock; // @[src/main/scala/fpga/Core.scala 354:22]
-  wire  ic_btb_reset; // @[src/main/scala/fpga/Core.scala 354:22]
-  wire [30:0] ic_btb_io_lu_pc; // @[src/main/scala/fpga/Core.scala 354:22]
-  wire  ic_btb_io_lu_matches0; // @[src/main/scala/fpga/Core.scala 354:22]
-  wire [30:0] ic_btb_io_lu_taken_pc0; // @[src/main/scala/fpga/Core.scala 354:22]
-  wire  ic_btb_io_lu_matches1; // @[src/main/scala/fpga/Core.scala 354:22]
-  wire [30:0] ic_btb_io_lu_taken_pc1; // @[src/main/scala/fpga/Core.scala 354:22]
-  wire  ic_btb_io_up_en; // @[src/main/scala/fpga/Core.scala 354:22]
-  wire [30:0] ic_btb_io_up_pc; // @[src/main/scala/fpga/Core.scala 354:22]
-  wire [30:0] ic_btb_io_up_taken_pc; // @[src/main/scala/fpga/Core.scala 354:22]
-  wire [30:0] ic_pht_io_lu_pc; // @[src/main/scala/fpga/Core.scala 355:22]
-  wire [1:0] ic_pht_io_lu_cnt0; // @[src/main/scala/fpga/Core.scala 355:22]
-  wire [1:0] ic_pht_io_lu_cnt1; // @[src/main/scala/fpga/Core.scala 355:22]
-  wire  ic_pht_io_up_en; // @[src/main/scala/fpga/Core.scala 355:22]
-  wire [30:0] ic_pht_io_up_pc; // @[src/main/scala/fpga/Core.scala 355:22]
-  wire [1:0] ic_pht_io_up_cnt; // @[src/main/scala/fpga/Core.scala 355:22]
-  wire  ic_pht_io_mem_wen; // @[src/main/scala/fpga/Core.scala 355:22]
-  wire [11:0] ic_pht_io_mem_raddr; // @[src/main/scala/fpga/Core.scala 355:22]
-  wire [3:0] ic_pht_io_mem_rdata; // @[src/main/scala/fpga/Core.scala 355:22]
-  wire [12:0] ic_pht_io_mem_waddr; // @[src/main/scala/fpga/Core.scala 355:22]
-  wire [1:0] ic_pht_io_mem_wdata; // @[src/main/scala/fpga/Core.scala 355:22]
+  wire  ic_btb_clock; // @[src/main/scala/fpga/Core.scala 358:22]
+  wire  ic_btb_reset; // @[src/main/scala/fpga/Core.scala 358:22]
+  wire [30:0] ic_btb_io_lu_pc; // @[src/main/scala/fpga/Core.scala 358:22]
+  wire  ic_btb_io_lu_matches0; // @[src/main/scala/fpga/Core.scala 358:22]
+  wire [30:0] ic_btb_io_lu_taken_pc0; // @[src/main/scala/fpga/Core.scala 358:22]
+  wire  ic_btb_io_lu_matches1; // @[src/main/scala/fpga/Core.scala 358:22]
+  wire [30:0] ic_btb_io_lu_taken_pc1; // @[src/main/scala/fpga/Core.scala 358:22]
+  wire  ic_btb_io_up_en; // @[src/main/scala/fpga/Core.scala 358:22]
+  wire [30:0] ic_btb_io_up_pc; // @[src/main/scala/fpga/Core.scala 358:22]
+  wire [30:0] ic_btb_io_up_taken_pc; // @[src/main/scala/fpga/Core.scala 358:22]
+  wire [30:0] ic_pht_io_lu_pc; // @[src/main/scala/fpga/Core.scala 359:22]
+  wire [1:0] ic_pht_io_lu_cnt0; // @[src/main/scala/fpga/Core.scala 359:22]
+  wire [1:0] ic_pht_io_lu_cnt1; // @[src/main/scala/fpga/Core.scala 359:22]
+  wire  ic_pht_io_up_en; // @[src/main/scala/fpga/Core.scala 359:22]
+  wire [30:0] ic_pht_io_up_pc; // @[src/main/scala/fpga/Core.scala 359:22]
+  wire [1:0] ic_pht_io_up_cnt; // @[src/main/scala/fpga/Core.scala 359:22]
+  wire  ic_pht_io_mem_wen; // @[src/main/scala/fpga/Core.scala 359:22]
+  wire [11:0] ic_pht_io_mem_raddr; // @[src/main/scala/fpga/Core.scala 359:22]
+  wire [3:0] ic_pht_io_mem_rdata; // @[src/main/scala/fpga/Core.scala 359:22]
+  wire [12:0] ic_pht_io_mem_waddr; // @[src/main/scala/fpga/Core.scala 359:22]
+  wire [1:0] ic_pht_io_mem_wdata; // @[src/main/scala/fpga/Core.scala 359:22]
   reg [63:0] instret; // @[src/main/scala/fpga/Core.scala 138:24]
   reg [30:0] csr_reg_trap_vector; // @[src/main/scala/fpga/Core.scala 139:37]
   reg [31:0] csr_reg_mcause; // @[src/main/scala/fpga/Core.scala 140:37]
@@ -861,337 +867,342 @@ module Core(
   reg [11:0] rrd_reg_csr_addr; // @[src/main/scala/fpga/Core.scala 184:38]
   reg [1:0] rrd_reg_csr_cmd; // @[src/main/scala/fpga/Core.scala 185:38]
   reg [31:0] rrd_reg_imm_b_sext; // @[src/main/scala/fpga/Core.scala 186:38]
-  reg [2:0] rrd_reg_mem_w; // @[src/main/scala/fpga/Core.scala 187:38]
-  reg  rrd_reg_is_br; // @[src/main/scala/fpga/Core.scala 189:38]
-  reg  rrd_reg_is_j; // @[src/main/scala/fpga/Core.scala 190:38]
-  reg  rrd_reg_bp_taken; // @[src/main/scala/fpga/Core.scala 191:38]
-  reg [30:0] rrd_reg_bp_taken_pc; // @[src/main/scala/fpga/Core.scala 192:38]
-  reg [1:0] rrd_reg_bp_cnt; // @[src/main/scala/fpga/Core.scala 193:38]
-  reg  rrd_reg_is_half; // @[src/main/scala/fpga/Core.scala 194:38]
-  reg  rrd_reg_is_valid_inst; // @[src/main/scala/fpga/Core.scala 195:38]
-  reg  rrd_reg_is_trap; // @[src/main/scala/fpga/Core.scala 196:38]
-  reg [31:0] rrd_reg_mcause; // @[src/main/scala/fpga/Core.scala 197:38]
-  reg [30:0] ex1_reg_pc; // @[src/main/scala/fpga/Core.scala 201:38]
-  reg [4:0] ex1_reg_wb_addr; // @[src/main/scala/fpga/Core.scala 202:38]
-  reg [31:0] ex1_reg_op1_data; // @[src/main/scala/fpga/Core.scala 203:38]
-  reg [31:0] ex1_reg_op2_data; // @[src/main/scala/fpga/Core.scala 204:38]
-  reg [31:0] ex1_reg_op3_data; // @[src/main/scala/fpga/Core.scala 205:38]
-  reg [3:0] ex1_reg_exe_fun; // @[src/main/scala/fpga/Core.scala 206:38]
-  reg  ex1_reg_rf_wen; // @[src/main/scala/fpga/Core.scala 207:38]
-  reg [2:0] ex1_reg_wb_sel; // @[src/main/scala/fpga/Core.scala 208:38]
-  reg [11:0] ex1_reg_csr_addr; // @[src/main/scala/fpga/Core.scala 209:38]
-  reg [1:0] ex1_reg_csr_cmd; // @[src/main/scala/fpga/Core.scala 210:38]
-  reg [2:0] ex1_reg_mem_w; // @[src/main/scala/fpga/Core.scala 211:38]
-  reg  ex1_reg_is_j; // @[src/main/scala/fpga/Core.scala 212:38]
-  reg  ex1_reg_bp_taken; // @[src/main/scala/fpga/Core.scala 213:38]
-  reg [30:0] ex1_reg_bp_taken_pc; // @[src/main/scala/fpga/Core.scala 214:38]
-  reg [1:0] ex1_reg_bp_cnt; // @[src/main/scala/fpga/Core.scala 215:38]
-  reg  ex1_reg_is_half; // @[src/main/scala/fpga/Core.scala 216:38]
-  reg  ex1_reg_is_valid_inst; // @[src/main/scala/fpga/Core.scala 217:38]
-  reg  ex1_reg_is_trap; // @[src/main/scala/fpga/Core.scala 218:38]
-  reg  ex1_reg_is_mret; // @[src/main/scala/fpga/Core.scala 219:38]
-  reg [31:0] ex1_reg_mcause; // @[src/main/scala/fpga/Core.scala 220:38]
-  reg  ex1_reg_mem_use_reg; // @[src/main/scala/fpga/Core.scala 222:38]
-  reg  ex1_reg_inst2_use_reg; // @[src/main/scala/fpga/Core.scala 223:38]
-  reg  ex1_reg_inst3_use_reg; // @[src/main/scala/fpga/Core.scala 224:38]
-  reg  ex1_reg_is_br; // @[src/main/scala/fpga/Core.scala 225:38]
-  reg [30:0] ex1_reg_direct_jbr_pc; // @[src/main/scala/fpga/Core.scala 226:38]
-  reg [30:0] ex2_reg_pc; // @[src/main/scala/fpga/Core.scala 229:38]
-  reg [4:0] ex2_reg_wb_addr; // @[src/main/scala/fpga/Core.scala 230:38]
-  reg [47:0] ex2_reg_mullu; // @[src/main/scala/fpga/Core.scala 231:38]
-  reg [31:0] ex2_reg_mulls; // @[src/main/scala/fpga/Core.scala 232:38]
-  reg [47:0] ex2_reg_mulhuu; // @[src/main/scala/fpga/Core.scala 233:38]
-  reg [47:0] ex2_reg_mulhss; // @[src/main/scala/fpga/Core.scala 234:38]
-  reg [47:0] ex2_reg_mulhsu; // @[src/main/scala/fpga/Core.scala 235:38]
-  reg [3:0] ex2_reg_exe_fun; // @[src/main/scala/fpga/Core.scala 236:38]
-  reg  ex2_reg_rf_wen; // @[src/main/scala/fpga/Core.scala 237:38]
-  reg [2:0] ex2_reg_wb_sel; // @[src/main/scala/fpga/Core.scala 238:38]
-  reg [31:0] ex2_reg_alu_out; // @[src/main/scala/fpga/Core.scala 239:38]
-  reg [31:0] ex2_reg_pc_bit_out; // @[src/main/scala/fpga/Core.scala 240:38]
-  reg  ex2_reg_is_valid_inst; // @[src/main/scala/fpga/Core.scala 241:38]
-  reg  ex2_reg_divrem; // @[src/main/scala/fpga/Core.scala 244:38]
-  reg  ex2_reg_sign_op1; // @[src/main/scala/fpga/Core.scala 245:38]
-  reg  ex2_reg_sign_op12; // @[src/main/scala/fpga/Core.scala 246:38]
-  reg  ex2_reg_zero_op2; // @[src/main/scala/fpga/Core.scala 247:38]
-  reg [36:0] ex2_reg_init_dividend; // @[src/main/scala/fpga/Core.scala 248:38]
-  reg [31:0] ex2_reg_init_divisor; // @[src/main/scala/fpga/Core.scala 249:38]
-  reg [31:0] ex2_reg_orig_dividend; // @[src/main/scala/fpga/Core.scala 250:38]
-  reg  ex2_reg_inst3_use_reg; // @[src/main/scala/fpga/Core.scala 251:38]
-  reg  ex2_reg_no_mem; // @[src/main/scala/fpga/Core.scala 252:38]
-  reg [6:0] mem1_reg_mem_wstrb; // @[src/main/scala/fpga/Core.scala 255:39]
-  reg [31:0] mem1_reg_wdata; // @[src/main/scala/fpga/Core.scala 256:39]
-  reg [2:0] mem1_reg_mem_w; // @[src/main/scala/fpga/Core.scala 257:39]
-  reg  mem1_reg_is_mem_load; // @[src/main/scala/fpga/Core.scala 260:39]
-  reg  mem1_reg_is_mem_store; // @[src/main/scala/fpga/Core.scala 261:39]
-  reg  mem1_reg_is_dram_load; // @[src/main/scala/fpga/Core.scala 262:39]
-  reg  mem1_reg_is_dram_store; // @[src/main/scala/fpga/Core.scala 263:39]
-  reg  mem1_reg_is_dram_fence; // @[src/main/scala/fpga/Core.scala 264:39]
-  reg  mem1_reg_is_valid_inst; // @[src/main/scala/fpga/Core.scala 265:39]
-  reg  mem1_reg_unaligned; // @[src/main/scala/fpga/Core.scala 266:39]
-  reg [1:0] mem2_reg_wb_byte_offset; // @[src/main/scala/fpga/Core.scala 269:40]
-  reg [2:0] mem2_reg_mem_w; // @[src/main/scala/fpga/Core.scala 270:40]
-  reg [4:0] mem2_reg_wb_addr; // @[src/main/scala/fpga/Core.scala 272:40]
-  reg  mem2_reg_is_valid_load; // @[src/main/scala/fpga/Core.scala 273:40]
-  reg  mem2_reg_is_valid_inst; // @[src/main/scala/fpga/Core.scala 275:40]
-  reg  mem2_reg_is_mem_load; // @[src/main/scala/fpga/Core.scala 276:40]
-  reg  mem2_reg_is_dram_load; // @[src/main/scala/fpga/Core.scala 277:40]
-  reg  mem2_reg_unaligned; // @[src/main/scala/fpga/Core.scala 278:40]
-  reg [1:0] mem3_reg_wb_byte_offset; // @[src/main/scala/fpga/Core.scala 281:40]
-  reg [2:0] mem3_reg_mem_w; // @[src/main/scala/fpga/Core.scala 282:40]
-  reg [31:0] mem3_reg_dmem_rdata; // @[src/main/scala/fpga/Core.scala 283:40]
-  reg [23:0] mem3_reg_rdata_high; // @[src/main/scala/fpga/Core.scala 284:40]
-  reg [4:0] mem3_reg_wb_addr; // @[src/main/scala/fpga/Core.scala 285:40]
-  reg  mem3_reg_is_valid_load; // @[src/main/scala/fpga/Core.scala 286:40]
-  reg  mem3_reg_is_valid_inst; // @[src/main/scala/fpga/Core.scala 287:40]
-  reg  mem3_reg_unaligned; // @[src/main/scala/fpga/Core.scala 289:40]
-  reg  mem3_reg_is_aligned_lw; // @[src/main/scala/fpga/Core.scala 290:40]
-  reg  id_reg_is_bp_fail; // @[src/main/scala/fpga/Core.scala 292:37]
-  reg [30:0] id_reg_br_pc; // @[src/main/scala/fpga/Core.scala 293:37]
-  reg  ex1_reg_fw_en; // @[src/main/scala/fpga/Core.scala 301:37]
-  reg  ex2_reg_fw_en; // @[src/main/scala/fpga/Core.scala 303:37]
-  reg  mem3_reg_fw_en; // @[src/main/scala/fpga/Core.scala 305:37]
-  reg  ex2_reg_div_stall; // @[src/main/scala/fpga/Core.scala 308:37]
-  reg [2:0] ex2_reg_divrem_state; // @[src/main/scala/fpga/Core.scala 310:37]
-  reg  ex2_reg_is_br; // @[src/main/scala/fpga/Core.scala 311:37]
-  reg [30:0] ex2_reg_br_pc; // @[src/main/scala/fpga/Core.scala 312:37]
-  reg  ex2_reg_is_retired; // @[src/main/scala/fpga/Core.scala 317:37]
-  reg  mem3_reg_is_retired; // @[src/main/scala/fpga/Core.scala 318:37]
-  reg  ic_reg_read_rdy; // @[src/main/scala/fpga/Core.scala 338:33]
-  reg  ic_reg_half_rdy; // @[src/main/scala/fpga/Core.scala 339:33]
-  reg [30:0] ic_reg_imem_addr; // @[src/main/scala/fpga/Core.scala 343:33]
-  reg [30:0] ic_reg_addr_out; // @[src/main/scala/fpga/Core.scala 344:33]
-  reg [31:0] ic_reg_inst; // @[src/main/scala/fpga/Core.scala 347:34]
-  reg [30:0] ic_reg_inst_addr; // @[src/main/scala/fpga/Core.scala 348:34]
-  reg [31:0] ic_reg_inst2; // @[src/main/scala/fpga/Core.scala 349:34]
-  reg [2:0] ic_state; // @[src/main/scala/fpga/Core.scala 352:25]
-  reg  ic_reg_bp_next_taken0; // @[src/main/scala/fpga/Core.scala 360:41]
-  reg [30:0] ic_reg_bp_next_taken_pc0; // @[src/main/scala/fpga/Core.scala 361:41]
-  reg [1:0] ic_reg_bp_next_cnt0; // @[src/main/scala/fpga/Core.scala 362:41]
-  reg  ic_reg_bp_next_taken1; // @[src/main/scala/fpga/Core.scala 363:41]
-  reg [30:0] ic_reg_bp_next_taken_pc1; // @[src/main/scala/fpga/Core.scala 364:41]
-  reg [1:0] ic_reg_bp_next_cnt1; // @[src/main/scala/fpga/Core.scala 365:41]
-  reg  ic_reg_bp_next_taken2; // @[src/main/scala/fpga/Core.scala 366:41]
-  reg [30:0] ic_reg_bp_next_taken_pc2; // @[src/main/scala/fpga/Core.scala 367:41]
-  reg [1:0] ic_reg_bp_next_cnt2; // @[src/main/scala/fpga/Core.scala 368:41]
-  wire [30:0] ic_imem_addr_2 = {ic_reg_imem_addr[30:1],1'h1}; // @[src/main/scala/fpga/Core.scala 370:27]
-  wire [30:0] ic_imem_addr_4 = ic_reg_imem_addr + 31'h2; // @[src/main/scala/fpga/Core.scala 371:41]
-  wire [30:0] ic_inst_addr_2 = {ic_reg_inst_addr[30:1],1'h1}; // @[src/main/scala/fpga/Core.scala 372:27]
-  wire [31:0] _io_imem_addr_T = {ic_reg_imem_addr,1'h0}; // @[src/main/scala/fpga/Core.scala 373:22]
+  reg [1:0] rrd_reg_shamt; // @[src/main/scala/fpga/Core.scala 187:38]
+  reg  rrd_reg_op2op; // @[src/main/scala/fpga/Core.scala 188:38]
+  reg [2:0] rrd_reg_mem_w; // @[src/main/scala/fpga/Core.scala 189:38]
+  reg  rrd_reg_is_br; // @[src/main/scala/fpga/Core.scala 191:38]
+  reg  rrd_reg_is_j; // @[src/main/scala/fpga/Core.scala 192:38]
+  reg  rrd_reg_bp_taken; // @[src/main/scala/fpga/Core.scala 193:38]
+  reg [30:0] rrd_reg_bp_taken_pc; // @[src/main/scala/fpga/Core.scala 194:38]
+  reg [1:0] rrd_reg_bp_cnt; // @[src/main/scala/fpga/Core.scala 195:38]
+  reg  rrd_reg_is_half; // @[src/main/scala/fpga/Core.scala 196:38]
+  reg  rrd_reg_is_valid_inst; // @[src/main/scala/fpga/Core.scala 197:38]
+  reg  rrd_reg_is_trap; // @[src/main/scala/fpga/Core.scala 198:38]
+  reg [31:0] rrd_reg_mcause; // @[src/main/scala/fpga/Core.scala 199:38]
+  reg [30:0] ex1_reg_pc; // @[src/main/scala/fpga/Core.scala 203:38]
+  reg [4:0] ex1_reg_wb_addr; // @[src/main/scala/fpga/Core.scala 204:38]
+  reg [31:0] ex1_reg_op1_data; // @[src/main/scala/fpga/Core.scala 205:38]
+  reg [31:0] ex1_reg_op2_data; // @[src/main/scala/fpga/Core.scala 206:38]
+  reg [31:0] ex1_reg_op3_data; // @[src/main/scala/fpga/Core.scala 207:38]
+  reg [3:0] ex1_reg_exe_fun; // @[src/main/scala/fpga/Core.scala 208:38]
+  reg  ex1_reg_rf_wen; // @[src/main/scala/fpga/Core.scala 209:38]
+  reg [2:0] ex1_reg_wb_sel; // @[src/main/scala/fpga/Core.scala 210:38]
+  reg [11:0] ex1_reg_csr_addr; // @[src/main/scala/fpga/Core.scala 211:38]
+  reg [1:0] ex1_reg_csr_cmd; // @[src/main/scala/fpga/Core.scala 212:38]
+  reg [1:0] ex1_reg_shamt; // @[src/main/scala/fpga/Core.scala 213:38]
+  reg  ex1_reg_op2op; // @[src/main/scala/fpga/Core.scala 214:38]
+  reg [2:0] ex1_reg_mem_w; // @[src/main/scala/fpga/Core.scala 215:38]
+  reg  ex1_reg_is_j; // @[src/main/scala/fpga/Core.scala 216:38]
+  reg  ex1_reg_bp_taken; // @[src/main/scala/fpga/Core.scala 217:38]
+  reg [30:0] ex1_reg_bp_taken_pc; // @[src/main/scala/fpga/Core.scala 218:38]
+  reg [1:0] ex1_reg_bp_cnt; // @[src/main/scala/fpga/Core.scala 219:38]
+  reg  ex1_reg_is_half; // @[src/main/scala/fpga/Core.scala 220:38]
+  reg  ex1_reg_is_valid_inst; // @[src/main/scala/fpga/Core.scala 221:38]
+  reg  ex1_reg_is_trap; // @[src/main/scala/fpga/Core.scala 222:38]
+  reg  ex1_reg_is_mret; // @[src/main/scala/fpga/Core.scala 223:38]
+  reg [31:0] ex1_reg_mcause; // @[src/main/scala/fpga/Core.scala 224:38]
+  reg  ex1_reg_mem_use_reg; // @[src/main/scala/fpga/Core.scala 226:38]
+  reg  ex1_reg_inst2_use_reg; // @[src/main/scala/fpga/Core.scala 227:38]
+  reg  ex1_reg_inst3_use_reg; // @[src/main/scala/fpga/Core.scala 228:38]
+  reg  ex1_reg_is_br; // @[src/main/scala/fpga/Core.scala 229:38]
+  reg [30:0] ex1_reg_direct_jbr_pc; // @[src/main/scala/fpga/Core.scala 230:38]
+  reg [30:0] ex2_reg_pc; // @[src/main/scala/fpga/Core.scala 233:38]
+  reg [4:0] ex2_reg_wb_addr; // @[src/main/scala/fpga/Core.scala 234:38]
+  reg [47:0] ex2_reg_mullu; // @[src/main/scala/fpga/Core.scala 235:38]
+  reg [31:0] ex2_reg_mulls; // @[src/main/scala/fpga/Core.scala 236:38]
+  reg [47:0] ex2_reg_mulhuu; // @[src/main/scala/fpga/Core.scala 237:38]
+  reg [47:0] ex2_reg_mulhss; // @[src/main/scala/fpga/Core.scala 238:38]
+  reg [47:0] ex2_reg_mulhsu; // @[src/main/scala/fpga/Core.scala 239:38]
+  reg [3:0] ex2_reg_exe_fun; // @[src/main/scala/fpga/Core.scala 240:38]
+  reg  ex2_reg_rf_wen; // @[src/main/scala/fpga/Core.scala 241:38]
+  reg [2:0] ex2_reg_wb_sel; // @[src/main/scala/fpga/Core.scala 242:38]
+  reg [31:0] ex2_reg_alu_out; // @[src/main/scala/fpga/Core.scala 243:38]
+  reg [31:0] ex2_reg_pc_bit_out; // @[src/main/scala/fpga/Core.scala 244:38]
+  reg  ex2_reg_is_valid_inst; // @[src/main/scala/fpga/Core.scala 245:38]
+  reg  ex2_reg_divrem; // @[src/main/scala/fpga/Core.scala 248:38]
+  reg  ex2_reg_sign_op1; // @[src/main/scala/fpga/Core.scala 249:38]
+  reg  ex2_reg_sign_op12; // @[src/main/scala/fpga/Core.scala 250:38]
+  reg  ex2_reg_zero_op2; // @[src/main/scala/fpga/Core.scala 251:38]
+  reg [36:0] ex2_reg_init_dividend; // @[src/main/scala/fpga/Core.scala 252:38]
+  reg [31:0] ex2_reg_init_divisor; // @[src/main/scala/fpga/Core.scala 253:38]
+  reg [31:0] ex2_reg_orig_dividend; // @[src/main/scala/fpga/Core.scala 254:38]
+  reg  ex2_reg_inst3_use_reg; // @[src/main/scala/fpga/Core.scala 255:38]
+  reg  ex2_reg_no_mem; // @[src/main/scala/fpga/Core.scala 256:38]
+  reg [6:0] mem1_reg_mem_wstrb; // @[src/main/scala/fpga/Core.scala 259:39]
+  reg [31:0] mem1_reg_wdata; // @[src/main/scala/fpga/Core.scala 260:39]
+  reg [2:0] mem1_reg_mem_w; // @[src/main/scala/fpga/Core.scala 261:39]
+  reg  mem1_reg_is_mem_load; // @[src/main/scala/fpga/Core.scala 264:39]
+  reg  mem1_reg_is_mem_store; // @[src/main/scala/fpga/Core.scala 265:39]
+  reg  mem1_reg_is_dram_load; // @[src/main/scala/fpga/Core.scala 266:39]
+  reg  mem1_reg_is_dram_store; // @[src/main/scala/fpga/Core.scala 267:39]
+  reg  mem1_reg_is_dram_fence; // @[src/main/scala/fpga/Core.scala 268:39]
+  reg  mem1_reg_is_valid_inst; // @[src/main/scala/fpga/Core.scala 269:39]
+  reg  mem1_reg_unaligned; // @[src/main/scala/fpga/Core.scala 270:39]
+  reg [1:0] mem2_reg_wb_byte_offset; // @[src/main/scala/fpga/Core.scala 273:40]
+  reg [2:0] mem2_reg_mem_w; // @[src/main/scala/fpga/Core.scala 274:40]
+  reg [4:0] mem2_reg_wb_addr; // @[src/main/scala/fpga/Core.scala 276:40]
+  reg  mem2_reg_is_valid_load; // @[src/main/scala/fpga/Core.scala 277:40]
+  reg  mem2_reg_is_valid_inst; // @[src/main/scala/fpga/Core.scala 279:40]
+  reg  mem2_reg_is_mem_load; // @[src/main/scala/fpga/Core.scala 280:40]
+  reg  mem2_reg_is_dram_load; // @[src/main/scala/fpga/Core.scala 281:40]
+  reg  mem2_reg_unaligned; // @[src/main/scala/fpga/Core.scala 282:40]
+  reg [1:0] mem3_reg_wb_byte_offset; // @[src/main/scala/fpga/Core.scala 285:40]
+  reg [2:0] mem3_reg_mem_w; // @[src/main/scala/fpga/Core.scala 286:40]
+  reg [31:0] mem3_reg_dmem_rdata; // @[src/main/scala/fpga/Core.scala 287:40]
+  reg [23:0] mem3_reg_rdata_high; // @[src/main/scala/fpga/Core.scala 288:40]
+  reg [4:0] mem3_reg_wb_addr; // @[src/main/scala/fpga/Core.scala 289:40]
+  reg  mem3_reg_is_valid_load; // @[src/main/scala/fpga/Core.scala 290:40]
+  reg  mem3_reg_is_valid_inst; // @[src/main/scala/fpga/Core.scala 291:40]
+  reg  mem3_reg_unaligned; // @[src/main/scala/fpga/Core.scala 293:40]
+  reg  mem3_reg_is_aligned_lw; // @[src/main/scala/fpga/Core.scala 294:40]
+  reg  id_reg_is_bp_fail; // @[src/main/scala/fpga/Core.scala 296:37]
+  reg [30:0] id_reg_br_pc; // @[src/main/scala/fpga/Core.scala 297:37]
+  reg  ex1_reg_fw_en; // @[src/main/scala/fpga/Core.scala 305:37]
+  reg  ex2_reg_fw_en; // @[src/main/scala/fpga/Core.scala 307:37]
+  reg  mem3_reg_fw_en; // @[src/main/scala/fpga/Core.scala 309:37]
+  reg  ex2_reg_div_stall; // @[src/main/scala/fpga/Core.scala 312:37]
+  reg [2:0] ex2_reg_divrem_state; // @[src/main/scala/fpga/Core.scala 314:37]
+  reg  ex2_reg_is_br; // @[src/main/scala/fpga/Core.scala 315:37]
+  reg [30:0] ex2_reg_br_pc; // @[src/main/scala/fpga/Core.scala 316:37]
+  reg  ex2_reg_is_retired; // @[src/main/scala/fpga/Core.scala 321:37]
+  reg  mem3_reg_is_retired; // @[src/main/scala/fpga/Core.scala 322:37]
+  reg  ic_reg_read_rdy; // @[src/main/scala/fpga/Core.scala 342:33]
+  reg  ic_reg_half_rdy; // @[src/main/scala/fpga/Core.scala 343:33]
+  reg [30:0] ic_reg_imem_addr; // @[src/main/scala/fpga/Core.scala 347:33]
+  reg [30:0] ic_reg_addr_out; // @[src/main/scala/fpga/Core.scala 348:33]
+  reg [31:0] ic_reg_inst; // @[src/main/scala/fpga/Core.scala 351:34]
+  reg [30:0] ic_reg_inst_addr; // @[src/main/scala/fpga/Core.scala 352:34]
+  reg [31:0] ic_reg_inst2; // @[src/main/scala/fpga/Core.scala 353:34]
+  reg [2:0] ic_state; // @[src/main/scala/fpga/Core.scala 356:25]
+  reg  ic_reg_bp_next_taken0; // @[src/main/scala/fpga/Core.scala 364:41]
+  reg [30:0] ic_reg_bp_next_taken_pc0; // @[src/main/scala/fpga/Core.scala 365:41]
+  reg [1:0] ic_reg_bp_next_cnt0; // @[src/main/scala/fpga/Core.scala 366:41]
+  reg  ic_reg_bp_next_taken1; // @[src/main/scala/fpga/Core.scala 367:41]
+  reg [30:0] ic_reg_bp_next_taken_pc1; // @[src/main/scala/fpga/Core.scala 368:41]
+  reg [1:0] ic_reg_bp_next_cnt1; // @[src/main/scala/fpga/Core.scala 369:41]
+  reg  ic_reg_bp_next_taken2; // @[src/main/scala/fpga/Core.scala 370:41]
+  reg [30:0] ic_reg_bp_next_taken_pc2; // @[src/main/scala/fpga/Core.scala 371:41]
+  reg [1:0] ic_reg_bp_next_cnt2; // @[src/main/scala/fpga/Core.scala 372:41]
+  wire [30:0] ic_imem_addr_2 = {ic_reg_imem_addr[30:1],1'h1}; // @[src/main/scala/fpga/Core.scala 374:27]
+  wire [30:0] ic_imem_addr_4 = ic_reg_imem_addr + 31'h2; // @[src/main/scala/fpga/Core.scala 375:41]
+  wire [30:0] ic_inst_addr_2 = {ic_reg_inst_addr[30:1],1'h1}; // @[src/main/scala/fpga/Core.scala 376:27]
+  wire [31:0] _io_imem_addr_T = {ic_reg_imem_addr,1'h0}; // @[src/main/scala/fpga/Core.scala 377:22]
   wire [30:0] _if1_jump_addr_T = id_reg_is_bp_fail ? id_reg_br_pc : id_reg_bp_taken_pc; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
   wire [30:0] if1_jump_addr = ex2_reg_is_br ? ex2_reg_br_pc : _if1_jump_addr_T; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
-  wire [30:0] ic_next_imem_addr = {if1_jump_addr[30:1],1'h0}; // @[src/main/scala/fpga/Core.scala 390:32]
-  wire [31:0] _io_imem_addr_T_1 = {if1_jump_addr[30:1],1'h0,1'h0}; // @[src/main/scala/fpga/Core.scala 391:28]
-  wire  _T_3 = 3'h0 == ic_state; // @[src/main/scala/fpga/Core.scala 403:23]
-  wire  _ic_bp_taken_T_1 = ic_btb_io_lu_matches0 & ic_pht_io_lu_cnt0[0]; // @[src/main/scala/fpga/Core.scala 405:49]
-  wire  _ic_reg_bp_next_taken1_T_1 = ic_btb_io_lu_matches1 & ic_pht_io_lu_cnt1[0]; // @[src/main/scala/fpga/Core.scala 411:59]
-  wire  _T_6 = 3'h1 == ic_state; // @[src/main/scala/fpga/Core.scala 403:23]
-  wire  _T_9 = 3'h2 == ic_state; // @[src/main/scala/fpga/Core.scala 403:23]
-  wire  _T_12 = 3'h4 == ic_state; // @[src/main/scala/fpga/Core.scala 403:23]
-  wire  _T_15 = 3'h3 == ic_state; // @[src/main/scala/fpga/Core.scala 403:23]
-  wire  _GEN_0 = 3'h3 == ic_state & ic_reg_bp_next_taken2; // @[src/main/scala/fpga/Core.scala 384:19 403:23 443:24]
-  wire [30:0] _GEN_1 = 3'h3 == ic_state ? ic_reg_bp_next_taken_pc2 : 31'h0; // @[src/main/scala/fpga/Core.scala 385:19 403:23 444:24]
-  wire [1:0] _GEN_2 = 3'h3 == ic_state ? ic_reg_bp_next_cnt2 : 2'h0; // @[src/main/scala/fpga/Core.scala 386:19 403:23 445:24]
-  wire  _GEN_3 = 3'h4 == ic_state ? ic_reg_bp_next_taken1 : _GEN_0; // @[src/main/scala/fpga/Core.scala 403:23 432:24]
-  wire [30:0] _GEN_4 = 3'h4 == ic_state ? ic_reg_bp_next_taken_pc1 : _GEN_1; // @[src/main/scala/fpga/Core.scala 403:23 433:24]
-  wire [1:0] _GEN_5 = 3'h4 == ic_state ? ic_reg_bp_next_cnt1 : _GEN_2; // @[src/main/scala/fpga/Core.scala 403:23 434:24]
-  wire  _GEN_6 = 3'h4 == ic_state ? _ic_bp_taken_T_1 : ic_reg_bp_next_taken0; // @[src/main/scala/fpga/Core.scala 403:23 435:34 360:41]
-  wire [30:0] _GEN_7 = 3'h4 == ic_state ? ic_btb_io_lu_taken_pc0 : ic_reg_bp_next_taken_pc0; // @[src/main/scala/fpga/Core.scala 403:23 436:34 361:41]
-  wire [1:0] _GEN_8 = 3'h4 == ic_state ? ic_pht_io_lu_cnt0 : ic_reg_bp_next_cnt0; // @[src/main/scala/fpga/Core.scala 403:23 437:34 362:41]
-  wire  _GEN_9 = 3'h4 == ic_state ? ic_reg_bp_next_taken1 : ic_reg_bp_next_taken2; // @[src/main/scala/fpga/Core.scala 403:23 438:34 366:41]
-  wire [30:0] _GEN_10 = 3'h4 == ic_state ? ic_reg_bp_next_taken_pc1 : ic_reg_bp_next_taken_pc2; // @[src/main/scala/fpga/Core.scala 403:23 439:34 367:41]
-  wire [1:0] _GEN_11 = 3'h4 == ic_state ? ic_reg_bp_next_cnt1 : ic_reg_bp_next_cnt2; // @[src/main/scala/fpga/Core.scala 403:23 440:34 368:41]
-  wire  _GEN_12 = 3'h2 == ic_state ? ic_reg_bp_next_taken0 : _GEN_3; // @[src/main/scala/fpga/Core.scala 403:23 427:24]
-  wire [30:0] _GEN_13 = 3'h2 == ic_state ? ic_reg_bp_next_taken_pc0 : _GEN_4; // @[src/main/scala/fpga/Core.scala 403:23 428:24]
-  wire [1:0] _GEN_14 = 3'h2 == ic_state ? ic_reg_bp_next_cnt0 : _GEN_5; // @[src/main/scala/fpga/Core.scala 403:23 429:24]
-  wire  _GEN_15 = 3'h2 == ic_state ? ic_reg_bp_next_taken0 : _GEN_6; // @[src/main/scala/fpga/Core.scala 403:23 360:41]
-  wire [30:0] _GEN_16 = 3'h2 == ic_state ? ic_reg_bp_next_taken_pc0 : _GEN_7; // @[src/main/scala/fpga/Core.scala 403:23 361:41]
-  wire [1:0] _GEN_17 = 3'h2 == ic_state ? ic_reg_bp_next_cnt0 : _GEN_8; // @[src/main/scala/fpga/Core.scala 403:23 362:41]
-  wire  _GEN_18 = 3'h2 == ic_state ? ic_reg_bp_next_taken2 : _GEN_9; // @[src/main/scala/fpga/Core.scala 403:23 366:41]
-  wire [30:0] _GEN_19 = 3'h2 == ic_state ? ic_reg_bp_next_taken_pc2 : _GEN_10; // @[src/main/scala/fpga/Core.scala 403:23 367:41]
-  wire [1:0] _GEN_20 = 3'h2 == ic_state ? ic_reg_bp_next_cnt2 : _GEN_11; // @[src/main/scala/fpga/Core.scala 403:23 368:41]
-  wire  _GEN_21 = 3'h1 == ic_state ? _ic_reg_bp_next_taken1_T_1 : _GEN_12; // @[src/main/scala/fpga/Core.scala 403:23 416:24]
-  wire [30:0] _GEN_22 = 3'h1 == ic_state ? ic_btb_io_lu_taken_pc1 : _GEN_13; // @[src/main/scala/fpga/Core.scala 403:23 417:24]
-  wire [1:0] _GEN_23 = 3'h1 == ic_state ? ic_pht_io_lu_cnt1 : _GEN_14; // @[src/main/scala/fpga/Core.scala 403:23 418:24]
-  wire  _GEN_24 = 3'h1 == ic_state ? _ic_bp_taken_T_1 : _GEN_15; // @[src/main/scala/fpga/Core.scala 403:23 419:34]
-  wire [30:0] _GEN_25 = 3'h1 == ic_state ? ic_btb_io_lu_taken_pc0 : _GEN_16; // @[src/main/scala/fpga/Core.scala 403:23 420:34]
-  wire [1:0] _GEN_26 = 3'h1 == ic_state ? ic_pht_io_lu_cnt0 : _GEN_17; // @[src/main/scala/fpga/Core.scala 403:23 421:34]
-  wire  _GEN_27 = 3'h1 == ic_state ? _ic_reg_bp_next_taken1_T_1 : ic_reg_bp_next_taken1; // @[src/main/scala/fpga/Core.scala 403:23 422:34 363:41]
-  wire [30:0] _GEN_28 = 3'h1 == ic_state ? ic_btb_io_lu_taken_pc1 : ic_reg_bp_next_taken_pc1; // @[src/main/scala/fpga/Core.scala 403:23 423:34 364:41]
-  wire [1:0] _GEN_29 = 3'h1 == ic_state ? ic_pht_io_lu_cnt1 : ic_reg_bp_next_cnt1; // @[src/main/scala/fpga/Core.scala 403:23 424:34 365:41]
-  wire  _GEN_30 = 3'h1 == ic_state ? ic_reg_bp_next_taken2 : _GEN_18; // @[src/main/scala/fpga/Core.scala 403:23 366:41]
-  wire [30:0] _GEN_31 = 3'h1 == ic_state ? ic_reg_bp_next_taken_pc2 : _GEN_19; // @[src/main/scala/fpga/Core.scala 403:23 367:41]
-  wire [1:0] _GEN_32 = 3'h1 == ic_state ? ic_reg_bp_next_cnt2 : _GEN_20; // @[src/main/scala/fpga/Core.scala 403:23 368:41]
-  wire  _GEN_33 = 3'h0 == ic_state ? ic_btb_io_lu_matches0 & ic_pht_io_lu_cnt0[0] : _GEN_21; // @[src/main/scala/fpga/Core.scala 403:23 405:24]
-  wire [30:0] _GEN_34 = 3'h0 == ic_state ? ic_btb_io_lu_taken_pc0 : _GEN_22; // @[src/main/scala/fpga/Core.scala 403:23 406:24]
-  wire [1:0] _GEN_35 = 3'h0 == ic_state ? ic_pht_io_lu_cnt0 : _GEN_23; // @[src/main/scala/fpga/Core.scala 403:23 407:24]
-  wire  _GEN_36 = 3'h0 == ic_state ? _ic_bp_taken_T_1 : _GEN_24; // @[src/main/scala/fpga/Core.scala 403:23 408:34]
-  wire [30:0] _GEN_37 = 3'h0 == ic_state ? ic_btb_io_lu_taken_pc0 : _GEN_25; // @[src/main/scala/fpga/Core.scala 403:23 409:34]
-  wire [1:0] _GEN_38 = 3'h0 == ic_state ? ic_pht_io_lu_cnt0 : _GEN_26; // @[src/main/scala/fpga/Core.scala 403:23 410:34]
-  wire  _GEN_42 = 3'h0 == ic_state ? ic_reg_bp_next_taken2 : _GEN_30; // @[src/main/scala/fpga/Core.scala 403:23 366:41]
-  wire [30:0] _GEN_43 = 3'h0 == ic_state ? ic_reg_bp_next_taken_pc2 : _GEN_31; // @[src/main/scala/fpga/Core.scala 403:23 367:41]
-  wire [1:0] _GEN_44 = 3'h0 == ic_state ? ic_reg_bp_next_cnt2 : _GEN_32; // @[src/main/scala/fpga/Core.scala 403:23 368:41]
-  wire [31:0] _io_imem_addr_T_2 = {ic_imem_addr_4,1'h0}; // @[src/main/scala/fpga/Core.scala 451:32]
-  wire  _ic_read_en4_T = ~id_reg_stall; // @[src/main/scala/fpga/Core.scala 584:18]
-  wire  _if1_is_jump_T = ex2_reg_is_br | id_reg_is_bp_fail; // @[src/main/scala/fpga/Core.scala 574:35]
-  wire  if1_is_jump = ex2_reg_is_br | id_reg_is_bp_fail | id_reg_bp_taken; // @[src/main/scala/fpga/Core.scala 574:56]
-  wire [30:0] _ic_data_out_T_2 = {15'h0,io_imem_inst[31:16]}; // @[src/main/scala/fpga/Core.scala 481:32]
-  wire [31:0] _ic_data_out_T_5 = {io_imem_inst[15:0],ic_reg_inst[31:16]}; // @[src/main/scala/fpga/Core.scala 519:33]
-  wire [31:0] _ic_data_out_T_8 = {ic_reg_inst[15:0],ic_reg_inst2[31:16]}; // @[src/main/scala/fpga/Core.scala 549:31]
-  wire [31:0] _GEN_64 = _T_15 ? _ic_data_out_T_8 : 32'h13; // @[src/main/scala/fpga/Core.scala 379:15 449:23 549:25]
-  wire [31:0] _GEN_73 = _T_12 ? _ic_data_out_T_5 : _GEN_64; // @[src/main/scala/fpga/Core.scala 449:23 519:27]
-  wire [31:0] _GEN_94 = _T_9 ? ic_reg_inst : _GEN_73; // @[src/main/scala/fpga/Core.scala 449:23 502:25]
-  wire [31:0] _GEN_119 = _T_6 ? {{1'd0}, _ic_data_out_T_2} : _GEN_94; // @[src/main/scala/fpga/Core.scala 449:23 481:26]
-  wire [31:0] _GEN_141 = _T_3 ? io_imem_inst : _GEN_119; // @[src/main/scala/fpga/Core.scala 449:23 455:26]
-  wire [31:0] _GEN_179 = ~io_imem_valid ? 32'h13 : _GEN_141; // @[src/main/scala/fpga/Core.scala 379:15 398:98]
-  wire [31:0] ic_data_out = if1_is_jump ? 32'h13 : _GEN_179; // @[src/main/scala/fpga/Core.scala 379:15 389:21]
-  wire  if2_is_half_inst = ic_data_out[1:0] != 2'h3; // @[src/main/scala/fpga/Core.scala 582:45]
-  wire  ic_read_en4 = ~id_reg_stall & ~if2_is_half_inst; // @[src/main/scala/fpga/Core.scala 584:32]
-  wire [30:0] _GEN_45 = ic_read_en4 ? ic_imem_addr_4 : ic_reg_addr_out; // @[src/main/scala/fpga/Core.scala 380:15 471:34 472:23]
-  wire [1:0] _GEN_46 = ic_read_en4 ? 2'h0 : 2'h2; // @[src/main/scala/fpga/Core.scala 467:18 471:34 473:20]
-  wire  ic_read_en2 = _ic_read_en4_T & if2_is_half_inst; // @[src/main/scala/fpga/Core.scala 583:32]
-  wire [30:0] _GEN_47 = ic_read_en2 ? ic_imem_addr_2 : _GEN_45; // @[src/main/scala/fpga/Core.scala 468:28 469:23]
-  wire [2:0] _GEN_48 = ic_read_en2 ? 3'h4 : {{1'd0}, _GEN_46}; // @[src/main/scala/fpga/Core.scala 468:28 470:20]
-  wire [30:0] _GEN_49 = ic_read_en2 ? ic_imem_addr_4 : ic_imem_addr_2; // @[src/main/scala/fpga/Core.scala 495:28 496:23 482:26]
-  wire [2:0] _GEN_50 = ic_read_en2 ? 3'h0 : 3'h4; // @[src/main/scala/fpga/Core.scala 494:18 495:28 497:20]
-  wire [30:0] _GEN_51 = ic_read_en4 ? ic_reg_imem_addr : ic_reg_addr_out; // @[src/main/scala/fpga/Core.scala 380:15 511:33 512:23]
-  wire [2:0] _GEN_52 = ic_read_en4 ? 3'h0 : ic_state; // @[src/main/scala/fpga/Core.scala 511:33 513:20 352:25]
-  wire [30:0] _GEN_53 = ic_read_en2 ? ic_inst_addr_2 : _GEN_51; // @[src/main/scala/fpga/Core.scala 508:28 509:23]
-  wire [2:0] _GEN_54 = ic_read_en2 ? 3'h4 : _GEN_52; // @[src/main/scala/fpga/Core.scala 508:28 510:20]
-  wire [30:0] _GEN_55 = ic_read_en4 ? ic_imem_addr_2 : ic_reg_addr_out; // @[src/main/scala/fpga/Core.scala 380:15 542:33 543:23]
-  wire [2:0] _GEN_56 = ic_read_en4 ? 3'h4 : 3'h3; // @[src/main/scala/fpga/Core.scala 538:18 542:33 544:20]
-  wire [30:0] _GEN_57 = ic_read_en2 ? ic_reg_imem_addr : _GEN_55; // @[src/main/scala/fpga/Core.scala 539:28 540:23]
-  wire [2:0] _GEN_58 = ic_read_en2 ? 3'h2 : _GEN_56; // @[src/main/scala/fpga/Core.scala 539:28 541:20]
-  wire [30:0] _GEN_59 = ic_read_en4 ? ic_inst_addr_2 : ic_reg_addr_out; // @[src/main/scala/fpga/Core.scala 380:15 558:33 559:23]
-  wire [2:0] _GEN_60 = ic_read_en4 ? 3'h4 : ic_state; // @[src/main/scala/fpga/Core.scala 558:33 560:20 352:25]
-  wire [30:0] _GEN_61 = ic_read_en2 ? ic_reg_inst_addr : _GEN_59; // @[src/main/scala/fpga/Core.scala 555:28 556:23]
-  wire [2:0] _GEN_62 = ic_read_en2 ? 3'h2 : _GEN_60; // @[src/main/scala/fpga/Core.scala 555:28 557:20]
-  wire [31:0] _GEN_63 = _T_15 ? _io_imem_addr_T : _io_imem_addr_T; // @[src/main/scala/fpga/Core.scala 373:16 449:23 548:25]
-  wire [30:0] _GEN_69 = _T_15 ? _GEN_61 : ic_reg_addr_out; // @[src/main/scala/fpga/Core.scala 380:15 449:23]
-  wire [2:0] _GEN_70 = _T_15 ? _GEN_62 : ic_state; // @[src/main/scala/fpga/Core.scala 449:23 352:25]
-  wire [31:0] _GEN_71 = _T_12 ? _io_imem_addr_T_2 : _GEN_63; // @[src/main/scala/fpga/Core.scala 449:23 517:27]
-  wire [30:0] _GEN_72 = _T_12 ? ic_imem_addr_4 : ic_reg_imem_addr; // @[src/main/scala/fpga/Core.scala 449:23 518:27 343:33]
-  wire [31:0] _GEN_74 = _T_12 ? io_imem_inst : ic_reg_inst; // @[src/main/scala/fpga/Core.scala 449:23 520:27 347:34]
-  wire [30:0] _GEN_75 = _T_12 ? ic_reg_imem_addr : ic_reg_inst_addr; // @[src/main/scala/fpga/Core.scala 449:23 521:27 348:34]
-  wire [31:0] _GEN_76 = _T_12 ? ic_reg_inst : ic_reg_inst2; // @[src/main/scala/fpga/Core.scala 449:23 522:27 349:34]
-  wire  _GEN_85 = _T_12 ? _ic_reg_bp_next_taken1_T_1 : ic_reg_bp_next_taken1; // @[src/main/scala/fpga/Core.scala 449:23 532:34 363:41]
-  wire [30:0] _GEN_86 = _T_12 ? ic_btb_io_lu_taken_pc1 : ic_reg_bp_next_taken_pc1; // @[src/main/scala/fpga/Core.scala 449:23 533:34 364:41]
-  wire [1:0] _GEN_87 = _T_12 ? ic_pht_io_lu_cnt1 : ic_reg_bp_next_cnt1; // @[src/main/scala/fpga/Core.scala 449:23 534:34 365:41]
-  wire [2:0] _GEN_91 = _T_12 ? _GEN_58 : _GEN_70; // @[src/main/scala/fpga/Core.scala 449:23]
-  wire [30:0] _GEN_92 = _T_12 ? _GEN_57 : _GEN_69; // @[src/main/scala/fpga/Core.scala 449:23]
-  wire [31:0] _GEN_93 = _T_9 ? _io_imem_addr_T : _GEN_71; // @[src/main/scala/fpga/Core.scala 449:23 501:25]
-  wire [30:0] _GEN_95 = _T_9 ? ic_reg_imem_addr : _GEN_72; // @[src/main/scala/fpga/Core.scala 449:23 503:25]
-  wire [30:0] _GEN_99 = _T_9 ? _GEN_53 : _GEN_92; // @[src/main/scala/fpga/Core.scala 449:23]
-  wire [2:0] _GEN_100 = _T_9 ? _GEN_54 : _GEN_91; // @[src/main/scala/fpga/Core.scala 449:23]
-  wire [31:0] _GEN_102 = _T_9 ? ic_reg_inst : _GEN_74; // @[src/main/scala/fpga/Core.scala 449:23 347:34]
-  wire [30:0] _GEN_103 = _T_9 ? ic_reg_inst_addr : _GEN_75; // @[src/main/scala/fpga/Core.scala 449:23 348:34]
-  wire [31:0] _GEN_104 = _T_9 ? ic_reg_inst2 : _GEN_76; // @[src/main/scala/fpga/Core.scala 449:23 349:34]
-  wire  _GEN_109 = _T_9 ? ic_reg_bp_next_taken1 : _GEN_85; // @[src/main/scala/fpga/Core.scala 449:23 363:41]
-  wire [30:0] _GEN_110 = _T_9 ? ic_reg_bp_next_taken_pc1 : _GEN_86; // @[src/main/scala/fpga/Core.scala 449:23 364:41]
-  wire [1:0] _GEN_111 = _T_9 ? ic_reg_bp_next_cnt1 : _GEN_87; // @[src/main/scala/fpga/Core.scala 449:23 365:41]
-  wire [31:0] _GEN_115 = _T_6 ? _io_imem_addr_T_2 : _GEN_93; // @[src/main/scala/fpga/Core.scala 449:23 477:26]
-  wire [30:0] _GEN_116 = _T_6 ? ic_imem_addr_4 : _GEN_95; // @[src/main/scala/fpga/Core.scala 449:23 478:26]
-  wire [31:0] _GEN_117 = _T_6 ? io_imem_inst : _GEN_102; // @[src/main/scala/fpga/Core.scala 449:23 479:26]
-  wire [30:0] _GEN_118 = _T_6 ? ic_reg_imem_addr : _GEN_103; // @[src/main/scala/fpga/Core.scala 449:23 480:26]
-  wire [30:0] _GEN_120 = _T_6 ? _GEN_49 : _GEN_99; // @[src/main/scala/fpga/Core.scala 449:23]
-  wire  _GEN_128 = _T_6 ? _ic_reg_bp_next_taken1_T_1 : _GEN_109; // @[src/main/scala/fpga/Core.scala 449:23 491:34]
-  wire [30:0] _GEN_129 = _T_6 ? ic_btb_io_lu_taken_pc1 : _GEN_110; // @[src/main/scala/fpga/Core.scala 449:23 492:34]
-  wire [1:0] _GEN_130 = _T_6 ? ic_pht_io_lu_cnt1 : _GEN_111; // @[src/main/scala/fpga/Core.scala 449:23 493:34]
-  wire [2:0] _GEN_131 = _T_6 ? _GEN_50 : _GEN_100; // @[src/main/scala/fpga/Core.scala 449:23]
-  wire [31:0] _GEN_132 = _T_6 ? ic_reg_inst2 : _GEN_104; // @[src/main/scala/fpga/Core.scala 449:23 349:34]
-  wire [31:0] _GEN_137 = _T_3 ? _io_imem_addr_T_2 : _GEN_115; // @[src/main/scala/fpga/Core.scala 449:23 451:26]
-  wire [30:0] _GEN_138 = _T_3 ? ic_imem_addr_4 : _GEN_116; // @[src/main/scala/fpga/Core.scala 449:23 452:26]
-  wire  _GEN_160 = ~io_imem_valid ? ic_reg_half_rdy : 1'h1; // @[src/main/scala/fpga/Core.scala 376:19 398:98 400:21]
-  wire  _GEN_161 = ~io_imem_valid ? 1'h0 : ic_reg_read_rdy; // @[src/main/scala/fpga/Core.scala 377:15 398:98 401:21]
-  wire  _GEN_162 = ~io_imem_valid ? 1'h0 : ic_reg_half_rdy; // @[src/main/scala/fpga/Core.scala 378:15 398:98 402:21]
-  wire  _GEN_163 = ~io_imem_valid ? _GEN_33 : _GEN_33; // @[src/main/scala/fpga/Core.scala 398:98]
-  wire [30:0] _GEN_164 = ~io_imem_valid ? _GEN_34 : _GEN_34; // @[src/main/scala/fpga/Core.scala 398:98]
-  wire [1:0] _GEN_165 = ~io_imem_valid ? _GEN_35 : _GEN_35; // @[src/main/scala/fpga/Core.scala 398:98]
-  wire [31:0] _GEN_175 = ~io_imem_valid ? _io_imem_addr_T : _GEN_137; // @[src/main/scala/fpga/Core.scala 373:16 398:98]
-  wire [30:0] _GEN_176 = ~io_imem_valid ? ic_reg_imem_addr : _GEN_138; // @[src/main/scala/fpga/Core.scala 343:33 398:98]
-  wire  _GEN_191 = if1_is_jump | _GEN_160; // @[src/main/scala/fpga/Core.scala 376:19 389:21]
-  wire  ic_read_rdy = if1_is_jump ? ic_reg_read_rdy : _GEN_161; // @[src/main/scala/fpga/Core.scala 377:15 389:21]
-  wire  ic_half_rdy = if1_is_jump ? ic_reg_half_rdy : _GEN_162; // @[src/main/scala/fpga/Core.scala 378:15 389:21]
-  wire  ic_bp_taken = if1_is_jump ? 1'h0 : _GEN_163; // @[src/main/scala/fpga/Core.scala 384:19 389:21]
-  wire [30:0] ic_bp_taken_pc = if1_is_jump ? 31'h0 : _GEN_164; // @[src/main/scala/fpga/Core.scala 385:19 389:21]
-  wire [1:0] ic_bp_cnt = if1_is_jump ? 2'h0 : _GEN_165; // @[src/main/scala/fpga/Core.scala 386:19 389:21]
-  wire  if2_is_inst_read = ic_read_rdy | ic_half_rdy & if2_is_half_inst; // @[src/main/scala/fpga/Core.scala 585:38]
-  wire  _if2_is_valid_inst_T = ~ex2_reg_is_br; // @[src/main/scala/fpga/Core.scala 587:27]
-  wire  _if2_is_valid_inst_T_1 = ~id_reg_is_bp_fail; // @[src/main/scala/fpga/Core.scala 587:45]
-  wire  if2_is_valid_inst = ~ex2_reg_is_br & ~id_reg_is_bp_fail & ~id_reg_bp_taken & if2_is_inst_read; // @[src/main/scala/fpga/Core.scala 587:84]
-  wire [31:0] if2_inst = if2_is_valid_inst ? ic_data_out : 32'h13; // @[src/main/scala/fpga/Core.scala 588:21]
-  wire  if2_bp_taken = if2_is_valid_inst & ic_bp_taken; // @[src/main/scala/fpga/Core.scala 589:40]
-  wire [31:0] _T_31 = {ic_reg_addr_out,1'h0}; // @[src/main/scala/fpga/Core.scala 603:46]
-  wire  _T_33 = ~reset; // @[src/main/scala/fpga/Core.scala 603:9]
-  wire  _rrd_stall_T_1 = ~rrd_reg_op1_sel; // @[src/main/scala/fpga/Core.scala 1152:25]
-  wire  _rrd_stall_T_3 = ~rrd_reg_op2_sel; // @[src/main/scala/fpga/Core.scala 1153:25]
-  wire  _rrd_stall_T_4 = ~rrd_reg_op2_sel & scoreboard_rrd_stall_MPORT_1_data; // @[src/main/scala/fpga/Core.scala 1153:39]
-  wire  _rrd_stall_T_5 = ~rrd_reg_op1_sel & scoreboard_rrd_stall_MPORT_data | _rrd_stall_T_4; // @[src/main/scala/fpga/Core.scala 1152:72]
-  wire  _rrd_stall_T_7 = rrd_reg_op3_sel == 2'h2 & scoreboard_rrd_stall_MPORT_2_data; // @[src/main/scala/fpga/Core.scala 1154:39]
-  wire  _rrd_stall_T_8 = _rrd_stall_T_5 | _rrd_stall_T_7; // @[src/main/scala/fpga/Core.scala 1153:72]
-  wire  _rrd_stall_T_10 = rrd_reg_rf_wen & scoreboard_rrd_stall_MPORT_3_data; // @[src/main/scala/fpga/Core.scala 1155:35]
-  wire  _rrd_stall_T_11 = _rrd_stall_T_8 | _rrd_stall_T_10; // @[src/main/scala/fpga/Core.scala 1154:72]
-  wire  rrd_stall = _if2_is_valid_inst_T & _rrd_stall_T_11; // @[src/main/scala/fpga/Core.scala 1151:20]
-  wire  mem1_mem_stall = mem1_reg_is_mem_store & ~io_dmem_wready; // @[src/main/scala/fpga/Core.scala 1811:89]
-  wire  _mem1_dram_stall_T_3 = mem1_reg_is_dram_store & ~io_cache_wready; // @[src/main/scala/fpga/Core.scala 1814:29]
-  wire  _mem1_dram_stall_T_4 = mem1_reg_is_dram_load & ~io_cache_rready | _mem1_dram_stall_T_3; // @[src/main/scala/fpga/Core.scala 1813:49]
-  wire  _mem1_dram_stall_T_5 = mem1_reg_is_dram_fence & io_cache_ibusy; // @[src/main/scala/fpga/Core.scala 1815:29]
-  wire  mem1_dram_stall = _mem1_dram_stall_T_4 | _mem1_dram_stall_T_5; // @[src/main/scala/fpga/Core.scala 1814:50]
-  wire  mem2_dram_stall = mem2_reg_is_dram_load & ~io_cache_rvalid; // @[src/main/scala/fpga/Core.scala 1845:48]
-  wire  mem_stall = mem1_mem_stall | mem1_dram_stall | mem1_reg_unaligned | mem2_dram_stall; // @[src/main/scala/fpga/Core.scala 1817:72]
-  wire  ex2_stall = mem_stall | ex2_reg_div_stall; // @[src/main/scala/fpga/Core.scala 1549:26]
-  wire  id_stall = rrd_stall | ex2_stall; // @[src/main/scala/fpga/Core.scala 626:25]
-  wire  id_is_half = id_reg_inst[1:0] != 2'h3; // @[src/main/scala/fpga/Core.scala 633:35]
-  wire [4:0] id_rs1_addr = id_reg_inst[19:15]; // @[src/main/scala/fpga/Core.scala 635:28]
-  wire [4:0] id_rs2_addr = id_reg_inst[24:20]; // @[src/main/scala/fpga/Core.scala 636:28]
-  wire [4:0] id_rs3_addr = id_reg_inst[31:27]; // @[src/main/scala/fpga/Core.scala 637:28]
-  wire [4:0] id_w_wb_addr = id_reg_inst[11:7]; // @[src/main/scala/fpga/Core.scala 638:30]
-  wire [4:0] id_c_rs2_addr = id_reg_inst[6:2]; // @[src/main/scala/fpga/Core.scala 643:31]
-  wire [4:0] id_c_rs1p_addr = {2'h1,id_reg_inst[9:7]}; // @[src/main/scala/fpga/Core.scala 645:27]
-  wire [4:0] id_c_rs2p_addr = {2'h1,id_reg_inst[4:2]}; // @[src/main/scala/fpga/Core.scala 646:27]
-  wire [4:0] id_c_rs3p_addr = {2'h1,id_reg_inst[12:10]}; // @[src/main/scala/fpga/Core.scala 647:27]
-  wire [11:0] id_imm_i = id_reg_inst[31:20]; // @[src/main/scala/fpga/Core.scala 651:25]
-  wire [19:0] _id_imm_i_sext_T_2 = id_imm_i[11] ? 20'hfffff : 20'h0; // @[src/main/scala/fpga/Core.scala 652:31]
-  wire [31:0] id_imm_i_sext = {_id_imm_i_sext_T_2,id_imm_i}; // @[src/main/scala/fpga/Core.scala 652:26]
-  wire [11:0] id_imm_s = {id_reg_inst[31:25],id_w_wb_addr}; // @[src/main/scala/fpga/Core.scala 653:21]
-  wire [19:0] _id_imm_s_sext_T_2 = id_imm_s[11] ? 20'hfffff : 20'h0; // @[src/main/scala/fpga/Core.scala 654:31]
-  wire [31:0] id_imm_s_sext = {_id_imm_s_sext_T_2,id_reg_inst[31:25],id_w_wb_addr}; // @[src/main/scala/fpga/Core.scala 654:26]
-  wire [11:0] id_imm_b = {id_reg_inst[31],id_reg_inst[7],id_reg_inst[30:25],id_reg_inst[11:8]}; // @[src/main/scala/fpga/Core.scala 655:21]
-  wire [18:0] _id_imm_b_sext_T_2 = id_imm_b[11] ? 19'h7ffff : 19'h0; // @[src/main/scala/fpga/Core.scala 656:31]
+  wire [30:0] ic_next_imem_addr = {if1_jump_addr[30:1],1'h0}; // @[src/main/scala/fpga/Core.scala 394:32]
+  wire [31:0] _io_imem_addr_T_1 = {if1_jump_addr[30:1],1'h0,1'h0}; // @[src/main/scala/fpga/Core.scala 395:28]
+  wire  _T_3 = 3'h0 == ic_state; // @[src/main/scala/fpga/Core.scala 407:23]
+  wire  _ic_bp_taken_T_1 = ic_btb_io_lu_matches0 & ic_pht_io_lu_cnt0[0]; // @[src/main/scala/fpga/Core.scala 409:49]
+  wire  _ic_reg_bp_next_taken1_T_1 = ic_btb_io_lu_matches1 & ic_pht_io_lu_cnt1[0]; // @[src/main/scala/fpga/Core.scala 415:59]
+  wire  _T_6 = 3'h1 == ic_state; // @[src/main/scala/fpga/Core.scala 407:23]
+  wire  _T_9 = 3'h2 == ic_state; // @[src/main/scala/fpga/Core.scala 407:23]
+  wire  _T_12 = 3'h4 == ic_state; // @[src/main/scala/fpga/Core.scala 407:23]
+  wire  _T_15 = 3'h3 == ic_state; // @[src/main/scala/fpga/Core.scala 407:23]
+  wire  _GEN_0 = 3'h3 == ic_state & ic_reg_bp_next_taken2; // @[src/main/scala/fpga/Core.scala 388:19 407:23 447:24]
+  wire [30:0] _GEN_1 = 3'h3 == ic_state ? ic_reg_bp_next_taken_pc2 : 31'h0; // @[src/main/scala/fpga/Core.scala 389:19 407:23 448:24]
+  wire [1:0] _GEN_2 = 3'h3 == ic_state ? ic_reg_bp_next_cnt2 : 2'h0; // @[src/main/scala/fpga/Core.scala 390:19 407:23 449:24]
+  wire  _GEN_3 = 3'h4 == ic_state ? ic_reg_bp_next_taken1 : _GEN_0; // @[src/main/scala/fpga/Core.scala 407:23 436:24]
+  wire [30:0] _GEN_4 = 3'h4 == ic_state ? ic_reg_bp_next_taken_pc1 : _GEN_1; // @[src/main/scala/fpga/Core.scala 407:23 437:24]
+  wire [1:0] _GEN_5 = 3'h4 == ic_state ? ic_reg_bp_next_cnt1 : _GEN_2; // @[src/main/scala/fpga/Core.scala 407:23 438:24]
+  wire  _GEN_6 = 3'h4 == ic_state ? _ic_bp_taken_T_1 : ic_reg_bp_next_taken0; // @[src/main/scala/fpga/Core.scala 407:23 439:34 364:41]
+  wire [30:0] _GEN_7 = 3'h4 == ic_state ? ic_btb_io_lu_taken_pc0 : ic_reg_bp_next_taken_pc0; // @[src/main/scala/fpga/Core.scala 407:23 440:34 365:41]
+  wire [1:0] _GEN_8 = 3'h4 == ic_state ? ic_pht_io_lu_cnt0 : ic_reg_bp_next_cnt0; // @[src/main/scala/fpga/Core.scala 407:23 441:34 366:41]
+  wire  _GEN_9 = 3'h4 == ic_state ? ic_reg_bp_next_taken1 : ic_reg_bp_next_taken2; // @[src/main/scala/fpga/Core.scala 407:23 442:34 370:41]
+  wire [30:0] _GEN_10 = 3'h4 == ic_state ? ic_reg_bp_next_taken_pc1 : ic_reg_bp_next_taken_pc2; // @[src/main/scala/fpga/Core.scala 407:23 443:34 371:41]
+  wire [1:0] _GEN_11 = 3'h4 == ic_state ? ic_reg_bp_next_cnt1 : ic_reg_bp_next_cnt2; // @[src/main/scala/fpga/Core.scala 407:23 444:34 372:41]
+  wire  _GEN_12 = 3'h2 == ic_state ? ic_reg_bp_next_taken0 : _GEN_3; // @[src/main/scala/fpga/Core.scala 407:23 431:24]
+  wire [30:0] _GEN_13 = 3'h2 == ic_state ? ic_reg_bp_next_taken_pc0 : _GEN_4; // @[src/main/scala/fpga/Core.scala 407:23 432:24]
+  wire [1:0] _GEN_14 = 3'h2 == ic_state ? ic_reg_bp_next_cnt0 : _GEN_5; // @[src/main/scala/fpga/Core.scala 407:23 433:24]
+  wire  _GEN_15 = 3'h2 == ic_state ? ic_reg_bp_next_taken0 : _GEN_6; // @[src/main/scala/fpga/Core.scala 407:23 364:41]
+  wire [30:0] _GEN_16 = 3'h2 == ic_state ? ic_reg_bp_next_taken_pc0 : _GEN_7; // @[src/main/scala/fpga/Core.scala 407:23 365:41]
+  wire [1:0] _GEN_17 = 3'h2 == ic_state ? ic_reg_bp_next_cnt0 : _GEN_8; // @[src/main/scala/fpga/Core.scala 407:23 366:41]
+  wire  _GEN_18 = 3'h2 == ic_state ? ic_reg_bp_next_taken2 : _GEN_9; // @[src/main/scala/fpga/Core.scala 407:23 370:41]
+  wire [30:0] _GEN_19 = 3'h2 == ic_state ? ic_reg_bp_next_taken_pc2 : _GEN_10; // @[src/main/scala/fpga/Core.scala 407:23 371:41]
+  wire [1:0] _GEN_20 = 3'h2 == ic_state ? ic_reg_bp_next_cnt2 : _GEN_11; // @[src/main/scala/fpga/Core.scala 407:23 372:41]
+  wire  _GEN_21 = 3'h1 == ic_state ? _ic_reg_bp_next_taken1_T_1 : _GEN_12; // @[src/main/scala/fpga/Core.scala 407:23 420:24]
+  wire [30:0] _GEN_22 = 3'h1 == ic_state ? ic_btb_io_lu_taken_pc1 : _GEN_13; // @[src/main/scala/fpga/Core.scala 407:23 421:24]
+  wire [1:0] _GEN_23 = 3'h1 == ic_state ? ic_pht_io_lu_cnt1 : _GEN_14; // @[src/main/scala/fpga/Core.scala 407:23 422:24]
+  wire  _GEN_24 = 3'h1 == ic_state ? _ic_bp_taken_T_1 : _GEN_15; // @[src/main/scala/fpga/Core.scala 407:23 423:34]
+  wire [30:0] _GEN_25 = 3'h1 == ic_state ? ic_btb_io_lu_taken_pc0 : _GEN_16; // @[src/main/scala/fpga/Core.scala 407:23 424:34]
+  wire [1:0] _GEN_26 = 3'h1 == ic_state ? ic_pht_io_lu_cnt0 : _GEN_17; // @[src/main/scala/fpga/Core.scala 407:23 425:34]
+  wire  _GEN_27 = 3'h1 == ic_state ? _ic_reg_bp_next_taken1_T_1 : ic_reg_bp_next_taken1; // @[src/main/scala/fpga/Core.scala 407:23 426:34 367:41]
+  wire [30:0] _GEN_28 = 3'h1 == ic_state ? ic_btb_io_lu_taken_pc1 : ic_reg_bp_next_taken_pc1; // @[src/main/scala/fpga/Core.scala 407:23 427:34 368:41]
+  wire [1:0] _GEN_29 = 3'h1 == ic_state ? ic_pht_io_lu_cnt1 : ic_reg_bp_next_cnt1; // @[src/main/scala/fpga/Core.scala 407:23 428:34 369:41]
+  wire  _GEN_30 = 3'h1 == ic_state ? ic_reg_bp_next_taken2 : _GEN_18; // @[src/main/scala/fpga/Core.scala 407:23 370:41]
+  wire [30:0] _GEN_31 = 3'h1 == ic_state ? ic_reg_bp_next_taken_pc2 : _GEN_19; // @[src/main/scala/fpga/Core.scala 407:23 371:41]
+  wire [1:0] _GEN_32 = 3'h1 == ic_state ? ic_reg_bp_next_cnt2 : _GEN_20; // @[src/main/scala/fpga/Core.scala 407:23 372:41]
+  wire  _GEN_33 = 3'h0 == ic_state ? ic_btb_io_lu_matches0 & ic_pht_io_lu_cnt0[0] : _GEN_21; // @[src/main/scala/fpga/Core.scala 407:23 409:24]
+  wire [30:0] _GEN_34 = 3'h0 == ic_state ? ic_btb_io_lu_taken_pc0 : _GEN_22; // @[src/main/scala/fpga/Core.scala 407:23 410:24]
+  wire [1:0] _GEN_35 = 3'h0 == ic_state ? ic_pht_io_lu_cnt0 : _GEN_23; // @[src/main/scala/fpga/Core.scala 407:23 411:24]
+  wire  _GEN_36 = 3'h0 == ic_state ? _ic_bp_taken_T_1 : _GEN_24; // @[src/main/scala/fpga/Core.scala 407:23 412:34]
+  wire [30:0] _GEN_37 = 3'h0 == ic_state ? ic_btb_io_lu_taken_pc0 : _GEN_25; // @[src/main/scala/fpga/Core.scala 407:23 413:34]
+  wire [1:0] _GEN_38 = 3'h0 == ic_state ? ic_pht_io_lu_cnt0 : _GEN_26; // @[src/main/scala/fpga/Core.scala 407:23 414:34]
+  wire  _GEN_42 = 3'h0 == ic_state ? ic_reg_bp_next_taken2 : _GEN_30; // @[src/main/scala/fpga/Core.scala 407:23 370:41]
+  wire [30:0] _GEN_43 = 3'h0 == ic_state ? ic_reg_bp_next_taken_pc2 : _GEN_31; // @[src/main/scala/fpga/Core.scala 407:23 371:41]
+  wire [1:0] _GEN_44 = 3'h0 == ic_state ? ic_reg_bp_next_cnt2 : _GEN_32; // @[src/main/scala/fpga/Core.scala 407:23 372:41]
+  wire [31:0] _io_imem_addr_T_2 = {ic_imem_addr_4,1'h0}; // @[src/main/scala/fpga/Core.scala 455:32]
+  wire  _ic_read_en4_T = ~id_reg_stall; // @[src/main/scala/fpga/Core.scala 588:18]
+  wire  _if1_is_jump_T = ex2_reg_is_br | id_reg_is_bp_fail; // @[src/main/scala/fpga/Core.scala 578:35]
+  wire  if1_is_jump = ex2_reg_is_br | id_reg_is_bp_fail | id_reg_bp_taken; // @[src/main/scala/fpga/Core.scala 578:56]
+  wire [30:0] _ic_data_out_T_2 = {15'h0,io_imem_inst[31:16]}; // @[src/main/scala/fpga/Core.scala 485:32]
+  wire [31:0] _ic_data_out_T_5 = {io_imem_inst[15:0],ic_reg_inst[31:16]}; // @[src/main/scala/fpga/Core.scala 523:33]
+  wire [31:0] _ic_data_out_T_8 = {ic_reg_inst[15:0],ic_reg_inst2[31:16]}; // @[src/main/scala/fpga/Core.scala 553:31]
+  wire [31:0] _GEN_64 = _T_15 ? _ic_data_out_T_8 : 32'h13; // @[src/main/scala/fpga/Core.scala 383:15 453:23 553:25]
+  wire [31:0] _GEN_73 = _T_12 ? _ic_data_out_T_5 : _GEN_64; // @[src/main/scala/fpga/Core.scala 453:23 523:27]
+  wire [31:0] _GEN_94 = _T_9 ? ic_reg_inst : _GEN_73; // @[src/main/scala/fpga/Core.scala 453:23 506:25]
+  wire [31:0] _GEN_119 = _T_6 ? {{1'd0}, _ic_data_out_T_2} : _GEN_94; // @[src/main/scala/fpga/Core.scala 453:23 485:26]
+  wire [31:0] _GEN_141 = _T_3 ? io_imem_inst : _GEN_119; // @[src/main/scala/fpga/Core.scala 453:23 459:26]
+  wire [31:0] _GEN_179 = ~io_imem_valid ? 32'h13 : _GEN_141; // @[src/main/scala/fpga/Core.scala 383:15 402:98]
+  wire [31:0] ic_data_out = if1_is_jump ? 32'h13 : _GEN_179; // @[src/main/scala/fpga/Core.scala 383:15 393:21]
+  wire  if2_is_half_inst = ic_data_out[1:0] != 2'h3; // @[src/main/scala/fpga/Core.scala 586:45]
+  wire  ic_read_en4 = ~id_reg_stall & ~if2_is_half_inst; // @[src/main/scala/fpga/Core.scala 588:32]
+  wire [30:0] _GEN_45 = ic_read_en4 ? ic_imem_addr_4 : ic_reg_addr_out; // @[src/main/scala/fpga/Core.scala 384:15 475:34 476:23]
+  wire [1:0] _GEN_46 = ic_read_en4 ? 2'h0 : 2'h2; // @[src/main/scala/fpga/Core.scala 471:18 475:34 477:20]
+  wire  ic_read_en2 = _ic_read_en4_T & if2_is_half_inst; // @[src/main/scala/fpga/Core.scala 587:32]
+  wire [30:0] _GEN_47 = ic_read_en2 ? ic_imem_addr_2 : _GEN_45; // @[src/main/scala/fpga/Core.scala 472:28 473:23]
+  wire [2:0] _GEN_48 = ic_read_en2 ? 3'h4 : {{1'd0}, _GEN_46}; // @[src/main/scala/fpga/Core.scala 472:28 474:20]
+  wire [30:0] _GEN_49 = ic_read_en2 ? ic_imem_addr_4 : ic_imem_addr_2; // @[src/main/scala/fpga/Core.scala 499:28 500:23 486:26]
+  wire [2:0] _GEN_50 = ic_read_en2 ? 3'h0 : 3'h4; // @[src/main/scala/fpga/Core.scala 498:18 499:28 501:20]
+  wire [30:0] _GEN_51 = ic_read_en4 ? ic_reg_imem_addr : ic_reg_addr_out; // @[src/main/scala/fpga/Core.scala 384:15 515:33 516:23]
+  wire [2:0] _GEN_52 = ic_read_en4 ? 3'h0 : ic_state; // @[src/main/scala/fpga/Core.scala 515:33 517:20 356:25]
+  wire [30:0] _GEN_53 = ic_read_en2 ? ic_inst_addr_2 : _GEN_51; // @[src/main/scala/fpga/Core.scala 512:28 513:23]
+  wire [2:0] _GEN_54 = ic_read_en2 ? 3'h4 : _GEN_52; // @[src/main/scala/fpga/Core.scala 512:28 514:20]
+  wire [30:0] _GEN_55 = ic_read_en4 ? ic_imem_addr_2 : ic_reg_addr_out; // @[src/main/scala/fpga/Core.scala 384:15 546:33 547:23]
+  wire [2:0] _GEN_56 = ic_read_en4 ? 3'h4 : 3'h3; // @[src/main/scala/fpga/Core.scala 542:18 546:33 548:20]
+  wire [30:0] _GEN_57 = ic_read_en2 ? ic_reg_imem_addr : _GEN_55; // @[src/main/scala/fpga/Core.scala 543:28 544:23]
+  wire [2:0] _GEN_58 = ic_read_en2 ? 3'h2 : _GEN_56; // @[src/main/scala/fpga/Core.scala 543:28 545:20]
+  wire [30:0] _GEN_59 = ic_read_en4 ? ic_inst_addr_2 : ic_reg_addr_out; // @[src/main/scala/fpga/Core.scala 384:15 562:33 563:23]
+  wire [2:0] _GEN_60 = ic_read_en4 ? 3'h4 : ic_state; // @[src/main/scala/fpga/Core.scala 562:33 564:20 356:25]
+  wire [30:0] _GEN_61 = ic_read_en2 ? ic_reg_inst_addr : _GEN_59; // @[src/main/scala/fpga/Core.scala 559:28 560:23]
+  wire [2:0] _GEN_62 = ic_read_en2 ? 3'h2 : _GEN_60; // @[src/main/scala/fpga/Core.scala 559:28 561:20]
+  wire [31:0] _GEN_63 = _T_15 ? _io_imem_addr_T : _io_imem_addr_T; // @[src/main/scala/fpga/Core.scala 377:16 453:23 552:25]
+  wire [30:0] _GEN_69 = _T_15 ? _GEN_61 : ic_reg_addr_out; // @[src/main/scala/fpga/Core.scala 384:15 453:23]
+  wire [2:0] _GEN_70 = _T_15 ? _GEN_62 : ic_state; // @[src/main/scala/fpga/Core.scala 453:23 356:25]
+  wire [31:0] _GEN_71 = _T_12 ? _io_imem_addr_T_2 : _GEN_63; // @[src/main/scala/fpga/Core.scala 453:23 521:27]
+  wire [30:0] _GEN_72 = _T_12 ? ic_imem_addr_4 : ic_reg_imem_addr; // @[src/main/scala/fpga/Core.scala 453:23 522:27 347:33]
+  wire [31:0] _GEN_74 = _T_12 ? io_imem_inst : ic_reg_inst; // @[src/main/scala/fpga/Core.scala 453:23 524:27 351:34]
+  wire [30:0] _GEN_75 = _T_12 ? ic_reg_imem_addr : ic_reg_inst_addr; // @[src/main/scala/fpga/Core.scala 453:23 525:27 352:34]
+  wire [31:0] _GEN_76 = _T_12 ? ic_reg_inst : ic_reg_inst2; // @[src/main/scala/fpga/Core.scala 453:23 526:27 353:34]
+  wire  _GEN_85 = _T_12 ? _ic_reg_bp_next_taken1_T_1 : ic_reg_bp_next_taken1; // @[src/main/scala/fpga/Core.scala 453:23 536:34 367:41]
+  wire [30:0] _GEN_86 = _T_12 ? ic_btb_io_lu_taken_pc1 : ic_reg_bp_next_taken_pc1; // @[src/main/scala/fpga/Core.scala 453:23 537:34 368:41]
+  wire [1:0] _GEN_87 = _T_12 ? ic_pht_io_lu_cnt1 : ic_reg_bp_next_cnt1; // @[src/main/scala/fpga/Core.scala 453:23 538:34 369:41]
+  wire [2:0] _GEN_91 = _T_12 ? _GEN_58 : _GEN_70; // @[src/main/scala/fpga/Core.scala 453:23]
+  wire [30:0] _GEN_92 = _T_12 ? _GEN_57 : _GEN_69; // @[src/main/scala/fpga/Core.scala 453:23]
+  wire [31:0] _GEN_93 = _T_9 ? _io_imem_addr_T : _GEN_71; // @[src/main/scala/fpga/Core.scala 453:23 505:25]
+  wire [30:0] _GEN_95 = _T_9 ? ic_reg_imem_addr : _GEN_72; // @[src/main/scala/fpga/Core.scala 453:23 507:25]
+  wire [30:0] _GEN_99 = _T_9 ? _GEN_53 : _GEN_92; // @[src/main/scala/fpga/Core.scala 453:23]
+  wire [2:0] _GEN_100 = _T_9 ? _GEN_54 : _GEN_91; // @[src/main/scala/fpga/Core.scala 453:23]
+  wire [31:0] _GEN_102 = _T_9 ? ic_reg_inst : _GEN_74; // @[src/main/scala/fpga/Core.scala 453:23 351:34]
+  wire [30:0] _GEN_103 = _T_9 ? ic_reg_inst_addr : _GEN_75; // @[src/main/scala/fpga/Core.scala 453:23 352:34]
+  wire [31:0] _GEN_104 = _T_9 ? ic_reg_inst2 : _GEN_76; // @[src/main/scala/fpga/Core.scala 453:23 353:34]
+  wire  _GEN_109 = _T_9 ? ic_reg_bp_next_taken1 : _GEN_85; // @[src/main/scala/fpga/Core.scala 453:23 367:41]
+  wire [30:0] _GEN_110 = _T_9 ? ic_reg_bp_next_taken_pc1 : _GEN_86; // @[src/main/scala/fpga/Core.scala 453:23 368:41]
+  wire [1:0] _GEN_111 = _T_9 ? ic_reg_bp_next_cnt1 : _GEN_87; // @[src/main/scala/fpga/Core.scala 453:23 369:41]
+  wire [31:0] _GEN_115 = _T_6 ? _io_imem_addr_T_2 : _GEN_93; // @[src/main/scala/fpga/Core.scala 453:23 481:26]
+  wire [30:0] _GEN_116 = _T_6 ? ic_imem_addr_4 : _GEN_95; // @[src/main/scala/fpga/Core.scala 453:23 482:26]
+  wire [31:0] _GEN_117 = _T_6 ? io_imem_inst : _GEN_102; // @[src/main/scala/fpga/Core.scala 453:23 483:26]
+  wire [30:0] _GEN_118 = _T_6 ? ic_reg_imem_addr : _GEN_103; // @[src/main/scala/fpga/Core.scala 453:23 484:26]
+  wire [30:0] _GEN_120 = _T_6 ? _GEN_49 : _GEN_99; // @[src/main/scala/fpga/Core.scala 453:23]
+  wire  _GEN_128 = _T_6 ? _ic_reg_bp_next_taken1_T_1 : _GEN_109; // @[src/main/scala/fpga/Core.scala 453:23 495:34]
+  wire [30:0] _GEN_129 = _T_6 ? ic_btb_io_lu_taken_pc1 : _GEN_110; // @[src/main/scala/fpga/Core.scala 453:23 496:34]
+  wire [1:0] _GEN_130 = _T_6 ? ic_pht_io_lu_cnt1 : _GEN_111; // @[src/main/scala/fpga/Core.scala 453:23 497:34]
+  wire [2:0] _GEN_131 = _T_6 ? _GEN_50 : _GEN_100; // @[src/main/scala/fpga/Core.scala 453:23]
+  wire [31:0] _GEN_132 = _T_6 ? ic_reg_inst2 : _GEN_104; // @[src/main/scala/fpga/Core.scala 453:23 353:34]
+  wire [31:0] _GEN_137 = _T_3 ? _io_imem_addr_T_2 : _GEN_115; // @[src/main/scala/fpga/Core.scala 453:23 455:26]
+  wire [30:0] _GEN_138 = _T_3 ? ic_imem_addr_4 : _GEN_116; // @[src/main/scala/fpga/Core.scala 453:23 456:26]
+  wire  _GEN_160 = ~io_imem_valid ? ic_reg_half_rdy : 1'h1; // @[src/main/scala/fpga/Core.scala 380:19 402:98 404:21]
+  wire  _GEN_161 = ~io_imem_valid ? 1'h0 : ic_reg_read_rdy; // @[src/main/scala/fpga/Core.scala 381:15 402:98 405:21]
+  wire  _GEN_162 = ~io_imem_valid ? 1'h0 : ic_reg_half_rdy; // @[src/main/scala/fpga/Core.scala 382:15 402:98 406:21]
+  wire  _GEN_163 = ~io_imem_valid ? _GEN_33 : _GEN_33; // @[src/main/scala/fpga/Core.scala 402:98]
+  wire [30:0] _GEN_164 = ~io_imem_valid ? _GEN_34 : _GEN_34; // @[src/main/scala/fpga/Core.scala 402:98]
+  wire [1:0] _GEN_165 = ~io_imem_valid ? _GEN_35 : _GEN_35; // @[src/main/scala/fpga/Core.scala 402:98]
+  wire [31:0] _GEN_175 = ~io_imem_valid ? _io_imem_addr_T : _GEN_137; // @[src/main/scala/fpga/Core.scala 377:16 402:98]
+  wire [30:0] _GEN_176 = ~io_imem_valid ? ic_reg_imem_addr : _GEN_138; // @[src/main/scala/fpga/Core.scala 347:33 402:98]
+  wire  _GEN_191 = if1_is_jump | _GEN_160; // @[src/main/scala/fpga/Core.scala 380:19 393:21]
+  wire  ic_read_rdy = if1_is_jump ? ic_reg_read_rdy : _GEN_161; // @[src/main/scala/fpga/Core.scala 381:15 393:21]
+  wire  ic_half_rdy = if1_is_jump ? ic_reg_half_rdy : _GEN_162; // @[src/main/scala/fpga/Core.scala 382:15 393:21]
+  wire  ic_bp_taken = if1_is_jump ? 1'h0 : _GEN_163; // @[src/main/scala/fpga/Core.scala 388:19 393:21]
+  wire [30:0] ic_bp_taken_pc = if1_is_jump ? 31'h0 : _GEN_164; // @[src/main/scala/fpga/Core.scala 389:19 393:21]
+  wire [1:0] ic_bp_cnt = if1_is_jump ? 2'h0 : _GEN_165; // @[src/main/scala/fpga/Core.scala 390:19 393:21]
+  wire  if2_is_inst_read = ic_read_rdy | ic_half_rdy & if2_is_half_inst; // @[src/main/scala/fpga/Core.scala 589:38]
+  wire  _if2_is_valid_inst_T = ~ex2_reg_is_br; // @[src/main/scala/fpga/Core.scala 591:27]
+  wire  _if2_is_valid_inst_T_1 = ~id_reg_is_bp_fail; // @[src/main/scala/fpga/Core.scala 591:45]
+  wire  if2_is_valid_inst = ~ex2_reg_is_br & ~id_reg_is_bp_fail & ~id_reg_bp_taken & if2_is_inst_read; // @[src/main/scala/fpga/Core.scala 591:84]
+  wire [31:0] if2_inst = if2_is_valid_inst ? ic_data_out : 32'h13; // @[src/main/scala/fpga/Core.scala 592:21]
+  wire  if2_bp_taken = if2_is_valid_inst & ic_bp_taken; // @[src/main/scala/fpga/Core.scala 593:40]
+  wire [31:0] _T_31 = {ic_reg_addr_out,1'h0}; // @[src/main/scala/fpga/Core.scala 607:46]
+  wire  _T_33 = ~reset; // @[src/main/scala/fpga/Core.scala 607:9]
+  wire  _rrd_stall_T_1 = ~rrd_reg_op1_sel; // @[src/main/scala/fpga/Core.scala 1181:25]
+  wire  _rrd_stall_T_3 = ~rrd_reg_op2_sel; // @[src/main/scala/fpga/Core.scala 1182:25]
+  wire  _rrd_stall_T_4 = ~rrd_reg_op2_sel & scoreboard_rrd_stall_MPORT_1_data; // @[src/main/scala/fpga/Core.scala 1182:39]
+  wire  _rrd_stall_T_5 = ~rrd_reg_op1_sel & scoreboard_rrd_stall_MPORT_data | _rrd_stall_T_4; // @[src/main/scala/fpga/Core.scala 1181:72]
+  wire  _rrd_stall_T_7 = rrd_reg_op3_sel == 2'h2 & scoreboard_rrd_stall_MPORT_2_data; // @[src/main/scala/fpga/Core.scala 1183:39]
+  wire  _rrd_stall_T_8 = _rrd_stall_T_5 | _rrd_stall_T_7; // @[src/main/scala/fpga/Core.scala 1182:72]
+  wire  _rrd_stall_T_10 = rrd_reg_rf_wen & scoreboard_rrd_stall_MPORT_3_data; // @[src/main/scala/fpga/Core.scala 1184:35]
+  wire  _rrd_stall_T_11 = _rrd_stall_T_8 | _rrd_stall_T_10; // @[src/main/scala/fpga/Core.scala 1183:72]
+  wire  rrd_stall = _if2_is_valid_inst_T & _rrd_stall_T_11; // @[src/main/scala/fpga/Core.scala 1180:20]
+  wire  mem1_mem_stall = mem1_reg_is_mem_store & ~io_dmem_wready; // @[src/main/scala/fpga/Core.scala 1844:89]
+  wire  _mem1_dram_stall_T_3 = mem1_reg_is_dram_store & ~io_cache_wready; // @[src/main/scala/fpga/Core.scala 1847:29]
+  wire  _mem1_dram_stall_T_4 = mem1_reg_is_dram_load & ~io_cache_rready | _mem1_dram_stall_T_3; // @[src/main/scala/fpga/Core.scala 1846:49]
+  wire  _mem1_dram_stall_T_5 = mem1_reg_is_dram_fence & io_cache_ibusy; // @[src/main/scala/fpga/Core.scala 1848:29]
+  wire  mem1_dram_stall = _mem1_dram_stall_T_4 | _mem1_dram_stall_T_5; // @[src/main/scala/fpga/Core.scala 1847:50]
+  wire  mem2_dram_stall = mem2_reg_is_dram_load & ~io_cache_rvalid; // @[src/main/scala/fpga/Core.scala 1878:48]
+  wire  mem_stall = mem1_mem_stall | mem1_dram_stall | mem1_reg_unaligned | mem2_dram_stall; // @[src/main/scala/fpga/Core.scala 1850:72]
+  wire  ex2_stall = mem_stall | ex2_reg_div_stall; // @[src/main/scala/fpga/Core.scala 1582:26]
+  wire  id_stall = rrd_stall | ex2_stall; // @[src/main/scala/fpga/Core.scala 630:25]
+  wire  id_is_half = id_reg_inst[1:0] != 2'h3; // @[src/main/scala/fpga/Core.scala 637:35]
+  wire [4:0] id_rs1_addr = id_reg_inst[19:15]; // @[src/main/scala/fpga/Core.scala 639:28]
+  wire [4:0] id_rs2_addr = id_reg_inst[24:20]; // @[src/main/scala/fpga/Core.scala 640:28]
+  wire [4:0] id_rs3_addr = id_reg_inst[31:27]; // @[src/main/scala/fpga/Core.scala 641:28]
+  wire [4:0] id_w_wb_addr = id_reg_inst[11:7]; // @[src/main/scala/fpga/Core.scala 642:30]
+  wire [4:0] id_c_rs2_addr = id_reg_inst[6:2]; // @[src/main/scala/fpga/Core.scala 647:31]
+  wire [4:0] id_c_rs1p_addr = {2'h1,id_reg_inst[9:7]}; // @[src/main/scala/fpga/Core.scala 649:27]
+  wire [4:0] id_c_rs2p_addr = {2'h1,id_reg_inst[4:2]}; // @[src/main/scala/fpga/Core.scala 650:27]
+  wire [4:0] id_c_rs3p_addr = {2'h1,id_reg_inst[12:10]}; // @[src/main/scala/fpga/Core.scala 651:27]
+  wire [11:0] id_imm_i = id_reg_inst[31:20]; // @[src/main/scala/fpga/Core.scala 655:25]
+  wire [19:0] _id_imm_i_sext_T_2 = id_imm_i[11] ? 20'hfffff : 20'h0; // @[src/main/scala/fpga/Core.scala 656:31]
+  wire [31:0] id_imm_i_sext = {_id_imm_i_sext_T_2,id_imm_i}; // @[src/main/scala/fpga/Core.scala 656:26]
+  wire [11:0] id_imm_s = {id_reg_inst[31:25],id_w_wb_addr}; // @[src/main/scala/fpga/Core.scala 657:21]
+  wire [19:0] _id_imm_s_sext_T_2 = id_imm_s[11] ? 20'hfffff : 20'h0; // @[src/main/scala/fpga/Core.scala 658:31]
+  wire [31:0] id_imm_s_sext = {_id_imm_s_sext_T_2,id_reg_inst[31:25],id_w_wb_addr}; // @[src/main/scala/fpga/Core.scala 658:26]
+  wire [11:0] id_imm_b = {id_reg_inst[31],id_reg_inst[7],id_reg_inst[30:25],id_reg_inst[11:8]}; // @[src/main/scala/fpga/Core.scala 659:21]
+  wire [18:0] _id_imm_b_sext_T_2 = id_imm_b[11] ? 19'h7ffff : 19'h0; // @[src/main/scala/fpga/Core.scala 660:31]
   wire [31:0] id_imm_b_sext = {_id_imm_b_sext_T_2,id_reg_inst[31],id_reg_inst[7],id_reg_inst[30:25],id_reg_inst[11:8],1'h0
-    }; // @[src/main/scala/fpga/Core.scala 656:26]
-  wire [19:0] id_imm_j = {id_reg_inst[31],id_reg_inst[19:12],id_reg_inst[20],id_reg_inst[30:21]}; // @[src/main/scala/fpga/Core.scala 657:21]
-  wire [10:0] _id_imm_j_sext_T_2 = id_imm_j[19] ? 11'h7ff : 11'h0; // @[src/main/scala/fpga/Core.scala 658:31]
+    }; // @[src/main/scala/fpga/Core.scala 660:26]
+  wire [19:0] id_imm_j = {id_reg_inst[31],id_reg_inst[19:12],id_reg_inst[20],id_reg_inst[30:21]}; // @[src/main/scala/fpga/Core.scala 661:21]
+  wire [10:0] _id_imm_j_sext_T_2 = id_imm_j[19] ? 11'h7ff : 11'h0; // @[src/main/scala/fpga/Core.scala 662:31]
   wire [31:0] id_imm_j_sext = {_id_imm_j_sext_T_2,id_reg_inst[31],id_reg_inst[19:12],id_reg_inst[20],id_reg_inst[30:21],1'h0
-    }; // @[src/main/scala/fpga/Core.scala 658:26]
-  wire [19:0] id_imm_u = id_reg_inst[31:12]; // @[src/main/scala/fpga/Core.scala 659:25]
-  wire [31:0] id_imm_u_shifted = {id_imm_u,12'h0}; // @[src/main/scala/fpga/Core.scala 660:29]
-  wire [31:0] id_imm_z_uext = {27'h0,id_rs1_addr}; // @[src/main/scala/fpga/Core.scala 662:26]
-  wire [26:0] _id_c_imm_i_T_2 = id_reg_inst[12] ? 27'h7ffffff : 27'h0; // @[src/main/scala/fpga/Core.scala 664:28]
-  wire [31:0] id_c_imm_i = {_id_c_imm_i_T_2,id_c_rs2_addr}; // @[src/main/scala/fpga/Core.scala 664:23]
-  wire [14:0] _id_c_imm_iu_T_2 = id_reg_inst[12] ? 15'h7fff : 15'h0; // @[src/main/scala/fpga/Core.scala 665:29]
-  wire [31:0] id_c_imm_iu = {_id_c_imm_iu_T_2,id_c_rs2_addr,12'h0}; // @[src/main/scala/fpga/Core.scala 665:24]
-  wire [22:0] _id_c_imm_i16_T_2 = id_reg_inst[12] ? 23'h7fffff : 23'h0; // @[src/main/scala/fpga/Core.scala 666:30]
-  wire [31:0] id_c_imm_i16 = {_id_c_imm_i16_T_2,id_reg_inst[4:3],id_reg_inst[5],id_reg_inst[2],id_reg_inst[6],4'h0}; // @[src/main/scala/fpga/Core.scala 666:25]
-  wire [31:0] id_c_imm_sl = {24'h0,id_reg_inst[3:2],id_reg_inst[12],id_reg_inst[6:4],2'h0}; // @[src/main/scala/fpga/Core.scala 667:24]
-  wire [31:0] id_c_imm_ss = {24'h0,id_reg_inst[8:7],id_reg_inst[12:9],2'h0}; // @[src/main/scala/fpga/Core.scala 668:24]
-  wire [31:0] id_c_imm_iw = {22'h0,id_reg_inst[10:7],id_reg_inst[12:11],id_reg_inst[5],id_reg_inst[6],2'h0}; // @[src/main/scala/fpga/Core.scala 669:24]
-  wire [31:0] id_c_imm_ls = {25'h0,id_reg_inst[5],id_reg_inst[12:10],id_reg_inst[6],2'h0}; // @[src/main/scala/fpga/Core.scala 670:24]
-  wire [23:0] _id_c_imm_b_T_2 = id_reg_inst[12] ? 24'hffffff : 24'h0; // @[src/main/scala/fpga/Core.scala 671:28]
-  wire [31:0] id_c_imm_b = {_id_c_imm_b_T_2,id_reg_inst[6:5],id_reg_inst[2],id_reg_inst[11:10],id_reg_inst[4:3],1'h0}; // @[src/main/scala/fpga/Core.scala 671:23]
-  wire [20:0] _id_c_imm_j_T_2 = id_reg_inst[12] ? 21'h1fffff : 21'h0; // @[src/main/scala/fpga/Core.scala 672:28]
+    }; // @[src/main/scala/fpga/Core.scala 662:26]
+  wire [19:0] id_imm_u = id_reg_inst[31:12]; // @[src/main/scala/fpga/Core.scala 663:25]
+  wire [31:0] id_imm_u_shifted = {id_imm_u,12'h0}; // @[src/main/scala/fpga/Core.scala 664:29]
+  wire [31:0] id_imm_z_uext = {27'h0,id_rs1_addr}; // @[src/main/scala/fpga/Core.scala 666:26]
+  wire [26:0] _id_c_imm_i_T_2 = id_reg_inst[12] ? 27'h7ffffff : 27'h0; // @[src/main/scala/fpga/Core.scala 668:28]
+  wire [31:0] id_c_imm_i = {_id_c_imm_i_T_2,id_c_rs2_addr}; // @[src/main/scala/fpga/Core.scala 668:23]
+  wire [14:0] _id_c_imm_iu_T_2 = id_reg_inst[12] ? 15'h7fff : 15'h0; // @[src/main/scala/fpga/Core.scala 669:29]
+  wire [31:0] id_c_imm_iu = {_id_c_imm_iu_T_2,id_c_rs2_addr,12'h0}; // @[src/main/scala/fpga/Core.scala 669:24]
+  wire [22:0] _id_c_imm_i16_T_2 = id_reg_inst[12] ? 23'h7fffff : 23'h0; // @[src/main/scala/fpga/Core.scala 670:30]
+  wire [31:0] id_c_imm_i16 = {_id_c_imm_i16_T_2,id_reg_inst[4:3],id_reg_inst[5],id_reg_inst[2],id_reg_inst[6],4'h0}; // @[src/main/scala/fpga/Core.scala 670:25]
+  wire [31:0] id_c_imm_sl = {24'h0,id_reg_inst[3:2],id_reg_inst[12],id_reg_inst[6:4],2'h0}; // @[src/main/scala/fpga/Core.scala 671:24]
+  wire [31:0] id_c_imm_ss = {24'h0,id_reg_inst[8:7],id_reg_inst[12:9],2'h0}; // @[src/main/scala/fpga/Core.scala 672:24]
+  wire [31:0] id_c_imm_iw = {22'h0,id_reg_inst[10:7],id_reg_inst[12:11],id_reg_inst[5],id_reg_inst[6],2'h0}; // @[src/main/scala/fpga/Core.scala 673:24]
+  wire [31:0] id_c_imm_ls = {25'h0,id_reg_inst[5],id_reg_inst[12:10],id_reg_inst[6],2'h0}; // @[src/main/scala/fpga/Core.scala 674:24]
+  wire [23:0] _id_c_imm_b_T_2 = id_reg_inst[12] ? 24'hffffff : 24'h0; // @[src/main/scala/fpga/Core.scala 675:28]
+  wire [31:0] id_c_imm_b = {_id_c_imm_b_T_2,id_reg_inst[6:5],id_reg_inst[2],id_reg_inst[11:10],id_reg_inst[4:3],1'h0}; // @[src/main/scala/fpga/Core.scala 675:23]
+  wire [20:0] _id_c_imm_j_T_2 = id_reg_inst[12] ? 21'h1fffff : 21'h0; // @[src/main/scala/fpga/Core.scala 676:28]
   wire [31:0] id_c_imm_j = {_id_c_imm_j_T_2,id_reg_inst[8],id_reg_inst[10:9],id_reg_inst[6],id_reg_inst[7],id_reg_inst[2
-    ],id_reg_inst[11],id_reg_inst[5:3],1'h0}; // @[src/main/scala/fpga/Core.scala 672:23]
-  wire [31:0] id_c_imm_b2 = {_id_c_imm_i_T_2,id_reg_inst[11:10],id_reg_inst[6:5],1'h0}; // @[src/main/scala/fpga/Core.scala 674:24]
-  wire [31:0] id_c_imm_u = {12'h0,id_reg_inst[12:5],12'h0}; // @[src/main/scala/fpga/Core.scala 675:23]
-  wire [31:0] id_c_imm_lsb = {27'h0,id_reg_inst[11:10],id_reg_inst[6:5],id_reg_inst[12]}; // @[src/main/scala/fpga/Core.scala 676:25]
-  wire [31:0] id_c_imm_lsh = {28'h0,id_reg_inst[10],id_reg_inst[6:5],1'h0}; // @[src/main/scala/fpga/Core.scala 677:25]
-  wire [31:0] id_c_imm_sw0 = {25'h0,id_reg_inst[5:3],id_reg_inst[10],id_reg_inst[6],2'h0}; // @[src/main/scala/fpga/Core.scala 678:25]
-  wire [31:0] id_c_imm_sb0 = {28'h0,id_reg_inst[10],id_reg_inst[6:4]}; // @[src/main/scala/fpga/Core.scala 679:25]
-  wire [32:0] id_c_imm_sh0 = {28'h0,id_reg_inst[4],id_reg_inst[10],id_reg_inst[6:5],1'h0}; // @[src/main/scala/fpga/Core.scala 680:25]
-  wire [25:0] _id_c_imm_a2w_T_2 = id_reg_inst[12] ? 26'h3ffffff : 26'h0; // @[src/main/scala/fpga/Core.scala 681:30]
-  wire [31:0] id_c_imm_a2w = {_id_c_imm_a2w_T_2,id_reg_inst[5],id_reg_inst[11:10],id_reg_inst[6],2'h0}; // @[src/main/scala/fpga/Core.scala 681:25]
-  wire [29:0] _id_c_imm_a2b_T_2 = id_reg_inst[12] ? 30'h3fffffff : 30'h0; // @[src/main/scala/fpga/Core.scala 682:30]
-  wire [31:0] id_c_imm_a2b = {_id_c_imm_a2b_T_2,id_reg_inst[11:10]}; // @[src/main/scala/fpga/Core.scala 682:25]
+    ],id_reg_inst[11],id_reg_inst[5:3],1'h0}; // @[src/main/scala/fpga/Core.scala 676:23]
+  wire [31:0] id_c_imm_b2 = {_id_c_imm_i_T_2,id_reg_inst[11:10],id_reg_inst[6:5],1'h0}; // @[src/main/scala/fpga/Core.scala 678:24]
+  wire [31:0] id_c_imm_u = {12'h0,id_reg_inst[12:5],12'h0}; // @[src/main/scala/fpga/Core.scala 679:23]
+  wire [31:0] id_c_imm_lsb = {27'h0,id_reg_inst[11:10],id_reg_inst[6:5],id_reg_inst[12]}; // @[src/main/scala/fpga/Core.scala 680:25]
+  wire [31:0] id_c_imm_lsh = {28'h0,id_reg_inst[10],id_reg_inst[6:5],1'h0}; // @[src/main/scala/fpga/Core.scala 681:25]
+  wire [31:0] id_c_imm_sw0 = {25'h0,id_reg_inst[5:3],id_reg_inst[10],id_reg_inst[6],2'h0}; // @[src/main/scala/fpga/Core.scala 682:25]
+  wire [31:0] id_c_imm_sb0 = {28'h0,id_reg_inst[10],id_reg_inst[6:4]}; // @[src/main/scala/fpga/Core.scala 683:25]
+  wire [32:0] id_c_imm_sh0 = {28'h0,id_reg_inst[4],id_reg_inst[10],id_reg_inst[6:5],1'h0}; // @[src/main/scala/fpga/Core.scala 684:25]
+  wire [25:0] _id_c_imm_a2w_T_2 = id_reg_inst[12] ? 26'h3ffffff : 26'h0; // @[src/main/scala/fpga/Core.scala 685:30]
+  wire [31:0] id_c_imm_a2w = {_id_c_imm_a2w_T_2,id_reg_inst[5],id_reg_inst[11:10],id_reg_inst[6],2'h0}; // @[src/main/scala/fpga/Core.scala 685:25]
+  wire [29:0] _id_c_imm_a2b_T_2 = id_reg_inst[12] ? 30'h3fffffff : 30'h0; // @[src/main/scala/fpga/Core.scala 686:30]
+  wire [31:0] id_c_imm_a2b = {_id_c_imm_a2b_T_2,id_reg_inst[11:10]}; // @[src/main/scala/fpga/Core.scala 686:25]
+  wire [1:0] id_shamt = id_reg_inst[14:13]; // @[src/main/scala/fpga/Core.scala 688:25]
   wire [31:0] _csignals_T = id_reg_inst & 32'h707f; // @[src/main/scala/chisel3/util/Lookup.scala 31:38]
   wire  _csignals_T_1 = 32'h3 == _csignals_T; // @[src/main/scala/chisel3/util/Lookup.scala 31:38]
   wire  _csignals_T_3 = 32'h4003 == _csignals_T; // @[src/main/scala/chisel3/util/Lookup.scala 31:38]
@@ -1268,1062 +1279,1202 @@ module Core(
   wire  _csignals_T_139 = 32'h60005033 == _csignals_T_16; // @[src/main/scala/chisel3/util/Lookup.scala 31:38]
   wire  _csignals_T_141 = 32'h60005013 == _csignals_T_16; // @[src/main/scala/chisel3/util/Lookup.scala 31:38]
   wire  _csignals_T_143 = 32'h4a001033 == _csignals_T_16; // @[src/main/scala/chisel3/util/Lookup.scala 31:38]
-  wire [31:0] _csignals_T_144 = id_reg_inst & 32'h600707f; // @[src/main/scala/chisel3/util/Lookup.scala 31:38]
-  wire  _csignals_T_145 = 32'h6005033 == _csignals_T_144; // @[src/main/scala/chisel3/util/Lookup.scala 31:38]
-  wire  _csignals_T_147 = 32'h4001033 == _csignals_T_144; // @[src/main/scala/chisel3/util/Lookup.scala 31:38]
-  wire  _csignals_T_149 = 32'h4005033 == _csignals_T_144; // @[src/main/scala/chisel3/util/Lookup.scala 31:38]
-  wire  _csignals_T_151 = 32'h4005013 == _csignals_T_144; // @[src/main/scala/chisel3/util/Lookup.scala 31:38]
-  wire [31:0] _csignals_T_152 = id_reg_inst & 32'hffff; // @[src/main/scala/chisel3/util/Lookup.scala 31:38]
-  wire  _csignals_T_153 = 32'h0 == _csignals_T_152; // @[src/main/scala/chisel3/util/Lookup.scala 31:38]
-  wire [31:0] _csignals_T_154 = id_reg_inst & 32'he003; // @[src/main/scala/chisel3/util/Lookup.scala 31:38]
-  wire  _csignals_T_155 = 32'h0 == _csignals_T_154; // @[src/main/scala/chisel3/util/Lookup.scala 31:38]
-  wire [31:0] _csignals_T_156 = id_reg_inst & 32'hef83; // @[src/main/scala/chisel3/util/Lookup.scala 31:38]
-  wire  _csignals_T_157 = 32'h6101 == _csignals_T_156; // @[src/main/scala/chisel3/util/Lookup.scala 31:38]
-  wire  _csignals_T_159 = 32'h1 == _csignals_T_154; // @[src/main/scala/chisel3/util/Lookup.scala 31:38]
-  wire  _csignals_T_161 = 32'h4000 == _csignals_T_154; // @[src/main/scala/chisel3/util/Lookup.scala 31:38]
-  wire  _csignals_T_163 = 32'hc000 == _csignals_T_154; // @[src/main/scala/chisel3/util/Lookup.scala 31:38]
-  wire  _csignals_T_165 = 32'h4001 == _csignals_T_154; // @[src/main/scala/chisel3/util/Lookup.scala 31:38]
-  wire  _csignals_T_167 = 32'h6001 == _csignals_T_154; // @[src/main/scala/chisel3/util/Lookup.scala 31:38]
-  wire [31:0] _csignals_T_168 = id_reg_inst & 32'hec03; // @[src/main/scala/chisel3/util/Lookup.scala 31:38]
-  wire  _csignals_T_169 = 32'h8401 == _csignals_T_168; // @[src/main/scala/chisel3/util/Lookup.scala 31:38]
-  wire  _csignals_T_171 = 32'h8001 == _csignals_T_168; // @[src/main/scala/chisel3/util/Lookup.scala 31:38]
-  wire  _csignals_T_173 = 32'h8801 == _csignals_T_168; // @[src/main/scala/chisel3/util/Lookup.scala 31:38]
-  wire [31:0] _csignals_T_174 = id_reg_inst & 32'hfc63; // @[src/main/scala/chisel3/util/Lookup.scala 31:38]
-  wire  _csignals_T_175 = 32'h8c01 == _csignals_T_174; // @[src/main/scala/chisel3/util/Lookup.scala 31:38]
-  wire  _csignals_T_177 = 32'h8c21 == _csignals_T_174; // @[src/main/scala/chisel3/util/Lookup.scala 31:38]
-  wire  _csignals_T_179 = 32'h8c41 == _csignals_T_174; // @[src/main/scala/chisel3/util/Lookup.scala 31:38]
-  wire  _csignals_T_181 = 32'h8c61 == _csignals_T_174; // @[src/main/scala/chisel3/util/Lookup.scala 31:38]
-  wire  _csignals_T_183 = 32'h2 == _csignals_T_154; // @[src/main/scala/chisel3/util/Lookup.scala 31:38]
-  wire  _csignals_T_185 = 32'ha001 == _csignals_T_154; // @[src/main/scala/chisel3/util/Lookup.scala 31:38]
-  wire  _csignals_T_187 = 32'hc001 == _csignals_T_154; // @[src/main/scala/chisel3/util/Lookup.scala 31:38]
-  wire  _csignals_T_189 = 32'he001 == _csignals_T_154; // @[src/main/scala/chisel3/util/Lookup.scala 31:38]
-  wire [31:0] _csignals_T_190 = id_reg_inst & 32'hf07f; // @[src/main/scala/chisel3/util/Lookup.scala 31:38]
-  wire  _csignals_T_191 = 32'h8002 == _csignals_T_190; // @[src/main/scala/chisel3/util/Lookup.scala 31:38]
-  wire  _csignals_T_193 = 32'h9002 == _csignals_T_190; // @[src/main/scala/chisel3/util/Lookup.scala 31:38]
-  wire  _csignals_T_195 = 32'h2001 == _csignals_T_154; // @[src/main/scala/chisel3/util/Lookup.scala 31:38]
-  wire  _csignals_T_197 = 32'h4002 == _csignals_T_154; // @[src/main/scala/chisel3/util/Lookup.scala 31:38]
-  wire  _csignals_T_199 = 32'hc002 == _csignals_T_154; // @[src/main/scala/chisel3/util/Lookup.scala 31:38]
-  wire [31:0] _csignals_T_200 = id_reg_inst & 32'hf003; // @[src/main/scala/chisel3/util/Lookup.scala 31:38]
-  wire  _csignals_T_201 = 32'h8002 == _csignals_T_200; // @[src/main/scala/chisel3/util/Lookup.scala 31:38]
-  wire  _csignals_T_203 = 32'h9002 == _csignals_T_200; // @[src/main/scala/chisel3/util/Lookup.scala 31:38]
-  wire  _csignals_T_205 = 32'h2000 == _csignals_T_154; // @[src/main/scala/chisel3/util/Lookup.scala 31:38]
-  wire  _csignals_T_207 = 32'h6000 == _csignals_T_154; // @[src/main/scala/chisel3/util/Lookup.scala 31:38]
-  wire [31:0] _csignals_T_208 = id_reg_inst & 32'hf803; // @[src/main/scala/chisel3/util/Lookup.scala 31:38]
-  wire  _csignals_T_209 = 32'h2002 == _csignals_T_208; // @[src/main/scala/chisel3/util/Lookup.scala 31:38]
-  wire  _csignals_T_211 = 32'h2802 == _csignals_T_208; // @[src/main/scala/chisel3/util/Lookup.scala 31:38]
-  wire  _csignals_T_213 = 32'h3002 == _csignals_T_208; // @[src/main/scala/chisel3/util/Lookup.scala 31:38]
-  wire [31:0] _csignals_T_214 = id_reg_inst & 32'hf807; // @[src/main/scala/chisel3/util/Lookup.scala 31:38]
-  wire  _csignals_T_215 = 32'h3802 == _csignals_T_214; // @[src/main/scala/chisel3/util/Lookup.scala 31:38]
-  wire [31:0] _csignals_T_216 = id_reg_inst & 32'hf80f; // @[src/main/scala/chisel3/util/Lookup.scala 31:38]
-  wire  _csignals_T_217 = 32'h3806 == _csignals_T_216; // @[src/main/scala/chisel3/util/Lookup.scala 31:38]
-  wire  _csignals_T_219 = 32'h380e == _csignals_T_216; // @[src/main/scala/chisel3/util/Lookup.scala 31:38]
-  wire  _csignals_T_221 = 32'h6002 == _csignals_T_154; // @[src/main/scala/chisel3/util/Lookup.scala 31:38]
-  wire  _csignals_T_223 = 32'he000 == _csignals_T_154; // @[src/main/scala/chisel3/util/Lookup.scala 31:38]
-  wire  _csignals_T_225 = 32'h9c41 == _csignals_T_174; // @[src/main/scala/chisel3/util/Lookup.scala 31:38]
-  wire [31:0] _csignals_T_226 = id_reg_inst & 32'hfc7f; // @[src/main/scala/chisel3/util/Lookup.scala 31:38]
-  wire  _csignals_T_227 = 32'h9c61 == _csignals_T_226; // @[src/main/scala/chisel3/util/Lookup.scala 31:38]
-  wire  _csignals_T_229 = 32'h9c65 == _csignals_T_226; // @[src/main/scala/chisel3/util/Lookup.scala 31:38]
-  wire  _csignals_T_231 = 32'h9c6d == _csignals_T_226; // @[src/main/scala/chisel3/util/Lookup.scala 31:38]
-  wire  _csignals_T_233 = 32'h9c69 == _csignals_T_226; // @[src/main/scala/chisel3/util/Lookup.scala 31:38]
-  wire  _csignals_T_235 = 32'h9c75 == _csignals_T_226; // @[src/main/scala/chisel3/util/Lookup.scala 31:38]
-  wire  _csignals_T_237 = 32'h9c79 == _csignals_T_226; // @[src/main/scala/chisel3/util/Lookup.scala 31:38]
-  wire  _csignals_T_239 = 32'h8000 == _csignals_T_154; // @[src/main/scala/chisel3/util/Lookup.scala 31:38]
-  wire  _csignals_T_241 = 32'ha000 == _csignals_T_154; // @[src/main/scala/chisel3/util/Lookup.scala 31:38]
-  wire  _csignals_T_243 = 32'ha002 == _csignals_T_154; // @[src/main/scala/chisel3/util/Lookup.scala 31:38]
-  wire [31:0] _csignals_T_244 = id_reg_inst & 32'he063; // @[src/main/scala/chisel3/util/Lookup.scala 31:38]
-  wire  _csignals_T_245 = 32'he002 == _csignals_T_244; // @[src/main/scala/chisel3/util/Lookup.scala 31:38]
-  wire  _csignals_T_247 = 32'he022 == _csignals_T_174; // @[src/main/scala/chisel3/util/Lookup.scala 31:38]
-  wire  _csignals_T_249 = 32'hf022 == _csignals_T_174; // @[src/main/scala/chisel3/util/Lookup.scala 31:38]
-  wire  _csignals_T_251 = 32'he022 == _csignals_T_244; // @[src/main/scala/chisel3/util/Lookup.scala 31:38]
-  wire  _csignals_T_253 = 32'he042 == _csignals_T_244; // @[src/main/scala/chisel3/util/Lookup.scala 31:38]
-  wire  _csignals_T_255 = 32'he062 == _csignals_T_244; // @[src/main/scala/chisel3/util/Lookup.scala 31:38]
-  wire [3:0] _csignals_T_256 = _csignals_T_255 ? 4'h7 : 4'h0; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [3:0] _csignals_T_257 = _csignals_T_253 ? 4'h6 : _csignals_T_256; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [3:0] _csignals_T_258 = _csignals_T_251 ? 4'h0 : _csignals_T_257; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [3:0] _csignals_T_259 = _csignals_T_249 ? 4'h7 : _csignals_T_258; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [3:0] _csignals_T_260 = _csignals_T_247 ? 4'h7 : _csignals_T_259; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [3:0] _csignals_T_261 = _csignals_T_245 ? 4'h0 : _csignals_T_260; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [3:0] _csignals_T_262 = _csignals_T_243 ? 4'h0 : _csignals_T_261; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [3:0] _csignals_T_263 = _csignals_T_241 ? 4'h9 : _csignals_T_262; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [3:0] _csignals_T_264 = _csignals_T_239 ? 4'h8 : _csignals_T_263; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [3:0] _csignals_T_265 = _csignals_T_237 ? 4'h8 : _csignals_T_264; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [3:0] _csignals_T_266 = _csignals_T_235 ? 4'h1 : _csignals_T_265; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [3:0] _csignals_T_267 = _csignals_T_233 ? 4'ha : _csignals_T_266; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [3:0] _csignals_T_268 = _csignals_T_231 ? 4'h9 : _csignals_T_267; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [3:0] _csignals_T_269 = _csignals_T_229 ? 4'h8 : _csignals_T_268; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [3:0] _csignals_T_270 = _csignals_T_227 ? 4'h2 : _csignals_T_269; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [3:0] _csignals_T_271 = _csignals_T_225 ? 4'h8 : _csignals_T_270; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [3:0] _csignals_T_272 = _csignals_T_223 ? 4'h0 : _csignals_T_271; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [3:0] _csignals_T_273 = _csignals_T_221 ? 4'h0 : _csignals_T_272; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [3:0] _csignals_T_274 = _csignals_T_219 ? 4'h0 : _csignals_T_273; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [3:0] _csignals_T_275 = _csignals_T_217 ? 4'h0 : _csignals_T_274; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [3:0] _csignals_T_276 = _csignals_T_215 ? 4'h0 : _csignals_T_275; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [3:0] _csignals_T_277 = _csignals_T_213 ? 4'h0 : _csignals_T_276; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [3:0] _csignals_T_278 = _csignals_T_211 ? 4'h0 : _csignals_T_277; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [3:0] _csignals_T_279 = _csignals_T_209 ? 4'h0 : _csignals_T_278; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [3:0] _csignals_T_280 = _csignals_T_207 ? 4'h0 : _csignals_T_279; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [3:0] _csignals_T_281 = _csignals_T_205 ? 4'h0 : _csignals_T_280; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [3:0] _csignals_T_282 = _csignals_T_203 ? 4'h0 : _csignals_T_281; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [3:0] _csignals_T_283 = _csignals_T_201 ? 4'h0 : _csignals_T_282; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [3:0] _csignals_T_284 = _csignals_T_199 ? 4'h0 : _csignals_T_283; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [3:0] _csignals_T_285 = _csignals_T_197 ? 4'h0 : _csignals_T_284; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [3:0] _csignals_T_286 = _csignals_T_195 ? 4'h0 : _csignals_T_285; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [3:0] _csignals_T_287 = _csignals_T_193 ? 4'h0 : _csignals_T_286; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [3:0] _csignals_T_288 = _csignals_T_191 ? 4'h0 : _csignals_T_287; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [3:0] _csignals_T_289 = _csignals_T_189 ? 4'h9 : _csignals_T_288; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [3:0] _csignals_T_290 = _csignals_T_187 ? 4'h8 : _csignals_T_289; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [3:0] _csignals_T_291 = _csignals_T_185 ? 4'h0 : _csignals_T_290; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [3:0] _csignals_T_292 = _csignals_T_183 ? 4'h4 : _csignals_T_291; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [3:0] _csignals_T_293 = _csignals_T_181 ? 4'h2 : _csignals_T_292; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [3:0] _csignals_T_294 = _csignals_T_179 ? 4'h3 : _csignals_T_293; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [3:0] _csignals_T_295 = _csignals_T_177 ? 4'h1 : _csignals_T_294; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [3:0] _csignals_T_296 = _csignals_T_175 ? 4'h8 : _csignals_T_295; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [3:0] _csignals_T_297 = _csignals_T_173 ? 4'h2 : _csignals_T_296; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [3:0] _csignals_T_298 = _csignals_T_171 ? 4'h5 : _csignals_T_297; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [3:0] _csignals_T_299 = _csignals_T_169 ? 4'h5 : _csignals_T_298; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [3:0] _csignals_T_300 = _csignals_T_167 ? 4'h0 : _csignals_T_299; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [3:0] _csignals_T_301 = _csignals_T_165 ? 4'h0 : _csignals_T_300; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [3:0] _csignals_T_302 = _csignals_T_163 ? 4'h0 : _csignals_T_301; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [3:0] _csignals_T_303 = _csignals_T_161 ? 4'h0 : _csignals_T_302; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [3:0] _csignals_T_304 = _csignals_T_159 ? 4'h0 : _csignals_T_303; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [3:0] _csignals_T_305 = _csignals_T_157 ? 4'h0 : _csignals_T_304; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [3:0] _csignals_T_306 = _csignals_T_155 ? 4'h0 : _csignals_T_305; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [3:0] _csignals_T_307 = _csignals_T_153 ? 4'h0 : _csignals_T_306; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [3:0] _csignals_T_308 = _csignals_T_151 ? 4'h5 : _csignals_T_307; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [3:0] _csignals_T_309 = _csignals_T_149 ? 4'h5 : _csignals_T_308; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [3:0] _csignals_T_310 = _csignals_T_147 ? 4'h4 : _csignals_T_309; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [3:0] _csignals_T_311 = _csignals_T_145 ? 4'hf : _csignals_T_310; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [3:0] _csignals_T_312 = _csignals_T_143 ? 4'h3 : _csignals_T_311; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [3:0] _csignals_T_313 = _csignals_T_141 ? 4'h5 : _csignals_T_312; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [3:0] _csignals_T_314 = _csignals_T_139 ? 4'h5 : _csignals_T_313; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [3:0] _csignals_T_315 = _csignals_T_137 ? 4'h4 : _csignals_T_314; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [3:0] _csignals_T_316 = _csignals_T_135 ? 4'h9 : _csignals_T_315; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [3:0] _csignals_T_317 = _csignals_T_133 ? 4'hb : _csignals_T_316; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [3:0] _csignals_T_318 = _csignals_T_131 ? 4'ha : _csignals_T_317; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [3:0] _csignals_T_319 = _csignals_T_129 ? 4'ha : _csignals_T_318; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [3:0] _csignals_T_320 = _csignals_T_127 ? 4'h9 : _csignals_T_319; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [3:0] _csignals_T_321 = _csignals_T_125 ? 4'h8 : _csignals_T_320; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [3:0] _csignals_T_322 = _csignals_T_123 ? 4'h7 : _csignals_T_321; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [3:0] _csignals_T_323 = _csignals_T_121 ? 4'h6 : _csignals_T_322; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [3:0] _csignals_T_324 = _csignals_T_119 ? 4'h5 : _csignals_T_323; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [3:0] _csignals_T_325 = _csignals_T_117 ? 4'h4 : _csignals_T_324; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [3:0] _csignals_T_326 = _csignals_T_115 ? 4'hf : _csignals_T_325; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [3:0] _csignals_T_327 = _csignals_T_113 ? 4'he : _csignals_T_326; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [3:0] _csignals_T_328 = _csignals_T_111 ? 4'hd : _csignals_T_327; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [3:0] _csignals_T_329 = _csignals_T_109 ? 4'hc : _csignals_T_328; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [3:0] _csignals_T_330 = _csignals_T_107 ? 4'hf : _csignals_T_329; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [3:0] _csignals_T_331 = _csignals_T_105 ? 4'hd : _csignals_T_330; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [3:0] _csignals_T_332 = _csignals_T_103 ? 4'he : _csignals_T_331; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [3:0] _csignals_T_333 = _csignals_T_101 ? 4'hc : _csignals_T_332; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [3:0] _csignals_T_334 = _csignals_T_99 ? 4'hb : _csignals_T_333; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [3:0] _csignals_T_335 = _csignals_T_97 ? 4'ha : _csignals_T_334; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [3:0] _csignals_T_336 = _csignals_T_95 ? 4'h9 : _csignals_T_335; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [3:0] _csignals_T_337 = _csignals_T_93 ? 4'h8 : _csignals_T_336; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [3:0] _csignals_T_338 = _csignals_T_91 ? 4'h0 : _csignals_T_337; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [3:0] _csignals_T_339 = _csignals_T_89 ? 4'hf : _csignals_T_338; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [3:0] _csignals_T_340 = _csignals_T_87 ? 4'he : _csignals_T_339; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [3:0] _csignals_T_341 = _csignals_T_85 ? 4'h0 : _csignals_T_340; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [3:0] _csignals_T_342 = _csignals_T_83 ? 4'h0 : _csignals_T_341; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [3:0] _csignals_T_343 = _csignals_T_81 ? 4'h0 : _csignals_T_342; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [3:0] _csignals_T_344 = _csignals_T_79 ? 4'h0 : _csignals_T_343; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [3:0] _csignals_T_345 = _csignals_T_77 ? 4'h0 : _csignals_T_344; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [3:0] _csignals_T_346 = _csignals_T_75 ? 4'h0 : _csignals_T_345; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [3:0] _csignals_T_347 = _csignals_T_73 ? 4'h0 : _csignals_T_346; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [3:0] _csignals_T_348 = _csignals_T_71 ? 4'h0 : _csignals_T_347; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [3:0] _csignals_T_349 = _csignals_T_69 ? 4'h0 : _csignals_T_348; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [3:0] _csignals_T_350 = _csignals_T_67 ? 4'h0 : _csignals_T_349; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [3:0] _csignals_T_351 = _csignals_T_65 ? 4'hc : _csignals_T_350; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [3:0] _csignals_T_352 = _csignals_T_63 ? 4'ha : _csignals_T_351; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [3:0] _csignals_T_353 = _csignals_T_61 ? 4'hd : _csignals_T_352; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [3:0] _csignals_T_354 = _csignals_T_59 ? 4'hb : _csignals_T_353; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [3:0] _csignals_T_355 = _csignals_T_57 ? 4'h9 : _csignals_T_354; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [3:0] _csignals_T_356 = _csignals_T_55 ? 4'h8 : _csignals_T_355; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [3:0] _csignals_T_357 = _csignals_T_53 ? 4'h7 : _csignals_T_356; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [3:0] _csignals_T_358 = _csignals_T_51 ? 4'h6 : _csignals_T_357; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [3:0] _csignals_T_359 = _csignals_T_49 ? 4'h7 : _csignals_T_358; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [3:0] _csignals_T_360 = _csignals_T_47 ? 4'h6 : _csignals_T_359; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [3:0] _csignals_T_361 = _csignals_T_45 ? 4'h5 : _csignals_T_360; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [3:0] _csignals_T_362 = _csignals_T_43 ? 4'h5 : _csignals_T_361; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [3:0] _csignals_T_363 = _csignals_T_41 ? 4'h4 : _csignals_T_362; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [3:0] _csignals_T_364 = _csignals_T_39 ? 4'h5 : _csignals_T_363; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [3:0] _csignals_T_365 = _csignals_T_37 ? 4'h5 : _csignals_T_364; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [3:0] _csignals_T_366 = _csignals_T_35 ? 4'h4 : _csignals_T_365; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [3:0] _csignals_T_367 = _csignals_T_33 ? 4'h1 : _csignals_T_366; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [3:0] _csignals_T_368 = _csignals_T_31 ? 4'h3 : _csignals_T_367; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [3:0] _csignals_T_369 = _csignals_T_29 ? 4'h2 : _csignals_T_368; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [3:0] _csignals_T_370 = _csignals_T_27 ? 4'h1 : _csignals_T_369; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [3:0] _csignals_T_371 = _csignals_T_25 ? 4'h3 : _csignals_T_370; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [3:0] _csignals_T_372 = _csignals_T_23 ? 4'h2 : _csignals_T_371; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [3:0] _csignals_T_373 = _csignals_T_21 ? 4'h8 : _csignals_T_372; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [3:0] _csignals_T_374 = _csignals_T_19 ? 4'h0 : _csignals_T_373; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [3:0] _csignals_T_375 = _csignals_T_17 ? 4'h0 : _csignals_T_374; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [3:0] _csignals_T_376 = _csignals_T_15 ? 4'h0 : _csignals_T_375; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [3:0] _csignals_T_377 = _csignals_T_13 ? 4'h0 : _csignals_T_376; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [3:0] _csignals_T_378 = _csignals_T_11 ? 4'h0 : _csignals_T_377; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [3:0] _csignals_T_379 = _csignals_T_9 ? 4'h0 : _csignals_T_378; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [3:0] _csignals_T_380 = _csignals_T_7 ? 4'h0 : _csignals_T_379; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [3:0] _csignals_T_381 = _csignals_T_5 ? 4'h0 : _csignals_T_380; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [3:0] _csignals_T_382 = _csignals_T_3 ? 4'h0 : _csignals_T_381; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [3:0] csignals_0 = _csignals_T_1 ? 4'h0 : _csignals_T_382; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_383 = _csignals_T_255 ? 3'h7 : 3'h4; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_384 = _csignals_T_253 ? 3'h7 : _csignals_T_383; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_385 = _csignals_T_251 ? 3'h7 : _csignals_T_384; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_386 = _csignals_T_249 ? 3'h0 : _csignals_T_385; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_387 = _csignals_T_247 ? 3'h7 : _csignals_T_386; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_388 = _csignals_T_245 ? 3'h7 : _csignals_T_387; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_389 = _csignals_T_243 ? 3'h7 : _csignals_T_388; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_390 = _csignals_T_241 ? 3'h7 : _csignals_T_389; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_391 = _csignals_T_239 ? 3'h7 : _csignals_T_390; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_392 = _csignals_T_237 ? 3'h0 : _csignals_T_391; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_393 = _csignals_T_235 ? 3'h7 : _csignals_T_392; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_394 = _csignals_T_233 ? 3'h7 : _csignals_T_393; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_395 = _csignals_T_231 ? 3'h7 : _csignals_T_394; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_396 = _csignals_T_229 ? 3'h7 : _csignals_T_395; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_397 = _csignals_T_227 ? 3'h7 : _csignals_T_396; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_398 = _csignals_T_225 ? 3'h7 : _csignals_T_397; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_399 = _csignals_T_223 ? 3'h1 : _csignals_T_398; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_400 = _csignals_T_221 ? 3'h7 : _csignals_T_399; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_401 = _csignals_T_219 ? 3'h7 : _csignals_T_400; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_402 = _csignals_T_217 ? 3'h7 : _csignals_T_401; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_403 = _csignals_T_215 ? 3'h7 : _csignals_T_402; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_404 = _csignals_T_213 ? 3'h7 : _csignals_T_403; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_405 = _csignals_T_211 ? 3'h7 : _csignals_T_404; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_406 = _csignals_T_209 ? 3'h7 : _csignals_T_405; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_407 = _csignals_T_207 ? 3'h7 : _csignals_T_406; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_408 = _csignals_T_205 ? 3'h7 : _csignals_T_407; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_409 = _csignals_T_203 ? 3'h5 : _csignals_T_408; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_410 = _csignals_T_201 ? 3'h0 : _csignals_T_409; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_411 = _csignals_T_199 ? 3'h6 : _csignals_T_410; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_412 = _csignals_T_197 ? 3'h6 : _csignals_T_411; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_413 = _csignals_T_195 ? 3'h1 : _csignals_T_412; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_414 = _csignals_T_193 ? 3'h5 : _csignals_T_413; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_415 = _csignals_T_191 ? 3'h5 : _csignals_T_414; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_416 = _csignals_T_189 ? 3'h7 : _csignals_T_415; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_417 = _csignals_T_187 ? 3'h7 : _csignals_T_416; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_418 = _csignals_T_185 ? 3'h1 : _csignals_T_417; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_419 = _csignals_T_183 ? 3'h5 : _csignals_T_418; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_420 = _csignals_T_181 ? 3'h7 : _csignals_T_419; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_421 = _csignals_T_179 ? 3'h7 : _csignals_T_420; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_422 = _csignals_T_177 ? 3'h7 : _csignals_T_421; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_423 = _csignals_T_175 ? 3'h7 : _csignals_T_422; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_424 = _csignals_T_173 ? 3'h7 : _csignals_T_423; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_425 = _csignals_T_171 ? 3'h7 : _csignals_T_424; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_426 = _csignals_T_169 ? 3'h7 : _csignals_T_425; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_427 = _csignals_T_167 ? 3'h0 : _csignals_T_426; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_428 = _csignals_T_165 ? 3'h0 : _csignals_T_427; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_429 = _csignals_T_163 ? 3'h7 : _csignals_T_428; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_430 = _csignals_T_161 ? 3'h7 : _csignals_T_429; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_431 = _csignals_T_159 ? 3'h5 : _csignals_T_430; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_432 = _csignals_T_157 ? 3'h5 : _csignals_T_431; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_433 = _csignals_T_155 ? 3'h6 : _csignals_T_432; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_434 = _csignals_T_153 ? 3'h0 : _csignals_T_433; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_435 = _csignals_T_151 ? 3'h4 : _csignals_T_434; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_436 = _csignals_T_149 ? 3'h4 : _csignals_T_435; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_437 = _csignals_T_147 ? 3'h4 : _csignals_T_436; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_438 = _csignals_T_145 ? 3'h4 : _csignals_T_437; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_439 = _csignals_T_143 ? 3'h4 : _csignals_T_438; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_440 = _csignals_T_141 ? 3'h4 : _csignals_T_439; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_441 = _csignals_T_139 ? 3'h4 : _csignals_T_440; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_442 = _csignals_T_137 ? 3'h4 : _csignals_T_441; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_443 = _csignals_T_135 ? 3'h4 : _csignals_T_442; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_444 = _csignals_T_133 ? 3'h4 : _csignals_T_443; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_445 = _csignals_T_131 ? 3'h4 : _csignals_T_444; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_446 = _csignals_T_129 ? 3'h4 : _csignals_T_445; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_447 = _csignals_T_127 ? 3'h4 : _csignals_T_446; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_448 = _csignals_T_125 ? 3'h4 : _csignals_T_447; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_449 = _csignals_T_123 ? 3'h4 : _csignals_T_448; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_450 = _csignals_T_121 ? 3'h4 : _csignals_T_449; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_451 = _csignals_T_119 ? 3'h4 : _csignals_T_450; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_452 = _csignals_T_117 ? 3'h4 : _csignals_T_451; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_453 = _csignals_T_115 ? 3'h4 : _csignals_T_452; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_454 = _csignals_T_113 ? 3'h4 : _csignals_T_453; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_455 = _csignals_T_111 ? 3'h4 : _csignals_T_454; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_456 = _csignals_T_109 ? 3'h4 : _csignals_T_455; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_457 = _csignals_T_107 ? 3'h4 : _csignals_T_456; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_458 = _csignals_T_105 ? 3'h4 : _csignals_T_457; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_459 = _csignals_T_103 ? 3'h4 : _csignals_T_458; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_460 = _csignals_T_101 ? 3'h4 : _csignals_T_459; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_461 = _csignals_T_99 ? 3'h4 : _csignals_T_460; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_462 = _csignals_T_97 ? 3'h4 : _csignals_T_461; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_463 = _csignals_T_95 ? 3'h4 : _csignals_T_462; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_464 = _csignals_T_93 ? 3'h4 : _csignals_T_463; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_465 = _csignals_T_91 ? 3'h0 : _csignals_T_464; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_466 = _csignals_T_89 ? 3'h0 : _csignals_T_465; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_467 = _csignals_T_87 ? 3'h0 : _csignals_T_466; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_468 = _csignals_T_85 ? 3'h2 : _csignals_T_467; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_469 = _csignals_T_83 ? 3'h4 : _csignals_T_468; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_470 = _csignals_T_81 ? 3'h2 : _csignals_T_469; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_471 = _csignals_T_79 ? 3'h4 : _csignals_T_470; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_472 = _csignals_T_77 ? 3'h2 : _csignals_T_471; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_473 = _csignals_T_75 ? 3'h4 : _csignals_T_472; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_474 = _csignals_T_73 ? 3'h1 : _csignals_T_473; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_475 = _csignals_T_71 ? 3'h0 : _csignals_T_474; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_476 = _csignals_T_69 ? 3'h4 : _csignals_T_475; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_477 = _csignals_T_67 ? 3'h1 : _csignals_T_476; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_478 = _csignals_T_65 ? 3'h4 : _csignals_T_477; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_479 = _csignals_T_63 ? 3'h4 : _csignals_T_478; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_480 = _csignals_T_61 ? 3'h4 : _csignals_T_479; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_481 = _csignals_T_59 ? 3'h4 : _csignals_T_480; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_482 = _csignals_T_57 ? 3'h4 : _csignals_T_481; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_483 = _csignals_T_55 ? 3'h4 : _csignals_T_482; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_484 = _csignals_T_53 ? 3'h4 : _csignals_T_483; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_485 = _csignals_T_51 ? 3'h4 : _csignals_T_484; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_486 = _csignals_T_49 ? 3'h4 : _csignals_T_485; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_487 = _csignals_T_47 ? 3'h4 : _csignals_T_486; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_488 = _csignals_T_45 ? 3'h4 : _csignals_T_487; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_489 = _csignals_T_43 ? 3'h4 : _csignals_T_488; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_490 = _csignals_T_41 ? 3'h4 : _csignals_T_489; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_491 = _csignals_T_39 ? 3'h4 : _csignals_T_490; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_492 = _csignals_T_37 ? 3'h4 : _csignals_T_491; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_493 = _csignals_T_35 ? 3'h4 : _csignals_T_492; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_494 = _csignals_T_33 ? 3'h4 : _csignals_T_493; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_495 = _csignals_T_31 ? 3'h4 : _csignals_T_494; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_496 = _csignals_T_29 ? 3'h4 : _csignals_T_495; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_497 = _csignals_T_27 ? 3'h4 : _csignals_T_496; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_498 = _csignals_T_25 ? 3'h4 : _csignals_T_497; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_499 = _csignals_T_23 ? 3'h4 : _csignals_T_498; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_500 = _csignals_T_21 ? 3'h4 : _csignals_T_499; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_501 = _csignals_T_19 ? 3'h4 : _csignals_T_500; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_502 = _csignals_T_17 ? 3'h4 : _csignals_T_501; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_503 = _csignals_T_15 ? 3'h4 : _csignals_T_502; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_504 = _csignals_T_13 ? 3'h4 : _csignals_T_503; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_505 = _csignals_T_11 ? 3'h4 : _csignals_T_504; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_506 = _csignals_T_9 ? 3'h4 : _csignals_T_505; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_507 = _csignals_T_7 ? 3'h4 : _csignals_T_506; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_508 = _csignals_T_5 ? 3'h4 : _csignals_T_507; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_509 = _csignals_T_3 ? 3'h4 : _csignals_T_508; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] csignals_1 = _csignals_T_1 ? 3'h4 : _csignals_T_509; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [4:0] _csignals_T_510 = _csignals_T_255 ? 5'h3 : 5'h1; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [4:0] _csignals_T_511 = _csignals_T_253 ? 5'h3 : _csignals_T_510; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [4:0] _csignals_T_512 = _csignals_T_251 ? 5'h1c : _csignals_T_511; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [4:0] _csignals_T_513 = _csignals_T_249 ? 5'h7 : _csignals_T_512; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [4:0] _csignals_T_514 = _csignals_T_247 ? 5'h1a : _csignals_T_513; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [4:0] _csignals_T_515 = _csignals_T_245 ? 5'h3 : _csignals_T_514; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [4:0] _csignals_T_516 = _csignals_T_243 ? 5'h1b : _csignals_T_515; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [4:0] _csignals_T_517 = _csignals_T_241 ? 5'h6 : _csignals_T_516; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [4:0] _csignals_T_518 = _csignals_T_239 ? 5'h6 : _csignals_T_517; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [4:0] _csignals_T_519 = _csignals_T_237 ? 5'h7 : _csignals_T_518; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [4:0] _csignals_T_520 = _csignals_T_235 ? 5'h19 : _csignals_T_519; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [4:0] _csignals_T_521 = _csignals_T_233 ? 5'h1e : _csignals_T_520; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [4:0] _csignals_T_522 = _csignals_T_231 ? 5'h1e : _csignals_T_521; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [4:0] _csignals_T_523 = _csignals_T_229 ? 5'h1e : _csignals_T_522; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [4:0] _csignals_T_524 = _csignals_T_227 ? 5'h18 : _csignals_T_523; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [4:0] _csignals_T_525 = _csignals_T_225 ? 5'h6 : _csignals_T_524; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [4:0] _csignals_T_526 = _csignals_T_223 ? 5'h1d : _csignals_T_525; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [4:0] _csignals_T_527 = _csignals_T_221 ? 5'h13 : _csignals_T_526; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [4:0] _csignals_T_528 = _csignals_T_219 ? 5'h17 : _csignals_T_527; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [4:0] _csignals_T_529 = _csignals_T_217 ? 5'h16 : _csignals_T_528; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [4:0] _csignals_T_530 = _csignals_T_215 ? 5'h15 : _csignals_T_529; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [4:0] _csignals_T_531 = _csignals_T_213 ? 5'h14 : _csignals_T_530; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [4:0] _csignals_T_532 = _csignals_T_211 ? 5'h14 : _csignals_T_531; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [4:0] _csignals_T_533 = _csignals_T_209 ? 5'h14 : _csignals_T_532; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [4:0] _csignals_T_534 = _csignals_T_207 ? 5'h13 : _csignals_T_533; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [4:0] _csignals_T_535 = _csignals_T_205 ? 5'h13 : _csignals_T_534; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [4:0] _csignals_T_536 = _csignals_T_203 ? 5'h2 : _csignals_T_535; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [4:0] _csignals_T_537 = _csignals_T_201 ? 5'h2 : _csignals_T_536; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [4:0] _csignals_T_538 = _csignals_T_199 ? 5'h12 : _csignals_T_537; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [4:0] _csignals_T_539 = _csignals_T_197 ? 5'h11 : _csignals_T_538; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [4:0] _csignals_T_540 = _csignals_T_195 ? 5'h10 : _csignals_T_539; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [4:0] _csignals_T_541 = _csignals_T_193 ? 5'h0 : _csignals_T_540; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [4:0] _csignals_T_542 = _csignals_T_191 ? 5'h0 : _csignals_T_541; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [4:0] _csignals_T_543 = _csignals_T_189 ? 5'h0 : _csignals_T_542; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [4:0] _csignals_T_544 = _csignals_T_187 ? 5'h0 : _csignals_T_543; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [4:0] _csignals_T_545 = _csignals_T_185 ? 5'h10 : _csignals_T_544; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [4:0] _csignals_T_546 = _csignals_T_183 ? 5'hd : _csignals_T_545; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [4:0] _csignals_T_547 = _csignals_T_181 ? 5'h6 : _csignals_T_546; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [4:0] _csignals_T_548 = _csignals_T_179 ? 5'h6 : _csignals_T_547; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [4:0] _csignals_T_549 = _csignals_T_177 ? 5'h6 : _csignals_T_548; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [4:0] _csignals_T_550 = _csignals_T_175 ? 5'h6 : _csignals_T_549; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [4:0] _csignals_T_551 = _csignals_T_173 ? 5'hd : _csignals_T_550; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [4:0] _csignals_T_552 = _csignals_T_171 ? 5'hd : _csignals_T_551; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [4:0] _csignals_T_553 = _csignals_T_169 ? 5'hd : _csignals_T_552; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [4:0] _csignals_T_554 = _csignals_T_167 ? 5'hf : _csignals_T_553; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [4:0] _csignals_T_555 = _csignals_T_165 ? 5'hd : _csignals_T_554; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [4:0] _csignals_T_556 = _csignals_T_163 ? 5'he : _csignals_T_555; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [4:0] _csignals_T_557 = _csignals_T_161 ? 5'he : _csignals_T_556; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [4:0] _csignals_T_558 = _csignals_T_159 ? 5'hd : _csignals_T_557; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [4:0] _csignals_T_559 = _csignals_T_157 ? 5'hc : _csignals_T_558; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [4:0] _csignals_T_560 = _csignals_T_155 ? 5'hb : _csignals_T_559; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [4:0] _csignals_T_561 = _csignals_T_153 ? 5'h1e : _csignals_T_560; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [4:0] _csignals_T_562 = _csignals_T_151 ? 5'h4 : _csignals_T_561; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [4:0] _csignals_T_563 = _csignals_T_149 ? 5'h1 : _csignals_T_562; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [4:0] _csignals_T_564 = _csignals_T_147 ? 5'h1 : _csignals_T_563; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [4:0] _csignals_T_565 = _csignals_T_145 ? 5'h1 : _csignals_T_564; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [4:0] _csignals_T_566 = _csignals_T_143 ? 5'h1 : _csignals_T_565; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [4:0] _csignals_T_567 = _csignals_T_141 ? 5'h4 : _csignals_T_566; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [4:0] _csignals_T_568 = _csignals_T_139 ? 5'h1 : _csignals_T_567; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [4:0] _csignals_T_569 = _csignals_T_137 ? 5'h1 : _csignals_T_568; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [4:0] _csignals_T_570 = _csignals_T_135 ? 5'h1 : _csignals_T_569; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [4:0] _csignals_T_571 = _csignals_T_133 ? 5'h1 : _csignals_T_570; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [4:0] _csignals_T_572 = _csignals_T_131 ? 5'h1 : _csignals_T_571; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [4:0] _csignals_T_573 = _csignals_T_129 ? 5'h1e : _csignals_T_572; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [4:0] _csignals_T_574 = _csignals_T_127 ? 5'h1e : _csignals_T_573; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [4:0] _csignals_T_575 = _csignals_T_125 ? 5'h1e : _csignals_T_574; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [4:0] _csignals_T_576 = _csignals_T_123 ? 5'h1e : _csignals_T_575; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [4:0] _csignals_T_577 = _csignals_T_121 ? 5'h1e : _csignals_T_576; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [4:0] _csignals_T_578 = _csignals_T_119 ? 5'h1e : _csignals_T_577; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [4:0] _csignals_T_579 = _csignals_T_117 ? 5'h1e : _csignals_T_578; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [4:0] _csignals_T_580 = _csignals_T_115 ? 5'h1 : _csignals_T_579; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [4:0] _csignals_T_581 = _csignals_T_113 ? 5'h1 : _csignals_T_580; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [4:0] _csignals_T_582 = _csignals_T_111 ? 5'h1 : _csignals_T_581; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [4:0] _csignals_T_583 = _csignals_T_109 ? 5'h1 : _csignals_T_582; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [4:0] _csignals_T_584 = _csignals_T_107 ? 5'h1 : _csignals_T_583; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [4:0] _csignals_T_585 = _csignals_T_105 ? 5'h1 : _csignals_T_584; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [4:0] _csignals_T_586 = _csignals_T_103 ? 5'h1 : _csignals_T_585; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [4:0] _csignals_T_587 = _csignals_T_101 ? 5'h1 : _csignals_T_586; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [4:0] _csignals_T_588 = _csignals_T_99 ? 5'h1 : _csignals_T_587; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [4:0] _csignals_T_589 = _csignals_T_97 ? 5'h1 : _csignals_T_588; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [4:0] _csignals_T_590 = _csignals_T_95 ? 5'h1 : _csignals_T_589; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [4:0] _csignals_T_591 = _csignals_T_93 ? 5'h1 : _csignals_T_590; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [4:0] _csignals_T_592 = _csignals_T_91 ? 5'h1e : _csignals_T_591; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [4:0] _csignals_T_593 = _csignals_T_89 ? 5'h1e : _csignals_T_592; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [4:0] _csignals_T_594 = _csignals_T_87 ? 5'h1e : _csignals_T_593; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [4:0] _csignals_T_595 = _csignals_T_85 ? 5'h0 : _csignals_T_594; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [4:0] _csignals_T_596 = _csignals_T_83 ? 5'h0 : _csignals_T_595; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [4:0] _csignals_T_597 = _csignals_T_81 ? 5'h0 : _csignals_T_596; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [4:0] _csignals_T_598 = _csignals_T_79 ? 5'h0 : _csignals_T_597; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [4:0] _csignals_T_599 = _csignals_T_77 ? 5'h0 : _csignals_T_598; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [4:0] _csignals_T_600 = _csignals_T_75 ? 5'h0 : _csignals_T_599; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [4:0] _csignals_T_601 = _csignals_T_73 ? 5'ha : _csignals_T_600; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [4:0] _csignals_T_602 = _csignals_T_71 ? 5'ha : _csignals_T_601; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [4:0] _csignals_T_603 = _csignals_T_69 ? 5'h4 : _csignals_T_602; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [4:0] _csignals_T_604 = _csignals_T_67 ? 5'h9 : _csignals_T_603; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [4:0] _csignals_T_605 = _csignals_T_65 ? 5'h1 : _csignals_T_604; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [4:0] _csignals_T_606 = _csignals_T_63 ? 5'h1 : _csignals_T_605; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [4:0] _csignals_T_607 = _csignals_T_61 ? 5'h1 : _csignals_T_606; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [4:0] _csignals_T_608 = _csignals_T_59 ? 5'h1 : _csignals_T_607; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [4:0] _csignals_T_609 = _csignals_T_57 ? 5'h1 : _csignals_T_608; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [4:0] _csignals_T_610 = _csignals_T_55 ? 5'h1 : _csignals_T_609; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [4:0] _csignals_T_611 = _csignals_T_53 ? 5'h4 : _csignals_T_610; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [4:0] _csignals_T_612 = _csignals_T_51 ? 5'h4 : _csignals_T_611; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [4:0] _csignals_T_613 = _csignals_T_49 ? 5'h1 : _csignals_T_612; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [4:0] _csignals_T_614 = _csignals_T_47 ? 5'h1 : _csignals_T_613; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [4:0] _csignals_T_615 = _csignals_T_45 ? 5'h4 : _csignals_T_614; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [4:0] _csignals_T_616 = _csignals_T_43 ? 5'h4 : _csignals_T_615; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [4:0] _csignals_T_617 = _csignals_T_41 ? 5'h4 : _csignals_T_616; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [4:0] _csignals_T_618 = _csignals_T_39 ? 5'h1 : _csignals_T_617; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [4:0] _csignals_T_619 = _csignals_T_37 ? 5'h1 : _csignals_T_618; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [4:0] _csignals_T_620 = _csignals_T_35 ? 5'h1 : _csignals_T_619; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [4:0] _csignals_T_621 = _csignals_T_33 ? 5'h4 : _csignals_T_620; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [4:0] _csignals_T_622 = _csignals_T_31 ? 5'h4 : _csignals_T_621; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [4:0] _csignals_T_623 = _csignals_T_29 ? 5'h4 : _csignals_T_622; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [4:0] _csignals_T_624 = _csignals_T_27 ? 5'h1 : _csignals_T_623; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [4:0] _csignals_T_625 = _csignals_T_25 ? 5'h1 : _csignals_T_624; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [4:0] _csignals_T_626 = _csignals_T_23 ? 5'h1 : _csignals_T_625; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [4:0] _csignals_T_627 = _csignals_T_21 ? 5'h1 : _csignals_T_626; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [4:0] _csignals_T_628 = _csignals_T_19 ? 5'h4 : _csignals_T_627; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [4:0] _csignals_T_629 = _csignals_T_17 ? 5'h1 : _csignals_T_628; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [4:0] _csignals_T_630 = _csignals_T_15 ? 5'h8 : _csignals_T_629; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [4:0] _csignals_T_631 = _csignals_T_13 ? 5'h4 : _csignals_T_630; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [4:0] _csignals_T_632 = _csignals_T_11 ? 5'h8 : _csignals_T_631; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [4:0] _csignals_T_633 = _csignals_T_9 ? 5'h4 : _csignals_T_632; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [4:0] _csignals_T_634 = _csignals_T_7 ? 5'h4 : _csignals_T_633; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [4:0] _csignals_T_635 = _csignals_T_5 ? 5'h8 : _csignals_T_634; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [4:0] _csignals_T_636 = _csignals_T_3 ? 5'h4 : _csignals_T_635; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [4:0] csignals_2 = _csignals_T_1 ? 5'h4 : _csignals_T_636; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_654 = _csignals_T_221 ? 3'h5 : 3'h0; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_655 = _csignals_T_219 ? 3'h0 : _csignals_T_654; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_656 = _csignals_T_217 ? 3'h0 : _csignals_T_655; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_657 = _csignals_T_215 ? 3'h0 : _csignals_T_656; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_658 = _csignals_T_213 ? 3'h5 : _csignals_T_657; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_659 = _csignals_T_211 ? 3'h0 : _csignals_T_658; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_660 = _csignals_T_209 ? 3'h0 : _csignals_T_659; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_661 = _csignals_T_207 ? 3'h0 : _csignals_T_660; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_662 = _csignals_T_205 ? 3'h0 : _csignals_T_661; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_663 = _csignals_T_203 ? 3'h0 : _csignals_T_662; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_664 = _csignals_T_201 ? 3'h0 : _csignals_T_663; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_665 = _csignals_T_199 ? 3'h6 : _csignals_T_664; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_666 = _csignals_T_197 ? 3'h0 : _csignals_T_665; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_667 = _csignals_T_195 ? 3'h0 : _csignals_T_666; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_668 = _csignals_T_193 ? 3'h0 : _csignals_T_667; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_669 = _csignals_T_191 ? 3'h0 : _csignals_T_668; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_670 = _csignals_T_189 ? 3'h0 : _csignals_T_669; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_671 = _csignals_T_187 ? 3'h0 : _csignals_T_670; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_672 = _csignals_T_185 ? 3'h0 : _csignals_T_671; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_673 = _csignals_T_183 ? 3'h0 : _csignals_T_672; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_674 = _csignals_T_181 ? 3'h0 : _csignals_T_673; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_675 = _csignals_T_179 ? 3'h0 : _csignals_T_674; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_676 = _csignals_T_177 ? 3'h0 : _csignals_T_675; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_677 = _csignals_T_175 ? 3'h0 : _csignals_T_676; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_678 = _csignals_T_173 ? 3'h0 : _csignals_T_677; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_679 = _csignals_T_171 ? 3'h0 : _csignals_T_678; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_680 = _csignals_T_169 ? 3'h1 : _csignals_T_679; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_681 = _csignals_T_167 ? 3'h0 : _csignals_T_680; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_682 = _csignals_T_165 ? 3'h0 : _csignals_T_681; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_683 = _csignals_T_163 ? 3'h5 : _csignals_T_682; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_684 = _csignals_T_161 ? 3'h0 : _csignals_T_683; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_685 = _csignals_T_159 ? 3'h0 : _csignals_T_684; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_686 = _csignals_T_157 ? 3'h0 : _csignals_T_685; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_687 = _csignals_T_155 ? 3'h0 : _csignals_T_686; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_688 = _csignals_T_153 ? 3'h0 : _csignals_T_687; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_689 = _csignals_T_151 ? 3'h7 : _csignals_T_688; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_690 = _csignals_T_149 ? 3'h7 : _csignals_T_689; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_691 = _csignals_T_147 ? 3'h7 : _csignals_T_690; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_692 = _csignals_T_145 ? 3'h7 : _csignals_T_691; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_693 = _csignals_T_143 ? 3'h0 : _csignals_T_692; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_694 = _csignals_T_141 ? 3'h3 : _csignals_T_693; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_695 = _csignals_T_139 ? 3'h3 : _csignals_T_694; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_696 = _csignals_T_137 ? 3'h3 : _csignals_T_695; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_697 = _csignals_T_135 ? 3'h0 : _csignals_T_696; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_698 = _csignals_T_133 ? 3'h0 : _csignals_T_697; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_699 = _csignals_T_131 ? 3'h0 : _csignals_T_698; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_700 = _csignals_T_129 ? 3'h0 : _csignals_T_699; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_701 = _csignals_T_127 ? 3'h0 : _csignals_T_700; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_702 = _csignals_T_125 ? 3'h0 : _csignals_T_701; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_703 = _csignals_T_123 ? 3'h0 : _csignals_T_702; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_704 = _csignals_T_121 ? 3'h0 : _csignals_T_703; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_705 = _csignals_T_119 ? 3'h0 : _csignals_T_704; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_706 = _csignals_T_117 ? 3'h0 : _csignals_T_705; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_707 = _csignals_T_115 ? 3'h0 : _csignals_T_706; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_708 = _csignals_T_113 ? 3'h0 : _csignals_T_707; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_709 = _csignals_T_111 ? 3'h0 : _csignals_T_708; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_710 = _csignals_T_109 ? 3'h0 : _csignals_T_709; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_711 = _csignals_T_107 ? 3'h0 : _csignals_T_710; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_712 = _csignals_T_105 ? 3'h0 : _csignals_T_711; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_713 = _csignals_T_103 ? 3'h0 : _csignals_T_712; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_714 = _csignals_T_101 ? 3'h0 : _csignals_T_713; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_715 = _csignals_T_99 ? 3'h0 : _csignals_T_714; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_716 = _csignals_T_97 ? 3'h0 : _csignals_T_715; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_717 = _csignals_T_95 ? 3'h0 : _csignals_T_716; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_718 = _csignals_T_93 ? 3'h0 : _csignals_T_717; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_719 = _csignals_T_91 ? 3'h0 : _csignals_T_718; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_720 = _csignals_T_89 ? 3'h0 : _csignals_T_719; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_721 = _csignals_T_87 ? 3'h0 : _csignals_T_720; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_722 = _csignals_T_85 ? 3'h0 : _csignals_T_721; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_723 = _csignals_T_83 ? 3'h0 : _csignals_T_722; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_724 = _csignals_T_81 ? 3'h0 : _csignals_T_723; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_725 = _csignals_T_79 ? 3'h0 : _csignals_T_724; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_726 = _csignals_T_77 ? 3'h0 : _csignals_T_725; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_727 = _csignals_T_75 ? 3'h0 : _csignals_T_726; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_728 = _csignals_T_73 ? 3'h0 : _csignals_T_727; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_729 = _csignals_T_71 ? 3'h0 : _csignals_T_728; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_730 = _csignals_T_69 ? 3'h0 : _csignals_T_729; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_731 = _csignals_T_67 ? 3'h0 : _csignals_T_730; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_732 = _csignals_T_65 ? 3'h0 : _csignals_T_731; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_733 = _csignals_T_63 ? 3'h0 : _csignals_T_732; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_734 = _csignals_T_61 ? 3'h0 : _csignals_T_733; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_735 = _csignals_T_59 ? 3'h0 : _csignals_T_734; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_736 = _csignals_T_57 ? 3'h0 : _csignals_T_735; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_737 = _csignals_T_55 ? 3'h0 : _csignals_T_736; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_738 = _csignals_T_53 ? 3'h0 : _csignals_T_737; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_739 = _csignals_T_51 ? 3'h0 : _csignals_T_738; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_740 = _csignals_T_49 ? 3'h0 : _csignals_T_739; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_741 = _csignals_T_47 ? 3'h0 : _csignals_T_740; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_742 = _csignals_T_45 ? 3'h1 : _csignals_T_741; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_743 = _csignals_T_43 ? 3'h0 : _csignals_T_742; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_744 = _csignals_T_41 ? 3'h0 : _csignals_T_743; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_745 = _csignals_T_39 ? 3'h1 : _csignals_T_744; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_746 = _csignals_T_37 ? 3'h0 : _csignals_T_745; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_747 = _csignals_T_35 ? 3'h0 : _csignals_T_746; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_748 = _csignals_T_33 ? 3'h0 : _csignals_T_747; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_749 = _csignals_T_31 ? 3'h0 : _csignals_T_748; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_750 = _csignals_T_29 ? 3'h0 : _csignals_T_749; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_751 = _csignals_T_27 ? 3'h0 : _csignals_T_750; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_752 = _csignals_T_25 ? 3'h0 : _csignals_T_751; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_753 = _csignals_T_23 ? 3'h0 : _csignals_T_752; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_754 = _csignals_T_21 ? 3'h0 : _csignals_T_753; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_755 = _csignals_T_19 ? 3'h0 : _csignals_T_754; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_756 = _csignals_T_17 ? 3'h0 : _csignals_T_755; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_757 = _csignals_T_15 ? 3'h4 : _csignals_T_756; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_758 = _csignals_T_13 ? 3'h0 : _csignals_T_757; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_759 = _csignals_T_11 ? 3'h4 : _csignals_T_758; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_760 = _csignals_T_9 ? 3'h0 : _csignals_T_759; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_761 = _csignals_T_7 ? 3'h0 : _csignals_T_760; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_762 = _csignals_T_5 ? 3'h4 : _csignals_T_761; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_763 = _csignals_T_3 ? 3'h0 : _csignals_T_762; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] csignals_3 = _csignals_T_1 ? 3'h0 : _csignals_T_763; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire  _csignals_T_771 = _csignals_T_241 ? 1'h0 : _csignals_T_243 | (_csignals_T_245 | (_csignals_T_247 | (
-    _csignals_T_249 | (_csignals_T_251 | (_csignals_T_253 | _csignals_T_255))))); // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire  _csignals_T_772 = _csignals_T_239 ? 1'h0 : _csignals_T_771; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire  _csignals_T_781 = _csignals_T_221 ? 1'h0 : _csignals_T_223 | (_csignals_T_225 | (_csignals_T_227 | (
-    _csignals_T_229 | (_csignals_T_231 | (_csignals_T_233 | (_csignals_T_235 | (_csignals_T_237 | _csignals_T_772)))))))
+  wire [31:0] _csignals_T_144 = id_reg_inst & 32'hfe00107f; // @[src/main/scala/chisel3/util/Lookup.scala 31:38]
+  wire  _csignals_T_145 = 32'h20000033 == _csignals_T_144; // @[src/main/scala/chisel3/util/Lookup.scala 31:38]
+  wire  _csignals_T_147 = 32'h48001033 == _csignals_T_16; // @[src/main/scala/chisel3/util/Lookup.scala 31:38]
+  wire  _csignals_T_149 = 32'h28001033 == _csignals_T_16; // @[src/main/scala/chisel3/util/Lookup.scala 31:38]
+  wire  _csignals_T_151 = 32'h68001033 == _csignals_T_16; // @[src/main/scala/chisel3/util/Lookup.scala 31:38]
+  wire  _csignals_T_153 = 32'h48005033 == _csignals_T_16; // @[src/main/scala/chisel3/util/Lookup.scala 31:38]
+  wire  _csignals_T_155 = 32'h48001013 == _csignals_T_16; // @[src/main/scala/chisel3/util/Lookup.scala 31:38]
+  wire  _csignals_T_157 = 32'h28001013 == _csignals_T_16; // @[src/main/scala/chisel3/util/Lookup.scala 31:38]
+  wire  _csignals_T_159 = 32'h68001013 == _csignals_T_16; // @[src/main/scala/chisel3/util/Lookup.scala 31:38]
+  wire  _csignals_T_161 = 32'h48005013 == _csignals_T_16; // @[src/main/scala/chisel3/util/Lookup.scala 31:38]
+  wire [31:0] _csignals_T_162 = id_reg_inst & 32'h600707f; // @[src/main/scala/chisel3/util/Lookup.scala 31:38]
+  wire  _csignals_T_163 = 32'h6005033 == _csignals_T_162; // @[src/main/scala/chisel3/util/Lookup.scala 31:38]
+  wire  _csignals_T_165 = 32'h4001033 == _csignals_T_162; // @[src/main/scala/chisel3/util/Lookup.scala 31:38]
+  wire  _csignals_T_167 = 32'h4005033 == _csignals_T_162; // @[src/main/scala/chisel3/util/Lookup.scala 31:38]
+  wire  _csignals_T_169 = 32'h4005013 == _csignals_T_162; // @[src/main/scala/chisel3/util/Lookup.scala 31:38]
+  wire [31:0] _csignals_T_170 = id_reg_inst & 32'hffff; // @[src/main/scala/chisel3/util/Lookup.scala 31:38]
+  wire  _csignals_T_171 = 32'h0 == _csignals_T_170; // @[src/main/scala/chisel3/util/Lookup.scala 31:38]
+  wire [31:0] _csignals_T_172 = id_reg_inst & 32'he003; // @[src/main/scala/chisel3/util/Lookup.scala 31:38]
+  wire  _csignals_T_173 = 32'h0 == _csignals_T_172; // @[src/main/scala/chisel3/util/Lookup.scala 31:38]
+  wire [31:0] _csignals_T_174 = id_reg_inst & 32'hef83; // @[src/main/scala/chisel3/util/Lookup.scala 31:38]
+  wire  _csignals_T_175 = 32'h6101 == _csignals_T_174; // @[src/main/scala/chisel3/util/Lookup.scala 31:38]
+  wire  _csignals_T_177 = 32'h1 == _csignals_T_172; // @[src/main/scala/chisel3/util/Lookup.scala 31:38]
+  wire  _csignals_T_179 = 32'h4000 == _csignals_T_172; // @[src/main/scala/chisel3/util/Lookup.scala 31:38]
+  wire  _csignals_T_181 = 32'hc000 == _csignals_T_172; // @[src/main/scala/chisel3/util/Lookup.scala 31:38]
+  wire  _csignals_T_183 = 32'h4001 == _csignals_T_172; // @[src/main/scala/chisel3/util/Lookup.scala 31:38]
+  wire  _csignals_T_185 = 32'h6001 == _csignals_T_172; // @[src/main/scala/chisel3/util/Lookup.scala 31:38]
+  wire [31:0] _csignals_T_186 = id_reg_inst & 32'hec03; // @[src/main/scala/chisel3/util/Lookup.scala 31:38]
+  wire  _csignals_T_187 = 32'h8401 == _csignals_T_186; // @[src/main/scala/chisel3/util/Lookup.scala 31:38]
+  wire  _csignals_T_189 = 32'h8001 == _csignals_T_186; // @[src/main/scala/chisel3/util/Lookup.scala 31:38]
+  wire  _csignals_T_191 = 32'h8801 == _csignals_T_186; // @[src/main/scala/chisel3/util/Lookup.scala 31:38]
+  wire [31:0] _csignals_T_192 = id_reg_inst & 32'hfc63; // @[src/main/scala/chisel3/util/Lookup.scala 31:38]
+  wire  _csignals_T_193 = 32'h8c01 == _csignals_T_192; // @[src/main/scala/chisel3/util/Lookup.scala 31:38]
+  wire  _csignals_T_195 = 32'h8c21 == _csignals_T_192; // @[src/main/scala/chisel3/util/Lookup.scala 31:38]
+  wire  _csignals_T_197 = 32'h8c41 == _csignals_T_192; // @[src/main/scala/chisel3/util/Lookup.scala 31:38]
+  wire  _csignals_T_199 = 32'h8c61 == _csignals_T_192; // @[src/main/scala/chisel3/util/Lookup.scala 31:38]
+  wire  _csignals_T_201 = 32'h2 == _csignals_T_172; // @[src/main/scala/chisel3/util/Lookup.scala 31:38]
+  wire  _csignals_T_203 = 32'ha001 == _csignals_T_172; // @[src/main/scala/chisel3/util/Lookup.scala 31:38]
+  wire  _csignals_T_205 = 32'hc001 == _csignals_T_172; // @[src/main/scala/chisel3/util/Lookup.scala 31:38]
+  wire  _csignals_T_207 = 32'he001 == _csignals_T_172; // @[src/main/scala/chisel3/util/Lookup.scala 31:38]
+  wire [31:0] _csignals_T_208 = id_reg_inst & 32'hf07f; // @[src/main/scala/chisel3/util/Lookup.scala 31:38]
+  wire  _csignals_T_209 = 32'h8002 == _csignals_T_208; // @[src/main/scala/chisel3/util/Lookup.scala 31:38]
+  wire  _csignals_T_211 = 32'h9002 == _csignals_T_208; // @[src/main/scala/chisel3/util/Lookup.scala 31:38]
+  wire  _csignals_T_213 = 32'h2001 == _csignals_T_172; // @[src/main/scala/chisel3/util/Lookup.scala 31:38]
+  wire  _csignals_T_215 = 32'h4002 == _csignals_T_172; // @[src/main/scala/chisel3/util/Lookup.scala 31:38]
+  wire  _csignals_T_217 = 32'hc002 == _csignals_T_172; // @[src/main/scala/chisel3/util/Lookup.scala 31:38]
+  wire [31:0] _csignals_T_218 = id_reg_inst & 32'hf003; // @[src/main/scala/chisel3/util/Lookup.scala 31:38]
+  wire  _csignals_T_219 = 32'h8002 == _csignals_T_218; // @[src/main/scala/chisel3/util/Lookup.scala 31:38]
+  wire  _csignals_T_221 = 32'h9002 == _csignals_T_218; // @[src/main/scala/chisel3/util/Lookup.scala 31:38]
+  wire  _csignals_T_223 = 32'h2000 == _csignals_T_172; // @[src/main/scala/chisel3/util/Lookup.scala 31:38]
+  wire  _csignals_T_225 = 32'h6000 == _csignals_T_172; // @[src/main/scala/chisel3/util/Lookup.scala 31:38]
+  wire [31:0] _csignals_T_226 = id_reg_inst & 32'hf803; // @[src/main/scala/chisel3/util/Lookup.scala 31:38]
+  wire  _csignals_T_227 = 32'h2002 == _csignals_T_226; // @[src/main/scala/chisel3/util/Lookup.scala 31:38]
+  wire  _csignals_T_229 = 32'h2802 == _csignals_T_226; // @[src/main/scala/chisel3/util/Lookup.scala 31:38]
+  wire  _csignals_T_231 = 32'h3002 == _csignals_T_226; // @[src/main/scala/chisel3/util/Lookup.scala 31:38]
+  wire [31:0] _csignals_T_232 = id_reg_inst & 32'hf807; // @[src/main/scala/chisel3/util/Lookup.scala 31:38]
+  wire  _csignals_T_233 = 32'h3802 == _csignals_T_232; // @[src/main/scala/chisel3/util/Lookup.scala 31:38]
+  wire [31:0] _csignals_T_234 = id_reg_inst & 32'hf80f; // @[src/main/scala/chisel3/util/Lookup.scala 31:38]
+  wire  _csignals_T_235 = 32'h3806 == _csignals_T_234; // @[src/main/scala/chisel3/util/Lookup.scala 31:38]
+  wire  _csignals_T_237 = 32'h380e == _csignals_T_234; // @[src/main/scala/chisel3/util/Lookup.scala 31:38]
+  wire  _csignals_T_239 = 32'h6002 == _csignals_T_172; // @[src/main/scala/chisel3/util/Lookup.scala 31:38]
+  wire  _csignals_T_241 = 32'he000 == _csignals_T_172; // @[src/main/scala/chisel3/util/Lookup.scala 31:38]
+  wire  _csignals_T_243 = 32'h9c41 == _csignals_T_192; // @[src/main/scala/chisel3/util/Lookup.scala 31:38]
+  wire [31:0] _csignals_T_244 = id_reg_inst & 32'hfc7f; // @[src/main/scala/chisel3/util/Lookup.scala 31:38]
+  wire  _csignals_T_245 = 32'h9c61 == _csignals_T_244; // @[src/main/scala/chisel3/util/Lookup.scala 31:38]
+  wire  _csignals_T_247 = 32'h9c65 == _csignals_T_244; // @[src/main/scala/chisel3/util/Lookup.scala 31:38]
+  wire  _csignals_T_249 = 32'h9c6d == _csignals_T_244; // @[src/main/scala/chisel3/util/Lookup.scala 31:38]
+  wire  _csignals_T_251 = 32'h9c69 == _csignals_T_244; // @[src/main/scala/chisel3/util/Lookup.scala 31:38]
+  wire  _csignals_T_253 = 32'h9c75 == _csignals_T_244; // @[src/main/scala/chisel3/util/Lookup.scala 31:38]
+  wire  _csignals_T_255 = 32'h9c79 == _csignals_T_244; // @[src/main/scala/chisel3/util/Lookup.scala 31:38]
+  wire  _csignals_T_257 = 32'h8000 == _csignals_T_172; // @[src/main/scala/chisel3/util/Lookup.scala 31:38]
+  wire  _csignals_T_259 = 32'ha000 == _csignals_T_172; // @[src/main/scala/chisel3/util/Lookup.scala 31:38]
+  wire  _csignals_T_261 = 32'ha002 == _csignals_T_172; // @[src/main/scala/chisel3/util/Lookup.scala 31:38]
+  wire [31:0] _csignals_T_262 = id_reg_inst & 32'he063; // @[src/main/scala/chisel3/util/Lookup.scala 31:38]
+  wire  _csignals_T_263 = 32'he002 == _csignals_T_262; // @[src/main/scala/chisel3/util/Lookup.scala 31:38]
+  wire  _csignals_T_265 = 32'he022 == _csignals_T_192; // @[src/main/scala/chisel3/util/Lookup.scala 31:38]
+  wire  _csignals_T_267 = 32'hf022 == _csignals_T_192; // @[src/main/scala/chisel3/util/Lookup.scala 31:38]
+  wire  _csignals_T_269 = 32'he022 == _csignals_T_262; // @[src/main/scala/chisel3/util/Lookup.scala 31:38]
+  wire  _csignals_T_271 = 32'he042 == _csignals_T_262; // @[src/main/scala/chisel3/util/Lookup.scala 31:38]
+  wire  _csignals_T_273 = 32'he062 == _csignals_T_262; // @[src/main/scala/chisel3/util/Lookup.scala 31:38]
+  wire [3:0] _csignals_T_274 = _csignals_T_273 ? 4'h7 : 4'h0; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [3:0] _csignals_T_275 = _csignals_T_271 ? 4'h6 : _csignals_T_274; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [3:0] _csignals_T_276 = _csignals_T_269 ? 4'h0 : _csignals_T_275; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [3:0] _csignals_T_277 = _csignals_T_267 ? 4'h7 : _csignals_T_276; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [3:0] _csignals_T_278 = _csignals_T_265 ? 4'h7 : _csignals_T_277; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [3:0] _csignals_T_279 = _csignals_T_263 ? 4'h0 : _csignals_T_278; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [3:0] _csignals_T_280 = _csignals_T_261 ? 4'h0 : _csignals_T_279; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [3:0] _csignals_T_281 = _csignals_T_259 ? 4'h9 : _csignals_T_280; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [3:0] _csignals_T_282 = _csignals_T_257 ? 4'h8 : _csignals_T_281; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [3:0] _csignals_T_283 = _csignals_T_255 ? 4'h8 : _csignals_T_282; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [3:0] _csignals_T_284 = _csignals_T_253 ? 4'h1 : _csignals_T_283; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [3:0] _csignals_T_285 = _csignals_T_251 ? 4'ha : _csignals_T_284; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [3:0] _csignals_T_286 = _csignals_T_249 ? 4'h9 : _csignals_T_285; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [3:0] _csignals_T_287 = _csignals_T_247 ? 4'h8 : _csignals_T_286; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [3:0] _csignals_T_288 = _csignals_T_245 ? 4'h2 : _csignals_T_287; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [3:0] _csignals_T_289 = _csignals_T_243 ? 4'h8 : _csignals_T_288; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [3:0] _csignals_T_290 = _csignals_T_241 ? 4'h0 : _csignals_T_289; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [3:0] _csignals_T_291 = _csignals_T_239 ? 4'h0 : _csignals_T_290; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [3:0] _csignals_T_292 = _csignals_T_237 ? 4'h0 : _csignals_T_291; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [3:0] _csignals_T_293 = _csignals_T_235 ? 4'h0 : _csignals_T_292; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [3:0] _csignals_T_294 = _csignals_T_233 ? 4'h0 : _csignals_T_293; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [3:0] _csignals_T_295 = _csignals_T_231 ? 4'h0 : _csignals_T_294; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [3:0] _csignals_T_296 = _csignals_T_229 ? 4'h0 : _csignals_T_295; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [3:0] _csignals_T_297 = _csignals_T_227 ? 4'h0 : _csignals_T_296; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [3:0] _csignals_T_298 = _csignals_T_225 ? 4'h0 : _csignals_T_297; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [3:0] _csignals_T_299 = _csignals_T_223 ? 4'h0 : _csignals_T_298; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [3:0] _csignals_T_300 = _csignals_T_221 ? 4'h0 : _csignals_T_299; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [3:0] _csignals_T_301 = _csignals_T_219 ? 4'h0 : _csignals_T_300; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [3:0] _csignals_T_302 = _csignals_T_217 ? 4'h0 : _csignals_T_301; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [3:0] _csignals_T_303 = _csignals_T_215 ? 4'h0 : _csignals_T_302; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [3:0] _csignals_T_304 = _csignals_T_213 ? 4'h0 : _csignals_T_303; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [3:0] _csignals_T_305 = _csignals_T_211 ? 4'h0 : _csignals_T_304; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [3:0] _csignals_T_306 = _csignals_T_209 ? 4'h0 : _csignals_T_305; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [3:0] _csignals_T_307 = _csignals_T_207 ? 4'h9 : _csignals_T_306; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [3:0] _csignals_T_308 = _csignals_T_205 ? 4'h8 : _csignals_T_307; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [3:0] _csignals_T_309 = _csignals_T_203 ? 4'h0 : _csignals_T_308; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [3:0] _csignals_T_310 = _csignals_T_201 ? 4'h4 : _csignals_T_309; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [3:0] _csignals_T_311 = _csignals_T_199 ? 4'h2 : _csignals_T_310; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [3:0] _csignals_T_312 = _csignals_T_197 ? 4'h3 : _csignals_T_311; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [3:0] _csignals_T_313 = _csignals_T_195 ? 4'h1 : _csignals_T_312; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [3:0] _csignals_T_314 = _csignals_T_193 ? 4'h8 : _csignals_T_313; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [3:0] _csignals_T_315 = _csignals_T_191 ? 4'h2 : _csignals_T_314; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [3:0] _csignals_T_316 = _csignals_T_189 ? 4'h5 : _csignals_T_315; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [3:0] _csignals_T_317 = _csignals_T_187 ? 4'h5 : _csignals_T_316; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [3:0] _csignals_T_318 = _csignals_T_185 ? 4'h0 : _csignals_T_317; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [3:0] _csignals_T_319 = _csignals_T_183 ? 4'h0 : _csignals_T_318; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [3:0] _csignals_T_320 = _csignals_T_181 ? 4'h0 : _csignals_T_319; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [3:0] _csignals_T_321 = _csignals_T_179 ? 4'h0 : _csignals_T_320; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [3:0] _csignals_T_322 = _csignals_T_177 ? 4'h0 : _csignals_T_321; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [3:0] _csignals_T_323 = _csignals_T_175 ? 4'h0 : _csignals_T_322; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [3:0] _csignals_T_324 = _csignals_T_173 ? 4'h0 : _csignals_T_323; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [3:0] _csignals_T_325 = _csignals_T_171 ? 4'h0 : _csignals_T_324; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [3:0] _csignals_T_326 = _csignals_T_169 ? 4'h5 : _csignals_T_325; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [3:0] _csignals_T_327 = _csignals_T_167 ? 4'h5 : _csignals_T_326; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [3:0] _csignals_T_328 = _csignals_T_165 ? 4'h4 : _csignals_T_327; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [3:0] _csignals_T_329 = _csignals_T_163 ? 4'h9 : _csignals_T_328; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [3:0] _csignals_T_330 = _csignals_T_161 ? 4'hc : _csignals_T_329; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [3:0] _csignals_T_331 = _csignals_T_159 ? 4'he : _csignals_T_330; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [3:0] _csignals_T_332 = _csignals_T_157 ? 4'hf : _csignals_T_331; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [3:0] _csignals_T_333 = _csignals_T_155 ? 4'hd : _csignals_T_332; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [3:0] _csignals_T_334 = _csignals_T_153 ? 4'hc : _csignals_T_333; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [3:0] _csignals_T_335 = _csignals_T_151 ? 4'he : _csignals_T_334; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [3:0] _csignals_T_336 = _csignals_T_149 ? 4'hf : _csignals_T_335; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [3:0] _csignals_T_337 = _csignals_T_147 ? 4'hd : _csignals_T_336; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [3:0] _csignals_T_338 = _csignals_T_145 ? 4'ha : _csignals_T_337; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [3:0] _csignals_T_339 = _csignals_T_143 ? 4'h3 : _csignals_T_338; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [3:0] _csignals_T_340 = _csignals_T_141 ? 4'h5 : _csignals_T_339; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [3:0] _csignals_T_341 = _csignals_T_139 ? 4'h5 : _csignals_T_340; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [3:0] _csignals_T_342 = _csignals_T_137 ? 4'h4 : _csignals_T_341; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [3:0] _csignals_T_343 = _csignals_T_135 ? 4'h1 : _csignals_T_342; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [3:0] _csignals_T_344 = _csignals_T_133 ? 4'h3 : _csignals_T_343; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [3:0] _csignals_T_345 = _csignals_T_131 ? 4'h2 : _csignals_T_344; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [3:0] _csignals_T_346 = _csignals_T_129 ? 4'ha : _csignals_T_345; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [3:0] _csignals_T_347 = _csignals_T_127 ? 4'h9 : _csignals_T_346; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [3:0] _csignals_T_348 = _csignals_T_125 ? 4'h8 : _csignals_T_347; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [3:0] _csignals_T_349 = _csignals_T_123 ? 4'h7 : _csignals_T_348; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [3:0] _csignals_T_350 = _csignals_T_121 ? 4'h6 : _csignals_T_349; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [3:0] _csignals_T_351 = _csignals_T_119 ? 4'h5 : _csignals_T_350; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [3:0] _csignals_T_352 = _csignals_T_117 ? 4'h4 : _csignals_T_351; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [3:0] _csignals_T_353 = _csignals_T_115 ? 4'hf : _csignals_T_352; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [3:0] _csignals_T_354 = _csignals_T_113 ? 4'he : _csignals_T_353; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [3:0] _csignals_T_355 = _csignals_T_111 ? 4'hd : _csignals_T_354; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [3:0] _csignals_T_356 = _csignals_T_109 ? 4'hc : _csignals_T_355; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [3:0] _csignals_T_357 = _csignals_T_107 ? 4'hf : _csignals_T_356; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [3:0] _csignals_T_358 = _csignals_T_105 ? 4'hd : _csignals_T_357; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [3:0] _csignals_T_359 = _csignals_T_103 ? 4'he : _csignals_T_358; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [3:0] _csignals_T_360 = _csignals_T_101 ? 4'hc : _csignals_T_359; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [3:0] _csignals_T_361 = _csignals_T_99 ? 4'hb : _csignals_T_360; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [3:0] _csignals_T_362 = _csignals_T_97 ? 4'ha : _csignals_T_361; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [3:0] _csignals_T_363 = _csignals_T_95 ? 4'h9 : _csignals_T_362; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [3:0] _csignals_T_364 = _csignals_T_93 ? 4'h8 : _csignals_T_363; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [3:0] _csignals_T_365 = _csignals_T_91 ? 4'h0 : _csignals_T_364; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [3:0] _csignals_T_366 = _csignals_T_89 ? 4'hf : _csignals_T_365; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [3:0] _csignals_T_367 = _csignals_T_87 ? 4'he : _csignals_T_366; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [3:0] _csignals_T_368 = _csignals_T_85 ? 4'h0 : _csignals_T_367; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [3:0] _csignals_T_369 = _csignals_T_83 ? 4'h0 : _csignals_T_368; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [3:0] _csignals_T_370 = _csignals_T_81 ? 4'h0 : _csignals_T_369; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [3:0] _csignals_T_371 = _csignals_T_79 ? 4'h0 : _csignals_T_370; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [3:0] _csignals_T_372 = _csignals_T_77 ? 4'h0 : _csignals_T_371; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [3:0] _csignals_T_373 = _csignals_T_75 ? 4'h0 : _csignals_T_372; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [3:0] _csignals_T_374 = _csignals_T_73 ? 4'h0 : _csignals_T_373; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [3:0] _csignals_T_375 = _csignals_T_71 ? 4'h0 : _csignals_T_374; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [3:0] _csignals_T_376 = _csignals_T_69 ? 4'h0 : _csignals_T_375; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [3:0] _csignals_T_377 = _csignals_T_67 ? 4'h0 : _csignals_T_376; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [3:0] _csignals_T_378 = _csignals_T_65 ? 4'hc : _csignals_T_377; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [3:0] _csignals_T_379 = _csignals_T_63 ? 4'ha : _csignals_T_378; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [3:0] _csignals_T_380 = _csignals_T_61 ? 4'hd : _csignals_T_379; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [3:0] _csignals_T_381 = _csignals_T_59 ? 4'hb : _csignals_T_380; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [3:0] _csignals_T_382 = _csignals_T_57 ? 4'h9 : _csignals_T_381; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [3:0] _csignals_T_383 = _csignals_T_55 ? 4'h8 : _csignals_T_382; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [3:0] _csignals_T_384 = _csignals_T_53 ? 4'h7 : _csignals_T_383; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [3:0] _csignals_T_385 = _csignals_T_51 ? 4'h6 : _csignals_T_384; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [3:0] _csignals_T_386 = _csignals_T_49 ? 4'h7 : _csignals_T_385; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [3:0] _csignals_T_387 = _csignals_T_47 ? 4'h6 : _csignals_T_386; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [3:0] _csignals_T_388 = _csignals_T_45 ? 4'h5 : _csignals_T_387; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [3:0] _csignals_T_389 = _csignals_T_43 ? 4'h5 : _csignals_T_388; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [3:0] _csignals_T_390 = _csignals_T_41 ? 4'h4 : _csignals_T_389; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [3:0] _csignals_T_391 = _csignals_T_39 ? 4'h5 : _csignals_T_390; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [3:0] _csignals_T_392 = _csignals_T_37 ? 4'h5 : _csignals_T_391; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [3:0] _csignals_T_393 = _csignals_T_35 ? 4'h4 : _csignals_T_392; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [3:0] _csignals_T_394 = _csignals_T_33 ? 4'h1 : _csignals_T_393; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [3:0] _csignals_T_395 = _csignals_T_31 ? 4'h3 : _csignals_T_394; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [3:0] _csignals_T_396 = _csignals_T_29 ? 4'h2 : _csignals_T_395; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [3:0] _csignals_T_397 = _csignals_T_27 ? 4'h1 : _csignals_T_396; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [3:0] _csignals_T_398 = _csignals_T_25 ? 4'h3 : _csignals_T_397; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [3:0] _csignals_T_399 = _csignals_T_23 ? 4'h2 : _csignals_T_398; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [3:0] _csignals_T_400 = _csignals_T_21 ? 4'h8 : _csignals_T_399; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [3:0] _csignals_T_401 = _csignals_T_19 ? 4'h0 : _csignals_T_400; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [3:0] _csignals_T_402 = _csignals_T_17 ? 4'h0 : _csignals_T_401; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [3:0] _csignals_T_403 = _csignals_T_15 ? 4'h0 : _csignals_T_402; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [3:0] _csignals_T_404 = _csignals_T_13 ? 4'h0 : _csignals_T_403; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [3:0] _csignals_T_405 = _csignals_T_11 ? 4'h0 : _csignals_T_404; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [3:0] _csignals_T_406 = _csignals_T_9 ? 4'h0 : _csignals_T_405; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [3:0] _csignals_T_407 = _csignals_T_7 ? 4'h0 : _csignals_T_406; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [3:0] _csignals_T_408 = _csignals_T_5 ? 4'h0 : _csignals_T_407; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [3:0] _csignals_T_409 = _csignals_T_3 ? 4'h0 : _csignals_T_408; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [3:0] csignals_0 = _csignals_T_1 ? 4'h0 : _csignals_T_409; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_410 = _csignals_T_273 ? 3'h7 : 3'h4; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_411 = _csignals_T_271 ? 3'h7 : _csignals_T_410; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_412 = _csignals_T_269 ? 3'h7 : _csignals_T_411; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_413 = _csignals_T_267 ? 3'h0 : _csignals_T_412; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_414 = _csignals_T_265 ? 3'h7 : _csignals_T_413; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_415 = _csignals_T_263 ? 3'h7 : _csignals_T_414; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_416 = _csignals_T_261 ? 3'h7 : _csignals_T_415; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_417 = _csignals_T_259 ? 3'h7 : _csignals_T_416; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_418 = _csignals_T_257 ? 3'h7 : _csignals_T_417; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_419 = _csignals_T_255 ? 3'h0 : _csignals_T_418; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_420 = _csignals_T_253 ? 3'h7 : _csignals_T_419; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_421 = _csignals_T_251 ? 3'h7 : _csignals_T_420; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_422 = _csignals_T_249 ? 3'h7 : _csignals_T_421; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_423 = _csignals_T_247 ? 3'h7 : _csignals_T_422; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_424 = _csignals_T_245 ? 3'h7 : _csignals_T_423; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_425 = _csignals_T_243 ? 3'h7 : _csignals_T_424; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_426 = _csignals_T_241 ? 3'h1 : _csignals_T_425; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_427 = _csignals_T_239 ? 3'h7 : _csignals_T_426; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_428 = _csignals_T_237 ? 3'h7 : _csignals_T_427; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_429 = _csignals_T_235 ? 3'h7 : _csignals_T_428; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_430 = _csignals_T_233 ? 3'h7 : _csignals_T_429; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_431 = _csignals_T_231 ? 3'h7 : _csignals_T_430; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_432 = _csignals_T_229 ? 3'h7 : _csignals_T_431; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_433 = _csignals_T_227 ? 3'h7 : _csignals_T_432; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_434 = _csignals_T_225 ? 3'h7 : _csignals_T_433; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_435 = _csignals_T_223 ? 3'h7 : _csignals_T_434; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_436 = _csignals_T_221 ? 3'h5 : _csignals_T_435; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_437 = _csignals_T_219 ? 3'h0 : _csignals_T_436; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_438 = _csignals_T_217 ? 3'h6 : _csignals_T_437; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_439 = _csignals_T_215 ? 3'h6 : _csignals_T_438; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_440 = _csignals_T_213 ? 3'h1 : _csignals_T_439; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_441 = _csignals_T_211 ? 3'h5 : _csignals_T_440; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_442 = _csignals_T_209 ? 3'h5 : _csignals_T_441; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_443 = _csignals_T_207 ? 3'h7 : _csignals_T_442; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_444 = _csignals_T_205 ? 3'h7 : _csignals_T_443; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_445 = _csignals_T_203 ? 3'h1 : _csignals_T_444; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_446 = _csignals_T_201 ? 3'h5 : _csignals_T_445; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_447 = _csignals_T_199 ? 3'h7 : _csignals_T_446; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_448 = _csignals_T_197 ? 3'h7 : _csignals_T_447; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_449 = _csignals_T_195 ? 3'h7 : _csignals_T_448; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_450 = _csignals_T_193 ? 3'h7 : _csignals_T_449; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_451 = _csignals_T_191 ? 3'h7 : _csignals_T_450; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_452 = _csignals_T_189 ? 3'h7 : _csignals_T_451; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_453 = _csignals_T_187 ? 3'h7 : _csignals_T_452; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_454 = _csignals_T_185 ? 3'h0 : _csignals_T_453; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_455 = _csignals_T_183 ? 3'h0 : _csignals_T_454; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_456 = _csignals_T_181 ? 3'h7 : _csignals_T_455; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_457 = _csignals_T_179 ? 3'h7 : _csignals_T_456; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_458 = _csignals_T_177 ? 3'h5 : _csignals_T_457; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_459 = _csignals_T_175 ? 3'h5 : _csignals_T_458; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_460 = _csignals_T_173 ? 3'h6 : _csignals_T_459; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_461 = _csignals_T_171 ? 3'h0 : _csignals_T_460; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_462 = _csignals_T_169 ? 3'h4 : _csignals_T_461; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_463 = _csignals_T_167 ? 3'h4 : _csignals_T_462; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_464 = _csignals_T_165 ? 3'h4 : _csignals_T_463; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_465 = _csignals_T_163 ? 3'h4 : _csignals_T_464; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_466 = _csignals_T_161 ? 3'h4 : _csignals_T_465; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_467 = _csignals_T_159 ? 3'h4 : _csignals_T_466; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_468 = _csignals_T_157 ? 3'h4 : _csignals_T_467; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_469 = _csignals_T_155 ? 3'h4 : _csignals_T_468; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_470 = _csignals_T_153 ? 3'h4 : _csignals_T_469; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_471 = _csignals_T_151 ? 3'h4 : _csignals_T_470; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_472 = _csignals_T_149 ? 3'h4 : _csignals_T_471; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_473 = _csignals_T_147 ? 3'h4 : _csignals_T_472; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_474 = _csignals_T_145 ? 3'h4 : _csignals_T_473; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_475 = _csignals_T_143 ? 3'h4 : _csignals_T_474; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_476 = _csignals_T_141 ? 3'h4 : _csignals_T_475; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_477 = _csignals_T_139 ? 3'h4 : _csignals_T_476; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_478 = _csignals_T_137 ? 3'h4 : _csignals_T_477; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_479 = _csignals_T_135 ? 3'h4 : _csignals_T_478; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_480 = _csignals_T_133 ? 3'h4 : _csignals_T_479; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_481 = _csignals_T_131 ? 3'h4 : _csignals_T_480; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_482 = _csignals_T_129 ? 3'h4 : _csignals_T_481; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_483 = _csignals_T_127 ? 3'h4 : _csignals_T_482; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_484 = _csignals_T_125 ? 3'h4 : _csignals_T_483; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_485 = _csignals_T_123 ? 3'h4 : _csignals_T_484; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_486 = _csignals_T_121 ? 3'h4 : _csignals_T_485; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_487 = _csignals_T_119 ? 3'h4 : _csignals_T_486; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_488 = _csignals_T_117 ? 3'h4 : _csignals_T_487; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_489 = _csignals_T_115 ? 3'h4 : _csignals_T_488; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_490 = _csignals_T_113 ? 3'h4 : _csignals_T_489; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_491 = _csignals_T_111 ? 3'h4 : _csignals_T_490; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_492 = _csignals_T_109 ? 3'h4 : _csignals_T_491; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_493 = _csignals_T_107 ? 3'h4 : _csignals_T_492; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_494 = _csignals_T_105 ? 3'h4 : _csignals_T_493; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_495 = _csignals_T_103 ? 3'h4 : _csignals_T_494; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_496 = _csignals_T_101 ? 3'h4 : _csignals_T_495; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_497 = _csignals_T_99 ? 3'h4 : _csignals_T_496; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_498 = _csignals_T_97 ? 3'h4 : _csignals_T_497; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_499 = _csignals_T_95 ? 3'h4 : _csignals_T_498; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_500 = _csignals_T_93 ? 3'h4 : _csignals_T_499; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_501 = _csignals_T_91 ? 3'h0 : _csignals_T_500; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_502 = _csignals_T_89 ? 3'h0 : _csignals_T_501; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_503 = _csignals_T_87 ? 3'h0 : _csignals_T_502; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_504 = _csignals_T_85 ? 3'h2 : _csignals_T_503; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_505 = _csignals_T_83 ? 3'h4 : _csignals_T_504; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_506 = _csignals_T_81 ? 3'h2 : _csignals_T_505; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_507 = _csignals_T_79 ? 3'h4 : _csignals_T_506; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_508 = _csignals_T_77 ? 3'h2 : _csignals_T_507; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_509 = _csignals_T_75 ? 3'h4 : _csignals_T_508; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_510 = _csignals_T_73 ? 3'h1 : _csignals_T_509; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_511 = _csignals_T_71 ? 3'h0 : _csignals_T_510; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_512 = _csignals_T_69 ? 3'h4 : _csignals_T_511; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_513 = _csignals_T_67 ? 3'h1 : _csignals_T_512; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_514 = _csignals_T_65 ? 3'h4 : _csignals_T_513; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_515 = _csignals_T_63 ? 3'h4 : _csignals_T_514; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_516 = _csignals_T_61 ? 3'h4 : _csignals_T_515; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_517 = _csignals_T_59 ? 3'h4 : _csignals_T_516; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_518 = _csignals_T_57 ? 3'h4 : _csignals_T_517; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_519 = _csignals_T_55 ? 3'h4 : _csignals_T_518; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_520 = _csignals_T_53 ? 3'h4 : _csignals_T_519; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_521 = _csignals_T_51 ? 3'h4 : _csignals_T_520; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_522 = _csignals_T_49 ? 3'h4 : _csignals_T_521; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_523 = _csignals_T_47 ? 3'h4 : _csignals_T_522; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_524 = _csignals_T_45 ? 3'h4 : _csignals_T_523; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_525 = _csignals_T_43 ? 3'h4 : _csignals_T_524; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_526 = _csignals_T_41 ? 3'h4 : _csignals_T_525; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_527 = _csignals_T_39 ? 3'h4 : _csignals_T_526; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_528 = _csignals_T_37 ? 3'h4 : _csignals_T_527; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_529 = _csignals_T_35 ? 3'h4 : _csignals_T_528; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_530 = _csignals_T_33 ? 3'h4 : _csignals_T_529; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_531 = _csignals_T_31 ? 3'h4 : _csignals_T_530; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_532 = _csignals_T_29 ? 3'h4 : _csignals_T_531; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_533 = _csignals_T_27 ? 3'h4 : _csignals_T_532; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_534 = _csignals_T_25 ? 3'h4 : _csignals_T_533; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_535 = _csignals_T_23 ? 3'h4 : _csignals_T_534; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_536 = _csignals_T_21 ? 3'h4 : _csignals_T_535; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_537 = _csignals_T_19 ? 3'h4 : _csignals_T_536; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_538 = _csignals_T_17 ? 3'h4 : _csignals_T_537; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_539 = _csignals_T_15 ? 3'h4 : _csignals_T_538; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_540 = _csignals_T_13 ? 3'h4 : _csignals_T_539; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_541 = _csignals_T_11 ? 3'h4 : _csignals_T_540; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_542 = _csignals_T_9 ? 3'h4 : _csignals_T_541; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_543 = _csignals_T_7 ? 3'h4 : _csignals_T_542; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_544 = _csignals_T_5 ? 3'h4 : _csignals_T_543; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_545 = _csignals_T_3 ? 3'h4 : _csignals_T_544; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] csignals_1 = _csignals_T_1 ? 3'h4 : _csignals_T_545; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [4:0] _csignals_T_546 = _csignals_T_273 ? 5'h3 : 5'h1; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [4:0] _csignals_T_547 = _csignals_T_271 ? 5'h3 : _csignals_T_546; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [4:0] _csignals_T_548 = _csignals_T_269 ? 5'h1c : _csignals_T_547; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [4:0] _csignals_T_549 = _csignals_T_267 ? 5'h7 : _csignals_T_548; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [4:0] _csignals_T_550 = _csignals_T_265 ? 5'h1a : _csignals_T_549; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [4:0] _csignals_T_551 = _csignals_T_263 ? 5'h3 : _csignals_T_550; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [4:0] _csignals_T_552 = _csignals_T_261 ? 5'h1b : _csignals_T_551; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [4:0] _csignals_T_553 = _csignals_T_259 ? 5'h6 : _csignals_T_552; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [4:0] _csignals_T_554 = _csignals_T_257 ? 5'h6 : _csignals_T_553; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [4:0] _csignals_T_555 = _csignals_T_255 ? 5'h7 : _csignals_T_554; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [4:0] _csignals_T_556 = _csignals_T_253 ? 5'h19 : _csignals_T_555; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [4:0] _csignals_T_557 = _csignals_T_251 ? 5'h1e : _csignals_T_556; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [4:0] _csignals_T_558 = _csignals_T_249 ? 5'h1e : _csignals_T_557; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [4:0] _csignals_T_559 = _csignals_T_247 ? 5'h1e : _csignals_T_558; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [4:0] _csignals_T_560 = _csignals_T_245 ? 5'h18 : _csignals_T_559; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [4:0] _csignals_T_561 = _csignals_T_243 ? 5'h6 : _csignals_T_560; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [4:0] _csignals_T_562 = _csignals_T_241 ? 5'h1d : _csignals_T_561; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [4:0] _csignals_T_563 = _csignals_T_239 ? 5'h13 : _csignals_T_562; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [4:0] _csignals_T_564 = _csignals_T_237 ? 5'h17 : _csignals_T_563; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [4:0] _csignals_T_565 = _csignals_T_235 ? 5'h16 : _csignals_T_564; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [4:0] _csignals_T_566 = _csignals_T_233 ? 5'h15 : _csignals_T_565; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [4:0] _csignals_T_567 = _csignals_T_231 ? 5'h14 : _csignals_T_566; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [4:0] _csignals_T_568 = _csignals_T_229 ? 5'h14 : _csignals_T_567; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [4:0] _csignals_T_569 = _csignals_T_227 ? 5'h14 : _csignals_T_568; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [4:0] _csignals_T_570 = _csignals_T_225 ? 5'h13 : _csignals_T_569; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [4:0] _csignals_T_571 = _csignals_T_223 ? 5'h13 : _csignals_T_570; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [4:0] _csignals_T_572 = _csignals_T_221 ? 5'h2 : _csignals_T_571; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [4:0] _csignals_T_573 = _csignals_T_219 ? 5'h2 : _csignals_T_572; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [4:0] _csignals_T_574 = _csignals_T_217 ? 5'h12 : _csignals_T_573; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [4:0] _csignals_T_575 = _csignals_T_215 ? 5'h11 : _csignals_T_574; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [4:0] _csignals_T_576 = _csignals_T_213 ? 5'h10 : _csignals_T_575; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [4:0] _csignals_T_577 = _csignals_T_211 ? 5'h0 : _csignals_T_576; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [4:0] _csignals_T_578 = _csignals_T_209 ? 5'h0 : _csignals_T_577; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [4:0] _csignals_T_579 = _csignals_T_207 ? 5'h0 : _csignals_T_578; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [4:0] _csignals_T_580 = _csignals_T_205 ? 5'h0 : _csignals_T_579; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [4:0] _csignals_T_581 = _csignals_T_203 ? 5'h10 : _csignals_T_580; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [4:0] _csignals_T_582 = _csignals_T_201 ? 5'hd : _csignals_T_581; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [4:0] _csignals_T_583 = _csignals_T_199 ? 5'h6 : _csignals_T_582; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [4:0] _csignals_T_584 = _csignals_T_197 ? 5'h6 : _csignals_T_583; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [4:0] _csignals_T_585 = _csignals_T_195 ? 5'h6 : _csignals_T_584; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [4:0] _csignals_T_586 = _csignals_T_193 ? 5'h6 : _csignals_T_585; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [4:0] _csignals_T_587 = _csignals_T_191 ? 5'hd : _csignals_T_586; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [4:0] _csignals_T_588 = _csignals_T_189 ? 5'hd : _csignals_T_587; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [4:0] _csignals_T_589 = _csignals_T_187 ? 5'hd : _csignals_T_588; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [4:0] _csignals_T_590 = _csignals_T_185 ? 5'hf : _csignals_T_589; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [4:0] _csignals_T_591 = _csignals_T_183 ? 5'hd : _csignals_T_590; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [4:0] _csignals_T_592 = _csignals_T_181 ? 5'he : _csignals_T_591; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [4:0] _csignals_T_593 = _csignals_T_179 ? 5'he : _csignals_T_592; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [4:0] _csignals_T_594 = _csignals_T_177 ? 5'hd : _csignals_T_593; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [4:0] _csignals_T_595 = _csignals_T_175 ? 5'hc : _csignals_T_594; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [4:0] _csignals_T_596 = _csignals_T_173 ? 5'hb : _csignals_T_595; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [4:0] _csignals_T_597 = _csignals_T_171 ? 5'h1e : _csignals_T_596; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [4:0] _csignals_T_598 = _csignals_T_169 ? 5'h4 : _csignals_T_597; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [4:0] _csignals_T_599 = _csignals_T_167 ? 5'h1 : _csignals_T_598; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [4:0] _csignals_T_600 = _csignals_T_165 ? 5'h1 : _csignals_T_599; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [4:0] _csignals_T_601 = _csignals_T_163 ? 5'h1 : _csignals_T_600; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [4:0] _csignals_T_602 = _csignals_T_161 ? 5'h4 : _csignals_T_601; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [4:0] _csignals_T_603 = _csignals_T_159 ? 5'h4 : _csignals_T_602; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [4:0] _csignals_T_604 = _csignals_T_157 ? 5'h4 : _csignals_T_603; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [4:0] _csignals_T_605 = _csignals_T_155 ? 5'h4 : _csignals_T_604; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [4:0] _csignals_T_606 = _csignals_T_153 ? 5'h1 : _csignals_T_605; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [4:0] _csignals_T_607 = _csignals_T_151 ? 5'h1 : _csignals_T_606; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [4:0] _csignals_T_608 = _csignals_T_149 ? 5'h1 : _csignals_T_607; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [4:0] _csignals_T_609 = _csignals_T_147 ? 5'h1 : _csignals_T_608; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [4:0] _csignals_T_610 = _csignals_T_145 ? 5'h1 : _csignals_T_609; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [4:0] _csignals_T_611 = _csignals_T_143 ? 5'h1 : _csignals_T_610; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [4:0] _csignals_T_612 = _csignals_T_141 ? 5'h4 : _csignals_T_611; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [4:0] _csignals_T_613 = _csignals_T_139 ? 5'h1 : _csignals_T_612; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [4:0] _csignals_T_614 = _csignals_T_137 ? 5'h1 : _csignals_T_613; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [4:0] _csignals_T_615 = _csignals_T_135 ? 5'h1 : _csignals_T_614; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [4:0] _csignals_T_616 = _csignals_T_133 ? 5'h1 : _csignals_T_615; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [4:0] _csignals_T_617 = _csignals_T_131 ? 5'h1 : _csignals_T_616; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [4:0] _csignals_T_618 = _csignals_T_129 ? 5'h1e : _csignals_T_617; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [4:0] _csignals_T_619 = _csignals_T_127 ? 5'h1e : _csignals_T_618; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [4:0] _csignals_T_620 = _csignals_T_125 ? 5'h1e : _csignals_T_619; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [4:0] _csignals_T_621 = _csignals_T_123 ? 5'h1e : _csignals_T_620; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [4:0] _csignals_T_622 = _csignals_T_121 ? 5'h1e : _csignals_T_621; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [4:0] _csignals_T_623 = _csignals_T_119 ? 5'h1e : _csignals_T_622; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [4:0] _csignals_T_624 = _csignals_T_117 ? 5'h1e : _csignals_T_623; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [4:0] _csignals_T_625 = _csignals_T_115 ? 5'h1 : _csignals_T_624; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [4:0] _csignals_T_626 = _csignals_T_113 ? 5'h1 : _csignals_T_625; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [4:0] _csignals_T_627 = _csignals_T_111 ? 5'h1 : _csignals_T_626; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [4:0] _csignals_T_628 = _csignals_T_109 ? 5'h1 : _csignals_T_627; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [4:0] _csignals_T_629 = _csignals_T_107 ? 5'h1 : _csignals_T_628; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [4:0] _csignals_T_630 = _csignals_T_105 ? 5'h1 : _csignals_T_629; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [4:0] _csignals_T_631 = _csignals_T_103 ? 5'h1 : _csignals_T_630; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [4:0] _csignals_T_632 = _csignals_T_101 ? 5'h1 : _csignals_T_631; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [4:0] _csignals_T_633 = _csignals_T_99 ? 5'h1 : _csignals_T_632; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [4:0] _csignals_T_634 = _csignals_T_97 ? 5'h1 : _csignals_T_633; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [4:0] _csignals_T_635 = _csignals_T_95 ? 5'h1 : _csignals_T_634; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [4:0] _csignals_T_636 = _csignals_T_93 ? 5'h1 : _csignals_T_635; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [4:0] _csignals_T_637 = _csignals_T_91 ? 5'h1e : _csignals_T_636; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [4:0] _csignals_T_638 = _csignals_T_89 ? 5'h1e : _csignals_T_637; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [4:0] _csignals_T_639 = _csignals_T_87 ? 5'h1e : _csignals_T_638; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [4:0] _csignals_T_640 = _csignals_T_85 ? 5'h0 : _csignals_T_639; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [4:0] _csignals_T_641 = _csignals_T_83 ? 5'h0 : _csignals_T_640; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [4:0] _csignals_T_642 = _csignals_T_81 ? 5'h0 : _csignals_T_641; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [4:0] _csignals_T_643 = _csignals_T_79 ? 5'h0 : _csignals_T_642; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [4:0] _csignals_T_644 = _csignals_T_77 ? 5'h0 : _csignals_T_643; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [4:0] _csignals_T_645 = _csignals_T_75 ? 5'h0 : _csignals_T_644; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [4:0] _csignals_T_646 = _csignals_T_73 ? 5'ha : _csignals_T_645; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [4:0] _csignals_T_647 = _csignals_T_71 ? 5'ha : _csignals_T_646; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [4:0] _csignals_T_648 = _csignals_T_69 ? 5'h4 : _csignals_T_647; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [4:0] _csignals_T_649 = _csignals_T_67 ? 5'h9 : _csignals_T_648; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [4:0] _csignals_T_650 = _csignals_T_65 ? 5'h1 : _csignals_T_649; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [4:0] _csignals_T_651 = _csignals_T_63 ? 5'h1 : _csignals_T_650; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [4:0] _csignals_T_652 = _csignals_T_61 ? 5'h1 : _csignals_T_651; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [4:0] _csignals_T_653 = _csignals_T_59 ? 5'h1 : _csignals_T_652; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [4:0] _csignals_T_654 = _csignals_T_57 ? 5'h1 : _csignals_T_653; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [4:0] _csignals_T_655 = _csignals_T_55 ? 5'h1 : _csignals_T_654; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [4:0] _csignals_T_656 = _csignals_T_53 ? 5'h4 : _csignals_T_655; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [4:0] _csignals_T_657 = _csignals_T_51 ? 5'h4 : _csignals_T_656; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [4:0] _csignals_T_658 = _csignals_T_49 ? 5'h1 : _csignals_T_657; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [4:0] _csignals_T_659 = _csignals_T_47 ? 5'h1 : _csignals_T_658; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [4:0] _csignals_T_660 = _csignals_T_45 ? 5'h4 : _csignals_T_659; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [4:0] _csignals_T_661 = _csignals_T_43 ? 5'h4 : _csignals_T_660; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [4:0] _csignals_T_662 = _csignals_T_41 ? 5'h4 : _csignals_T_661; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [4:0] _csignals_T_663 = _csignals_T_39 ? 5'h1 : _csignals_T_662; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [4:0] _csignals_T_664 = _csignals_T_37 ? 5'h1 : _csignals_T_663; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [4:0] _csignals_T_665 = _csignals_T_35 ? 5'h1 : _csignals_T_664; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [4:0] _csignals_T_666 = _csignals_T_33 ? 5'h4 : _csignals_T_665; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [4:0] _csignals_T_667 = _csignals_T_31 ? 5'h4 : _csignals_T_666; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [4:0] _csignals_T_668 = _csignals_T_29 ? 5'h4 : _csignals_T_667; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [4:0] _csignals_T_669 = _csignals_T_27 ? 5'h1 : _csignals_T_668; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [4:0] _csignals_T_670 = _csignals_T_25 ? 5'h1 : _csignals_T_669; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [4:0] _csignals_T_671 = _csignals_T_23 ? 5'h1 : _csignals_T_670; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [4:0] _csignals_T_672 = _csignals_T_21 ? 5'h1 : _csignals_T_671; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [4:0] _csignals_T_673 = _csignals_T_19 ? 5'h4 : _csignals_T_672; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [4:0] _csignals_T_674 = _csignals_T_17 ? 5'h1 : _csignals_T_673; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [4:0] _csignals_T_675 = _csignals_T_15 ? 5'h8 : _csignals_T_674; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [4:0] _csignals_T_676 = _csignals_T_13 ? 5'h4 : _csignals_T_675; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [4:0] _csignals_T_677 = _csignals_T_11 ? 5'h8 : _csignals_T_676; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [4:0] _csignals_T_678 = _csignals_T_9 ? 5'h4 : _csignals_T_677; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [4:0] _csignals_T_679 = _csignals_T_7 ? 5'h4 : _csignals_T_678; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [4:0] _csignals_T_680 = _csignals_T_5 ? 5'h8 : _csignals_T_679; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [4:0] _csignals_T_681 = _csignals_T_3 ? 5'h4 : _csignals_T_680; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [4:0] csignals_2 = _csignals_T_1 ? 5'h4 : _csignals_T_681; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_699 = _csignals_T_239 ? 3'h5 : 3'h0; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_700 = _csignals_T_237 ? 3'h0 : _csignals_T_699; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_701 = _csignals_T_235 ? 3'h0 : _csignals_T_700; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_702 = _csignals_T_233 ? 3'h0 : _csignals_T_701; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_703 = _csignals_T_231 ? 3'h5 : _csignals_T_702; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_704 = _csignals_T_229 ? 3'h0 : _csignals_T_703; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_705 = _csignals_T_227 ? 3'h0 : _csignals_T_704; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_706 = _csignals_T_225 ? 3'h0 : _csignals_T_705; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_707 = _csignals_T_223 ? 3'h0 : _csignals_T_706; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_708 = _csignals_T_221 ? 3'h0 : _csignals_T_707; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_709 = _csignals_T_219 ? 3'h0 : _csignals_T_708; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_710 = _csignals_T_217 ? 3'h6 : _csignals_T_709; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_711 = _csignals_T_215 ? 3'h0 : _csignals_T_710; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_712 = _csignals_T_213 ? 3'h0 : _csignals_T_711; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_713 = _csignals_T_211 ? 3'h0 : _csignals_T_712; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_714 = _csignals_T_209 ? 3'h0 : _csignals_T_713; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_715 = _csignals_T_207 ? 3'h0 : _csignals_T_714; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_716 = _csignals_T_205 ? 3'h0 : _csignals_T_715; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_717 = _csignals_T_203 ? 3'h0 : _csignals_T_716; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_718 = _csignals_T_201 ? 3'h0 : _csignals_T_717; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_719 = _csignals_T_199 ? 3'h0 : _csignals_T_718; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_720 = _csignals_T_197 ? 3'h0 : _csignals_T_719; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_721 = _csignals_T_195 ? 3'h0 : _csignals_T_720; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_722 = _csignals_T_193 ? 3'h0 : _csignals_T_721; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_723 = _csignals_T_191 ? 3'h0 : _csignals_T_722; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_724 = _csignals_T_189 ? 3'h0 : _csignals_T_723; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_725 = _csignals_T_187 ? 3'h1 : _csignals_T_724; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_726 = _csignals_T_185 ? 3'h0 : _csignals_T_725; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_727 = _csignals_T_183 ? 3'h0 : _csignals_T_726; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_728 = _csignals_T_181 ? 3'h5 : _csignals_T_727; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_729 = _csignals_T_179 ? 3'h0 : _csignals_T_728; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_730 = _csignals_T_177 ? 3'h0 : _csignals_T_729; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_731 = _csignals_T_175 ? 3'h0 : _csignals_T_730; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_732 = _csignals_T_173 ? 3'h0 : _csignals_T_731; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_733 = _csignals_T_171 ? 3'h0 : _csignals_T_732; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_734 = _csignals_T_169 ? 3'h7 : _csignals_T_733; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_735 = _csignals_T_167 ? 3'h7 : _csignals_T_734; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_736 = _csignals_T_165 ? 3'h7 : _csignals_T_735; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_737 = _csignals_T_163 ? 3'h7 : _csignals_T_736; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_738 = _csignals_T_161 ? 3'h0 : _csignals_T_737; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_739 = _csignals_T_159 ? 3'h0 : _csignals_T_738; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_740 = _csignals_T_157 ? 3'h0 : _csignals_T_739; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_741 = _csignals_T_155 ? 3'h0 : _csignals_T_740; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_742 = _csignals_T_153 ? 3'h0 : _csignals_T_741; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_743 = _csignals_T_151 ? 3'h0 : _csignals_T_742; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_744 = _csignals_T_149 ? 3'h0 : _csignals_T_743; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_745 = _csignals_T_147 ? 3'h0 : _csignals_T_744; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_746 = _csignals_T_145 ? 3'h0 : _csignals_T_745; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_747 = _csignals_T_143 ? 3'h0 : _csignals_T_746; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_748 = _csignals_T_141 ? 3'h3 : _csignals_T_747; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_749 = _csignals_T_139 ? 3'h3 : _csignals_T_748; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_750 = _csignals_T_137 ? 3'h3 : _csignals_T_749; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_751 = _csignals_T_135 ? 3'h0 : _csignals_T_750; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_752 = _csignals_T_133 ? 3'h0 : _csignals_T_751; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_753 = _csignals_T_131 ? 3'h0 : _csignals_T_752; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_754 = _csignals_T_129 ? 3'h0 : _csignals_T_753; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_755 = _csignals_T_127 ? 3'h0 : _csignals_T_754; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_756 = _csignals_T_125 ? 3'h0 : _csignals_T_755; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_757 = _csignals_T_123 ? 3'h0 : _csignals_T_756; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_758 = _csignals_T_121 ? 3'h0 : _csignals_T_757; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_759 = _csignals_T_119 ? 3'h0 : _csignals_T_758; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_760 = _csignals_T_117 ? 3'h0 : _csignals_T_759; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_761 = _csignals_T_115 ? 3'h0 : _csignals_T_760; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_762 = _csignals_T_113 ? 3'h0 : _csignals_T_761; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_763 = _csignals_T_111 ? 3'h0 : _csignals_T_762; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_764 = _csignals_T_109 ? 3'h0 : _csignals_T_763; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_765 = _csignals_T_107 ? 3'h0 : _csignals_T_764; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_766 = _csignals_T_105 ? 3'h0 : _csignals_T_765; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_767 = _csignals_T_103 ? 3'h0 : _csignals_T_766; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_768 = _csignals_T_101 ? 3'h0 : _csignals_T_767; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_769 = _csignals_T_99 ? 3'h0 : _csignals_T_768; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_770 = _csignals_T_97 ? 3'h0 : _csignals_T_769; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_771 = _csignals_T_95 ? 3'h0 : _csignals_T_770; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_772 = _csignals_T_93 ? 3'h0 : _csignals_T_771; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_773 = _csignals_T_91 ? 3'h0 : _csignals_T_772; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_774 = _csignals_T_89 ? 3'h0 : _csignals_T_773; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_775 = _csignals_T_87 ? 3'h0 : _csignals_T_774; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_776 = _csignals_T_85 ? 3'h0 : _csignals_T_775; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_777 = _csignals_T_83 ? 3'h0 : _csignals_T_776; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_778 = _csignals_T_81 ? 3'h0 : _csignals_T_777; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_779 = _csignals_T_79 ? 3'h0 : _csignals_T_778; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_780 = _csignals_T_77 ? 3'h0 : _csignals_T_779; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_781 = _csignals_T_75 ? 3'h0 : _csignals_T_780; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_782 = _csignals_T_73 ? 3'h0 : _csignals_T_781; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_783 = _csignals_T_71 ? 3'h0 : _csignals_T_782; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_784 = _csignals_T_69 ? 3'h0 : _csignals_T_783; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_785 = _csignals_T_67 ? 3'h0 : _csignals_T_784; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_786 = _csignals_T_65 ? 3'h0 : _csignals_T_785; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_787 = _csignals_T_63 ? 3'h0 : _csignals_T_786; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_788 = _csignals_T_61 ? 3'h0 : _csignals_T_787; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_789 = _csignals_T_59 ? 3'h0 : _csignals_T_788; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_790 = _csignals_T_57 ? 3'h0 : _csignals_T_789; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_791 = _csignals_T_55 ? 3'h0 : _csignals_T_790; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_792 = _csignals_T_53 ? 3'h0 : _csignals_T_791; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_793 = _csignals_T_51 ? 3'h0 : _csignals_T_792; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_794 = _csignals_T_49 ? 3'h0 : _csignals_T_793; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_795 = _csignals_T_47 ? 3'h0 : _csignals_T_794; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_796 = _csignals_T_45 ? 3'h1 : _csignals_T_795; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_797 = _csignals_T_43 ? 3'h0 : _csignals_T_796; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_798 = _csignals_T_41 ? 3'h0 : _csignals_T_797; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_799 = _csignals_T_39 ? 3'h1 : _csignals_T_798; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_800 = _csignals_T_37 ? 3'h0 : _csignals_T_799; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_801 = _csignals_T_35 ? 3'h0 : _csignals_T_800; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_802 = _csignals_T_33 ? 3'h0 : _csignals_T_801; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_803 = _csignals_T_31 ? 3'h0 : _csignals_T_802; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_804 = _csignals_T_29 ? 3'h0 : _csignals_T_803; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_805 = _csignals_T_27 ? 3'h0 : _csignals_T_804; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_806 = _csignals_T_25 ? 3'h0 : _csignals_T_805; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_807 = _csignals_T_23 ? 3'h0 : _csignals_T_806; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_808 = _csignals_T_21 ? 3'h0 : _csignals_T_807; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_809 = _csignals_T_19 ? 3'h0 : _csignals_T_808; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_810 = _csignals_T_17 ? 3'h0 : _csignals_T_809; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_811 = _csignals_T_15 ? 3'h4 : _csignals_T_810; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_812 = _csignals_T_13 ? 3'h0 : _csignals_T_811; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_813 = _csignals_T_11 ? 3'h4 : _csignals_T_812; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_814 = _csignals_T_9 ? 3'h0 : _csignals_T_813; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_815 = _csignals_T_7 ? 3'h0 : _csignals_T_814; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_816 = _csignals_T_5 ? 3'h4 : _csignals_T_815; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_817 = _csignals_T_3 ? 3'h0 : _csignals_T_816; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] csignals_3 = _csignals_T_1 ? 3'h0 : _csignals_T_817; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire  _csignals_T_825 = _csignals_T_259 ? 1'h0 : _csignals_T_261 | (_csignals_T_263 | (_csignals_T_265 | (
+    _csignals_T_267 | (_csignals_T_269 | (_csignals_T_271 | _csignals_T_273))))); // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire  _csignals_T_826 = _csignals_T_257 ? 1'h0 : _csignals_T_825; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire  _csignals_T_835 = _csignals_T_239 ? 1'h0 : _csignals_T_241 | (_csignals_T_243 | (_csignals_T_245 | (
+    _csignals_T_247 | (_csignals_T_249 | (_csignals_T_251 | (_csignals_T_253 | (_csignals_T_255 | _csignals_T_826)))))))
     ; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire  _csignals_T_782 = _csignals_T_219 ? 1'h0 : _csignals_T_781; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire  _csignals_T_783 = _csignals_T_217 ? 1'h0 : _csignals_T_782; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire  _csignals_T_784 = _csignals_T_215 ? 1'h0 : _csignals_T_783; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire  _csignals_T_785 = _csignals_T_213 ? 1'h0 : _csignals_T_784; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire  _csignals_T_792 = _csignals_T_199 ? 1'h0 : _csignals_T_201 | (_csignals_T_203 | (_csignals_T_205 | (
-    _csignals_T_207 | (_csignals_T_209 | (_csignals_T_211 | _csignals_T_785))))); // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire  _csignals_T_796 = _csignals_T_191 ? 1'h0 : _csignals_T_193 | (_csignals_T_195 | (_csignals_T_197 |
-    _csignals_T_792)); // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire  _csignals_T_797 = _csignals_T_189 ? 1'h0 : _csignals_T_796; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire  _csignals_T_798 = _csignals_T_187 ? 1'h0 : _csignals_T_797; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire  _csignals_T_799 = _csignals_T_185 ? 1'h0 : _csignals_T_798; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire  _csignals_T_810 = _csignals_T_163 ? 1'h0 : _csignals_T_165 | (_csignals_T_167 | (_csignals_T_169 | (
-    _csignals_T_171 | (_csignals_T_173 | (_csignals_T_175 | (_csignals_T_177 | (_csignals_T_179 | (_csignals_T_181 | (
-    _csignals_T_183 | _csignals_T_799))))))))); // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire  _csignals_T_815 = _csignals_T_153 ? 1'h0 : _csignals_T_155 | (_csignals_T_157 | (_csignals_T_159 | (
-    _csignals_T_161 | _csignals_T_810))); // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire  _csignals_T_845 = _csignals_T_93 | (_csignals_T_95 | (_csignals_T_97 | (_csignals_T_99 | (_csignals_T_101 | (
-    _csignals_T_103 | (_csignals_T_105 | (_csignals_T_107 | (_csignals_T_109 | (_csignals_T_111 | (_csignals_T_113 | (
-    _csignals_T_115 | (_csignals_T_117 | (_csignals_T_119 | (_csignals_T_121 | (_csignals_T_123 | (_csignals_T_125 | (
-    _csignals_T_127 | (_csignals_T_129 | (_csignals_T_131 | (_csignals_T_133 | (_csignals_T_135 | (_csignals_T_137 | (
-    _csignals_T_139 | (_csignals_T_141 | (_csignals_T_143 | (_csignals_T_145 | (_csignals_T_147 | (_csignals_T_149 | (
-    _csignals_T_151 | _csignals_T_815))))))))))))))))))))))))))))); // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire  _csignals_T_846 = _csignals_T_91 ? 1'h0 : _csignals_T_845; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire  _csignals_T_847 = _csignals_T_89 ? 1'h0 : _csignals_T_846; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire  _csignals_T_848 = _csignals_T_87 ? 1'h0 : _csignals_T_847; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire  _csignals_T_859 = _csignals_T_65 ? 1'h0 : _csignals_T_67 | (_csignals_T_69 | (_csignals_T_71 | (_csignals_T_73
+  wire  _csignals_T_836 = _csignals_T_237 ? 1'h0 : _csignals_T_835; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire  _csignals_T_837 = _csignals_T_235 ? 1'h0 : _csignals_T_836; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire  _csignals_T_838 = _csignals_T_233 ? 1'h0 : _csignals_T_837; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire  _csignals_T_839 = _csignals_T_231 ? 1'h0 : _csignals_T_838; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire  _csignals_T_846 = _csignals_T_217 ? 1'h0 : _csignals_T_219 | (_csignals_T_221 | (_csignals_T_223 | (
+    _csignals_T_225 | (_csignals_T_227 | (_csignals_T_229 | _csignals_T_839))))); // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire  _csignals_T_850 = _csignals_T_209 ? 1'h0 : _csignals_T_211 | (_csignals_T_213 | (_csignals_T_215 |
+    _csignals_T_846)); // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire  _csignals_T_851 = _csignals_T_207 ? 1'h0 : _csignals_T_850; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire  _csignals_T_852 = _csignals_T_205 ? 1'h0 : _csignals_T_851; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire  _csignals_T_853 = _csignals_T_203 ? 1'h0 : _csignals_T_852; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire  _csignals_T_864 = _csignals_T_181 ? 1'h0 : _csignals_T_183 | (_csignals_T_185 | (_csignals_T_187 | (
+    _csignals_T_189 | (_csignals_T_191 | (_csignals_T_193 | (_csignals_T_195 | (_csignals_T_197 | (_csignals_T_199 | (
+    _csignals_T_201 | _csignals_T_853))))))))); // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire  _csignals_T_869 = _csignals_T_171 ? 1'h0 : _csignals_T_173 | (_csignals_T_175 | (_csignals_T_177 | (
+    _csignals_T_179 | _csignals_T_864))); // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire  _csignals_T_899 = _csignals_T_111 | (_csignals_T_113 | (_csignals_T_115 | (_csignals_T_117 | (_csignals_T_119 |
+    (_csignals_T_121 | (_csignals_T_123 | (_csignals_T_125 | (_csignals_T_127 | (_csignals_T_129 | (_csignals_T_131 | (
+    _csignals_T_133 | (_csignals_T_135 | (_csignals_T_137 | (_csignals_T_139 | (_csignals_T_141 | (_csignals_T_143 | (
+    _csignals_T_145 | (_csignals_T_147 | (_csignals_T_149 | (_csignals_T_151 | (_csignals_T_153 | (_csignals_T_155 | (
+    _csignals_T_157 | (_csignals_T_159 | (_csignals_T_161 | (_csignals_T_163 | (_csignals_T_165 | (_csignals_T_167 | (
+    _csignals_T_169 | _csignals_T_869))))))))))))))))))))))))))))); // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire  _csignals_T_909 = _csignals_T_91 ? 1'h0 : _csignals_T_93 | (_csignals_T_95 | (_csignals_T_97 | (_csignals_T_99
+     | (_csignals_T_101 | (_csignals_T_103 | (_csignals_T_105 | (_csignals_T_107 | (_csignals_T_109 | _csignals_T_899)))
+    ))))); // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire  _csignals_T_910 = _csignals_T_89 ? 1'h0 : _csignals_T_909; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire  _csignals_T_911 = _csignals_T_87 ? 1'h0 : _csignals_T_910; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire  _csignals_T_922 = _csignals_T_65 ? 1'h0 : _csignals_T_67 | (_csignals_T_69 | (_csignals_T_71 | (_csignals_T_73
      | (_csignals_T_75 | (_csignals_T_77 | (_csignals_T_79 | (_csignals_T_81 | (_csignals_T_83 | (_csignals_T_85 |
-    _csignals_T_848))))))))); // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire  _csignals_T_860 = _csignals_T_63 ? 1'h0 : _csignals_T_859; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire  _csignals_T_861 = _csignals_T_61 ? 1'h0 : _csignals_T_860; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire  _csignals_T_862 = _csignals_T_59 ? 1'h0 : _csignals_T_861; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire  _csignals_T_863 = _csignals_T_57 ? 1'h0 : _csignals_T_862; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire  _csignals_T_864 = _csignals_T_55 ? 1'h0 : _csignals_T_863; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire  _csignals_T_884 = _csignals_T_15 ? 1'h0 : _csignals_T_17 | (_csignals_T_19 | (_csignals_T_21 | (_csignals_T_23
+    _csignals_T_911))))))))); // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire  _csignals_T_923 = _csignals_T_63 ? 1'h0 : _csignals_T_922; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire  _csignals_T_924 = _csignals_T_61 ? 1'h0 : _csignals_T_923; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire  _csignals_T_925 = _csignals_T_59 ? 1'h0 : _csignals_T_924; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire  _csignals_T_926 = _csignals_T_57 ? 1'h0 : _csignals_T_925; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire  _csignals_T_927 = _csignals_T_55 ? 1'h0 : _csignals_T_926; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire  _csignals_T_947 = _csignals_T_15 ? 1'h0 : _csignals_T_17 | (_csignals_T_19 | (_csignals_T_21 | (_csignals_T_23
      | (_csignals_T_25 | (_csignals_T_27 | (_csignals_T_29 | (_csignals_T_31 | (_csignals_T_33 | (_csignals_T_35 | (
     _csignals_T_37 | (_csignals_T_39 | (_csignals_T_41 | (_csignals_T_43 | (_csignals_T_45 | (_csignals_T_47 | (
-    _csignals_T_49 | (_csignals_T_51 | (_csignals_T_53 | _csignals_T_864)))))))))))))))))); // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire  _csignals_T_886 = _csignals_T_11 ? 1'h0 : _csignals_T_13 | _csignals_T_884; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire  _csignals_T_889 = _csignals_T_5 ? 1'h0 : _csignals_T_7 | (_csignals_T_9 | _csignals_T_886); // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire  csignals_4 = _csignals_T_1 | (_csignals_T_3 | _csignals_T_889); // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_902 = _csignals_T_233 ? 3'h6 : 3'h0; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_903 = _csignals_T_231 ? 3'h6 : _csignals_T_902; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_904 = _csignals_T_229 ? 3'h6 : _csignals_T_903; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_905 = _csignals_T_227 ? 3'h0 : _csignals_T_904; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_906 = _csignals_T_225 ? 3'h1 : _csignals_T_905; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_907 = _csignals_T_223 ? 3'h0 : _csignals_T_906; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_908 = _csignals_T_221 ? 3'h4 : _csignals_T_907; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_909 = _csignals_T_219 ? 3'h4 : _csignals_T_908; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_910 = _csignals_T_217 ? 3'h4 : _csignals_T_909; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_911 = _csignals_T_215 ? 3'h4 : _csignals_T_910; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_912 = _csignals_T_213 ? 3'h4 : _csignals_T_911; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_913 = _csignals_T_211 ? 3'h5 : _csignals_T_912; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_914 = _csignals_T_209 ? 3'h5 : _csignals_T_913; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_915 = _csignals_T_207 ? 3'h5 : _csignals_T_914; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_916 = _csignals_T_205 ? 3'h5 : _csignals_T_915; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_917 = _csignals_T_203 ? 3'h0 : _csignals_T_916; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_918 = _csignals_T_201 ? 3'h0 : _csignals_T_917; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_919 = _csignals_T_199 ? 3'h4 : _csignals_T_918; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_920 = _csignals_T_197 ? 3'h5 : _csignals_T_919; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_921 = _csignals_T_195 ? 3'h2 : _csignals_T_920; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_922 = _csignals_T_193 ? 3'h2 : _csignals_T_921; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_923 = _csignals_T_191 ? 3'h2 : _csignals_T_922; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_924 = _csignals_T_189 ? 3'h0 : _csignals_T_923; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_925 = _csignals_T_187 ? 3'h0 : _csignals_T_924; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_926 = _csignals_T_185 ? 3'h2 : _csignals_T_925; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_927 = _csignals_T_183 ? 3'h0 : _csignals_T_926; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_928 = _csignals_T_181 ? 3'h0 : _csignals_T_927; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_929 = _csignals_T_179 ? 3'h0 : _csignals_T_928; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_930 = _csignals_T_177 ? 3'h0 : _csignals_T_929; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_931 = _csignals_T_175 ? 3'h0 : _csignals_T_930; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_932 = _csignals_T_173 ? 3'h0 : _csignals_T_931; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_933 = _csignals_T_171 ? 3'h0 : _csignals_T_932; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_934 = _csignals_T_169 ? 3'h0 : _csignals_T_933; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_935 = _csignals_T_167 ? 3'h0 : _csignals_T_934; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_936 = _csignals_T_165 ? 3'h0 : _csignals_T_935; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_937 = _csignals_T_163 ? 3'h4 : _csignals_T_936; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_938 = _csignals_T_161 ? 3'h5 : _csignals_T_937; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_939 = _csignals_T_159 ? 3'h0 : _csignals_T_938; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_940 = _csignals_T_157 ? 3'h0 : _csignals_T_939; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_941 = _csignals_T_155 ? 3'h0 : _csignals_T_940; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_942 = _csignals_T_153 ? 3'h0 : _csignals_T_941; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_943 = _csignals_T_151 ? 3'h0 : _csignals_T_942; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_944 = _csignals_T_149 ? 3'h0 : _csignals_T_943; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_945 = _csignals_T_147 ? 3'h0 : _csignals_T_944; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_946 = _csignals_T_145 ? 3'h0 : _csignals_T_945; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_947 = _csignals_T_143 ? 3'h6 : _csignals_T_946; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_948 = _csignals_T_141 ? 3'h0 : _csignals_T_947; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_949 = _csignals_T_139 ? 3'h0 : _csignals_T_948; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_950 = _csignals_T_137 ? 3'h0 : _csignals_T_949; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_951 = _csignals_T_135 ? 3'h0 : _csignals_T_950; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_952 = _csignals_T_133 ? 3'h0 : _csignals_T_951; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_953 = _csignals_T_131 ? 3'h0 : _csignals_T_952; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_954 = _csignals_T_129 ? 3'h6 : _csignals_T_953; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_955 = _csignals_T_127 ? 3'h6 : _csignals_T_954; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_956 = _csignals_T_125 ? 3'h6 : _csignals_T_955; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_957 = _csignals_T_123 ? 3'h6 : _csignals_T_956; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_958 = _csignals_T_121 ? 3'h6 : _csignals_T_957; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_959 = _csignals_T_119 ? 3'h6 : _csignals_T_958; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_960 = _csignals_T_117 ? 3'h6 : _csignals_T_959; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_961 = _csignals_T_115 ? 3'h6 : _csignals_T_960; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_962 = _csignals_T_113 ? 3'h6 : _csignals_T_961; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_963 = _csignals_T_111 ? 3'h6 : _csignals_T_962; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_964 = _csignals_T_109 ? 3'h6 : _csignals_T_963; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_965 = _csignals_T_107 ? 3'h1 : _csignals_T_964; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_966 = _csignals_T_105 ? 3'h1 : _csignals_T_965; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_967 = _csignals_T_103 ? 3'h1 : _csignals_T_966; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_968 = _csignals_T_101 ? 3'h1 : _csignals_T_967; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_969 = _csignals_T_99 ? 3'h1 : _csignals_T_968; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_970 = _csignals_T_97 ? 3'h1 : _csignals_T_969; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_971 = _csignals_T_95 ? 3'h1 : _csignals_T_970; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_972 = _csignals_T_93 ? 3'h1 : _csignals_T_971; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_973 = _csignals_T_91 ? 3'h7 : _csignals_T_972; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_974 = _csignals_T_89 ? 3'h0 : _csignals_T_973; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_975 = _csignals_T_87 ? 3'h0 : _csignals_T_974; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_976 = _csignals_T_85 ? 3'h3 : _csignals_T_975; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_977 = _csignals_T_83 ? 3'h3 : _csignals_T_976; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_978 = _csignals_T_81 ? 3'h3 : _csignals_T_977; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_979 = _csignals_T_79 ? 3'h3 : _csignals_T_978; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_980 = _csignals_T_77 ? 3'h3 : _csignals_T_979; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_981 = _csignals_T_75 ? 3'h3 : _csignals_T_980; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_982 = _csignals_T_73 ? 3'h0 : _csignals_T_981; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_983 = _csignals_T_71 ? 3'h0 : _csignals_T_982; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_984 = _csignals_T_69 ? 3'h2 : _csignals_T_983; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_985 = _csignals_T_67 ? 3'h2 : _csignals_T_984; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_986 = _csignals_T_65 ? 3'h0 : _csignals_T_985; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_987 = _csignals_T_63 ? 3'h0 : _csignals_T_986; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_988 = _csignals_T_61 ? 3'h0 : _csignals_T_987; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_989 = _csignals_T_59 ? 3'h0 : _csignals_T_988; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_990 = _csignals_T_57 ? 3'h0 : _csignals_T_989; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_991 = _csignals_T_55 ? 3'h0 : _csignals_T_990; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_992 = _csignals_T_53 ? 3'h0 : _csignals_T_991; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_993 = _csignals_T_51 ? 3'h0 : _csignals_T_992; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_994 = _csignals_T_49 ? 3'h0 : _csignals_T_993; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_995 = _csignals_T_47 ? 3'h0 : _csignals_T_994; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_996 = _csignals_T_45 ? 3'h0 : _csignals_T_995; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_997 = _csignals_T_43 ? 3'h0 : _csignals_T_996; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_998 = _csignals_T_41 ? 3'h0 : _csignals_T_997; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_999 = _csignals_T_39 ? 3'h0 : _csignals_T_998; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1000 = _csignals_T_37 ? 3'h0 : _csignals_T_999; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1001 = _csignals_T_35 ? 3'h0 : _csignals_T_1000; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1002 = _csignals_T_33 ? 3'h0 : _csignals_T_1001; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1003 = _csignals_T_31 ? 3'h0 : _csignals_T_1002; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1004 = _csignals_T_29 ? 3'h0 : _csignals_T_1003; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1005 = _csignals_T_27 ? 3'h0 : _csignals_T_1004; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1006 = _csignals_T_25 ? 3'h0 : _csignals_T_1005; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1007 = _csignals_T_23 ? 3'h0 : _csignals_T_1006; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1008 = _csignals_T_21 ? 3'h0 : _csignals_T_1007; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1009 = _csignals_T_19 ? 3'h0 : _csignals_T_1008; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1010 = _csignals_T_17 ? 3'h0 : _csignals_T_1009; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1011 = _csignals_T_15 ? 3'h4 : _csignals_T_1010; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1012 = _csignals_T_13 ? 3'h5 : _csignals_T_1011; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1013 = _csignals_T_11 ? 3'h4 : _csignals_T_1012; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1014 = _csignals_T_9 ? 3'h5 : _csignals_T_1013; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1015 = _csignals_T_7 ? 3'h5 : _csignals_T_1014; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1016 = _csignals_T_5 ? 3'h4 : _csignals_T_1015; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1017 = _csignals_T_3 ? 3'h5 : _csignals_T_1016; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] csignals_5 = _csignals_T_1 ? 3'h5 : _csignals_T_1017; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1018 = _csignals_T_255 ? 3'h3 : 3'h0; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1019 = _csignals_T_253 ? 3'h3 : _csignals_T_1018; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1020 = _csignals_T_251 ? 3'h3 : _csignals_T_1019; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1021 = _csignals_T_249 ? 3'h3 : _csignals_T_1020; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1022 = _csignals_T_247 ? 3'h3 : _csignals_T_1021; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1023 = _csignals_T_245 ? 3'h3 : _csignals_T_1022; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1024 = _csignals_T_243 ? 3'h3 : _csignals_T_1023; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1025 = _csignals_T_241 ? 3'h7 : _csignals_T_1024; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1026 = _csignals_T_239 ? 3'h7 : _csignals_T_1025; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1027 = _csignals_T_237 ? 3'h2 : _csignals_T_1026; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1028 = _csignals_T_235 ? 3'h2 : _csignals_T_1027; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1029 = _csignals_T_233 ? 3'h2 : _csignals_T_1028; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1030 = _csignals_T_231 ? 3'h2 : _csignals_T_1029; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1031 = _csignals_T_229 ? 3'h2 : _csignals_T_1030; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1032 = _csignals_T_227 ? 3'h2 : _csignals_T_1031; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1033 = _csignals_T_225 ? 3'h2 : _csignals_T_1032; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1034 = _csignals_T_223 ? 3'h3 : _csignals_T_1033; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1035 = _csignals_T_221 ? 3'h1 : _csignals_T_1034; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1036 = _csignals_T_219 ? 3'h1 : _csignals_T_1035; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1037 = _csignals_T_217 ? 3'h1 : _csignals_T_1036; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1038 = _csignals_T_215 ? 3'h1 : _csignals_T_1037; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1039 = _csignals_T_213 ? 3'h1 : _csignals_T_1038; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1040 = _csignals_T_211 ? 3'h3 : _csignals_T_1039; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1041 = _csignals_T_209 ? 3'h3 : _csignals_T_1040; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1042 = _csignals_T_207 ? 3'h3 : _csignals_T_1041; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1043 = _csignals_T_205 ? 3'h3 : _csignals_T_1042; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1044 = _csignals_T_203 ? 3'h1 : _csignals_T_1043; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1045 = _csignals_T_201 ? 3'h1 : _csignals_T_1044; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1046 = _csignals_T_199 ? 3'h1 : _csignals_T_1045; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1047 = _csignals_T_197 ? 3'h1 : _csignals_T_1046; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1048 = _csignals_T_195 ? 3'h4 : _csignals_T_1047; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1049 = _csignals_T_193 ? 3'h4 : _csignals_T_1048; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1050 = _csignals_T_191 ? 3'h1 : _csignals_T_1049; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1051 = _csignals_T_189 ? 3'h6 : _csignals_T_1050; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1052 = _csignals_T_187 ? 3'h6 : _csignals_T_1051; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1053 = _csignals_T_185 ? 3'h1 : _csignals_T_1052; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1054 = _csignals_T_183 ? 3'h1 : _csignals_T_1053; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1055 = _csignals_T_181 ? 3'h2 : _csignals_T_1054; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1056 = _csignals_T_179 ? 3'h2 : _csignals_T_1055; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1057 = _csignals_T_177 ? 3'h2 : _csignals_T_1056; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1058 = _csignals_T_175 ? 3'h2 : _csignals_T_1057; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1059 = _csignals_T_173 ? 3'h2 : _csignals_T_1058; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1060 = _csignals_T_171 ? 3'h2 : _csignals_T_1059; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1061 = _csignals_T_169 ? 3'h2 : _csignals_T_1060; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1062 = _csignals_T_167 ? 3'h1 : _csignals_T_1061; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1063 = _csignals_T_165 ? 3'h1 : _csignals_T_1062; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1064 = _csignals_T_163 ? 3'h1 : _csignals_T_1063; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1065 = _csignals_T_161 ? 3'h3 : _csignals_T_1064; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1066 = _csignals_T_159 ? 3'h1 : _csignals_T_1065; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1067 = _csignals_T_157 ? 3'h1 : _csignals_T_1066; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1068 = _csignals_T_155 ? 3'h3 : _csignals_T_1067; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1069 = _csignals_T_153 ? 3'h1 : _csignals_T_1068; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1070 = _csignals_T_151 ? 3'h0 : _csignals_T_1069; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1071 = _csignals_T_149 ? 3'h0 : _csignals_T_1070; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1072 = _csignals_T_147 ? 3'h0 : _csignals_T_1071; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1073 = _csignals_T_145 ? 3'h0 : _csignals_T_1072; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1074 = _csignals_T_143 ? 3'h0 : _csignals_T_1073; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1075 = _csignals_T_141 ? 3'h0 : _csignals_T_1074; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1076 = _csignals_T_139 ? 3'h0 : _csignals_T_1075; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1077 = _csignals_T_137 ? 3'h0 : _csignals_T_1076; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1078 = _csignals_T_135 ? 3'h0 : _csignals_T_1077; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1079 = _csignals_T_133 ? 3'h0 : _csignals_T_1078; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1080 = _csignals_T_131 ? 3'h0 : _csignals_T_1079; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1081 = _csignals_T_129 ? 3'h0 : _csignals_T_1080; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1082 = _csignals_T_127 ? 3'h0 : _csignals_T_1081; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1083 = _csignals_T_125 ? 3'h0 : _csignals_T_1082; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1084 = _csignals_T_123 ? 3'h0 : _csignals_T_1083; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1085 = _csignals_T_121 ? 3'h0 : _csignals_T_1084; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1086 = _csignals_T_119 ? 3'h0 : _csignals_T_1085; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1087 = _csignals_T_117 ? 3'h0 : _csignals_T_1086; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1088 = _csignals_T_115 ? 3'h0 : _csignals_T_1087; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1089 = _csignals_T_113 ? 3'h0 : _csignals_T_1088; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1090 = _csignals_T_111 ? 3'h0 : _csignals_T_1089; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1091 = _csignals_T_109 ? 3'h0 : _csignals_T_1090; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1092 = _csignals_T_107 ? 3'h0 : _csignals_T_1091; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1093 = _csignals_T_105 ? 3'h0 : _csignals_T_1092; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1094 = _csignals_T_103 ? 3'h0 : _csignals_T_1093; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1095 = _csignals_T_101 ? 3'h0 : _csignals_T_1094; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1096 = _csignals_T_99 ? 3'h0 : _csignals_T_1095; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1097 = _csignals_T_97 ? 3'h0 : _csignals_T_1096; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1098 = _csignals_T_95 ? 3'h0 : _csignals_T_1097; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1099 = _csignals_T_93 ? 3'h0 : _csignals_T_1098; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1100 = _csignals_T_91 ? 3'h0 : _csignals_T_1099; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1101 = _csignals_T_89 ? 3'h0 : _csignals_T_1100; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1102 = _csignals_T_87 ? 3'h0 : _csignals_T_1101; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1103 = _csignals_T_85 ? 3'h0 : _csignals_T_1102; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1104 = _csignals_T_83 ? 3'h0 : _csignals_T_1103; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1105 = _csignals_T_81 ? 3'h0 : _csignals_T_1104; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1106 = _csignals_T_79 ? 3'h0 : _csignals_T_1105; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1107 = _csignals_T_77 ? 3'h0 : _csignals_T_1106; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1108 = _csignals_T_75 ? 3'h0 : _csignals_T_1107; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1109 = _csignals_T_73 ? 3'h0 : _csignals_T_1108; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1110 = _csignals_T_71 ? 3'h0 : _csignals_T_1109; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1111 = _csignals_T_69 ? 3'h0 : _csignals_T_1110; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1112 = _csignals_T_67 ? 3'h0 : _csignals_T_1111; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1113 = _csignals_T_65 ? 3'h0 : _csignals_T_1112; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1114 = _csignals_T_63 ? 3'h0 : _csignals_T_1113; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1115 = _csignals_T_61 ? 3'h0 : _csignals_T_1114; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1116 = _csignals_T_59 ? 3'h0 : _csignals_T_1115; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1117 = _csignals_T_57 ? 3'h0 : _csignals_T_1116; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1118 = _csignals_T_55 ? 3'h0 : _csignals_T_1117; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1119 = _csignals_T_53 ? 3'h0 : _csignals_T_1118; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1120 = _csignals_T_51 ? 3'h0 : _csignals_T_1119; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1121 = _csignals_T_49 ? 3'h0 : _csignals_T_1120; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1122 = _csignals_T_47 ? 3'h0 : _csignals_T_1121; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1123 = _csignals_T_45 ? 3'h0 : _csignals_T_1122; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1124 = _csignals_T_43 ? 3'h0 : _csignals_T_1123; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1125 = _csignals_T_41 ? 3'h0 : _csignals_T_1124; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1126 = _csignals_T_39 ? 3'h0 : _csignals_T_1125; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1127 = _csignals_T_37 ? 3'h0 : _csignals_T_1126; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1128 = _csignals_T_35 ? 3'h0 : _csignals_T_1127; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1129 = _csignals_T_33 ? 3'h0 : _csignals_T_1128; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1130 = _csignals_T_31 ? 3'h0 : _csignals_T_1129; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1131 = _csignals_T_29 ? 3'h0 : _csignals_T_1130; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1132 = _csignals_T_27 ? 3'h0 : _csignals_T_1131; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1133 = _csignals_T_25 ? 3'h0 : _csignals_T_1132; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1134 = _csignals_T_23 ? 3'h0 : _csignals_T_1133; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1135 = _csignals_T_21 ? 3'h0 : _csignals_T_1134; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1136 = _csignals_T_19 ? 3'h0 : _csignals_T_1135; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1137 = _csignals_T_17 ? 3'h0 : _csignals_T_1136; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1138 = _csignals_T_15 ? 3'h0 : _csignals_T_1137; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1139 = _csignals_T_13 ? 3'h0 : _csignals_T_1138; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1140 = _csignals_T_11 ? 3'h0 : _csignals_T_1139; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1141 = _csignals_T_9 ? 3'h0 : _csignals_T_1140; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1142 = _csignals_T_7 ? 3'h0 : _csignals_T_1141; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1143 = _csignals_T_5 ? 3'h0 : _csignals_T_1142; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1144 = _csignals_T_3 ? 3'h0 : _csignals_T_1143; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] csignals_6 = _csignals_T_1 ? 3'h0 : _csignals_T_1144; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [1:0] _csignals_T_1230 = _csignals_T_85 ? 2'h3 : 2'h0; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [1:0] _csignals_T_1231 = _csignals_T_83 ? 2'h3 : _csignals_T_1230; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [1:0] _csignals_T_1232 = _csignals_T_81 ? 2'h2 : _csignals_T_1231; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [1:0] _csignals_T_1233 = _csignals_T_79 ? 2'h2 : _csignals_T_1232; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [1:0] _csignals_T_1234 = _csignals_T_77 ? 2'h1 : _csignals_T_1233; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [1:0] _csignals_T_1235 = _csignals_T_75 ? 2'h1 : _csignals_T_1234; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [1:0] _csignals_T_1236 = _csignals_T_73 ? 2'h0 : _csignals_T_1235; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [1:0] _csignals_T_1237 = _csignals_T_71 ? 2'h0 : _csignals_T_1236; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [1:0] _csignals_T_1238 = _csignals_T_69 ? 2'h0 : _csignals_T_1237; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [1:0] _csignals_T_1239 = _csignals_T_67 ? 2'h0 : _csignals_T_1238; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [1:0] _csignals_T_1240 = _csignals_T_65 ? 2'h0 : _csignals_T_1239; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [1:0] _csignals_T_1241 = _csignals_T_63 ? 2'h0 : _csignals_T_1240; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [1:0] _csignals_T_1242 = _csignals_T_61 ? 2'h0 : _csignals_T_1241; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [1:0] _csignals_T_1243 = _csignals_T_59 ? 2'h0 : _csignals_T_1242; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [1:0] _csignals_T_1244 = _csignals_T_57 ? 2'h0 : _csignals_T_1243; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [1:0] _csignals_T_1245 = _csignals_T_55 ? 2'h0 : _csignals_T_1244; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [1:0] _csignals_T_1246 = _csignals_T_53 ? 2'h0 : _csignals_T_1245; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [1:0] _csignals_T_1247 = _csignals_T_51 ? 2'h0 : _csignals_T_1246; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [1:0] _csignals_T_1248 = _csignals_T_49 ? 2'h0 : _csignals_T_1247; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [1:0] _csignals_T_1249 = _csignals_T_47 ? 2'h0 : _csignals_T_1248; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [1:0] _csignals_T_1250 = _csignals_T_45 ? 2'h0 : _csignals_T_1249; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [1:0] _csignals_T_1251 = _csignals_T_43 ? 2'h0 : _csignals_T_1250; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [1:0] _csignals_T_1252 = _csignals_T_41 ? 2'h0 : _csignals_T_1251; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [1:0] _csignals_T_1253 = _csignals_T_39 ? 2'h0 : _csignals_T_1252; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [1:0] _csignals_T_1254 = _csignals_T_37 ? 2'h0 : _csignals_T_1253; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [1:0] _csignals_T_1255 = _csignals_T_35 ? 2'h0 : _csignals_T_1254; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [1:0] _csignals_T_1256 = _csignals_T_33 ? 2'h0 : _csignals_T_1255; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [1:0] _csignals_T_1257 = _csignals_T_31 ? 2'h0 : _csignals_T_1256; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [1:0] _csignals_T_1258 = _csignals_T_29 ? 2'h0 : _csignals_T_1257; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [1:0] _csignals_T_1259 = _csignals_T_27 ? 2'h0 : _csignals_T_1258; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [1:0] _csignals_T_1260 = _csignals_T_25 ? 2'h0 : _csignals_T_1259; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [1:0] _csignals_T_1261 = _csignals_T_23 ? 2'h0 : _csignals_T_1260; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [1:0] _csignals_T_1262 = _csignals_T_21 ? 2'h0 : _csignals_T_1261; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [1:0] _csignals_T_1263 = _csignals_T_19 ? 2'h0 : _csignals_T_1262; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [1:0] _csignals_T_1264 = _csignals_T_17 ? 2'h0 : _csignals_T_1263; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [1:0] _csignals_T_1265 = _csignals_T_15 ? 2'h0 : _csignals_T_1264; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [1:0] _csignals_T_1266 = _csignals_T_13 ? 2'h0 : _csignals_T_1265; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [1:0] _csignals_T_1267 = _csignals_T_11 ? 2'h0 : _csignals_T_1266; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [1:0] _csignals_T_1268 = _csignals_T_9 ? 2'h0 : _csignals_T_1267; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [1:0] _csignals_T_1269 = _csignals_T_7 ? 2'h0 : _csignals_T_1268; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [1:0] _csignals_T_1270 = _csignals_T_5 ? 2'h0 : _csignals_T_1269; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [1:0] _csignals_T_1271 = _csignals_T_3 ? 2'h0 : _csignals_T_1270; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [1:0] csignals_7 = _csignals_T_1 ? 2'h0 : _csignals_T_1271; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1279 = _csignals_T_241 ? 3'h1 : 3'h0; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1280 = _csignals_T_239 ? 3'h1 : _csignals_T_1279; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1281 = _csignals_T_237 ? 3'h0 : _csignals_T_1280; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1282 = _csignals_T_235 ? 3'h0 : _csignals_T_1281; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1283 = _csignals_T_233 ? 3'h0 : _csignals_T_1282; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1284 = _csignals_T_231 ? 3'h0 : _csignals_T_1283; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1285 = _csignals_T_229 ? 3'h0 : _csignals_T_1284; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1286 = _csignals_T_227 ? 3'h0 : _csignals_T_1285; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1287 = _csignals_T_225 ? 3'h0 : _csignals_T_1286; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1288 = _csignals_T_223 ? 3'h0 : _csignals_T_1287; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1289 = _csignals_T_221 ? 3'h5 : _csignals_T_1288; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1290 = _csignals_T_219 ? 3'h4 : _csignals_T_1289; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1291 = _csignals_T_217 ? 3'h5 : _csignals_T_1290; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1292 = _csignals_T_215 ? 3'h0 : _csignals_T_1291; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1293 = _csignals_T_213 ? 3'h4 : _csignals_T_1292; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1294 = _csignals_T_211 ? 3'h6 : _csignals_T_1293; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1295 = _csignals_T_209 ? 3'h4 : _csignals_T_1294; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1296 = _csignals_T_207 ? 3'h7 : _csignals_T_1295; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1297 = _csignals_T_205 ? 3'h5 : _csignals_T_1296; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1298 = _csignals_T_203 ? 3'h0 : _csignals_T_1297; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1299 = _csignals_T_201 ? 3'h0 : _csignals_T_1298; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1300 = _csignals_T_199 ? 3'h0 : _csignals_T_1299; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1301 = _csignals_T_197 ? 3'h0 : _csignals_T_1300; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1302 = _csignals_T_195 ? 3'h0 : _csignals_T_1301; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1303 = _csignals_T_193 ? 3'h0 : _csignals_T_1302; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1304 = _csignals_T_191 ? 3'h0 : _csignals_T_1303; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1305 = _csignals_T_189 ? 3'h1 : _csignals_T_1304; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1306 = _csignals_T_187 ? 3'h1 : _csignals_T_1305; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1307 = _csignals_T_185 ? 3'h0 : _csignals_T_1306; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1308 = _csignals_T_183 ? 3'h0 : _csignals_T_1307; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1309 = _csignals_T_181 ? 3'h0 : _csignals_T_1308; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1310 = _csignals_T_179 ? 3'h0 : _csignals_T_1309; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1311 = _csignals_T_177 ? 3'h0 : _csignals_T_1310; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1312 = _csignals_T_175 ? 3'h0 : _csignals_T_1311; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1313 = _csignals_T_173 ? 3'h0 : _csignals_T_1312; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1314 = _csignals_T_171 ? 3'h0 : _csignals_T_1313; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1315 = _csignals_T_169 ? 3'h0 : _csignals_T_1314; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1316 = _csignals_T_167 ? 3'h0 : _csignals_T_1315; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1317 = _csignals_T_165 ? 3'h0 : _csignals_T_1316; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1318 = _csignals_T_163 ? 3'h0 : _csignals_T_1317; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1319 = _csignals_T_161 ? 3'h0 : _csignals_T_1318; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1320 = _csignals_T_159 ? 3'h0 : _csignals_T_1319; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1321 = _csignals_T_157 ? 3'h0 : _csignals_T_1320; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1322 = _csignals_T_155 ? 3'h0 : _csignals_T_1321; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1323 = _csignals_T_153 ? 3'h0 : _csignals_T_1322; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1324 = _csignals_T_151 ? 3'h0 : _csignals_T_1323; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1325 = _csignals_T_149 ? 3'h0 : _csignals_T_1324; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1326 = _csignals_T_147 ? 3'h0 : _csignals_T_1325; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1327 = _csignals_T_145 ? 3'h0 : _csignals_T_1326; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1328 = _csignals_T_143 ? 3'h0 : _csignals_T_1327; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1329 = _csignals_T_141 ? 3'h0 : _csignals_T_1328; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1330 = _csignals_T_139 ? 3'h0 : _csignals_T_1329; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1331 = _csignals_T_137 ? 3'h0 : _csignals_T_1330; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1332 = _csignals_T_135 ? 3'h0 : _csignals_T_1331; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1333 = _csignals_T_133 ? 3'h0 : _csignals_T_1332; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1334 = _csignals_T_131 ? 3'h0 : _csignals_T_1333; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1335 = _csignals_T_129 ? 3'h0 : _csignals_T_1334; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1336 = _csignals_T_127 ? 3'h0 : _csignals_T_1335; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1337 = _csignals_T_125 ? 3'h0 : _csignals_T_1336; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1338 = _csignals_T_123 ? 3'h0 : _csignals_T_1337; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1339 = _csignals_T_121 ? 3'h0 : _csignals_T_1338; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1340 = _csignals_T_119 ? 3'h0 : _csignals_T_1339; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1341 = _csignals_T_117 ? 3'h0 : _csignals_T_1340; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1342 = _csignals_T_115 ? 3'h0 : _csignals_T_1341; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1343 = _csignals_T_113 ? 3'h0 : _csignals_T_1342; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1344 = _csignals_T_111 ? 3'h0 : _csignals_T_1343; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1345 = _csignals_T_109 ? 3'h0 : _csignals_T_1344; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1346 = _csignals_T_107 ? 3'h0 : _csignals_T_1345; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1347 = _csignals_T_105 ? 3'h0 : _csignals_T_1346; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1348 = _csignals_T_103 ? 3'h0 : _csignals_T_1347; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1349 = _csignals_T_101 ? 3'h0 : _csignals_T_1348; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1350 = _csignals_T_99 ? 3'h0 : _csignals_T_1349; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1351 = _csignals_T_97 ? 3'h0 : _csignals_T_1350; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1352 = _csignals_T_95 ? 3'h0 : _csignals_T_1351; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1353 = _csignals_T_93 ? 3'h0 : _csignals_T_1352; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1354 = _csignals_T_91 ? 3'h0 : _csignals_T_1353; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1355 = _csignals_T_89 ? 3'h3 : _csignals_T_1354; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1356 = _csignals_T_87 ? 3'h3 : _csignals_T_1355; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1357 = _csignals_T_85 ? 3'h0 : _csignals_T_1356; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1358 = _csignals_T_83 ? 3'h0 : _csignals_T_1357; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1359 = _csignals_T_81 ? 3'h0 : _csignals_T_1358; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1360 = _csignals_T_79 ? 3'h0 : _csignals_T_1359; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1361 = _csignals_T_77 ? 3'h0 : _csignals_T_1360; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1362 = _csignals_T_75 ? 3'h0 : _csignals_T_1361; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1363 = _csignals_T_73 ? 3'h0 : _csignals_T_1362; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1364 = _csignals_T_71 ? 3'h0 : _csignals_T_1363; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1365 = _csignals_T_69 ? 3'h0 : _csignals_T_1364; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1366 = _csignals_T_67 ? 3'h0 : _csignals_T_1365; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1367 = _csignals_T_65 ? 3'h1 : _csignals_T_1366; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1368 = _csignals_T_63 ? 3'h1 : _csignals_T_1367; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1369 = _csignals_T_61 ? 3'h1 : _csignals_T_1368; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1370 = _csignals_T_59 ? 3'h1 : _csignals_T_1369; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1371 = _csignals_T_57 ? 3'h1 : _csignals_T_1370; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1372 = _csignals_T_55 ? 3'h1 : _csignals_T_1371; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1373 = _csignals_T_53 ? 3'h0 : _csignals_T_1372; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1374 = _csignals_T_51 ? 3'h0 : _csignals_T_1373; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1375 = _csignals_T_49 ? 3'h0 : _csignals_T_1374; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1376 = _csignals_T_47 ? 3'h0 : _csignals_T_1375; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1377 = _csignals_T_45 ? 3'h0 : _csignals_T_1376; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1378 = _csignals_T_43 ? 3'h0 : _csignals_T_1377; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1379 = _csignals_T_41 ? 3'h0 : _csignals_T_1378; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1380 = _csignals_T_39 ? 3'h0 : _csignals_T_1379; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1381 = _csignals_T_37 ? 3'h0 : _csignals_T_1380; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1382 = _csignals_T_35 ? 3'h0 : _csignals_T_1381; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1383 = _csignals_T_33 ? 3'h0 : _csignals_T_1382; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1384 = _csignals_T_31 ? 3'h0 : _csignals_T_1383; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1385 = _csignals_T_29 ? 3'h0 : _csignals_T_1384; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1386 = _csignals_T_27 ? 3'h0 : _csignals_T_1385; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1387 = _csignals_T_25 ? 3'h0 : _csignals_T_1386; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1388 = _csignals_T_23 ? 3'h0 : _csignals_T_1387; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1389 = _csignals_T_21 ? 3'h0 : _csignals_T_1388; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1390 = _csignals_T_19 ? 3'h0 : _csignals_T_1389; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1391 = _csignals_T_17 ? 3'h0 : _csignals_T_1390; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1392 = _csignals_T_15 ? 3'h0 : _csignals_T_1391; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1393 = _csignals_T_13 ? 3'h0 : _csignals_T_1392; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1394 = _csignals_T_11 ? 3'h4 : _csignals_T_1393; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1395 = _csignals_T_9 ? 3'h6 : _csignals_T_1394; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1396 = _csignals_T_7 ? 3'h4 : _csignals_T_1395; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1397 = _csignals_T_5 ? 3'h5 : _csignals_T_1396; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] _csignals_T_1398 = _csignals_T_3 ? 3'h7 : _csignals_T_1397; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire [2:0] csignals_8 = _csignals_T_1 ? 3'h5 : _csignals_T_1398; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire  _id_wb_addr_T = csignals_6 == 3'h1; // @[src/main/scala/fpga/Core.scala 820:13]
-  wire  _id_wb_addr_T_1 = csignals_6 == 3'h2; // @[src/main/scala/fpga/Core.scala 821:13]
-  wire  _id_wb_addr_T_2 = csignals_6 == 3'h3; // @[src/main/scala/fpga/Core.scala 822:13]
-  wire  _id_wb_addr_T_3 = csignals_6 == 3'h4; // @[src/main/scala/fpga/Core.scala 823:13]
+    _csignals_T_49 | (_csignals_T_51 | (_csignals_T_53 | _csignals_T_927)))))))))))))))))); // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire  _csignals_T_949 = _csignals_T_11 ? 1'h0 : _csignals_T_13 | _csignals_T_947; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire  _csignals_T_952 = _csignals_T_5 ? 1'h0 : _csignals_T_7 | (_csignals_T_9 | _csignals_T_949); // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire  csignals_4 = _csignals_T_1 | (_csignals_T_3 | _csignals_T_952); // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_965 = _csignals_T_251 ? 3'h6 : 3'h0; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_966 = _csignals_T_249 ? 3'h6 : _csignals_T_965; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_967 = _csignals_T_247 ? 3'h6 : _csignals_T_966; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_968 = _csignals_T_245 ? 3'h0 : _csignals_T_967; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_969 = _csignals_T_243 ? 3'h1 : _csignals_T_968; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_970 = _csignals_T_241 ? 3'h0 : _csignals_T_969; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_971 = _csignals_T_239 ? 3'h4 : _csignals_T_970; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_972 = _csignals_T_237 ? 3'h4 : _csignals_T_971; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_973 = _csignals_T_235 ? 3'h4 : _csignals_T_972; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_974 = _csignals_T_233 ? 3'h4 : _csignals_T_973; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_975 = _csignals_T_231 ? 3'h4 : _csignals_T_974; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_976 = _csignals_T_229 ? 3'h5 : _csignals_T_975; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_977 = _csignals_T_227 ? 3'h5 : _csignals_T_976; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_978 = _csignals_T_225 ? 3'h5 : _csignals_T_977; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_979 = _csignals_T_223 ? 3'h5 : _csignals_T_978; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_980 = _csignals_T_221 ? 3'h0 : _csignals_T_979; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_981 = _csignals_T_219 ? 3'h0 : _csignals_T_980; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_982 = _csignals_T_217 ? 3'h4 : _csignals_T_981; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_983 = _csignals_T_215 ? 3'h5 : _csignals_T_982; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_984 = _csignals_T_213 ? 3'h2 : _csignals_T_983; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_985 = _csignals_T_211 ? 3'h2 : _csignals_T_984; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_986 = _csignals_T_209 ? 3'h2 : _csignals_T_985; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_987 = _csignals_T_207 ? 3'h0 : _csignals_T_986; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_988 = _csignals_T_205 ? 3'h0 : _csignals_T_987; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_989 = _csignals_T_203 ? 3'h2 : _csignals_T_988; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_990 = _csignals_T_201 ? 3'h0 : _csignals_T_989; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_991 = _csignals_T_199 ? 3'h0 : _csignals_T_990; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_992 = _csignals_T_197 ? 3'h0 : _csignals_T_991; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_993 = _csignals_T_195 ? 3'h0 : _csignals_T_992; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_994 = _csignals_T_193 ? 3'h0 : _csignals_T_993; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_995 = _csignals_T_191 ? 3'h0 : _csignals_T_994; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_996 = _csignals_T_189 ? 3'h0 : _csignals_T_995; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_997 = _csignals_T_187 ? 3'h0 : _csignals_T_996; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_998 = _csignals_T_185 ? 3'h0 : _csignals_T_997; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_999 = _csignals_T_183 ? 3'h0 : _csignals_T_998; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1000 = _csignals_T_181 ? 3'h4 : _csignals_T_999; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1001 = _csignals_T_179 ? 3'h5 : _csignals_T_1000; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1002 = _csignals_T_177 ? 3'h0 : _csignals_T_1001; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1003 = _csignals_T_175 ? 3'h0 : _csignals_T_1002; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1004 = _csignals_T_173 ? 3'h0 : _csignals_T_1003; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1005 = _csignals_T_171 ? 3'h0 : _csignals_T_1004; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1006 = _csignals_T_169 ? 3'h0 : _csignals_T_1005; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1007 = _csignals_T_167 ? 3'h0 : _csignals_T_1006; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1008 = _csignals_T_165 ? 3'h0 : _csignals_T_1007; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1009 = _csignals_T_163 ? 3'h0 : _csignals_T_1008; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1010 = _csignals_T_161 ? 3'h0 : _csignals_T_1009; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1011 = _csignals_T_159 ? 3'h0 : _csignals_T_1010; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1012 = _csignals_T_157 ? 3'h0 : _csignals_T_1011; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1013 = _csignals_T_155 ? 3'h0 : _csignals_T_1012; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1014 = _csignals_T_153 ? 3'h0 : _csignals_T_1013; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1015 = _csignals_T_151 ? 3'h0 : _csignals_T_1014; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1016 = _csignals_T_149 ? 3'h0 : _csignals_T_1015; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1017 = _csignals_T_147 ? 3'h0 : _csignals_T_1016; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1018 = _csignals_T_145 ? 3'h0 : _csignals_T_1017; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1019 = _csignals_T_143 ? 3'h6 : _csignals_T_1018; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1020 = _csignals_T_141 ? 3'h0 : _csignals_T_1019; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1021 = _csignals_T_139 ? 3'h0 : _csignals_T_1020; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1022 = _csignals_T_137 ? 3'h0 : _csignals_T_1021; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1023 = _csignals_T_135 ? 3'h0 : _csignals_T_1022; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1024 = _csignals_T_133 ? 3'h0 : _csignals_T_1023; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1025 = _csignals_T_131 ? 3'h0 : _csignals_T_1024; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1026 = _csignals_T_129 ? 3'h6 : _csignals_T_1025; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1027 = _csignals_T_127 ? 3'h6 : _csignals_T_1026; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1028 = _csignals_T_125 ? 3'h6 : _csignals_T_1027; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1029 = _csignals_T_123 ? 3'h6 : _csignals_T_1028; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1030 = _csignals_T_121 ? 3'h6 : _csignals_T_1029; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1031 = _csignals_T_119 ? 3'h6 : _csignals_T_1030; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1032 = _csignals_T_117 ? 3'h6 : _csignals_T_1031; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1033 = _csignals_T_115 ? 3'h6 : _csignals_T_1032; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1034 = _csignals_T_113 ? 3'h6 : _csignals_T_1033; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1035 = _csignals_T_111 ? 3'h6 : _csignals_T_1034; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1036 = _csignals_T_109 ? 3'h6 : _csignals_T_1035; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1037 = _csignals_T_107 ? 3'h1 : _csignals_T_1036; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1038 = _csignals_T_105 ? 3'h1 : _csignals_T_1037; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1039 = _csignals_T_103 ? 3'h1 : _csignals_T_1038; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1040 = _csignals_T_101 ? 3'h1 : _csignals_T_1039; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1041 = _csignals_T_99 ? 3'h1 : _csignals_T_1040; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1042 = _csignals_T_97 ? 3'h1 : _csignals_T_1041; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1043 = _csignals_T_95 ? 3'h1 : _csignals_T_1042; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1044 = _csignals_T_93 ? 3'h1 : _csignals_T_1043; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1045 = _csignals_T_91 ? 3'h7 : _csignals_T_1044; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1046 = _csignals_T_89 ? 3'h0 : _csignals_T_1045; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1047 = _csignals_T_87 ? 3'h0 : _csignals_T_1046; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1048 = _csignals_T_85 ? 3'h3 : _csignals_T_1047; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1049 = _csignals_T_83 ? 3'h3 : _csignals_T_1048; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1050 = _csignals_T_81 ? 3'h3 : _csignals_T_1049; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1051 = _csignals_T_79 ? 3'h3 : _csignals_T_1050; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1052 = _csignals_T_77 ? 3'h3 : _csignals_T_1051; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1053 = _csignals_T_75 ? 3'h3 : _csignals_T_1052; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1054 = _csignals_T_73 ? 3'h0 : _csignals_T_1053; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1055 = _csignals_T_71 ? 3'h0 : _csignals_T_1054; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1056 = _csignals_T_69 ? 3'h2 : _csignals_T_1055; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1057 = _csignals_T_67 ? 3'h2 : _csignals_T_1056; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1058 = _csignals_T_65 ? 3'h0 : _csignals_T_1057; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1059 = _csignals_T_63 ? 3'h0 : _csignals_T_1058; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1060 = _csignals_T_61 ? 3'h0 : _csignals_T_1059; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1061 = _csignals_T_59 ? 3'h0 : _csignals_T_1060; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1062 = _csignals_T_57 ? 3'h0 : _csignals_T_1061; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1063 = _csignals_T_55 ? 3'h0 : _csignals_T_1062; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1064 = _csignals_T_53 ? 3'h0 : _csignals_T_1063; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1065 = _csignals_T_51 ? 3'h0 : _csignals_T_1064; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1066 = _csignals_T_49 ? 3'h0 : _csignals_T_1065; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1067 = _csignals_T_47 ? 3'h0 : _csignals_T_1066; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1068 = _csignals_T_45 ? 3'h0 : _csignals_T_1067; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1069 = _csignals_T_43 ? 3'h0 : _csignals_T_1068; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1070 = _csignals_T_41 ? 3'h0 : _csignals_T_1069; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1071 = _csignals_T_39 ? 3'h0 : _csignals_T_1070; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1072 = _csignals_T_37 ? 3'h0 : _csignals_T_1071; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1073 = _csignals_T_35 ? 3'h0 : _csignals_T_1072; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1074 = _csignals_T_33 ? 3'h0 : _csignals_T_1073; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1075 = _csignals_T_31 ? 3'h0 : _csignals_T_1074; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1076 = _csignals_T_29 ? 3'h0 : _csignals_T_1075; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1077 = _csignals_T_27 ? 3'h0 : _csignals_T_1076; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1078 = _csignals_T_25 ? 3'h0 : _csignals_T_1077; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1079 = _csignals_T_23 ? 3'h0 : _csignals_T_1078; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1080 = _csignals_T_21 ? 3'h0 : _csignals_T_1079; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1081 = _csignals_T_19 ? 3'h0 : _csignals_T_1080; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1082 = _csignals_T_17 ? 3'h0 : _csignals_T_1081; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1083 = _csignals_T_15 ? 3'h4 : _csignals_T_1082; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1084 = _csignals_T_13 ? 3'h5 : _csignals_T_1083; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1085 = _csignals_T_11 ? 3'h4 : _csignals_T_1084; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1086 = _csignals_T_9 ? 3'h5 : _csignals_T_1085; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1087 = _csignals_T_7 ? 3'h5 : _csignals_T_1086; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1088 = _csignals_T_5 ? 3'h4 : _csignals_T_1087; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1089 = _csignals_T_3 ? 3'h5 : _csignals_T_1088; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] csignals_5 = _csignals_T_1 ? 3'h5 : _csignals_T_1089; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1090 = _csignals_T_273 ? 3'h3 : 3'h0; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1091 = _csignals_T_271 ? 3'h3 : _csignals_T_1090; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1092 = _csignals_T_269 ? 3'h3 : _csignals_T_1091; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1093 = _csignals_T_267 ? 3'h3 : _csignals_T_1092; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1094 = _csignals_T_265 ? 3'h3 : _csignals_T_1093; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1095 = _csignals_T_263 ? 3'h3 : _csignals_T_1094; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1096 = _csignals_T_261 ? 3'h3 : _csignals_T_1095; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1097 = _csignals_T_259 ? 3'h7 : _csignals_T_1096; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1098 = _csignals_T_257 ? 3'h7 : _csignals_T_1097; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1099 = _csignals_T_255 ? 3'h2 : _csignals_T_1098; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1100 = _csignals_T_253 ? 3'h2 : _csignals_T_1099; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1101 = _csignals_T_251 ? 3'h2 : _csignals_T_1100; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1102 = _csignals_T_249 ? 3'h2 : _csignals_T_1101; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1103 = _csignals_T_247 ? 3'h2 : _csignals_T_1102; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1104 = _csignals_T_245 ? 3'h2 : _csignals_T_1103; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1105 = _csignals_T_243 ? 3'h2 : _csignals_T_1104; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1106 = _csignals_T_241 ? 3'h3 : _csignals_T_1105; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1107 = _csignals_T_239 ? 3'h1 : _csignals_T_1106; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1108 = _csignals_T_237 ? 3'h1 : _csignals_T_1107; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1109 = _csignals_T_235 ? 3'h1 : _csignals_T_1108; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1110 = _csignals_T_233 ? 3'h1 : _csignals_T_1109; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1111 = _csignals_T_231 ? 3'h1 : _csignals_T_1110; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1112 = _csignals_T_229 ? 3'h3 : _csignals_T_1111; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1113 = _csignals_T_227 ? 3'h3 : _csignals_T_1112; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1114 = _csignals_T_225 ? 3'h3 : _csignals_T_1113; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1115 = _csignals_T_223 ? 3'h3 : _csignals_T_1114; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1116 = _csignals_T_221 ? 3'h1 : _csignals_T_1115; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1117 = _csignals_T_219 ? 3'h1 : _csignals_T_1116; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1118 = _csignals_T_217 ? 3'h1 : _csignals_T_1117; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1119 = _csignals_T_215 ? 3'h1 : _csignals_T_1118; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1120 = _csignals_T_213 ? 3'h4 : _csignals_T_1119; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1121 = _csignals_T_211 ? 3'h4 : _csignals_T_1120; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1122 = _csignals_T_209 ? 3'h1 : _csignals_T_1121; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1123 = _csignals_T_207 ? 3'h6 : _csignals_T_1122; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1124 = _csignals_T_205 ? 3'h6 : _csignals_T_1123; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1125 = _csignals_T_203 ? 3'h1 : _csignals_T_1124; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1126 = _csignals_T_201 ? 3'h1 : _csignals_T_1125; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1127 = _csignals_T_199 ? 3'h2 : _csignals_T_1126; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1128 = _csignals_T_197 ? 3'h2 : _csignals_T_1127; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1129 = _csignals_T_195 ? 3'h2 : _csignals_T_1128; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1130 = _csignals_T_193 ? 3'h2 : _csignals_T_1129; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1131 = _csignals_T_191 ? 3'h2 : _csignals_T_1130; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1132 = _csignals_T_189 ? 3'h2 : _csignals_T_1131; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1133 = _csignals_T_187 ? 3'h2 : _csignals_T_1132; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1134 = _csignals_T_185 ? 3'h1 : _csignals_T_1133; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1135 = _csignals_T_183 ? 3'h1 : _csignals_T_1134; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1136 = _csignals_T_181 ? 3'h1 : _csignals_T_1135; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1137 = _csignals_T_179 ? 3'h3 : _csignals_T_1136; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1138 = _csignals_T_177 ? 3'h1 : _csignals_T_1137; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1139 = _csignals_T_175 ? 3'h1 : _csignals_T_1138; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1140 = _csignals_T_173 ? 3'h3 : _csignals_T_1139; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1141 = _csignals_T_171 ? 3'h1 : _csignals_T_1140; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1142 = _csignals_T_169 ? 3'h0 : _csignals_T_1141; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1143 = _csignals_T_167 ? 3'h0 : _csignals_T_1142; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1144 = _csignals_T_165 ? 3'h0 : _csignals_T_1143; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1145 = _csignals_T_163 ? 3'h0 : _csignals_T_1144; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1146 = _csignals_T_161 ? 3'h0 : _csignals_T_1145; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1147 = _csignals_T_159 ? 3'h0 : _csignals_T_1146; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1148 = _csignals_T_157 ? 3'h0 : _csignals_T_1147; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1149 = _csignals_T_155 ? 3'h0 : _csignals_T_1148; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1150 = _csignals_T_153 ? 3'h0 : _csignals_T_1149; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1151 = _csignals_T_151 ? 3'h0 : _csignals_T_1150; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1152 = _csignals_T_149 ? 3'h0 : _csignals_T_1151; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1153 = _csignals_T_147 ? 3'h0 : _csignals_T_1152; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1154 = _csignals_T_145 ? 3'h0 : _csignals_T_1153; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1155 = _csignals_T_143 ? 3'h0 : _csignals_T_1154; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1156 = _csignals_T_141 ? 3'h0 : _csignals_T_1155; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1157 = _csignals_T_139 ? 3'h0 : _csignals_T_1156; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1158 = _csignals_T_137 ? 3'h0 : _csignals_T_1157; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1159 = _csignals_T_135 ? 3'h0 : _csignals_T_1158; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1160 = _csignals_T_133 ? 3'h0 : _csignals_T_1159; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1161 = _csignals_T_131 ? 3'h0 : _csignals_T_1160; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1162 = _csignals_T_129 ? 3'h0 : _csignals_T_1161; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1163 = _csignals_T_127 ? 3'h0 : _csignals_T_1162; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1164 = _csignals_T_125 ? 3'h0 : _csignals_T_1163; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1165 = _csignals_T_123 ? 3'h0 : _csignals_T_1164; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1166 = _csignals_T_121 ? 3'h0 : _csignals_T_1165; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1167 = _csignals_T_119 ? 3'h0 : _csignals_T_1166; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1168 = _csignals_T_117 ? 3'h0 : _csignals_T_1167; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1169 = _csignals_T_115 ? 3'h0 : _csignals_T_1168; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1170 = _csignals_T_113 ? 3'h0 : _csignals_T_1169; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1171 = _csignals_T_111 ? 3'h0 : _csignals_T_1170; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1172 = _csignals_T_109 ? 3'h0 : _csignals_T_1171; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1173 = _csignals_T_107 ? 3'h0 : _csignals_T_1172; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1174 = _csignals_T_105 ? 3'h0 : _csignals_T_1173; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1175 = _csignals_T_103 ? 3'h0 : _csignals_T_1174; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1176 = _csignals_T_101 ? 3'h0 : _csignals_T_1175; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1177 = _csignals_T_99 ? 3'h0 : _csignals_T_1176; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1178 = _csignals_T_97 ? 3'h0 : _csignals_T_1177; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1179 = _csignals_T_95 ? 3'h0 : _csignals_T_1178; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1180 = _csignals_T_93 ? 3'h0 : _csignals_T_1179; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1181 = _csignals_T_91 ? 3'h0 : _csignals_T_1180; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1182 = _csignals_T_89 ? 3'h0 : _csignals_T_1181; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1183 = _csignals_T_87 ? 3'h0 : _csignals_T_1182; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1184 = _csignals_T_85 ? 3'h0 : _csignals_T_1183; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1185 = _csignals_T_83 ? 3'h0 : _csignals_T_1184; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1186 = _csignals_T_81 ? 3'h0 : _csignals_T_1185; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1187 = _csignals_T_79 ? 3'h0 : _csignals_T_1186; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1188 = _csignals_T_77 ? 3'h0 : _csignals_T_1187; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1189 = _csignals_T_75 ? 3'h0 : _csignals_T_1188; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1190 = _csignals_T_73 ? 3'h0 : _csignals_T_1189; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1191 = _csignals_T_71 ? 3'h0 : _csignals_T_1190; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1192 = _csignals_T_69 ? 3'h0 : _csignals_T_1191; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1193 = _csignals_T_67 ? 3'h0 : _csignals_T_1192; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1194 = _csignals_T_65 ? 3'h0 : _csignals_T_1193; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1195 = _csignals_T_63 ? 3'h0 : _csignals_T_1194; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1196 = _csignals_T_61 ? 3'h0 : _csignals_T_1195; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1197 = _csignals_T_59 ? 3'h0 : _csignals_T_1196; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1198 = _csignals_T_57 ? 3'h0 : _csignals_T_1197; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1199 = _csignals_T_55 ? 3'h0 : _csignals_T_1198; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1200 = _csignals_T_53 ? 3'h0 : _csignals_T_1199; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1201 = _csignals_T_51 ? 3'h0 : _csignals_T_1200; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1202 = _csignals_T_49 ? 3'h0 : _csignals_T_1201; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1203 = _csignals_T_47 ? 3'h0 : _csignals_T_1202; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1204 = _csignals_T_45 ? 3'h0 : _csignals_T_1203; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1205 = _csignals_T_43 ? 3'h0 : _csignals_T_1204; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1206 = _csignals_T_41 ? 3'h0 : _csignals_T_1205; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1207 = _csignals_T_39 ? 3'h0 : _csignals_T_1206; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1208 = _csignals_T_37 ? 3'h0 : _csignals_T_1207; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1209 = _csignals_T_35 ? 3'h0 : _csignals_T_1208; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1210 = _csignals_T_33 ? 3'h0 : _csignals_T_1209; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1211 = _csignals_T_31 ? 3'h0 : _csignals_T_1210; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1212 = _csignals_T_29 ? 3'h0 : _csignals_T_1211; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1213 = _csignals_T_27 ? 3'h0 : _csignals_T_1212; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1214 = _csignals_T_25 ? 3'h0 : _csignals_T_1213; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1215 = _csignals_T_23 ? 3'h0 : _csignals_T_1214; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1216 = _csignals_T_21 ? 3'h0 : _csignals_T_1215; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1217 = _csignals_T_19 ? 3'h0 : _csignals_T_1216; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1218 = _csignals_T_17 ? 3'h0 : _csignals_T_1217; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1219 = _csignals_T_15 ? 3'h0 : _csignals_T_1218; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1220 = _csignals_T_13 ? 3'h0 : _csignals_T_1219; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1221 = _csignals_T_11 ? 3'h0 : _csignals_T_1220; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1222 = _csignals_T_9 ? 3'h0 : _csignals_T_1221; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1223 = _csignals_T_7 ? 3'h0 : _csignals_T_1222; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1224 = _csignals_T_5 ? 3'h0 : _csignals_T_1223; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1225 = _csignals_T_3 ? 3'h0 : _csignals_T_1224; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] csignals_6 = _csignals_T_1 ? 3'h0 : _csignals_T_1225; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [1:0] _csignals_T_1320 = _csignals_T_85 ? 2'h3 : 2'h0; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [1:0] _csignals_T_1321 = _csignals_T_83 ? 2'h3 : _csignals_T_1320; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [1:0] _csignals_T_1322 = _csignals_T_81 ? 2'h2 : _csignals_T_1321; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [1:0] _csignals_T_1323 = _csignals_T_79 ? 2'h2 : _csignals_T_1322; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [1:0] _csignals_T_1324 = _csignals_T_77 ? 2'h1 : _csignals_T_1323; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [1:0] _csignals_T_1325 = _csignals_T_75 ? 2'h1 : _csignals_T_1324; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [1:0] _csignals_T_1326 = _csignals_T_73 ? 2'h0 : _csignals_T_1325; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [1:0] _csignals_T_1327 = _csignals_T_71 ? 2'h0 : _csignals_T_1326; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [1:0] _csignals_T_1328 = _csignals_T_69 ? 2'h0 : _csignals_T_1327; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [1:0] _csignals_T_1329 = _csignals_T_67 ? 2'h0 : _csignals_T_1328; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [1:0] _csignals_T_1330 = _csignals_T_65 ? 2'h0 : _csignals_T_1329; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [1:0] _csignals_T_1331 = _csignals_T_63 ? 2'h0 : _csignals_T_1330; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [1:0] _csignals_T_1332 = _csignals_T_61 ? 2'h0 : _csignals_T_1331; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [1:0] _csignals_T_1333 = _csignals_T_59 ? 2'h0 : _csignals_T_1332; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [1:0] _csignals_T_1334 = _csignals_T_57 ? 2'h0 : _csignals_T_1333; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [1:0] _csignals_T_1335 = _csignals_T_55 ? 2'h0 : _csignals_T_1334; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [1:0] _csignals_T_1336 = _csignals_T_53 ? 2'h0 : _csignals_T_1335; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [1:0] _csignals_T_1337 = _csignals_T_51 ? 2'h0 : _csignals_T_1336; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [1:0] _csignals_T_1338 = _csignals_T_49 ? 2'h0 : _csignals_T_1337; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [1:0] _csignals_T_1339 = _csignals_T_47 ? 2'h0 : _csignals_T_1338; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [1:0] _csignals_T_1340 = _csignals_T_45 ? 2'h0 : _csignals_T_1339; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [1:0] _csignals_T_1341 = _csignals_T_43 ? 2'h0 : _csignals_T_1340; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [1:0] _csignals_T_1342 = _csignals_T_41 ? 2'h0 : _csignals_T_1341; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [1:0] _csignals_T_1343 = _csignals_T_39 ? 2'h0 : _csignals_T_1342; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [1:0] _csignals_T_1344 = _csignals_T_37 ? 2'h0 : _csignals_T_1343; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [1:0] _csignals_T_1345 = _csignals_T_35 ? 2'h0 : _csignals_T_1344; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [1:0] _csignals_T_1346 = _csignals_T_33 ? 2'h0 : _csignals_T_1345; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [1:0] _csignals_T_1347 = _csignals_T_31 ? 2'h0 : _csignals_T_1346; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [1:0] _csignals_T_1348 = _csignals_T_29 ? 2'h0 : _csignals_T_1347; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [1:0] _csignals_T_1349 = _csignals_T_27 ? 2'h0 : _csignals_T_1348; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [1:0] _csignals_T_1350 = _csignals_T_25 ? 2'h0 : _csignals_T_1349; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [1:0] _csignals_T_1351 = _csignals_T_23 ? 2'h0 : _csignals_T_1350; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [1:0] _csignals_T_1352 = _csignals_T_21 ? 2'h0 : _csignals_T_1351; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [1:0] _csignals_T_1353 = _csignals_T_19 ? 2'h0 : _csignals_T_1352; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [1:0] _csignals_T_1354 = _csignals_T_17 ? 2'h0 : _csignals_T_1353; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [1:0] _csignals_T_1355 = _csignals_T_15 ? 2'h0 : _csignals_T_1354; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [1:0] _csignals_T_1356 = _csignals_T_13 ? 2'h0 : _csignals_T_1355; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [1:0] _csignals_T_1357 = _csignals_T_11 ? 2'h0 : _csignals_T_1356; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [1:0] _csignals_T_1358 = _csignals_T_9 ? 2'h0 : _csignals_T_1357; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [1:0] _csignals_T_1359 = _csignals_T_7 ? 2'h0 : _csignals_T_1358; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [1:0] _csignals_T_1360 = _csignals_T_5 ? 2'h0 : _csignals_T_1359; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [1:0] _csignals_T_1361 = _csignals_T_3 ? 2'h0 : _csignals_T_1360; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [1:0] csignals_7 = _csignals_T_1 ? 2'h0 : _csignals_T_1361; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1369 = _csignals_T_259 ? 3'h1 : 3'h0; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1370 = _csignals_T_257 ? 3'h1 : _csignals_T_1369; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1371 = _csignals_T_255 ? 3'h0 : _csignals_T_1370; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1372 = _csignals_T_253 ? 3'h0 : _csignals_T_1371; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1373 = _csignals_T_251 ? 3'h0 : _csignals_T_1372; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1374 = _csignals_T_249 ? 3'h0 : _csignals_T_1373; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1375 = _csignals_T_247 ? 3'h0 : _csignals_T_1374; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1376 = _csignals_T_245 ? 3'h0 : _csignals_T_1375; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1377 = _csignals_T_243 ? 3'h0 : _csignals_T_1376; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1378 = _csignals_T_241 ? 3'h0 : _csignals_T_1377; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1379 = _csignals_T_239 ? 3'h5 : _csignals_T_1378; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1380 = _csignals_T_237 ? 3'h4 : _csignals_T_1379; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1381 = _csignals_T_235 ? 3'h5 : _csignals_T_1380; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1382 = _csignals_T_233 ? 3'h0 : _csignals_T_1381; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1383 = _csignals_T_231 ? 3'h4 : _csignals_T_1382; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1384 = _csignals_T_229 ? 3'h6 : _csignals_T_1383; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1385 = _csignals_T_227 ? 3'h4 : _csignals_T_1384; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1386 = _csignals_T_225 ? 3'h7 : _csignals_T_1385; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1387 = _csignals_T_223 ? 3'h5 : _csignals_T_1386; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1388 = _csignals_T_221 ? 3'h0 : _csignals_T_1387; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1389 = _csignals_T_219 ? 3'h0 : _csignals_T_1388; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1390 = _csignals_T_217 ? 3'h0 : _csignals_T_1389; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1391 = _csignals_T_215 ? 3'h0 : _csignals_T_1390; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1392 = _csignals_T_213 ? 3'h0 : _csignals_T_1391; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1393 = _csignals_T_211 ? 3'h0 : _csignals_T_1392; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1394 = _csignals_T_209 ? 3'h0 : _csignals_T_1393; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1395 = _csignals_T_207 ? 3'h1 : _csignals_T_1394; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1396 = _csignals_T_205 ? 3'h1 : _csignals_T_1395; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1397 = _csignals_T_203 ? 3'h0 : _csignals_T_1396; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1398 = _csignals_T_201 ? 3'h0 : _csignals_T_1397; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1399 = _csignals_T_199 ? 3'h0 : _csignals_T_1398; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1400 = _csignals_T_197 ? 3'h0 : _csignals_T_1399; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1401 = _csignals_T_195 ? 3'h0 : _csignals_T_1400; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1402 = _csignals_T_193 ? 3'h0 : _csignals_T_1401; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1403 = _csignals_T_191 ? 3'h0 : _csignals_T_1402; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1404 = _csignals_T_189 ? 3'h0 : _csignals_T_1403; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1405 = _csignals_T_187 ? 3'h0 : _csignals_T_1404; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1406 = _csignals_T_185 ? 3'h0 : _csignals_T_1405; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1407 = _csignals_T_183 ? 3'h0 : _csignals_T_1406; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1408 = _csignals_T_181 ? 3'h0 : _csignals_T_1407; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1409 = _csignals_T_179 ? 3'h0 : _csignals_T_1408; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1410 = _csignals_T_177 ? 3'h0 : _csignals_T_1409; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1411 = _csignals_T_175 ? 3'h0 : _csignals_T_1410; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1412 = _csignals_T_173 ? 3'h0 : _csignals_T_1411; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1413 = _csignals_T_171 ? 3'h0 : _csignals_T_1412; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1414 = _csignals_T_169 ? 3'h0 : _csignals_T_1413; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1415 = _csignals_T_167 ? 3'h0 : _csignals_T_1414; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1416 = _csignals_T_165 ? 3'h0 : _csignals_T_1415; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1417 = _csignals_T_163 ? 3'h0 : _csignals_T_1416; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1418 = _csignals_T_161 ? 3'h0 : _csignals_T_1417; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1419 = _csignals_T_159 ? 3'h0 : _csignals_T_1418; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1420 = _csignals_T_157 ? 3'h0 : _csignals_T_1419; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1421 = _csignals_T_155 ? 3'h0 : _csignals_T_1420; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1422 = _csignals_T_153 ? 3'h0 : _csignals_T_1421; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1423 = _csignals_T_151 ? 3'h0 : _csignals_T_1422; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1424 = _csignals_T_149 ? 3'h0 : _csignals_T_1423; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1425 = _csignals_T_147 ? 3'h0 : _csignals_T_1424; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1426 = _csignals_T_145 ? 3'h0 : _csignals_T_1425; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1427 = _csignals_T_143 ? 3'h0 : _csignals_T_1426; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1428 = _csignals_T_141 ? 3'h0 : _csignals_T_1427; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1429 = _csignals_T_139 ? 3'h0 : _csignals_T_1428; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1430 = _csignals_T_137 ? 3'h0 : _csignals_T_1429; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1431 = _csignals_T_135 ? 3'h0 : _csignals_T_1430; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1432 = _csignals_T_133 ? 3'h0 : _csignals_T_1431; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1433 = _csignals_T_131 ? 3'h0 : _csignals_T_1432; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1434 = _csignals_T_129 ? 3'h0 : _csignals_T_1433; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1435 = _csignals_T_127 ? 3'h0 : _csignals_T_1434; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1436 = _csignals_T_125 ? 3'h0 : _csignals_T_1435; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1437 = _csignals_T_123 ? 3'h0 : _csignals_T_1436; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1438 = _csignals_T_121 ? 3'h0 : _csignals_T_1437; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1439 = _csignals_T_119 ? 3'h0 : _csignals_T_1438; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1440 = _csignals_T_117 ? 3'h0 : _csignals_T_1439; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1441 = _csignals_T_115 ? 3'h0 : _csignals_T_1440; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1442 = _csignals_T_113 ? 3'h0 : _csignals_T_1441; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1443 = _csignals_T_111 ? 3'h0 : _csignals_T_1442; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1444 = _csignals_T_109 ? 3'h0 : _csignals_T_1443; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1445 = _csignals_T_107 ? 3'h0 : _csignals_T_1444; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1446 = _csignals_T_105 ? 3'h0 : _csignals_T_1445; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1447 = _csignals_T_103 ? 3'h0 : _csignals_T_1446; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1448 = _csignals_T_101 ? 3'h0 : _csignals_T_1447; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1449 = _csignals_T_99 ? 3'h0 : _csignals_T_1448; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1450 = _csignals_T_97 ? 3'h0 : _csignals_T_1449; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1451 = _csignals_T_95 ? 3'h0 : _csignals_T_1450; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1452 = _csignals_T_93 ? 3'h0 : _csignals_T_1451; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1453 = _csignals_T_91 ? 3'h0 : _csignals_T_1452; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1454 = _csignals_T_89 ? 3'h3 : _csignals_T_1453; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1455 = _csignals_T_87 ? 3'h3 : _csignals_T_1454; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1456 = _csignals_T_85 ? 3'h0 : _csignals_T_1455; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1457 = _csignals_T_83 ? 3'h0 : _csignals_T_1456; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1458 = _csignals_T_81 ? 3'h0 : _csignals_T_1457; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1459 = _csignals_T_79 ? 3'h0 : _csignals_T_1458; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1460 = _csignals_T_77 ? 3'h0 : _csignals_T_1459; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1461 = _csignals_T_75 ? 3'h0 : _csignals_T_1460; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1462 = _csignals_T_73 ? 3'h0 : _csignals_T_1461; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1463 = _csignals_T_71 ? 3'h0 : _csignals_T_1462; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1464 = _csignals_T_69 ? 3'h0 : _csignals_T_1463; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1465 = _csignals_T_67 ? 3'h0 : _csignals_T_1464; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1466 = _csignals_T_65 ? 3'h1 : _csignals_T_1465; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1467 = _csignals_T_63 ? 3'h1 : _csignals_T_1466; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1468 = _csignals_T_61 ? 3'h1 : _csignals_T_1467; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1469 = _csignals_T_59 ? 3'h1 : _csignals_T_1468; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1470 = _csignals_T_57 ? 3'h1 : _csignals_T_1469; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1471 = _csignals_T_55 ? 3'h1 : _csignals_T_1470; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1472 = _csignals_T_53 ? 3'h0 : _csignals_T_1471; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1473 = _csignals_T_51 ? 3'h0 : _csignals_T_1472; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1474 = _csignals_T_49 ? 3'h0 : _csignals_T_1473; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1475 = _csignals_T_47 ? 3'h0 : _csignals_T_1474; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1476 = _csignals_T_45 ? 3'h0 : _csignals_T_1475; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1477 = _csignals_T_43 ? 3'h0 : _csignals_T_1476; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1478 = _csignals_T_41 ? 3'h0 : _csignals_T_1477; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1479 = _csignals_T_39 ? 3'h0 : _csignals_T_1478; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1480 = _csignals_T_37 ? 3'h0 : _csignals_T_1479; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1481 = _csignals_T_35 ? 3'h0 : _csignals_T_1480; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1482 = _csignals_T_33 ? 3'h0 : _csignals_T_1481; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1483 = _csignals_T_31 ? 3'h0 : _csignals_T_1482; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1484 = _csignals_T_29 ? 3'h0 : _csignals_T_1483; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1485 = _csignals_T_27 ? 3'h0 : _csignals_T_1484; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1486 = _csignals_T_25 ? 3'h0 : _csignals_T_1485; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1487 = _csignals_T_23 ? 3'h0 : _csignals_T_1486; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1488 = _csignals_T_21 ? 3'h0 : _csignals_T_1487; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1489 = _csignals_T_19 ? 3'h0 : _csignals_T_1488; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1490 = _csignals_T_17 ? 3'h0 : _csignals_T_1489; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1491 = _csignals_T_15 ? 3'h0 : _csignals_T_1490; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1492 = _csignals_T_13 ? 3'h0 : _csignals_T_1491; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1493 = _csignals_T_11 ? 3'h4 : _csignals_T_1492; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1494 = _csignals_T_9 ? 3'h6 : _csignals_T_1493; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1495 = _csignals_T_7 ? 3'h4 : _csignals_T_1494; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1496 = _csignals_T_5 ? 3'h5 : _csignals_T_1495; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] _csignals_T_1497 = _csignals_T_3 ? 3'h7 : _csignals_T_1496; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire [2:0] csignals_8 = _csignals_T_1 ? 3'h5 : _csignals_T_1497; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire  _csignals_T_1570 = _csignals_T_129 ? 1'h0 : _csignals_T_131 | (_csignals_T_133 | _csignals_T_135); // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire  _csignals_T_1571 = _csignals_T_127 ? 1'h0 : _csignals_T_1570; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire  _csignals_T_1572 = _csignals_T_125 ? 1'h0 : _csignals_T_1571; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire  _csignals_T_1573 = _csignals_T_123 ? 1'h0 : _csignals_T_1572; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire  _csignals_T_1574 = _csignals_T_121 ? 1'h0 : _csignals_T_1573; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire  _csignals_T_1575 = _csignals_T_119 ? 1'h0 : _csignals_T_1574; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire  _csignals_T_1576 = _csignals_T_117 ? 1'h0 : _csignals_T_1575; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire  _csignals_T_1577 = _csignals_T_115 ? 1'h0 : _csignals_T_1576; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire  _csignals_T_1578 = _csignals_T_113 ? 1'h0 : _csignals_T_1577; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire  _csignals_T_1579 = _csignals_T_111 ? 1'h0 : _csignals_T_1578; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire  _csignals_T_1580 = _csignals_T_109 ? 1'h0 : _csignals_T_1579; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire  _csignals_T_1581 = _csignals_T_107 ? 1'h0 : _csignals_T_1580; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire  _csignals_T_1582 = _csignals_T_105 ? 1'h0 : _csignals_T_1581; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire  _csignals_T_1583 = _csignals_T_103 ? 1'h0 : _csignals_T_1582; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire  _csignals_T_1584 = _csignals_T_101 ? 1'h0 : _csignals_T_1583; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire  _csignals_T_1585 = _csignals_T_99 ? 1'h0 : _csignals_T_1584; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire  _csignals_T_1586 = _csignals_T_97 ? 1'h0 : _csignals_T_1585; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire  _csignals_T_1587 = _csignals_T_95 ? 1'h0 : _csignals_T_1586; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire  _csignals_T_1588 = _csignals_T_93 ? 1'h0 : _csignals_T_1587; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire  _csignals_T_1589 = _csignals_T_91 ? 1'h0 : _csignals_T_1588; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire  _csignals_T_1590 = _csignals_T_89 ? 1'h0 : _csignals_T_1589; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire  _csignals_T_1591 = _csignals_T_87 ? 1'h0 : _csignals_T_1590; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire  _csignals_T_1592 = _csignals_T_85 ? 1'h0 : _csignals_T_1591; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire  _csignals_T_1593 = _csignals_T_83 ? 1'h0 : _csignals_T_1592; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire  _csignals_T_1594 = _csignals_T_81 ? 1'h0 : _csignals_T_1593; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire  _csignals_T_1595 = _csignals_T_79 ? 1'h0 : _csignals_T_1594; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire  _csignals_T_1596 = _csignals_T_77 ? 1'h0 : _csignals_T_1595; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire  _csignals_T_1597 = _csignals_T_75 ? 1'h0 : _csignals_T_1596; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire  _csignals_T_1598 = _csignals_T_73 ? 1'h0 : _csignals_T_1597; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire  _csignals_T_1599 = _csignals_T_71 ? 1'h0 : _csignals_T_1598; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire  _csignals_T_1600 = _csignals_T_69 ? 1'h0 : _csignals_T_1599; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire  _csignals_T_1601 = _csignals_T_67 ? 1'h0 : _csignals_T_1600; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire  _csignals_T_1602 = _csignals_T_65 ? 1'h0 : _csignals_T_1601; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire  _csignals_T_1603 = _csignals_T_63 ? 1'h0 : _csignals_T_1602; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire  _csignals_T_1604 = _csignals_T_61 ? 1'h0 : _csignals_T_1603; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire  _csignals_T_1605 = _csignals_T_59 ? 1'h0 : _csignals_T_1604; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire  _csignals_T_1606 = _csignals_T_57 ? 1'h0 : _csignals_T_1605; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire  _csignals_T_1607 = _csignals_T_55 ? 1'h0 : _csignals_T_1606; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire  _csignals_T_1608 = _csignals_T_53 ? 1'h0 : _csignals_T_1607; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire  _csignals_T_1609 = _csignals_T_51 ? 1'h0 : _csignals_T_1608; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire  _csignals_T_1610 = _csignals_T_49 ? 1'h0 : _csignals_T_1609; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire  _csignals_T_1611 = _csignals_T_47 ? 1'h0 : _csignals_T_1610; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire  _csignals_T_1612 = _csignals_T_45 ? 1'h0 : _csignals_T_1611; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire  _csignals_T_1613 = _csignals_T_43 ? 1'h0 : _csignals_T_1612; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire  _csignals_T_1614 = _csignals_T_41 ? 1'h0 : _csignals_T_1613; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire  _csignals_T_1615 = _csignals_T_39 ? 1'h0 : _csignals_T_1614; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire  _csignals_T_1616 = _csignals_T_37 ? 1'h0 : _csignals_T_1615; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire  _csignals_T_1617 = _csignals_T_35 ? 1'h0 : _csignals_T_1616; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire  _csignals_T_1618 = _csignals_T_33 ? 1'h0 : _csignals_T_1617; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire  _csignals_T_1619 = _csignals_T_31 ? 1'h0 : _csignals_T_1618; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire  _csignals_T_1620 = _csignals_T_29 ? 1'h0 : _csignals_T_1619; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire  _csignals_T_1621 = _csignals_T_27 ? 1'h0 : _csignals_T_1620; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire  _csignals_T_1622 = _csignals_T_25 ? 1'h0 : _csignals_T_1621; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire  _csignals_T_1623 = _csignals_T_23 ? 1'h0 : _csignals_T_1622; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire  _csignals_T_1624 = _csignals_T_21 ? 1'h0 : _csignals_T_1623; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire  _csignals_T_1625 = _csignals_T_19 ? 1'h0 : _csignals_T_1624; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire  _csignals_T_1626 = _csignals_T_17 ? 1'h0 : _csignals_T_1625; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire  _csignals_T_1627 = _csignals_T_15 ? 1'h0 : _csignals_T_1626; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire  _csignals_T_1628 = _csignals_T_13 ? 1'h0 : _csignals_T_1627; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire  _csignals_T_1629 = _csignals_T_11 ? 1'h0 : _csignals_T_1628; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire  _csignals_T_1630 = _csignals_T_9 ? 1'h0 : _csignals_T_1629; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire  _csignals_T_1631 = _csignals_T_7 ? 1'h0 : _csignals_T_1630; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire  _csignals_T_1632 = _csignals_T_5 ? 1'h0 : _csignals_T_1631; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire  _csignals_T_1633 = _csignals_T_3 ? 1'h0 : _csignals_T_1632; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire  csignals_9 = _csignals_T_1 ? 1'h0 : _csignals_T_1633; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+  wire  _id_wb_addr_T = csignals_6 == 3'h1; // @[src/main/scala/fpga/Core.scala 835:13]
+  wire  _id_wb_addr_T_1 = csignals_6 == 3'h2; // @[src/main/scala/fpga/Core.scala 836:13]
+  wire  _id_wb_addr_T_2 = csignals_6 == 3'h3; // @[src/main/scala/fpga/Core.scala 837:13]
+  wire  _id_wb_addr_T_3 = csignals_6 == 3'h4; // @[src/main/scala/fpga/Core.scala 838:13]
   wire [4:0] _id_wb_addr_T_4 = _id_wb_addr_T_3 ? 5'h1 : id_w_wb_addr; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
   wire [4:0] _id_wb_addr_T_5 = _id_wb_addr_T_2 ? id_c_rs2p_addr : _id_wb_addr_T_4; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
   wire [4:0] _id_wb_addr_T_6 = _id_wb_addr_T_1 ? id_c_rs1p_addr : _id_wb_addr_T_5; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
   wire [4:0] id_wb_addr = _id_wb_addr_T ? id_w_wb_addr : _id_wb_addr_T_6; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
-  wire  _id_op1_data_T = csignals_1 == 3'h1; // @[src/main/scala/fpga/Core.scala 827:17]
-  wire [31:0] _id_op1_data_T_1 = {id_reg_pc,1'h0}; // @[src/main/scala/fpga/Core.scala 827:39]
-  wire  _id_op1_data_T_2 = csignals_1 == 3'h2; // @[src/main/scala/fpga/Core.scala 828:17]
+  wire  _id_op1_data_T = csignals_1 == 3'h1; // @[src/main/scala/fpga/Core.scala 842:17]
+  wire [31:0] _id_op1_data_T_1 = {id_reg_pc,1'h0}; // @[src/main/scala/fpga/Core.scala 842:39]
+  wire  _id_op1_data_T_2 = csignals_1 == 3'h2; // @[src/main/scala/fpga/Core.scala 843:17]
   wire [31:0] _id_op1_data_T_3 = _id_op1_data_T_2 ? id_imm_z_uext : 32'h0; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
   wire [31:0] id_op1_data = _id_op1_data_T ? _id_op1_data_T_1 : _id_op1_data_T_3; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
-  wire  _id_op2_data_T = csignals_2 == 5'h0; // @[src/main/scala/fpga/Core.scala 832:17]
-  wire  _id_op2_data_T_1 = csignals_2 == 5'h4; // @[src/main/scala/fpga/Core.scala 833:17]
-  wire  _id_op2_data_T_2 = csignals_2 == 5'h8; // @[src/main/scala/fpga/Core.scala 834:17]
-  wire  _id_op2_data_T_3 = csignals_2 == 5'h9; // @[src/main/scala/fpga/Core.scala 835:17]
-  wire  _id_op2_data_T_4 = csignals_2 == 5'ha; // @[src/main/scala/fpga/Core.scala 836:17]
-  wire  _id_op2_data_T_5 = csignals_2 == 5'hb; // @[src/main/scala/fpga/Core.scala 837:17]
-  wire  _id_op2_data_T_6 = csignals_2 == 5'hc; // @[src/main/scala/fpga/Core.scala 838:17]
-  wire  _id_op2_data_T_7 = csignals_2 == 5'hd; // @[src/main/scala/fpga/Core.scala 839:17]
-  wire  _id_op2_data_T_8 = csignals_2 == 5'he; // @[src/main/scala/fpga/Core.scala 840:17]
-  wire  _id_op2_data_T_9 = csignals_2 == 5'hf; // @[src/main/scala/fpga/Core.scala 841:17]
-  wire  _id_op2_data_T_10 = csignals_2 == 5'h10; // @[src/main/scala/fpga/Core.scala 842:17]
-  wire  _id_op2_data_T_11 = csignals_2 == 5'h11; // @[src/main/scala/fpga/Core.scala 843:17]
-  wire  _id_op2_data_T_12 = csignals_2 == 5'h12; // @[src/main/scala/fpga/Core.scala 844:17]
-  wire  _id_op2_data_T_13 = csignals_2 == 5'h13; // @[src/main/scala/fpga/Core.scala 845:17]
-  wire  _id_op2_data_T_14 = csignals_2 == 5'h14; // @[src/main/scala/fpga/Core.scala 846:17]
-  wire  _id_op2_data_T_15 = csignals_2 == 5'h15; // @[src/main/scala/fpga/Core.scala 847:17]
-  wire  _id_op2_data_T_16 = csignals_2 == 5'h16; // @[src/main/scala/fpga/Core.scala 848:17]
-  wire  _id_op2_data_T_17 = csignals_2 == 5'h17; // @[src/main/scala/fpga/Core.scala 849:17]
-  wire  _id_op2_data_T_18 = csignals_2 == 5'h18; // @[src/main/scala/fpga/Core.scala 850:17]
-  wire  _id_op2_data_T_19 = csignals_2 == 5'h19; // @[src/main/scala/fpga/Core.scala 851:17]
-  wire  _id_op2_data_T_21 = csignals_2 == 5'h1a; // @[src/main/scala/fpga/Core.scala 852:17]
-  wire  _id_op2_data_T_22 = csignals_2 == 5'h1b; // @[src/main/scala/fpga/Core.scala 853:17]
-  wire  _id_op2_data_T_23 = csignals_2 == 5'h1c; // @[src/main/scala/fpga/Core.scala 854:17]
-  wire  _id_op2_data_T_24 = csignals_2 == 5'h1d; // @[src/main/scala/fpga/Core.scala 855:17]
+  wire  _id_op2_data_T = csignals_2 == 5'h0; // @[src/main/scala/fpga/Core.scala 847:17]
+  wire  _id_op2_data_T_1 = csignals_2 == 5'h4; // @[src/main/scala/fpga/Core.scala 848:17]
+  wire  _id_op2_data_T_2 = csignals_2 == 5'h8; // @[src/main/scala/fpga/Core.scala 849:17]
+  wire  _id_op2_data_T_3 = csignals_2 == 5'h9; // @[src/main/scala/fpga/Core.scala 850:17]
+  wire  _id_op2_data_T_4 = csignals_2 == 5'ha; // @[src/main/scala/fpga/Core.scala 851:17]
+  wire  _id_op2_data_T_5 = csignals_2 == 5'hb; // @[src/main/scala/fpga/Core.scala 852:17]
+  wire  _id_op2_data_T_6 = csignals_2 == 5'hc; // @[src/main/scala/fpga/Core.scala 853:17]
+  wire  _id_op2_data_T_7 = csignals_2 == 5'hd; // @[src/main/scala/fpga/Core.scala 854:17]
+  wire  _id_op2_data_T_8 = csignals_2 == 5'he; // @[src/main/scala/fpga/Core.scala 855:17]
+  wire  _id_op2_data_T_9 = csignals_2 == 5'hf; // @[src/main/scala/fpga/Core.scala 856:17]
+  wire  _id_op2_data_T_10 = csignals_2 == 5'h10; // @[src/main/scala/fpga/Core.scala 857:17]
+  wire  _id_op2_data_T_11 = csignals_2 == 5'h11; // @[src/main/scala/fpga/Core.scala 858:17]
+  wire  _id_op2_data_T_12 = csignals_2 == 5'h12; // @[src/main/scala/fpga/Core.scala 859:17]
+  wire  _id_op2_data_T_13 = csignals_2 == 5'h13; // @[src/main/scala/fpga/Core.scala 860:17]
+  wire  _id_op2_data_T_14 = csignals_2 == 5'h14; // @[src/main/scala/fpga/Core.scala 861:17]
+  wire  _id_op2_data_T_15 = csignals_2 == 5'h15; // @[src/main/scala/fpga/Core.scala 862:17]
+  wire  _id_op2_data_T_16 = csignals_2 == 5'h16; // @[src/main/scala/fpga/Core.scala 863:17]
+  wire  _id_op2_data_T_17 = csignals_2 == 5'h17; // @[src/main/scala/fpga/Core.scala 864:17]
+  wire  _id_op2_data_T_18 = csignals_2 == 5'h18; // @[src/main/scala/fpga/Core.scala 865:17]
+  wire  _id_op2_data_T_19 = csignals_2 == 5'h19; // @[src/main/scala/fpga/Core.scala 866:17]
+  wire  _id_op2_data_T_21 = csignals_2 == 5'h1a; // @[src/main/scala/fpga/Core.scala 867:17]
+  wire  _id_op2_data_T_22 = csignals_2 == 5'h1b; // @[src/main/scala/fpga/Core.scala 868:17]
+  wire  _id_op2_data_T_23 = csignals_2 == 5'h1c; // @[src/main/scala/fpga/Core.scala 869:17]
+  wire  _id_op2_data_T_24 = csignals_2 == 5'h1d; // @[src/main/scala/fpga/Core.scala 870:17]
   wire [31:0] _id_op2_data_T_25 = _id_op2_data_T_24 ? id_c_imm_u : 32'h0; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
   wire [31:0] _id_op2_data_T_26 = _id_op2_data_T_23 ? id_c_imm_a2b : _id_op2_data_T_25; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
   wire [31:0] _id_op2_data_T_27 = _id_op2_data_T_22 ? id_c_imm_a2w : _id_op2_data_T_26; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
@@ -2348,35 +2499,35 @@ module Core(
   wire [32:0] _id_op2_data_T_46 = _id_op2_data_T_2 ? {{1'd0}, id_imm_s_sext} : _id_op2_data_T_45; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
   wire [32:0] _id_op2_data_T_47 = _id_op2_data_T_1 ? {{1'd0}, id_imm_i_sext} : _id_op2_data_T_46; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
   wire [32:0] _id_op2_data_T_48 = _id_op2_data_T ? 33'h0 : _id_op2_data_T_47; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
-  wire  _id_csr_addr_T_2 = csignals_0 == 4'he & csignals_8 == 3'h3; // @[src/main/scala/fpga/Core.scala 858:50]
-  wire [11:0] id_csr_addr = csignals_0 == 4'he & csignals_8 == 3'h3 ? 12'h342 : id_imm_i; // @[src/main/scala/fpga/Core.scala 858:24]
-  wire  _id_m_op1_sel_T = csignals_1 == 3'h4; // @[src/main/scala/fpga/Core.scala 861:17]
-  wire  _id_m_op1_sel_T_1 = csignals_1 == 3'h5; // @[src/main/scala/fpga/Core.scala 862:17]
-  wire  _id_m_op1_sel_T_2 = csignals_1 == 3'h6; // @[src/main/scala/fpga/Core.scala 863:17]
-  wire  _id_m_op1_sel_T_3 = csignals_1 == 3'h7; // @[src/main/scala/fpga/Core.scala 864:17]
+  wire  _id_csr_addr_T_2 = csignals_0 == 4'he & csignals_8 == 3'h3; // @[src/main/scala/fpga/Core.scala 873:50]
+  wire [11:0] id_csr_addr = csignals_0 == 4'he & csignals_8 == 3'h3 ? 12'h342 : id_imm_i; // @[src/main/scala/fpga/Core.scala 873:24]
+  wire  _id_m_op1_sel_T = csignals_1 == 3'h4; // @[src/main/scala/fpga/Core.scala 876:17]
+  wire  _id_m_op1_sel_T_1 = csignals_1 == 3'h5; // @[src/main/scala/fpga/Core.scala 877:17]
+  wire  _id_m_op1_sel_T_2 = csignals_1 == 3'h6; // @[src/main/scala/fpga/Core.scala 878:17]
+  wire  _id_m_op1_sel_T_3 = csignals_1 == 3'h7; // @[src/main/scala/fpga/Core.scala 879:17]
   wire  _id_m_op1_sel_T_4 = _id_m_op1_sel_T_3 ? 1'h0 : 1'h1; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
   wire  _id_m_op1_sel_T_5 = _id_m_op1_sel_T_2 ? 1'h0 : _id_m_op1_sel_T_4; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
   wire  _id_m_op1_sel_T_6 = _id_m_op1_sel_T_1 ? 1'h0 : _id_m_op1_sel_T_5; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
   wire  id_m_op1_sel = _id_m_op1_sel_T ? 1'h0 : _id_m_op1_sel_T_6; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
-  wire  _id_m_op2_sel_T = csignals_2 == 5'h1; // @[src/main/scala/fpga/Core.scala 867:17]
-  wire  _id_m_op2_sel_T_1 = csignals_2 == 5'h2; // @[src/main/scala/fpga/Core.scala 868:17]
-  wire  _id_m_op2_sel_T_2 = csignals_2 == 5'h7; // @[src/main/scala/fpga/Core.scala 869:17]
-  wire  _id_m_op2_sel_T_3 = csignals_2 == 5'h6; // @[src/main/scala/fpga/Core.scala 870:17]
-  wire  _id_m_op2_sel_T_4 = csignals_2 == 5'h3; // @[src/main/scala/fpga/Core.scala 871:17]
-  wire  _id_m_op2_sel_T_5 = csignals_2 == 5'h5; // @[src/main/scala/fpga/Core.scala 872:17]
+  wire  _id_m_op2_sel_T = csignals_2 == 5'h1; // @[src/main/scala/fpga/Core.scala 882:17]
+  wire  _id_m_op2_sel_T_1 = csignals_2 == 5'h2; // @[src/main/scala/fpga/Core.scala 883:17]
+  wire  _id_m_op2_sel_T_2 = csignals_2 == 5'h7; // @[src/main/scala/fpga/Core.scala 884:17]
+  wire  _id_m_op2_sel_T_3 = csignals_2 == 5'h6; // @[src/main/scala/fpga/Core.scala 885:17]
+  wire  _id_m_op2_sel_T_4 = csignals_2 == 5'h3; // @[src/main/scala/fpga/Core.scala 886:17]
+  wire  _id_m_op2_sel_T_5 = csignals_2 == 5'h5; // @[src/main/scala/fpga/Core.scala 887:17]
   wire  _id_m_op2_sel_T_6 = _id_m_op2_sel_T_5 ? 1'h0 : 1'h1; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
   wire  _id_m_op2_sel_T_7 = _id_m_op2_sel_T_4 ? 1'h0 : _id_m_op2_sel_T_6; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
   wire  _id_m_op2_sel_T_8 = _id_m_op2_sel_T_3 ? 1'h0 : _id_m_op2_sel_T_7; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
   wire  _id_m_op2_sel_T_9 = _id_m_op2_sel_T_2 ? 1'h0 : _id_m_op2_sel_T_8; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
   wire  _id_m_op2_sel_T_10 = _id_m_op2_sel_T_1 ? 1'h0 : _id_m_op2_sel_T_9; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
   wire  id_m_op2_sel = _id_m_op2_sel_T ? 1'h0 : _id_m_op2_sel_T_10; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
-  wire  _id_m_op3_sel_T = csignals_3 == 3'h0; // @[src/main/scala/fpga/Core.scala 875:17]
-  wire  _id_m_op3_sel_T_1 = csignals_3 == 3'h1; // @[src/main/scala/fpga/Core.scala 876:17]
-  wire  _id_m_op3_sel_T_2 = csignals_3 == 3'h3; // @[src/main/scala/fpga/Core.scala 877:17]
-  wire  _id_m_op3_sel_T_3 = csignals_3 == 3'h4; // @[src/main/scala/fpga/Core.scala 878:17]
-  wire  _id_m_op3_sel_T_4 = csignals_3 == 3'h6; // @[src/main/scala/fpga/Core.scala 879:17]
-  wire  _id_m_op3_sel_T_5 = csignals_3 == 3'h5; // @[src/main/scala/fpga/Core.scala 880:17]
-  wire  _id_m_op3_sel_T_6 = csignals_3 == 3'h7; // @[src/main/scala/fpga/Core.scala 881:17]
+  wire  _id_m_op3_sel_T = csignals_3 == 3'h0; // @[src/main/scala/fpga/Core.scala 890:17]
+  wire  _id_m_op3_sel_T_1 = csignals_3 == 3'h1; // @[src/main/scala/fpga/Core.scala 891:17]
+  wire  _id_m_op3_sel_T_2 = csignals_3 == 3'h3; // @[src/main/scala/fpga/Core.scala 892:17]
+  wire  _id_m_op3_sel_T_3 = csignals_3 == 3'h4; // @[src/main/scala/fpga/Core.scala 893:17]
+  wire  _id_m_op3_sel_T_4 = csignals_3 == 3'h6; // @[src/main/scala/fpga/Core.scala 894:17]
+  wire  _id_m_op3_sel_T_5 = csignals_3 == 3'h5; // @[src/main/scala/fpga/Core.scala 895:17]
+  wire  _id_m_op3_sel_T_6 = csignals_3 == 3'h7; // @[src/main/scala/fpga/Core.scala 896:17]
   wire [1:0] _id_m_op3_sel_T_7 = _id_m_op3_sel_T_6 ? 2'h2 : 2'h0; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
   wire [1:0] _id_m_op3_sel_T_8 = _id_m_op3_sel_T_5 ? 2'h2 : _id_m_op3_sel_T_7; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
   wire [1:0] _id_m_op3_sel_T_9 = _id_m_op3_sel_T_4 ? 2'h2 : _id_m_op3_sel_T_8; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
@@ -2394,162 +2545,180 @@ module Core(
   wire [4:0] _id_m_rs3_addr_T_3 = _id_m_op3_sel_T_6 ? id_rs3_addr : id_rs2_addr; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
   wire [4:0] _id_m_rs3_addr_T_4 = _id_m_op3_sel_T_5 ? id_c_rs2p_addr : _id_m_rs3_addr_T_3; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
   wire [4:0] id_m_rs3_addr = _id_m_op3_sel_T_4 ? id_c_rs2_addr : _id_m_rs3_addr_T_4; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
-  wire  _id_m_imm_b_sext_T = csignals_6 == 3'h6; // @[src/main/scala/fpga/Core.scala 900:13]
-  wire  _id_m_imm_b_sext_T_1 = csignals_6 == 3'h7; // @[src/main/scala/fpga/Core.scala 901:13]
+  wire  _id_m_imm_b_sext_T = csignals_6 == 3'h6; // @[src/main/scala/fpga/Core.scala 915:13]
+  wire  _id_m_imm_b_sext_T_1 = csignals_6 == 3'h7; // @[src/main/scala/fpga/Core.scala 916:13]
   wire [31:0] _id_m_imm_b_sext_T_2 = _id_m_imm_b_sext_T_1 ? id_c_imm_b2 : id_imm_b_sext; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
   wire [31:0] id_m_imm_b_sext = _id_m_imm_b_sext_T ? id_c_imm_b : _id_m_imm_b_sext_T_2; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
-  wire  id_is_br = csignals_8 == 3'h1; // @[src/main/scala/fpga/Core.scala 905:28]
-  wire  id_is_j = csignals_5 == 3'h2; // @[src/main/scala/fpga/Core.scala 906:28]
-  wire [30:0] _id_reg_br_pc_T_1 = id_reg_pc + 31'h1; // @[src/main/scala/fpga/Core.scala 911:45]
-  wire [30:0] _id_reg_br_pc_T_3 = id_reg_pc + 31'h2; // @[src/main/scala/fpga/Core.scala 911:72]
-  reg [30:0] id_reg_pc_delay; // @[src/main/scala/fpga/Core.scala 919:40]
-  reg [4:0] id_reg_wb_addr_delay; // @[src/main/scala/fpga/Core.scala 920:40]
-  reg  id_reg_op1_sel_delay; // @[src/main/scala/fpga/Core.scala 921:40]
-  reg  id_reg_op2_sel_delay; // @[src/main/scala/fpga/Core.scala 922:40]
-  reg [1:0] id_reg_op3_sel_delay; // @[src/main/scala/fpga/Core.scala 923:40]
-  reg [4:0] id_reg_rs1_addr_delay; // @[src/main/scala/fpga/Core.scala 924:40]
-  reg [4:0] id_reg_rs2_addr_delay; // @[src/main/scala/fpga/Core.scala 925:40]
-  reg [4:0] id_reg_rs3_addr_delay; // @[src/main/scala/fpga/Core.scala 926:40]
-  reg [31:0] id_reg_op1_data_delay; // @[src/main/scala/fpga/Core.scala 927:40]
-  reg [31:0] id_reg_op2_data_delay; // @[src/main/scala/fpga/Core.scala 928:40]
-  reg [3:0] id_reg_exe_fun_delay; // @[src/main/scala/fpga/Core.scala 929:40]
-  reg  id_reg_rf_wen_delay; // @[src/main/scala/fpga/Core.scala 930:40]
-  reg [2:0] id_reg_wb_sel_delay; // @[src/main/scala/fpga/Core.scala 931:40]
-  reg [11:0] id_reg_csr_addr_delay; // @[src/main/scala/fpga/Core.scala 932:40]
-  reg [1:0] id_reg_csr_cmd_delay; // @[src/main/scala/fpga/Core.scala 933:40]
-  reg [31:0] id_reg_imm_b_sext_delay; // @[src/main/scala/fpga/Core.scala 934:40]
-  reg [2:0] id_reg_mem_w_delay; // @[src/main/scala/fpga/Core.scala 935:40]
-  reg  id_reg_is_br_delay; // @[src/main/scala/fpga/Core.scala 937:40]
-  reg  id_reg_is_j_delay; // @[src/main/scala/fpga/Core.scala 938:40]
-  reg  id_reg_bp_taken_delay; // @[src/main/scala/fpga/Core.scala 939:40]
-  reg [30:0] id_reg_bp_taken_pc_delay; // @[src/main/scala/fpga/Core.scala 940:41]
-  reg [1:0] id_reg_bp_cnt_delay; // @[src/main/scala/fpga/Core.scala 941:40]
-  reg  id_reg_is_half_delay; // @[src/main/scala/fpga/Core.scala 942:40]
-  reg  id_reg_is_valid_inst_delay; // @[src/main/scala/fpga/Core.scala 943:43]
-  reg  id_reg_is_trap_delay; // @[src/main/scala/fpga/Core.scala 944:40]
-  reg [31:0] id_reg_mcause_delay; // @[src/main/scala/fpga/Core.scala 945:40]
-  wire [30:0] _GEN_217 = _ic_read_en4_T ? id_reg_pc : id_reg_pc_delay; // @[src/main/scala/fpga/Core.scala 949:26 950:32 919:40]
-  wire  _GEN_218 = _ic_read_en4_T ? id_m_op1_sel : id_reg_op1_sel_delay; // @[src/main/scala/fpga/Core.scala 949:26 951:31 921:40]
-  wire  _GEN_219 = _ic_read_en4_T ? id_m_op2_sel : id_reg_op2_sel_delay; // @[src/main/scala/fpga/Core.scala 949:26 952:31 922:40]
-  wire [1:0] _GEN_220 = _ic_read_en4_T ? id_m_op3_sel : id_reg_op3_sel_delay; // @[src/main/scala/fpga/Core.scala 949:26 953:31 923:40]
-  wire [4:0] _GEN_221 = _ic_read_en4_T ? id_m_rs1_addr : id_reg_rs1_addr_delay; // @[src/main/scala/fpga/Core.scala 949:26 954:31 924:40]
-  wire [4:0] _GEN_222 = _ic_read_en4_T ? id_m_rs2_addr : id_reg_rs2_addr_delay; // @[src/main/scala/fpga/Core.scala 949:26 955:31 925:40]
-  wire [4:0] _GEN_223 = _ic_read_en4_T ? id_m_rs3_addr : id_reg_rs3_addr_delay; // @[src/main/scala/fpga/Core.scala 949:26 956:31 926:40]
-  wire [31:0] _GEN_224 = _ic_read_en4_T ? id_op1_data : id_reg_op1_data_delay; // @[src/main/scala/fpga/Core.scala 949:26 957:31 927:40]
-  wire [31:0] id_op2_data = _id_op2_data_T_48[31:0]; // @[src/main/scala/fpga/Core.scala 830:25 831:15]
-  wire [31:0] _GEN_225 = _ic_read_en4_T ? id_op2_data : id_reg_op2_data_delay; // @[src/main/scala/fpga/Core.scala 949:26 958:31 928:40]
-  wire [4:0] _GEN_226 = _ic_read_en4_T ? id_wb_addr : id_reg_wb_addr_delay; // @[src/main/scala/fpga/Core.scala 949:26 959:31 920:40]
-  wire [31:0] _GEN_227 = _ic_read_en4_T ? id_m_imm_b_sext : id_reg_imm_b_sext_delay; // @[src/main/scala/fpga/Core.scala 949:26 960:31 934:40]
-  wire [11:0] _GEN_228 = _ic_read_en4_T ? id_csr_addr : id_reg_csr_addr_delay; // @[src/main/scala/fpga/Core.scala 949:26 961:31 932:40]
-  wire [30:0] _GEN_230 = _ic_read_en4_T ? id_reg_bp_taken_pc : id_reg_bp_taken_pc_delay; // @[src/main/scala/fpga/Core.scala 949:26 963:32 940:41]
-  wire [1:0] _GEN_231 = _ic_read_en4_T ? id_reg_bp_cnt : id_reg_bp_cnt_delay; // @[src/main/scala/fpga/Core.scala 949:26 964:31 941:40]
-  wire  _GEN_232 = _ic_read_en4_T ? id_is_half : id_reg_is_half_delay; // @[src/main/scala/fpga/Core.scala 949:26 965:31 942:40]
-  wire [31:0] _GEN_233 = _ic_read_en4_T ? 32'hb : id_reg_mcause_delay; // @[src/main/scala/fpga/Core.scala 949:26 966:31 945:40]
-  wire  _id_reg_is_valid_inst_delay_T = id_reg_inst != 32'h13; // @[src/main/scala/fpga/Core.scala 1003:43]
-  wire [30:0] _GEN_288 = id_reg_stall ? id_reg_pc_delay : id_reg_pc; // @[src/main/scala/fpga/Core.scala 1015:24 1016:29 1048:29]
-  wire  _GEN_289 = id_reg_stall ? id_reg_op1_sel_delay : id_m_op1_sel; // @[src/main/scala/fpga/Core.scala 1015:24 1017:29 1049:29]
-  wire  _GEN_290 = id_reg_stall ? id_reg_op2_sel_delay : id_m_op2_sel; // @[src/main/scala/fpga/Core.scala 1015:24 1018:29 1050:29]
-  wire [1:0] _GEN_291 = id_reg_stall ? id_reg_op3_sel_delay : id_m_op3_sel; // @[src/main/scala/fpga/Core.scala 1015:24 1019:29 1051:29]
-  wire [4:0] _GEN_292 = id_reg_stall ? id_reg_rs1_addr_delay : id_m_rs1_addr; // @[src/main/scala/fpga/Core.scala 1015:24 1020:29 1052:29]
-  wire [4:0] _GEN_293 = id_reg_stall ? id_reg_rs2_addr_delay : id_m_rs2_addr; // @[src/main/scala/fpga/Core.scala 1015:24 1021:29 1053:29]
-  wire [4:0] _GEN_294 = id_reg_stall ? id_reg_rs3_addr_delay : id_m_rs3_addr; // @[src/main/scala/fpga/Core.scala 1015:24 1022:29 1054:29]
-  wire [31:0] _GEN_295 = id_reg_stall ? id_reg_op1_data_delay : id_op1_data; // @[src/main/scala/fpga/Core.scala 1015:24 1023:29 1055:29]
-  wire [31:0] _GEN_296 = id_reg_stall ? id_reg_op2_data_delay : id_op2_data; // @[src/main/scala/fpga/Core.scala 1015:24 1024:29 1056:29]
-  wire [4:0] _GEN_297 = id_reg_stall ? id_reg_wb_addr_delay : id_wb_addr; // @[src/main/scala/fpga/Core.scala 1015:24 1025:29 1057:29]
-  wire [31:0] _GEN_301 = id_reg_stall ? id_reg_imm_b_sext_delay : id_m_imm_b_sext; // @[src/main/scala/fpga/Core.scala 1015:24 1029:29 1061:29]
-  wire [11:0] _GEN_302 = id_reg_stall ? id_reg_csr_addr_delay : id_csr_addr; // @[src/main/scala/fpga/Core.scala 1015:24 1030:29 1062:29]
-  wire [30:0] _GEN_304 = id_reg_stall ? id_reg_bp_taken_pc_delay : id_reg_bp_taken_pc; // @[src/main/scala/fpga/Core.scala 1015:24 1037:29 1069:29]
-  wire [1:0] _GEN_305 = id_reg_stall ? id_reg_bp_cnt_delay : id_reg_bp_cnt; // @[src/main/scala/fpga/Core.scala 1015:24 1038:29 1070:29]
-  wire  _GEN_306 = id_reg_stall ? id_reg_is_half_delay : id_is_half; // @[src/main/scala/fpga/Core.scala 1015:24 1039:29 1071:29]
-  wire [31:0] _GEN_307 = id_reg_stall ? id_reg_mcause_delay : 32'hb; // @[src/main/scala/fpga/Core.scala 1015:24 1042:29 1074:29]
-  wire  _T_44 = ~rrd_stall; // @[src/main/scala/fpga/Core.scala 1080:14]
-  wire  _T_45 = ~ex2_stall; // @[src/main/scala/fpga/Core.scala 1080:28]
-  wire  _rrd_op1_data_T_2 = _rrd_stall_T_1 & rrd_reg_rs1_addr == 5'h0; // @[src/main/scala/fpga/Core.scala 1159:35]
-  wire  _rrd_op1_data_T_4 = ex1_reg_fw_en & _rrd_stall_T_1; // @[src/main/scala/fpga/Core.scala 1160:20]
-  wire  _rrd_op1_data_T_5 = rrd_reg_rs1_addr == ex1_reg_wb_addr; // @[src/main/scala/fpga/Core.scala 1162:24]
-  wire  _rrd_op1_data_T_6 = _rrd_op1_data_T_4 & _rrd_op1_data_T_5; // @[src/main/scala/fpga/Core.scala 1161:37]
-  wire  _rrd_op1_data_T_8 = ex2_reg_fw_en & _rrd_stall_T_1; // @[src/main/scala/fpga/Core.scala 1163:20]
-  wire  _rrd_op1_data_T_9 = rrd_reg_rs1_addr == ex2_reg_wb_addr; // @[src/main/scala/fpga/Core.scala 1165:24]
-  wire  _rrd_op1_data_T_10 = _rrd_op1_data_T_8 & _rrd_op1_data_T_9; // @[src/main/scala/fpga/Core.scala 1164:37]
-  wire  _rrd_op1_data_T_12 = mem3_reg_fw_en & _rrd_stall_T_1; // @[src/main/scala/fpga/Core.scala 1166:21]
-  wire  _rrd_op1_data_T_13 = rrd_reg_rs1_addr == mem3_reg_wb_addr; // @[src/main/scala/fpga/Core.scala 1168:24]
-  wire  _rrd_op1_data_T_14 = _rrd_op1_data_T_12 & _rrd_op1_data_T_13; // @[src/main/scala/fpga/Core.scala 1167:37]
+  wire  id_is_br = csignals_8 == 3'h1; // @[src/main/scala/fpga/Core.scala 920:28]
+  wire  id_is_j = csignals_5 == 3'h2; // @[src/main/scala/fpga/Core.scala 921:28]
+  wire [30:0] _id_reg_br_pc_T_1 = id_reg_pc + 31'h1; // @[src/main/scala/fpga/Core.scala 926:45]
+  wire [30:0] _id_reg_br_pc_T_3 = id_reg_pc + 31'h2; // @[src/main/scala/fpga/Core.scala 926:72]
+  reg [30:0] id_reg_pc_delay; // @[src/main/scala/fpga/Core.scala 934:40]
+  reg [4:0] id_reg_wb_addr_delay; // @[src/main/scala/fpga/Core.scala 935:40]
+  reg  id_reg_op1_sel_delay; // @[src/main/scala/fpga/Core.scala 936:40]
+  reg  id_reg_op2_sel_delay; // @[src/main/scala/fpga/Core.scala 937:40]
+  reg [1:0] id_reg_op3_sel_delay; // @[src/main/scala/fpga/Core.scala 938:40]
+  reg [4:0] id_reg_rs1_addr_delay; // @[src/main/scala/fpga/Core.scala 939:40]
+  reg [4:0] id_reg_rs2_addr_delay; // @[src/main/scala/fpga/Core.scala 940:40]
+  reg [4:0] id_reg_rs3_addr_delay; // @[src/main/scala/fpga/Core.scala 941:40]
+  reg [31:0] id_reg_op1_data_delay; // @[src/main/scala/fpga/Core.scala 942:40]
+  reg [31:0] id_reg_op2_data_delay; // @[src/main/scala/fpga/Core.scala 943:40]
+  reg [3:0] id_reg_exe_fun_delay; // @[src/main/scala/fpga/Core.scala 944:40]
+  reg  id_reg_rf_wen_delay; // @[src/main/scala/fpga/Core.scala 945:40]
+  reg [2:0] id_reg_wb_sel_delay; // @[src/main/scala/fpga/Core.scala 946:40]
+  reg [11:0] id_reg_csr_addr_delay; // @[src/main/scala/fpga/Core.scala 947:40]
+  reg [1:0] id_reg_csr_cmd_delay; // @[src/main/scala/fpga/Core.scala 948:40]
+  reg [31:0] id_reg_imm_b_sext_delay; // @[src/main/scala/fpga/Core.scala 949:40]
+  reg [1:0] id_reg_shamt_delay; // @[src/main/scala/fpga/Core.scala 950:40]
+  reg  id_reg_op2op_delay; // @[src/main/scala/fpga/Core.scala 951:40]
+  reg [2:0] id_reg_mem_w_delay; // @[src/main/scala/fpga/Core.scala 952:40]
+  reg  id_reg_is_br_delay; // @[src/main/scala/fpga/Core.scala 954:40]
+  reg  id_reg_is_j_delay; // @[src/main/scala/fpga/Core.scala 955:40]
+  reg  id_reg_bp_taken_delay; // @[src/main/scala/fpga/Core.scala 956:40]
+  reg [30:0] id_reg_bp_taken_pc_delay; // @[src/main/scala/fpga/Core.scala 957:41]
+  reg [1:0] id_reg_bp_cnt_delay; // @[src/main/scala/fpga/Core.scala 958:40]
+  reg  id_reg_is_half_delay; // @[src/main/scala/fpga/Core.scala 959:40]
+  reg  id_reg_is_valid_inst_delay; // @[src/main/scala/fpga/Core.scala 960:43]
+  reg  id_reg_is_trap_delay; // @[src/main/scala/fpga/Core.scala 961:40]
+  reg [31:0] id_reg_mcause_delay; // @[src/main/scala/fpga/Core.scala 962:40]
+  wire [30:0] _GEN_217 = _ic_read_en4_T ? id_reg_pc : id_reg_pc_delay; // @[src/main/scala/fpga/Core.scala 966:26 967:32 934:40]
+  wire  _GEN_218 = _ic_read_en4_T ? id_m_op1_sel : id_reg_op1_sel_delay; // @[src/main/scala/fpga/Core.scala 966:26 968:31 936:40]
+  wire  _GEN_219 = _ic_read_en4_T ? id_m_op2_sel : id_reg_op2_sel_delay; // @[src/main/scala/fpga/Core.scala 966:26 969:31 937:40]
+  wire [1:0] _GEN_220 = _ic_read_en4_T ? id_m_op3_sel : id_reg_op3_sel_delay; // @[src/main/scala/fpga/Core.scala 966:26 970:31 938:40]
+  wire [4:0] _GEN_221 = _ic_read_en4_T ? id_m_rs1_addr : id_reg_rs1_addr_delay; // @[src/main/scala/fpga/Core.scala 966:26 971:31 939:40]
+  wire [4:0] _GEN_222 = _ic_read_en4_T ? id_m_rs2_addr : id_reg_rs2_addr_delay; // @[src/main/scala/fpga/Core.scala 966:26 972:31 940:40]
+  wire [4:0] _GEN_223 = _ic_read_en4_T ? id_m_rs3_addr : id_reg_rs3_addr_delay; // @[src/main/scala/fpga/Core.scala 966:26 973:31 941:40]
+  wire [31:0] _GEN_224 = _ic_read_en4_T ? id_op1_data : id_reg_op1_data_delay; // @[src/main/scala/fpga/Core.scala 966:26 974:31 942:40]
+  wire [31:0] id_op2_data = _id_op2_data_T_48[31:0]; // @[src/main/scala/fpga/Core.scala 845:25 846:15]
+  wire [31:0] _GEN_225 = _ic_read_en4_T ? id_op2_data : id_reg_op2_data_delay; // @[src/main/scala/fpga/Core.scala 966:26 975:31 943:40]
+  wire [4:0] _GEN_226 = _ic_read_en4_T ? id_wb_addr : id_reg_wb_addr_delay; // @[src/main/scala/fpga/Core.scala 966:26 976:31 935:40]
+  wire [31:0] _GEN_227 = _ic_read_en4_T ? id_m_imm_b_sext : id_reg_imm_b_sext_delay; // @[src/main/scala/fpga/Core.scala 966:26 977:31 949:40]
+  wire [1:0] _GEN_228 = _ic_read_en4_T ? id_shamt : id_reg_shamt_delay; // @[src/main/scala/fpga/Core.scala 966:26 978:31 950:40]
+  wire  _GEN_229 = _ic_read_en4_T ? csignals_9 : id_reg_op2op_delay; // @[src/main/scala/fpga/Core.scala 966:26 979:31 951:40]
+  wire [11:0] _GEN_230 = _ic_read_en4_T ? id_csr_addr : id_reg_csr_addr_delay; // @[src/main/scala/fpga/Core.scala 966:26 980:31 947:40]
+  wire [30:0] _GEN_232 = _ic_read_en4_T ? id_reg_bp_taken_pc : id_reg_bp_taken_pc_delay; // @[src/main/scala/fpga/Core.scala 966:26 982:32 957:41]
+  wire [1:0] _GEN_233 = _ic_read_en4_T ? id_reg_bp_cnt : id_reg_bp_cnt_delay; // @[src/main/scala/fpga/Core.scala 966:26 983:31 958:40]
+  wire  _GEN_234 = _ic_read_en4_T ? id_is_half : id_reg_is_half_delay; // @[src/main/scala/fpga/Core.scala 966:26 984:31 959:40]
+  wire [31:0] _GEN_235 = _ic_read_en4_T ? 32'hb : id_reg_mcause_delay; // @[src/main/scala/fpga/Core.scala 966:26 985:31 962:40]
+  wire  _id_reg_is_valid_inst_delay_T = id_reg_inst != 32'h13; // @[src/main/scala/fpga/Core.scala 1024:43]
+  wire [30:0] _GEN_294 = id_reg_stall ? id_reg_pc_delay : id_reg_pc; // @[src/main/scala/fpga/Core.scala 1036:24 1037:29 1071:29]
+  wire  _GEN_295 = id_reg_stall ? id_reg_op1_sel_delay : id_m_op1_sel; // @[src/main/scala/fpga/Core.scala 1036:24 1038:29 1072:29]
+  wire  _GEN_296 = id_reg_stall ? id_reg_op2_sel_delay : id_m_op2_sel; // @[src/main/scala/fpga/Core.scala 1036:24 1039:29 1073:29]
+  wire [1:0] _GEN_297 = id_reg_stall ? id_reg_op3_sel_delay : id_m_op3_sel; // @[src/main/scala/fpga/Core.scala 1036:24 1040:29 1074:29]
+  wire [4:0] _GEN_298 = id_reg_stall ? id_reg_rs1_addr_delay : id_m_rs1_addr; // @[src/main/scala/fpga/Core.scala 1036:24 1041:29 1075:29]
+  wire [4:0] _GEN_299 = id_reg_stall ? id_reg_rs2_addr_delay : id_m_rs2_addr; // @[src/main/scala/fpga/Core.scala 1036:24 1042:29 1076:29]
+  wire [4:0] _GEN_300 = id_reg_stall ? id_reg_rs3_addr_delay : id_m_rs3_addr; // @[src/main/scala/fpga/Core.scala 1036:24 1043:29 1077:29]
+  wire [31:0] _GEN_301 = id_reg_stall ? id_reg_op1_data_delay : id_op1_data; // @[src/main/scala/fpga/Core.scala 1036:24 1044:29 1078:29]
+  wire [31:0] _GEN_302 = id_reg_stall ? id_reg_op2_data_delay : id_op2_data; // @[src/main/scala/fpga/Core.scala 1036:24 1045:29 1079:29]
+  wire [4:0] _GEN_303 = id_reg_stall ? id_reg_wb_addr_delay : id_wb_addr; // @[src/main/scala/fpga/Core.scala 1036:24 1046:29 1080:29]
+  wire [31:0] _GEN_307 = id_reg_stall ? id_reg_imm_b_sext_delay : id_m_imm_b_sext; // @[src/main/scala/fpga/Core.scala 1036:24 1050:29 1084:29]
+  wire [1:0] _GEN_308 = id_reg_stall ? id_reg_shamt_delay : id_shamt; // @[src/main/scala/fpga/Core.scala 1036:24 1051:29 1085:29]
+  wire  _GEN_309 = id_reg_stall ? id_reg_op2op_delay : csignals_9; // @[src/main/scala/fpga/Core.scala 1036:24 1052:29 1086:29]
+  wire [11:0] _GEN_310 = id_reg_stall ? id_reg_csr_addr_delay : id_csr_addr; // @[src/main/scala/fpga/Core.scala 1036:24 1053:29 1087:29]
+  wire [30:0] _GEN_312 = id_reg_stall ? id_reg_bp_taken_pc_delay : id_reg_bp_taken_pc; // @[src/main/scala/fpga/Core.scala 1036:24 1060:29 1094:29]
+  wire [1:0] _GEN_313 = id_reg_stall ? id_reg_bp_cnt_delay : id_reg_bp_cnt; // @[src/main/scala/fpga/Core.scala 1036:24 1061:29 1095:29]
+  wire  _GEN_314 = id_reg_stall ? id_reg_is_half_delay : id_is_half; // @[src/main/scala/fpga/Core.scala 1036:24 1062:29 1096:29]
+  wire [31:0] _GEN_315 = id_reg_stall ? id_reg_mcause_delay : 32'hb; // @[src/main/scala/fpga/Core.scala 1036:24 1065:29 1099:29]
+  wire  _T_44 = ~rrd_stall; // @[src/main/scala/fpga/Core.scala 1105:14]
+  wire  _T_45 = ~ex2_stall; // @[src/main/scala/fpga/Core.scala 1105:28]
+  wire  _rrd_op1_data_T_2 = _rrd_stall_T_1 & rrd_reg_rs1_addr == 5'h0; // @[src/main/scala/fpga/Core.scala 1188:35]
+  wire  _rrd_op1_data_T_4 = ex1_reg_fw_en & _rrd_stall_T_1; // @[src/main/scala/fpga/Core.scala 1189:20]
+  wire  _rrd_op1_data_T_5 = rrd_reg_rs1_addr == ex1_reg_wb_addr; // @[src/main/scala/fpga/Core.scala 1191:24]
+  wire  _rrd_op1_data_T_6 = _rrd_op1_data_T_4 & _rrd_op1_data_T_5; // @[src/main/scala/fpga/Core.scala 1190:37]
+  wire  _rrd_op1_data_T_8 = ex2_reg_fw_en & _rrd_stall_T_1; // @[src/main/scala/fpga/Core.scala 1192:20]
+  wire  _rrd_op1_data_T_9 = rrd_reg_rs1_addr == ex2_reg_wb_addr; // @[src/main/scala/fpga/Core.scala 1194:24]
+  wire  _rrd_op1_data_T_10 = _rrd_op1_data_T_8 & _rrd_op1_data_T_9; // @[src/main/scala/fpga/Core.scala 1193:37]
+  wire  _rrd_op1_data_T_12 = mem3_reg_fw_en & _rrd_stall_T_1; // @[src/main/scala/fpga/Core.scala 1195:21]
+  wire  _rrd_op1_data_T_13 = rrd_reg_rs1_addr == mem3_reg_wb_addr; // @[src/main/scala/fpga/Core.scala 1197:24]
+  wire  _rrd_op1_data_T_14 = _rrd_op1_data_T_12 & _rrd_op1_data_T_13; // @[src/main/scala/fpga/Core.scala 1196:37]
   wire [31:0] _rrd_op1_data_T_16 = _rrd_stall_T_1 ? regfile_rrd_op1_data_MPORT_data : rrd_reg_op1_data; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
   wire [31:0] _rrd_op1_data_T_17 = _rrd_op1_data_T_14 ? mem3_reg_dmem_rdata : _rrd_op1_data_T_16; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
-  wire  _ex2_fw_data_T_1 = ex2_reg_wb_sel == 3'h6; // @[src/main/scala/fpga/Core.scala 1737:23]
-  wire  _ex2_fw_data_T_2 = ex2_reg_wb_sel == 3'h2 | _ex2_fw_data_T_1; // @[src/main/scala/fpga/Core.scala 1736:34]
-  wire [31:0] ex2_fw_data = _ex2_fw_data_T_2 ? ex2_reg_pc_bit_out : ex2_reg_alu_out; // @[src/main/scala/fpga/Core.scala 1734:21]
+  wire  _ex2_fw_data_T_1 = ex2_reg_wb_sel == 3'h6; // @[src/main/scala/fpga/Core.scala 1770:23]
+  wire  _ex2_fw_data_T_2 = ex2_reg_wb_sel == 3'h2 | _ex2_fw_data_T_1; // @[src/main/scala/fpga/Core.scala 1769:34]
+  wire [31:0] ex2_fw_data = _ex2_fw_data_T_2 ? ex2_reg_pc_bit_out : ex2_reg_alu_out; // @[src/main/scala/fpga/Core.scala 1767:21]
   wire [31:0] _rrd_op1_data_T_18 = _rrd_op1_data_T_10 ? ex2_fw_data : _rrd_op1_data_T_17; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
-  wire  _ex1_alu_out_T = ex1_reg_exe_fun == 4'h0; // @[src/main/scala/fpga/Core.scala 1262:22]
-  wire [31:0] ex1_add_out = ex1_reg_op1_data + ex1_reg_op2_data; // @[src/main/scala/fpga/Core.scala 1260:38]
-  wire  _ex1_alu_out_T_1 = ex1_reg_exe_fun == 4'h8; // @[src/main/scala/fpga/Core.scala 1263:22]
-  wire [31:0] _ex1_alu_out_T_3 = ex1_reg_op1_data - ex1_reg_op2_data; // @[src/main/scala/fpga/Core.scala 1263:58]
-  wire  _ex1_alu_out_T_4 = ex1_reg_exe_fun == 4'h2; // @[src/main/scala/fpga/Core.scala 1264:22]
-  wire [31:0] _ex1_alu_out_T_5 = ex1_reg_op1_data & ex1_reg_op2_data; // @[src/main/scala/fpga/Core.scala 1264:58]
-  wire  _ex1_alu_out_T_6 = ex1_reg_exe_fun == 4'h3; // @[src/main/scala/fpga/Core.scala 1265:22]
-  wire [31:0] _ex1_alu_out_T_7 = ex1_reg_op1_data | ex1_reg_op2_data; // @[src/main/scala/fpga/Core.scala 1265:58]
-  wire  _ex1_alu_out_T_8 = ex1_reg_exe_fun == 4'h1; // @[src/main/scala/fpga/Core.scala 1266:22]
-  wire [31:0] _ex1_alu_out_T_9 = ex1_reg_op1_data ^ ex1_reg_op2_data; // @[src/main/scala/fpga/Core.scala 1266:58]
-  wire  _ex1_alu_out_T_10 = ex1_reg_exe_fun == 4'h4; // @[src/main/scala/fpga/Core.scala 1267:22]
-  wire [62:0] _ex1_alu_out_T_12 = {ex1_reg_op1_data,ex1_reg_op3_data[31:1]}; // @[src/main/scala/fpga/Core.scala 1267:44]
-  wire [31:0] _ex1_alu_out_T_13 = ~ex1_reg_op2_data; // @[src/main/scala/fpga/Core.scala 1267:100]
-  wire [62:0] _ex1_alu_out_T_15 = _ex1_alu_out_T_12 >> _ex1_alu_out_T_13[4:0]; // @[src/main/scala/fpga/Core.scala 1267:96]
-  wire  _ex1_alu_out_T_17 = ex1_reg_exe_fun == 4'h5; // @[src/main/scala/fpga/Core.scala 1268:22]
-  wire [62:0] _ex1_alu_out_T_19 = {ex1_reg_op3_data[30:0],ex1_reg_op1_data}; // @[src/main/scala/fpga/Core.scala 1268:44]
-  wire [62:0] _ex1_alu_out_T_21 = _ex1_alu_out_T_19 >> ex1_reg_op2_data[4:0]; // @[src/main/scala/fpga/Core.scala 1268:96]
-  wire  _ex1_alu_out_T_23 = ex1_reg_exe_fun == 4'h6; // @[src/main/scala/fpga/Core.scala 1269:22]
-  wire  _ex1_alu_out_T_26 = $signed(ex1_reg_op1_data) < $signed(ex1_reg_op2_data); // @[src/main/scala/fpga/Core.scala 1269:65]
-  wire  _ex1_alu_out_T_27 = ex1_reg_exe_fun == 4'h7; // @[src/main/scala/fpga/Core.scala 1270:22]
-  wire  _ex1_alu_out_T_28 = ex1_reg_op1_data < ex1_reg_op2_data; // @[src/main/scala/fpga/Core.scala 1270:58]
-  wire  _ex1_alu_out_T_29 = ex1_reg_exe_fun == 4'ha; // @[src/main/scala/fpga/Core.scala 1271:22]
-  wire [31:0] _ex1_alu_out_T_31 = ex1_reg_op1_data & _ex1_alu_out_T_13; // @[src/main/scala/fpga/Core.scala 1271:58]
-  wire  _ex1_alu_out_T_32 = ex1_reg_exe_fun == 4'h9; // @[src/main/scala/fpga/Core.scala 1272:22]
-  wire [31:0] _ex1_alu_out_T_34 = ex1_reg_op1_data ^ _ex1_alu_out_T_13; // @[src/main/scala/fpga/Core.scala 1272:58]
-  wire  _ex1_alu_out_T_35 = ex1_reg_exe_fun == 4'hb; // @[src/main/scala/fpga/Core.scala 1273:22]
-  wire [31:0] _ex1_alu_out_T_37 = ex1_reg_op1_data | _ex1_alu_out_T_13; // @[src/main/scala/fpga/Core.scala 1273:58]
-  wire  _ex1_alu_out_T_38 = ex1_reg_exe_fun == 4'hf; // @[src/main/scala/fpga/Core.scala 1274:22]
-  wire [31:0] _ex1_alu_out_T_40 = 32'h0 < ex1_reg_op2_data ? ex1_reg_op1_data : ex1_reg_op3_data; // @[src/main/scala/fpga/Core.scala 1274:43]
-  wire [31:0] _ex1_alu_out_T_41 = _ex1_alu_out_T_38 ? _ex1_alu_out_T_40 : 32'h0; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
-  wire [31:0] _ex1_alu_out_T_42 = _ex1_alu_out_T_35 ? _ex1_alu_out_T_37 : _ex1_alu_out_T_41; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
-  wire [31:0] _ex1_alu_out_T_43 = _ex1_alu_out_T_32 ? _ex1_alu_out_T_34 : _ex1_alu_out_T_42; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
-  wire [31:0] _ex1_alu_out_T_44 = _ex1_alu_out_T_29 ? _ex1_alu_out_T_31 : _ex1_alu_out_T_43; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
-  wire [31:0] _ex1_alu_out_T_45 = _ex1_alu_out_T_27 ? {{31'd0}, _ex1_alu_out_T_28} : _ex1_alu_out_T_44; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
-  wire [31:0] _ex1_alu_out_T_46 = _ex1_alu_out_T_23 ? {{31'd0}, _ex1_alu_out_T_26} : _ex1_alu_out_T_45; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
-  wire [31:0] _ex1_alu_out_T_47 = _ex1_alu_out_T_17 ? _ex1_alu_out_T_21[31:0] : _ex1_alu_out_T_46; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
-  wire [31:0] _ex1_alu_out_T_48 = _ex1_alu_out_T_10 ? _ex1_alu_out_T_15[31:0] : _ex1_alu_out_T_47; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
-  wire [31:0] _ex1_alu_out_T_49 = _ex1_alu_out_T_8 ? _ex1_alu_out_T_9 : _ex1_alu_out_T_48; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
-  wire [31:0] _ex1_alu_out_T_50 = _ex1_alu_out_T_6 ? _ex1_alu_out_T_7 : _ex1_alu_out_T_49; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
-  wire [31:0] _ex1_alu_out_T_51 = _ex1_alu_out_T_4 ? _ex1_alu_out_T_5 : _ex1_alu_out_T_50; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
-  wire [31:0] _ex1_alu_out_T_52 = _ex1_alu_out_T_1 ? _ex1_alu_out_T_3 : _ex1_alu_out_T_51; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
-  wire [31:0] ex1_alu_out = _ex1_alu_out_T ? ex1_add_out : _ex1_alu_out_T_52; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
+  wire  _ex1_alu_out_T = ex1_reg_exe_fun == 4'h0; // @[src/main/scala/fpga/Core.scala 1293:22]
+  wire [31:0] ex1_add_out = ex1_reg_op1_data + ex1_reg_op2_data; // @[src/main/scala/fpga/Core.scala 1291:38]
+  wire  _ex1_alu_out_T_1 = ex1_reg_exe_fun == 4'h8; // @[src/main/scala/fpga/Core.scala 1294:22]
+  wire [31:0] _ex1_alu_out_T_3 = ex1_reg_op1_data - ex1_reg_op2_data; // @[src/main/scala/fpga/Core.scala 1294:58]
+  wire  _ex1_alu_out_T_4 = ex1_reg_exe_fun == 4'h2; // @[src/main/scala/fpga/Core.scala 1295:22]
+  wire [31:0] _ex1_alu_out_T_6 = ~ex1_reg_op2_data; // @[src/main/scala/fpga/Core.scala 1295:111]
+  wire [31:0] _ex1_alu_out_T_7 = ~ex1_reg_op2op ? ex1_reg_op2_data : _ex1_alu_out_T_6; // @[src/main/scala/fpga/Core.scala 1295:63]
+  wire [31:0] _ex1_alu_out_T_8 = ex1_reg_op1_data & _ex1_alu_out_T_7; // @[src/main/scala/fpga/Core.scala 1295:58]
+  wire  _ex1_alu_out_T_9 = ex1_reg_exe_fun == 4'h3; // @[src/main/scala/fpga/Core.scala 1296:22]
+  wire [31:0] _ex1_alu_out_T_13 = ex1_reg_op1_data | _ex1_alu_out_T_7; // @[src/main/scala/fpga/Core.scala 1296:58]
+  wire  _ex1_alu_out_T_14 = ex1_reg_exe_fun == 4'h1; // @[src/main/scala/fpga/Core.scala 1297:22]
+  wire [31:0] _ex1_alu_out_T_18 = ex1_reg_op1_data ^ _ex1_alu_out_T_7; // @[src/main/scala/fpga/Core.scala 1297:58]
+  wire  _ex1_alu_out_T_19 = ex1_reg_exe_fun == 4'h4; // @[src/main/scala/fpga/Core.scala 1298:22]
+  wire [62:0] _ex1_alu_out_T_21 = {ex1_reg_op1_data,ex1_reg_op3_data[31:1]}; // @[src/main/scala/fpga/Core.scala 1298:44]
+  wire [62:0] _ex1_alu_out_T_24 = _ex1_alu_out_T_21 >> _ex1_alu_out_T_6[4:0]; // @[src/main/scala/fpga/Core.scala 1298:96]
+  wire  _ex1_alu_out_T_26 = ex1_reg_exe_fun == 4'h5; // @[src/main/scala/fpga/Core.scala 1299:22]
+  wire [62:0] _ex1_alu_out_T_28 = {ex1_reg_op3_data[30:0],ex1_reg_op1_data}; // @[src/main/scala/fpga/Core.scala 1299:44]
+  wire [62:0] _ex1_alu_out_T_30 = _ex1_alu_out_T_28 >> ex1_reg_op2_data[4:0]; // @[src/main/scala/fpga/Core.scala 1299:96]
+  wire  _ex1_alu_out_T_32 = ex1_reg_exe_fun == 4'h6; // @[src/main/scala/fpga/Core.scala 1300:22]
+  wire  _ex1_alu_out_T_35 = $signed(ex1_reg_op1_data) < $signed(ex1_reg_op2_data); // @[src/main/scala/fpga/Core.scala 1300:65]
+  wire  _ex1_alu_out_T_36 = ex1_reg_exe_fun == 4'h7; // @[src/main/scala/fpga/Core.scala 1301:22]
+  wire  _ex1_alu_out_T_37 = ex1_reg_op1_data < ex1_reg_op2_data; // @[src/main/scala/fpga/Core.scala 1301:58]
+  wire  _ex1_alu_out_T_38 = ex1_reg_exe_fun == 4'ha; // @[src/main/scala/fpga/Core.scala 1302:22]
+  wire [34:0] _GEN_65 = {{3'd0}, ex1_reg_op1_data}; // @[src/main/scala/fpga/Core.scala 1302:59]
+  wire [34:0] _ex1_alu_out_T_39 = _GEN_65 << ex1_reg_shamt; // @[src/main/scala/fpga/Core.scala 1302:59]
+  wire [31:0] _ex1_alu_out_T_42 = _ex1_alu_out_T_39[31:0] + ex1_reg_op2_data; // @[src/main/scala/fpga/Core.scala 1302:92]
+  wire  _ex1_alu_out_T_43 = ex1_reg_exe_fun == 4'h9; // @[src/main/scala/fpga/Core.scala 1303:22]
+  wire [31:0] _ex1_alu_out_T_45 = 32'h0 < ex1_reg_op2_data ? ex1_reg_op1_data : ex1_reg_op3_data; // @[src/main/scala/fpga/Core.scala 1303:43]
+  wire  _ex1_alu_out_T_46 = ex1_reg_exe_fun == 4'hd; // @[src/main/scala/fpga/Core.scala 1304:22]
+  wire [62:0] _ex1_alu_out_T_48 = 63'h1 << ex1_reg_op2_data[4:0]; // @[src/main/scala/fpga/Core.scala 1304:79]
+  wire [31:0] _ex1_alu_out_T_50 = ~_ex1_alu_out_T_48[31:0]; // @[src/main/scala/fpga/Core.scala 1304:60]
+  wire [31:0] _ex1_alu_out_T_51 = ex1_reg_op1_data & _ex1_alu_out_T_50; // @[src/main/scala/fpga/Core.scala 1304:58]
+  wire  _ex1_alu_out_T_52 = ex1_reg_exe_fun == 4'hf; // @[src/main/scala/fpga/Core.scala 1305:22]
+  wire [31:0] _ex1_alu_out_T_56 = ex1_reg_op1_data | _ex1_alu_out_T_48[31:0]; // @[src/main/scala/fpga/Core.scala 1305:58]
+  wire  _ex1_alu_out_T_57 = ex1_reg_exe_fun == 4'he; // @[src/main/scala/fpga/Core.scala 1306:22]
+  wire [31:0] _ex1_alu_out_T_61 = ex1_reg_op1_data ^ _ex1_alu_out_T_48[31:0]; // @[src/main/scala/fpga/Core.scala 1306:58]
+  wire  _ex1_alu_out_T_62 = ex1_reg_exe_fun == 4'hc; // @[src/main/scala/fpga/Core.scala 1307:22]
+  wire [31:0] _ex1_alu_out_T_65 = ex1_reg_op1_data >> ex1_reg_op2_data[4:0]; // @[src/main/scala/fpga/Core.scala 1307:90]
+  wire [31:0] _ex1_alu_out_T_67 = {31'h0,_ex1_alu_out_T_65[0]}; // @[src/main/scala/fpga/Core.scala 1307:43]
+  wire [31:0] _ex1_alu_out_T_68 = _ex1_alu_out_T_62 ? _ex1_alu_out_T_67 : 32'h0; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
+  wire [31:0] _ex1_alu_out_T_69 = _ex1_alu_out_T_57 ? _ex1_alu_out_T_61 : _ex1_alu_out_T_68; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
+  wire [31:0] _ex1_alu_out_T_70 = _ex1_alu_out_T_52 ? _ex1_alu_out_T_56 : _ex1_alu_out_T_69; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
+  wire [31:0] _ex1_alu_out_T_71 = _ex1_alu_out_T_46 ? _ex1_alu_out_T_51 : _ex1_alu_out_T_70; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
+  wire [31:0] _ex1_alu_out_T_72 = _ex1_alu_out_T_43 ? _ex1_alu_out_T_45 : _ex1_alu_out_T_71; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
+  wire [31:0] _ex1_alu_out_T_73 = _ex1_alu_out_T_38 ? _ex1_alu_out_T_42 : _ex1_alu_out_T_72; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
+  wire [31:0] _ex1_alu_out_T_74 = _ex1_alu_out_T_36 ? {{31'd0}, _ex1_alu_out_T_37} : _ex1_alu_out_T_73; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
+  wire [31:0] _ex1_alu_out_T_75 = _ex1_alu_out_T_32 ? {{31'd0}, _ex1_alu_out_T_35} : _ex1_alu_out_T_74; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
+  wire [31:0] _ex1_alu_out_T_76 = _ex1_alu_out_T_26 ? _ex1_alu_out_T_30[31:0] : _ex1_alu_out_T_75; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
+  wire [31:0] _ex1_alu_out_T_77 = _ex1_alu_out_T_19 ? _ex1_alu_out_T_24[31:0] : _ex1_alu_out_T_76; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
+  wire [31:0] _ex1_alu_out_T_78 = _ex1_alu_out_T_14 ? _ex1_alu_out_T_18 : _ex1_alu_out_T_77; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
+  wire [31:0] _ex1_alu_out_T_79 = _ex1_alu_out_T_9 ? _ex1_alu_out_T_13 : _ex1_alu_out_T_78; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
+  wire [31:0] _ex1_alu_out_T_80 = _ex1_alu_out_T_4 ? _ex1_alu_out_T_8 : _ex1_alu_out_T_79; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
+  wire [31:0] _ex1_alu_out_T_81 = _ex1_alu_out_T_1 ? _ex1_alu_out_T_3 : _ex1_alu_out_T_80; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
+  wire [31:0] ex1_alu_out = _ex1_alu_out_T ? ex1_add_out : _ex1_alu_out_T_81; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
   wire [31:0] _rrd_op1_data_T_19 = _rrd_op1_data_T_6 ? ex1_alu_out : _rrd_op1_data_T_18; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
   wire [31:0] rrd_op1_data = _rrd_op1_data_T_2 ? 32'h0 : _rrd_op1_data_T_19; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
-  wire  _rrd_op2_data_T_2 = _rrd_stall_T_3 & rrd_reg_rs2_addr == 5'h0; // @[src/main/scala/fpga/Core.scala 1172:35]
-  wire  _rrd_op2_data_T_4 = ex1_reg_fw_en & _rrd_stall_T_3; // @[src/main/scala/fpga/Core.scala 1173:20]
-  wire  _rrd_op2_data_T_5 = rrd_reg_rs2_addr == ex1_reg_wb_addr; // @[src/main/scala/fpga/Core.scala 1175:24]
-  wire  _rrd_op2_data_T_6 = _rrd_op2_data_T_4 & _rrd_op2_data_T_5; // @[src/main/scala/fpga/Core.scala 1174:37]
-  wire  _rrd_op2_data_T_8 = ex2_reg_fw_en & _rrd_stall_T_3; // @[src/main/scala/fpga/Core.scala 1176:20]
-  wire  _rrd_op2_data_T_9 = rrd_reg_rs2_addr == ex2_reg_wb_addr; // @[src/main/scala/fpga/Core.scala 1178:24]
-  wire  _rrd_op2_data_T_10 = _rrd_op2_data_T_8 & _rrd_op2_data_T_9; // @[src/main/scala/fpga/Core.scala 1177:37]
-  wire  _rrd_op2_data_T_12 = mem3_reg_fw_en & _rrd_stall_T_3; // @[src/main/scala/fpga/Core.scala 1179:21]
-  wire  _rrd_op2_data_T_13 = rrd_reg_rs2_addr == mem3_reg_wb_addr; // @[src/main/scala/fpga/Core.scala 1181:24]
-  wire  _rrd_op2_data_T_14 = _rrd_op2_data_T_12 & _rrd_op2_data_T_13; // @[src/main/scala/fpga/Core.scala 1180:37]
+  wire  _rrd_op2_data_T_2 = _rrd_stall_T_3 & rrd_reg_rs2_addr == 5'h0; // @[src/main/scala/fpga/Core.scala 1201:35]
+  wire  _rrd_op2_data_T_4 = ex1_reg_fw_en & _rrd_stall_T_3; // @[src/main/scala/fpga/Core.scala 1202:20]
+  wire  _rrd_op2_data_T_5 = rrd_reg_rs2_addr == ex1_reg_wb_addr; // @[src/main/scala/fpga/Core.scala 1204:24]
+  wire  _rrd_op2_data_T_6 = _rrd_op2_data_T_4 & _rrd_op2_data_T_5; // @[src/main/scala/fpga/Core.scala 1203:37]
+  wire  _rrd_op2_data_T_8 = ex2_reg_fw_en & _rrd_stall_T_3; // @[src/main/scala/fpga/Core.scala 1205:20]
+  wire  _rrd_op2_data_T_9 = rrd_reg_rs2_addr == ex2_reg_wb_addr; // @[src/main/scala/fpga/Core.scala 1207:24]
+  wire  _rrd_op2_data_T_10 = _rrd_op2_data_T_8 & _rrd_op2_data_T_9; // @[src/main/scala/fpga/Core.scala 1206:37]
+  wire  _rrd_op2_data_T_12 = mem3_reg_fw_en & _rrd_stall_T_3; // @[src/main/scala/fpga/Core.scala 1208:21]
+  wire  _rrd_op2_data_T_13 = rrd_reg_rs2_addr == mem3_reg_wb_addr; // @[src/main/scala/fpga/Core.scala 1210:24]
+  wire  _rrd_op2_data_T_14 = _rrd_op2_data_T_12 & _rrd_op2_data_T_13; // @[src/main/scala/fpga/Core.scala 1209:37]
   wire [31:0] _rrd_op2_data_T_16 = _rrd_stall_T_3 ? regfile_rrd_op2_data_MPORT_data : rrd_reg_op2_data; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
   wire [31:0] _rrd_op2_data_T_17 = _rrd_op2_data_T_14 ? mem3_reg_dmem_rdata : _rrd_op2_data_T_16; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
   wire [31:0] _rrd_op2_data_T_18 = _rrd_op2_data_T_10 ? ex2_fw_data : _rrd_op2_data_T_17; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
   wire [31:0] _rrd_op2_data_T_19 = _rrd_op2_data_T_6 ? ex1_alu_out : _rrd_op2_data_T_18; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
   wire [31:0] rrd_op2_data = _rrd_op2_data_T_2 ? 32'h0 : _rrd_op2_data_T_19; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
-  wire  _rrd_op3_data_T = rrd_reg_op3_sel == 2'h0; // @[src/main/scala/fpga/Core.scala 1185:22]
-  wire  _rrd_op3_data_T_1 = rrd_reg_op3_sel == 2'h1; // @[src/main/scala/fpga/Core.scala 1186:22]
-  wire [31:0] _rrd_op3_data_T_4 = rrd_op1_data[31] ? 32'hffffffff : 32'h0; // @[src/main/scala/fpga/Core.scala 1186:44]
-  wire  _rrd_op3_data_T_5 = rrd_reg_op3_sel == 2'h3; // @[src/main/scala/fpga/Core.scala 1187:22]
-  wire  _rrd_op3_data_T_6 = rrd_reg_rs3_addr == 5'h0; // @[src/main/scala/fpga/Core.scala 1188:23]
-  wire  _rrd_op3_data_T_7 = rrd_reg_rs3_addr == ex1_reg_wb_addr; // @[src/main/scala/fpga/Core.scala 1190:24]
-  wire  _rrd_op3_data_T_8 = ex1_reg_fw_en & _rrd_op3_data_T_7; // @[src/main/scala/fpga/Core.scala 1189:20]
-  wire  _rrd_op3_data_T_9 = rrd_reg_rs3_addr == ex2_reg_wb_addr; // @[src/main/scala/fpga/Core.scala 1192:24]
-  wire  _rrd_op3_data_T_10 = ex2_reg_fw_en & _rrd_op3_data_T_9; // @[src/main/scala/fpga/Core.scala 1191:20]
-  wire  _rrd_op3_data_T_11 = rrd_reg_rs3_addr == mem3_reg_wb_addr; // @[src/main/scala/fpga/Core.scala 1194:24]
-  wire  _rrd_op3_data_T_12 = mem3_reg_fw_en & _rrd_op3_data_T_11; // @[src/main/scala/fpga/Core.scala 1193:21]
+  wire  _rrd_op3_data_T = rrd_reg_op3_sel == 2'h0; // @[src/main/scala/fpga/Core.scala 1214:22]
+  wire  _rrd_op3_data_T_1 = rrd_reg_op3_sel == 2'h1; // @[src/main/scala/fpga/Core.scala 1215:22]
+  wire [31:0] _rrd_op3_data_T_4 = rrd_op1_data[31] ? 32'hffffffff : 32'h0; // @[src/main/scala/fpga/Core.scala 1215:44]
+  wire  _rrd_op3_data_T_5 = rrd_reg_op3_sel == 2'h3; // @[src/main/scala/fpga/Core.scala 1216:22]
+  wire  _rrd_op3_data_T_6 = rrd_reg_rs3_addr == 5'h0; // @[src/main/scala/fpga/Core.scala 1217:23]
+  wire  _rrd_op3_data_T_7 = rrd_reg_rs3_addr == ex1_reg_wb_addr; // @[src/main/scala/fpga/Core.scala 1219:24]
+  wire  _rrd_op3_data_T_8 = ex1_reg_fw_en & _rrd_op3_data_T_7; // @[src/main/scala/fpga/Core.scala 1218:20]
+  wire  _rrd_op3_data_T_9 = rrd_reg_rs3_addr == ex2_reg_wb_addr; // @[src/main/scala/fpga/Core.scala 1221:24]
+  wire  _rrd_op3_data_T_10 = ex2_reg_fw_en & _rrd_op3_data_T_9; // @[src/main/scala/fpga/Core.scala 1220:20]
+  wire  _rrd_op3_data_T_11 = rrd_reg_rs3_addr == mem3_reg_wb_addr; // @[src/main/scala/fpga/Core.scala 1223:24]
+  wire  _rrd_op3_data_T_12 = mem3_reg_fw_en & _rrd_op3_data_T_11; // @[src/main/scala/fpga/Core.scala 1222:21]
   wire [31:0] _rrd_op3_data_T_13 = _rrd_op3_data_T_12 ? mem3_reg_dmem_rdata : regfile_rrd_op3_data_MPORT_data; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
   wire [31:0] _rrd_op3_data_T_14 = _rrd_op3_data_T_10 ? ex2_fw_data : _rrd_op3_data_T_13; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
   wire [31:0] _rrd_op3_data_T_15 = _rrd_op3_data_T_8 ? ex1_alu_out : _rrd_op3_data_T_14; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
@@ -2557,91 +2726,91 @@ module Core(
   wire [31:0] _rrd_op3_data_T_17 = _rrd_op3_data_T_5 ? rrd_op1_data : _rrd_op3_data_T_16; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
   wire [31:0] _rrd_op3_data_T_18 = _rrd_op3_data_T_1 ? _rrd_op3_data_T_4 : _rrd_op3_data_T_17; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
   wire [31:0] rrd_op3_data = _rrd_op3_data_T ? 32'h0 : _rrd_op3_data_T_18; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
-  wire [30:0] rrd_direct_jbr_pc = rrd_reg_pc + rrd_reg_imm_b_sext[31:1]; // @[src/main/scala/fpga/Core.scala 1197:38]
-  wire  _rrd_hazard_T_1 = rrd_reg_wb_addr != 5'h0; // @[src/main/scala/fpga/Core.scala 1199:67]
-  wire  rrd_hazard = rrd_reg_rf_wen & rrd_reg_wb_addr != 5'h0 & _T_44 & _if2_is_valid_inst_T; // @[src/main/scala/fpga/Core.scala 1199:90]
-  wire  rrd_fw_en_next = rrd_hazard & rrd_reg_wb_sel == 3'h0; // @[src/main/scala/fpga/Core.scala 1200:35]
-  wire  _T_53 = _T_45 & _T_44 & _if2_is_valid_inst_T & rrd_reg_rf_wen; // @[src/main/scala/fpga/Core.scala 1207:48]
-  wire  _T_55 = _T_53 & _rrd_hazard_T_1; // @[src/main/scala/fpga/Core.scala 1208:30]
-  wire  rrd_mem_use_reg = _T_55 & rrd_reg_wb_sel == 3'h5; // @[src/main/scala/fpga/Core.scala 1209:5 1211:25 1202:38]
-  wire  rrd_inst2_use_reg = _T_55 & (rrd_reg_wb_sel == 3'h6 | rrd_reg_wb_sel == 3'h2); // @[src/main/scala/fpga/Core.scala 1209:5 1212:25 1203:38]
-  wire  rrd_inst3_use_reg = _T_55 & (rrd_reg_wb_sel == 3'h1 | rrd_reg_wb_sel == 3'h3); // @[src/main/scala/fpga/Core.scala 1209:5 1213:25 1204:38]
-  wire  ex_is_bubble = rrd_stall | ex2_reg_is_br; // @[src/main/scala/fpga/Core.scala 1224:34]
-  wire  _ex1_reg_is_mret_T = ~ex_is_bubble; // @[src/main/scala/fpga/Core.scala 1237:30]
-  wire [47:0] ex1_mullu = ex1_reg_op1_data * ex1_reg_op2_data[15:0]; // @[src/main/scala/fpga/Core.scala 1277:38]
-  wire [16:0] _ex1_mulls_T_2 = {1'b0,$signed(ex1_reg_op2_data[15:0])}; // @[src/main/scala/fpga/Core.scala 1278:45]
-  wire [48:0] _ex1_mulls_T_3 = $signed(ex1_reg_op1_data) * $signed(_ex1_mulls_T_2); // @[src/main/scala/fpga/Core.scala 1278:45]
-  wire [47:0] _ex1_mulls_T_5 = _ex1_mulls_T_3[47:0]; // @[src/main/scala/fpga/Core.scala 1278:45]
-  wire [31:0] ex1_mulls = _ex1_mulls_T_5[47:16]; // @[src/main/scala/fpga/Core.scala 1278:81]
-  wire [47:0] ex1_mulhuu = ex1_reg_op1_data * ex1_reg_op2_data[31:16]; // @[src/main/scala/fpga/Core.scala 1279:38]
-  wire [15:0] _ex1_mulhss_T_2 = ex1_reg_op2_data[31:16]; // @[src/main/scala/fpga/Core.scala 1280:88]
-  wire [47:0] ex1_mulhss = $signed(ex1_reg_op1_data) * $signed(_ex1_mulhss_T_2); // @[src/main/scala/fpga/Core.scala 1280:45]
-  wire [16:0] _ex1_mulhsu_T_2 = {1'b0,$signed(ex1_reg_op2_data[31:16])}; // @[src/main/scala/fpga/Core.scala 1281:45]
-  wire [48:0] _ex1_mulhsu_T_3 = $signed(ex1_reg_op1_data) * $signed(_ex1_mulhsu_T_2); // @[src/main/scala/fpga/Core.scala 1281:45]
-  wire [47:0] ex1_mulhsu = _ex1_mulhsu_T_3[47:0]; // @[src/main/scala/fpga/Core.scala 1281:45]
-  wire [30:0] _ex1_next_pc_T_1 = ex1_reg_pc + 31'h1; // @[src/main/scala/fpga/Core.scala 1291:53]
-  wire [30:0] _ex1_next_pc_T_3 = ex1_reg_pc + 31'h2; // @[src/main/scala/fpga/Core.scala 1291:81]
-  wire [30:0] ex1_next_pc = ex1_reg_is_half ? _ex1_next_pc_T_1 : _ex1_next_pc_T_3; // @[src/main/scala/fpga/Core.scala 1291:24]
-  wire  _ex1_pc_bit_out_T = ex1_reg_wb_sel == 3'h2; // @[src/main/scala/fpga/Core.scala 1293:21]
-  wire [31:0] _ex1_pc_bit_out_T_1 = {ex1_next_pc,1'h0}; // @[src/main/scala/fpga/Core.scala 1293:43]
-  wire [31:0] _ex1_pc_bit_out_T_4 = {16'h0,ex1_reg_op1_data[15:0]}; // @[src/main/scala/fpga/Core.scala 1294:43]
-  wire [1:0] _ex1_pc_bit_out_T_38 = ex1_reg_op1_data[0] + ex1_reg_op1_data[1]; // @[src/main/scala/fpga/Core.scala 1295:48]
-  wire [1:0] _ex1_pc_bit_out_T_40 = ex1_reg_op1_data[2] + ex1_reg_op1_data[3]; // @[src/main/scala/fpga/Core.scala 1295:48]
-  wire [2:0] _ex1_pc_bit_out_T_42 = _ex1_pc_bit_out_T_38 + _ex1_pc_bit_out_T_40; // @[src/main/scala/fpga/Core.scala 1295:48]
-  wire [1:0] _ex1_pc_bit_out_T_44 = ex1_reg_op1_data[4] + ex1_reg_op1_data[5]; // @[src/main/scala/fpga/Core.scala 1295:48]
-  wire [1:0] _ex1_pc_bit_out_T_46 = ex1_reg_op1_data[6] + ex1_reg_op1_data[7]; // @[src/main/scala/fpga/Core.scala 1295:48]
-  wire [2:0] _ex1_pc_bit_out_T_48 = _ex1_pc_bit_out_T_44 + _ex1_pc_bit_out_T_46; // @[src/main/scala/fpga/Core.scala 1295:48]
-  wire [3:0] _ex1_pc_bit_out_T_50 = _ex1_pc_bit_out_T_42 + _ex1_pc_bit_out_T_48; // @[src/main/scala/fpga/Core.scala 1295:48]
-  wire [1:0] _ex1_pc_bit_out_T_52 = ex1_reg_op1_data[8] + ex1_reg_op1_data[9]; // @[src/main/scala/fpga/Core.scala 1295:48]
-  wire [1:0] _ex1_pc_bit_out_T_54 = ex1_reg_op1_data[10] + ex1_reg_op1_data[11]; // @[src/main/scala/fpga/Core.scala 1295:48]
-  wire [2:0] _ex1_pc_bit_out_T_56 = _ex1_pc_bit_out_T_52 + _ex1_pc_bit_out_T_54; // @[src/main/scala/fpga/Core.scala 1295:48]
-  wire [1:0] _ex1_pc_bit_out_T_58 = ex1_reg_op1_data[12] + ex1_reg_op1_data[13]; // @[src/main/scala/fpga/Core.scala 1295:48]
-  wire [1:0] _ex1_pc_bit_out_T_60 = ex1_reg_op1_data[14] + ex1_reg_op1_data[15]; // @[src/main/scala/fpga/Core.scala 1295:48]
-  wire [2:0] _ex1_pc_bit_out_T_62 = _ex1_pc_bit_out_T_58 + _ex1_pc_bit_out_T_60; // @[src/main/scala/fpga/Core.scala 1295:48]
-  wire [3:0] _ex1_pc_bit_out_T_64 = _ex1_pc_bit_out_T_56 + _ex1_pc_bit_out_T_62; // @[src/main/scala/fpga/Core.scala 1295:48]
-  wire [4:0] _ex1_pc_bit_out_T_66 = _ex1_pc_bit_out_T_50 + _ex1_pc_bit_out_T_64; // @[src/main/scala/fpga/Core.scala 1295:48]
-  wire [1:0] _ex1_pc_bit_out_T_68 = ex1_reg_op1_data[16] + ex1_reg_op1_data[17]; // @[src/main/scala/fpga/Core.scala 1295:48]
-  wire [1:0] _ex1_pc_bit_out_T_70 = ex1_reg_op1_data[18] + ex1_reg_op1_data[19]; // @[src/main/scala/fpga/Core.scala 1295:48]
-  wire [2:0] _ex1_pc_bit_out_T_72 = _ex1_pc_bit_out_T_68 + _ex1_pc_bit_out_T_70; // @[src/main/scala/fpga/Core.scala 1295:48]
-  wire [1:0] _ex1_pc_bit_out_T_74 = ex1_reg_op1_data[20] + ex1_reg_op1_data[21]; // @[src/main/scala/fpga/Core.scala 1295:48]
-  wire [1:0] _ex1_pc_bit_out_T_76 = ex1_reg_op1_data[22] + ex1_reg_op1_data[23]; // @[src/main/scala/fpga/Core.scala 1295:48]
-  wire [2:0] _ex1_pc_bit_out_T_78 = _ex1_pc_bit_out_T_74 + _ex1_pc_bit_out_T_76; // @[src/main/scala/fpga/Core.scala 1295:48]
-  wire [3:0] _ex1_pc_bit_out_T_80 = _ex1_pc_bit_out_T_72 + _ex1_pc_bit_out_T_78; // @[src/main/scala/fpga/Core.scala 1295:48]
-  wire [1:0] _ex1_pc_bit_out_T_82 = ex1_reg_op1_data[24] + ex1_reg_op1_data[25]; // @[src/main/scala/fpga/Core.scala 1295:48]
-  wire [1:0] _ex1_pc_bit_out_T_84 = ex1_reg_op1_data[26] + ex1_reg_op1_data[27]; // @[src/main/scala/fpga/Core.scala 1295:48]
-  wire [2:0] _ex1_pc_bit_out_T_86 = _ex1_pc_bit_out_T_82 + _ex1_pc_bit_out_T_84; // @[src/main/scala/fpga/Core.scala 1295:48]
-  wire [1:0] _ex1_pc_bit_out_T_88 = ex1_reg_op1_data[28] + ex1_reg_op1_data[29]; // @[src/main/scala/fpga/Core.scala 1295:48]
-  wire [1:0] _ex1_pc_bit_out_T_90 = ex1_reg_op1_data[30] + ex1_reg_op1_data[31]; // @[src/main/scala/fpga/Core.scala 1295:48]
-  wire [2:0] _ex1_pc_bit_out_T_92 = _ex1_pc_bit_out_T_88 + _ex1_pc_bit_out_T_90; // @[src/main/scala/fpga/Core.scala 1295:48]
-  wire [3:0] _ex1_pc_bit_out_T_94 = _ex1_pc_bit_out_T_86 + _ex1_pc_bit_out_T_92; // @[src/main/scala/fpga/Core.scala 1295:48]
-  wire [4:0] _ex1_pc_bit_out_T_96 = _ex1_pc_bit_out_T_80 + _ex1_pc_bit_out_T_94; // @[src/main/scala/fpga/Core.scala 1295:48]
-  wire [5:0] _ex1_pc_bit_out_T_98 = _ex1_pc_bit_out_T_66 + _ex1_pc_bit_out_T_96; // @[src/main/scala/fpga/Core.scala 1295:48]
-  wire [31:0] _GEN_635 = {{16'd0}, ex1_reg_op1_data[31:16]}; // @[src/main/scala/fpga/Core.scala 1296:77]
-  wire [31:0] _ex1_pc_bit_out_T_104 = _GEN_635 & 32'hffff; // @[src/main/scala/fpga/Core.scala 1296:77]
-  wire [31:0] _ex1_pc_bit_out_T_106 = {ex1_reg_op1_data[15:0], 16'h0}; // @[src/main/scala/fpga/Core.scala 1296:77]
-  wire [31:0] _ex1_pc_bit_out_T_108 = _ex1_pc_bit_out_T_106 & 32'hffff0000; // @[src/main/scala/fpga/Core.scala 1296:77]
-  wire [31:0] _ex1_pc_bit_out_T_109 = _ex1_pc_bit_out_T_104 | _ex1_pc_bit_out_T_108; // @[src/main/scala/fpga/Core.scala 1296:77]
-  wire [31:0] _GEN_636 = {{8'd0}, _ex1_pc_bit_out_T_109[31:8]}; // @[src/main/scala/fpga/Core.scala 1296:77]
-  wire [31:0] _ex1_pc_bit_out_T_114 = _GEN_636 & 32'hff00ff; // @[src/main/scala/fpga/Core.scala 1296:77]
-  wire [31:0] _ex1_pc_bit_out_T_116 = {_ex1_pc_bit_out_T_109[23:0], 8'h0}; // @[src/main/scala/fpga/Core.scala 1296:77]
-  wire [31:0] _ex1_pc_bit_out_T_118 = _ex1_pc_bit_out_T_116 & 32'hff00ff00; // @[src/main/scala/fpga/Core.scala 1296:77]
-  wire [31:0] _ex1_pc_bit_out_T_119 = _ex1_pc_bit_out_T_114 | _ex1_pc_bit_out_T_118; // @[src/main/scala/fpga/Core.scala 1296:77]
-  wire [31:0] _GEN_637 = {{4'd0}, _ex1_pc_bit_out_T_119[31:4]}; // @[src/main/scala/fpga/Core.scala 1296:77]
-  wire [31:0] _ex1_pc_bit_out_T_124 = _GEN_637 & 32'hf0f0f0f; // @[src/main/scala/fpga/Core.scala 1296:77]
-  wire [31:0] _ex1_pc_bit_out_T_126 = {_ex1_pc_bit_out_T_119[27:0], 4'h0}; // @[src/main/scala/fpga/Core.scala 1296:77]
-  wire [31:0] _ex1_pc_bit_out_T_128 = _ex1_pc_bit_out_T_126 & 32'hf0f0f0f0; // @[src/main/scala/fpga/Core.scala 1296:77]
-  wire [31:0] _ex1_pc_bit_out_T_129 = _ex1_pc_bit_out_T_124 | _ex1_pc_bit_out_T_128; // @[src/main/scala/fpga/Core.scala 1296:77]
-  wire [31:0] _GEN_638 = {{2'd0}, _ex1_pc_bit_out_T_129[31:2]}; // @[src/main/scala/fpga/Core.scala 1296:77]
-  wire [31:0] _ex1_pc_bit_out_T_134 = _GEN_638 & 32'h33333333; // @[src/main/scala/fpga/Core.scala 1296:77]
-  wire [31:0] _ex1_pc_bit_out_T_136 = {_ex1_pc_bit_out_T_129[29:0], 2'h0}; // @[src/main/scala/fpga/Core.scala 1296:77]
-  wire [31:0] _ex1_pc_bit_out_T_138 = _ex1_pc_bit_out_T_136 & 32'hcccccccc; // @[src/main/scala/fpga/Core.scala 1296:77]
-  wire [31:0] _ex1_pc_bit_out_T_139 = _ex1_pc_bit_out_T_134 | _ex1_pc_bit_out_T_138; // @[src/main/scala/fpga/Core.scala 1296:77]
-  wire [31:0] _GEN_639 = {{1'd0}, _ex1_pc_bit_out_T_139[31:1]}; // @[src/main/scala/fpga/Core.scala 1296:77]
-  wire [31:0] _ex1_pc_bit_out_T_144 = _GEN_639 & 32'h55555555; // @[src/main/scala/fpga/Core.scala 1296:77]
-  wire [31:0] _ex1_pc_bit_out_T_146 = {_ex1_pc_bit_out_T_139[30:0], 1'h0}; // @[src/main/scala/fpga/Core.scala 1296:77]
-  wire [31:0] _ex1_pc_bit_out_T_148 = _ex1_pc_bit_out_T_146 & 32'haaaaaaaa; // @[src/main/scala/fpga/Core.scala 1296:77]
-  wire [31:0] _ex1_pc_bit_out_T_149 = _ex1_pc_bit_out_T_144 | _ex1_pc_bit_out_T_148; // @[src/main/scala/fpga/Core.scala 1296:77]
-  wire [32:0] _ex1_pc_bit_out_T_150 = {1'h1,_ex1_pc_bit_out_T_149}; // @[src/main/scala/fpga/Core.scala 1296:59]
+  wire [30:0] rrd_direct_jbr_pc = rrd_reg_pc + rrd_reg_imm_b_sext[31:1]; // @[src/main/scala/fpga/Core.scala 1226:38]
+  wire  _rrd_hazard_T_1 = rrd_reg_wb_addr != 5'h0; // @[src/main/scala/fpga/Core.scala 1228:67]
+  wire  rrd_hazard = rrd_reg_rf_wen & rrd_reg_wb_addr != 5'h0 & _T_44 & _if2_is_valid_inst_T; // @[src/main/scala/fpga/Core.scala 1228:90]
+  wire  rrd_fw_en_next = rrd_hazard & rrd_reg_wb_sel == 3'h0; // @[src/main/scala/fpga/Core.scala 1229:35]
+  wire  _T_53 = _T_45 & _T_44 & _if2_is_valid_inst_T & rrd_reg_rf_wen; // @[src/main/scala/fpga/Core.scala 1236:48]
+  wire  _T_55 = _T_53 & _rrd_hazard_T_1; // @[src/main/scala/fpga/Core.scala 1237:30]
+  wire  rrd_mem_use_reg = _T_55 & rrd_reg_wb_sel == 3'h5; // @[src/main/scala/fpga/Core.scala 1238:5 1240:25 1231:38]
+  wire  rrd_inst2_use_reg = _T_55 & (rrd_reg_wb_sel == 3'h6 | rrd_reg_wb_sel == 3'h2); // @[src/main/scala/fpga/Core.scala 1238:5 1241:25 1232:38]
+  wire  rrd_inst3_use_reg = _T_55 & (rrd_reg_wb_sel == 3'h1 | rrd_reg_wb_sel == 3'h3); // @[src/main/scala/fpga/Core.scala 1238:5 1242:25 1233:38]
+  wire  ex_is_bubble = rrd_stall | ex2_reg_is_br; // @[src/main/scala/fpga/Core.scala 1253:34]
+  wire  _ex1_reg_is_mret_T = ~ex_is_bubble; // @[src/main/scala/fpga/Core.scala 1268:30]
+  wire [47:0] ex1_mullu = ex1_reg_op1_data * ex1_reg_op2_data[15:0]; // @[src/main/scala/fpga/Core.scala 1310:38]
+  wire [16:0] _ex1_mulls_T_2 = {1'b0,$signed(ex1_reg_op2_data[15:0])}; // @[src/main/scala/fpga/Core.scala 1311:45]
+  wire [48:0] _ex1_mulls_T_3 = $signed(ex1_reg_op1_data) * $signed(_ex1_mulls_T_2); // @[src/main/scala/fpga/Core.scala 1311:45]
+  wire [47:0] _ex1_mulls_T_5 = _ex1_mulls_T_3[47:0]; // @[src/main/scala/fpga/Core.scala 1311:45]
+  wire [31:0] ex1_mulls = _ex1_mulls_T_5[47:16]; // @[src/main/scala/fpga/Core.scala 1311:81]
+  wire [47:0] ex1_mulhuu = ex1_reg_op1_data * ex1_reg_op2_data[31:16]; // @[src/main/scala/fpga/Core.scala 1312:38]
+  wire [15:0] _ex1_mulhss_T_2 = ex1_reg_op2_data[31:16]; // @[src/main/scala/fpga/Core.scala 1313:88]
+  wire [47:0] ex1_mulhss = $signed(ex1_reg_op1_data) * $signed(_ex1_mulhss_T_2); // @[src/main/scala/fpga/Core.scala 1313:45]
+  wire [16:0] _ex1_mulhsu_T_2 = {1'b0,$signed(ex1_reg_op2_data[31:16])}; // @[src/main/scala/fpga/Core.scala 1314:45]
+  wire [48:0] _ex1_mulhsu_T_3 = $signed(ex1_reg_op1_data) * $signed(_ex1_mulhsu_T_2); // @[src/main/scala/fpga/Core.scala 1314:45]
+  wire [47:0] ex1_mulhsu = _ex1_mulhsu_T_3[47:0]; // @[src/main/scala/fpga/Core.scala 1314:45]
+  wire [30:0] _ex1_next_pc_T_1 = ex1_reg_pc + 31'h1; // @[src/main/scala/fpga/Core.scala 1324:53]
+  wire [30:0] _ex1_next_pc_T_3 = ex1_reg_pc + 31'h2; // @[src/main/scala/fpga/Core.scala 1324:81]
+  wire [30:0] ex1_next_pc = ex1_reg_is_half ? _ex1_next_pc_T_1 : _ex1_next_pc_T_3; // @[src/main/scala/fpga/Core.scala 1324:24]
+  wire  _ex1_pc_bit_out_T = ex1_reg_wb_sel == 3'h2; // @[src/main/scala/fpga/Core.scala 1326:21]
+  wire [31:0] _ex1_pc_bit_out_T_1 = {ex1_next_pc,1'h0}; // @[src/main/scala/fpga/Core.scala 1326:43]
+  wire [31:0] _ex1_pc_bit_out_T_4 = {16'h0,ex1_reg_op1_data[15:0]}; // @[src/main/scala/fpga/Core.scala 1327:43]
+  wire [1:0] _ex1_pc_bit_out_T_38 = ex1_reg_op1_data[0] + ex1_reg_op1_data[1]; // @[src/main/scala/fpga/Core.scala 1328:48]
+  wire [1:0] _ex1_pc_bit_out_T_40 = ex1_reg_op1_data[2] + ex1_reg_op1_data[3]; // @[src/main/scala/fpga/Core.scala 1328:48]
+  wire [2:0] _ex1_pc_bit_out_T_42 = _ex1_pc_bit_out_T_38 + _ex1_pc_bit_out_T_40; // @[src/main/scala/fpga/Core.scala 1328:48]
+  wire [1:0] _ex1_pc_bit_out_T_44 = ex1_reg_op1_data[4] + ex1_reg_op1_data[5]; // @[src/main/scala/fpga/Core.scala 1328:48]
+  wire [1:0] _ex1_pc_bit_out_T_46 = ex1_reg_op1_data[6] + ex1_reg_op1_data[7]; // @[src/main/scala/fpga/Core.scala 1328:48]
+  wire [2:0] _ex1_pc_bit_out_T_48 = _ex1_pc_bit_out_T_44 + _ex1_pc_bit_out_T_46; // @[src/main/scala/fpga/Core.scala 1328:48]
+  wire [3:0] _ex1_pc_bit_out_T_50 = _ex1_pc_bit_out_T_42 + _ex1_pc_bit_out_T_48; // @[src/main/scala/fpga/Core.scala 1328:48]
+  wire [1:0] _ex1_pc_bit_out_T_52 = ex1_reg_op1_data[8] + ex1_reg_op1_data[9]; // @[src/main/scala/fpga/Core.scala 1328:48]
+  wire [1:0] _ex1_pc_bit_out_T_54 = ex1_reg_op1_data[10] + ex1_reg_op1_data[11]; // @[src/main/scala/fpga/Core.scala 1328:48]
+  wire [2:0] _ex1_pc_bit_out_T_56 = _ex1_pc_bit_out_T_52 + _ex1_pc_bit_out_T_54; // @[src/main/scala/fpga/Core.scala 1328:48]
+  wire [1:0] _ex1_pc_bit_out_T_58 = ex1_reg_op1_data[12] + ex1_reg_op1_data[13]; // @[src/main/scala/fpga/Core.scala 1328:48]
+  wire [1:0] _ex1_pc_bit_out_T_60 = ex1_reg_op1_data[14] + ex1_reg_op1_data[15]; // @[src/main/scala/fpga/Core.scala 1328:48]
+  wire [2:0] _ex1_pc_bit_out_T_62 = _ex1_pc_bit_out_T_58 + _ex1_pc_bit_out_T_60; // @[src/main/scala/fpga/Core.scala 1328:48]
+  wire [3:0] _ex1_pc_bit_out_T_64 = _ex1_pc_bit_out_T_56 + _ex1_pc_bit_out_T_62; // @[src/main/scala/fpga/Core.scala 1328:48]
+  wire [4:0] _ex1_pc_bit_out_T_66 = _ex1_pc_bit_out_T_50 + _ex1_pc_bit_out_T_64; // @[src/main/scala/fpga/Core.scala 1328:48]
+  wire [1:0] _ex1_pc_bit_out_T_68 = ex1_reg_op1_data[16] + ex1_reg_op1_data[17]; // @[src/main/scala/fpga/Core.scala 1328:48]
+  wire [1:0] _ex1_pc_bit_out_T_70 = ex1_reg_op1_data[18] + ex1_reg_op1_data[19]; // @[src/main/scala/fpga/Core.scala 1328:48]
+  wire [2:0] _ex1_pc_bit_out_T_72 = _ex1_pc_bit_out_T_68 + _ex1_pc_bit_out_T_70; // @[src/main/scala/fpga/Core.scala 1328:48]
+  wire [1:0] _ex1_pc_bit_out_T_74 = ex1_reg_op1_data[20] + ex1_reg_op1_data[21]; // @[src/main/scala/fpga/Core.scala 1328:48]
+  wire [1:0] _ex1_pc_bit_out_T_76 = ex1_reg_op1_data[22] + ex1_reg_op1_data[23]; // @[src/main/scala/fpga/Core.scala 1328:48]
+  wire [2:0] _ex1_pc_bit_out_T_78 = _ex1_pc_bit_out_T_74 + _ex1_pc_bit_out_T_76; // @[src/main/scala/fpga/Core.scala 1328:48]
+  wire [3:0] _ex1_pc_bit_out_T_80 = _ex1_pc_bit_out_T_72 + _ex1_pc_bit_out_T_78; // @[src/main/scala/fpga/Core.scala 1328:48]
+  wire [1:0] _ex1_pc_bit_out_T_82 = ex1_reg_op1_data[24] + ex1_reg_op1_data[25]; // @[src/main/scala/fpga/Core.scala 1328:48]
+  wire [1:0] _ex1_pc_bit_out_T_84 = ex1_reg_op1_data[26] + ex1_reg_op1_data[27]; // @[src/main/scala/fpga/Core.scala 1328:48]
+  wire [2:0] _ex1_pc_bit_out_T_86 = _ex1_pc_bit_out_T_82 + _ex1_pc_bit_out_T_84; // @[src/main/scala/fpga/Core.scala 1328:48]
+  wire [1:0] _ex1_pc_bit_out_T_88 = ex1_reg_op1_data[28] + ex1_reg_op1_data[29]; // @[src/main/scala/fpga/Core.scala 1328:48]
+  wire [1:0] _ex1_pc_bit_out_T_90 = ex1_reg_op1_data[30] + ex1_reg_op1_data[31]; // @[src/main/scala/fpga/Core.scala 1328:48]
+  wire [2:0] _ex1_pc_bit_out_T_92 = _ex1_pc_bit_out_T_88 + _ex1_pc_bit_out_T_90; // @[src/main/scala/fpga/Core.scala 1328:48]
+  wire [3:0] _ex1_pc_bit_out_T_94 = _ex1_pc_bit_out_T_86 + _ex1_pc_bit_out_T_92; // @[src/main/scala/fpga/Core.scala 1328:48]
+  wire [4:0] _ex1_pc_bit_out_T_96 = _ex1_pc_bit_out_T_80 + _ex1_pc_bit_out_T_94; // @[src/main/scala/fpga/Core.scala 1328:48]
+  wire [5:0] _ex1_pc_bit_out_T_98 = _ex1_pc_bit_out_T_66 + _ex1_pc_bit_out_T_96; // @[src/main/scala/fpga/Core.scala 1328:48]
+  wire [31:0] _GEN_649 = {{16'd0}, ex1_reg_op1_data[31:16]}; // @[src/main/scala/fpga/Core.scala 1329:77]
+  wire [31:0] _ex1_pc_bit_out_T_104 = _GEN_649 & 32'hffff; // @[src/main/scala/fpga/Core.scala 1329:77]
+  wire [31:0] _ex1_pc_bit_out_T_106 = {ex1_reg_op1_data[15:0], 16'h0}; // @[src/main/scala/fpga/Core.scala 1329:77]
+  wire [31:0] _ex1_pc_bit_out_T_108 = _ex1_pc_bit_out_T_106 & 32'hffff0000; // @[src/main/scala/fpga/Core.scala 1329:77]
+  wire [31:0] _ex1_pc_bit_out_T_109 = _ex1_pc_bit_out_T_104 | _ex1_pc_bit_out_T_108; // @[src/main/scala/fpga/Core.scala 1329:77]
+  wire [31:0] _GEN_650 = {{8'd0}, _ex1_pc_bit_out_T_109[31:8]}; // @[src/main/scala/fpga/Core.scala 1329:77]
+  wire [31:0] _ex1_pc_bit_out_T_114 = _GEN_650 & 32'hff00ff; // @[src/main/scala/fpga/Core.scala 1329:77]
+  wire [31:0] _ex1_pc_bit_out_T_116 = {_ex1_pc_bit_out_T_109[23:0], 8'h0}; // @[src/main/scala/fpga/Core.scala 1329:77]
+  wire [31:0] _ex1_pc_bit_out_T_118 = _ex1_pc_bit_out_T_116 & 32'hff00ff00; // @[src/main/scala/fpga/Core.scala 1329:77]
+  wire [31:0] _ex1_pc_bit_out_T_119 = _ex1_pc_bit_out_T_114 | _ex1_pc_bit_out_T_118; // @[src/main/scala/fpga/Core.scala 1329:77]
+  wire [31:0] _GEN_651 = {{4'd0}, _ex1_pc_bit_out_T_119[31:4]}; // @[src/main/scala/fpga/Core.scala 1329:77]
+  wire [31:0] _ex1_pc_bit_out_T_124 = _GEN_651 & 32'hf0f0f0f; // @[src/main/scala/fpga/Core.scala 1329:77]
+  wire [31:0] _ex1_pc_bit_out_T_126 = {_ex1_pc_bit_out_T_119[27:0], 4'h0}; // @[src/main/scala/fpga/Core.scala 1329:77]
+  wire [31:0] _ex1_pc_bit_out_T_128 = _ex1_pc_bit_out_T_126 & 32'hf0f0f0f0; // @[src/main/scala/fpga/Core.scala 1329:77]
+  wire [31:0] _ex1_pc_bit_out_T_129 = _ex1_pc_bit_out_T_124 | _ex1_pc_bit_out_T_128; // @[src/main/scala/fpga/Core.scala 1329:77]
+  wire [31:0] _GEN_652 = {{2'd0}, _ex1_pc_bit_out_T_129[31:2]}; // @[src/main/scala/fpga/Core.scala 1329:77]
+  wire [31:0] _ex1_pc_bit_out_T_134 = _GEN_652 & 32'h33333333; // @[src/main/scala/fpga/Core.scala 1329:77]
+  wire [31:0] _ex1_pc_bit_out_T_136 = {_ex1_pc_bit_out_T_129[29:0], 2'h0}; // @[src/main/scala/fpga/Core.scala 1329:77]
+  wire [31:0] _ex1_pc_bit_out_T_138 = _ex1_pc_bit_out_T_136 & 32'hcccccccc; // @[src/main/scala/fpga/Core.scala 1329:77]
+  wire [31:0] _ex1_pc_bit_out_T_139 = _ex1_pc_bit_out_T_134 | _ex1_pc_bit_out_T_138; // @[src/main/scala/fpga/Core.scala 1329:77]
+  wire [31:0] _GEN_653 = {{1'd0}, _ex1_pc_bit_out_T_139[31:1]}; // @[src/main/scala/fpga/Core.scala 1329:77]
+  wire [31:0] _ex1_pc_bit_out_T_144 = _GEN_653 & 32'h55555555; // @[src/main/scala/fpga/Core.scala 1329:77]
+  wire [31:0] _ex1_pc_bit_out_T_146 = {_ex1_pc_bit_out_T_139[30:0], 1'h0}; // @[src/main/scala/fpga/Core.scala 1329:77]
+  wire [31:0] _ex1_pc_bit_out_T_148 = _ex1_pc_bit_out_T_146 & 32'haaaaaaaa; // @[src/main/scala/fpga/Core.scala 1329:77]
+  wire [31:0] _ex1_pc_bit_out_T_149 = _ex1_pc_bit_out_T_144 | _ex1_pc_bit_out_T_148; // @[src/main/scala/fpga/Core.scala 1329:77]
+  wire [32:0] _ex1_pc_bit_out_T_150 = {1'h1,_ex1_pc_bit_out_T_149}; // @[src/main/scala/fpga/Core.scala 1329:59]
   wire [5:0] _ex1_pc_bit_out_T_184 = _ex1_pc_bit_out_T_150[31] ? 6'h1f : 6'h20; // @[src/main/scala/chisel3/util/Mux.scala 50:70]
   wire [5:0] _ex1_pc_bit_out_T_185 = _ex1_pc_bit_out_T_150[30] ? 6'h1e : _ex1_pc_bit_out_T_184; // @[src/main/scala/chisel3/util/Mux.scala 50:70]
   wire [5:0] _ex1_pc_bit_out_T_186 = _ex1_pc_bit_out_T_150[29] ? 6'h1d : _ex1_pc_bit_out_T_185; // @[src/main/scala/chisel3/util/Mux.scala 50:70]
@@ -2674,7 +2843,7 @@ module Core(
   wire [5:0] _ex1_pc_bit_out_T_213 = _ex1_pc_bit_out_T_150[2] ? 6'h2 : _ex1_pc_bit_out_T_212; // @[src/main/scala/chisel3/util/Mux.scala 50:70]
   wire [5:0] _ex1_pc_bit_out_T_214 = _ex1_pc_bit_out_T_150[1] ? 6'h1 : _ex1_pc_bit_out_T_213; // @[src/main/scala/chisel3/util/Mux.scala 50:70]
   wire [5:0] _ex1_pc_bit_out_T_215 = _ex1_pc_bit_out_T_150[0] ? 6'h0 : _ex1_pc_bit_out_T_214; // @[src/main/scala/chisel3/util/Mux.scala 50:70]
-  wire [32:0] _ex1_pc_bit_out_T_217 = {1'h1,ex1_reg_op1_data}; // @[src/main/scala/fpga/Core.scala 1297:59]
+  wire [32:0] _ex1_pc_bit_out_T_217 = {1'h1,ex1_reg_op1_data}; // @[src/main/scala/fpga/Core.scala 1330:59]
   wire [5:0] _ex1_pc_bit_out_T_251 = _ex1_pc_bit_out_T_217[31] ? 6'h1f : 6'h20; // @[src/main/scala/chisel3/util/Mux.scala 50:70]
   wire [5:0] _ex1_pc_bit_out_T_252 = _ex1_pc_bit_out_T_217[30] ? 6'h1e : _ex1_pc_bit_out_T_251; // @[src/main/scala/chisel3/util/Mux.scala 50:70]
   wire [5:0] _ex1_pc_bit_out_T_253 = _ex1_pc_bit_out_T_217[29] ? 6'h1d : _ex1_pc_bit_out_T_252; // @[src/main/scala/chisel3/util/Mux.scala 50:70]
@@ -2708,371 +2877,369 @@ module Core(
   wire [5:0] _ex1_pc_bit_out_T_281 = _ex1_pc_bit_out_T_217[1] ? 6'h1 : _ex1_pc_bit_out_T_280; // @[src/main/scala/chisel3/util/Mux.scala 50:70]
   wire [5:0] _ex1_pc_bit_out_T_282 = _ex1_pc_bit_out_T_217[0] ? 6'h0 : _ex1_pc_bit_out_T_281; // @[src/main/scala/chisel3/util/Mux.scala 50:70]
   wire [31:0] _ex1_pc_bit_out_T_288 = {ex1_reg_op1_data[7:0],ex1_reg_op1_data[15:8],ex1_reg_op1_data[23:16],
-    ex1_reg_op1_data[31:24]}; // @[src/main/scala/fpga/Core.scala 1298:43]
-  wire [23:0] _ex1_pc_bit_out_T_292 = ex1_reg_op1_data[7] ? 24'hffffff : 24'h0; // @[src/main/scala/fpga/Core.scala 1299:48]
-  wire [31:0] _ex1_pc_bit_out_T_294 = {_ex1_pc_bit_out_T_292,ex1_reg_op1_data[7:0]}; // @[src/main/scala/fpga/Core.scala 1299:43]
-  wire [15:0] _ex1_pc_bit_out_T_298 = ex1_reg_op1_data[15] ? 16'hffff : 16'h0; // @[src/main/scala/fpga/Core.scala 1300:48]
-  wire [31:0] _ex1_pc_bit_out_T_300 = {_ex1_pc_bit_out_T_298,ex1_reg_op1_data[15:0]}; // @[src/main/scala/fpga/Core.scala 1300:43]
-  wire  _ex1_pc_bit_out_T_301 = ex1_reg_exe_fun == 4'hc; // @[src/main/scala/fpga/Core.scala 1301:22]
-  wire [31:0] _ex1_pc_bit_out_T_305 = _ex1_alu_out_T_26 ? ex1_reg_op2_data : ex1_reg_op1_data; // @[src/main/scala/fpga/Core.scala 1301:43]
-  wire  _ex1_pc_bit_out_T_306 = ex1_reg_exe_fun == 4'hd; // @[src/main/scala/fpga/Core.scala 1302:22]
-  wire [31:0] _ex1_pc_bit_out_T_308 = _ex1_alu_out_T_28 ? ex1_reg_op2_data : ex1_reg_op1_data; // @[src/main/scala/fpga/Core.scala 1302:43]
-  wire  _ex1_pc_bit_out_T_309 = ex1_reg_exe_fun == 4'he; // @[src/main/scala/fpga/Core.scala 1303:22]
-  wire [31:0] _ex1_pc_bit_out_T_313 = _ex1_alu_out_T_26 ? ex1_reg_op1_data : ex1_reg_op2_data; // @[src/main/scala/fpga/Core.scala 1303:43]
-  wire [31:0] _ex1_pc_bit_out_T_316 = _ex1_alu_out_T_28 ? ex1_reg_op1_data : ex1_reg_op2_data; // @[src/main/scala/fpga/Core.scala 1304:43]
-  wire [1:0] _ex1_pc_bit_out_T_336 = ex1_reg_op2_data[1] + ex1_reg_op2_data[2]; // @[src/main/scala/fpga/Core.scala 1287:47]
-  wire [1:0] _GEN_640 = {{1'd0}, ex1_reg_op2_data[0]}; // @[src/main/scala/fpga/Core.scala 1287:47]
-  wire [2:0] _ex1_pc_bit_out_T_338 = _GEN_640 + _ex1_pc_bit_out_T_336; // @[src/main/scala/fpga/Core.scala 1287:47]
-  wire [1:0] _ex1_pc_bit_out_T_340 = ex1_reg_op2_data[3] + ex1_reg_op2_data[4]; // @[src/main/scala/fpga/Core.scala 1287:47]
-  wire [1:0] _ex1_pc_bit_out_T_342 = ex1_reg_op2_data[5] + ex1_reg_op2_data[6]; // @[src/main/scala/fpga/Core.scala 1287:47]
-  wire [2:0] _ex1_pc_bit_out_T_344 = _ex1_pc_bit_out_T_340 + _ex1_pc_bit_out_T_342; // @[src/main/scala/fpga/Core.scala 1287:47]
-  wire [2:0] _GEN_641 = {{1'd0}, _ex1_pc_bit_out_T_338[1:0]}; // @[src/main/scala/fpga/Core.scala 1287:47]
-  wire [3:0] _ex1_pc_bit_out_T_346 = _GEN_641 + _ex1_pc_bit_out_T_344; // @[src/main/scala/fpga/Core.scala 1287:47]
-  wire [1:0] _ex1_pc_bit_out_T_348 = ex1_reg_op2_data[7] + ex1_reg_op2_data[8]; // @[src/main/scala/fpga/Core.scala 1287:47]
-  wire [1:0] _ex1_pc_bit_out_T_350 = ex1_reg_op2_data[9] + ex1_reg_op2_data[10]; // @[src/main/scala/fpga/Core.scala 1287:47]
-  wire [2:0] _ex1_pc_bit_out_T_352 = _ex1_pc_bit_out_T_348 + _ex1_pc_bit_out_T_350; // @[src/main/scala/fpga/Core.scala 1287:47]
-  wire [1:0] _ex1_pc_bit_out_T_354 = ex1_reg_op2_data[11] + ex1_reg_op2_data[12]; // @[src/main/scala/fpga/Core.scala 1287:47]
-  wire [1:0] _ex1_pc_bit_out_T_356 = ex1_reg_op2_data[13] + ex1_reg_op2_data[14]; // @[src/main/scala/fpga/Core.scala 1287:47]
-  wire [2:0] _ex1_pc_bit_out_T_358 = _ex1_pc_bit_out_T_354 + _ex1_pc_bit_out_T_356; // @[src/main/scala/fpga/Core.scala 1287:47]
-  wire [3:0] _ex1_pc_bit_out_T_360 = _ex1_pc_bit_out_T_352 + _ex1_pc_bit_out_T_358; // @[src/main/scala/fpga/Core.scala 1287:47]
-  wire [3:0] _GEN_642 = {{1'd0}, _ex1_pc_bit_out_T_346[2:0]}; // @[src/main/scala/fpga/Core.scala 1287:47]
-  wire [4:0] _ex1_pc_bit_out_T_362 = _GEN_642 + _ex1_pc_bit_out_T_360; // @[src/main/scala/fpga/Core.scala 1287:47]
-  wire [31:0] _ex1_pc_bit_out_T_364 = ex1_reg_op1_data >> _ex1_pc_bit_out_T_362[3:0]; // @[src/main/scala/fpga/Core.scala 1287:36]
-  wire  _ex1_pc_bit_out_T_366 = ex1_reg_op2_data[15] & _ex1_pc_bit_out_T_364[0]; // @[src/main/scala/fpga/Core.scala 1287:10]
-  wire [1:0] _ex1_pc_bit_out_T_384 = ex1_reg_op2_data[1] + ex1_reg_op2_data[2]; // @[src/main/scala/fpga/Core.scala 1287:47]
-  wire [1:0] _GEN_643 = {{1'd0}, ex1_reg_op2_data[0]}; // @[src/main/scala/fpga/Core.scala 1287:47]
-  wire [2:0] _ex1_pc_bit_out_T_386 = _GEN_643 + _ex1_pc_bit_out_T_384; // @[src/main/scala/fpga/Core.scala 1287:47]
-  wire [1:0] _ex1_pc_bit_out_T_388 = ex1_reg_op2_data[3] + ex1_reg_op2_data[4]; // @[src/main/scala/fpga/Core.scala 1287:47]
-  wire [1:0] _ex1_pc_bit_out_T_390 = ex1_reg_op2_data[5] + ex1_reg_op2_data[6]; // @[src/main/scala/fpga/Core.scala 1287:47]
-  wire [2:0] _ex1_pc_bit_out_T_392 = _ex1_pc_bit_out_T_388 + _ex1_pc_bit_out_T_390; // @[src/main/scala/fpga/Core.scala 1287:47]
-  wire [2:0] _GEN_644 = {{1'd0}, _ex1_pc_bit_out_T_386[1:0]}; // @[src/main/scala/fpga/Core.scala 1287:47]
-  wire [3:0] _ex1_pc_bit_out_T_394 = _GEN_644 + _ex1_pc_bit_out_T_392; // @[src/main/scala/fpga/Core.scala 1287:47]
-  wire [1:0] _ex1_pc_bit_out_T_396 = ex1_reg_op2_data[8] + ex1_reg_op2_data[9]; // @[src/main/scala/fpga/Core.scala 1287:47]
-  wire [1:0] _GEN_645 = {{1'd0}, ex1_reg_op2_data[7]}; // @[src/main/scala/fpga/Core.scala 1287:47]
-  wire [2:0] _ex1_pc_bit_out_T_398 = _GEN_645 + _ex1_pc_bit_out_T_396; // @[src/main/scala/fpga/Core.scala 1287:47]
-  wire [1:0] _ex1_pc_bit_out_T_400 = ex1_reg_op2_data[10] + ex1_reg_op2_data[11]; // @[src/main/scala/fpga/Core.scala 1287:47]
-  wire [1:0] _ex1_pc_bit_out_T_402 = ex1_reg_op2_data[12] + ex1_reg_op2_data[13]; // @[src/main/scala/fpga/Core.scala 1287:47]
-  wire [2:0] _ex1_pc_bit_out_T_404 = _ex1_pc_bit_out_T_400 + _ex1_pc_bit_out_T_402; // @[src/main/scala/fpga/Core.scala 1287:47]
-  wire [2:0] _GEN_646 = {{1'd0}, _ex1_pc_bit_out_T_398[1:0]}; // @[src/main/scala/fpga/Core.scala 1287:47]
-  wire [3:0] _ex1_pc_bit_out_T_406 = _GEN_646 + _ex1_pc_bit_out_T_404; // @[src/main/scala/fpga/Core.scala 1287:47]
-  wire [3:0] _ex1_pc_bit_out_T_408 = _ex1_pc_bit_out_T_394[2:0] + _ex1_pc_bit_out_T_406[2:0]; // @[src/main/scala/fpga/Core.scala 1287:47]
-  wire [31:0] _ex1_pc_bit_out_T_410 = ex1_reg_op1_data >> _ex1_pc_bit_out_T_408; // @[src/main/scala/fpga/Core.scala 1287:36]
-  wire  _ex1_pc_bit_out_T_412 = ex1_reg_op2_data[14] & _ex1_pc_bit_out_T_410[0]; // @[src/main/scala/fpga/Core.scala 1287:10]
-  wire [1:0] _ex1_pc_bit_out_T_429 = ex1_reg_op2_data[1] + ex1_reg_op2_data[2]; // @[src/main/scala/fpga/Core.scala 1287:47]
-  wire [1:0] _GEN_647 = {{1'd0}, ex1_reg_op2_data[0]}; // @[src/main/scala/fpga/Core.scala 1287:47]
-  wire [2:0] _ex1_pc_bit_out_T_431 = _GEN_647 + _ex1_pc_bit_out_T_429; // @[src/main/scala/fpga/Core.scala 1287:47]
-  wire [1:0] _ex1_pc_bit_out_T_433 = ex1_reg_op2_data[4] + ex1_reg_op2_data[5]; // @[src/main/scala/fpga/Core.scala 1287:47]
-  wire [1:0] _GEN_648 = {{1'd0}, ex1_reg_op2_data[3]}; // @[src/main/scala/fpga/Core.scala 1287:47]
-  wire [2:0] _ex1_pc_bit_out_T_435 = _GEN_648 + _ex1_pc_bit_out_T_433; // @[src/main/scala/fpga/Core.scala 1287:47]
-  wire [2:0] _ex1_pc_bit_out_T_437 = _ex1_pc_bit_out_T_431[1:0] + _ex1_pc_bit_out_T_435[1:0]; // @[src/main/scala/fpga/Core.scala 1287:47]
-  wire [1:0] _ex1_pc_bit_out_T_439 = ex1_reg_op2_data[7] + ex1_reg_op2_data[8]; // @[src/main/scala/fpga/Core.scala 1287:47]
-  wire [1:0] _GEN_649 = {{1'd0}, ex1_reg_op2_data[6]}; // @[src/main/scala/fpga/Core.scala 1287:47]
-  wire [2:0] _ex1_pc_bit_out_T_441 = _GEN_649 + _ex1_pc_bit_out_T_439; // @[src/main/scala/fpga/Core.scala 1287:47]
-  wire [1:0] _ex1_pc_bit_out_T_443 = ex1_reg_op2_data[9] + ex1_reg_op2_data[10]; // @[src/main/scala/fpga/Core.scala 1287:47]
-  wire [1:0] _ex1_pc_bit_out_T_445 = ex1_reg_op2_data[11] + ex1_reg_op2_data[12]; // @[src/main/scala/fpga/Core.scala 1287:47]
-  wire [2:0] _ex1_pc_bit_out_T_447 = _ex1_pc_bit_out_T_443 + _ex1_pc_bit_out_T_445; // @[src/main/scala/fpga/Core.scala 1287:47]
-  wire [2:0] _GEN_650 = {{1'd0}, _ex1_pc_bit_out_T_441[1:0]}; // @[src/main/scala/fpga/Core.scala 1287:47]
-  wire [3:0] _ex1_pc_bit_out_T_449 = _GEN_650 + _ex1_pc_bit_out_T_447; // @[src/main/scala/fpga/Core.scala 1287:47]
-  wire [3:0] _ex1_pc_bit_out_T_451 = _ex1_pc_bit_out_T_437 + _ex1_pc_bit_out_T_449[2:0]; // @[src/main/scala/fpga/Core.scala 1287:47]
-  wire [31:0] _ex1_pc_bit_out_T_453 = ex1_reg_op1_data >> _ex1_pc_bit_out_T_451; // @[src/main/scala/fpga/Core.scala 1287:36]
-  wire  _ex1_pc_bit_out_T_455 = ex1_reg_op2_data[13] & _ex1_pc_bit_out_T_453[0]; // @[src/main/scala/fpga/Core.scala 1287:10]
-  wire [1:0] _ex1_pc_bit_out_T_471 = ex1_reg_op2_data[1] + ex1_reg_op2_data[2]; // @[src/main/scala/fpga/Core.scala 1287:47]
-  wire [1:0] _GEN_651 = {{1'd0}, ex1_reg_op2_data[0]}; // @[src/main/scala/fpga/Core.scala 1287:47]
-  wire [2:0] _ex1_pc_bit_out_T_473 = _GEN_651 + _ex1_pc_bit_out_T_471; // @[src/main/scala/fpga/Core.scala 1287:47]
-  wire [1:0] _ex1_pc_bit_out_T_475 = ex1_reg_op2_data[4] + ex1_reg_op2_data[5]; // @[src/main/scala/fpga/Core.scala 1287:47]
-  wire [1:0] _GEN_652 = {{1'd0}, ex1_reg_op2_data[3]}; // @[src/main/scala/fpga/Core.scala 1287:47]
-  wire [2:0] _ex1_pc_bit_out_T_477 = _GEN_652 + _ex1_pc_bit_out_T_475; // @[src/main/scala/fpga/Core.scala 1287:47]
-  wire [2:0] _ex1_pc_bit_out_T_479 = _ex1_pc_bit_out_T_473[1:0] + _ex1_pc_bit_out_T_477[1:0]; // @[src/main/scala/fpga/Core.scala 1287:47]
-  wire [1:0] _ex1_pc_bit_out_T_481 = ex1_reg_op2_data[7] + ex1_reg_op2_data[8]; // @[src/main/scala/fpga/Core.scala 1287:47]
-  wire [1:0] _GEN_653 = {{1'd0}, ex1_reg_op2_data[6]}; // @[src/main/scala/fpga/Core.scala 1287:47]
-  wire [2:0] _ex1_pc_bit_out_T_483 = _GEN_653 + _ex1_pc_bit_out_T_481; // @[src/main/scala/fpga/Core.scala 1287:47]
-  wire [1:0] _ex1_pc_bit_out_T_485 = ex1_reg_op2_data[10] + ex1_reg_op2_data[11]; // @[src/main/scala/fpga/Core.scala 1287:47]
-  wire [1:0] _GEN_654 = {{1'd0}, ex1_reg_op2_data[9]}; // @[src/main/scala/fpga/Core.scala 1287:47]
-  wire [2:0] _ex1_pc_bit_out_T_487 = _GEN_654 + _ex1_pc_bit_out_T_485; // @[src/main/scala/fpga/Core.scala 1287:47]
-  wire [2:0] _ex1_pc_bit_out_T_489 = _ex1_pc_bit_out_T_483[1:0] + _ex1_pc_bit_out_T_487[1:0]; // @[src/main/scala/fpga/Core.scala 1287:47]
-  wire [3:0] _ex1_pc_bit_out_T_491 = _ex1_pc_bit_out_T_479 + _ex1_pc_bit_out_T_489; // @[src/main/scala/fpga/Core.scala 1287:47]
-  wire [31:0] _ex1_pc_bit_out_T_493 = ex1_reg_op1_data >> _ex1_pc_bit_out_T_491; // @[src/main/scala/fpga/Core.scala 1287:36]
-  wire  _ex1_pc_bit_out_T_495 = ex1_reg_op2_data[12] & _ex1_pc_bit_out_T_493[0]; // @[src/main/scala/fpga/Core.scala 1287:10]
-  wire [1:0] _ex1_pc_bit_out_T_510 = ex1_reg_op2_data[0] + ex1_reg_op2_data[1]; // @[src/main/scala/fpga/Core.scala 1287:47]
-  wire [1:0] _ex1_pc_bit_out_T_512 = ex1_reg_op2_data[3] + ex1_reg_op2_data[4]; // @[src/main/scala/fpga/Core.scala 1287:47]
-  wire [1:0] _GEN_655 = {{1'd0}, ex1_reg_op2_data[2]}; // @[src/main/scala/fpga/Core.scala 1287:47]
-  wire [2:0] _ex1_pc_bit_out_T_514 = _GEN_655 + _ex1_pc_bit_out_T_512; // @[src/main/scala/fpga/Core.scala 1287:47]
-  wire [2:0] _ex1_pc_bit_out_T_516 = _ex1_pc_bit_out_T_510 + _ex1_pc_bit_out_T_514[1:0]; // @[src/main/scala/fpga/Core.scala 1287:47]
-  wire [1:0] _ex1_pc_bit_out_T_518 = ex1_reg_op2_data[6] + ex1_reg_op2_data[7]; // @[src/main/scala/fpga/Core.scala 1287:47]
-  wire [1:0] _GEN_656 = {{1'd0}, ex1_reg_op2_data[5]}; // @[src/main/scala/fpga/Core.scala 1287:47]
-  wire [2:0] _ex1_pc_bit_out_T_520 = _GEN_656 + _ex1_pc_bit_out_T_518; // @[src/main/scala/fpga/Core.scala 1287:47]
-  wire [1:0] _ex1_pc_bit_out_T_522 = ex1_reg_op2_data[9] + ex1_reg_op2_data[10]; // @[src/main/scala/fpga/Core.scala 1287:47]
-  wire [1:0] _GEN_657 = {{1'd0}, ex1_reg_op2_data[8]}; // @[src/main/scala/fpga/Core.scala 1287:47]
-  wire [2:0] _ex1_pc_bit_out_T_524 = _GEN_657 + _ex1_pc_bit_out_T_522; // @[src/main/scala/fpga/Core.scala 1287:47]
-  wire [2:0] _ex1_pc_bit_out_T_526 = _ex1_pc_bit_out_T_520[1:0] + _ex1_pc_bit_out_T_524[1:0]; // @[src/main/scala/fpga/Core.scala 1287:47]
-  wire [3:0] _ex1_pc_bit_out_T_528 = _ex1_pc_bit_out_T_516 + _ex1_pc_bit_out_T_526; // @[src/main/scala/fpga/Core.scala 1287:47]
-  wire [31:0] _ex1_pc_bit_out_T_530 = ex1_reg_op1_data >> _ex1_pc_bit_out_T_528; // @[src/main/scala/fpga/Core.scala 1287:36]
-  wire  _ex1_pc_bit_out_T_532 = ex1_reg_op2_data[11] & _ex1_pc_bit_out_T_530[0]; // @[src/main/scala/fpga/Core.scala 1287:10]
-  wire [1:0] _ex1_pc_bit_out_T_546 = ex1_reg_op2_data[0] + ex1_reg_op2_data[1]; // @[src/main/scala/fpga/Core.scala 1287:47]
-  wire [1:0] _ex1_pc_bit_out_T_548 = ex1_reg_op2_data[3] + ex1_reg_op2_data[4]; // @[src/main/scala/fpga/Core.scala 1287:47]
-  wire [1:0] _GEN_658 = {{1'd0}, ex1_reg_op2_data[2]}; // @[src/main/scala/fpga/Core.scala 1287:47]
-  wire [2:0] _ex1_pc_bit_out_T_550 = _GEN_658 + _ex1_pc_bit_out_T_548; // @[src/main/scala/fpga/Core.scala 1287:47]
-  wire [2:0] _ex1_pc_bit_out_T_552 = _ex1_pc_bit_out_T_546 + _ex1_pc_bit_out_T_550[1:0]; // @[src/main/scala/fpga/Core.scala 1287:47]
-  wire [1:0] _ex1_pc_bit_out_T_554 = ex1_reg_op2_data[5] + ex1_reg_op2_data[6]; // @[src/main/scala/fpga/Core.scala 1287:47]
-  wire [1:0] _ex1_pc_bit_out_T_556 = ex1_reg_op2_data[8] + ex1_reg_op2_data[9]; // @[src/main/scala/fpga/Core.scala 1287:47]
-  wire [1:0] _GEN_659 = {{1'd0}, ex1_reg_op2_data[7]}; // @[src/main/scala/fpga/Core.scala 1287:47]
-  wire [2:0] _ex1_pc_bit_out_T_558 = _GEN_659 + _ex1_pc_bit_out_T_556; // @[src/main/scala/fpga/Core.scala 1287:47]
-  wire [2:0] _ex1_pc_bit_out_T_560 = _ex1_pc_bit_out_T_554 + _ex1_pc_bit_out_T_558[1:0]; // @[src/main/scala/fpga/Core.scala 1287:47]
-  wire [3:0] _ex1_pc_bit_out_T_562 = _ex1_pc_bit_out_T_552 + _ex1_pc_bit_out_T_560; // @[src/main/scala/fpga/Core.scala 1287:47]
-  wire [31:0] _ex1_pc_bit_out_T_564 = ex1_reg_op1_data >> _ex1_pc_bit_out_T_562; // @[src/main/scala/fpga/Core.scala 1287:36]
-  wire  _ex1_pc_bit_out_T_566 = ex1_reg_op2_data[10] & _ex1_pc_bit_out_T_564[0]; // @[src/main/scala/fpga/Core.scala 1287:10]
-  wire [1:0] _ex1_pc_bit_out_T_579 = ex1_reg_op2_data[0] + ex1_reg_op2_data[1]; // @[src/main/scala/fpga/Core.scala 1287:47]
-  wire [1:0] _ex1_pc_bit_out_T_581 = ex1_reg_op2_data[2] + ex1_reg_op2_data[3]; // @[src/main/scala/fpga/Core.scala 1287:47]
-  wire [2:0] _ex1_pc_bit_out_T_583 = _ex1_pc_bit_out_T_579 + _ex1_pc_bit_out_T_581; // @[src/main/scala/fpga/Core.scala 1287:47]
-  wire [1:0] _ex1_pc_bit_out_T_585 = ex1_reg_op2_data[4] + ex1_reg_op2_data[5]; // @[src/main/scala/fpga/Core.scala 1287:47]
-  wire [1:0] _ex1_pc_bit_out_T_587 = ex1_reg_op2_data[7] + ex1_reg_op2_data[8]; // @[src/main/scala/fpga/Core.scala 1287:47]
-  wire [1:0] _GEN_660 = {{1'd0}, ex1_reg_op2_data[6]}; // @[src/main/scala/fpga/Core.scala 1287:47]
-  wire [2:0] _ex1_pc_bit_out_T_589 = _GEN_660 + _ex1_pc_bit_out_T_587; // @[src/main/scala/fpga/Core.scala 1287:47]
-  wire [2:0] _ex1_pc_bit_out_T_591 = _ex1_pc_bit_out_T_585 + _ex1_pc_bit_out_T_589[1:0]; // @[src/main/scala/fpga/Core.scala 1287:47]
-  wire [3:0] _ex1_pc_bit_out_T_593 = _ex1_pc_bit_out_T_583 + _ex1_pc_bit_out_T_591; // @[src/main/scala/fpga/Core.scala 1287:47]
-  wire [31:0] _ex1_pc_bit_out_T_595 = ex1_reg_op1_data >> _ex1_pc_bit_out_T_593; // @[src/main/scala/fpga/Core.scala 1287:36]
-  wire  _ex1_pc_bit_out_T_597 = ex1_reg_op2_data[9] & _ex1_pc_bit_out_T_595[0]; // @[src/main/scala/fpga/Core.scala 1287:10]
-  wire [1:0] _ex1_pc_bit_out_T_609 = ex1_reg_op2_data[0] + ex1_reg_op2_data[1]; // @[src/main/scala/fpga/Core.scala 1287:47]
-  wire [1:0] _ex1_pc_bit_out_T_611 = ex1_reg_op2_data[2] + ex1_reg_op2_data[3]; // @[src/main/scala/fpga/Core.scala 1287:47]
-  wire [2:0] _ex1_pc_bit_out_T_613 = _ex1_pc_bit_out_T_609 + _ex1_pc_bit_out_T_611; // @[src/main/scala/fpga/Core.scala 1287:47]
-  wire [1:0] _ex1_pc_bit_out_T_615 = ex1_reg_op2_data[4] + ex1_reg_op2_data[5]; // @[src/main/scala/fpga/Core.scala 1287:47]
-  wire [1:0] _ex1_pc_bit_out_T_617 = ex1_reg_op2_data[6] + ex1_reg_op2_data[7]; // @[src/main/scala/fpga/Core.scala 1287:47]
-  wire [2:0] _ex1_pc_bit_out_T_619 = _ex1_pc_bit_out_T_615 + _ex1_pc_bit_out_T_617; // @[src/main/scala/fpga/Core.scala 1287:47]
-  wire [3:0] _ex1_pc_bit_out_T_621 = _ex1_pc_bit_out_T_613 + _ex1_pc_bit_out_T_619; // @[src/main/scala/fpga/Core.scala 1287:47]
-  wire [31:0] _ex1_pc_bit_out_T_623 = ex1_reg_op1_data >> _ex1_pc_bit_out_T_621; // @[src/main/scala/fpga/Core.scala 1287:36]
-  wire  _ex1_pc_bit_out_T_625 = ex1_reg_op2_data[8] & _ex1_pc_bit_out_T_623[0]; // @[src/main/scala/fpga/Core.scala 1287:10]
-  wire [1:0] _ex1_pc_bit_out_T_636 = ex1_reg_op2_data[1] + ex1_reg_op2_data[2]; // @[src/main/scala/fpga/Core.scala 1287:47]
-  wire [1:0] _GEN_661 = {{1'd0}, ex1_reg_op2_data[0]}; // @[src/main/scala/fpga/Core.scala 1287:47]
-  wire [2:0] _ex1_pc_bit_out_T_638 = _GEN_661 + _ex1_pc_bit_out_T_636; // @[src/main/scala/fpga/Core.scala 1287:47]
-  wire [1:0] _ex1_pc_bit_out_T_640 = ex1_reg_op2_data[3] + ex1_reg_op2_data[4]; // @[src/main/scala/fpga/Core.scala 1287:47]
-  wire [1:0] _ex1_pc_bit_out_T_642 = ex1_reg_op2_data[5] + ex1_reg_op2_data[6]; // @[src/main/scala/fpga/Core.scala 1287:47]
-  wire [2:0] _ex1_pc_bit_out_T_644 = _ex1_pc_bit_out_T_640 + _ex1_pc_bit_out_T_642; // @[src/main/scala/fpga/Core.scala 1287:47]
-  wire [2:0] _GEN_662 = {{1'd0}, _ex1_pc_bit_out_T_638[1:0]}; // @[src/main/scala/fpga/Core.scala 1287:47]
-  wire [3:0] _ex1_pc_bit_out_T_646 = _GEN_662 + _ex1_pc_bit_out_T_644; // @[src/main/scala/fpga/Core.scala 1287:47]
-  wire [31:0] _ex1_pc_bit_out_T_648 = ex1_reg_op1_data >> _ex1_pc_bit_out_T_646[2:0]; // @[src/main/scala/fpga/Core.scala 1287:36]
-  wire  _ex1_pc_bit_out_T_650 = ex1_reg_op2_data[7] & _ex1_pc_bit_out_T_648[0]; // @[src/main/scala/fpga/Core.scala 1287:10]
-  wire [1:0] _ex1_pc_bit_out_T_660 = ex1_reg_op2_data[1] + ex1_reg_op2_data[2]; // @[src/main/scala/fpga/Core.scala 1287:47]
-  wire [1:0] _GEN_663 = {{1'd0}, ex1_reg_op2_data[0]}; // @[src/main/scala/fpga/Core.scala 1287:47]
-  wire [2:0] _ex1_pc_bit_out_T_662 = _GEN_663 + _ex1_pc_bit_out_T_660; // @[src/main/scala/fpga/Core.scala 1287:47]
-  wire [1:0] _ex1_pc_bit_out_T_664 = ex1_reg_op2_data[4] + ex1_reg_op2_data[5]; // @[src/main/scala/fpga/Core.scala 1287:47]
-  wire [1:0] _GEN_664 = {{1'd0}, ex1_reg_op2_data[3]}; // @[src/main/scala/fpga/Core.scala 1287:47]
-  wire [2:0] _ex1_pc_bit_out_T_666 = _GEN_664 + _ex1_pc_bit_out_T_664; // @[src/main/scala/fpga/Core.scala 1287:47]
-  wire [2:0] _ex1_pc_bit_out_T_668 = _ex1_pc_bit_out_T_662[1:0] + _ex1_pc_bit_out_T_666[1:0]; // @[src/main/scala/fpga/Core.scala 1287:47]
-  wire [31:0] _ex1_pc_bit_out_T_670 = ex1_reg_op1_data >> _ex1_pc_bit_out_T_668; // @[src/main/scala/fpga/Core.scala 1287:36]
-  wire  _ex1_pc_bit_out_T_672 = ex1_reg_op2_data[6] & _ex1_pc_bit_out_T_670[0]; // @[src/main/scala/fpga/Core.scala 1287:10]
-  wire [1:0] _ex1_pc_bit_out_T_681 = ex1_reg_op2_data[0] + ex1_reg_op2_data[1]; // @[src/main/scala/fpga/Core.scala 1287:47]
-  wire [1:0] _ex1_pc_bit_out_T_683 = ex1_reg_op2_data[3] + ex1_reg_op2_data[4]; // @[src/main/scala/fpga/Core.scala 1287:47]
-  wire [1:0] _GEN_665 = {{1'd0}, ex1_reg_op2_data[2]}; // @[src/main/scala/fpga/Core.scala 1287:47]
-  wire [2:0] _ex1_pc_bit_out_T_685 = _GEN_665 + _ex1_pc_bit_out_T_683; // @[src/main/scala/fpga/Core.scala 1287:47]
-  wire [2:0] _ex1_pc_bit_out_T_687 = _ex1_pc_bit_out_T_681 + _ex1_pc_bit_out_T_685[1:0]; // @[src/main/scala/fpga/Core.scala 1287:47]
-  wire [31:0] _ex1_pc_bit_out_T_689 = ex1_reg_op1_data >> _ex1_pc_bit_out_T_687; // @[src/main/scala/fpga/Core.scala 1287:36]
-  wire  _ex1_pc_bit_out_T_691 = ex1_reg_op2_data[5] & _ex1_pc_bit_out_T_689[0]; // @[src/main/scala/fpga/Core.scala 1287:10]
-  wire [1:0] _ex1_pc_bit_out_T_699 = ex1_reg_op2_data[0] + ex1_reg_op2_data[1]; // @[src/main/scala/fpga/Core.scala 1287:47]
-  wire [1:0] _ex1_pc_bit_out_T_701 = ex1_reg_op2_data[2] + ex1_reg_op2_data[3]; // @[src/main/scala/fpga/Core.scala 1287:47]
-  wire [2:0] _ex1_pc_bit_out_T_703 = _ex1_pc_bit_out_T_699 + _ex1_pc_bit_out_T_701; // @[src/main/scala/fpga/Core.scala 1287:47]
-  wire [31:0] _ex1_pc_bit_out_T_705 = ex1_reg_op1_data >> _ex1_pc_bit_out_T_703; // @[src/main/scala/fpga/Core.scala 1287:36]
-  wire  _ex1_pc_bit_out_T_707 = ex1_reg_op2_data[4] & _ex1_pc_bit_out_T_705[0]; // @[src/main/scala/fpga/Core.scala 1287:10]
-  wire [1:0] _ex1_pc_bit_out_T_714 = ex1_reg_op2_data[1] + ex1_reg_op2_data[2]; // @[src/main/scala/fpga/Core.scala 1287:47]
-  wire [1:0] _GEN_666 = {{1'd0}, ex1_reg_op2_data[0]}; // @[src/main/scala/fpga/Core.scala 1287:47]
-  wire [2:0] _ex1_pc_bit_out_T_716 = _GEN_666 + _ex1_pc_bit_out_T_714; // @[src/main/scala/fpga/Core.scala 1287:47]
-  wire [31:0] _ex1_pc_bit_out_T_718 = ex1_reg_op1_data >> _ex1_pc_bit_out_T_716[1:0]; // @[src/main/scala/fpga/Core.scala 1287:36]
-  wire  _ex1_pc_bit_out_T_720 = ex1_reg_op2_data[3] & _ex1_pc_bit_out_T_718[0]; // @[src/main/scala/fpga/Core.scala 1287:10]
-  wire [1:0] _ex1_pc_bit_out_T_726 = ex1_reg_op2_data[0] + ex1_reg_op2_data[1]; // @[src/main/scala/fpga/Core.scala 1287:47]
-  wire [31:0] _ex1_pc_bit_out_T_728 = ex1_reg_op1_data >> _ex1_pc_bit_out_T_726; // @[src/main/scala/fpga/Core.scala 1287:36]
-  wire  _ex1_pc_bit_out_T_730 = ex1_reg_op2_data[2] & _ex1_pc_bit_out_T_728[0]; // @[src/main/scala/fpga/Core.scala 1287:10]
-  wire [31:0] _ex1_pc_bit_out_T_735 = ex1_reg_op1_data >> ex1_reg_op2_data[0]; // @[src/main/scala/fpga/Core.scala 1287:36]
-  wire  _ex1_pc_bit_out_T_737 = ex1_reg_op2_data[1] & _ex1_pc_bit_out_T_735[0]; // @[src/main/scala/fpga/Core.scala 1287:10]
-  wire  _ex1_pc_bit_out_T_741 = ex1_reg_op2_data[0] & ex1_reg_op1_data[0]; // @[src/main/scala/fpga/Core.scala 1285:10]
+    ex1_reg_op1_data[31:24]}; // @[src/main/scala/fpga/Core.scala 1331:43]
+  wire [23:0] _ex1_pc_bit_out_T_292 = ex1_reg_op1_data[7] ? 24'hffffff : 24'h0; // @[src/main/scala/fpga/Core.scala 1332:48]
+  wire [31:0] _ex1_pc_bit_out_T_294 = {_ex1_pc_bit_out_T_292,ex1_reg_op1_data[7:0]}; // @[src/main/scala/fpga/Core.scala 1332:43]
+  wire [15:0] _ex1_pc_bit_out_T_298 = ex1_reg_op1_data[15] ? 16'hffff : 16'h0; // @[src/main/scala/fpga/Core.scala 1333:48]
+  wire [31:0] _ex1_pc_bit_out_T_300 = {_ex1_pc_bit_out_T_298,ex1_reg_op1_data[15:0]}; // @[src/main/scala/fpga/Core.scala 1333:43]
+  wire [31:0] _ex1_pc_bit_out_T_305 = _ex1_alu_out_T_35 ? ex1_reg_op2_data : ex1_reg_op1_data; // @[src/main/scala/fpga/Core.scala 1334:43]
+  wire [31:0] _ex1_pc_bit_out_T_308 = _ex1_alu_out_T_37 ? ex1_reg_op2_data : ex1_reg_op1_data; // @[src/main/scala/fpga/Core.scala 1335:43]
+  wire [31:0] _ex1_pc_bit_out_T_313 = _ex1_alu_out_T_35 ? ex1_reg_op1_data : ex1_reg_op2_data; // @[src/main/scala/fpga/Core.scala 1336:43]
+  wire [31:0] _ex1_pc_bit_out_T_316 = _ex1_alu_out_T_37 ? ex1_reg_op1_data : ex1_reg_op2_data; // @[src/main/scala/fpga/Core.scala 1337:43]
+  wire [1:0] _ex1_pc_bit_out_T_336 = ex1_reg_op2_data[1] + ex1_reg_op2_data[2]; // @[src/main/scala/fpga/Core.scala 1320:47]
+  wire [1:0] _GEN_654 = {{1'd0}, ex1_reg_op2_data[0]}; // @[src/main/scala/fpga/Core.scala 1320:47]
+  wire [2:0] _ex1_pc_bit_out_T_338 = _GEN_654 + _ex1_pc_bit_out_T_336; // @[src/main/scala/fpga/Core.scala 1320:47]
+  wire [1:0] _ex1_pc_bit_out_T_340 = ex1_reg_op2_data[3] + ex1_reg_op2_data[4]; // @[src/main/scala/fpga/Core.scala 1320:47]
+  wire [1:0] _ex1_pc_bit_out_T_342 = ex1_reg_op2_data[5] + ex1_reg_op2_data[6]; // @[src/main/scala/fpga/Core.scala 1320:47]
+  wire [2:0] _ex1_pc_bit_out_T_344 = _ex1_pc_bit_out_T_340 + _ex1_pc_bit_out_T_342; // @[src/main/scala/fpga/Core.scala 1320:47]
+  wire [2:0] _GEN_655 = {{1'd0}, _ex1_pc_bit_out_T_338[1:0]}; // @[src/main/scala/fpga/Core.scala 1320:47]
+  wire [3:0] _ex1_pc_bit_out_T_346 = _GEN_655 + _ex1_pc_bit_out_T_344; // @[src/main/scala/fpga/Core.scala 1320:47]
+  wire [1:0] _ex1_pc_bit_out_T_348 = ex1_reg_op2_data[7] + ex1_reg_op2_data[8]; // @[src/main/scala/fpga/Core.scala 1320:47]
+  wire [1:0] _ex1_pc_bit_out_T_350 = ex1_reg_op2_data[9] + ex1_reg_op2_data[10]; // @[src/main/scala/fpga/Core.scala 1320:47]
+  wire [2:0] _ex1_pc_bit_out_T_352 = _ex1_pc_bit_out_T_348 + _ex1_pc_bit_out_T_350; // @[src/main/scala/fpga/Core.scala 1320:47]
+  wire [1:0] _ex1_pc_bit_out_T_354 = ex1_reg_op2_data[11] + ex1_reg_op2_data[12]; // @[src/main/scala/fpga/Core.scala 1320:47]
+  wire [1:0] _ex1_pc_bit_out_T_356 = ex1_reg_op2_data[13] + ex1_reg_op2_data[14]; // @[src/main/scala/fpga/Core.scala 1320:47]
+  wire [2:0] _ex1_pc_bit_out_T_358 = _ex1_pc_bit_out_T_354 + _ex1_pc_bit_out_T_356; // @[src/main/scala/fpga/Core.scala 1320:47]
+  wire [3:0] _ex1_pc_bit_out_T_360 = _ex1_pc_bit_out_T_352 + _ex1_pc_bit_out_T_358; // @[src/main/scala/fpga/Core.scala 1320:47]
+  wire [3:0] _GEN_656 = {{1'd0}, _ex1_pc_bit_out_T_346[2:0]}; // @[src/main/scala/fpga/Core.scala 1320:47]
+  wire [4:0] _ex1_pc_bit_out_T_362 = _GEN_656 + _ex1_pc_bit_out_T_360; // @[src/main/scala/fpga/Core.scala 1320:47]
+  wire [31:0] _ex1_pc_bit_out_T_364 = ex1_reg_op1_data >> _ex1_pc_bit_out_T_362[3:0]; // @[src/main/scala/fpga/Core.scala 1320:36]
+  wire  _ex1_pc_bit_out_T_366 = ex1_reg_op2_data[15] & _ex1_pc_bit_out_T_364[0]; // @[src/main/scala/fpga/Core.scala 1320:10]
+  wire [1:0] _ex1_pc_bit_out_T_384 = ex1_reg_op2_data[1] + ex1_reg_op2_data[2]; // @[src/main/scala/fpga/Core.scala 1320:47]
+  wire [1:0] _GEN_657 = {{1'd0}, ex1_reg_op2_data[0]}; // @[src/main/scala/fpga/Core.scala 1320:47]
+  wire [2:0] _ex1_pc_bit_out_T_386 = _GEN_657 + _ex1_pc_bit_out_T_384; // @[src/main/scala/fpga/Core.scala 1320:47]
+  wire [1:0] _ex1_pc_bit_out_T_388 = ex1_reg_op2_data[3] + ex1_reg_op2_data[4]; // @[src/main/scala/fpga/Core.scala 1320:47]
+  wire [1:0] _ex1_pc_bit_out_T_390 = ex1_reg_op2_data[5] + ex1_reg_op2_data[6]; // @[src/main/scala/fpga/Core.scala 1320:47]
+  wire [2:0] _ex1_pc_bit_out_T_392 = _ex1_pc_bit_out_T_388 + _ex1_pc_bit_out_T_390; // @[src/main/scala/fpga/Core.scala 1320:47]
+  wire [2:0] _GEN_658 = {{1'd0}, _ex1_pc_bit_out_T_386[1:0]}; // @[src/main/scala/fpga/Core.scala 1320:47]
+  wire [3:0] _ex1_pc_bit_out_T_394 = _GEN_658 + _ex1_pc_bit_out_T_392; // @[src/main/scala/fpga/Core.scala 1320:47]
+  wire [1:0] _ex1_pc_bit_out_T_396 = ex1_reg_op2_data[8] + ex1_reg_op2_data[9]; // @[src/main/scala/fpga/Core.scala 1320:47]
+  wire [1:0] _GEN_659 = {{1'd0}, ex1_reg_op2_data[7]}; // @[src/main/scala/fpga/Core.scala 1320:47]
+  wire [2:0] _ex1_pc_bit_out_T_398 = _GEN_659 + _ex1_pc_bit_out_T_396; // @[src/main/scala/fpga/Core.scala 1320:47]
+  wire [1:0] _ex1_pc_bit_out_T_400 = ex1_reg_op2_data[10] + ex1_reg_op2_data[11]; // @[src/main/scala/fpga/Core.scala 1320:47]
+  wire [1:0] _ex1_pc_bit_out_T_402 = ex1_reg_op2_data[12] + ex1_reg_op2_data[13]; // @[src/main/scala/fpga/Core.scala 1320:47]
+  wire [2:0] _ex1_pc_bit_out_T_404 = _ex1_pc_bit_out_T_400 + _ex1_pc_bit_out_T_402; // @[src/main/scala/fpga/Core.scala 1320:47]
+  wire [2:0] _GEN_660 = {{1'd0}, _ex1_pc_bit_out_T_398[1:0]}; // @[src/main/scala/fpga/Core.scala 1320:47]
+  wire [3:0] _ex1_pc_bit_out_T_406 = _GEN_660 + _ex1_pc_bit_out_T_404; // @[src/main/scala/fpga/Core.scala 1320:47]
+  wire [3:0] _ex1_pc_bit_out_T_408 = _ex1_pc_bit_out_T_394[2:0] + _ex1_pc_bit_out_T_406[2:0]; // @[src/main/scala/fpga/Core.scala 1320:47]
+  wire [31:0] _ex1_pc_bit_out_T_410 = ex1_reg_op1_data >> _ex1_pc_bit_out_T_408; // @[src/main/scala/fpga/Core.scala 1320:36]
+  wire  _ex1_pc_bit_out_T_412 = ex1_reg_op2_data[14] & _ex1_pc_bit_out_T_410[0]; // @[src/main/scala/fpga/Core.scala 1320:10]
+  wire [1:0] _ex1_pc_bit_out_T_429 = ex1_reg_op2_data[1] + ex1_reg_op2_data[2]; // @[src/main/scala/fpga/Core.scala 1320:47]
+  wire [1:0] _GEN_661 = {{1'd0}, ex1_reg_op2_data[0]}; // @[src/main/scala/fpga/Core.scala 1320:47]
+  wire [2:0] _ex1_pc_bit_out_T_431 = _GEN_661 + _ex1_pc_bit_out_T_429; // @[src/main/scala/fpga/Core.scala 1320:47]
+  wire [1:0] _ex1_pc_bit_out_T_433 = ex1_reg_op2_data[4] + ex1_reg_op2_data[5]; // @[src/main/scala/fpga/Core.scala 1320:47]
+  wire [1:0] _GEN_662 = {{1'd0}, ex1_reg_op2_data[3]}; // @[src/main/scala/fpga/Core.scala 1320:47]
+  wire [2:0] _ex1_pc_bit_out_T_435 = _GEN_662 + _ex1_pc_bit_out_T_433; // @[src/main/scala/fpga/Core.scala 1320:47]
+  wire [2:0] _ex1_pc_bit_out_T_437 = _ex1_pc_bit_out_T_431[1:0] + _ex1_pc_bit_out_T_435[1:0]; // @[src/main/scala/fpga/Core.scala 1320:47]
+  wire [1:0] _ex1_pc_bit_out_T_439 = ex1_reg_op2_data[7] + ex1_reg_op2_data[8]; // @[src/main/scala/fpga/Core.scala 1320:47]
+  wire [1:0] _GEN_663 = {{1'd0}, ex1_reg_op2_data[6]}; // @[src/main/scala/fpga/Core.scala 1320:47]
+  wire [2:0] _ex1_pc_bit_out_T_441 = _GEN_663 + _ex1_pc_bit_out_T_439; // @[src/main/scala/fpga/Core.scala 1320:47]
+  wire [1:0] _ex1_pc_bit_out_T_443 = ex1_reg_op2_data[9] + ex1_reg_op2_data[10]; // @[src/main/scala/fpga/Core.scala 1320:47]
+  wire [1:0] _ex1_pc_bit_out_T_445 = ex1_reg_op2_data[11] + ex1_reg_op2_data[12]; // @[src/main/scala/fpga/Core.scala 1320:47]
+  wire [2:0] _ex1_pc_bit_out_T_447 = _ex1_pc_bit_out_T_443 + _ex1_pc_bit_out_T_445; // @[src/main/scala/fpga/Core.scala 1320:47]
+  wire [2:0] _GEN_664 = {{1'd0}, _ex1_pc_bit_out_T_441[1:0]}; // @[src/main/scala/fpga/Core.scala 1320:47]
+  wire [3:0] _ex1_pc_bit_out_T_449 = _GEN_664 + _ex1_pc_bit_out_T_447; // @[src/main/scala/fpga/Core.scala 1320:47]
+  wire [3:0] _ex1_pc_bit_out_T_451 = _ex1_pc_bit_out_T_437 + _ex1_pc_bit_out_T_449[2:0]; // @[src/main/scala/fpga/Core.scala 1320:47]
+  wire [31:0] _ex1_pc_bit_out_T_453 = ex1_reg_op1_data >> _ex1_pc_bit_out_T_451; // @[src/main/scala/fpga/Core.scala 1320:36]
+  wire  _ex1_pc_bit_out_T_455 = ex1_reg_op2_data[13] & _ex1_pc_bit_out_T_453[0]; // @[src/main/scala/fpga/Core.scala 1320:10]
+  wire [1:0] _ex1_pc_bit_out_T_471 = ex1_reg_op2_data[1] + ex1_reg_op2_data[2]; // @[src/main/scala/fpga/Core.scala 1320:47]
+  wire [1:0] _GEN_665 = {{1'd0}, ex1_reg_op2_data[0]}; // @[src/main/scala/fpga/Core.scala 1320:47]
+  wire [2:0] _ex1_pc_bit_out_T_473 = _GEN_665 + _ex1_pc_bit_out_T_471; // @[src/main/scala/fpga/Core.scala 1320:47]
+  wire [1:0] _ex1_pc_bit_out_T_475 = ex1_reg_op2_data[4] + ex1_reg_op2_data[5]; // @[src/main/scala/fpga/Core.scala 1320:47]
+  wire [1:0] _GEN_666 = {{1'd0}, ex1_reg_op2_data[3]}; // @[src/main/scala/fpga/Core.scala 1320:47]
+  wire [2:0] _ex1_pc_bit_out_T_477 = _GEN_666 + _ex1_pc_bit_out_T_475; // @[src/main/scala/fpga/Core.scala 1320:47]
+  wire [2:0] _ex1_pc_bit_out_T_479 = _ex1_pc_bit_out_T_473[1:0] + _ex1_pc_bit_out_T_477[1:0]; // @[src/main/scala/fpga/Core.scala 1320:47]
+  wire [1:0] _ex1_pc_bit_out_T_481 = ex1_reg_op2_data[7] + ex1_reg_op2_data[8]; // @[src/main/scala/fpga/Core.scala 1320:47]
+  wire [1:0] _GEN_667 = {{1'd0}, ex1_reg_op2_data[6]}; // @[src/main/scala/fpga/Core.scala 1320:47]
+  wire [2:0] _ex1_pc_bit_out_T_483 = _GEN_667 + _ex1_pc_bit_out_T_481; // @[src/main/scala/fpga/Core.scala 1320:47]
+  wire [1:0] _ex1_pc_bit_out_T_485 = ex1_reg_op2_data[10] + ex1_reg_op2_data[11]; // @[src/main/scala/fpga/Core.scala 1320:47]
+  wire [1:0] _GEN_668 = {{1'd0}, ex1_reg_op2_data[9]}; // @[src/main/scala/fpga/Core.scala 1320:47]
+  wire [2:0] _ex1_pc_bit_out_T_487 = _GEN_668 + _ex1_pc_bit_out_T_485; // @[src/main/scala/fpga/Core.scala 1320:47]
+  wire [2:0] _ex1_pc_bit_out_T_489 = _ex1_pc_bit_out_T_483[1:0] + _ex1_pc_bit_out_T_487[1:0]; // @[src/main/scala/fpga/Core.scala 1320:47]
+  wire [3:0] _ex1_pc_bit_out_T_491 = _ex1_pc_bit_out_T_479 + _ex1_pc_bit_out_T_489; // @[src/main/scala/fpga/Core.scala 1320:47]
+  wire [31:0] _ex1_pc_bit_out_T_493 = ex1_reg_op1_data >> _ex1_pc_bit_out_T_491; // @[src/main/scala/fpga/Core.scala 1320:36]
+  wire  _ex1_pc_bit_out_T_495 = ex1_reg_op2_data[12] & _ex1_pc_bit_out_T_493[0]; // @[src/main/scala/fpga/Core.scala 1320:10]
+  wire [1:0] _ex1_pc_bit_out_T_510 = ex1_reg_op2_data[0] + ex1_reg_op2_data[1]; // @[src/main/scala/fpga/Core.scala 1320:47]
+  wire [1:0] _ex1_pc_bit_out_T_512 = ex1_reg_op2_data[3] + ex1_reg_op2_data[4]; // @[src/main/scala/fpga/Core.scala 1320:47]
+  wire [1:0] _GEN_669 = {{1'd0}, ex1_reg_op2_data[2]}; // @[src/main/scala/fpga/Core.scala 1320:47]
+  wire [2:0] _ex1_pc_bit_out_T_514 = _GEN_669 + _ex1_pc_bit_out_T_512; // @[src/main/scala/fpga/Core.scala 1320:47]
+  wire [2:0] _ex1_pc_bit_out_T_516 = _ex1_pc_bit_out_T_510 + _ex1_pc_bit_out_T_514[1:0]; // @[src/main/scala/fpga/Core.scala 1320:47]
+  wire [1:0] _ex1_pc_bit_out_T_518 = ex1_reg_op2_data[6] + ex1_reg_op2_data[7]; // @[src/main/scala/fpga/Core.scala 1320:47]
+  wire [1:0] _GEN_670 = {{1'd0}, ex1_reg_op2_data[5]}; // @[src/main/scala/fpga/Core.scala 1320:47]
+  wire [2:0] _ex1_pc_bit_out_T_520 = _GEN_670 + _ex1_pc_bit_out_T_518; // @[src/main/scala/fpga/Core.scala 1320:47]
+  wire [1:0] _ex1_pc_bit_out_T_522 = ex1_reg_op2_data[9] + ex1_reg_op2_data[10]; // @[src/main/scala/fpga/Core.scala 1320:47]
+  wire [1:0] _GEN_671 = {{1'd0}, ex1_reg_op2_data[8]}; // @[src/main/scala/fpga/Core.scala 1320:47]
+  wire [2:0] _ex1_pc_bit_out_T_524 = _GEN_671 + _ex1_pc_bit_out_T_522; // @[src/main/scala/fpga/Core.scala 1320:47]
+  wire [2:0] _ex1_pc_bit_out_T_526 = _ex1_pc_bit_out_T_520[1:0] + _ex1_pc_bit_out_T_524[1:0]; // @[src/main/scala/fpga/Core.scala 1320:47]
+  wire [3:0] _ex1_pc_bit_out_T_528 = _ex1_pc_bit_out_T_516 + _ex1_pc_bit_out_T_526; // @[src/main/scala/fpga/Core.scala 1320:47]
+  wire [31:0] _ex1_pc_bit_out_T_530 = ex1_reg_op1_data >> _ex1_pc_bit_out_T_528; // @[src/main/scala/fpga/Core.scala 1320:36]
+  wire  _ex1_pc_bit_out_T_532 = ex1_reg_op2_data[11] & _ex1_pc_bit_out_T_530[0]; // @[src/main/scala/fpga/Core.scala 1320:10]
+  wire [1:0] _ex1_pc_bit_out_T_546 = ex1_reg_op2_data[0] + ex1_reg_op2_data[1]; // @[src/main/scala/fpga/Core.scala 1320:47]
+  wire [1:0] _ex1_pc_bit_out_T_548 = ex1_reg_op2_data[3] + ex1_reg_op2_data[4]; // @[src/main/scala/fpga/Core.scala 1320:47]
+  wire [1:0] _GEN_672 = {{1'd0}, ex1_reg_op2_data[2]}; // @[src/main/scala/fpga/Core.scala 1320:47]
+  wire [2:0] _ex1_pc_bit_out_T_550 = _GEN_672 + _ex1_pc_bit_out_T_548; // @[src/main/scala/fpga/Core.scala 1320:47]
+  wire [2:0] _ex1_pc_bit_out_T_552 = _ex1_pc_bit_out_T_546 + _ex1_pc_bit_out_T_550[1:0]; // @[src/main/scala/fpga/Core.scala 1320:47]
+  wire [1:0] _ex1_pc_bit_out_T_554 = ex1_reg_op2_data[5] + ex1_reg_op2_data[6]; // @[src/main/scala/fpga/Core.scala 1320:47]
+  wire [1:0] _ex1_pc_bit_out_T_556 = ex1_reg_op2_data[8] + ex1_reg_op2_data[9]; // @[src/main/scala/fpga/Core.scala 1320:47]
+  wire [1:0] _GEN_673 = {{1'd0}, ex1_reg_op2_data[7]}; // @[src/main/scala/fpga/Core.scala 1320:47]
+  wire [2:0] _ex1_pc_bit_out_T_558 = _GEN_673 + _ex1_pc_bit_out_T_556; // @[src/main/scala/fpga/Core.scala 1320:47]
+  wire [2:0] _ex1_pc_bit_out_T_560 = _ex1_pc_bit_out_T_554 + _ex1_pc_bit_out_T_558[1:0]; // @[src/main/scala/fpga/Core.scala 1320:47]
+  wire [3:0] _ex1_pc_bit_out_T_562 = _ex1_pc_bit_out_T_552 + _ex1_pc_bit_out_T_560; // @[src/main/scala/fpga/Core.scala 1320:47]
+  wire [31:0] _ex1_pc_bit_out_T_564 = ex1_reg_op1_data >> _ex1_pc_bit_out_T_562; // @[src/main/scala/fpga/Core.scala 1320:36]
+  wire  _ex1_pc_bit_out_T_566 = ex1_reg_op2_data[10] & _ex1_pc_bit_out_T_564[0]; // @[src/main/scala/fpga/Core.scala 1320:10]
+  wire [1:0] _ex1_pc_bit_out_T_579 = ex1_reg_op2_data[0] + ex1_reg_op2_data[1]; // @[src/main/scala/fpga/Core.scala 1320:47]
+  wire [1:0] _ex1_pc_bit_out_T_581 = ex1_reg_op2_data[2] + ex1_reg_op2_data[3]; // @[src/main/scala/fpga/Core.scala 1320:47]
+  wire [2:0] _ex1_pc_bit_out_T_583 = _ex1_pc_bit_out_T_579 + _ex1_pc_bit_out_T_581; // @[src/main/scala/fpga/Core.scala 1320:47]
+  wire [1:0] _ex1_pc_bit_out_T_585 = ex1_reg_op2_data[4] + ex1_reg_op2_data[5]; // @[src/main/scala/fpga/Core.scala 1320:47]
+  wire [1:0] _ex1_pc_bit_out_T_587 = ex1_reg_op2_data[7] + ex1_reg_op2_data[8]; // @[src/main/scala/fpga/Core.scala 1320:47]
+  wire [1:0] _GEN_674 = {{1'd0}, ex1_reg_op2_data[6]}; // @[src/main/scala/fpga/Core.scala 1320:47]
+  wire [2:0] _ex1_pc_bit_out_T_589 = _GEN_674 + _ex1_pc_bit_out_T_587; // @[src/main/scala/fpga/Core.scala 1320:47]
+  wire [2:0] _ex1_pc_bit_out_T_591 = _ex1_pc_bit_out_T_585 + _ex1_pc_bit_out_T_589[1:0]; // @[src/main/scala/fpga/Core.scala 1320:47]
+  wire [3:0] _ex1_pc_bit_out_T_593 = _ex1_pc_bit_out_T_583 + _ex1_pc_bit_out_T_591; // @[src/main/scala/fpga/Core.scala 1320:47]
+  wire [31:0] _ex1_pc_bit_out_T_595 = ex1_reg_op1_data >> _ex1_pc_bit_out_T_593; // @[src/main/scala/fpga/Core.scala 1320:36]
+  wire  _ex1_pc_bit_out_T_597 = ex1_reg_op2_data[9] & _ex1_pc_bit_out_T_595[0]; // @[src/main/scala/fpga/Core.scala 1320:10]
+  wire [1:0] _ex1_pc_bit_out_T_609 = ex1_reg_op2_data[0] + ex1_reg_op2_data[1]; // @[src/main/scala/fpga/Core.scala 1320:47]
+  wire [1:0] _ex1_pc_bit_out_T_611 = ex1_reg_op2_data[2] + ex1_reg_op2_data[3]; // @[src/main/scala/fpga/Core.scala 1320:47]
+  wire [2:0] _ex1_pc_bit_out_T_613 = _ex1_pc_bit_out_T_609 + _ex1_pc_bit_out_T_611; // @[src/main/scala/fpga/Core.scala 1320:47]
+  wire [1:0] _ex1_pc_bit_out_T_615 = ex1_reg_op2_data[4] + ex1_reg_op2_data[5]; // @[src/main/scala/fpga/Core.scala 1320:47]
+  wire [1:0] _ex1_pc_bit_out_T_617 = ex1_reg_op2_data[6] + ex1_reg_op2_data[7]; // @[src/main/scala/fpga/Core.scala 1320:47]
+  wire [2:0] _ex1_pc_bit_out_T_619 = _ex1_pc_bit_out_T_615 + _ex1_pc_bit_out_T_617; // @[src/main/scala/fpga/Core.scala 1320:47]
+  wire [3:0] _ex1_pc_bit_out_T_621 = _ex1_pc_bit_out_T_613 + _ex1_pc_bit_out_T_619; // @[src/main/scala/fpga/Core.scala 1320:47]
+  wire [31:0] _ex1_pc_bit_out_T_623 = ex1_reg_op1_data >> _ex1_pc_bit_out_T_621; // @[src/main/scala/fpga/Core.scala 1320:36]
+  wire  _ex1_pc_bit_out_T_625 = ex1_reg_op2_data[8] & _ex1_pc_bit_out_T_623[0]; // @[src/main/scala/fpga/Core.scala 1320:10]
+  wire [1:0] _ex1_pc_bit_out_T_636 = ex1_reg_op2_data[1] + ex1_reg_op2_data[2]; // @[src/main/scala/fpga/Core.scala 1320:47]
+  wire [1:0] _GEN_675 = {{1'd0}, ex1_reg_op2_data[0]}; // @[src/main/scala/fpga/Core.scala 1320:47]
+  wire [2:0] _ex1_pc_bit_out_T_638 = _GEN_675 + _ex1_pc_bit_out_T_636; // @[src/main/scala/fpga/Core.scala 1320:47]
+  wire [1:0] _ex1_pc_bit_out_T_640 = ex1_reg_op2_data[3] + ex1_reg_op2_data[4]; // @[src/main/scala/fpga/Core.scala 1320:47]
+  wire [1:0] _ex1_pc_bit_out_T_642 = ex1_reg_op2_data[5] + ex1_reg_op2_data[6]; // @[src/main/scala/fpga/Core.scala 1320:47]
+  wire [2:0] _ex1_pc_bit_out_T_644 = _ex1_pc_bit_out_T_640 + _ex1_pc_bit_out_T_642; // @[src/main/scala/fpga/Core.scala 1320:47]
+  wire [2:0] _GEN_676 = {{1'd0}, _ex1_pc_bit_out_T_638[1:0]}; // @[src/main/scala/fpga/Core.scala 1320:47]
+  wire [3:0] _ex1_pc_bit_out_T_646 = _GEN_676 + _ex1_pc_bit_out_T_644; // @[src/main/scala/fpga/Core.scala 1320:47]
+  wire [31:0] _ex1_pc_bit_out_T_648 = ex1_reg_op1_data >> _ex1_pc_bit_out_T_646[2:0]; // @[src/main/scala/fpga/Core.scala 1320:36]
+  wire  _ex1_pc_bit_out_T_650 = ex1_reg_op2_data[7] & _ex1_pc_bit_out_T_648[0]; // @[src/main/scala/fpga/Core.scala 1320:10]
+  wire [1:0] _ex1_pc_bit_out_T_660 = ex1_reg_op2_data[1] + ex1_reg_op2_data[2]; // @[src/main/scala/fpga/Core.scala 1320:47]
+  wire [1:0] _GEN_677 = {{1'd0}, ex1_reg_op2_data[0]}; // @[src/main/scala/fpga/Core.scala 1320:47]
+  wire [2:0] _ex1_pc_bit_out_T_662 = _GEN_677 + _ex1_pc_bit_out_T_660; // @[src/main/scala/fpga/Core.scala 1320:47]
+  wire [1:0] _ex1_pc_bit_out_T_664 = ex1_reg_op2_data[4] + ex1_reg_op2_data[5]; // @[src/main/scala/fpga/Core.scala 1320:47]
+  wire [1:0] _GEN_678 = {{1'd0}, ex1_reg_op2_data[3]}; // @[src/main/scala/fpga/Core.scala 1320:47]
+  wire [2:0] _ex1_pc_bit_out_T_666 = _GEN_678 + _ex1_pc_bit_out_T_664; // @[src/main/scala/fpga/Core.scala 1320:47]
+  wire [2:0] _ex1_pc_bit_out_T_668 = _ex1_pc_bit_out_T_662[1:0] + _ex1_pc_bit_out_T_666[1:0]; // @[src/main/scala/fpga/Core.scala 1320:47]
+  wire [31:0] _ex1_pc_bit_out_T_670 = ex1_reg_op1_data >> _ex1_pc_bit_out_T_668; // @[src/main/scala/fpga/Core.scala 1320:36]
+  wire  _ex1_pc_bit_out_T_672 = ex1_reg_op2_data[6] & _ex1_pc_bit_out_T_670[0]; // @[src/main/scala/fpga/Core.scala 1320:10]
+  wire [1:0] _ex1_pc_bit_out_T_681 = ex1_reg_op2_data[0] + ex1_reg_op2_data[1]; // @[src/main/scala/fpga/Core.scala 1320:47]
+  wire [1:0] _ex1_pc_bit_out_T_683 = ex1_reg_op2_data[3] + ex1_reg_op2_data[4]; // @[src/main/scala/fpga/Core.scala 1320:47]
+  wire [1:0] _GEN_679 = {{1'd0}, ex1_reg_op2_data[2]}; // @[src/main/scala/fpga/Core.scala 1320:47]
+  wire [2:0] _ex1_pc_bit_out_T_685 = _GEN_679 + _ex1_pc_bit_out_T_683; // @[src/main/scala/fpga/Core.scala 1320:47]
+  wire [2:0] _ex1_pc_bit_out_T_687 = _ex1_pc_bit_out_T_681 + _ex1_pc_bit_out_T_685[1:0]; // @[src/main/scala/fpga/Core.scala 1320:47]
+  wire [31:0] _ex1_pc_bit_out_T_689 = ex1_reg_op1_data >> _ex1_pc_bit_out_T_687; // @[src/main/scala/fpga/Core.scala 1320:36]
+  wire  _ex1_pc_bit_out_T_691 = ex1_reg_op2_data[5] & _ex1_pc_bit_out_T_689[0]; // @[src/main/scala/fpga/Core.scala 1320:10]
+  wire [1:0] _ex1_pc_bit_out_T_699 = ex1_reg_op2_data[0] + ex1_reg_op2_data[1]; // @[src/main/scala/fpga/Core.scala 1320:47]
+  wire [1:0] _ex1_pc_bit_out_T_701 = ex1_reg_op2_data[2] + ex1_reg_op2_data[3]; // @[src/main/scala/fpga/Core.scala 1320:47]
+  wire [2:0] _ex1_pc_bit_out_T_703 = _ex1_pc_bit_out_T_699 + _ex1_pc_bit_out_T_701; // @[src/main/scala/fpga/Core.scala 1320:47]
+  wire [31:0] _ex1_pc_bit_out_T_705 = ex1_reg_op1_data >> _ex1_pc_bit_out_T_703; // @[src/main/scala/fpga/Core.scala 1320:36]
+  wire  _ex1_pc_bit_out_T_707 = ex1_reg_op2_data[4] & _ex1_pc_bit_out_T_705[0]; // @[src/main/scala/fpga/Core.scala 1320:10]
+  wire [1:0] _ex1_pc_bit_out_T_714 = ex1_reg_op2_data[1] + ex1_reg_op2_data[2]; // @[src/main/scala/fpga/Core.scala 1320:47]
+  wire [1:0] _GEN_680 = {{1'd0}, ex1_reg_op2_data[0]}; // @[src/main/scala/fpga/Core.scala 1320:47]
+  wire [2:0] _ex1_pc_bit_out_T_716 = _GEN_680 + _ex1_pc_bit_out_T_714; // @[src/main/scala/fpga/Core.scala 1320:47]
+  wire [31:0] _ex1_pc_bit_out_T_718 = ex1_reg_op1_data >> _ex1_pc_bit_out_T_716[1:0]; // @[src/main/scala/fpga/Core.scala 1320:36]
+  wire  _ex1_pc_bit_out_T_720 = ex1_reg_op2_data[3] & _ex1_pc_bit_out_T_718[0]; // @[src/main/scala/fpga/Core.scala 1320:10]
+  wire [1:0] _ex1_pc_bit_out_T_726 = ex1_reg_op2_data[0] + ex1_reg_op2_data[1]; // @[src/main/scala/fpga/Core.scala 1320:47]
+  wire [31:0] _ex1_pc_bit_out_T_728 = ex1_reg_op1_data >> _ex1_pc_bit_out_T_726; // @[src/main/scala/fpga/Core.scala 1320:36]
+  wire  _ex1_pc_bit_out_T_730 = ex1_reg_op2_data[2] & _ex1_pc_bit_out_T_728[0]; // @[src/main/scala/fpga/Core.scala 1320:10]
+  wire [31:0] _ex1_pc_bit_out_T_735 = ex1_reg_op1_data >> ex1_reg_op2_data[0]; // @[src/main/scala/fpga/Core.scala 1320:36]
+  wire  _ex1_pc_bit_out_T_737 = ex1_reg_op2_data[1] & _ex1_pc_bit_out_T_735[0]; // @[src/main/scala/fpga/Core.scala 1320:10]
+  wire  _ex1_pc_bit_out_T_741 = ex1_reg_op2_data[0] & ex1_reg_op1_data[0]; // @[src/main/scala/fpga/Core.scala 1318:10]
   wire [7:0] ex1_pc_bit_out_lo_1 = {_ex1_pc_bit_out_T_650,_ex1_pc_bit_out_T_672,_ex1_pc_bit_out_T_691,
-    _ex1_pc_bit_out_T_707,_ex1_pc_bit_out_T_720,_ex1_pc_bit_out_T_730,_ex1_pc_bit_out_T_737,_ex1_pc_bit_out_T_741}; // @[src/main/scala/fpga/Core.scala 1305:43]
+    _ex1_pc_bit_out_T_707,_ex1_pc_bit_out_T_720,_ex1_pc_bit_out_T_730,_ex1_pc_bit_out_T_737,_ex1_pc_bit_out_T_741}; // @[src/main/scala/fpga/Core.scala 1338:43]
   wire [15:0] _ex1_pc_bit_out_T_742 = {_ex1_pc_bit_out_T_366,_ex1_pc_bit_out_T_412,_ex1_pc_bit_out_T_455,
     _ex1_pc_bit_out_T_495,_ex1_pc_bit_out_T_532,_ex1_pc_bit_out_T_566,_ex1_pc_bit_out_T_597,_ex1_pc_bit_out_T_625,
-    ex1_pc_bit_out_lo_1}; // @[src/main/scala/fpga/Core.scala 1305:43]
-  wire [31:0] _ex1_pc_bit_out_T_743 = _ex1_alu_out_T_6 ? {{16'd0}, _ex1_pc_bit_out_T_742} : 32'h0; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
-  wire [31:0] _ex1_pc_bit_out_T_744 = _ex1_alu_out_T_38 ? _ex1_pc_bit_out_T_316 : _ex1_pc_bit_out_T_743; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
-  wire [31:0] _ex1_pc_bit_out_T_745 = _ex1_pc_bit_out_T_309 ? _ex1_pc_bit_out_T_313 : _ex1_pc_bit_out_T_744; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
-  wire [31:0] _ex1_pc_bit_out_T_746 = _ex1_pc_bit_out_T_306 ? _ex1_pc_bit_out_T_308 : _ex1_pc_bit_out_T_745; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
-  wire [31:0] _ex1_pc_bit_out_T_747 = _ex1_pc_bit_out_T_301 ? _ex1_pc_bit_out_T_305 : _ex1_pc_bit_out_T_746; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
-  wire [31:0] _ex1_pc_bit_out_T_748 = _ex1_alu_out_T_32 ? _ex1_pc_bit_out_T_300 : _ex1_pc_bit_out_T_747; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
+    ex1_pc_bit_out_lo_1}; // @[src/main/scala/fpga/Core.scala 1338:43]
+  wire [31:0] _ex1_pc_bit_out_T_743 = _ex1_alu_out_T_9 ? {{16'd0}, _ex1_pc_bit_out_T_742} : 32'h0; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
+  wire [31:0] _ex1_pc_bit_out_T_744 = _ex1_alu_out_T_52 ? _ex1_pc_bit_out_T_316 : _ex1_pc_bit_out_T_743; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
+  wire [31:0] _ex1_pc_bit_out_T_745 = _ex1_alu_out_T_57 ? _ex1_pc_bit_out_T_313 : _ex1_pc_bit_out_T_744; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
+  wire [31:0] _ex1_pc_bit_out_T_746 = _ex1_alu_out_T_46 ? _ex1_pc_bit_out_T_308 : _ex1_pc_bit_out_T_745; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
+  wire [31:0] _ex1_pc_bit_out_T_747 = _ex1_alu_out_T_62 ? _ex1_pc_bit_out_T_305 : _ex1_pc_bit_out_T_746; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
+  wire [31:0] _ex1_pc_bit_out_T_748 = _ex1_alu_out_T_43 ? _ex1_pc_bit_out_T_300 : _ex1_pc_bit_out_T_747; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
   wire [31:0] _ex1_pc_bit_out_T_749 = _ex1_alu_out_T_1 ? _ex1_pc_bit_out_T_294 : _ex1_pc_bit_out_T_748; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
-  wire [31:0] _ex1_pc_bit_out_T_750 = _ex1_alu_out_T_27 ? _ex1_pc_bit_out_T_288 : _ex1_pc_bit_out_T_749; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
-  wire [31:0] _ex1_pc_bit_out_T_751 = _ex1_alu_out_T_17 ? {{26'd0}, _ex1_pc_bit_out_T_282} : _ex1_pc_bit_out_T_750; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
-  wire [31:0] _ex1_pc_bit_out_T_752 = _ex1_alu_out_T_10 ? {{26'd0}, _ex1_pc_bit_out_T_215} : _ex1_pc_bit_out_T_751; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
-  wire [31:0] _ex1_pc_bit_out_T_753 = _ex1_alu_out_T_23 ? {{26'd0}, _ex1_pc_bit_out_T_98} : _ex1_pc_bit_out_T_752; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
-  wire  _ex1_divrem_T = ex1_reg_wb_sel == 3'h1; // @[src/main/scala/fpga/Core.scala 1317:34]
-  wire [31:0] _ex1_dividend_T_1 = ~ex1_reg_op1_data; // @[src/main/scala/fpga/Core.scala 1319:47]
-  wire [31:0] _ex1_dividend_T_3 = _ex1_dividend_T_1 + 32'h1; // @[src/main/scala/fpga/Core.scala 1319:65]
-  wire [36:0] _ex1_dividend_T_5 = {5'h0,_ex1_dividend_T_3}; // @[src/main/scala/fpga/Core.scala 1319:26]
-  wire [36:0] _ex1_dividend_T_8 = {5'h0,ex1_reg_op1_data}; // @[src/main/scala/fpga/Core.scala 1321:26]
-  wire [31:0] _ex1_divisor_T_2 = _ex1_alu_out_T_13 + 32'h1; // @[src/main/scala/fpga/Core.scala 1325:41]
-  wire  ex1_sign_op1 = (_ex1_pc_bit_out_T_301 | _ex1_pc_bit_out_T_306) & ex1_reg_op1_data[31]; // @[src/main/scala/fpga/Core.scala 1316:69 1323:18]
-  wire  _GEN_409 = ex1_reg_op2_data[31] ? ~ex1_sign_op1 : ex1_sign_op1; // @[src/main/scala/fpga/Core.scala 1324:49 1326:21 1329:21]
-  wire  _GEN_410 = (_ex1_pc_bit_out_T_309 | _ex1_alu_out_T_38) & _ex1_divrem_T; // @[src/main/scala/fpga/Core.scala 1331:77 1332:16 1308:31]
-  wire  ex1_divrem = _ex1_pc_bit_out_T_301 | _ex1_pc_bit_out_T_306 ? ex1_reg_wb_sel == 3'h1 : _GEN_410; // @[src/main/scala/fpga/Core.scala 1316:69 1317:16]
-  wire  ex1_sign_op12 = (_ex1_pc_bit_out_T_301 | _ex1_pc_bit_out_T_306) & _GEN_409; // @[src/main/scala/fpga/Core.scala 1316:69]
-  wire  ex1_zero_op2 = ex1_reg_op2_data == 32'h0; // @[src/main/scala/fpga/Core.scala 1338:37]
-  wire  _ex1_is_cond_br_T_1 = ex1_reg_op1_data == ex1_reg_op2_data; // @[src/main/scala/fpga/Core.scala 1344:57]
-  wire  _ex1_is_cond_br_T_4 = ~_ex1_is_cond_br_T_1; // @[src/main/scala/fpga/Core.scala 1345:38]
-  wire  _ex1_is_cond_br_T_13 = ~_ex1_alu_out_T_26; // @[src/main/scala/fpga/Core.scala 1347:38]
-  wire  _ex1_is_cond_br_T_18 = ~_ex1_alu_out_T_28; // @[src/main/scala/fpga/Core.scala 1349:38]
-  wire  _ex1_is_cond_br_T_20 = _ex1_pc_bit_out_T_301 ? _ex1_alu_out_T_28 : _ex1_pc_bit_out_T_306 & _ex1_is_cond_br_T_18; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
-  wire  _ex1_is_cond_br_T_21 = _ex1_alu_out_T_35 ? _ex1_is_cond_br_T_13 : _ex1_is_cond_br_T_20; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
-  wire  _ex1_is_cond_br_T_22 = _ex1_alu_out_T_29 ? _ex1_alu_out_T_26 : _ex1_is_cond_br_T_21; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
-  wire  _ex1_is_cond_br_T_23 = _ex1_alu_out_T_32 ? _ex1_is_cond_br_T_4 : _ex1_is_cond_br_T_22; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
+  wire [31:0] _ex1_pc_bit_out_T_750 = _ex1_alu_out_T_36 ? _ex1_pc_bit_out_T_288 : _ex1_pc_bit_out_T_749; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
+  wire [31:0] _ex1_pc_bit_out_T_751 = _ex1_alu_out_T_26 ? {{26'd0}, _ex1_pc_bit_out_T_282} : _ex1_pc_bit_out_T_750; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
+  wire [31:0] _ex1_pc_bit_out_T_752 = _ex1_alu_out_T_19 ? {{26'd0}, _ex1_pc_bit_out_T_215} : _ex1_pc_bit_out_T_751; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
+  wire [31:0] _ex1_pc_bit_out_T_753 = _ex1_alu_out_T_32 ? {{26'd0}, _ex1_pc_bit_out_T_98} : _ex1_pc_bit_out_T_752; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
+  wire  _ex1_divrem_T = ex1_reg_wb_sel == 3'h1; // @[src/main/scala/fpga/Core.scala 1350:34]
+  wire [31:0] _ex1_dividend_T_1 = ~ex1_reg_op1_data; // @[src/main/scala/fpga/Core.scala 1352:47]
+  wire [31:0] _ex1_dividend_T_3 = _ex1_dividend_T_1 + 32'h1; // @[src/main/scala/fpga/Core.scala 1352:65]
+  wire [36:0] _ex1_dividend_T_5 = {5'h0,_ex1_dividend_T_3}; // @[src/main/scala/fpga/Core.scala 1352:26]
+  wire [36:0] _ex1_dividend_T_8 = {5'h0,ex1_reg_op1_data}; // @[src/main/scala/fpga/Core.scala 1354:26]
+  wire [31:0] _ex1_divisor_T_2 = _ex1_alu_out_T_6 + 32'h1; // @[src/main/scala/fpga/Core.scala 1358:41]
+  wire  ex1_sign_op1 = (_ex1_alu_out_T_62 | _ex1_alu_out_T_46) & ex1_reg_op1_data[31]; // @[src/main/scala/fpga/Core.scala 1349:69 1356:18]
+  wire  _GEN_423 = ex1_reg_op2_data[31] ? ~ex1_sign_op1 : ex1_sign_op1; // @[src/main/scala/fpga/Core.scala 1357:49 1359:21 1362:21]
+  wire  _GEN_424 = (_ex1_alu_out_T_57 | _ex1_alu_out_T_52) & _ex1_divrem_T; // @[src/main/scala/fpga/Core.scala 1364:77 1365:16 1341:31]
+  wire  ex1_divrem = _ex1_alu_out_T_62 | _ex1_alu_out_T_46 ? ex1_reg_wb_sel == 3'h1 : _GEN_424; // @[src/main/scala/fpga/Core.scala 1349:69 1350:16]
+  wire  ex1_sign_op12 = (_ex1_alu_out_T_62 | _ex1_alu_out_T_46) & _GEN_423; // @[src/main/scala/fpga/Core.scala 1349:69]
+  wire  ex1_zero_op2 = ex1_reg_op2_data == 32'h0; // @[src/main/scala/fpga/Core.scala 1371:37]
+  wire  _ex1_is_cond_br_T_1 = ex1_reg_op1_data == ex1_reg_op2_data; // @[src/main/scala/fpga/Core.scala 1377:57]
+  wire  _ex1_is_cond_br_T_4 = ~_ex1_is_cond_br_T_1; // @[src/main/scala/fpga/Core.scala 1378:38]
+  wire  _ex1_is_cond_br_T_9 = ex1_reg_exe_fun == 4'hb; // @[src/main/scala/fpga/Core.scala 1380:22]
+  wire  _ex1_is_cond_br_T_13 = ~_ex1_alu_out_T_35; // @[src/main/scala/fpga/Core.scala 1380:38]
+  wire  _ex1_is_cond_br_T_18 = ~_ex1_alu_out_T_37; // @[src/main/scala/fpga/Core.scala 1382:38]
+  wire  _ex1_is_cond_br_T_20 = _ex1_alu_out_T_62 ? _ex1_alu_out_T_37 : _ex1_alu_out_T_46 & _ex1_is_cond_br_T_18; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
+  wire  _ex1_is_cond_br_T_21 = _ex1_is_cond_br_T_9 ? _ex1_is_cond_br_T_13 : _ex1_is_cond_br_T_20; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
+  wire  _ex1_is_cond_br_T_22 = _ex1_alu_out_T_38 ? _ex1_alu_out_T_35 : _ex1_is_cond_br_T_21; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
+  wire  _ex1_is_cond_br_T_23 = _ex1_alu_out_T_43 ? _ex1_is_cond_br_T_4 : _ex1_is_cond_br_T_22; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
   wire  ex1_is_cond_br = _ex1_alu_out_T_1 ? _ex1_is_cond_br_T_1 : _ex1_is_cond_br_T_23; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
-  wire [30:0] ex1_taken_pc = ex1_reg_is_j ? ex1_add_out[31:1] : ex1_reg_direct_jbr_pc; // @[src/main/scala/fpga/Core.scala 1353:25]
-  wire  _ex1_br_pc_T_1 = ex1_reg_is_br & ex1_is_cond_br | ex1_reg_is_j; // @[src/main/scala/fpga/Core.scala 1356:46]
+  wire [30:0] ex1_taken_pc = ex1_reg_is_j ? ex1_add_out[31:1] : ex1_reg_direct_jbr_pc; // @[src/main/scala/fpga/Core.scala 1386:25]
+  wire  _ex1_br_pc_T_1 = ex1_reg_is_br & ex1_is_cond_br | ex1_reg_is_j; // @[src/main/scala/fpga/Core.scala 1389:46]
   wire [30:0] _ex1_br_pc_T_2 = _ex1_br_pc_T_1 ? ex1_taken_pc : ex1_next_pc; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
-  reg  csr_reg_is_meintr; // @[src/main/scala/fpga/Core.scala 1395:34]
-  wire  csr_is_valid_inst = ex1_reg_is_valid_inst & _if2_is_valid_inst_T; // @[src/main/scala/fpga/Core.scala 1406:49]
-  wire  csr_is_meintr = csr_reg_is_meintr & csr_is_valid_inst; // @[src/main/scala/fpga/Core.scala 1407:41]
-  reg  csr_reg_is_mtintr; // @[src/main/scala/fpga/Core.scala 1400:34]
-  wire  csr_is_mtintr = csr_reg_is_mtintr & csr_is_valid_inst; // @[src/main/scala/fpga/Core.scala 1408:41]
-  wire  ex1_en = csr_is_valid_inst & ~csr_is_meintr & ~csr_is_mtintr; // @[src/main/scala/fpga/Core.scala 1409:49]
-  wire  csr_is_trap = ex1_en & ex1_reg_is_trap; // @[src/main/scala/fpga/Core.scala 1410:28]
-  wire  csr_is_mret = ex1_en & ex1_reg_is_mret; // @[src/main/scala/fpga/Core.scala 1412:28]
-  wire  _GEN_492 = csr_is_trap | csr_is_mret; // @[src/main/scala/fpga/Core.scala 1480:28 1488:26]
-  wire  _GEN_500 = csr_is_mtintr | _GEN_492; // @[src/main/scala/fpga/Core.scala 1470:30 1478:26]
-  wire  csr_is_br = csr_is_meintr | _GEN_500; // @[src/main/scala/fpga/Core.scala 1460:24 1468:26]
-  wire [30:0] _GEN_493 = csr_is_trap ? csr_reg_trap_vector : csr_reg_mepc; // @[src/main/scala/fpga/Core.scala 1480:28 1489:26]
-  wire [30:0] _GEN_501 = csr_is_mtintr ? csr_reg_trap_vector : _GEN_493; // @[src/main/scala/fpga/Core.scala 1470:30 1479:26]
-  wire [30:0] csr_br_pc = csr_is_meintr ? csr_reg_trap_vector : _GEN_501; // @[src/main/scala/fpga/Core.scala 1460:24 1469:26]
+  reg  csr_reg_is_meintr; // @[src/main/scala/fpga/Core.scala 1428:34]
+  wire  csr_is_valid_inst = ex1_reg_is_valid_inst & _if2_is_valid_inst_T; // @[src/main/scala/fpga/Core.scala 1439:49]
+  wire  csr_is_meintr = csr_reg_is_meintr & csr_is_valid_inst; // @[src/main/scala/fpga/Core.scala 1440:41]
+  reg  csr_reg_is_mtintr; // @[src/main/scala/fpga/Core.scala 1433:34]
+  wire  csr_is_mtintr = csr_reg_is_mtintr & csr_is_valid_inst; // @[src/main/scala/fpga/Core.scala 1441:41]
+  wire  ex1_en = csr_is_valid_inst & ~csr_is_meintr & ~csr_is_mtintr; // @[src/main/scala/fpga/Core.scala 1442:49]
+  wire  csr_is_trap = ex1_en & ex1_reg_is_trap; // @[src/main/scala/fpga/Core.scala 1443:28]
+  wire  csr_is_mret = ex1_en & ex1_reg_is_mret; // @[src/main/scala/fpga/Core.scala 1445:28]
+  wire  _GEN_506 = csr_is_trap | csr_is_mret; // @[src/main/scala/fpga/Core.scala 1513:28 1521:26]
+  wire  _GEN_514 = csr_is_mtintr | _GEN_506; // @[src/main/scala/fpga/Core.scala 1503:30 1511:26]
+  wire  csr_is_br = csr_is_meintr | _GEN_514; // @[src/main/scala/fpga/Core.scala 1493:24 1501:26]
+  wire [30:0] _GEN_507 = csr_is_trap ? csr_reg_trap_vector : csr_reg_mepc; // @[src/main/scala/fpga/Core.scala 1513:28 1522:26]
+  wire [30:0] _GEN_515 = csr_is_mtintr ? csr_reg_trap_vector : _GEN_507; // @[src/main/scala/fpga/Core.scala 1503:30 1512:26]
+  wire [30:0] csr_br_pc = csr_is_meintr ? csr_reg_trap_vector : _GEN_515; // @[src/main/scala/fpga/Core.scala 1493:24 1502:26]
   wire [30:0] ex1_br_pc = csr_is_br ? csr_br_pc : _ex1_br_pc_T_2; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
-  wire [30:0] ex1_predict_pc = ex1_reg_bp_taken ? ex1_reg_bp_taken_pc : ex1_next_pc; // @[src/main/scala/fpga/Core.scala 1358:27]
-  wire  ex1_bp_failure = ex1_br_pc != ex1_predict_pc; // @[src/main/scala/fpga/Core.scala 1359:34]
-  wire  ex1_is_br = ex1_bp_failure & _if2_is_valid_inst_T; // @[src/main/scala/fpga/Core.scala 1361:31]
-  wire  _ic_pht_io_up_cnt_T_6 = ~ex1_reg_bp_cnt[1] | ex1_reg_bp_cnt[0]; // @[src/main/scala/fpga/Core.scala 1369:51]
-  wire [1:0] _ic_pht_io_up_cnt_T_7 = {ex1_reg_bp_cnt[0],_ic_pht_io_up_cnt_T_6}; // @[src/main/scala/fpga/Core.scala 1369:8]
-  wire  _ic_pht_io_up_cnt_T_9 = ~ex1_reg_bp_cnt[0]; // @[src/main/scala/fpga/Core.scala 1370:9]
-  wire  _ic_pht_io_up_cnt_T_12 = ex1_reg_bp_cnt[1] & ex1_reg_bp_cnt[0]; // @[src/main/scala/fpga/Core.scala 1370:51]
-  wire [1:0] _ic_pht_io_up_cnt_T_13 = {_ic_pht_io_up_cnt_T_9,_ic_pht_io_up_cnt_T_12}; // @[src/main/scala/fpga/Core.scala 1370:8]
-  wire  _T_70 = ~ex1_en & (ex1_reg_mem_use_reg | ex1_reg_inst3_use_reg); // @[src/main/scala/fpga/Core.scala 1375:43]
-  wire  ex1_hazard = ex1_reg_rf_wen & ex1_reg_wb_addr != 5'h0 & ex1_en; // @[src/main/scala/fpga/Core.scala 1379:76]
-  wire  _ex1_fw_en_next_T_2 = ex1_reg_wb_sel != 3'h5; // @[src/main/scala/fpga/Core.scala 1380:84]
-  wire  ex1_fw_en_next = ex1_hazard & ex1_reg_wb_sel != 3'h1 & ex1_reg_wb_sel != 3'h5; // @[src/main/scala/fpga/Core.scala 1380:65]
-  wire  _T_76 = ex1_reg_csr_addr == 12'h300; // @[src/main/scala/fpga/Core.scala 1442:34]
-  wire  _GEN_448 = ex1_reg_csr_addr == 12'h341 ? 1'h0 : _T_76; // @[src/main/scala/fpga/Core.scala 1393:42 1440:53]
-  wire  _GEN_460 = ex1_reg_csr_addr == 12'h305 ? 1'h0 : _GEN_448; // @[src/main/scala/fpga/Core.scala 1393:42 1438:48]
-  wire  _GEN_472 = ex1_en & ex1_reg_wb_sel == 3'h3 & _GEN_460; // @[src/main/scala/fpga/Core.scala 1393:42 1437:46]
-  wire  _GEN_482 = csr_is_mret | _GEN_472; // @[src/main/scala/fpga/Core.scala 1490:28 1493:26]
-  wire  _GEN_490 = csr_is_trap | _GEN_482; // @[src/main/scala/fpga/Core.scala 1480:28 1486:26]
-  wire  _GEN_498 = csr_is_mtintr | _GEN_490; // @[src/main/scala/fpga/Core.scala 1470:30 1476:26]
-  wire  csr_mstatus_mie_fw_en = csr_is_meintr | _GEN_498; // @[src/main/scala/fpga/Core.scala 1460:24 1466:26]
-  wire  _csr_wdata_T = ex1_reg_csr_cmd == 2'h1; // @[src/main/scala/fpga/Core.scala 1432:22]
-  wire  _csr_wdata_T_1 = ex1_reg_csr_cmd == 2'h2; // @[src/main/scala/fpga/Core.scala 1433:22]
-  wire [31:0] _csr_rdata_T_10 = {20'h0,io_intr,3'h0,mtimer_io_intr,7'h0}; // @[src/main/scala/fpga/Core.scala 1428:29]
-  wire [31:0] _csr_rdata_T_9 = {20'h0,csr_reg_mie_meie,3'h0,csr_reg_mie_mtie,7'h0}; // @[src/main/scala/fpga/Core.scala 1427:29]
-  wire [31:0] _csr_rdata_T_8 = {24'h0,csr_reg_mstatus_mpie,3'h0,csr_reg_mstatus_mie,3'h0}; // @[src/main/scala/fpga/Core.scala 1425:29]
-  wire [31:0] _csr_rdata_T_7 = {csr_reg_mepc,1'h0}; // @[src/main/scala/fpga/Core.scala 1422:29]
-  wire [31:0] _csr_rdata_T = {csr_reg_trap_vector,1'h0}; // @[src/main/scala/fpga/Core.scala 1415:29]
-  wire [31:0] _csr_rdata_T_12 = 12'h305 == ex1_reg_csr_addr ? _csr_rdata_T : 32'h0; // @[src/main/scala/fpga/Core.scala 1414:63]
-  wire [31:0] _csr_rdata_T_14 = 12'hc01 == ex1_reg_csr_addr ? mtimer_io_mtime[31:0] : _csr_rdata_T_12; // @[src/main/scala/fpga/Core.scala 1414:63]
-  wire [31:0] _csr_rdata_T_16 = 12'hc00 == ex1_reg_csr_addr ? cycle_counter_io_value[31:0] : _csr_rdata_T_14; // @[src/main/scala/fpga/Core.scala 1414:63]
-  wire [31:0] _csr_rdata_T_18 = 12'hc02 == ex1_reg_csr_addr ? instret[31:0] : _csr_rdata_T_16; // @[src/main/scala/fpga/Core.scala 1414:63]
-  wire [31:0] _csr_rdata_T_20 = 12'hc80 == ex1_reg_csr_addr ? cycle_counter_io_value[63:32] : _csr_rdata_T_18; // @[src/main/scala/fpga/Core.scala 1414:63]
-  wire [31:0] _csr_rdata_T_22 = 12'hc81 == ex1_reg_csr_addr ? mtimer_io_mtime[63:32] : _csr_rdata_T_20; // @[src/main/scala/fpga/Core.scala 1414:63]
-  wire [31:0] _csr_rdata_T_24 = 12'hc82 == ex1_reg_csr_addr ? instret[63:32] : _csr_rdata_T_22; // @[src/main/scala/fpga/Core.scala 1414:63]
-  wire [31:0] _csr_rdata_T_26 = 12'h341 == ex1_reg_csr_addr ? _csr_rdata_T_7 : _csr_rdata_T_24; // @[src/main/scala/fpga/Core.scala 1414:63]
-  wire [31:0] _csr_rdata_T_28 = 12'h342 == ex1_reg_csr_addr ? csr_reg_mcause : _csr_rdata_T_26; // @[src/main/scala/fpga/Core.scala 1414:63]
-  wire [31:0] _csr_rdata_T_30 = 12'h300 == ex1_reg_csr_addr ? _csr_rdata_T_8 : _csr_rdata_T_28; // @[src/main/scala/fpga/Core.scala 1414:63]
-  wire [31:0] _csr_rdata_T_32 = 12'h340 == ex1_reg_csr_addr ? csr_reg_mscratch : _csr_rdata_T_30; // @[src/main/scala/fpga/Core.scala 1414:63]
-  wire [31:0] _csr_rdata_T_34 = 12'h304 == ex1_reg_csr_addr ? _csr_rdata_T_9 : _csr_rdata_T_32; // @[src/main/scala/fpga/Core.scala 1414:63]
-  wire [31:0] csr_rdata = 12'h344 == ex1_reg_csr_addr ? _csr_rdata_T_10 : _csr_rdata_T_34; // @[src/main/scala/fpga/Core.scala 1414:63]
-  wire [31:0] _csr_wdata_T_2 = csr_rdata | ex1_reg_op1_data; // @[src/main/scala/fpga/Core.scala 1433:47]
-  wire  _csr_wdata_T_3 = ex1_reg_csr_cmd == 2'h3; // @[src/main/scala/fpga/Core.scala 1434:22]
-  wire [31:0] _csr_wdata_T_5 = csr_rdata & _ex1_dividend_T_1; // @[src/main/scala/fpga/Core.scala 1434:47]
+  wire [30:0] ex1_predict_pc = ex1_reg_bp_taken ? ex1_reg_bp_taken_pc : ex1_next_pc; // @[src/main/scala/fpga/Core.scala 1391:27]
+  wire  ex1_bp_failure = ex1_br_pc != ex1_predict_pc; // @[src/main/scala/fpga/Core.scala 1392:34]
+  wire  ex1_is_br = ex1_bp_failure & _if2_is_valid_inst_T; // @[src/main/scala/fpga/Core.scala 1394:31]
+  wire  _ic_pht_io_up_cnt_T_6 = ~ex1_reg_bp_cnt[1] | ex1_reg_bp_cnt[0]; // @[src/main/scala/fpga/Core.scala 1402:51]
+  wire [1:0] _ic_pht_io_up_cnt_T_7 = {ex1_reg_bp_cnt[0],_ic_pht_io_up_cnt_T_6}; // @[src/main/scala/fpga/Core.scala 1402:8]
+  wire  _ic_pht_io_up_cnt_T_9 = ~ex1_reg_bp_cnt[0]; // @[src/main/scala/fpga/Core.scala 1403:9]
+  wire  _ic_pht_io_up_cnt_T_12 = ex1_reg_bp_cnt[1] & ex1_reg_bp_cnt[0]; // @[src/main/scala/fpga/Core.scala 1403:51]
+  wire [1:0] _ic_pht_io_up_cnt_T_13 = {_ic_pht_io_up_cnt_T_9,_ic_pht_io_up_cnt_T_12}; // @[src/main/scala/fpga/Core.scala 1403:8]
+  wire  _T_70 = ~ex1_en & (ex1_reg_mem_use_reg | ex1_reg_inst3_use_reg); // @[src/main/scala/fpga/Core.scala 1408:43]
+  wire  ex1_hazard = ex1_reg_rf_wen & ex1_reg_wb_addr != 5'h0 & ex1_en; // @[src/main/scala/fpga/Core.scala 1412:76]
+  wire  _ex1_fw_en_next_T_2 = ex1_reg_wb_sel != 3'h5; // @[src/main/scala/fpga/Core.scala 1413:84]
+  wire  ex1_fw_en_next = ex1_hazard & ex1_reg_wb_sel != 3'h1 & ex1_reg_wb_sel != 3'h5; // @[src/main/scala/fpga/Core.scala 1413:65]
+  wire  _T_76 = ex1_reg_csr_addr == 12'h300; // @[src/main/scala/fpga/Core.scala 1475:34]
+  wire  _GEN_462 = ex1_reg_csr_addr == 12'h341 ? 1'h0 : _T_76; // @[src/main/scala/fpga/Core.scala 1426:42 1473:53]
+  wire  _GEN_474 = ex1_reg_csr_addr == 12'h305 ? 1'h0 : _GEN_462; // @[src/main/scala/fpga/Core.scala 1426:42 1471:48]
+  wire  _GEN_486 = ex1_en & ex1_reg_wb_sel == 3'h3 & _GEN_474; // @[src/main/scala/fpga/Core.scala 1426:42 1470:46]
+  wire  _GEN_496 = csr_is_mret | _GEN_486; // @[src/main/scala/fpga/Core.scala 1523:28 1526:26]
+  wire  _GEN_504 = csr_is_trap | _GEN_496; // @[src/main/scala/fpga/Core.scala 1513:28 1519:26]
+  wire  _GEN_512 = csr_is_mtintr | _GEN_504; // @[src/main/scala/fpga/Core.scala 1503:30 1509:26]
+  wire  csr_mstatus_mie_fw_en = csr_is_meintr | _GEN_512; // @[src/main/scala/fpga/Core.scala 1493:24 1499:26]
+  wire  _csr_wdata_T = ex1_reg_csr_cmd == 2'h1; // @[src/main/scala/fpga/Core.scala 1465:22]
+  wire  _csr_wdata_T_1 = ex1_reg_csr_cmd == 2'h2; // @[src/main/scala/fpga/Core.scala 1466:22]
+  wire [31:0] _csr_rdata_T_10 = {20'h0,io_intr,3'h0,mtimer_io_intr,7'h0}; // @[src/main/scala/fpga/Core.scala 1461:29]
+  wire [31:0] _csr_rdata_T_9 = {20'h0,csr_reg_mie_meie,3'h0,csr_reg_mie_mtie,7'h0}; // @[src/main/scala/fpga/Core.scala 1460:29]
+  wire [31:0] _csr_rdata_T_8 = {24'h0,csr_reg_mstatus_mpie,3'h0,csr_reg_mstatus_mie,3'h0}; // @[src/main/scala/fpga/Core.scala 1458:29]
+  wire [31:0] _csr_rdata_T_7 = {csr_reg_mepc,1'h0}; // @[src/main/scala/fpga/Core.scala 1455:29]
+  wire [31:0] _csr_rdata_T = {csr_reg_trap_vector,1'h0}; // @[src/main/scala/fpga/Core.scala 1448:29]
+  wire [31:0] _csr_rdata_T_12 = 12'h305 == ex1_reg_csr_addr ? _csr_rdata_T : 32'h0; // @[src/main/scala/fpga/Core.scala 1447:63]
+  wire [31:0] _csr_rdata_T_14 = 12'hc01 == ex1_reg_csr_addr ? mtimer_io_mtime[31:0] : _csr_rdata_T_12; // @[src/main/scala/fpga/Core.scala 1447:63]
+  wire [31:0] _csr_rdata_T_16 = 12'hc00 == ex1_reg_csr_addr ? cycle_counter_io_value[31:0] : _csr_rdata_T_14; // @[src/main/scala/fpga/Core.scala 1447:63]
+  wire [31:0] _csr_rdata_T_18 = 12'hc02 == ex1_reg_csr_addr ? instret[31:0] : _csr_rdata_T_16; // @[src/main/scala/fpga/Core.scala 1447:63]
+  wire [31:0] _csr_rdata_T_20 = 12'hc80 == ex1_reg_csr_addr ? cycle_counter_io_value[63:32] : _csr_rdata_T_18; // @[src/main/scala/fpga/Core.scala 1447:63]
+  wire [31:0] _csr_rdata_T_22 = 12'hc81 == ex1_reg_csr_addr ? mtimer_io_mtime[63:32] : _csr_rdata_T_20; // @[src/main/scala/fpga/Core.scala 1447:63]
+  wire [31:0] _csr_rdata_T_24 = 12'hc82 == ex1_reg_csr_addr ? instret[63:32] : _csr_rdata_T_22; // @[src/main/scala/fpga/Core.scala 1447:63]
+  wire [31:0] _csr_rdata_T_26 = 12'h341 == ex1_reg_csr_addr ? _csr_rdata_T_7 : _csr_rdata_T_24; // @[src/main/scala/fpga/Core.scala 1447:63]
+  wire [31:0] _csr_rdata_T_28 = 12'h342 == ex1_reg_csr_addr ? csr_reg_mcause : _csr_rdata_T_26; // @[src/main/scala/fpga/Core.scala 1447:63]
+  wire [31:0] _csr_rdata_T_30 = 12'h300 == ex1_reg_csr_addr ? _csr_rdata_T_8 : _csr_rdata_T_28; // @[src/main/scala/fpga/Core.scala 1447:63]
+  wire [31:0] _csr_rdata_T_32 = 12'h340 == ex1_reg_csr_addr ? csr_reg_mscratch : _csr_rdata_T_30; // @[src/main/scala/fpga/Core.scala 1447:63]
+  wire [31:0] _csr_rdata_T_34 = 12'h304 == ex1_reg_csr_addr ? _csr_rdata_T_9 : _csr_rdata_T_32; // @[src/main/scala/fpga/Core.scala 1447:63]
+  wire [31:0] csr_rdata = 12'h344 == ex1_reg_csr_addr ? _csr_rdata_T_10 : _csr_rdata_T_34; // @[src/main/scala/fpga/Core.scala 1447:63]
+  wire [31:0] _csr_wdata_T_2 = csr_rdata | ex1_reg_op1_data; // @[src/main/scala/fpga/Core.scala 1466:47]
+  wire  _csr_wdata_T_3 = ex1_reg_csr_cmd == 2'h3; // @[src/main/scala/fpga/Core.scala 1467:22]
+  wire [31:0] _csr_wdata_T_5 = csr_rdata & _ex1_dividend_T_1; // @[src/main/scala/fpga/Core.scala 1467:47]
   wire [31:0] _csr_wdata_T_6 = _csr_wdata_T_3 ? _csr_wdata_T_5 : 32'h0; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
   wire [31:0] _csr_wdata_T_7 = _csr_wdata_T_1 ? _csr_wdata_T_2 : _csr_wdata_T_6; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
   wire [31:0] csr_wdata = _csr_wdata_T ? ex1_reg_op1_data : _csr_wdata_T_7; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
-  wire  _GEN_438 = ex1_reg_csr_addr == 12'h300 & csr_wdata[3]; // @[src/main/scala/fpga/Core.scala 1442:56 1446:29 1394:39]
-  wire  _GEN_449 = ex1_reg_csr_addr == 12'h341 ? 1'h0 : _GEN_438; // @[src/main/scala/fpga/Core.scala 1394:39 1440:53]
-  wire  _GEN_461 = ex1_reg_csr_addr == 12'h305 ? 1'h0 : _GEN_449; // @[src/main/scala/fpga/Core.scala 1394:39 1438:48]
-  wire  _GEN_473 = ex1_en & ex1_reg_wb_sel == 3'h3 & _GEN_461; // @[src/main/scala/fpga/Core.scala 1394:39 1437:46]
-  wire  _GEN_483 = csr_is_mret ? csr_reg_mstatus_mpie : _GEN_473; // @[src/main/scala/fpga/Core.scala 1490:28 1494:26]
-  wire  _GEN_491 = csr_is_trap ? 1'h0 : _GEN_483; // @[src/main/scala/fpga/Core.scala 1480:28 1487:26]
-  wire  _GEN_499 = csr_is_mtintr ? 1'h0 : _GEN_491; // @[src/main/scala/fpga/Core.scala 1470:30 1477:26]
-  wire  csr_mstatus_mie_fw = csr_is_meintr ? 1'h0 : _GEN_499; // @[src/main/scala/fpga/Core.scala 1460:24 1467:26]
+  wire  _GEN_452 = ex1_reg_csr_addr == 12'h300 & csr_wdata[3]; // @[src/main/scala/fpga/Core.scala 1475:56 1479:29 1427:39]
+  wire  _GEN_463 = ex1_reg_csr_addr == 12'h341 ? 1'h0 : _GEN_452; // @[src/main/scala/fpga/Core.scala 1427:39 1473:53]
+  wire  _GEN_475 = ex1_reg_csr_addr == 12'h305 ? 1'h0 : _GEN_463; // @[src/main/scala/fpga/Core.scala 1427:39 1471:48]
+  wire  _GEN_487 = ex1_en & ex1_reg_wb_sel == 3'h3 & _GEN_475; // @[src/main/scala/fpga/Core.scala 1427:39 1470:46]
+  wire  _GEN_497 = csr_is_mret ? csr_reg_mstatus_mpie : _GEN_487; // @[src/main/scala/fpga/Core.scala 1523:28 1527:26]
+  wire  _GEN_505 = csr_is_trap ? 1'h0 : _GEN_497; // @[src/main/scala/fpga/Core.scala 1513:28 1520:26]
+  wire  _GEN_513 = csr_is_mtintr ? 1'h0 : _GEN_505; // @[src/main/scala/fpga/Core.scala 1503:30 1510:26]
+  wire  csr_mstatus_mie_fw = csr_is_meintr ? 1'h0 : _GEN_513; // @[src/main/scala/fpga/Core.scala 1493:24 1500:26]
   wire  _csr_reg_is_meintr_T_3 = csr_mstatus_mie_fw_en & csr_mstatus_mie_fw | ~csr_mstatus_mie_fw_en &
-    csr_reg_mstatus_mie; // @[src/main/scala/fpga/Core.scala 1396:52]
+    csr_reg_mstatus_mie; // @[src/main/scala/fpga/Core.scala 1429:52]
   wire  _csr_reg_is_meintr_T_4 = (csr_mstatus_mie_fw_en & csr_mstatus_mie_fw | ~csr_mstatus_mie_fw_en &
-    csr_reg_mstatus_mie) & io_intr; // @[src/main/scala/fpga/Core.scala 1396:104]
-  wire  _T_78 = ex1_reg_csr_addr == 12'h304; // @[src/main/scala/fpga/Core.scala 1449:34]
-  wire  _GEN_432 = ex1_reg_csr_addr == 12'h340 ? 1'h0 : _T_78; // @[src/main/scala/fpga/Core.scala 1390:34 1447:57]
-  wire  _GEN_442 = ex1_reg_csr_addr == 12'h300 ? 1'h0 : _GEN_432; // @[src/main/scala/fpga/Core.scala 1390:34 1442:56]
-  wire  _GEN_453 = ex1_reg_csr_addr == 12'h341 ? 1'h0 : _GEN_442; // @[src/main/scala/fpga/Core.scala 1390:34 1440:53]
-  wire  _GEN_465 = ex1_reg_csr_addr == 12'h305 ? 1'h0 : _GEN_453; // @[src/main/scala/fpga/Core.scala 1390:34 1438:48]
-  wire  csr_mie_fw_en = ex1_en & ex1_reg_wb_sel == 3'h3 & _GEN_465; // @[src/main/scala/fpga/Core.scala 1390:34 1437:46]
-  wire  _GEN_427 = ex1_reg_csr_addr == 12'h304 & csr_wdata[11]; // @[src/main/scala/fpga/Core.scala 1449:52 1453:24 1391:36]
-  wire  _GEN_433 = ex1_reg_csr_addr == 12'h340 ? 1'h0 : _GEN_427; // @[src/main/scala/fpga/Core.scala 1391:36 1447:57]
-  wire  _GEN_443 = ex1_reg_csr_addr == 12'h300 ? 1'h0 : _GEN_433; // @[src/main/scala/fpga/Core.scala 1391:36 1442:56]
-  wire  _GEN_454 = ex1_reg_csr_addr == 12'h341 ? 1'h0 : _GEN_443; // @[src/main/scala/fpga/Core.scala 1391:36 1440:53]
-  wire  _GEN_466 = ex1_reg_csr_addr == 12'h305 ? 1'h0 : _GEN_454; // @[src/main/scala/fpga/Core.scala 1391:36 1438:48]
-  wire  csr_mie_meie_fw = ex1_en & ex1_reg_wb_sel == 3'h3 & _GEN_466; // @[src/main/scala/fpga/Core.scala 1391:36 1437:46]
-  wire  _csr_reg_is_meintr_T_6 = ~csr_mie_fw_en; // @[src/main/scala/fpga/Core.scala 1398:47]
-  wire  _csr_reg_is_meintr_T_8 = csr_mie_fw_en & csr_mie_meie_fw | ~csr_mie_fw_en & csr_reg_mie_meie; // @[src/main/scala/fpga/Core.scala 1398:43]
-  wire  _csr_reg_is_mtintr_T_4 = _csr_reg_is_meintr_T_3 & mtimer_io_intr; // @[src/main/scala/fpga/Core.scala 1401:104]
-  wire  _GEN_428 = ex1_reg_csr_addr == 12'h304 & csr_wdata[7]; // @[src/main/scala/fpga/Core.scala 1449:52 1454:24 1392:36]
-  wire  _GEN_434 = ex1_reg_csr_addr == 12'h340 ? 1'h0 : _GEN_428; // @[src/main/scala/fpga/Core.scala 1392:36 1447:57]
-  wire  _GEN_444 = ex1_reg_csr_addr == 12'h300 ? 1'h0 : _GEN_434; // @[src/main/scala/fpga/Core.scala 1392:36 1442:56]
-  wire  _GEN_455 = ex1_reg_csr_addr == 12'h341 ? 1'h0 : _GEN_444; // @[src/main/scala/fpga/Core.scala 1392:36 1440:53]
-  wire  _GEN_467 = ex1_reg_csr_addr == 12'h305 ? 1'h0 : _GEN_455; // @[src/main/scala/fpga/Core.scala 1392:36 1438:48]
-  wire  csr_mie_mtie_fw = ex1_en & ex1_reg_wb_sel == 3'h3 & _GEN_467; // @[src/main/scala/fpga/Core.scala 1392:36 1437:46]
-  wire  _csr_reg_is_mtintr_T_8 = csr_mie_fw_en & csr_mie_mtie_fw | _csr_reg_is_meintr_T_6 & csr_reg_mie_mtie; // @[src/main/scala/fpga/Core.scala 1403:43]
-  wire  ex1_is_valid_inst = ex1_en & ~ex1_reg_is_trap; // @[src/main/scala/fpga/Core.scala 1411:34]
-  wire  _GEN_424 = ex1_reg_csr_addr == 12'h304 ? csr_wdata[11] : csr_reg_mie_meie; // @[src/main/scala/fpga/Core.scala 1449:52 1450:24 146:37]
-  wire  _GEN_425 = ex1_reg_csr_addr == 12'h304 ? csr_wdata[7] : csr_reg_mie_mtie; // @[src/main/scala/fpga/Core.scala 1449:52 1451:24 147:37]
-  wire [31:0] _GEN_429 = ex1_reg_csr_addr == 12'h340 ? csr_wdata : csr_reg_mscratch; // @[src/main/scala/fpga/Core.scala 1447:57 1448:24 145:37]
-  wire  _GEN_430 = ex1_reg_csr_addr == 12'h340 ? csr_reg_mie_meie : _GEN_424; // @[src/main/scala/fpga/Core.scala 1447:57 146:37]
-  wire  _GEN_431 = ex1_reg_csr_addr == 12'h340 ? csr_reg_mie_mtie : _GEN_425; // @[src/main/scala/fpga/Core.scala 1447:57 147:37]
-  wire  _GEN_435 = ex1_reg_csr_addr == 12'h300 ? csr_wdata[3] : csr_reg_mstatus_mie; // @[src/main/scala/fpga/Core.scala 1442:56 1443:29 143:37]
-  wire  _GEN_436 = ex1_reg_csr_addr == 12'h300 ? csr_wdata[7] : csr_reg_mstatus_mpie; // @[src/main/scala/fpga/Core.scala 1442:56 1444:29 144:37]
-  wire [31:0] _GEN_439 = ex1_reg_csr_addr == 12'h300 ? csr_reg_mscratch : _GEN_429; // @[src/main/scala/fpga/Core.scala 1442:56 145:37]
-  wire  _GEN_440 = ex1_reg_csr_addr == 12'h300 ? csr_reg_mie_meie : _GEN_430; // @[src/main/scala/fpga/Core.scala 1442:56 146:37]
-  wire  _GEN_441 = ex1_reg_csr_addr == 12'h300 ? csr_reg_mie_mtie : _GEN_431; // @[src/main/scala/fpga/Core.scala 1442:56 147:37]
-  wire [30:0] _GEN_445 = ex1_reg_csr_addr == 12'h341 ? csr_wdata[31:1] : csr_reg_mepc; // @[src/main/scala/fpga/Core.scala 1440:53 1441:20 142:37]
-  wire  _GEN_446 = ex1_reg_csr_addr == 12'h341 ? csr_reg_mstatus_mie : _GEN_435; // @[src/main/scala/fpga/Core.scala 143:37 1440:53]
-  wire  _GEN_447 = ex1_reg_csr_addr == 12'h341 ? csr_reg_mstatus_mpie : _GEN_436; // @[src/main/scala/fpga/Core.scala 144:37 1440:53]
-  wire [30:0] _GEN_457 = ex1_reg_csr_addr == 12'h305 ? csr_reg_mepc : _GEN_445; // @[src/main/scala/fpga/Core.scala 142:37 1438:48]
-  wire  _GEN_458 = ex1_reg_csr_addr == 12'h305 ? csr_reg_mstatus_mie : _GEN_446; // @[src/main/scala/fpga/Core.scala 143:37 1438:48]
-  wire  _GEN_459 = ex1_reg_csr_addr == 12'h305 ? csr_reg_mstatus_mpie : _GEN_447; // @[src/main/scala/fpga/Core.scala 1438:48 144:37]
-  wire [30:0] _GEN_469 = ex1_en & ex1_reg_wb_sel == 3'h3 ? _GEN_457 : csr_reg_mepc; // @[src/main/scala/fpga/Core.scala 142:37 1437:46]
-  wire  _GEN_470 = ex1_en & ex1_reg_wb_sel == 3'h3 ? _GEN_458 : csr_reg_mstatus_mie; // @[src/main/scala/fpga/Core.scala 143:37 1437:46]
-  wire  _GEN_471 = ex1_en & ex1_reg_wb_sel == 3'h3 ? _GEN_459 : csr_reg_mstatus_mpie; // @[src/main/scala/fpga/Core.scala 1437:46 144:37]
-  wire  _GEN_480 = csr_is_mret | _GEN_471; // @[src/main/scala/fpga/Core.scala 1490:28 1491:26]
-  wire  _GEN_481 = csr_is_mret ? csr_reg_mstatus_mpie : _GEN_470; // @[src/main/scala/fpga/Core.scala 1490:28 1492:26]
-  wire  _ex2_reg_divrem_T = ex1_divrem & ex1_en; // @[src/main/scala/fpga/Core.scala 1522:45]
-  wire  _ex2_reg_div_stall_T_3 = ex2_reg_divrem_state == 3'h0 | ex2_reg_divrem_state == 3'h5; // @[src/main/scala/fpga/Core.scala 1524:75]
-  wire  _ex2_reg_div_stall_T_4 = _ex2_reg_divrem_T & (ex2_reg_divrem_state == 3'h0 | ex2_reg_divrem_state == 3'h5); // @[src/main/scala/fpga/Core.scala 1524:29]
-  wire  _GEN_561 = 3'h2 == ex2_reg_divrem_state | 3'h3 == ex2_reg_divrem_state; // @[src/main/scala/fpga/Core.scala 1586:33 1677:26]
-  wire  _GEN_569 = 3'h1 == ex2_reg_divrem_state | _GEN_561; // @[src/main/scala/fpga/Core.scala 1586:33 1624:29]
-  wire  ex2_div_stall_next = 3'h0 == ex2_reg_divrem_state ? 1'h0 : _GEN_569; // @[src/main/scala/fpga/Core.scala 1584:22 1586:33]
-  wire  _ex2_reg_div_stall_T_9 = ex2_reg_divrem & _ex2_reg_div_stall_T_3; // @[src/main/scala/fpga/Core.scala 1538:23]
-  wire  _T_80 = ~ex2_reg_div_stall; // @[src/main/scala/fpga/Core.scala 1541:23]
-  reg [36:0] ex2_reg_dividend; // @[src/main/scala/fpga/Core.scala 1554:37]
-  reg [35:0] ex2_reg_divisor; // @[src/main/scala/fpga/Core.scala 1555:37]
-  reg [63:0] ex2_reg_p_divisor; // @[src/main/scala/fpga/Core.scala 1556:37]
-  reg [4:0] ex2_reg_divrem_count; // @[src/main/scala/fpga/Core.scala 1557:37]
-  reg [4:0] ex2_reg_rem_shift; // @[src/main/scala/fpga/Core.scala 1558:37]
-  reg  ex2_reg_extra_shift; // @[src/main/scala/fpga/Core.scala 1559:37]
-  reg [2:0] ex2_reg_d; // @[src/main/scala/fpga/Core.scala 1560:37]
-  reg [31:0] ex2_reg_reminder; // @[src/main/scala/fpga/Core.scala 1561:37]
-  reg [31:0] ex2_reg_quotient; // @[src/main/scala/fpga/Core.scala 1562:37]
-  wire  _ex2_alu_muldiv_out_T = ex2_reg_exe_fun == 4'h8; // @[src/main/scala/fpga/Core.scala 1572:22]
-  wire [31:0] _ex2_alu_muldiv_out_T_3 = {ex2_reg_mulhuu[15:0], 16'h0}; // @[src/main/scala/fpga/Core.scala 1572:106]
-  wire [31:0] _ex2_alu_muldiv_out_T_5 = ex2_reg_mullu[31:0] + _ex2_alu_muldiv_out_T_3; // @[src/main/scala/fpga/Core.scala 1572:71]
-  wire  _ex2_alu_muldiv_out_T_6 = ex2_reg_exe_fun == 4'h9; // @[src/main/scala/fpga/Core.scala 1573:22]
-  wire [15:0] _ex2_alu_muldiv_out_T_9 = ex2_reg_mulls[31] ? 16'hffff : 16'h0; // @[src/main/scala/fpga/Core.scala 1565:12]
-  wire [47:0] _ex2_alu_muldiv_out_T_12 = {_ex2_alu_muldiv_out_T_9,ex2_reg_mulls}; // @[src/main/scala/fpga/Core.scala 1565:65]
-  wire [47:0] _ex2_alu_muldiv_out_T_15 = $signed(_ex2_alu_muldiv_out_T_12) + $signed(ex2_reg_mulhss); // @[src/main/scala/fpga/Core.scala 1573:80]
-  wire  _ex2_alu_muldiv_out_T_17 = ex2_reg_exe_fun == 4'ha; // @[src/main/scala/fpga/Core.scala 1574:22]
-  wire [47:0] _ex2_alu_muldiv_out_T_21 = {16'h0,ex2_reg_mullu[47:16]}; // @[src/main/scala/fpga/Core.scala 1568:35]
-  wire [47:0] _ex2_alu_muldiv_out_T_23 = _ex2_alu_muldiv_out_T_21 + ex2_reg_mulhuu; // @[src/main/scala/fpga/Core.scala 1574:108]
-  wire  _ex2_alu_muldiv_out_T_25 = ex2_reg_exe_fun == 4'hb; // @[src/main/scala/fpga/Core.scala 1575:22]
-  wire [47:0] _ex2_alu_muldiv_out_T_34 = $signed(_ex2_alu_muldiv_out_T_12) + $signed(ex2_reg_mulhsu); // @[src/main/scala/fpga/Core.scala 1575:80]
-  wire  _ex2_alu_muldiv_out_T_36 = ex2_reg_exe_fun == 4'hc; // @[src/main/scala/fpga/Core.scala 1576:22]
-  wire  _ex2_alu_muldiv_out_T_37 = ex2_reg_exe_fun == 4'he; // @[src/main/scala/fpga/Core.scala 1577:22]
-  wire  _ex2_alu_muldiv_out_T_38 = ex2_reg_exe_fun == 4'hd; // @[src/main/scala/fpga/Core.scala 1578:22]
-  wire  _ex2_alu_muldiv_out_T_39 = ex2_reg_exe_fun == 4'hf; // @[src/main/scala/fpga/Core.scala 1579:22]
+    csr_reg_mstatus_mie) & io_intr; // @[src/main/scala/fpga/Core.scala 1429:104]
+  wire  _T_78 = ex1_reg_csr_addr == 12'h304; // @[src/main/scala/fpga/Core.scala 1482:34]
+  wire  _GEN_446 = ex1_reg_csr_addr == 12'h340 ? 1'h0 : _T_78; // @[src/main/scala/fpga/Core.scala 1423:34 1480:57]
+  wire  _GEN_456 = ex1_reg_csr_addr == 12'h300 ? 1'h0 : _GEN_446; // @[src/main/scala/fpga/Core.scala 1423:34 1475:56]
+  wire  _GEN_467 = ex1_reg_csr_addr == 12'h341 ? 1'h0 : _GEN_456; // @[src/main/scala/fpga/Core.scala 1423:34 1473:53]
+  wire  _GEN_479 = ex1_reg_csr_addr == 12'h305 ? 1'h0 : _GEN_467; // @[src/main/scala/fpga/Core.scala 1423:34 1471:48]
+  wire  csr_mie_fw_en = ex1_en & ex1_reg_wb_sel == 3'h3 & _GEN_479; // @[src/main/scala/fpga/Core.scala 1423:34 1470:46]
+  wire  _GEN_441 = ex1_reg_csr_addr == 12'h304 & csr_wdata[11]; // @[src/main/scala/fpga/Core.scala 1482:52 1486:24 1424:36]
+  wire  _GEN_447 = ex1_reg_csr_addr == 12'h340 ? 1'h0 : _GEN_441; // @[src/main/scala/fpga/Core.scala 1424:36 1480:57]
+  wire  _GEN_457 = ex1_reg_csr_addr == 12'h300 ? 1'h0 : _GEN_447; // @[src/main/scala/fpga/Core.scala 1424:36 1475:56]
+  wire  _GEN_468 = ex1_reg_csr_addr == 12'h341 ? 1'h0 : _GEN_457; // @[src/main/scala/fpga/Core.scala 1424:36 1473:53]
+  wire  _GEN_480 = ex1_reg_csr_addr == 12'h305 ? 1'h0 : _GEN_468; // @[src/main/scala/fpga/Core.scala 1424:36 1471:48]
+  wire  csr_mie_meie_fw = ex1_en & ex1_reg_wb_sel == 3'h3 & _GEN_480; // @[src/main/scala/fpga/Core.scala 1424:36 1470:46]
+  wire  _csr_reg_is_meintr_T_6 = ~csr_mie_fw_en; // @[src/main/scala/fpga/Core.scala 1431:47]
+  wire  _csr_reg_is_meintr_T_8 = csr_mie_fw_en & csr_mie_meie_fw | ~csr_mie_fw_en & csr_reg_mie_meie; // @[src/main/scala/fpga/Core.scala 1431:43]
+  wire  _csr_reg_is_mtintr_T_4 = _csr_reg_is_meintr_T_3 & mtimer_io_intr; // @[src/main/scala/fpga/Core.scala 1434:104]
+  wire  _GEN_442 = ex1_reg_csr_addr == 12'h304 & csr_wdata[7]; // @[src/main/scala/fpga/Core.scala 1482:52 1487:24 1425:36]
+  wire  _GEN_448 = ex1_reg_csr_addr == 12'h340 ? 1'h0 : _GEN_442; // @[src/main/scala/fpga/Core.scala 1425:36 1480:57]
+  wire  _GEN_458 = ex1_reg_csr_addr == 12'h300 ? 1'h0 : _GEN_448; // @[src/main/scala/fpga/Core.scala 1425:36 1475:56]
+  wire  _GEN_469 = ex1_reg_csr_addr == 12'h341 ? 1'h0 : _GEN_458; // @[src/main/scala/fpga/Core.scala 1425:36 1473:53]
+  wire  _GEN_481 = ex1_reg_csr_addr == 12'h305 ? 1'h0 : _GEN_469; // @[src/main/scala/fpga/Core.scala 1425:36 1471:48]
+  wire  csr_mie_mtie_fw = ex1_en & ex1_reg_wb_sel == 3'h3 & _GEN_481; // @[src/main/scala/fpga/Core.scala 1425:36 1470:46]
+  wire  _csr_reg_is_mtintr_T_8 = csr_mie_fw_en & csr_mie_mtie_fw | _csr_reg_is_meintr_T_6 & csr_reg_mie_mtie; // @[src/main/scala/fpga/Core.scala 1436:43]
+  wire  ex1_is_valid_inst = ex1_en & ~ex1_reg_is_trap; // @[src/main/scala/fpga/Core.scala 1444:34]
+  wire  _GEN_438 = ex1_reg_csr_addr == 12'h304 ? csr_wdata[11] : csr_reg_mie_meie; // @[src/main/scala/fpga/Core.scala 1482:52 1483:24 146:37]
+  wire  _GEN_439 = ex1_reg_csr_addr == 12'h304 ? csr_wdata[7] : csr_reg_mie_mtie; // @[src/main/scala/fpga/Core.scala 1482:52 1484:24 147:37]
+  wire [31:0] _GEN_443 = ex1_reg_csr_addr == 12'h340 ? csr_wdata : csr_reg_mscratch; // @[src/main/scala/fpga/Core.scala 1480:57 1481:24 145:37]
+  wire  _GEN_444 = ex1_reg_csr_addr == 12'h340 ? csr_reg_mie_meie : _GEN_438; // @[src/main/scala/fpga/Core.scala 146:37 1480:57]
+  wire  _GEN_445 = ex1_reg_csr_addr == 12'h340 ? csr_reg_mie_mtie : _GEN_439; // @[src/main/scala/fpga/Core.scala 147:37 1480:57]
+  wire  _GEN_449 = ex1_reg_csr_addr == 12'h300 ? csr_wdata[3] : csr_reg_mstatus_mie; // @[src/main/scala/fpga/Core.scala 1475:56 1476:29 143:37]
+  wire  _GEN_450 = ex1_reg_csr_addr == 12'h300 ? csr_wdata[7] : csr_reg_mstatus_mpie; // @[src/main/scala/fpga/Core.scala 1475:56 1477:29 144:37]
+  wire [31:0] _GEN_453 = ex1_reg_csr_addr == 12'h300 ? csr_reg_mscratch : _GEN_443; // @[src/main/scala/fpga/Core.scala 145:37 1475:56]
+  wire  _GEN_454 = ex1_reg_csr_addr == 12'h300 ? csr_reg_mie_meie : _GEN_444; // @[src/main/scala/fpga/Core.scala 146:37 1475:56]
+  wire  _GEN_455 = ex1_reg_csr_addr == 12'h300 ? csr_reg_mie_mtie : _GEN_445; // @[src/main/scala/fpga/Core.scala 147:37 1475:56]
+  wire [30:0] _GEN_459 = ex1_reg_csr_addr == 12'h341 ? csr_wdata[31:1] : csr_reg_mepc; // @[src/main/scala/fpga/Core.scala 1473:53 1474:20 142:37]
+  wire  _GEN_460 = ex1_reg_csr_addr == 12'h341 ? csr_reg_mstatus_mie : _GEN_449; // @[src/main/scala/fpga/Core.scala 143:37 1473:53]
+  wire  _GEN_461 = ex1_reg_csr_addr == 12'h341 ? csr_reg_mstatus_mpie : _GEN_450; // @[src/main/scala/fpga/Core.scala 144:37 1473:53]
+  wire [30:0] _GEN_471 = ex1_reg_csr_addr == 12'h305 ? csr_reg_mepc : _GEN_459; // @[src/main/scala/fpga/Core.scala 142:37 1471:48]
+  wire  _GEN_472 = ex1_reg_csr_addr == 12'h305 ? csr_reg_mstatus_mie : _GEN_460; // @[src/main/scala/fpga/Core.scala 143:37 1471:48]
+  wire  _GEN_473 = ex1_reg_csr_addr == 12'h305 ? csr_reg_mstatus_mpie : _GEN_461; // @[src/main/scala/fpga/Core.scala 144:37 1471:48]
+  wire [30:0] _GEN_483 = ex1_en & ex1_reg_wb_sel == 3'h3 ? _GEN_471 : csr_reg_mepc; // @[src/main/scala/fpga/Core.scala 142:37 1470:46]
+  wire  _GEN_484 = ex1_en & ex1_reg_wb_sel == 3'h3 ? _GEN_472 : csr_reg_mstatus_mie; // @[src/main/scala/fpga/Core.scala 143:37 1470:46]
+  wire  _GEN_485 = ex1_en & ex1_reg_wb_sel == 3'h3 ? _GEN_473 : csr_reg_mstatus_mpie; // @[src/main/scala/fpga/Core.scala 144:37 1470:46]
+  wire  _GEN_494 = csr_is_mret | _GEN_485; // @[src/main/scala/fpga/Core.scala 1523:28 1524:26]
+  wire  _GEN_495 = csr_is_mret ? csr_reg_mstatus_mpie : _GEN_484; // @[src/main/scala/fpga/Core.scala 1523:28 1525:26]
+  wire  _ex2_reg_divrem_T = ex1_divrem & ex1_en; // @[src/main/scala/fpga/Core.scala 1555:45]
+  wire  _ex2_reg_div_stall_T_3 = ex2_reg_divrem_state == 3'h0 | ex2_reg_divrem_state == 3'h5; // @[src/main/scala/fpga/Core.scala 1557:75]
+  wire  _ex2_reg_div_stall_T_4 = _ex2_reg_divrem_T & (ex2_reg_divrem_state == 3'h0 | ex2_reg_divrem_state == 3'h5); // @[src/main/scala/fpga/Core.scala 1557:29]
+  wire  _GEN_575 = 3'h2 == ex2_reg_divrem_state | 3'h3 == ex2_reg_divrem_state; // @[src/main/scala/fpga/Core.scala 1619:33 1710:26]
+  wire  _GEN_583 = 3'h1 == ex2_reg_divrem_state | _GEN_575; // @[src/main/scala/fpga/Core.scala 1619:33 1657:29]
+  wire  ex2_div_stall_next = 3'h0 == ex2_reg_divrem_state ? 1'h0 : _GEN_583; // @[src/main/scala/fpga/Core.scala 1617:22 1619:33]
+  wire  _ex2_reg_div_stall_T_9 = ex2_reg_divrem & _ex2_reg_div_stall_T_3; // @[src/main/scala/fpga/Core.scala 1571:23]
+  wire  _T_80 = ~ex2_reg_div_stall; // @[src/main/scala/fpga/Core.scala 1574:23]
+  reg [36:0] ex2_reg_dividend; // @[src/main/scala/fpga/Core.scala 1587:37]
+  reg [35:0] ex2_reg_divisor; // @[src/main/scala/fpga/Core.scala 1588:37]
+  reg [63:0] ex2_reg_p_divisor; // @[src/main/scala/fpga/Core.scala 1589:37]
+  reg [4:0] ex2_reg_divrem_count; // @[src/main/scala/fpga/Core.scala 1590:37]
+  reg [4:0] ex2_reg_rem_shift; // @[src/main/scala/fpga/Core.scala 1591:37]
+  reg  ex2_reg_extra_shift; // @[src/main/scala/fpga/Core.scala 1592:37]
+  reg [2:0] ex2_reg_d; // @[src/main/scala/fpga/Core.scala 1593:37]
+  reg [31:0] ex2_reg_reminder; // @[src/main/scala/fpga/Core.scala 1594:37]
+  reg [31:0] ex2_reg_quotient; // @[src/main/scala/fpga/Core.scala 1595:37]
+  wire  _ex2_alu_muldiv_out_T = ex2_reg_exe_fun == 4'h8; // @[src/main/scala/fpga/Core.scala 1605:22]
+  wire [31:0] _ex2_alu_muldiv_out_T_3 = {ex2_reg_mulhuu[15:0], 16'h0}; // @[src/main/scala/fpga/Core.scala 1605:106]
+  wire [31:0] _ex2_alu_muldiv_out_T_5 = ex2_reg_mullu[31:0] + _ex2_alu_muldiv_out_T_3; // @[src/main/scala/fpga/Core.scala 1605:71]
+  wire  _ex2_alu_muldiv_out_T_6 = ex2_reg_exe_fun == 4'h9; // @[src/main/scala/fpga/Core.scala 1606:22]
+  wire [15:0] _ex2_alu_muldiv_out_T_9 = ex2_reg_mulls[31] ? 16'hffff : 16'h0; // @[src/main/scala/fpga/Core.scala 1598:12]
+  wire [47:0] _ex2_alu_muldiv_out_T_12 = {_ex2_alu_muldiv_out_T_9,ex2_reg_mulls}; // @[src/main/scala/fpga/Core.scala 1598:65]
+  wire [47:0] _ex2_alu_muldiv_out_T_15 = $signed(_ex2_alu_muldiv_out_T_12) + $signed(ex2_reg_mulhss); // @[src/main/scala/fpga/Core.scala 1606:80]
+  wire  _ex2_alu_muldiv_out_T_17 = ex2_reg_exe_fun == 4'ha; // @[src/main/scala/fpga/Core.scala 1607:22]
+  wire [47:0] _ex2_alu_muldiv_out_T_21 = {16'h0,ex2_reg_mullu[47:16]}; // @[src/main/scala/fpga/Core.scala 1601:35]
+  wire [47:0] _ex2_alu_muldiv_out_T_23 = _ex2_alu_muldiv_out_T_21 + ex2_reg_mulhuu; // @[src/main/scala/fpga/Core.scala 1607:108]
+  wire  _ex2_alu_muldiv_out_T_25 = ex2_reg_exe_fun == 4'hb; // @[src/main/scala/fpga/Core.scala 1608:22]
+  wire [47:0] _ex2_alu_muldiv_out_T_34 = $signed(_ex2_alu_muldiv_out_T_12) + $signed(ex2_reg_mulhsu); // @[src/main/scala/fpga/Core.scala 1608:80]
+  wire  _ex2_alu_muldiv_out_T_36 = ex2_reg_exe_fun == 4'hc; // @[src/main/scala/fpga/Core.scala 1609:22]
+  wire  _ex2_alu_muldiv_out_T_37 = ex2_reg_exe_fun == 4'he; // @[src/main/scala/fpga/Core.scala 1610:22]
+  wire  _ex2_alu_muldiv_out_T_38 = ex2_reg_exe_fun == 4'hd; // @[src/main/scala/fpga/Core.scala 1611:22]
+  wire  _ex2_alu_muldiv_out_T_39 = ex2_reg_exe_fun == 4'hf; // @[src/main/scala/fpga/Core.scala 1612:22]
   wire [31:0] _ex2_alu_muldiv_out_T_40 = _ex2_alu_muldiv_out_T_39 ? ex2_reg_reminder : 32'h0; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
   wire [31:0] _ex2_alu_muldiv_out_T_41 = _ex2_alu_muldiv_out_T_38 ? ex2_reg_reminder : _ex2_alu_muldiv_out_T_40; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
   wire [31:0] _ex2_alu_muldiv_out_T_42 = _ex2_alu_muldiv_out_T_37 ? ex2_reg_quotient : _ex2_alu_muldiv_out_T_41; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
@@ -3084,216 +3251,216 @@ module Core(
   wire [31:0] _ex2_alu_muldiv_out_T_46 = _ex2_alu_muldiv_out_T_6 ? _ex2_alu_muldiv_out_T_15[47:16] :
     _ex2_alu_muldiv_out_T_45; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
   wire [31:0] ex2_alu_muldiv_out = _ex2_alu_muldiv_out_T ? _ex2_alu_muldiv_out_T_5 : _ex2_alu_muldiv_out_T_46; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
-  wire [1:0] _GEN_538 = ex2_reg_init_divisor[31:2] == 30'h0 ? 2'h2 : 2'h1; // @[src/main/scala/fpga/Core.scala 1589:60 1590:32 1592:32]
-  wire [36:0] _ex2_reg_dividend_T = ex2_reg_init_dividend; // @[src/main/scala/fpga/Core.scala 1596:53]
-  wire [35:0] _ex2_reg_divisor_T_1 = {ex2_reg_init_divisor[3:0],32'h0}; // @[src/main/scala/fpga/Core.scala 1597:34]
-  wire [63:0] _ex2_reg_p_divisor_T = {ex2_reg_init_divisor,32'h0}; // @[src/main/scala/fpga/Core.scala 1598:34]
-  wire [2:0] _ex2_reg_d_T_1 = {ex2_reg_init_divisor[0],2'h0}; // @[src/main/scala/fpga/Core.scala 1607:35]
-  wire [4:0] _ex2_reg_divrem_count_T_1 = ex2_reg_divrem_count + 5'h1; // @[src/main/scala/fpga/Core.scala 1616:52]
-  wire  _p_T_1 = ~ex2_reg_dividend[36]; // @[src/main/scala/fpga/Core.scala 1628:42]
-  wire [4:0] _p_T_4 = ~ex2_reg_dividend[35:31]; // @[src/main/scala/fpga/Core.scala 1630:11]
-  wire [4:0] _p_T_5 = ~ex2_reg_dividend[36] ? ex2_reg_dividend[35:31] : _p_T_4; // @[src/main/scala/fpga/Core.scala 1628:12]
-  wire [4:0] _p_T_10 = ~ex2_reg_dividend[34:30]; // @[src/main/scala/fpga/Core.scala 1634:11]
-  wire [4:0] _p_T_11 = _p_T_1 ? ex2_reg_dividend[34:30] : _p_T_10; // @[src/main/scala/fpga/Core.scala 1632:12]
-  wire [4:0] p = ex2_reg_extra_shift ? _p_T_5 : _p_T_11; // @[src/main/scala/fpga/Core.scala 1627:18]
-  wire [1:0] _ex2_q_T_5 = 5'h2 == p ? 2'h1 : 2'h0; // @[src/main/scala/fpga/Core.scala 1649:55]
-  wire [1:0] _ex2_q_T_7 = 5'h3 == p ? 2'h1 : _ex2_q_T_5; // @[src/main/scala/fpga/Core.scala 1649:55]
-  wire [1:0] _ex2_q_T_9 = 5'h4 == p ? 2'h1 : _ex2_q_T_7; // @[src/main/scala/fpga/Core.scala 1649:55]
-  wire [1:0] _ex2_q_T_11 = 5'h5 == p ? 2'h1 : _ex2_q_T_9; // @[src/main/scala/fpga/Core.scala 1649:55]
-  wire [1:0] _ex2_q_T_13 = 5'h6 == p ? 2'h2 : _ex2_q_T_11; // @[src/main/scala/fpga/Core.scala 1649:55]
-  wire [1:0] _ex2_q_T_15 = 5'h7 == p ? 2'h2 : _ex2_q_T_13; // @[src/main/scala/fpga/Core.scala 1649:55]
-  wire [1:0] _ex2_q_T_17 = 5'h8 == p ? 2'h2 : _ex2_q_T_15; // @[src/main/scala/fpga/Core.scala 1649:55]
-  wire [1:0] _ex2_q_T_19 = 5'h9 == p ? 2'h2 : _ex2_q_T_17; // @[src/main/scala/fpga/Core.scala 1649:55]
-  wire [1:0] _ex2_q_T_21 = 5'ha == p ? 2'h2 : _ex2_q_T_19; // @[src/main/scala/fpga/Core.scala 1649:55]
-  wire [1:0] _ex2_q_T_23 = 5'hb == p ? 2'h2 : _ex2_q_T_21; // @[src/main/scala/fpga/Core.scala 1649:55]
-  wire [1:0] _ex2_q_T_37 = 5'h6 == p ? 2'h1 : _ex2_q_T_11; // @[src/main/scala/fpga/Core.scala 1649:55]
-  wire [1:0] _ex2_q_T_39 = 5'h7 == p ? 2'h2 : _ex2_q_T_37; // @[src/main/scala/fpga/Core.scala 1649:55]
-  wire [1:0] _ex2_q_T_41 = 5'h8 == p ? 2'h2 : _ex2_q_T_39; // @[src/main/scala/fpga/Core.scala 1649:55]
-  wire [1:0] _ex2_q_T_43 = 5'h9 == p ? 2'h2 : _ex2_q_T_41; // @[src/main/scala/fpga/Core.scala 1649:55]
-  wire [1:0] _ex2_q_T_45 = 5'ha == p ? 2'h2 : _ex2_q_T_43; // @[src/main/scala/fpga/Core.scala 1649:55]
-  wire [1:0] _ex2_q_T_47 = 5'hb == p ? 2'h2 : _ex2_q_T_45; // @[src/main/scala/fpga/Core.scala 1649:55]
-  wire [1:0] _ex2_q_T_49 = 5'hc == p ? 2'h2 : _ex2_q_T_47; // @[src/main/scala/fpga/Core.scala 1649:55]
-  wire [1:0] _ex2_q_T_51 = 5'hd == p ? 2'h2 : _ex2_q_T_49; // @[src/main/scala/fpga/Core.scala 1649:55]
-  wire [1:0] _ex2_q_T_67 = 5'h7 == p ? 2'h1 : _ex2_q_T_37; // @[src/main/scala/fpga/Core.scala 1649:55]
-  wire [1:0] _ex2_q_T_69 = 5'h8 == p ? 2'h2 : _ex2_q_T_67; // @[src/main/scala/fpga/Core.scala 1649:55]
-  wire [1:0] _ex2_q_T_71 = 5'h9 == p ? 2'h2 : _ex2_q_T_69; // @[src/main/scala/fpga/Core.scala 1649:55]
-  wire [1:0] _ex2_q_T_73 = 5'ha == p ? 2'h2 : _ex2_q_T_71; // @[src/main/scala/fpga/Core.scala 1649:55]
-  wire [1:0] _ex2_q_T_75 = 5'hb == p ? 2'h2 : _ex2_q_T_73; // @[src/main/scala/fpga/Core.scala 1649:55]
-  wire [1:0] _ex2_q_T_77 = 5'hc == p ? 2'h2 : _ex2_q_T_75; // @[src/main/scala/fpga/Core.scala 1649:55]
-  wire [1:0] _ex2_q_T_79 = 5'hd == p ? 2'h2 : _ex2_q_T_77; // @[src/main/scala/fpga/Core.scala 1649:55]
-  wire [1:0] _ex2_q_T_81 = 5'he == p ? 2'h2 : _ex2_q_T_79; // @[src/main/scala/fpga/Core.scala 1649:55]
-  wire [1:0] _ex2_q_T_83 = 5'hf == p ? 2'h2 : _ex2_q_T_81; // @[src/main/scala/fpga/Core.scala 1649:55]
-  wire [1:0] _ex2_q_T_125 = 5'h4 == p ? 2'h1 : 2'h0; // @[src/main/scala/fpga/Core.scala 1649:55]
-  wire [1:0] _ex2_q_T_127 = 5'h5 == p ? 2'h1 : _ex2_q_T_125; // @[src/main/scala/fpga/Core.scala 1649:55]
-  wire [1:0] _ex2_q_T_129 = 5'h6 == p ? 2'h1 : _ex2_q_T_127; // @[src/main/scala/fpga/Core.scala 1649:55]
-  wire [1:0] _ex2_q_T_131 = 5'h7 == p ? 2'h1 : _ex2_q_T_129; // @[src/main/scala/fpga/Core.scala 1649:55]
-  wire [1:0] _ex2_q_T_133 = 5'h8 == p ? 2'h1 : _ex2_q_T_131; // @[src/main/scala/fpga/Core.scala 1649:55]
-  wire [1:0] _ex2_q_T_135 = 5'h9 == p ? 2'h1 : _ex2_q_T_133; // @[src/main/scala/fpga/Core.scala 1649:55]
-  wire [1:0] _ex2_q_T_137 = 5'ha == p ? 2'h2 : _ex2_q_T_135; // @[src/main/scala/fpga/Core.scala 1649:55]
-  wire [1:0] _ex2_q_T_139 = 5'hb == p ? 2'h2 : _ex2_q_T_137; // @[src/main/scala/fpga/Core.scala 1649:55]
-  wire [1:0] _ex2_q_T_141 = 5'hc == p ? 2'h2 : _ex2_q_T_139; // @[src/main/scala/fpga/Core.scala 1649:55]
-  wire [1:0] _ex2_q_T_143 = 5'hd == p ? 2'h2 : _ex2_q_T_141; // @[src/main/scala/fpga/Core.scala 1649:55]
-  wire [1:0] _ex2_q_T_145 = 5'he == p ? 2'h2 : _ex2_q_T_143; // @[src/main/scala/fpga/Core.scala 1649:55]
-  wire [1:0] _ex2_q_T_147 = 5'hf == p ? 2'h2 : _ex2_q_T_145; // @[src/main/scala/fpga/Core.scala 1649:55]
-  wire [1:0] _ex2_q_T_149 = 5'h10 == p ? 2'h2 : _ex2_q_T_147; // @[src/main/scala/fpga/Core.scala 1649:55]
-  wire [1:0] _ex2_q_T_151 = 5'h11 == p ? 2'h2 : _ex2_q_T_149; // @[src/main/scala/fpga/Core.scala 1649:55]
-  wire [1:0] _ex2_q_T_189 = 5'h12 == p ? 2'h2 : _ex2_q_T_151; // @[src/main/scala/fpga/Core.scala 1649:55]
-  wire [1:0] _ex2_q_T_191 = 5'h13 == p ? 2'h2 : _ex2_q_T_189; // @[src/main/scala/fpga/Core.scala 1649:55]
-  wire [1:0] _ex2_q_T_253 = 5'ha == p ? 2'h1 : _ex2_q_T_135; // @[src/main/scala/fpga/Core.scala 1649:55]
-  wire [1:0] _ex2_q_T_255 = 5'hb == p ? 2'h1 : _ex2_q_T_253; // @[src/main/scala/fpga/Core.scala 1649:55]
-  wire [1:0] _ex2_q_T_257 = 5'hc == p ? 2'h2 : _ex2_q_T_255; // @[src/main/scala/fpga/Core.scala 1649:55]
-  wire [1:0] _ex2_q_T_259 = 5'hd == p ? 2'h2 : _ex2_q_T_257; // @[src/main/scala/fpga/Core.scala 1649:55]
-  wire [1:0] _ex2_q_T_261 = 5'he == p ? 2'h2 : _ex2_q_T_259; // @[src/main/scala/fpga/Core.scala 1649:55]
-  wire [1:0] _ex2_q_T_263 = 5'hf == p ? 2'h2 : _ex2_q_T_261; // @[src/main/scala/fpga/Core.scala 1649:55]
-  wire [1:0] _ex2_q_T_265 = 5'h10 == p ? 2'h2 : _ex2_q_T_263; // @[src/main/scala/fpga/Core.scala 1649:55]
-  wire [1:0] _ex2_q_T_267 = 5'h11 == p ? 2'h2 : _ex2_q_T_265; // @[src/main/scala/fpga/Core.scala 1649:55]
-  wire [1:0] _ex2_q_T_269 = 5'h12 == p ? 2'h2 : _ex2_q_T_267; // @[src/main/scala/fpga/Core.scala 1649:55]
-  wire [1:0] _ex2_q_T_271 = 5'h13 == p ? 2'h2 : _ex2_q_T_269; // @[src/main/scala/fpga/Core.scala 1649:55]
-  wire [1:0] _ex2_q_T_273 = 5'h14 == p ? 2'h2 : _ex2_q_T_271; // @[src/main/scala/fpga/Core.scala 1649:55]
-  wire [1:0] _ex2_q_T_275 = 5'h15 == p ? 2'h2 : _ex2_q_T_273; // @[src/main/scala/fpga/Core.scala 1649:55]
-  wire [1:0] _ex2_q_T_277 = 3'h1 == ex2_reg_d ? _ex2_q_T_51 : _ex2_q_T_23; // @[src/main/scala/fpga/Core.scala 1647:49]
-  wire [1:0] _ex2_q_T_279 = 3'h2 == ex2_reg_d ? _ex2_q_T_83 : _ex2_q_T_277; // @[src/main/scala/fpga/Core.scala 1647:49]
-  wire [1:0] _ex2_q_T_281 = 3'h3 == ex2_reg_d ? _ex2_q_T_83 : _ex2_q_T_279; // @[src/main/scala/fpga/Core.scala 1647:49]
-  wire [1:0] _ex2_q_T_283 = 3'h4 == ex2_reg_d ? _ex2_q_T_151 : _ex2_q_T_281; // @[src/main/scala/fpga/Core.scala 1647:49]
-  wire [1:0] _ex2_q_T_285 = 3'h5 == ex2_reg_d ? _ex2_q_T_191 : _ex2_q_T_283; // @[src/main/scala/fpga/Core.scala 1647:49]
-  wire [1:0] _ex2_q_T_287 = 3'h6 == ex2_reg_d ? _ex2_q_T_191 : _ex2_q_T_285; // @[src/main/scala/fpga/Core.scala 1647:49]
-  wire [1:0] ex2_q = 3'h7 == ex2_reg_d ? _ex2_q_T_275 : _ex2_q_T_287; // @[src/main/scala/fpga/Core.scala 1647:49]
-  wire [38:0] _ex2_reg_dividend_T_1 = {$signed(ex2_reg_dividend), 2'h0}; // @[src/main/scala/fpga/Core.scala 1654:54]
-  wire [36:0] _ex2_reg_dividend_T_5 = {1'h0,ex2_reg_divisor}; // @[src/main/scala/fpga/Core.scala 1655:85]
-  wire [36:0] _ex2_reg_dividend_T_8 = $signed(ex2_reg_dividend) - $signed(_ex2_reg_dividend_T_5); // @[src/main/scala/fpga/Core.scala 1655:52]
-  wire [38:0] _ex2_reg_dividend_T_9 = {$signed(_ex2_reg_dividend_T_8), 2'h0}; // @[src/main/scala/fpga/Core.scala 1655:93]
-  wire [36:0] _ex2_reg_dividend_T_13 = {ex2_reg_divisor,1'h0}; // @[src/main/scala/fpga/Core.scala 1656:85]
-  wire [36:0] _ex2_reg_dividend_T_16 = $signed(ex2_reg_dividend) - $signed(_ex2_reg_dividend_T_13); // @[src/main/scala/fpga/Core.scala 1656:52]
-  wire [38:0] _ex2_reg_dividend_T_17 = {$signed(_ex2_reg_dividend_T_16), 2'h0}; // @[src/main/scala/fpga/Core.scala 1656:93]
+  wire [1:0] _GEN_552 = ex2_reg_init_divisor[31:2] == 30'h0 ? 2'h2 : 2'h1; // @[src/main/scala/fpga/Core.scala 1622:60 1623:32 1625:32]
+  wire [36:0] _ex2_reg_dividend_T = ex2_reg_init_dividend; // @[src/main/scala/fpga/Core.scala 1629:53]
+  wire [35:0] _ex2_reg_divisor_T_1 = {ex2_reg_init_divisor[3:0],32'h0}; // @[src/main/scala/fpga/Core.scala 1630:34]
+  wire [63:0] _ex2_reg_p_divisor_T = {ex2_reg_init_divisor,32'h0}; // @[src/main/scala/fpga/Core.scala 1631:34]
+  wire [2:0] _ex2_reg_d_T_1 = {ex2_reg_init_divisor[0],2'h0}; // @[src/main/scala/fpga/Core.scala 1640:35]
+  wire [4:0] _ex2_reg_divrem_count_T_1 = ex2_reg_divrem_count + 5'h1; // @[src/main/scala/fpga/Core.scala 1649:52]
+  wire  _p_T_1 = ~ex2_reg_dividend[36]; // @[src/main/scala/fpga/Core.scala 1661:42]
+  wire [4:0] _p_T_4 = ~ex2_reg_dividend[35:31]; // @[src/main/scala/fpga/Core.scala 1663:11]
+  wire [4:0] _p_T_5 = ~ex2_reg_dividend[36] ? ex2_reg_dividend[35:31] : _p_T_4; // @[src/main/scala/fpga/Core.scala 1661:12]
+  wire [4:0] _p_T_10 = ~ex2_reg_dividend[34:30]; // @[src/main/scala/fpga/Core.scala 1667:11]
+  wire [4:0] _p_T_11 = _p_T_1 ? ex2_reg_dividend[34:30] : _p_T_10; // @[src/main/scala/fpga/Core.scala 1665:12]
+  wire [4:0] p = ex2_reg_extra_shift ? _p_T_5 : _p_T_11; // @[src/main/scala/fpga/Core.scala 1660:18]
+  wire [1:0] _ex2_q_T_5 = 5'h2 == p ? 2'h1 : 2'h0; // @[src/main/scala/fpga/Core.scala 1682:55]
+  wire [1:0] _ex2_q_T_7 = 5'h3 == p ? 2'h1 : _ex2_q_T_5; // @[src/main/scala/fpga/Core.scala 1682:55]
+  wire [1:0] _ex2_q_T_9 = 5'h4 == p ? 2'h1 : _ex2_q_T_7; // @[src/main/scala/fpga/Core.scala 1682:55]
+  wire [1:0] _ex2_q_T_11 = 5'h5 == p ? 2'h1 : _ex2_q_T_9; // @[src/main/scala/fpga/Core.scala 1682:55]
+  wire [1:0] _ex2_q_T_13 = 5'h6 == p ? 2'h2 : _ex2_q_T_11; // @[src/main/scala/fpga/Core.scala 1682:55]
+  wire [1:0] _ex2_q_T_15 = 5'h7 == p ? 2'h2 : _ex2_q_T_13; // @[src/main/scala/fpga/Core.scala 1682:55]
+  wire [1:0] _ex2_q_T_17 = 5'h8 == p ? 2'h2 : _ex2_q_T_15; // @[src/main/scala/fpga/Core.scala 1682:55]
+  wire [1:0] _ex2_q_T_19 = 5'h9 == p ? 2'h2 : _ex2_q_T_17; // @[src/main/scala/fpga/Core.scala 1682:55]
+  wire [1:0] _ex2_q_T_21 = 5'ha == p ? 2'h2 : _ex2_q_T_19; // @[src/main/scala/fpga/Core.scala 1682:55]
+  wire [1:0] _ex2_q_T_23 = 5'hb == p ? 2'h2 : _ex2_q_T_21; // @[src/main/scala/fpga/Core.scala 1682:55]
+  wire [1:0] _ex2_q_T_37 = 5'h6 == p ? 2'h1 : _ex2_q_T_11; // @[src/main/scala/fpga/Core.scala 1682:55]
+  wire [1:0] _ex2_q_T_39 = 5'h7 == p ? 2'h2 : _ex2_q_T_37; // @[src/main/scala/fpga/Core.scala 1682:55]
+  wire [1:0] _ex2_q_T_41 = 5'h8 == p ? 2'h2 : _ex2_q_T_39; // @[src/main/scala/fpga/Core.scala 1682:55]
+  wire [1:0] _ex2_q_T_43 = 5'h9 == p ? 2'h2 : _ex2_q_T_41; // @[src/main/scala/fpga/Core.scala 1682:55]
+  wire [1:0] _ex2_q_T_45 = 5'ha == p ? 2'h2 : _ex2_q_T_43; // @[src/main/scala/fpga/Core.scala 1682:55]
+  wire [1:0] _ex2_q_T_47 = 5'hb == p ? 2'h2 : _ex2_q_T_45; // @[src/main/scala/fpga/Core.scala 1682:55]
+  wire [1:0] _ex2_q_T_49 = 5'hc == p ? 2'h2 : _ex2_q_T_47; // @[src/main/scala/fpga/Core.scala 1682:55]
+  wire [1:0] _ex2_q_T_51 = 5'hd == p ? 2'h2 : _ex2_q_T_49; // @[src/main/scala/fpga/Core.scala 1682:55]
+  wire [1:0] _ex2_q_T_67 = 5'h7 == p ? 2'h1 : _ex2_q_T_37; // @[src/main/scala/fpga/Core.scala 1682:55]
+  wire [1:0] _ex2_q_T_69 = 5'h8 == p ? 2'h2 : _ex2_q_T_67; // @[src/main/scala/fpga/Core.scala 1682:55]
+  wire [1:0] _ex2_q_T_71 = 5'h9 == p ? 2'h2 : _ex2_q_T_69; // @[src/main/scala/fpga/Core.scala 1682:55]
+  wire [1:0] _ex2_q_T_73 = 5'ha == p ? 2'h2 : _ex2_q_T_71; // @[src/main/scala/fpga/Core.scala 1682:55]
+  wire [1:0] _ex2_q_T_75 = 5'hb == p ? 2'h2 : _ex2_q_T_73; // @[src/main/scala/fpga/Core.scala 1682:55]
+  wire [1:0] _ex2_q_T_77 = 5'hc == p ? 2'h2 : _ex2_q_T_75; // @[src/main/scala/fpga/Core.scala 1682:55]
+  wire [1:0] _ex2_q_T_79 = 5'hd == p ? 2'h2 : _ex2_q_T_77; // @[src/main/scala/fpga/Core.scala 1682:55]
+  wire [1:0] _ex2_q_T_81 = 5'he == p ? 2'h2 : _ex2_q_T_79; // @[src/main/scala/fpga/Core.scala 1682:55]
+  wire [1:0] _ex2_q_T_83 = 5'hf == p ? 2'h2 : _ex2_q_T_81; // @[src/main/scala/fpga/Core.scala 1682:55]
+  wire [1:0] _ex2_q_T_125 = 5'h4 == p ? 2'h1 : 2'h0; // @[src/main/scala/fpga/Core.scala 1682:55]
+  wire [1:0] _ex2_q_T_127 = 5'h5 == p ? 2'h1 : _ex2_q_T_125; // @[src/main/scala/fpga/Core.scala 1682:55]
+  wire [1:0] _ex2_q_T_129 = 5'h6 == p ? 2'h1 : _ex2_q_T_127; // @[src/main/scala/fpga/Core.scala 1682:55]
+  wire [1:0] _ex2_q_T_131 = 5'h7 == p ? 2'h1 : _ex2_q_T_129; // @[src/main/scala/fpga/Core.scala 1682:55]
+  wire [1:0] _ex2_q_T_133 = 5'h8 == p ? 2'h1 : _ex2_q_T_131; // @[src/main/scala/fpga/Core.scala 1682:55]
+  wire [1:0] _ex2_q_T_135 = 5'h9 == p ? 2'h1 : _ex2_q_T_133; // @[src/main/scala/fpga/Core.scala 1682:55]
+  wire [1:0] _ex2_q_T_137 = 5'ha == p ? 2'h2 : _ex2_q_T_135; // @[src/main/scala/fpga/Core.scala 1682:55]
+  wire [1:0] _ex2_q_T_139 = 5'hb == p ? 2'h2 : _ex2_q_T_137; // @[src/main/scala/fpga/Core.scala 1682:55]
+  wire [1:0] _ex2_q_T_141 = 5'hc == p ? 2'h2 : _ex2_q_T_139; // @[src/main/scala/fpga/Core.scala 1682:55]
+  wire [1:0] _ex2_q_T_143 = 5'hd == p ? 2'h2 : _ex2_q_T_141; // @[src/main/scala/fpga/Core.scala 1682:55]
+  wire [1:0] _ex2_q_T_145 = 5'he == p ? 2'h2 : _ex2_q_T_143; // @[src/main/scala/fpga/Core.scala 1682:55]
+  wire [1:0] _ex2_q_T_147 = 5'hf == p ? 2'h2 : _ex2_q_T_145; // @[src/main/scala/fpga/Core.scala 1682:55]
+  wire [1:0] _ex2_q_T_149 = 5'h10 == p ? 2'h2 : _ex2_q_T_147; // @[src/main/scala/fpga/Core.scala 1682:55]
+  wire [1:0] _ex2_q_T_151 = 5'h11 == p ? 2'h2 : _ex2_q_T_149; // @[src/main/scala/fpga/Core.scala 1682:55]
+  wire [1:0] _ex2_q_T_189 = 5'h12 == p ? 2'h2 : _ex2_q_T_151; // @[src/main/scala/fpga/Core.scala 1682:55]
+  wire [1:0] _ex2_q_T_191 = 5'h13 == p ? 2'h2 : _ex2_q_T_189; // @[src/main/scala/fpga/Core.scala 1682:55]
+  wire [1:0] _ex2_q_T_253 = 5'ha == p ? 2'h1 : _ex2_q_T_135; // @[src/main/scala/fpga/Core.scala 1682:55]
+  wire [1:0] _ex2_q_T_255 = 5'hb == p ? 2'h1 : _ex2_q_T_253; // @[src/main/scala/fpga/Core.scala 1682:55]
+  wire [1:0] _ex2_q_T_257 = 5'hc == p ? 2'h2 : _ex2_q_T_255; // @[src/main/scala/fpga/Core.scala 1682:55]
+  wire [1:0] _ex2_q_T_259 = 5'hd == p ? 2'h2 : _ex2_q_T_257; // @[src/main/scala/fpga/Core.scala 1682:55]
+  wire [1:0] _ex2_q_T_261 = 5'he == p ? 2'h2 : _ex2_q_T_259; // @[src/main/scala/fpga/Core.scala 1682:55]
+  wire [1:0] _ex2_q_T_263 = 5'hf == p ? 2'h2 : _ex2_q_T_261; // @[src/main/scala/fpga/Core.scala 1682:55]
+  wire [1:0] _ex2_q_T_265 = 5'h10 == p ? 2'h2 : _ex2_q_T_263; // @[src/main/scala/fpga/Core.scala 1682:55]
+  wire [1:0] _ex2_q_T_267 = 5'h11 == p ? 2'h2 : _ex2_q_T_265; // @[src/main/scala/fpga/Core.scala 1682:55]
+  wire [1:0] _ex2_q_T_269 = 5'h12 == p ? 2'h2 : _ex2_q_T_267; // @[src/main/scala/fpga/Core.scala 1682:55]
+  wire [1:0] _ex2_q_T_271 = 5'h13 == p ? 2'h2 : _ex2_q_T_269; // @[src/main/scala/fpga/Core.scala 1682:55]
+  wire [1:0] _ex2_q_T_273 = 5'h14 == p ? 2'h2 : _ex2_q_T_271; // @[src/main/scala/fpga/Core.scala 1682:55]
+  wire [1:0] _ex2_q_T_275 = 5'h15 == p ? 2'h2 : _ex2_q_T_273; // @[src/main/scala/fpga/Core.scala 1682:55]
+  wire [1:0] _ex2_q_T_277 = 3'h1 == ex2_reg_d ? _ex2_q_T_51 : _ex2_q_T_23; // @[src/main/scala/fpga/Core.scala 1680:49]
+  wire [1:0] _ex2_q_T_279 = 3'h2 == ex2_reg_d ? _ex2_q_T_83 : _ex2_q_T_277; // @[src/main/scala/fpga/Core.scala 1680:49]
+  wire [1:0] _ex2_q_T_281 = 3'h3 == ex2_reg_d ? _ex2_q_T_83 : _ex2_q_T_279; // @[src/main/scala/fpga/Core.scala 1680:49]
+  wire [1:0] _ex2_q_T_283 = 3'h4 == ex2_reg_d ? _ex2_q_T_151 : _ex2_q_T_281; // @[src/main/scala/fpga/Core.scala 1680:49]
+  wire [1:0] _ex2_q_T_285 = 3'h5 == ex2_reg_d ? _ex2_q_T_191 : _ex2_q_T_283; // @[src/main/scala/fpga/Core.scala 1680:49]
+  wire [1:0] _ex2_q_T_287 = 3'h6 == ex2_reg_d ? _ex2_q_T_191 : _ex2_q_T_285; // @[src/main/scala/fpga/Core.scala 1680:49]
+  wire [1:0] ex2_q = 3'h7 == ex2_reg_d ? _ex2_q_T_275 : _ex2_q_T_287; // @[src/main/scala/fpga/Core.scala 1680:49]
+  wire [38:0] _ex2_reg_dividend_T_1 = {$signed(ex2_reg_dividend), 2'h0}; // @[src/main/scala/fpga/Core.scala 1687:54]
+  wire [36:0] _ex2_reg_dividend_T_5 = {1'h0,ex2_reg_divisor}; // @[src/main/scala/fpga/Core.scala 1688:85]
+  wire [36:0] _ex2_reg_dividend_T_8 = $signed(ex2_reg_dividend) - $signed(_ex2_reg_dividend_T_5); // @[src/main/scala/fpga/Core.scala 1688:52]
+  wire [38:0] _ex2_reg_dividend_T_9 = {$signed(_ex2_reg_dividend_T_8), 2'h0}; // @[src/main/scala/fpga/Core.scala 1688:93]
+  wire [36:0] _ex2_reg_dividend_T_13 = {ex2_reg_divisor,1'h0}; // @[src/main/scala/fpga/Core.scala 1689:85]
+  wire [36:0] _ex2_reg_dividend_T_16 = $signed(ex2_reg_dividend) - $signed(_ex2_reg_dividend_T_13); // @[src/main/scala/fpga/Core.scala 1689:52]
+  wire [38:0] _ex2_reg_dividend_T_17 = {$signed(_ex2_reg_dividend_T_16), 2'h0}; // @[src/main/scala/fpga/Core.scala 1689:93]
   wire [38:0] _ex2_reg_dividend_T_18 = ex2_q[1] ? $signed(_ex2_reg_dividend_T_17) : $signed(_ex2_reg_dividend_T_1); // @[src/main/scala/chisel3/util/Mux.scala 141:16]
   wire [38:0] _ex2_reg_dividend_T_19 = ex2_q[0] ? $signed(_ex2_reg_dividend_T_9) : $signed(_ex2_reg_dividend_T_18); // @[src/main/scala/chisel3/util/Mux.scala 141:16]
-  wire [33:0] _ex2_reg_quotient_T = {ex2_reg_quotient, 2'h0}; // @[src/main/scala/fpga/Core.scala 1658:54]
-  wire [33:0] _ex2_reg_quotient_T_5 = _ex2_reg_quotient_T + 34'h1; // @[src/main/scala/fpga/Core.scala 1659:58]
-  wire [33:0] _ex2_reg_quotient_T_10 = _ex2_reg_quotient_T + 34'h2; // @[src/main/scala/fpga/Core.scala 1660:58]
+  wire [33:0] _ex2_reg_quotient_T = {ex2_reg_quotient, 2'h0}; // @[src/main/scala/fpga/Core.scala 1691:54]
+  wire [33:0] _ex2_reg_quotient_T_5 = _ex2_reg_quotient_T + 34'h1; // @[src/main/scala/fpga/Core.scala 1692:58]
+  wire [33:0] _ex2_reg_quotient_T_10 = _ex2_reg_quotient_T + 34'h2; // @[src/main/scala/fpga/Core.scala 1693:58]
   wire [33:0] _ex2_reg_quotient_T_11 = ex2_q[1] ? _ex2_reg_quotient_T_10 : _ex2_reg_quotient_T; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
   wire [33:0] _ex2_reg_quotient_T_12 = ex2_q[0] ? _ex2_reg_quotient_T_5 : _ex2_reg_quotient_T_11; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
-  wire [36:0] _ex2_reg_dividend_T_27 = $signed(ex2_reg_dividend) + $signed(_ex2_reg_dividend_T_5); // @[src/main/scala/fpga/Core.scala 1664:52]
-  wire [38:0] _ex2_reg_dividend_T_28 = {$signed(_ex2_reg_dividend_T_27), 2'h0}; // @[src/main/scala/fpga/Core.scala 1664:93]
-  wire [36:0] _ex2_reg_dividend_T_35 = $signed(ex2_reg_dividend) + $signed(_ex2_reg_dividend_T_13); // @[src/main/scala/fpga/Core.scala 1665:52]
-  wire [38:0] _ex2_reg_dividend_T_36 = {$signed(_ex2_reg_dividend_T_35), 2'h0}; // @[src/main/scala/fpga/Core.scala 1665:93]
+  wire [36:0] _ex2_reg_dividend_T_27 = $signed(ex2_reg_dividend) + $signed(_ex2_reg_dividend_T_5); // @[src/main/scala/fpga/Core.scala 1697:52]
+  wire [38:0] _ex2_reg_dividend_T_28 = {$signed(_ex2_reg_dividend_T_27), 2'h0}; // @[src/main/scala/fpga/Core.scala 1697:93]
+  wire [36:0] _ex2_reg_dividend_T_35 = $signed(ex2_reg_dividend) + $signed(_ex2_reg_dividend_T_13); // @[src/main/scala/fpga/Core.scala 1698:52]
+  wire [38:0] _ex2_reg_dividend_T_36 = {$signed(_ex2_reg_dividend_T_35), 2'h0}; // @[src/main/scala/fpga/Core.scala 1698:93]
   wire [38:0] _ex2_reg_dividend_T_37 = ex2_q[1] ? $signed(_ex2_reg_dividend_T_36) : $signed(_ex2_reg_dividend_T_1); // @[src/main/scala/chisel3/util/Mux.scala 141:16]
   wire [38:0] _ex2_reg_dividend_T_38 = ex2_q[0] ? $signed(_ex2_reg_dividend_T_28) : $signed(_ex2_reg_dividend_T_37); // @[src/main/scala/chisel3/util/Mux.scala 141:16]
-  wire [33:0] _ex2_reg_quotient_T_18 = _ex2_reg_quotient_T - 34'h1; // @[src/main/scala/fpga/Core.scala 1668:58]
-  wire [33:0] _ex2_reg_quotient_T_23 = _ex2_reg_quotient_T - 34'h2; // @[src/main/scala/fpga/Core.scala 1669:58]
+  wire [33:0] _ex2_reg_quotient_T_18 = _ex2_reg_quotient_T - 34'h1; // @[src/main/scala/fpga/Core.scala 1701:58]
+  wire [33:0] _ex2_reg_quotient_T_23 = _ex2_reg_quotient_T - 34'h2; // @[src/main/scala/fpga/Core.scala 1702:58]
   wire [33:0] _ex2_reg_quotient_T_24 = ex2_q[1] ? _ex2_reg_quotient_T_23 : _ex2_reg_quotient_T; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
   wire [33:0] _ex2_reg_quotient_T_25 = ex2_q[0] ? _ex2_reg_quotient_T_18 : _ex2_reg_quotient_T_24; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
-  wire [38:0] _GEN_545 = _p_T_1 ? $signed(_ex2_reg_dividend_T_19) : $signed(_ex2_reg_dividend_T_38); // @[src/main/scala/fpga/Core.scala 1653:51 1654:26 1663:26]
-  wire [33:0] _GEN_546 = _p_T_1 ? _ex2_reg_quotient_T_12 : _ex2_reg_quotient_T_25; // @[src/main/scala/fpga/Core.scala 1653:51 1658:26 1667:26]
-  wire [4:0] _ex2_reg_rem_shift_T_1 = ex2_reg_rem_shift + 5'h1; // @[src/main/scala/fpga/Core.scala 1672:46]
-  wire [2:0] _GEN_547 = ex2_reg_divrem_count == 5'h10 ? 3'h3 : ex2_reg_divrem_state; // @[src/main/scala/fpga/Core.scala 1674:44 1675:30 310:37]
-  wire [5:0] _ex2_reg_reminder_T = {ex2_reg_rem_shift,1'h0}; // @[src/main/scala/fpga/Core.scala 1680:51]
-  wire [36:0] _ex2_reg_reminder_T_1 = $signed(ex2_reg_dividend) >>> _ex2_reg_reminder_T; // @[src/main/scala/fpga/Core.scala 1680:45]
-  wire [31:0] _reminder_T_4 = ex2_reg_reminder + ex2_reg_init_divisor; // @[src/main/scala/fpga/Core.scala 1686:26]
-  wire [31:0] reminder = ex2_reg_dividend[36] ? _reminder_T_4 : ex2_reg_reminder; // @[src/main/scala/fpga/Core.scala 1685:25]
-  wire [31:0] _ex2_reg_reminder_T_4 = ~reminder; // @[src/main/scala/fpga/Core.scala 1693:11]
-  wire [31:0] _ex2_reg_reminder_T_6 = _ex2_reg_reminder_T_4 + 32'h1; // @[src/main/scala/fpga/Core.scala 1693:21]
-  wire [31:0] _ex2_reg_reminder_T_7 = ~ex2_reg_sign_op1 ? reminder : _ex2_reg_reminder_T_6; // @[src/main/scala/fpga/Core.scala 1691:12]
-  wire [31:0] _ex2_reg_reminder_T_8 = ex2_reg_zero_op2 ? ex2_reg_orig_dividend : _ex2_reg_reminder_T_7; // @[src/main/scala/fpga/Core.scala 1689:30]
-  wire [31:0] _quotient_T_3 = ex2_reg_quotient - 32'h1; // @[src/main/scala/fpga/Core.scala 1697:26]
-  wire [31:0] quotient = ex2_reg_dividend[36] ? _quotient_T_3 : ex2_reg_quotient; // @[src/main/scala/fpga/Core.scala 1696:25]
-  wire [31:0] _ex2_reg_quotient_T_27 = ~quotient; // @[src/main/scala/fpga/Core.scala 1704:11]
-  wire [31:0] _ex2_reg_quotient_T_29 = _ex2_reg_quotient_T_27 + 32'h1; // @[src/main/scala/fpga/Core.scala 1704:21]
-  wire [31:0] _ex2_reg_quotient_T_30 = ~ex2_reg_sign_op12 ? quotient : _ex2_reg_quotient_T_29; // @[src/main/scala/fpga/Core.scala 1702:12]
-  wire [31:0] _ex2_reg_quotient_T_31 = ex2_reg_zero_op2 ? 32'hffffffff : _ex2_reg_quotient_T_30; // @[src/main/scala/fpga/Core.scala 1700:30]
-  wire [2:0] _GEN_548 = 3'h5 == ex2_reg_divrem_state ? 3'h0 : ex2_reg_divrem_state; // @[src/main/scala/fpga/Core.scala 1586:33 1711:28 310:37]
-  wire [31:0] _GEN_549 = 3'h4 == ex2_reg_divrem_state ? _ex2_reg_reminder_T_8 : ex2_reg_reminder; // @[src/main/scala/fpga/Core.scala 1586:33 1689:24 1561:37]
-  wire [31:0] _GEN_550 = 3'h4 == ex2_reg_divrem_state ? _ex2_reg_quotient_T_31 : ex2_reg_quotient; // @[src/main/scala/fpga/Core.scala 1586:33 1700:24 1562:37]
-  wire [2:0] _GEN_551 = 3'h4 == ex2_reg_divrem_state ? 3'h5 : _GEN_548; // @[src/main/scala/fpga/Core.scala 1586:33 1707:28]
-  wire [31:0] _GEN_552 = 3'h3 == ex2_reg_divrem_state ? _ex2_reg_reminder_T_1[31:0] : _GEN_549; // @[src/main/scala/fpga/Core.scala 1586:33 1680:24]
-  wire [2:0] _GEN_553 = 3'h3 == ex2_reg_divrem_state ? 3'h4 : _GEN_551; // @[src/main/scala/fpga/Core.scala 1586:33 1681:28]
-  wire [31:0] _GEN_555 = 3'h3 == ex2_reg_divrem_state ? ex2_reg_quotient : _GEN_550; // @[src/main/scala/fpga/Core.scala 1586:33 1562:37]
-  wire [38:0] _GEN_556 = 3'h2 == ex2_reg_divrem_state ? $signed(_GEN_545) : $signed({{2{ex2_reg_dividend[36]}},
-    ex2_reg_dividend}); // @[src/main/scala/fpga/Core.scala 1586:33 1554:37]
-  wire [33:0] _GEN_557 = 3'h2 == ex2_reg_divrem_state ? _GEN_546 : {{2'd0}, _GEN_555}; // @[src/main/scala/fpga/Core.scala 1586:33]
-  wire [38:0] _GEN_570 = 3'h1 == ex2_reg_divrem_state ? $signed({{2{ex2_reg_dividend[36]}},ex2_reg_dividend}) : $signed(
-    _GEN_556); // @[src/main/scala/fpga/Core.scala 1586:33 1554:37]
-  wire [33:0] _GEN_571 = 3'h1 == ex2_reg_divrem_state ? {{2'd0}, ex2_reg_quotient} : _GEN_557; // @[src/main/scala/fpga/Core.scala 1586:33 1562:37]
-  wire [38:0] _GEN_575 = 3'h0 == ex2_reg_divrem_state ? $signed({{2{_ex2_reg_dividend_T[36]}},_ex2_reg_dividend_T}) :
-    $signed(_GEN_570); // @[src/main/scala/fpga/Core.scala 1586:33 1596:28]
-  wire [33:0] _GEN_580 = 3'h0 == ex2_reg_divrem_state ? 34'h0 : _GEN_571; // @[src/main/scala/fpga/Core.scala 1586:33 1601:28]
-  wire  _ex2_wb_data_T_4 = ex2_reg_wb_sel == 3'h7; // @[src/main/scala/fpga/Core.scala 1729:23]
-  wire  _ex2_wb_data_T_5 = ex2_reg_wb_sel == 3'h3 | _ex2_wb_data_T_4; // @[src/main/scala/fpga/Core.scala 1728:35]
-  wire  _ex2_wb_data_T_6 = ex2_reg_wb_sel == 3'h1; // @[src/main/scala/fpga/Core.scala 1731:21]
+  wire [38:0] _GEN_559 = _p_T_1 ? $signed(_ex2_reg_dividend_T_19) : $signed(_ex2_reg_dividend_T_38); // @[src/main/scala/fpga/Core.scala 1686:51 1687:26 1696:26]
+  wire [33:0] _GEN_560 = _p_T_1 ? _ex2_reg_quotient_T_12 : _ex2_reg_quotient_T_25; // @[src/main/scala/fpga/Core.scala 1686:51 1691:26 1700:26]
+  wire [4:0] _ex2_reg_rem_shift_T_1 = ex2_reg_rem_shift + 5'h1; // @[src/main/scala/fpga/Core.scala 1705:46]
+  wire [2:0] _GEN_561 = ex2_reg_divrem_count == 5'h10 ? 3'h3 : ex2_reg_divrem_state; // @[src/main/scala/fpga/Core.scala 1707:44 1708:30 314:37]
+  wire [5:0] _ex2_reg_reminder_T = {ex2_reg_rem_shift,1'h0}; // @[src/main/scala/fpga/Core.scala 1713:51]
+  wire [36:0] _ex2_reg_reminder_T_1 = $signed(ex2_reg_dividend) >>> _ex2_reg_reminder_T; // @[src/main/scala/fpga/Core.scala 1713:45]
+  wire [31:0] _reminder_T_4 = ex2_reg_reminder + ex2_reg_init_divisor; // @[src/main/scala/fpga/Core.scala 1719:26]
+  wire [31:0] reminder = ex2_reg_dividend[36] ? _reminder_T_4 : ex2_reg_reminder; // @[src/main/scala/fpga/Core.scala 1718:25]
+  wire [31:0] _ex2_reg_reminder_T_4 = ~reminder; // @[src/main/scala/fpga/Core.scala 1726:11]
+  wire [31:0] _ex2_reg_reminder_T_6 = _ex2_reg_reminder_T_4 + 32'h1; // @[src/main/scala/fpga/Core.scala 1726:21]
+  wire [31:0] _ex2_reg_reminder_T_7 = ~ex2_reg_sign_op1 ? reminder : _ex2_reg_reminder_T_6; // @[src/main/scala/fpga/Core.scala 1724:12]
+  wire [31:0] _ex2_reg_reminder_T_8 = ex2_reg_zero_op2 ? ex2_reg_orig_dividend : _ex2_reg_reminder_T_7; // @[src/main/scala/fpga/Core.scala 1722:30]
+  wire [31:0] _quotient_T_3 = ex2_reg_quotient - 32'h1; // @[src/main/scala/fpga/Core.scala 1730:26]
+  wire [31:0] quotient = ex2_reg_dividend[36] ? _quotient_T_3 : ex2_reg_quotient; // @[src/main/scala/fpga/Core.scala 1729:25]
+  wire [31:0] _ex2_reg_quotient_T_27 = ~quotient; // @[src/main/scala/fpga/Core.scala 1737:11]
+  wire [31:0] _ex2_reg_quotient_T_29 = _ex2_reg_quotient_T_27 + 32'h1; // @[src/main/scala/fpga/Core.scala 1737:21]
+  wire [31:0] _ex2_reg_quotient_T_30 = ~ex2_reg_sign_op12 ? quotient : _ex2_reg_quotient_T_29; // @[src/main/scala/fpga/Core.scala 1735:12]
+  wire [31:0] _ex2_reg_quotient_T_31 = ex2_reg_zero_op2 ? 32'hffffffff : _ex2_reg_quotient_T_30; // @[src/main/scala/fpga/Core.scala 1733:30]
+  wire [2:0] _GEN_562 = 3'h5 == ex2_reg_divrem_state ? 3'h0 : ex2_reg_divrem_state; // @[src/main/scala/fpga/Core.scala 1619:33 1744:28 314:37]
+  wire [31:0] _GEN_563 = 3'h4 == ex2_reg_divrem_state ? _ex2_reg_reminder_T_8 : ex2_reg_reminder; // @[src/main/scala/fpga/Core.scala 1619:33 1722:24 1594:37]
+  wire [31:0] _GEN_564 = 3'h4 == ex2_reg_divrem_state ? _ex2_reg_quotient_T_31 : ex2_reg_quotient; // @[src/main/scala/fpga/Core.scala 1619:33 1733:24 1595:37]
+  wire [2:0] _GEN_565 = 3'h4 == ex2_reg_divrem_state ? 3'h5 : _GEN_562; // @[src/main/scala/fpga/Core.scala 1619:33 1740:28]
+  wire [31:0] _GEN_566 = 3'h3 == ex2_reg_divrem_state ? _ex2_reg_reminder_T_1[31:0] : _GEN_563; // @[src/main/scala/fpga/Core.scala 1619:33 1713:24]
+  wire [2:0] _GEN_567 = 3'h3 == ex2_reg_divrem_state ? 3'h4 : _GEN_565; // @[src/main/scala/fpga/Core.scala 1619:33 1714:28]
+  wire [31:0] _GEN_569 = 3'h3 == ex2_reg_divrem_state ? ex2_reg_quotient : _GEN_564; // @[src/main/scala/fpga/Core.scala 1619:33 1595:37]
+  wire [38:0] _GEN_570 = 3'h2 == ex2_reg_divrem_state ? $signed(_GEN_559) : $signed({{2{ex2_reg_dividend[36]}},
+    ex2_reg_dividend}); // @[src/main/scala/fpga/Core.scala 1619:33 1587:37]
+  wire [33:0] _GEN_571 = 3'h2 == ex2_reg_divrem_state ? _GEN_560 : {{2'd0}, _GEN_569}; // @[src/main/scala/fpga/Core.scala 1619:33]
+  wire [38:0] _GEN_584 = 3'h1 == ex2_reg_divrem_state ? $signed({{2{ex2_reg_dividend[36]}},ex2_reg_dividend}) : $signed(
+    _GEN_570); // @[src/main/scala/fpga/Core.scala 1619:33 1587:37]
+  wire [33:0] _GEN_585 = 3'h1 == ex2_reg_divrem_state ? {{2'd0}, ex2_reg_quotient} : _GEN_571; // @[src/main/scala/fpga/Core.scala 1619:33 1595:37]
+  wire [38:0] _GEN_589 = 3'h0 == ex2_reg_divrem_state ? $signed({{2{_ex2_reg_dividend_T[36]}},_ex2_reg_dividend_T}) :
+    $signed(_GEN_584); // @[src/main/scala/fpga/Core.scala 1619:33 1629:28]
+  wire [33:0] _GEN_594 = 3'h0 == ex2_reg_divrem_state ? 34'h0 : _GEN_585; // @[src/main/scala/fpga/Core.scala 1619:33 1634:28]
+  wire  _ex2_wb_data_T_4 = ex2_reg_wb_sel == 3'h7; // @[src/main/scala/fpga/Core.scala 1762:23]
+  wire  _ex2_wb_data_T_5 = ex2_reg_wb_sel == 3'h3 | _ex2_wb_data_T_4; // @[src/main/scala/fpga/Core.scala 1761:35]
+  wire  _ex2_wb_data_T_6 = ex2_reg_wb_sel == 3'h1; // @[src/main/scala/fpga/Core.scala 1764:21]
   wire [31:0] _ex2_wb_data_T_7 = _ex2_wb_data_T_6 ? ex2_alu_muldiv_out : ex2_reg_alu_out; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
   wire [31:0] _ex2_wb_data_T_8 = _ex2_wb_data_T_5 ? csr_rdata : _ex2_wb_data_T_7; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
   wire [31:0] ex2_wb_data = _ex2_fw_data_T_2 ? ex2_reg_pc_bit_out : _ex2_wb_data_T_8; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
-  wire  _T_115 = _T_80 & ex2_reg_rf_wen; // @[src/main/scala/fpga/Core.scala 1748:28]
-  wire  _mem1_reg_mem_wstrb_T_2 = ex1_reg_mem_w == 3'h5 | ex1_reg_mem_w == 3'h7; // @[src/main/scala/fpga/Core.scala 1764:31]
-  wire  _mem1_reg_mem_wstrb_T_5 = ex1_reg_mem_w == 3'h4 | ex1_reg_mem_w == 3'h6; // @[src/main/scala/fpga/Core.scala 1765:31]
+  wire  _T_115 = _T_80 & ex2_reg_rf_wen; // @[src/main/scala/fpga/Core.scala 1781:28]
+  wire  _mem1_reg_mem_wstrb_T_2 = ex1_reg_mem_w == 3'h5 | ex1_reg_mem_w == 3'h7; // @[src/main/scala/fpga/Core.scala 1797:31]
+  wire  _mem1_reg_mem_wstrb_T_5 = ex1_reg_mem_w == 3'h4 | ex1_reg_mem_w == 3'h6; // @[src/main/scala/fpga/Core.scala 1798:31]
   wire [3:0] _mem1_reg_mem_wstrb_T_6 = _mem1_reg_mem_wstrb_T_5 ? 4'h3 : 4'hf; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
   wire [3:0] _mem1_reg_mem_wstrb_T_7 = _mem1_reg_mem_wstrb_T_2 ? 4'h1 : _mem1_reg_mem_wstrb_T_6; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
-  wire [6:0] _GEN_65 = {{3'd0}, _mem1_reg_mem_wstrb_T_7}; // @[src/main/scala/fpga/Core.scala 1767:8]
-  wire [6:0] _mem1_reg_mem_wstrb_T_9 = _GEN_65 << ex1_add_out[1:0]; // @[src/main/scala/fpga/Core.scala 1767:8]
-  wire  _mem1_reg_unaligned_T_1 = ex1_add_out[1:0] != 2'h0; // @[src/main/scala/fpga/Core.scala 1768:57]
-  wire  _mem1_reg_unaligned_T_9 = ex1_add_out[1:0] == 2'h3; // @[src/main/scala/fpga/Core.scala 1770:81]
+  wire [6:0] _GEN_66 = {{3'd0}, _mem1_reg_mem_wstrb_T_7}; // @[src/main/scala/fpga/Core.scala 1800:8]
+  wire [6:0] _mem1_reg_mem_wstrb_T_9 = _GEN_66 << ex1_add_out[1:0]; // @[src/main/scala/fpga/Core.scala 1800:8]
+  wire  _mem1_reg_unaligned_T_1 = ex1_add_out[1:0] != 2'h0; // @[src/main/scala/fpga/Core.scala 1801:57]
+  wire  _mem1_reg_unaligned_T_9 = ex1_add_out[1:0] == 2'h3; // @[src/main/scala/fpga/Core.scala 1803:81]
   wire  _mem1_reg_unaligned_T_10 = _mem1_reg_mem_wstrb_T_5 ? _mem1_reg_unaligned_T_9 : _mem1_reg_unaligned_T_1; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
   wire  _mem1_reg_unaligned_T_11 = _mem1_reg_mem_wstrb_T_2 ? 1'h0 : _mem1_reg_unaligned_T_10; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
-  wire  _mem1_reg_unaligned_T_12 = ex1_reg_wb_sel == 3'h5; // @[src/main/scala/fpga/Core.scala 1771:27]
-  wire  _mem1_reg_unaligned_T_13 = ex1_reg_wb_sel == 3'h4; // @[src/main/scala/fpga/Core.scala 1771:55]
-  wire  _mem1_reg_unaligned_T_14 = ex1_reg_wb_sel == 3'h5 | ex1_reg_wb_sel == 3'h4; // @[src/main/scala/fpga/Core.scala 1771:37]
+  wire  _mem1_reg_unaligned_T_12 = ex1_reg_wb_sel == 3'h5; // @[src/main/scala/fpga/Core.scala 1804:27]
+  wire  _mem1_reg_unaligned_T_13 = ex1_reg_wb_sel == 3'h4; // @[src/main/scala/fpga/Core.scala 1804:55]
+  wire  _mem1_reg_unaligned_T_14 = ex1_reg_wb_sel == 3'h5 | ex1_reg_wb_sel == 3'h4; // @[src/main/scala/fpga/Core.scala 1804:37]
   wire  _mem1_reg_unaligned_T_16 = _mem1_reg_unaligned_T_11 & (ex1_reg_wb_sel == 3'h5 | ex1_reg_wb_sel == 3'h4) & ex1_en
-    ; // @[src/main/scala/fpga/Core.scala 1771:66]
-  wire [55:0] _mem1_reg_wdata_T_1 = {ex1_reg_op3_data,ex1_reg_op3_data[31:8]}; // @[src/main/scala/fpga/Core.scala 1772:35]
-  wire [5:0] _mem1_reg_wdata_T_3 = 4'h8 * ex1_add_out[1:0]; // @[src/main/scala/fpga/Core.scala 1772:87]
-  wire [118:0] _GEN_66 = {{63'd0}, _mem1_reg_wdata_T_1}; // @[src/main/scala/fpga/Core.scala 1772:79]
-  wire [118:0] _mem1_reg_wdata_T_4 = _GEN_66 << _mem1_reg_wdata_T_3; // @[src/main/scala/fpga/Core.scala 1772:79]
-  wire  mem1_is_dram = ex1_add_out[31:28] == 4'h2; // @[src/main/scala/fpga/Core.scala 1775:70]
-  wire  _mem1_reg_is_mem_load_T = ~mem1_is_dram; // @[src/main/scala/fpga/Core.scala 1777:31]
-  wire  _mem1_reg_is_dram_fence_T = ex1_reg_wb_sel == 3'h7; // @[src/main/scala/fpga/Core.scala 1781:47]
-  wire  _T_118 = ~mem1_mem_stall; // @[src/main/scala/fpga/Core.scala 1791:9]
-  wire  _T_119 = ~mem1_dram_stall; // @[src/main/scala/fpga/Core.scala 1791:28]
-  wire  _T_120 = ~mem1_mem_stall & ~mem1_dram_stall; // @[src/main/scala/fpga/Core.scala 1791:25]
-  wire [31:0] _mem_addr_T_1 = ex2_reg_alu_out + 32'h4; // @[src/main/scala/fpga/Core.scala 1795:59]
-  wire [3:0] _mem_wstrb_T_1 = {1'h0,mem1_reg_mem_wstrb[6:4]}; // @[src/main/scala/fpga/Core.scala 1796:46]
-  wire  _T_122 = ~mem2_dram_stall; // @[src/main/scala/fpga/Core.scala 1826:9]
-  wire  _mem2_reg_is_valid_load_T_1 = _T_118 & mem1_reg_is_mem_load; // @[src/main/scala/fpga/Core.scala 1831:49]
-  wire  _mem2_reg_is_valid_load_T_3 = _T_119 & mem1_reg_is_dram_load; // @[src/main/scala/fpga/Core.scala 1831:95]
-  wire  _mem2_is_valid_load_T_2 = _T_122 & ~mem2_reg_unaligned; // @[src/main/scala/fpga/Core.scala 1853:40]
-  wire  mem2_is_valid_load = _T_122 & ~mem2_reg_unaligned & mem2_reg_is_valid_load; // @[src/main/scala/fpga/Core.scala 1853:63]
-  wire  _mem2_is_aligned_lw_T_4 = mem2_reg_mem_w != 3'h5; // @[src/main/scala/fpga/Core.scala 1855:20]
+    ; // @[src/main/scala/fpga/Core.scala 1804:66]
+  wire [55:0] _mem1_reg_wdata_T_1 = {ex1_reg_op3_data,ex1_reg_op3_data[31:8]}; // @[src/main/scala/fpga/Core.scala 1805:35]
+  wire [5:0] _mem1_reg_wdata_T_3 = 4'h8 * ex1_add_out[1:0]; // @[src/main/scala/fpga/Core.scala 1805:87]
+  wire [118:0] _GEN_67 = {{63'd0}, _mem1_reg_wdata_T_1}; // @[src/main/scala/fpga/Core.scala 1805:79]
+  wire [118:0] _mem1_reg_wdata_T_4 = _GEN_67 << _mem1_reg_wdata_T_3; // @[src/main/scala/fpga/Core.scala 1805:79]
+  wire  mem1_is_dram = ex1_add_out[31:28] == 4'h2; // @[src/main/scala/fpga/Core.scala 1808:70]
+  wire  _mem1_reg_is_mem_load_T = ~mem1_is_dram; // @[src/main/scala/fpga/Core.scala 1810:31]
+  wire  _mem1_reg_is_dram_fence_T = ex1_reg_wb_sel == 3'h7; // @[src/main/scala/fpga/Core.scala 1814:47]
+  wire  _T_118 = ~mem1_mem_stall; // @[src/main/scala/fpga/Core.scala 1824:9]
+  wire  _T_119 = ~mem1_dram_stall; // @[src/main/scala/fpga/Core.scala 1824:28]
+  wire  _T_120 = ~mem1_mem_stall & ~mem1_dram_stall; // @[src/main/scala/fpga/Core.scala 1824:25]
+  wire [31:0] _mem_addr_T_1 = ex2_reg_alu_out + 32'h4; // @[src/main/scala/fpga/Core.scala 1828:59]
+  wire [3:0] _mem_wstrb_T_1 = {1'h0,mem1_reg_mem_wstrb[6:4]}; // @[src/main/scala/fpga/Core.scala 1829:46]
+  wire  _T_122 = ~mem2_dram_stall; // @[src/main/scala/fpga/Core.scala 1859:9]
+  wire  _mem2_reg_is_valid_load_T_1 = _T_118 & mem1_reg_is_mem_load; // @[src/main/scala/fpga/Core.scala 1864:49]
+  wire  _mem2_reg_is_valid_load_T_3 = _T_119 & mem1_reg_is_dram_load; // @[src/main/scala/fpga/Core.scala 1864:95]
+  wire  _mem2_is_valid_load_T_2 = _T_122 & ~mem2_reg_unaligned; // @[src/main/scala/fpga/Core.scala 1886:40]
+  wire  mem2_is_valid_load = _T_122 & ~mem2_reg_unaligned & mem2_reg_is_valid_load; // @[src/main/scala/fpga/Core.scala 1886:63]
+  wire  _mem2_is_aligned_lw_T_4 = mem2_reg_mem_w != 3'h5; // @[src/main/scala/fpga/Core.scala 1888:20]
   wire  _mem2_is_aligned_lw_T_5 = _T_122 & mem2_reg_is_valid_load & mem2_reg_wb_byte_offset == 2'h0 &
-    _mem2_is_aligned_lw_T_4; // @[src/main/scala/fpga/Core.scala 1854:105]
-  wire  _mem2_is_aligned_lw_T_8 = mem2_reg_mem_w != 3'h4; // @[src/main/scala/fpga/Core.scala 1856:20]
-  wire  _mem2_is_aligned_lw_T_9 = _mem2_is_aligned_lw_T_5 & mem2_reg_mem_w != 3'h7 & _mem2_is_aligned_lw_T_8; // @[src/main/scala/fpga/Core.scala 1855:57]
-  wire  _mem2_is_aligned_lw_T_10 = mem2_reg_mem_w != 3'h6; // @[src/main/scala/fpga/Core.scala 1856:47]
-  wire  mem2_is_aligned_lw = _mem2_is_aligned_lw_T_9 & mem2_reg_mem_w != 3'h6; // @[src/main/scala/fpga/Core.scala 1856:29]
-  wire [55:0] _mem3_wb_rdata_T = {mem3_reg_rdata_high,mem3_reg_dmem_rdata}; // @[src/main/scala/fpga/Core.scala 1892:27]
-  wire [5:0] _mem3_wb_rdata_T_1 = 4'h8 * mem3_reg_wb_byte_offset; // @[src/main/scala/fpga/Core.scala 1892:78]
-  wire [55:0] _mem3_wb_rdata_T_2 = _mem3_wb_rdata_T >> _mem3_wb_rdata_T_1; // @[src/main/scala/fpga/Core.scala 1892:70]
-  wire [31:0] mem3_wb_rdata = _mem3_wb_rdata_T_2[31:0]; // @[src/main/scala/fpga/Core.scala 1892:105]
-  wire  _mem3_wb_data_load_T = mem3_reg_mem_w == 3'h5; // @[src/main/scala/fpga/Core.scala 1894:21]
-  wire [23:0] _mem3_wb_data_load_T_3 = mem3_wb_rdata[7] ? 24'hffffff : 24'h0; // @[src/main/scala/fpga/Core.scala 1883:11]
-  wire [31:0] _mem3_wb_data_load_T_5 = {_mem3_wb_data_load_T_3,mem3_wb_rdata[7:0]}; // @[src/main/scala/fpga/Core.scala 1883:40]
-  wire  _mem3_wb_data_load_T_6 = mem3_reg_mem_w == 3'h4; // @[src/main/scala/fpga/Core.scala 1895:21]
-  wire [15:0] _mem3_wb_data_load_T_9 = mem3_wb_rdata[15] ? 16'hffff : 16'h0; // @[src/main/scala/fpga/Core.scala 1883:11]
-  wire [31:0] _mem3_wb_data_load_T_11 = {_mem3_wb_data_load_T_9,mem3_wb_rdata[15:0]}; // @[src/main/scala/fpga/Core.scala 1883:40]
-  wire  _mem3_wb_data_load_T_12 = mem3_reg_mem_w == 3'h7; // @[src/main/scala/fpga/Core.scala 1896:21]
-  wire [31:0] _mem3_wb_data_load_T_15 = {24'h0,mem3_wb_rdata[7:0]}; // @[src/main/scala/fpga/Core.scala 1886:31]
-  wire  _mem3_wb_data_load_T_16 = mem3_reg_mem_w == 3'h6; // @[src/main/scala/fpga/Core.scala 1897:21]
-  wire [31:0] _mem3_wb_data_load_T_19 = {16'h0,mem3_wb_rdata[15:0]}; // @[src/main/scala/fpga/Core.scala 1886:31]
+    _mem2_is_aligned_lw_T_4; // @[src/main/scala/fpga/Core.scala 1887:105]
+  wire  _mem2_is_aligned_lw_T_8 = mem2_reg_mem_w != 3'h4; // @[src/main/scala/fpga/Core.scala 1889:20]
+  wire  _mem2_is_aligned_lw_T_9 = _mem2_is_aligned_lw_T_5 & mem2_reg_mem_w != 3'h7 & _mem2_is_aligned_lw_T_8; // @[src/main/scala/fpga/Core.scala 1888:57]
+  wire  _mem2_is_aligned_lw_T_10 = mem2_reg_mem_w != 3'h6; // @[src/main/scala/fpga/Core.scala 1889:47]
+  wire  mem2_is_aligned_lw = _mem2_is_aligned_lw_T_9 & mem2_reg_mem_w != 3'h6; // @[src/main/scala/fpga/Core.scala 1889:29]
+  wire [55:0] _mem3_wb_rdata_T = {mem3_reg_rdata_high,mem3_reg_dmem_rdata}; // @[src/main/scala/fpga/Core.scala 1925:27]
+  wire [5:0] _mem3_wb_rdata_T_1 = 4'h8 * mem3_reg_wb_byte_offset; // @[src/main/scala/fpga/Core.scala 1925:78]
+  wire [55:0] _mem3_wb_rdata_T_2 = _mem3_wb_rdata_T >> _mem3_wb_rdata_T_1; // @[src/main/scala/fpga/Core.scala 1925:70]
+  wire [31:0] mem3_wb_rdata = _mem3_wb_rdata_T_2[31:0]; // @[src/main/scala/fpga/Core.scala 1925:105]
+  wire  _mem3_wb_data_load_T = mem3_reg_mem_w == 3'h5; // @[src/main/scala/fpga/Core.scala 1927:21]
+  wire [23:0] _mem3_wb_data_load_T_3 = mem3_wb_rdata[7] ? 24'hffffff : 24'h0; // @[src/main/scala/fpga/Core.scala 1916:11]
+  wire [31:0] _mem3_wb_data_load_T_5 = {_mem3_wb_data_load_T_3,mem3_wb_rdata[7:0]}; // @[src/main/scala/fpga/Core.scala 1916:40]
+  wire  _mem3_wb_data_load_T_6 = mem3_reg_mem_w == 3'h4; // @[src/main/scala/fpga/Core.scala 1928:21]
+  wire [15:0] _mem3_wb_data_load_T_9 = mem3_wb_rdata[15] ? 16'hffff : 16'h0; // @[src/main/scala/fpga/Core.scala 1916:11]
+  wire [31:0] _mem3_wb_data_load_T_11 = {_mem3_wb_data_load_T_9,mem3_wb_rdata[15:0]}; // @[src/main/scala/fpga/Core.scala 1916:40]
+  wire  _mem3_wb_data_load_T_12 = mem3_reg_mem_w == 3'h7; // @[src/main/scala/fpga/Core.scala 1929:21]
+  wire [31:0] _mem3_wb_data_load_T_15 = {24'h0,mem3_wb_rdata[7:0]}; // @[src/main/scala/fpga/Core.scala 1919:31]
+  wire  _mem3_wb_data_load_T_16 = mem3_reg_mem_w == 3'h6; // @[src/main/scala/fpga/Core.scala 1930:21]
+  wire [31:0] _mem3_wb_data_load_T_19 = {16'h0,mem3_wb_rdata[15:0]}; // @[src/main/scala/fpga/Core.scala 1919:31]
   wire [31:0] _mem3_wb_data_load_T_20 = _mem3_wb_data_load_T_16 ? _mem3_wb_data_load_T_19 : mem3_wb_rdata; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
   wire [31:0] _mem3_wb_data_load_T_21 = _mem3_wb_data_load_T_12 ? _mem3_wb_data_load_T_15 : _mem3_wb_data_load_T_20; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
   wire [31:0] _mem3_wb_data_load_T_22 = _mem3_wb_data_load_T_6 ? _mem3_wb_data_load_T_11 : _mem3_wb_data_load_T_21; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
   wire [31:0] mem3_wb_data_load = _mem3_wb_data_load_T ? _mem3_wb_data_load_T_5 : _mem3_wb_data_load_T_22; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
-  wire  _T_123 = ~mem3_reg_is_aligned_lw; // @[src/main/scala/fpga/Core.scala 1903:35]
-  wire [63:0] _instret_T_1 = instret + 64'h2; // @[src/main/scala/fpga/Core.scala 1909:24]
-  wire [63:0] _instret_T_3 = instret + 64'h1; // @[src/main/scala/fpga/Core.scala 1911:24]
-  wire [31:0] _io_debug_signal_ex2_reg_pc_T = {ex2_reg_pc,1'h0}; // @[src/main/scala/fpga/Core.scala 1924:45]
+  wire  _T_123 = ~mem3_reg_is_aligned_lw; // @[src/main/scala/fpga/Core.scala 1936:35]
+  wire [63:0] _instret_T_1 = instret + 64'h2; // @[src/main/scala/fpga/Core.scala 1942:24]
+  wire [63:0] _instret_T_3 = instret + 64'h1; // @[src/main/scala/fpga/Core.scala 1944:24]
+  wire [31:0] _io_debug_signal_ex2_reg_pc_T = {ex2_reg_pc,1'h0}; // @[src/main/scala/fpga/Core.scala 1957:45]
   wire [7:0] lo_lo = {scoreboard_MPORT_31_data,scoreboard_MPORT_32_data,scoreboard_MPORT_33_data,
     scoreboard_MPORT_34_data,scoreboard_MPORT_35_data,scoreboard_MPORT_36_data,scoreboard_MPORT_37_data,
-    scoreboard_MPORT_38_data}; // @[src/main/scala/fpga/Core.scala 1978:49]
+    scoreboard_MPORT_38_data}; // @[src/main/scala/fpga/Core.scala 2011:49]
   wire [15:0] lo = {scoreboard_MPORT_23_data,scoreboard_MPORT_24_data,scoreboard_MPORT_25_data,scoreboard_MPORT_26_data,
-    scoreboard_MPORT_27_data,scoreboard_MPORT_28_data,scoreboard_MPORT_29_data,scoreboard_MPORT_30_data,lo_lo}; // @[src/main/scala/fpga/Core.scala 1978:49]
+    scoreboard_MPORT_27_data,scoreboard_MPORT_28_data,scoreboard_MPORT_29_data,scoreboard_MPORT_30_data,lo_lo}; // @[src/main/scala/fpga/Core.scala 2011:49]
   wire [7:0] hi_lo = {scoreboard_MPORT_15_data,scoreboard_MPORT_16_data,scoreboard_MPORT_17_data,
     scoreboard_MPORT_18_data,scoreboard_MPORT_19_data,scoreboard_MPORT_20_data,scoreboard_MPORT_21_data,
-    scoreboard_MPORT_22_data}; // @[src/main/scala/fpga/Core.scala 1978:49]
-  wire [38:0] _GEN_667 = reset ? $signed(39'sh0) : $signed(_GEN_575); // @[src/main/scala/fpga/Core.scala 1554:{37,37}]
-  wire [33:0] _GEN_669 = reset ? 34'h0 : _GEN_580; // @[src/main/scala/fpga/Core.scala 1562:{37,37}]
+    scoreboard_MPORT_22_data}; // @[src/main/scala/fpga/Core.scala 2011:49]
+  wire [38:0] _GEN_681 = reset ? $signed(39'sh0) : $signed(_GEN_589); // @[src/main/scala/fpga/Core.scala 1587:{37,37}]
+  wire [33:0] _GEN_683 = reset ? 34'h0 : _GEN_594; // @[src/main/scala/fpga/Core.scala 1595:{37,37}]
   LongCounter cycle_counter ( // @[src/main/scala/fpga/Core.scala 135:29]
     .clock(cycle_counter_clock),
     .reset(cycle_counter_reset),
@@ -3310,7 +3477,7 @@ module Core(
     .io_intr(mtimer_io_intr),
     .io_mtime(mtimer_io_mtime)
   );
-  BTB ic_btb ( // @[src/main/scala/fpga/Core.scala 354:22]
+  BTB ic_btb ( // @[src/main/scala/fpga/Core.scala 358:22]
     .clock(ic_btb_clock),
     .reset(ic_btb_reset),
     .io_lu_pc(ic_btb_io_lu_pc),
@@ -3322,7 +3489,7 @@ module Core(
     .io_up_pc(ic_btb_io_up_pc),
     .io_up_taken_pc(ic_btb_io_up_taken_pc)
   );
-  PHT ic_pht ( // @[src/main/scala/fpga/Core.scala 355:22]
+  PHT ic_pht ( // @[src/main/scala/fpga/Core.scala 359:22]
     .io_lu_pc(ic_pht_io_lu_pc),
     .io_lu_cnt0(ic_pht_io_lu_cnt0),
     .io_lu_cnt1(ic_pht_io_lu_cnt1),
@@ -3480,40 +3647,40 @@ module Core(
   assign scoreboard_MPORT_6_addr = mem3_reg_wb_addr;
   assign scoreboard_MPORT_6_mask = 1'h1;
   assign scoreboard_MPORT_6_en = mem3_reg_is_valid_load & _T_123;
-  assign io_imem_addr = if1_is_jump ? _io_imem_addr_T_1 : _GEN_175; // @[src/main/scala/fpga/Core.scala 389:21 391:22]
-  assign io_dmem_raddr = mem1_reg_unaligned ? _mem_addr_T_1 : ex2_reg_alu_out; // @[src/main/scala/fpga/Core.scala 1795:22]
-  assign io_dmem_ren = mem1_reg_is_mem_load; // @[src/main/scala/fpga/Core.scala 1799:17]
-  assign io_dmem_waddr = mem1_reg_unaligned ? _mem_addr_T_1 : ex2_reg_alu_out; // @[src/main/scala/fpga/Core.scala 1795:22]
-  assign io_dmem_wen = mem1_reg_is_mem_store; // @[src/main/scala/fpga/Core.scala 1800:17]
-  assign io_dmem_wstrb = mem1_reg_unaligned ? _mem_wstrb_T_1 : mem1_reg_mem_wstrb[3:0]; // @[src/main/scala/fpga/Core.scala 1796:22]
-  assign io_dmem_wdata = mem1_reg_wdata; // @[src/main/scala/fpga/Core.scala 1802:17]
-  assign io_cache_iinvalidate = mem1_reg_is_dram_fence; // @[src/main/scala/fpga/Core.scala 1809:24]
-  assign io_cache_raddr = mem1_reg_unaligned ? _mem_addr_T_1 : ex2_reg_alu_out; // @[src/main/scala/fpga/Core.scala 1795:22]
-  assign io_cache_ren = mem1_reg_is_dram_load; // @[src/main/scala/fpga/Core.scala 1805:18]
-  assign io_cache_waddr = mem1_reg_unaligned ? _mem_addr_T_1 : ex2_reg_alu_out; // @[src/main/scala/fpga/Core.scala 1795:22]
-  assign io_cache_wen = mem1_reg_is_dram_store; // @[src/main/scala/fpga/Core.scala 1806:18]
-  assign io_cache_wstrb = mem1_reg_unaligned ? _mem_wstrb_T_1 : mem1_reg_mem_wstrb[3:0]; // @[src/main/scala/fpga/Core.scala 1796:22]
-  assign io_cache_wdata = mem1_reg_wdata; // @[src/main/scala/fpga/Core.scala 1808:18]
-  assign io_pht_mem_wen = ic_pht_io_mem_wen; // @[src/main/scala/fpga/Core.scala 387:17]
-  assign io_pht_mem_raddr = ic_pht_io_mem_raddr; // @[src/main/scala/fpga/Core.scala 387:17]
-  assign io_pht_mem_waddr = ic_pht_io_mem_waddr; // @[src/main/scala/fpga/Core.scala 387:17]
-  assign io_pht_mem_wdata = ic_pht_io_mem_wdata; // @[src/main/scala/fpga/Core.scala 387:17]
+  assign io_imem_addr = if1_is_jump ? _io_imem_addr_T_1 : _GEN_175; // @[src/main/scala/fpga/Core.scala 393:21 395:22]
+  assign io_dmem_raddr = mem1_reg_unaligned ? _mem_addr_T_1 : ex2_reg_alu_out; // @[src/main/scala/fpga/Core.scala 1828:22]
+  assign io_dmem_ren = mem1_reg_is_mem_load; // @[src/main/scala/fpga/Core.scala 1832:17]
+  assign io_dmem_waddr = mem1_reg_unaligned ? _mem_addr_T_1 : ex2_reg_alu_out; // @[src/main/scala/fpga/Core.scala 1828:22]
+  assign io_dmem_wen = mem1_reg_is_mem_store; // @[src/main/scala/fpga/Core.scala 1833:17]
+  assign io_dmem_wstrb = mem1_reg_unaligned ? _mem_wstrb_T_1 : mem1_reg_mem_wstrb[3:0]; // @[src/main/scala/fpga/Core.scala 1829:22]
+  assign io_dmem_wdata = mem1_reg_wdata; // @[src/main/scala/fpga/Core.scala 1835:17]
+  assign io_cache_iinvalidate = mem1_reg_is_dram_fence; // @[src/main/scala/fpga/Core.scala 1842:24]
+  assign io_cache_raddr = mem1_reg_unaligned ? _mem_addr_T_1 : ex2_reg_alu_out; // @[src/main/scala/fpga/Core.scala 1828:22]
+  assign io_cache_ren = mem1_reg_is_dram_load; // @[src/main/scala/fpga/Core.scala 1838:18]
+  assign io_cache_waddr = mem1_reg_unaligned ? _mem_addr_T_1 : ex2_reg_alu_out; // @[src/main/scala/fpga/Core.scala 1828:22]
+  assign io_cache_wen = mem1_reg_is_dram_store; // @[src/main/scala/fpga/Core.scala 1839:18]
+  assign io_cache_wstrb = mem1_reg_unaligned ? _mem_wstrb_T_1 : mem1_reg_mem_wstrb[3:0]; // @[src/main/scala/fpga/Core.scala 1829:22]
+  assign io_cache_wdata = mem1_reg_wdata; // @[src/main/scala/fpga/Core.scala 1841:18]
+  assign io_pht_mem_wen = ic_pht_io_mem_wen; // @[src/main/scala/fpga/Core.scala 391:17]
+  assign io_pht_mem_raddr = ic_pht_io_mem_raddr; // @[src/main/scala/fpga/Core.scala 391:17]
+  assign io_pht_mem_waddr = ic_pht_io_mem_waddr; // @[src/main/scala/fpga/Core.scala 391:17]
+  assign io_pht_mem_wdata = ic_pht_io_mem_wdata; // @[src/main/scala/fpga/Core.scala 391:17]
   assign io_mtimer_mem_rdata = mtimer_io_mem_rdata; // @[src/main/scala/fpga/Core.scala 151:17]
-  assign io_debug_signal_ex2_reg_pc = {ex2_reg_pc,1'h0}; // @[src/main/scala/fpga/Core.scala 1924:45]
-  assign io_debug_signal_ex2_is_valid_inst = ex2_reg_is_valid_inst; // @[src/main/scala/fpga/Core.scala 1925:39]
-  assign io_debug_signal_me_intr = csr_reg_is_meintr & csr_is_valid_inst; // @[src/main/scala/fpga/Core.scala 1407:41]
-  assign io_debug_signal_mt_intr = csr_reg_is_mtintr & csr_is_valid_inst; // @[src/main/scala/fpga/Core.scala 1408:41]
-  assign io_debug_signal_trap = ex1_en & ex1_reg_is_trap; // @[src/main/scala/fpga/Core.scala 1410:28]
-  assign io_debug_signal_cycle_counter = cycle_counter_io_value[47:0]; // @[src/main/scala/fpga/Core.scala 1921:64]
-  assign io_debug_signal_id_pc = {id_reg_pc,1'h0}; // @[src/main/scala/fpga/Core.scala 1929:45]
-  assign io_debug_signal_id_inst = id_reg_inst; // @[src/main/scala/fpga/Core.scala 1930:39]
-  assign io_debug_signal_mem3_rdata = mem3_reg_dmem_rdata; // @[src/main/scala/fpga/Core.scala 1931:39]
-  assign io_debug_signal_mem3_rvalid = mem3_reg_is_valid_load; // @[src/main/scala/fpga/Core.scala 1932:39]
+  assign io_debug_signal_ex2_reg_pc = {ex2_reg_pc,1'h0}; // @[src/main/scala/fpga/Core.scala 1957:45]
+  assign io_debug_signal_ex2_is_valid_inst = ex2_reg_is_valid_inst; // @[src/main/scala/fpga/Core.scala 1958:39]
+  assign io_debug_signal_me_intr = csr_reg_is_meintr & csr_is_valid_inst; // @[src/main/scala/fpga/Core.scala 1440:41]
+  assign io_debug_signal_mt_intr = csr_reg_is_mtintr & csr_is_valid_inst; // @[src/main/scala/fpga/Core.scala 1441:41]
+  assign io_debug_signal_trap = ex1_en & ex1_reg_is_trap; // @[src/main/scala/fpga/Core.scala 1443:28]
+  assign io_debug_signal_cycle_counter = cycle_counter_io_value[47:0]; // @[src/main/scala/fpga/Core.scala 1954:64]
+  assign io_debug_signal_id_pc = {id_reg_pc,1'h0}; // @[src/main/scala/fpga/Core.scala 1962:45]
+  assign io_debug_signal_id_inst = id_reg_inst; // @[src/main/scala/fpga/Core.scala 1963:39]
+  assign io_debug_signal_mem3_rdata = mem3_reg_dmem_rdata; // @[src/main/scala/fpga/Core.scala 1964:39]
+  assign io_debug_signal_mem3_rvalid = mem3_reg_is_valid_load; // @[src/main/scala/fpga/Core.scala 1965:39]
   assign io_debug_signal_rwaddr = _ex2_fw_data_T_2 ? ex2_reg_pc_bit_out : _ex2_wb_data_T_8; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
-  assign io_debug_signal_ex2_reg_is_br = ex2_reg_is_br; // @[src/main/scala/fpga/Core.scala 1934:39]
-  assign io_debug_signal_id_reg_is_bp_fail = id_reg_is_bp_fail; // @[src/main/scala/fpga/Core.scala 1935:39]
-  assign io_debug_signal_id_reg_bp_taken = id_reg_bp_taken; // @[src/main/scala/fpga/Core.scala 1936:39]
-  assign io_debug_signal_ic_state = ic_state; // @[src/main/scala/fpga/Core.scala 1937:51]
+  assign io_debug_signal_ex2_reg_is_br = ex2_reg_is_br; // @[src/main/scala/fpga/Core.scala 1967:39]
+  assign io_debug_signal_id_reg_is_bp_fail = id_reg_is_bp_fail; // @[src/main/scala/fpga/Core.scala 1968:39]
+  assign io_debug_signal_id_reg_bp_taken = id_reg_bp_taken; // @[src/main/scala/fpga/Core.scala 1969:39]
+  assign io_debug_signal_ic_state = ic_state; // @[src/main/scala/fpga/Core.scala 1970:51]
   assign cycle_counter_clock = clock;
   assign cycle_counter_reset = reset;
   assign mtimer_clock = clock;
@@ -3524,15 +3691,15 @@ module Core(
   assign mtimer_io_mem_wdata = io_mtimer_mem_wdata; // @[src/main/scala/fpga/Core.scala 151:17]
   assign ic_btb_clock = clock;
   assign ic_btb_reset = reset;
-  assign ic_btb_io_lu_pc = if1_is_jump ? ic_next_imem_addr : _GEN_176; // @[src/main/scala/fpga/Core.scala 389:21 396:22]
-  assign ic_btb_io_up_en = ex1_en & _ex1_br_pc_T_1; // @[src/main/scala/fpga/Core.scala 1363:35]
-  assign ic_btb_io_up_pc = ex1_reg_pc; // @[src/main/scala/fpga/Core.scala 1364:25]
-  assign ic_btb_io_up_taken_pc = ex1_reg_is_j ? ex1_add_out[31:1] : ex1_reg_direct_jbr_pc; // @[src/main/scala/fpga/Core.scala 1353:25]
-  assign ic_pht_io_lu_pc = if1_is_jump ? ic_next_imem_addr : _GEN_176; // @[src/main/scala/fpga/Core.scala 389:21 396:22]
-  assign ic_pht_io_up_en = ex1_en & (ex1_reg_is_br | ex1_reg_is_j); // @[src/main/scala/fpga/Core.scala 1366:35]
-  assign ic_pht_io_up_pc = ex1_reg_pc; // @[src/main/scala/fpga/Core.scala 1367:25]
-  assign ic_pht_io_up_cnt = _ex1_br_pc_T_1 ? _ic_pht_io_up_cnt_T_7 : _ic_pht_io_up_cnt_T_13; // @[src/main/scala/fpga/Core.scala 1368:31]
-  assign ic_pht_io_mem_rdata = io_pht_mem_rdata; // @[src/main/scala/fpga/Core.scala 387:17]
+  assign ic_btb_io_lu_pc = if1_is_jump ? ic_next_imem_addr : _GEN_176; // @[src/main/scala/fpga/Core.scala 393:21 400:22]
+  assign ic_btb_io_up_en = ex1_en & _ex1_br_pc_T_1; // @[src/main/scala/fpga/Core.scala 1396:35]
+  assign ic_btb_io_up_pc = ex1_reg_pc; // @[src/main/scala/fpga/Core.scala 1397:25]
+  assign ic_btb_io_up_taken_pc = ex1_reg_is_j ? ex1_add_out[31:1] : ex1_reg_direct_jbr_pc; // @[src/main/scala/fpga/Core.scala 1386:25]
+  assign ic_pht_io_lu_pc = if1_is_jump ? ic_next_imem_addr : _GEN_176; // @[src/main/scala/fpga/Core.scala 393:21 400:22]
+  assign ic_pht_io_up_en = ex1_en & (ex1_reg_is_br | ex1_reg_is_j); // @[src/main/scala/fpga/Core.scala 1399:35]
+  assign ic_pht_io_up_pc = ex1_reg_pc; // @[src/main/scala/fpga/Core.scala 1400:25]
+  assign ic_pht_io_up_cnt = _ex1_br_pc_T_1 ? _ic_pht_io_up_cnt_T_7 : _ic_pht_io_up_cnt_T_13; // @[src/main/scala/fpga/Core.scala 1401:31]
+  assign ic_pht_io_mem_rdata = io_pht_mem_rdata; // @[src/main/scala/fpga/Core.scala 391:17]
   always @(posedge clock) begin
     if (regfile_MPORT_3_en & regfile_MPORT_3_mask) begin
       regfile[regfile_MPORT_3_addr] <= regfile_MPORT_3_data; // @[src/main/scala/fpga/Core.scala 133:20]
@@ -3557,93 +3724,93 @@ module Core(
     end
     if (reset) begin // @[src/main/scala/fpga/Core.scala 138:24]
       instret <= 64'h0; // @[src/main/scala/fpga/Core.scala 138:24]
-    end else if (ex2_reg_is_retired & mem3_reg_is_retired) begin // @[src/main/scala/fpga/Core.scala 1908:52]
-      instret <= _instret_T_1; // @[src/main/scala/fpga/Core.scala 1909:13]
-    end else if (ex2_reg_is_retired | mem3_reg_is_retired) begin // @[src/main/scala/fpga/Core.scala 1910:58]
-      instret <= _instret_T_3; // @[src/main/scala/fpga/Core.scala 1911:13]
+    end else if (ex2_reg_is_retired & mem3_reg_is_retired) begin // @[src/main/scala/fpga/Core.scala 1941:52]
+      instret <= _instret_T_1; // @[src/main/scala/fpga/Core.scala 1942:13]
+    end else if (ex2_reg_is_retired | mem3_reg_is_retired) begin // @[src/main/scala/fpga/Core.scala 1943:58]
+      instret <= _instret_T_3; // @[src/main/scala/fpga/Core.scala 1944:13]
     end
     if (reset) begin // @[src/main/scala/fpga/Core.scala 139:37]
       csr_reg_trap_vector <= 31'h0; // @[src/main/scala/fpga/Core.scala 139:37]
-    end else if (ex1_en & ex1_reg_wb_sel == 3'h3) begin // @[src/main/scala/fpga/Core.scala 1437:46]
-      if (ex1_reg_csr_addr == 12'h305) begin // @[src/main/scala/fpga/Core.scala 1438:48]
-        csr_reg_trap_vector <= csr_wdata[31:1]; // @[src/main/scala/fpga/Core.scala 1439:27]
+    end else if (ex1_en & ex1_reg_wb_sel == 3'h3) begin // @[src/main/scala/fpga/Core.scala 1470:46]
+      if (ex1_reg_csr_addr == 12'h305) begin // @[src/main/scala/fpga/Core.scala 1471:48]
+        csr_reg_trap_vector <= csr_wdata[31:1]; // @[src/main/scala/fpga/Core.scala 1472:27]
       end
     end
     if (reset) begin // @[src/main/scala/fpga/Core.scala 140:37]
       csr_reg_mcause <= 32'h0; // @[src/main/scala/fpga/Core.scala 140:37]
-    end else if (csr_is_meintr) begin // @[src/main/scala/fpga/Core.scala 1460:24]
-      csr_reg_mcause <= 32'h8000000b; // @[src/main/scala/fpga/Core.scala 1461:26]
-    end else if (csr_is_mtintr) begin // @[src/main/scala/fpga/Core.scala 1470:30]
-      csr_reg_mcause <= 32'h80000007; // @[src/main/scala/fpga/Core.scala 1471:26]
-    end else if (csr_is_trap) begin // @[src/main/scala/fpga/Core.scala 1480:28]
-      csr_reg_mcause <= ex1_reg_mcause; // @[src/main/scala/fpga/Core.scala 1481:26]
+    end else if (csr_is_meintr) begin // @[src/main/scala/fpga/Core.scala 1493:24]
+      csr_reg_mcause <= 32'h8000000b; // @[src/main/scala/fpga/Core.scala 1494:26]
+    end else if (csr_is_mtintr) begin // @[src/main/scala/fpga/Core.scala 1503:30]
+      csr_reg_mcause <= 32'h80000007; // @[src/main/scala/fpga/Core.scala 1504:26]
+    end else if (csr_is_trap) begin // @[src/main/scala/fpga/Core.scala 1513:28]
+      csr_reg_mcause <= ex1_reg_mcause; // @[src/main/scala/fpga/Core.scala 1514:26]
     end
     if (reset) begin // @[src/main/scala/fpga/Core.scala 142:37]
       csr_reg_mepc <= 31'h0; // @[src/main/scala/fpga/Core.scala 142:37]
-    end else if (csr_is_meintr) begin // @[src/main/scala/fpga/Core.scala 1460:24]
-      csr_reg_mepc <= ex1_reg_pc; // @[src/main/scala/fpga/Core.scala 1463:26]
-    end else if (csr_is_mtintr) begin // @[src/main/scala/fpga/Core.scala 1470:30]
-      csr_reg_mepc <= ex1_reg_pc; // @[src/main/scala/fpga/Core.scala 1473:26]
-    end else if (csr_is_trap) begin // @[src/main/scala/fpga/Core.scala 1480:28]
-      csr_reg_mepc <= ex1_reg_pc; // @[src/main/scala/fpga/Core.scala 1483:26]
+    end else if (csr_is_meintr) begin // @[src/main/scala/fpga/Core.scala 1493:24]
+      csr_reg_mepc <= ex1_reg_pc; // @[src/main/scala/fpga/Core.scala 1496:26]
+    end else if (csr_is_mtintr) begin // @[src/main/scala/fpga/Core.scala 1503:30]
+      csr_reg_mepc <= ex1_reg_pc; // @[src/main/scala/fpga/Core.scala 1506:26]
+    end else if (csr_is_trap) begin // @[src/main/scala/fpga/Core.scala 1513:28]
+      csr_reg_mepc <= ex1_reg_pc; // @[src/main/scala/fpga/Core.scala 1516:26]
     end else begin
-      csr_reg_mepc <= _GEN_469;
+      csr_reg_mepc <= _GEN_483;
     end
     if (reset) begin // @[src/main/scala/fpga/Core.scala 143:37]
       csr_reg_mstatus_mie <= 1'h0; // @[src/main/scala/fpga/Core.scala 143:37]
-    end else if (csr_is_meintr) begin // @[src/main/scala/fpga/Core.scala 1460:24]
-      csr_reg_mstatus_mie <= 1'h0; // @[src/main/scala/fpga/Core.scala 1465:26]
-    end else if (csr_is_mtintr) begin // @[src/main/scala/fpga/Core.scala 1470:30]
-      csr_reg_mstatus_mie <= 1'h0; // @[src/main/scala/fpga/Core.scala 1475:26]
-    end else if (csr_is_trap) begin // @[src/main/scala/fpga/Core.scala 1480:28]
-      csr_reg_mstatus_mie <= 1'h0; // @[src/main/scala/fpga/Core.scala 1485:26]
+    end else if (csr_is_meintr) begin // @[src/main/scala/fpga/Core.scala 1493:24]
+      csr_reg_mstatus_mie <= 1'h0; // @[src/main/scala/fpga/Core.scala 1498:26]
+    end else if (csr_is_mtintr) begin // @[src/main/scala/fpga/Core.scala 1503:30]
+      csr_reg_mstatus_mie <= 1'h0; // @[src/main/scala/fpga/Core.scala 1508:26]
+    end else if (csr_is_trap) begin // @[src/main/scala/fpga/Core.scala 1513:28]
+      csr_reg_mstatus_mie <= 1'h0; // @[src/main/scala/fpga/Core.scala 1518:26]
     end else begin
-      csr_reg_mstatus_mie <= _GEN_481;
+      csr_reg_mstatus_mie <= _GEN_495;
     end
     if (reset) begin // @[src/main/scala/fpga/Core.scala 144:37]
       csr_reg_mstatus_mpie <= 1'h0; // @[src/main/scala/fpga/Core.scala 144:37]
-    end else if (csr_is_meintr) begin // @[src/main/scala/fpga/Core.scala 1460:24]
-      csr_reg_mstatus_mpie <= csr_reg_mstatus_mie; // @[src/main/scala/fpga/Core.scala 1464:26]
-    end else if (csr_is_mtintr) begin // @[src/main/scala/fpga/Core.scala 1470:30]
-      csr_reg_mstatus_mpie <= csr_reg_mstatus_mie; // @[src/main/scala/fpga/Core.scala 1474:26]
-    end else if (csr_is_trap) begin // @[src/main/scala/fpga/Core.scala 1480:28]
-      csr_reg_mstatus_mpie <= csr_reg_mstatus_mie; // @[src/main/scala/fpga/Core.scala 1484:26]
+    end else if (csr_is_meintr) begin // @[src/main/scala/fpga/Core.scala 1493:24]
+      csr_reg_mstatus_mpie <= csr_reg_mstatus_mie; // @[src/main/scala/fpga/Core.scala 1497:26]
+    end else if (csr_is_mtintr) begin // @[src/main/scala/fpga/Core.scala 1503:30]
+      csr_reg_mstatus_mpie <= csr_reg_mstatus_mie; // @[src/main/scala/fpga/Core.scala 1507:26]
+    end else if (csr_is_trap) begin // @[src/main/scala/fpga/Core.scala 1513:28]
+      csr_reg_mstatus_mpie <= csr_reg_mstatus_mie; // @[src/main/scala/fpga/Core.scala 1517:26]
     end else begin
-      csr_reg_mstatus_mpie <= _GEN_480;
+      csr_reg_mstatus_mpie <= _GEN_494;
     end
     if (reset) begin // @[src/main/scala/fpga/Core.scala 145:37]
       csr_reg_mscratch <= 32'h0; // @[src/main/scala/fpga/Core.scala 145:37]
-    end else if (ex1_en & ex1_reg_wb_sel == 3'h3) begin // @[src/main/scala/fpga/Core.scala 1437:46]
-      if (!(ex1_reg_csr_addr == 12'h305)) begin // @[src/main/scala/fpga/Core.scala 1438:48]
-        if (!(ex1_reg_csr_addr == 12'h341)) begin // @[src/main/scala/fpga/Core.scala 1440:53]
-          csr_reg_mscratch <= _GEN_439;
+    end else if (ex1_en & ex1_reg_wb_sel == 3'h3) begin // @[src/main/scala/fpga/Core.scala 1470:46]
+      if (!(ex1_reg_csr_addr == 12'h305)) begin // @[src/main/scala/fpga/Core.scala 1471:48]
+        if (!(ex1_reg_csr_addr == 12'h341)) begin // @[src/main/scala/fpga/Core.scala 1473:53]
+          csr_reg_mscratch <= _GEN_453;
         end
       end
     end
     if (reset) begin // @[src/main/scala/fpga/Core.scala 146:37]
       csr_reg_mie_meie <= 1'h0; // @[src/main/scala/fpga/Core.scala 146:37]
-    end else if (ex1_en & ex1_reg_wb_sel == 3'h3) begin // @[src/main/scala/fpga/Core.scala 1437:46]
-      if (!(ex1_reg_csr_addr == 12'h305)) begin // @[src/main/scala/fpga/Core.scala 1438:48]
-        if (!(ex1_reg_csr_addr == 12'h341)) begin // @[src/main/scala/fpga/Core.scala 1440:53]
-          csr_reg_mie_meie <= _GEN_440;
+    end else if (ex1_en & ex1_reg_wb_sel == 3'h3) begin // @[src/main/scala/fpga/Core.scala 1470:46]
+      if (!(ex1_reg_csr_addr == 12'h305)) begin // @[src/main/scala/fpga/Core.scala 1471:48]
+        if (!(ex1_reg_csr_addr == 12'h341)) begin // @[src/main/scala/fpga/Core.scala 1473:53]
+          csr_reg_mie_meie <= _GEN_454;
         end
       end
     end
     if (reset) begin // @[src/main/scala/fpga/Core.scala 147:37]
       csr_reg_mie_mtie <= 1'h0; // @[src/main/scala/fpga/Core.scala 147:37]
-    end else if (ex1_en & ex1_reg_wb_sel == 3'h3) begin // @[src/main/scala/fpga/Core.scala 1437:46]
-      if (!(ex1_reg_csr_addr == 12'h305)) begin // @[src/main/scala/fpga/Core.scala 1438:48]
-        if (!(ex1_reg_csr_addr == 12'h341)) begin // @[src/main/scala/fpga/Core.scala 1440:53]
-          csr_reg_mie_mtie <= _GEN_441;
+    end else if (ex1_en & ex1_reg_wb_sel == 3'h3) begin // @[src/main/scala/fpga/Core.scala 1470:46]
+      if (!(ex1_reg_csr_addr == 12'h305)) begin // @[src/main/scala/fpga/Core.scala 1471:48]
+        if (!(ex1_reg_csr_addr == 12'h341)) begin // @[src/main/scala/fpga/Core.scala 1473:53]
+          csr_reg_mie_mtie <= _GEN_455;
         end
       end
     end
     if (reset) begin // @[src/main/scala/fpga/Core.scala 158:38]
       id_reg_inst <= 32'h13; // @[src/main/scala/fpga/Core.scala 158:38]
-    end else if (ex2_reg_is_br | _ic_read_en4_T) begin // @[src/main/scala/fpga/Core.scala 609:41]
-      if (if2_is_valid_inst) begin // @[src/main/scala/fpga/Core.scala 588:21]
-        if (if1_is_jump) begin // @[src/main/scala/fpga/Core.scala 389:21]
-          id_reg_inst <= 32'h13; // @[src/main/scala/fpga/Core.scala 379:15]
+    end else if (ex2_reg_is_br | _ic_read_en4_T) begin // @[src/main/scala/fpga/Core.scala 613:41]
+      if (if2_is_valid_inst) begin // @[src/main/scala/fpga/Core.scala 592:21]
+        if (if1_is_jump) begin // @[src/main/scala/fpga/Core.scala 393:21]
+          id_reg_inst <= 32'h13; // @[src/main/scala/fpga/Core.scala 383:15]
         end else begin
           id_reg_inst <= _GEN_179;
         end
@@ -3653,20 +3820,20 @@ module Core(
     end
     if (reset) begin // @[src/main/scala/fpga/Core.scala 159:38]
       id_reg_bp_taken <= 1'h0; // @[src/main/scala/fpga/Core.scala 159:38]
-    end else if (ex2_reg_is_br | _ic_read_en4_T) begin // @[src/main/scala/fpga/Core.scala 609:41]
-      id_reg_bp_taken <= if2_bp_taken; // @[src/main/scala/fpga/Core.scala 614:23]
+    end else if (ex2_reg_is_br | _ic_read_en4_T) begin // @[src/main/scala/fpga/Core.scala 613:41]
+      id_reg_bp_taken <= if2_bp_taken; // @[src/main/scala/fpga/Core.scala 618:23]
     end
     if (reset) begin // @[src/main/scala/fpga/Core.scala 160:38]
       id_reg_pc <= 31'h0; // @[src/main/scala/fpga/Core.scala 160:38]
-    end else if (_ic_read_en4_T) begin // @[src/main/scala/fpga/Core.scala 616:24]
-      id_reg_pc <= ic_reg_addr_out; // @[src/main/scala/fpga/Core.scala 617:24]
+    end else if (_ic_read_en4_T) begin // @[src/main/scala/fpga/Core.scala 620:24]
+      id_reg_pc <= ic_reg_addr_out; // @[src/main/scala/fpga/Core.scala 621:24]
     end
     if (reset) begin // @[src/main/scala/fpga/Core.scala 161:38]
       id_reg_bp_taken_pc <= 31'h0; // @[src/main/scala/fpga/Core.scala 161:38]
-    end else if (_ic_read_en4_T) begin // @[src/main/scala/fpga/Core.scala 616:24]
-      if (if1_is_jump) begin // @[src/main/scala/fpga/Core.scala 389:21]
-        id_reg_bp_taken_pc <= 31'h0; // @[src/main/scala/fpga/Core.scala 385:19]
-      end else if (~io_imem_valid) begin // @[src/main/scala/fpga/Core.scala 398:98]
+    end else if (_ic_read_en4_T) begin // @[src/main/scala/fpga/Core.scala 620:24]
+      if (if1_is_jump) begin // @[src/main/scala/fpga/Core.scala 393:21]
+        id_reg_bp_taken_pc <= 31'h0; // @[src/main/scala/fpga/Core.scala 389:19]
+      end else if (~io_imem_valid) begin // @[src/main/scala/fpga/Core.scala 402:98]
         id_reg_bp_taken_pc <= _GEN_34;
       end else begin
         id_reg_bp_taken_pc <= _GEN_34;
@@ -3674,10 +3841,10 @@ module Core(
     end
     if (reset) begin // @[src/main/scala/fpga/Core.scala 162:38]
       id_reg_bp_cnt <= 2'h0; // @[src/main/scala/fpga/Core.scala 162:38]
-    end else if (_ic_read_en4_T) begin // @[src/main/scala/fpga/Core.scala 616:24]
-      if (if1_is_jump) begin // @[src/main/scala/fpga/Core.scala 389:21]
-        id_reg_bp_cnt <= 2'h0; // @[src/main/scala/fpga/Core.scala 386:19]
-      end else if (~io_imem_valid) begin // @[src/main/scala/fpga/Core.scala 398:98]
+    end else if (_ic_read_en4_T) begin // @[src/main/scala/fpga/Core.scala 620:24]
+      if (if1_is_jump) begin // @[src/main/scala/fpga/Core.scala 393:21]
+        id_reg_bp_cnt <= 2'h0; // @[src/main/scala/fpga/Core.scala 390:19]
+      end else if (~io_imem_valid) begin // @[src/main/scala/fpga/Core.scala 402:98]
         id_reg_bp_cnt <= _GEN_35;
       end else begin
         id_reg_bp_cnt <= _GEN_35;
@@ -3686,243 +3853,257 @@ module Core(
     if (reset) begin // @[src/main/scala/fpga/Core.scala 164:38]
       id_reg_stall <= 1'h0; // @[src/main/scala/fpga/Core.scala 164:38]
     end else begin
-      id_reg_stall <= id_stall; // @[src/main/scala/fpga/Core.scala 627:16]
+      id_reg_stall <= id_stall; // @[src/main/scala/fpga/Core.scala 631:16]
     end
     if (reset) begin // @[src/main/scala/fpga/Core.scala 171:38]
       rrd_reg_pc <= 31'h0; // @[src/main/scala/fpga/Core.scala 171:38]
-    end else if (_if1_is_jump_T) begin // @[src/main/scala/fpga/Core.scala 1014:45]
-      rrd_reg_pc <= _GEN_288;
-    end else if (~rrd_stall & ~ex2_stall) begin // @[src/main/scala/fpga/Core.scala 1080:40]
-      rrd_reg_pc <= _GEN_288;
+    end else if (_if1_is_jump_T) begin // @[src/main/scala/fpga/Core.scala 1035:45]
+      rrd_reg_pc <= _GEN_294;
+    end else if (~rrd_stall & ~ex2_stall) begin // @[src/main/scala/fpga/Core.scala 1105:40]
+      rrd_reg_pc <= _GEN_294;
     end
     if (reset) begin // @[src/main/scala/fpga/Core.scala 172:38]
       rrd_reg_wb_addr <= 5'h0; // @[src/main/scala/fpga/Core.scala 172:38]
-    end else if (_if1_is_jump_T) begin // @[src/main/scala/fpga/Core.scala 1014:45]
-      rrd_reg_wb_addr <= _GEN_297;
-    end else if (~rrd_stall & ~ex2_stall) begin // @[src/main/scala/fpga/Core.scala 1080:40]
-      rrd_reg_wb_addr <= _GEN_297;
+    end else if (_if1_is_jump_T) begin // @[src/main/scala/fpga/Core.scala 1035:45]
+      rrd_reg_wb_addr <= _GEN_303;
+    end else if (~rrd_stall & ~ex2_stall) begin // @[src/main/scala/fpga/Core.scala 1105:40]
+      rrd_reg_wb_addr <= _GEN_303;
     end
     if (reset) begin // @[src/main/scala/fpga/Core.scala 173:38]
       rrd_reg_op1_sel <= 1'h0; // @[src/main/scala/fpga/Core.scala 173:38]
-    end else if (_if1_is_jump_T) begin // @[src/main/scala/fpga/Core.scala 1014:45]
-      rrd_reg_op1_sel <= _GEN_289;
-    end else if (~rrd_stall & ~ex2_stall) begin // @[src/main/scala/fpga/Core.scala 1080:40]
-      rrd_reg_op1_sel <= _GEN_289;
+    end else if (_if1_is_jump_T) begin // @[src/main/scala/fpga/Core.scala 1035:45]
+      rrd_reg_op1_sel <= _GEN_295;
+    end else if (~rrd_stall & ~ex2_stall) begin // @[src/main/scala/fpga/Core.scala 1105:40]
+      rrd_reg_op1_sel <= _GEN_295;
     end
     if (reset) begin // @[src/main/scala/fpga/Core.scala 174:38]
       rrd_reg_op2_sel <= 1'h0; // @[src/main/scala/fpga/Core.scala 174:38]
-    end else if (_if1_is_jump_T) begin // @[src/main/scala/fpga/Core.scala 1014:45]
-      rrd_reg_op2_sel <= _GEN_290;
-    end else if (~rrd_stall & ~ex2_stall) begin // @[src/main/scala/fpga/Core.scala 1080:40]
-      rrd_reg_op2_sel <= _GEN_290;
+    end else if (_if1_is_jump_T) begin // @[src/main/scala/fpga/Core.scala 1035:45]
+      rrd_reg_op2_sel <= _GEN_296;
+    end else if (~rrd_stall & ~ex2_stall) begin // @[src/main/scala/fpga/Core.scala 1105:40]
+      rrd_reg_op2_sel <= _GEN_296;
     end
     if (reset) begin // @[src/main/scala/fpga/Core.scala 175:38]
       rrd_reg_op3_sel <= 2'h0; // @[src/main/scala/fpga/Core.scala 175:38]
-    end else if (_if1_is_jump_T) begin // @[src/main/scala/fpga/Core.scala 1014:45]
-      rrd_reg_op3_sel <= _GEN_291;
-    end else if (~rrd_stall & ~ex2_stall) begin // @[src/main/scala/fpga/Core.scala 1080:40]
-      rrd_reg_op3_sel <= _GEN_291;
+    end else if (_if1_is_jump_T) begin // @[src/main/scala/fpga/Core.scala 1035:45]
+      rrd_reg_op3_sel <= _GEN_297;
+    end else if (~rrd_stall & ~ex2_stall) begin // @[src/main/scala/fpga/Core.scala 1105:40]
+      rrd_reg_op3_sel <= _GEN_297;
     end
     if (reset) begin // @[src/main/scala/fpga/Core.scala 176:38]
       rrd_reg_rs1_addr <= 5'h0; // @[src/main/scala/fpga/Core.scala 176:38]
-    end else if (_if1_is_jump_T) begin // @[src/main/scala/fpga/Core.scala 1014:45]
-      rrd_reg_rs1_addr <= _GEN_292;
-    end else if (~rrd_stall & ~ex2_stall) begin // @[src/main/scala/fpga/Core.scala 1080:40]
-      rrd_reg_rs1_addr <= _GEN_292;
+    end else if (_if1_is_jump_T) begin // @[src/main/scala/fpga/Core.scala 1035:45]
+      rrd_reg_rs1_addr <= _GEN_298;
+    end else if (~rrd_stall & ~ex2_stall) begin // @[src/main/scala/fpga/Core.scala 1105:40]
+      rrd_reg_rs1_addr <= _GEN_298;
     end
     if (reset) begin // @[src/main/scala/fpga/Core.scala 177:38]
       rrd_reg_rs2_addr <= 5'h0; // @[src/main/scala/fpga/Core.scala 177:38]
-    end else if (_if1_is_jump_T) begin // @[src/main/scala/fpga/Core.scala 1014:45]
-      rrd_reg_rs2_addr <= _GEN_293;
-    end else if (~rrd_stall & ~ex2_stall) begin // @[src/main/scala/fpga/Core.scala 1080:40]
-      rrd_reg_rs2_addr <= _GEN_293;
+    end else if (_if1_is_jump_T) begin // @[src/main/scala/fpga/Core.scala 1035:45]
+      rrd_reg_rs2_addr <= _GEN_299;
+    end else if (~rrd_stall & ~ex2_stall) begin // @[src/main/scala/fpga/Core.scala 1105:40]
+      rrd_reg_rs2_addr <= _GEN_299;
     end
     if (reset) begin // @[src/main/scala/fpga/Core.scala 178:38]
       rrd_reg_rs3_addr <= 5'h0; // @[src/main/scala/fpga/Core.scala 178:38]
-    end else if (_if1_is_jump_T) begin // @[src/main/scala/fpga/Core.scala 1014:45]
-      rrd_reg_rs3_addr <= _GEN_294;
-    end else if (~rrd_stall & ~ex2_stall) begin // @[src/main/scala/fpga/Core.scala 1080:40]
-      rrd_reg_rs3_addr <= _GEN_294;
+    end else if (_if1_is_jump_T) begin // @[src/main/scala/fpga/Core.scala 1035:45]
+      rrd_reg_rs3_addr <= _GEN_300;
+    end else if (~rrd_stall & ~ex2_stall) begin // @[src/main/scala/fpga/Core.scala 1105:40]
+      rrd_reg_rs3_addr <= _GEN_300;
     end
     if (reset) begin // @[src/main/scala/fpga/Core.scala 179:38]
       rrd_reg_op1_data <= 32'h0; // @[src/main/scala/fpga/Core.scala 179:38]
-    end else if (_if1_is_jump_T) begin // @[src/main/scala/fpga/Core.scala 1014:45]
-      rrd_reg_op1_data <= _GEN_295;
-    end else if (~rrd_stall & ~ex2_stall) begin // @[src/main/scala/fpga/Core.scala 1080:40]
-      rrd_reg_op1_data <= _GEN_295;
+    end else if (_if1_is_jump_T) begin // @[src/main/scala/fpga/Core.scala 1035:45]
+      rrd_reg_op1_data <= _GEN_301;
+    end else if (~rrd_stall & ~ex2_stall) begin // @[src/main/scala/fpga/Core.scala 1105:40]
+      rrd_reg_op1_data <= _GEN_301;
     end
     if (reset) begin // @[src/main/scala/fpga/Core.scala 180:38]
       rrd_reg_op2_data <= 32'h0; // @[src/main/scala/fpga/Core.scala 180:38]
-    end else if (_if1_is_jump_T) begin // @[src/main/scala/fpga/Core.scala 1014:45]
-      rrd_reg_op2_data <= _GEN_296;
-    end else if (~rrd_stall & ~ex2_stall) begin // @[src/main/scala/fpga/Core.scala 1080:40]
-      rrd_reg_op2_data <= _GEN_296;
+    end else if (_if1_is_jump_T) begin // @[src/main/scala/fpga/Core.scala 1035:45]
+      rrd_reg_op2_data <= _GEN_302;
+    end else if (~rrd_stall & ~ex2_stall) begin // @[src/main/scala/fpga/Core.scala 1105:40]
+      rrd_reg_op2_data <= _GEN_302;
     end
     if (reset) begin // @[src/main/scala/fpga/Core.scala 181:38]
       rrd_reg_exe_fun <= 4'h0; // @[src/main/scala/fpga/Core.scala 181:38]
-    end else if (_if1_is_jump_T) begin // @[src/main/scala/fpga/Core.scala 1014:45]
+    end else if (_if1_is_jump_T) begin // @[src/main/scala/fpga/Core.scala 1035:45]
       rrd_reg_exe_fun <= 4'h0;
-    end else if (~rrd_stall & ~ex2_stall) begin // @[src/main/scala/fpga/Core.scala 1080:40]
-      if (id_reg_stall) begin // @[src/main/scala/fpga/Core.scala 1081:24]
-        rrd_reg_exe_fun <= id_reg_exe_fun_delay; // @[src/main/scala/fpga/Core.scala 1093:29]
+    end else if (~rrd_stall & ~ex2_stall) begin // @[src/main/scala/fpga/Core.scala 1105:40]
+      if (id_reg_stall) begin // @[src/main/scala/fpga/Core.scala 1106:24]
+        rrd_reg_exe_fun <= id_reg_exe_fun_delay; // @[src/main/scala/fpga/Core.scala 1118:29]
       end else begin
-        rrd_reg_exe_fun <= csignals_0; // @[src/main/scala/fpga/Core.scala 1125:29]
+        rrd_reg_exe_fun <= csignals_0; // @[src/main/scala/fpga/Core.scala 1152:29]
       end
     end
     if (reset) begin // @[src/main/scala/fpga/Core.scala 182:38]
       rrd_reg_rf_wen <= 1'h0; // @[src/main/scala/fpga/Core.scala 182:38]
-    end else if (_if1_is_jump_T) begin // @[src/main/scala/fpga/Core.scala 1014:45]
+    end else if (_if1_is_jump_T) begin // @[src/main/scala/fpga/Core.scala 1035:45]
       rrd_reg_rf_wen <= 1'h0;
-    end else if (~rrd_stall & ~ex2_stall) begin // @[src/main/scala/fpga/Core.scala 1080:40]
-      if (id_reg_stall) begin // @[src/main/scala/fpga/Core.scala 1081:24]
-        rrd_reg_rf_wen <= id_reg_rf_wen_delay; // @[src/main/scala/fpga/Core.scala 1092:29]
+    end else if (~rrd_stall & ~ex2_stall) begin // @[src/main/scala/fpga/Core.scala 1105:40]
+      if (id_reg_stall) begin // @[src/main/scala/fpga/Core.scala 1106:24]
+        rrd_reg_rf_wen <= id_reg_rf_wen_delay; // @[src/main/scala/fpga/Core.scala 1117:29]
       end else begin
-        rrd_reg_rf_wen <= csignals_4; // @[src/main/scala/fpga/Core.scala 1124:29]
+        rrd_reg_rf_wen <= csignals_4; // @[src/main/scala/fpga/Core.scala 1151:29]
       end
     end
     if (reset) begin // @[src/main/scala/fpga/Core.scala 183:38]
       rrd_reg_wb_sel <= 3'h0; // @[src/main/scala/fpga/Core.scala 183:38]
-    end else if (_if1_is_jump_T) begin // @[src/main/scala/fpga/Core.scala 1014:45]
+    end else if (_if1_is_jump_T) begin // @[src/main/scala/fpga/Core.scala 1035:45]
       rrd_reg_wb_sel <= 3'h0;
-    end else if (~rrd_stall & ~ex2_stall) begin // @[src/main/scala/fpga/Core.scala 1080:40]
-      if (id_reg_stall) begin // @[src/main/scala/fpga/Core.scala 1081:24]
-        rrd_reg_wb_sel <= id_reg_wb_sel_delay; // @[src/main/scala/fpga/Core.scala 1094:29]
+    end else if (~rrd_stall & ~ex2_stall) begin // @[src/main/scala/fpga/Core.scala 1105:40]
+      if (id_reg_stall) begin // @[src/main/scala/fpga/Core.scala 1106:24]
+        rrd_reg_wb_sel <= id_reg_wb_sel_delay; // @[src/main/scala/fpga/Core.scala 1119:29]
       end else begin
-        rrd_reg_wb_sel <= csignals_5; // @[src/main/scala/fpga/Core.scala 1126:29]
+        rrd_reg_wb_sel <= csignals_5; // @[src/main/scala/fpga/Core.scala 1153:29]
       end
     end
     if (reset) begin // @[src/main/scala/fpga/Core.scala 184:38]
       rrd_reg_csr_addr <= 12'h0; // @[src/main/scala/fpga/Core.scala 184:38]
-    end else if (_if1_is_jump_T) begin // @[src/main/scala/fpga/Core.scala 1014:45]
-      rrd_reg_csr_addr <= _GEN_302;
-    end else if (~rrd_stall & ~ex2_stall) begin // @[src/main/scala/fpga/Core.scala 1080:40]
-      rrd_reg_csr_addr <= _GEN_302;
+    end else if (_if1_is_jump_T) begin // @[src/main/scala/fpga/Core.scala 1035:45]
+      rrd_reg_csr_addr <= _GEN_310;
+    end else if (~rrd_stall & ~ex2_stall) begin // @[src/main/scala/fpga/Core.scala 1105:40]
+      rrd_reg_csr_addr <= _GEN_310;
     end
     if (reset) begin // @[src/main/scala/fpga/Core.scala 185:38]
       rrd_reg_csr_cmd <= 2'h0; // @[src/main/scala/fpga/Core.scala 185:38]
-    end else if (_if1_is_jump_T) begin // @[src/main/scala/fpga/Core.scala 1014:45]
+    end else if (_if1_is_jump_T) begin // @[src/main/scala/fpga/Core.scala 1035:45]
       rrd_reg_csr_cmd <= 2'h0;
-    end else if (~rrd_stall & ~ex2_stall) begin // @[src/main/scala/fpga/Core.scala 1080:40]
-      if (id_reg_stall) begin // @[src/main/scala/fpga/Core.scala 1081:24]
-        rrd_reg_csr_cmd <= id_reg_csr_cmd_delay; // @[src/main/scala/fpga/Core.scala 1097:29]
+    end else if (~rrd_stall & ~ex2_stall) begin // @[src/main/scala/fpga/Core.scala 1105:40]
+      if (id_reg_stall) begin // @[src/main/scala/fpga/Core.scala 1106:24]
+        rrd_reg_csr_cmd <= id_reg_csr_cmd_delay; // @[src/main/scala/fpga/Core.scala 1124:29]
       end else begin
-        rrd_reg_csr_cmd <= csignals_7; // @[src/main/scala/fpga/Core.scala 1129:29]
+        rrd_reg_csr_cmd <= csignals_7; // @[src/main/scala/fpga/Core.scala 1158:29]
       end
     end
     if (reset) begin // @[src/main/scala/fpga/Core.scala 186:38]
       rrd_reg_imm_b_sext <= 32'h0; // @[src/main/scala/fpga/Core.scala 186:38]
-    end else if (_if1_is_jump_T) begin // @[src/main/scala/fpga/Core.scala 1014:45]
-      rrd_reg_imm_b_sext <= _GEN_301;
-    end else if (~rrd_stall & ~ex2_stall) begin // @[src/main/scala/fpga/Core.scala 1080:40]
-      rrd_reg_imm_b_sext <= _GEN_301;
+    end else if (_if1_is_jump_T) begin // @[src/main/scala/fpga/Core.scala 1035:45]
+      rrd_reg_imm_b_sext <= _GEN_307;
+    end else if (~rrd_stall & ~ex2_stall) begin // @[src/main/scala/fpga/Core.scala 1105:40]
+      rrd_reg_imm_b_sext <= _GEN_307;
     end
     if (reset) begin // @[src/main/scala/fpga/Core.scala 187:38]
-      rrd_reg_mem_w <= 3'h0; // @[src/main/scala/fpga/Core.scala 187:38]
-    end else if (_if1_is_jump_T) begin // @[src/main/scala/fpga/Core.scala 1014:45]
-      rrd_reg_mem_w <= 3'h0;
-    end else if (~rrd_stall & ~ex2_stall) begin // @[src/main/scala/fpga/Core.scala 1080:40]
-      if (id_reg_stall) begin // @[src/main/scala/fpga/Core.scala 1081:24]
-        rrd_reg_mem_w <= id_reg_mem_w_delay; // @[src/main/scala/fpga/Core.scala 1098:29]
-      end else begin
-        rrd_reg_mem_w <= csignals_8; // @[src/main/scala/fpga/Core.scala 1130:29]
-      end
+      rrd_reg_shamt <= 2'h0; // @[src/main/scala/fpga/Core.scala 187:38]
+    end else if (_if1_is_jump_T) begin // @[src/main/scala/fpga/Core.scala 1035:45]
+      rrd_reg_shamt <= _GEN_308;
+    end else if (~rrd_stall & ~ex2_stall) begin // @[src/main/scala/fpga/Core.scala 1105:40]
+      rrd_reg_shamt <= _GEN_308;
+    end
+    if (reset) begin // @[src/main/scala/fpga/Core.scala 188:38]
+      rrd_reg_op2op <= 1'h0; // @[src/main/scala/fpga/Core.scala 188:38]
+    end else if (_if1_is_jump_T) begin // @[src/main/scala/fpga/Core.scala 1035:45]
+      rrd_reg_op2op <= _GEN_309;
+    end else if (~rrd_stall & ~ex2_stall) begin // @[src/main/scala/fpga/Core.scala 1105:40]
+      rrd_reg_op2op <= _GEN_309;
     end
     if (reset) begin // @[src/main/scala/fpga/Core.scala 189:38]
-      rrd_reg_is_br <= 1'h0; // @[src/main/scala/fpga/Core.scala 189:38]
-    end else if (_if1_is_jump_T) begin // @[src/main/scala/fpga/Core.scala 1014:45]
-      rrd_reg_is_br <= 1'h0;
-    end else if (~rrd_stall & ~ex2_stall) begin // @[src/main/scala/fpga/Core.scala 1080:40]
-      if (id_reg_stall) begin // @[src/main/scala/fpga/Core.scala 1081:24]
-        rrd_reg_is_br <= id_reg_is_br_delay; // @[src/main/scala/fpga/Core.scala 1100:29]
+      rrd_reg_mem_w <= 3'h0; // @[src/main/scala/fpga/Core.scala 189:38]
+    end else if (_if1_is_jump_T) begin // @[src/main/scala/fpga/Core.scala 1035:45]
+      rrd_reg_mem_w <= 3'h0;
+    end else if (~rrd_stall & ~ex2_stall) begin // @[src/main/scala/fpga/Core.scala 1105:40]
+      if (id_reg_stall) begin // @[src/main/scala/fpga/Core.scala 1106:24]
+        rrd_reg_mem_w <= id_reg_mem_w_delay; // @[src/main/scala/fpga/Core.scala 1125:29]
       end else begin
-        rrd_reg_is_br <= id_is_br; // @[src/main/scala/fpga/Core.scala 1132:29]
-      end
-    end
-    if (reset) begin // @[src/main/scala/fpga/Core.scala 190:38]
-      rrd_reg_is_j <= 1'h0; // @[src/main/scala/fpga/Core.scala 190:38]
-    end else if (_if1_is_jump_T) begin // @[src/main/scala/fpga/Core.scala 1014:45]
-      rrd_reg_is_j <= 1'h0;
-    end else if (~rrd_stall & ~ex2_stall) begin // @[src/main/scala/fpga/Core.scala 1080:40]
-      if (id_reg_stall) begin // @[src/main/scala/fpga/Core.scala 1081:24]
-        rrd_reg_is_j <= id_reg_is_j_delay; // @[src/main/scala/fpga/Core.scala 1101:29]
-      end else begin
-        rrd_reg_is_j <= id_is_j; // @[src/main/scala/fpga/Core.scala 1133:29]
+        rrd_reg_mem_w <= csignals_8; // @[src/main/scala/fpga/Core.scala 1159:29]
       end
     end
     if (reset) begin // @[src/main/scala/fpga/Core.scala 191:38]
-      rrd_reg_bp_taken <= 1'h0; // @[src/main/scala/fpga/Core.scala 191:38]
-    end else if (_if1_is_jump_T) begin // @[src/main/scala/fpga/Core.scala 1014:45]
-      rrd_reg_bp_taken <= 1'h0;
-    end else if (~rrd_stall & ~ex2_stall) begin // @[src/main/scala/fpga/Core.scala 1080:40]
-      if (id_reg_stall) begin // @[src/main/scala/fpga/Core.scala 1081:24]
-        rrd_reg_bp_taken <= id_reg_bp_taken_delay; // @[src/main/scala/fpga/Core.scala 1102:29]
+      rrd_reg_is_br <= 1'h0; // @[src/main/scala/fpga/Core.scala 191:38]
+    end else if (_if1_is_jump_T) begin // @[src/main/scala/fpga/Core.scala 1035:45]
+      rrd_reg_is_br <= 1'h0;
+    end else if (~rrd_stall & ~ex2_stall) begin // @[src/main/scala/fpga/Core.scala 1105:40]
+      if (id_reg_stall) begin // @[src/main/scala/fpga/Core.scala 1106:24]
+        rrd_reg_is_br <= id_reg_is_br_delay; // @[src/main/scala/fpga/Core.scala 1127:29]
       end else begin
-        rrd_reg_bp_taken <= id_reg_bp_taken; // @[src/main/scala/fpga/Core.scala 1134:29]
+        rrd_reg_is_br <= id_is_br; // @[src/main/scala/fpga/Core.scala 1161:29]
       end
     end
     if (reset) begin // @[src/main/scala/fpga/Core.scala 192:38]
-      rrd_reg_bp_taken_pc <= 31'h0; // @[src/main/scala/fpga/Core.scala 192:38]
-    end else if (_if1_is_jump_T) begin // @[src/main/scala/fpga/Core.scala 1014:45]
-      rrd_reg_bp_taken_pc <= _GEN_304;
-    end else if (~rrd_stall & ~ex2_stall) begin // @[src/main/scala/fpga/Core.scala 1080:40]
-      rrd_reg_bp_taken_pc <= _GEN_304;
+      rrd_reg_is_j <= 1'h0; // @[src/main/scala/fpga/Core.scala 192:38]
+    end else if (_if1_is_jump_T) begin // @[src/main/scala/fpga/Core.scala 1035:45]
+      rrd_reg_is_j <= 1'h0;
+    end else if (~rrd_stall & ~ex2_stall) begin // @[src/main/scala/fpga/Core.scala 1105:40]
+      if (id_reg_stall) begin // @[src/main/scala/fpga/Core.scala 1106:24]
+        rrd_reg_is_j <= id_reg_is_j_delay; // @[src/main/scala/fpga/Core.scala 1128:29]
+      end else begin
+        rrd_reg_is_j <= id_is_j; // @[src/main/scala/fpga/Core.scala 1162:29]
+      end
     end
     if (reset) begin // @[src/main/scala/fpga/Core.scala 193:38]
-      rrd_reg_bp_cnt <= 2'h0; // @[src/main/scala/fpga/Core.scala 193:38]
-    end else if (_if1_is_jump_T) begin // @[src/main/scala/fpga/Core.scala 1014:45]
-      rrd_reg_bp_cnt <= _GEN_305;
-    end else if (~rrd_stall & ~ex2_stall) begin // @[src/main/scala/fpga/Core.scala 1080:40]
-      rrd_reg_bp_cnt <= _GEN_305;
+      rrd_reg_bp_taken <= 1'h0; // @[src/main/scala/fpga/Core.scala 193:38]
+    end else if (_if1_is_jump_T) begin // @[src/main/scala/fpga/Core.scala 1035:45]
+      rrd_reg_bp_taken <= 1'h0;
+    end else if (~rrd_stall & ~ex2_stall) begin // @[src/main/scala/fpga/Core.scala 1105:40]
+      if (id_reg_stall) begin // @[src/main/scala/fpga/Core.scala 1106:24]
+        rrd_reg_bp_taken <= id_reg_bp_taken_delay; // @[src/main/scala/fpga/Core.scala 1129:29]
+      end else begin
+        rrd_reg_bp_taken <= id_reg_bp_taken; // @[src/main/scala/fpga/Core.scala 1163:29]
+      end
     end
     if (reset) begin // @[src/main/scala/fpga/Core.scala 194:38]
-      rrd_reg_is_half <= 1'h0; // @[src/main/scala/fpga/Core.scala 194:38]
-    end else if (_if1_is_jump_T) begin // @[src/main/scala/fpga/Core.scala 1014:45]
-      rrd_reg_is_half <= _GEN_306;
-    end else if (~rrd_stall & ~ex2_stall) begin // @[src/main/scala/fpga/Core.scala 1080:40]
-      rrd_reg_is_half <= _GEN_306;
+      rrd_reg_bp_taken_pc <= 31'h0; // @[src/main/scala/fpga/Core.scala 194:38]
+    end else if (_if1_is_jump_T) begin // @[src/main/scala/fpga/Core.scala 1035:45]
+      rrd_reg_bp_taken_pc <= _GEN_312;
+    end else if (~rrd_stall & ~ex2_stall) begin // @[src/main/scala/fpga/Core.scala 1105:40]
+      rrd_reg_bp_taken_pc <= _GEN_312;
     end
     if (reset) begin // @[src/main/scala/fpga/Core.scala 195:38]
-      rrd_reg_is_valid_inst <= 1'h0; // @[src/main/scala/fpga/Core.scala 195:38]
-    end else if (_if1_is_jump_T) begin // @[src/main/scala/fpga/Core.scala 1014:45]
-      rrd_reg_is_valid_inst <= 1'h0;
-    end else if (~rrd_stall & ~ex2_stall) begin // @[src/main/scala/fpga/Core.scala 1080:40]
-      if (id_reg_stall) begin // @[src/main/scala/fpga/Core.scala 1081:24]
-        rrd_reg_is_valid_inst <= id_reg_is_valid_inst_delay; // @[src/main/scala/fpga/Core.scala 1106:29]
-      end else begin
-        rrd_reg_is_valid_inst <= _id_reg_is_valid_inst_delay_T; // @[src/main/scala/fpga/Core.scala 1138:29]
-      end
+      rrd_reg_bp_cnt <= 2'h0; // @[src/main/scala/fpga/Core.scala 195:38]
+    end else if (_if1_is_jump_T) begin // @[src/main/scala/fpga/Core.scala 1035:45]
+      rrd_reg_bp_cnt <= _GEN_313;
+    end else if (~rrd_stall & ~ex2_stall) begin // @[src/main/scala/fpga/Core.scala 1105:40]
+      rrd_reg_bp_cnt <= _GEN_313;
     end
     if (reset) begin // @[src/main/scala/fpga/Core.scala 196:38]
-      rrd_reg_is_trap <= 1'h0; // @[src/main/scala/fpga/Core.scala 196:38]
-    end else if (_if1_is_jump_T) begin // @[src/main/scala/fpga/Core.scala 1014:45]
-      rrd_reg_is_trap <= 1'h0;
-    end else if (~rrd_stall & ~ex2_stall) begin // @[src/main/scala/fpga/Core.scala 1080:40]
-      if (id_reg_stall) begin // @[src/main/scala/fpga/Core.scala 1081:24]
-        rrd_reg_is_trap <= id_reg_is_trap_delay; // @[src/main/scala/fpga/Core.scala 1107:29]
-      end else begin
-        rrd_reg_is_trap <= _id_csr_addr_T_2; // @[src/main/scala/fpga/Core.scala 1139:29]
-      end
+      rrd_reg_is_half <= 1'h0; // @[src/main/scala/fpga/Core.scala 196:38]
+    end else if (_if1_is_jump_T) begin // @[src/main/scala/fpga/Core.scala 1035:45]
+      rrd_reg_is_half <= _GEN_314;
+    end else if (~rrd_stall & ~ex2_stall) begin // @[src/main/scala/fpga/Core.scala 1105:40]
+      rrd_reg_is_half <= _GEN_314;
     end
     if (reset) begin // @[src/main/scala/fpga/Core.scala 197:38]
-      rrd_reg_mcause <= 32'h0; // @[src/main/scala/fpga/Core.scala 197:38]
-    end else if (_if1_is_jump_T) begin // @[src/main/scala/fpga/Core.scala 1014:45]
-      rrd_reg_mcause <= _GEN_307;
-    end else if (~rrd_stall & ~ex2_stall) begin // @[src/main/scala/fpga/Core.scala 1080:40]
-      rrd_reg_mcause <= _GEN_307;
+      rrd_reg_is_valid_inst <= 1'h0; // @[src/main/scala/fpga/Core.scala 197:38]
+    end else if (_if1_is_jump_T) begin // @[src/main/scala/fpga/Core.scala 1035:45]
+      rrd_reg_is_valid_inst <= 1'h0;
+    end else if (~rrd_stall & ~ex2_stall) begin // @[src/main/scala/fpga/Core.scala 1105:40]
+      if (id_reg_stall) begin // @[src/main/scala/fpga/Core.scala 1106:24]
+        rrd_reg_is_valid_inst <= id_reg_is_valid_inst_delay; // @[src/main/scala/fpga/Core.scala 1133:29]
+      end else begin
+        rrd_reg_is_valid_inst <= _id_reg_is_valid_inst_delay_T; // @[src/main/scala/fpga/Core.scala 1167:29]
+      end
     end
-    if (reset) begin // @[src/main/scala/fpga/Core.scala 201:38]
-      ex1_reg_pc <= 31'h0; // @[src/main/scala/fpga/Core.scala 201:38]
-    end else if (_T_45) begin // @[src/main/scala/fpga/Core.scala 1223:20]
-      ex1_reg_pc <= rrd_reg_pc; // @[src/main/scala/fpga/Core.scala 1225:27]
+    if (reset) begin // @[src/main/scala/fpga/Core.scala 198:38]
+      rrd_reg_is_trap <= 1'h0; // @[src/main/scala/fpga/Core.scala 198:38]
+    end else if (_if1_is_jump_T) begin // @[src/main/scala/fpga/Core.scala 1035:45]
+      rrd_reg_is_trap <= 1'h0;
+    end else if (~rrd_stall & ~ex2_stall) begin // @[src/main/scala/fpga/Core.scala 1105:40]
+      if (id_reg_stall) begin // @[src/main/scala/fpga/Core.scala 1106:24]
+        rrd_reg_is_trap <= id_reg_is_trap_delay; // @[src/main/scala/fpga/Core.scala 1134:29]
+      end else begin
+        rrd_reg_is_trap <= _id_csr_addr_T_2; // @[src/main/scala/fpga/Core.scala 1168:29]
+      end
     end
-    if (reset) begin // @[src/main/scala/fpga/Core.scala 202:38]
-      ex1_reg_wb_addr <= 5'h0; // @[src/main/scala/fpga/Core.scala 202:38]
-    end else if (_T_45) begin // @[src/main/scala/fpga/Core.scala 1223:20]
-      ex1_reg_wb_addr <= rrd_reg_wb_addr; // @[src/main/scala/fpga/Core.scala 1229:27]
+    if (reset) begin // @[src/main/scala/fpga/Core.scala 199:38]
+      rrd_reg_mcause <= 32'h0; // @[src/main/scala/fpga/Core.scala 199:38]
+    end else if (_if1_is_jump_T) begin // @[src/main/scala/fpga/Core.scala 1035:45]
+      rrd_reg_mcause <= _GEN_315;
+    end else if (~rrd_stall & ~ex2_stall) begin // @[src/main/scala/fpga/Core.scala 1105:40]
+      rrd_reg_mcause <= _GEN_315;
     end
     if (reset) begin // @[src/main/scala/fpga/Core.scala 203:38]
-      ex1_reg_op1_data <= 32'h0; // @[src/main/scala/fpga/Core.scala 203:38]
-    end else if (_T_45) begin // @[src/main/scala/fpga/Core.scala 1223:20]
+      ex1_reg_pc <= 31'h0; // @[src/main/scala/fpga/Core.scala 203:38]
+    end else if (_T_45) begin // @[src/main/scala/fpga/Core.scala 1252:20]
+      ex1_reg_pc <= rrd_reg_pc; // @[src/main/scala/fpga/Core.scala 1254:27]
+    end
+    if (reset) begin // @[src/main/scala/fpga/Core.scala 204:38]
+      ex1_reg_wb_addr <= 5'h0; // @[src/main/scala/fpga/Core.scala 204:38]
+    end else if (_T_45) begin // @[src/main/scala/fpga/Core.scala 1252:20]
+      ex1_reg_wb_addr <= rrd_reg_wb_addr; // @[src/main/scala/fpga/Core.scala 1258:27]
+    end
+    if (reset) begin // @[src/main/scala/fpga/Core.scala 205:38]
+      ex1_reg_op1_data <= 32'h0; // @[src/main/scala/fpga/Core.scala 205:38]
+    end else if (_T_45) begin // @[src/main/scala/fpga/Core.scala 1252:20]
       if (_rrd_op1_data_T_2) begin // @[src/main/scala/chisel3/util/Mux.scala 141:16]
         ex1_reg_op1_data <= 32'h0;
       end else if (_rrd_op1_data_T_6) begin // @[src/main/scala/chisel3/util/Mux.scala 141:16]
@@ -3931,9 +4112,9 @@ module Core(
         ex1_reg_op1_data <= _rrd_op1_data_T_18;
       end
     end
-    if (reset) begin // @[src/main/scala/fpga/Core.scala 204:38]
-      ex1_reg_op2_data <= 32'h0; // @[src/main/scala/fpga/Core.scala 204:38]
-    end else if (_T_45) begin // @[src/main/scala/fpga/Core.scala 1223:20]
+    if (reset) begin // @[src/main/scala/fpga/Core.scala 206:38]
+      ex1_reg_op2_data <= 32'h0; // @[src/main/scala/fpga/Core.scala 206:38]
+    end else if (_T_45) begin // @[src/main/scala/fpga/Core.scala 1252:20]
       if (_rrd_op2_data_T_2) begin // @[src/main/scala/chisel3/util/Mux.scala 141:16]
         ex1_reg_op2_data <= 32'h0;
       end else if (_rrd_op2_data_T_6) begin // @[src/main/scala/chisel3/util/Mux.scala 141:16]
@@ -3942,9 +4123,9 @@ module Core(
         ex1_reg_op2_data <= _rrd_op2_data_T_18;
       end
     end
-    if (reset) begin // @[src/main/scala/fpga/Core.scala 205:38]
-      ex1_reg_op3_data <= 32'h0; // @[src/main/scala/fpga/Core.scala 205:38]
-    end else if (_T_45) begin // @[src/main/scala/fpga/Core.scala 1223:20]
+    if (reset) begin // @[src/main/scala/fpga/Core.scala 207:38]
+      ex1_reg_op3_data <= 32'h0; // @[src/main/scala/fpga/Core.scala 207:38]
+    end else if (_T_45) begin // @[src/main/scala/fpga/Core.scala 1252:20]
       if (_rrd_op3_data_T) begin // @[src/main/scala/chisel3/util/Mux.scala 141:16]
         ex1_reg_op3_data <= 32'h0;
       end else if (_rrd_op3_data_T_1) begin // @[src/main/scala/chisel3/util/Mux.scala 141:16]
@@ -3953,527 +4134,537 @@ module Core(
         ex1_reg_op3_data <= _rrd_op3_data_T_17;
       end
     end
-    if (reset) begin // @[src/main/scala/fpga/Core.scala 206:38]
-      ex1_reg_exe_fun <= 4'h0; // @[src/main/scala/fpga/Core.scala 206:38]
-    end else if (_T_45) begin // @[src/main/scala/fpga/Core.scala 1223:20]
-      ex1_reg_exe_fun <= rrd_reg_exe_fun; // @[src/main/scala/fpga/Core.scala 1231:27]
+    if (reset) begin // @[src/main/scala/fpga/Core.scala 208:38]
+      ex1_reg_exe_fun <= 4'h0; // @[src/main/scala/fpga/Core.scala 208:38]
+    end else if (_T_45) begin // @[src/main/scala/fpga/Core.scala 1252:20]
+      ex1_reg_exe_fun <= rrd_reg_exe_fun; // @[src/main/scala/fpga/Core.scala 1260:27]
     end
-    if (reset) begin // @[src/main/scala/fpga/Core.scala 207:38]
-      ex1_reg_rf_wen <= 1'h0; // @[src/main/scala/fpga/Core.scala 207:38]
-    end else if (_T_45) begin // @[src/main/scala/fpga/Core.scala 1223:20]
-      if (ex_is_bubble) begin // @[src/main/scala/fpga/Core.scala 1230:33]
+    if (reset) begin // @[src/main/scala/fpga/Core.scala 209:38]
+      ex1_reg_rf_wen <= 1'h0; // @[src/main/scala/fpga/Core.scala 209:38]
+    end else if (_T_45) begin // @[src/main/scala/fpga/Core.scala 1252:20]
+      if (ex_is_bubble) begin // @[src/main/scala/fpga/Core.scala 1259:33]
         ex1_reg_rf_wen <= 1'h0;
       end else begin
         ex1_reg_rf_wen <= rrd_reg_rf_wen;
       end
     end
-    if (reset) begin // @[src/main/scala/fpga/Core.scala 208:38]
-      ex1_reg_wb_sel <= 3'h0; // @[src/main/scala/fpga/Core.scala 208:38]
-    end else if (_T_45) begin // @[src/main/scala/fpga/Core.scala 1223:20]
-      if (ex_is_bubble) begin // @[src/main/scala/fpga/Core.scala 1232:33]
+    if (reset) begin // @[src/main/scala/fpga/Core.scala 210:38]
+      ex1_reg_wb_sel <= 3'h0; // @[src/main/scala/fpga/Core.scala 210:38]
+    end else if (_T_45) begin // @[src/main/scala/fpga/Core.scala 1252:20]
+      if (ex_is_bubble) begin // @[src/main/scala/fpga/Core.scala 1261:33]
         ex1_reg_wb_sel <= 3'h0;
       end else begin
         ex1_reg_wb_sel <= rrd_reg_wb_sel;
       end
     end
-    if (reset) begin // @[src/main/scala/fpga/Core.scala 209:38]
-      ex1_reg_csr_addr <= 12'h0; // @[src/main/scala/fpga/Core.scala 209:38]
-    end else if (_T_45) begin // @[src/main/scala/fpga/Core.scala 1223:20]
-      ex1_reg_csr_addr <= rrd_reg_csr_addr; // @[src/main/scala/fpga/Core.scala 1234:27]
-    end
-    if (reset) begin // @[src/main/scala/fpga/Core.scala 210:38]
-      ex1_reg_csr_cmd <= 2'h0; // @[src/main/scala/fpga/Core.scala 210:38]
-    end else if (_T_45) begin // @[src/main/scala/fpga/Core.scala 1223:20]
-      ex1_reg_csr_cmd <= rrd_reg_csr_cmd; // @[src/main/scala/fpga/Core.scala 1235:27]
-    end
     if (reset) begin // @[src/main/scala/fpga/Core.scala 211:38]
-      ex1_reg_mem_w <= 3'h0; // @[src/main/scala/fpga/Core.scala 211:38]
-    end else if (_T_45) begin // @[src/main/scala/fpga/Core.scala 1223:20]
-      ex1_reg_mem_w <= rrd_reg_mem_w; // @[src/main/scala/fpga/Core.scala 1236:27]
+      ex1_reg_csr_addr <= 12'h0; // @[src/main/scala/fpga/Core.scala 211:38]
+    end else if (_T_45) begin // @[src/main/scala/fpga/Core.scala 1252:20]
+      ex1_reg_csr_addr <= rrd_reg_csr_addr; // @[src/main/scala/fpga/Core.scala 1263:27]
     end
     if (reset) begin // @[src/main/scala/fpga/Core.scala 212:38]
-      ex1_reg_is_j <= 1'h0; // @[src/main/scala/fpga/Core.scala 212:38]
-    end else if (_T_45) begin // @[src/main/scala/fpga/Core.scala 1223:20]
-      if (ex_is_bubble) begin // @[src/main/scala/fpga/Core.scala 1239:33]
+      ex1_reg_csr_cmd <= 2'h0; // @[src/main/scala/fpga/Core.scala 212:38]
+    end else if (_T_45) begin // @[src/main/scala/fpga/Core.scala 1252:20]
+      ex1_reg_csr_cmd <= rrd_reg_csr_cmd; // @[src/main/scala/fpga/Core.scala 1264:27]
+    end
+    if (reset) begin // @[src/main/scala/fpga/Core.scala 213:38]
+      ex1_reg_shamt <= 2'h0; // @[src/main/scala/fpga/Core.scala 213:38]
+    end else if (_T_45) begin // @[src/main/scala/fpga/Core.scala 1252:20]
+      ex1_reg_shamt <= rrd_reg_shamt; // @[src/main/scala/fpga/Core.scala 1265:27]
+    end
+    if (reset) begin // @[src/main/scala/fpga/Core.scala 214:38]
+      ex1_reg_op2op <= 1'h0; // @[src/main/scala/fpga/Core.scala 214:38]
+    end else if (_T_45) begin // @[src/main/scala/fpga/Core.scala 1252:20]
+      ex1_reg_op2op <= rrd_reg_op2op; // @[src/main/scala/fpga/Core.scala 1266:27]
+    end
+    if (reset) begin // @[src/main/scala/fpga/Core.scala 215:38]
+      ex1_reg_mem_w <= 3'h0; // @[src/main/scala/fpga/Core.scala 215:38]
+    end else if (_T_45) begin // @[src/main/scala/fpga/Core.scala 1252:20]
+      ex1_reg_mem_w <= rrd_reg_mem_w; // @[src/main/scala/fpga/Core.scala 1267:27]
+    end
+    if (reset) begin // @[src/main/scala/fpga/Core.scala 216:38]
+      ex1_reg_is_j <= 1'h0; // @[src/main/scala/fpga/Core.scala 216:38]
+    end else if (_T_45) begin // @[src/main/scala/fpga/Core.scala 1252:20]
+      if (ex_is_bubble) begin // @[src/main/scala/fpga/Core.scala 1270:33]
         ex1_reg_is_j <= 1'h0;
       end else begin
         ex1_reg_is_j <= rrd_reg_is_j;
       end
     end
-    if (reset) begin // @[src/main/scala/fpga/Core.scala 213:38]
-      ex1_reg_bp_taken <= 1'h0; // @[src/main/scala/fpga/Core.scala 213:38]
-    end else if (_T_45) begin // @[src/main/scala/fpga/Core.scala 1223:20]
-      if (ex_is_bubble) begin // @[src/main/scala/fpga/Core.scala 1240:33]
+    if (reset) begin // @[src/main/scala/fpga/Core.scala 217:38]
+      ex1_reg_bp_taken <= 1'h0; // @[src/main/scala/fpga/Core.scala 217:38]
+    end else if (_T_45) begin // @[src/main/scala/fpga/Core.scala 1252:20]
+      if (ex_is_bubble) begin // @[src/main/scala/fpga/Core.scala 1271:33]
         ex1_reg_bp_taken <= 1'h0;
       end else begin
         ex1_reg_bp_taken <= rrd_reg_bp_taken;
       end
     end
-    if (reset) begin // @[src/main/scala/fpga/Core.scala 214:38]
-      ex1_reg_bp_taken_pc <= 31'h0; // @[src/main/scala/fpga/Core.scala 214:38]
-    end else if (_T_45) begin // @[src/main/scala/fpga/Core.scala 1223:20]
-      ex1_reg_bp_taken_pc <= rrd_reg_bp_taken_pc; // @[src/main/scala/fpga/Core.scala 1241:27]
-    end
-    if (reset) begin // @[src/main/scala/fpga/Core.scala 215:38]
-      ex1_reg_bp_cnt <= 2'h0; // @[src/main/scala/fpga/Core.scala 215:38]
-    end else if (_T_45) begin // @[src/main/scala/fpga/Core.scala 1223:20]
-      ex1_reg_bp_cnt <= rrd_reg_bp_cnt; // @[src/main/scala/fpga/Core.scala 1242:27]
-    end
-    if (reset) begin // @[src/main/scala/fpga/Core.scala 216:38]
-      ex1_reg_is_half <= 1'h0; // @[src/main/scala/fpga/Core.scala 216:38]
-    end else if (_T_45) begin // @[src/main/scala/fpga/Core.scala 1223:20]
-      ex1_reg_is_half <= rrd_reg_is_half; // @[src/main/scala/fpga/Core.scala 1243:27]
-    end
-    if (reset) begin // @[src/main/scala/fpga/Core.scala 217:38]
-      ex1_reg_is_valid_inst <= 1'h0; // @[src/main/scala/fpga/Core.scala 217:38]
-    end else if (_T_45) begin // @[src/main/scala/fpga/Core.scala 1223:20]
-      ex1_reg_is_valid_inst <= rrd_reg_is_valid_inst & _ex1_reg_is_mret_T; // @[src/main/scala/fpga/Core.scala 1244:27]
-    end
     if (reset) begin // @[src/main/scala/fpga/Core.scala 218:38]
-      ex1_reg_is_trap <= 1'h0; // @[src/main/scala/fpga/Core.scala 218:38]
-    end else if (_T_45) begin // @[src/main/scala/fpga/Core.scala 1223:20]
-      if (ex_is_bubble) begin // @[src/main/scala/fpga/Core.scala 1245:33]
+      ex1_reg_bp_taken_pc <= 31'h0; // @[src/main/scala/fpga/Core.scala 218:38]
+    end else if (_T_45) begin // @[src/main/scala/fpga/Core.scala 1252:20]
+      ex1_reg_bp_taken_pc <= rrd_reg_bp_taken_pc; // @[src/main/scala/fpga/Core.scala 1272:27]
+    end
+    if (reset) begin // @[src/main/scala/fpga/Core.scala 219:38]
+      ex1_reg_bp_cnt <= 2'h0; // @[src/main/scala/fpga/Core.scala 219:38]
+    end else if (_T_45) begin // @[src/main/scala/fpga/Core.scala 1252:20]
+      ex1_reg_bp_cnt <= rrd_reg_bp_cnt; // @[src/main/scala/fpga/Core.scala 1273:27]
+    end
+    if (reset) begin // @[src/main/scala/fpga/Core.scala 220:38]
+      ex1_reg_is_half <= 1'h0; // @[src/main/scala/fpga/Core.scala 220:38]
+    end else if (_T_45) begin // @[src/main/scala/fpga/Core.scala 1252:20]
+      ex1_reg_is_half <= rrd_reg_is_half; // @[src/main/scala/fpga/Core.scala 1274:27]
+    end
+    if (reset) begin // @[src/main/scala/fpga/Core.scala 221:38]
+      ex1_reg_is_valid_inst <= 1'h0; // @[src/main/scala/fpga/Core.scala 221:38]
+    end else if (_T_45) begin // @[src/main/scala/fpga/Core.scala 1252:20]
+      ex1_reg_is_valid_inst <= rrd_reg_is_valid_inst & _ex1_reg_is_mret_T; // @[src/main/scala/fpga/Core.scala 1275:27]
+    end
+    if (reset) begin // @[src/main/scala/fpga/Core.scala 222:38]
+      ex1_reg_is_trap <= 1'h0; // @[src/main/scala/fpga/Core.scala 222:38]
+    end else if (_T_45) begin // @[src/main/scala/fpga/Core.scala 1252:20]
+      if (ex_is_bubble) begin // @[src/main/scala/fpga/Core.scala 1276:33]
         ex1_reg_is_trap <= 1'h0;
       end else begin
         ex1_reg_is_trap <= rrd_reg_is_trap;
       end
     end
-    if (reset) begin // @[src/main/scala/fpga/Core.scala 219:38]
-      ex1_reg_is_mret <= 1'h0; // @[src/main/scala/fpga/Core.scala 219:38]
-    end else if (_T_45) begin // @[src/main/scala/fpga/Core.scala 1223:20]
-      ex1_reg_is_mret <= ~ex_is_bubble & (rrd_reg_exe_fun == 4'hf & rrd_reg_mem_w == 3'h3); // @[src/main/scala/fpga/Core.scala 1237:27]
-    end
-    if (reset) begin // @[src/main/scala/fpga/Core.scala 220:38]
-      ex1_reg_mcause <= 32'h0; // @[src/main/scala/fpga/Core.scala 220:38]
-    end else if (_T_45) begin // @[src/main/scala/fpga/Core.scala 1223:20]
-      ex1_reg_mcause <= rrd_reg_mcause; // @[src/main/scala/fpga/Core.scala 1246:27]
-    end
-    if (reset) begin // @[src/main/scala/fpga/Core.scala 222:38]
-      ex1_reg_mem_use_reg <= 1'h0; // @[src/main/scala/fpga/Core.scala 222:38]
-    end else if (_T_45) begin // @[src/main/scala/fpga/Core.scala 1223:20]
-      ex1_reg_mem_use_reg <= rrd_mem_use_reg; // @[src/main/scala/fpga/Core.scala 1248:27]
-    end
     if (reset) begin // @[src/main/scala/fpga/Core.scala 223:38]
-      ex1_reg_inst2_use_reg <= 1'h0; // @[src/main/scala/fpga/Core.scala 223:38]
-    end else if (_T_45) begin // @[src/main/scala/fpga/Core.scala 1223:20]
-      ex1_reg_inst2_use_reg <= rrd_inst2_use_reg; // @[src/main/scala/fpga/Core.scala 1249:27]
+      ex1_reg_is_mret <= 1'h0; // @[src/main/scala/fpga/Core.scala 223:38]
+    end else if (_T_45) begin // @[src/main/scala/fpga/Core.scala 1252:20]
+      ex1_reg_is_mret <= ~ex_is_bubble & (rrd_reg_exe_fun == 4'hf & rrd_reg_mem_w == 3'h3); // @[src/main/scala/fpga/Core.scala 1268:27]
     end
     if (reset) begin // @[src/main/scala/fpga/Core.scala 224:38]
-      ex1_reg_inst3_use_reg <= 1'h0; // @[src/main/scala/fpga/Core.scala 224:38]
-    end else if (_T_45) begin // @[src/main/scala/fpga/Core.scala 1223:20]
-      ex1_reg_inst3_use_reg <= rrd_inst3_use_reg; // @[src/main/scala/fpga/Core.scala 1250:27]
+      ex1_reg_mcause <= 32'h0; // @[src/main/scala/fpga/Core.scala 224:38]
+    end else if (_T_45) begin // @[src/main/scala/fpga/Core.scala 1252:20]
+      ex1_reg_mcause <= rrd_reg_mcause; // @[src/main/scala/fpga/Core.scala 1277:27]
     end
-    if (reset) begin // @[src/main/scala/fpga/Core.scala 225:38]
-      ex1_reg_is_br <= 1'h0; // @[src/main/scala/fpga/Core.scala 225:38]
-    end else if (_T_45) begin // @[src/main/scala/fpga/Core.scala 1223:20]
-      if (ex_is_bubble) begin // @[src/main/scala/fpga/Core.scala 1238:33]
+    if (reset) begin // @[src/main/scala/fpga/Core.scala 226:38]
+      ex1_reg_mem_use_reg <= 1'h0; // @[src/main/scala/fpga/Core.scala 226:38]
+    end else if (_T_45) begin // @[src/main/scala/fpga/Core.scala 1252:20]
+      ex1_reg_mem_use_reg <= rrd_mem_use_reg; // @[src/main/scala/fpga/Core.scala 1279:27]
+    end
+    if (reset) begin // @[src/main/scala/fpga/Core.scala 227:38]
+      ex1_reg_inst2_use_reg <= 1'h0; // @[src/main/scala/fpga/Core.scala 227:38]
+    end else if (_T_45) begin // @[src/main/scala/fpga/Core.scala 1252:20]
+      ex1_reg_inst2_use_reg <= rrd_inst2_use_reg; // @[src/main/scala/fpga/Core.scala 1280:27]
+    end
+    if (reset) begin // @[src/main/scala/fpga/Core.scala 228:38]
+      ex1_reg_inst3_use_reg <= 1'h0; // @[src/main/scala/fpga/Core.scala 228:38]
+    end else if (_T_45) begin // @[src/main/scala/fpga/Core.scala 1252:20]
+      ex1_reg_inst3_use_reg <= rrd_inst3_use_reg; // @[src/main/scala/fpga/Core.scala 1281:27]
+    end
+    if (reset) begin // @[src/main/scala/fpga/Core.scala 229:38]
+      ex1_reg_is_br <= 1'h0; // @[src/main/scala/fpga/Core.scala 229:38]
+    end else if (_T_45) begin // @[src/main/scala/fpga/Core.scala 1252:20]
+      if (ex_is_bubble) begin // @[src/main/scala/fpga/Core.scala 1269:33]
         ex1_reg_is_br <= 1'h0;
       end else begin
         ex1_reg_is_br <= rrd_reg_is_br;
       end
     end
-    if (reset) begin // @[src/main/scala/fpga/Core.scala 226:38]
-      ex1_reg_direct_jbr_pc <= 31'h0; // @[src/main/scala/fpga/Core.scala 226:38]
-    end else if (_T_45) begin // @[src/main/scala/fpga/Core.scala 1223:20]
-      ex1_reg_direct_jbr_pc <= rrd_direct_jbr_pc; // @[src/main/scala/fpga/Core.scala 1233:27]
-    end
-    if (reset) begin // @[src/main/scala/fpga/Core.scala 229:38]
-      ex2_reg_pc <= 31'h0; // @[src/main/scala/fpga/Core.scala 229:38]
-    end else if (_T_45) begin // @[src/main/scala/fpga/Core.scala 1507:21]
-      ex2_reg_pc <= ex1_reg_pc; // @[src/main/scala/fpga/Core.scala 1508:24]
-    end
     if (reset) begin // @[src/main/scala/fpga/Core.scala 230:38]
-      ex2_reg_wb_addr <= 5'h0; // @[src/main/scala/fpga/Core.scala 230:38]
-    end else if (_T_45) begin // @[src/main/scala/fpga/Core.scala 1507:21]
-      ex2_reg_wb_addr <= ex1_reg_wb_addr; // @[src/main/scala/fpga/Core.scala 1509:24]
-    end
-    if (reset) begin // @[src/main/scala/fpga/Core.scala 231:38]
-      ex2_reg_mullu <= 48'h0; // @[src/main/scala/fpga/Core.scala 231:38]
-    end else if (_T_45) begin // @[src/main/scala/fpga/Core.scala 1507:21]
-      ex2_reg_mullu <= ex1_mullu; // @[src/main/scala/fpga/Core.scala 1511:24]
-    end
-    if (reset) begin // @[src/main/scala/fpga/Core.scala 232:38]
-      ex2_reg_mulls <= 32'h0; // @[src/main/scala/fpga/Core.scala 232:38]
-    end else if (_T_45) begin // @[src/main/scala/fpga/Core.scala 1507:21]
-      ex2_reg_mulls <= ex1_mulls; // @[src/main/scala/fpga/Core.scala 1512:24]
+      ex1_reg_direct_jbr_pc <= 31'h0; // @[src/main/scala/fpga/Core.scala 230:38]
+    end else if (_T_45) begin // @[src/main/scala/fpga/Core.scala 1252:20]
+      ex1_reg_direct_jbr_pc <= rrd_direct_jbr_pc; // @[src/main/scala/fpga/Core.scala 1262:27]
     end
     if (reset) begin // @[src/main/scala/fpga/Core.scala 233:38]
-      ex2_reg_mulhuu <= 48'h0; // @[src/main/scala/fpga/Core.scala 233:38]
-    end else if (_T_45) begin // @[src/main/scala/fpga/Core.scala 1507:21]
-      ex2_reg_mulhuu <= ex1_mulhuu; // @[src/main/scala/fpga/Core.scala 1513:24]
+      ex2_reg_pc <= 31'h0; // @[src/main/scala/fpga/Core.scala 233:38]
+    end else if (_T_45) begin // @[src/main/scala/fpga/Core.scala 1540:21]
+      ex2_reg_pc <= ex1_reg_pc; // @[src/main/scala/fpga/Core.scala 1541:24]
     end
     if (reset) begin // @[src/main/scala/fpga/Core.scala 234:38]
-      ex2_reg_mulhss <= 48'sh0; // @[src/main/scala/fpga/Core.scala 234:38]
-    end else if (_T_45) begin // @[src/main/scala/fpga/Core.scala 1507:21]
-      ex2_reg_mulhss <= ex1_mulhss; // @[src/main/scala/fpga/Core.scala 1514:24]
+      ex2_reg_wb_addr <= 5'h0; // @[src/main/scala/fpga/Core.scala 234:38]
+    end else if (_T_45) begin // @[src/main/scala/fpga/Core.scala 1540:21]
+      ex2_reg_wb_addr <= ex1_reg_wb_addr; // @[src/main/scala/fpga/Core.scala 1542:24]
     end
     if (reset) begin // @[src/main/scala/fpga/Core.scala 235:38]
-      ex2_reg_mulhsu <= 48'sh0; // @[src/main/scala/fpga/Core.scala 235:38]
-    end else if (_T_45) begin // @[src/main/scala/fpga/Core.scala 1507:21]
-      ex2_reg_mulhsu <= ex1_mulhsu; // @[src/main/scala/fpga/Core.scala 1515:24]
+      ex2_reg_mullu <= 48'h0; // @[src/main/scala/fpga/Core.scala 235:38]
+    end else if (_T_45) begin // @[src/main/scala/fpga/Core.scala 1540:21]
+      ex2_reg_mullu <= ex1_mullu; // @[src/main/scala/fpga/Core.scala 1544:24]
     end
     if (reset) begin // @[src/main/scala/fpga/Core.scala 236:38]
-      ex2_reg_exe_fun <= 4'h0; // @[src/main/scala/fpga/Core.scala 236:38]
-    end else if (_T_45) begin // @[src/main/scala/fpga/Core.scala 1507:21]
-      ex2_reg_exe_fun <= ex1_reg_exe_fun; // @[src/main/scala/fpga/Core.scala 1517:24]
+      ex2_reg_mulls <= 32'h0; // @[src/main/scala/fpga/Core.scala 236:38]
+    end else if (_T_45) begin // @[src/main/scala/fpga/Core.scala 1540:21]
+      ex2_reg_mulls <= ex1_mulls; // @[src/main/scala/fpga/Core.scala 1545:24]
     end
     if (reset) begin // @[src/main/scala/fpga/Core.scala 237:38]
-      ex2_reg_rf_wen <= 1'h0; // @[src/main/scala/fpga/Core.scala 237:38]
-    end else if (mem2_dram_stall & ~ex2_reg_div_stall) begin // @[src/main/scala/fpga/Core.scala 1541:43]
-      ex2_reg_rf_wen <= 1'h0; // @[src/main/scala/fpga/Core.scala 1543:27]
-    end else if (_T_45) begin // @[src/main/scala/fpga/Core.scala 1507:21]
-      ex2_reg_rf_wen <= ex1_en & ex1_reg_rf_wen; // @[src/main/scala/fpga/Core.scala 1518:24]
+      ex2_reg_mulhuu <= 48'h0; // @[src/main/scala/fpga/Core.scala 237:38]
+    end else if (_T_45) begin // @[src/main/scala/fpga/Core.scala 1540:21]
+      ex2_reg_mulhuu <= ex1_mulhuu; // @[src/main/scala/fpga/Core.scala 1546:24]
     end
     if (reset) begin // @[src/main/scala/fpga/Core.scala 238:38]
-      ex2_reg_wb_sel <= 3'h0; // @[src/main/scala/fpga/Core.scala 238:38]
-    end else if (_T_45) begin // @[src/main/scala/fpga/Core.scala 1507:21]
-      ex2_reg_wb_sel <= ex1_reg_wb_sel; // @[src/main/scala/fpga/Core.scala 1519:24]
+      ex2_reg_mulhss <= 48'sh0; // @[src/main/scala/fpga/Core.scala 238:38]
+    end else if (_T_45) begin // @[src/main/scala/fpga/Core.scala 1540:21]
+      ex2_reg_mulhss <= ex1_mulhss; // @[src/main/scala/fpga/Core.scala 1547:24]
     end
     if (reset) begin // @[src/main/scala/fpga/Core.scala 239:38]
-      ex2_reg_alu_out <= 32'h0; // @[src/main/scala/fpga/Core.scala 239:38]
-    end else if (_T_45) begin // @[src/main/scala/fpga/Core.scala 1507:21]
+      ex2_reg_mulhsu <= 48'sh0; // @[src/main/scala/fpga/Core.scala 239:38]
+    end else if (_T_45) begin // @[src/main/scala/fpga/Core.scala 1540:21]
+      ex2_reg_mulhsu <= ex1_mulhsu; // @[src/main/scala/fpga/Core.scala 1548:24]
+    end
+    if (reset) begin // @[src/main/scala/fpga/Core.scala 240:38]
+      ex2_reg_exe_fun <= 4'h0; // @[src/main/scala/fpga/Core.scala 240:38]
+    end else if (_T_45) begin // @[src/main/scala/fpga/Core.scala 1540:21]
+      ex2_reg_exe_fun <= ex1_reg_exe_fun; // @[src/main/scala/fpga/Core.scala 1550:24]
+    end
+    if (reset) begin // @[src/main/scala/fpga/Core.scala 241:38]
+      ex2_reg_rf_wen <= 1'h0; // @[src/main/scala/fpga/Core.scala 241:38]
+    end else if (mem2_dram_stall & ~ex2_reg_div_stall) begin // @[src/main/scala/fpga/Core.scala 1574:43]
+      ex2_reg_rf_wen <= 1'h0; // @[src/main/scala/fpga/Core.scala 1576:27]
+    end else if (_T_45) begin // @[src/main/scala/fpga/Core.scala 1540:21]
+      ex2_reg_rf_wen <= ex1_en & ex1_reg_rf_wen; // @[src/main/scala/fpga/Core.scala 1551:24]
+    end
+    if (reset) begin // @[src/main/scala/fpga/Core.scala 242:38]
+      ex2_reg_wb_sel <= 3'h0; // @[src/main/scala/fpga/Core.scala 242:38]
+    end else if (_T_45) begin // @[src/main/scala/fpga/Core.scala 1540:21]
+      ex2_reg_wb_sel <= ex1_reg_wb_sel; // @[src/main/scala/fpga/Core.scala 1552:24]
+    end
+    if (reset) begin // @[src/main/scala/fpga/Core.scala 243:38]
+      ex2_reg_alu_out <= 32'h0; // @[src/main/scala/fpga/Core.scala 243:38]
+    end else if (_T_45) begin // @[src/main/scala/fpga/Core.scala 1540:21]
       if (_ex1_alu_out_T) begin // @[src/main/scala/chisel3/util/Mux.scala 141:16]
         ex2_reg_alu_out <= ex1_add_out;
       end else if (_ex1_alu_out_T_1) begin // @[src/main/scala/chisel3/util/Mux.scala 141:16]
         ex2_reg_alu_out <= _ex1_alu_out_T_3;
       end else begin
-        ex2_reg_alu_out <= _ex1_alu_out_T_51;
+        ex2_reg_alu_out <= _ex1_alu_out_T_80;
       end
     end
-    if (reset) begin // @[src/main/scala/fpga/Core.scala 240:38]
-      ex2_reg_pc_bit_out <= 32'h0; // @[src/main/scala/fpga/Core.scala 240:38]
-    end else if (_T_45) begin // @[src/main/scala/fpga/Core.scala 1507:21]
+    if (reset) begin // @[src/main/scala/fpga/Core.scala 244:38]
+      ex2_reg_pc_bit_out <= 32'h0; // @[src/main/scala/fpga/Core.scala 244:38]
+    end else if (_T_45) begin // @[src/main/scala/fpga/Core.scala 1540:21]
       if (_ex1_pc_bit_out_T) begin // @[src/main/scala/chisel3/util/Mux.scala 141:16]
         ex2_reg_pc_bit_out <= _ex1_pc_bit_out_T_1;
-      end else if (_ex1_alu_out_T_29) begin // @[src/main/scala/chisel3/util/Mux.scala 141:16]
+      end else if (_ex1_alu_out_T_38) begin // @[src/main/scala/chisel3/util/Mux.scala 141:16]
         ex2_reg_pc_bit_out <= _ex1_pc_bit_out_T_4;
       end else begin
         ex2_reg_pc_bit_out <= _ex1_pc_bit_out_T_753;
       end
     end
-    if (reset) begin // @[src/main/scala/fpga/Core.scala 241:38]
-      ex2_reg_is_valid_inst <= 1'h0; // @[src/main/scala/fpga/Core.scala 241:38]
-    end else if (mem2_dram_stall & ~ex2_reg_div_stall) begin // @[src/main/scala/fpga/Core.scala 1541:43]
-      ex2_reg_is_valid_inst <= 1'h0; // @[src/main/scala/fpga/Core.scala 1545:27]
-    end else if (_T_45) begin // @[src/main/scala/fpga/Core.scala 1507:21]
-      ex2_reg_is_valid_inst <= ex1_is_valid_inst; // @[src/main/scala/fpga/Core.scala 1521:27]
-    end
-    if (reset) begin // @[src/main/scala/fpga/Core.scala 244:38]
-      ex2_reg_divrem <= 1'h0; // @[src/main/scala/fpga/Core.scala 244:38]
-    end else if (mem2_dram_stall & ~ex2_reg_div_stall) begin // @[src/main/scala/fpga/Core.scala 1541:43]
-      ex2_reg_divrem <= 1'h0; // @[src/main/scala/fpga/Core.scala 1544:27]
-    end else if (_T_45) begin // @[src/main/scala/fpga/Core.scala 1507:21]
-      ex2_reg_divrem <= ex1_divrem & ex1_en; // @[src/main/scala/fpga/Core.scala 1522:31]
-    end
     if (reset) begin // @[src/main/scala/fpga/Core.scala 245:38]
-      ex2_reg_sign_op1 <= 1'h0; // @[src/main/scala/fpga/Core.scala 245:38]
-    end else if (_T_45) begin // @[src/main/scala/fpga/Core.scala 1507:21]
-      ex2_reg_sign_op1 <= ex1_sign_op1; // @[src/main/scala/fpga/Core.scala 1525:31]
-    end
-    if (reset) begin // @[src/main/scala/fpga/Core.scala 246:38]
-      ex2_reg_sign_op12 <= 1'h0; // @[src/main/scala/fpga/Core.scala 246:38]
-    end else if (_T_45) begin // @[src/main/scala/fpga/Core.scala 1507:21]
-      ex2_reg_sign_op12 <= ex1_sign_op12; // @[src/main/scala/fpga/Core.scala 1526:31]
-    end
-    if (reset) begin // @[src/main/scala/fpga/Core.scala 247:38]
-      ex2_reg_zero_op2 <= 1'h0; // @[src/main/scala/fpga/Core.scala 247:38]
-    end else if (_T_45) begin // @[src/main/scala/fpga/Core.scala 1507:21]
-      ex2_reg_zero_op2 <= ex1_zero_op2; // @[src/main/scala/fpga/Core.scala 1527:31]
+      ex2_reg_is_valid_inst <= 1'h0; // @[src/main/scala/fpga/Core.scala 245:38]
+    end else if (mem2_dram_stall & ~ex2_reg_div_stall) begin // @[src/main/scala/fpga/Core.scala 1574:43]
+      ex2_reg_is_valid_inst <= 1'h0; // @[src/main/scala/fpga/Core.scala 1578:27]
+    end else if (_T_45) begin // @[src/main/scala/fpga/Core.scala 1540:21]
+      ex2_reg_is_valid_inst <= ex1_is_valid_inst; // @[src/main/scala/fpga/Core.scala 1554:27]
     end
     if (reset) begin // @[src/main/scala/fpga/Core.scala 248:38]
-      ex2_reg_init_dividend <= 37'h0; // @[src/main/scala/fpga/Core.scala 248:38]
-    end else if (_T_45) begin // @[src/main/scala/fpga/Core.scala 1507:21]
-      if (_ex1_pc_bit_out_T_301 | _ex1_pc_bit_out_T_306) begin // @[src/main/scala/fpga/Core.scala 1316:69]
-        if (ex1_reg_op1_data[31]) begin // @[src/main/scala/fpga/Core.scala 1318:49]
-          ex2_reg_init_dividend <= _ex1_dividend_T_5; // @[src/main/scala/fpga/Core.scala 1319:20]
-        end else begin
-          ex2_reg_init_dividend <= _ex1_dividend_T_8; // @[src/main/scala/fpga/Core.scala 1321:20]
-        end
-      end else if (_ex1_pc_bit_out_T_309 | _ex1_alu_out_T_38) begin // @[src/main/scala/fpga/Core.scala 1331:77]
-        ex2_reg_init_dividend <= _ex1_dividend_T_8; // @[src/main/scala/fpga/Core.scala 1333:18]
-      end else begin
-        ex2_reg_init_dividend <= 37'h0; // @[src/main/scala/fpga/Core.scala 1312:33]
-      end
+      ex2_reg_divrem <= 1'h0; // @[src/main/scala/fpga/Core.scala 248:38]
+    end else if (mem2_dram_stall & ~ex2_reg_div_stall) begin // @[src/main/scala/fpga/Core.scala 1574:43]
+      ex2_reg_divrem <= 1'h0; // @[src/main/scala/fpga/Core.scala 1577:27]
+    end else if (_T_45) begin // @[src/main/scala/fpga/Core.scala 1540:21]
+      ex2_reg_divrem <= ex1_divrem & ex1_en; // @[src/main/scala/fpga/Core.scala 1555:31]
     end
     if (reset) begin // @[src/main/scala/fpga/Core.scala 249:38]
-      ex2_reg_init_divisor <= 32'h0; // @[src/main/scala/fpga/Core.scala 249:38]
-    end else if (_T_45) begin // @[src/main/scala/fpga/Core.scala 1507:21]
-      if (_ex1_pc_bit_out_T_301 | _ex1_pc_bit_out_T_306) begin // @[src/main/scala/fpga/Core.scala 1316:69]
-        if (ex1_reg_op2_data[31]) begin // @[src/main/scala/fpga/Core.scala 1324:49]
-          ex2_reg_init_divisor <= _ex1_divisor_T_2; // @[src/main/scala/fpga/Core.scala 1325:19]
-        end else begin
-          ex2_reg_init_divisor <= ex1_reg_op2_data; // @[src/main/scala/fpga/Core.scala 1328:19]
-        end
-      end else if (_ex1_pc_bit_out_T_309 | _ex1_alu_out_T_38) begin // @[src/main/scala/fpga/Core.scala 1331:77]
-        ex2_reg_init_divisor <= ex1_reg_op2_data; // @[src/main/scala/fpga/Core.scala 1335:17]
-      end else begin
-        ex2_reg_init_divisor <= 32'h0; // @[src/main/scala/fpga/Core.scala 1313:32]
-      end
+      ex2_reg_sign_op1 <= 1'h0; // @[src/main/scala/fpga/Core.scala 249:38]
+    end else if (_T_45) begin // @[src/main/scala/fpga/Core.scala 1540:21]
+      ex2_reg_sign_op1 <= ex1_sign_op1; // @[src/main/scala/fpga/Core.scala 1558:31]
     end
     if (reset) begin // @[src/main/scala/fpga/Core.scala 250:38]
-      ex2_reg_orig_dividend <= 32'h0; // @[src/main/scala/fpga/Core.scala 250:38]
-    end else if (_T_45) begin // @[src/main/scala/fpga/Core.scala 1507:21]
-      ex2_reg_orig_dividend <= ex1_reg_op1_data; // @[src/main/scala/fpga/Core.scala 1530:31]
+      ex2_reg_sign_op12 <= 1'h0; // @[src/main/scala/fpga/Core.scala 250:38]
+    end else if (_T_45) begin // @[src/main/scala/fpga/Core.scala 1540:21]
+      ex2_reg_sign_op12 <= ex1_sign_op12; // @[src/main/scala/fpga/Core.scala 1559:31]
     end
     if (reset) begin // @[src/main/scala/fpga/Core.scala 251:38]
-      ex2_reg_inst3_use_reg <= 1'h0; // @[src/main/scala/fpga/Core.scala 251:38]
-    end else if (mem2_dram_stall & ~ex2_reg_div_stall) begin // @[src/main/scala/fpga/Core.scala 1541:43]
-      ex2_reg_inst3_use_reg <= 1'h0; // @[src/main/scala/fpga/Core.scala 1546:27]
-    end else if (_T_45) begin // @[src/main/scala/fpga/Core.scala 1507:21]
-      ex2_reg_inst3_use_reg <= ex1_reg_inst3_use_reg & ex1_en; // @[src/main/scala/fpga/Core.scala 1531:31]
+      ex2_reg_zero_op2 <= 1'h0; // @[src/main/scala/fpga/Core.scala 251:38]
+    end else if (_T_45) begin // @[src/main/scala/fpga/Core.scala 1540:21]
+      ex2_reg_zero_op2 <= ex1_zero_op2; // @[src/main/scala/fpga/Core.scala 1560:31]
     end
     if (reset) begin // @[src/main/scala/fpga/Core.scala 252:38]
-      ex2_reg_no_mem <= 1'h0; // @[src/main/scala/fpga/Core.scala 252:38]
-    end else if (_T_45) begin // @[src/main/scala/fpga/Core.scala 1507:21]
-      ex2_reg_no_mem <= _ex1_fw_en_next_T_2 & ex1_reg_wb_sel != 3'h4 & ex1_reg_wb_sel != 3'h7 & ex1_en; // @[src/main/scala/fpga/Core.scala 1520:24]
+      ex2_reg_init_dividend <= 37'h0; // @[src/main/scala/fpga/Core.scala 252:38]
+    end else if (_T_45) begin // @[src/main/scala/fpga/Core.scala 1540:21]
+      if (_ex1_alu_out_T_62 | _ex1_alu_out_T_46) begin // @[src/main/scala/fpga/Core.scala 1349:69]
+        if (ex1_reg_op1_data[31]) begin // @[src/main/scala/fpga/Core.scala 1351:49]
+          ex2_reg_init_dividend <= _ex1_dividend_T_5; // @[src/main/scala/fpga/Core.scala 1352:20]
+        end else begin
+          ex2_reg_init_dividend <= _ex1_dividend_T_8; // @[src/main/scala/fpga/Core.scala 1354:20]
+        end
+      end else if (_ex1_alu_out_T_57 | _ex1_alu_out_T_52) begin // @[src/main/scala/fpga/Core.scala 1364:77]
+        ex2_reg_init_dividend <= _ex1_dividend_T_8; // @[src/main/scala/fpga/Core.scala 1366:18]
+      end else begin
+        ex2_reg_init_dividend <= 37'h0; // @[src/main/scala/fpga/Core.scala 1345:33]
+      end
     end
-    if (reset) begin // @[src/main/scala/fpga/Core.scala 255:39]
-      mem1_reg_mem_wstrb <= 7'h0; // @[src/main/scala/fpga/Core.scala 255:39]
-    end else if (_T_45) begin // @[src/main/scala/fpga/Core.scala 1762:21]
-      mem1_reg_mem_wstrb <= _mem1_reg_mem_wstrb_T_9; // @[src/main/scala/fpga/Core.scala 1763:28]
+    if (reset) begin // @[src/main/scala/fpga/Core.scala 253:38]
+      ex2_reg_init_divisor <= 32'h0; // @[src/main/scala/fpga/Core.scala 253:38]
+    end else if (_T_45) begin // @[src/main/scala/fpga/Core.scala 1540:21]
+      if (_ex1_alu_out_T_62 | _ex1_alu_out_T_46) begin // @[src/main/scala/fpga/Core.scala 1349:69]
+        if (ex1_reg_op2_data[31]) begin // @[src/main/scala/fpga/Core.scala 1357:49]
+          ex2_reg_init_divisor <= _ex1_divisor_T_2; // @[src/main/scala/fpga/Core.scala 1358:19]
+        end else begin
+          ex2_reg_init_divisor <= ex1_reg_op2_data; // @[src/main/scala/fpga/Core.scala 1361:19]
+        end
+      end else if (_ex1_alu_out_T_57 | _ex1_alu_out_T_52) begin // @[src/main/scala/fpga/Core.scala 1364:77]
+        ex2_reg_init_divisor <= ex1_reg_op2_data; // @[src/main/scala/fpga/Core.scala 1368:17]
+      end else begin
+        ex2_reg_init_divisor <= 32'h0; // @[src/main/scala/fpga/Core.scala 1346:32]
+      end
     end
-    if (reset) begin // @[src/main/scala/fpga/Core.scala 256:39]
-      mem1_reg_wdata <= 32'h0; // @[src/main/scala/fpga/Core.scala 256:39]
-    end else if (_T_45) begin // @[src/main/scala/fpga/Core.scala 1762:21]
-      mem1_reg_wdata <= _mem1_reg_wdata_T_4[55:24]; // @[src/main/scala/fpga/Core.scala 1772:28]
+    if (reset) begin // @[src/main/scala/fpga/Core.scala 254:38]
+      ex2_reg_orig_dividend <= 32'h0; // @[src/main/scala/fpga/Core.scala 254:38]
+    end else if (_T_45) begin // @[src/main/scala/fpga/Core.scala 1540:21]
+      ex2_reg_orig_dividend <= ex1_reg_op1_data; // @[src/main/scala/fpga/Core.scala 1563:31]
     end
-    if (reset) begin // @[src/main/scala/fpga/Core.scala 257:39]
-      mem1_reg_mem_w <= 3'h0; // @[src/main/scala/fpga/Core.scala 257:39]
-    end else if (_T_45) begin // @[src/main/scala/fpga/Core.scala 1762:21]
-      mem1_reg_mem_w <= ex1_reg_mem_w; // @[src/main/scala/fpga/Core.scala 1773:28]
+    if (reset) begin // @[src/main/scala/fpga/Core.scala 255:38]
+      ex2_reg_inst3_use_reg <= 1'h0; // @[src/main/scala/fpga/Core.scala 255:38]
+    end else if (mem2_dram_stall & ~ex2_reg_div_stall) begin // @[src/main/scala/fpga/Core.scala 1574:43]
+      ex2_reg_inst3_use_reg <= 1'h0; // @[src/main/scala/fpga/Core.scala 1579:27]
+    end else if (_T_45) begin // @[src/main/scala/fpga/Core.scala 1540:21]
+      ex2_reg_inst3_use_reg <= ex1_reg_inst3_use_reg & ex1_en; // @[src/main/scala/fpga/Core.scala 1564:31]
+    end
+    if (reset) begin // @[src/main/scala/fpga/Core.scala 256:38]
+      ex2_reg_no_mem <= 1'h0; // @[src/main/scala/fpga/Core.scala 256:38]
+    end else if (_T_45) begin // @[src/main/scala/fpga/Core.scala 1540:21]
+      ex2_reg_no_mem <= _ex1_fw_en_next_T_2 & ex1_reg_wb_sel != 3'h4 & ex1_reg_wb_sel != 3'h7 & ex1_en; // @[src/main/scala/fpga/Core.scala 1553:24]
+    end
+    if (reset) begin // @[src/main/scala/fpga/Core.scala 259:39]
+      mem1_reg_mem_wstrb <= 7'h0; // @[src/main/scala/fpga/Core.scala 259:39]
+    end else if (_T_45) begin // @[src/main/scala/fpga/Core.scala 1795:21]
+      mem1_reg_mem_wstrb <= _mem1_reg_mem_wstrb_T_9; // @[src/main/scala/fpga/Core.scala 1796:28]
     end
     if (reset) begin // @[src/main/scala/fpga/Core.scala 260:39]
-      mem1_reg_is_mem_load <= 1'h0; // @[src/main/scala/fpga/Core.scala 260:39]
-    end else if (_T_45) begin // @[src/main/scala/fpga/Core.scala 1762:21]
-      mem1_reg_is_mem_load <= ~mem1_is_dram & _mem1_reg_unaligned_T_12 & ex1_en; // @[src/main/scala/fpga/Core.scala 1777:28]
+      mem1_reg_wdata <= 32'h0; // @[src/main/scala/fpga/Core.scala 260:39]
+    end else if (_T_45) begin // @[src/main/scala/fpga/Core.scala 1795:21]
+      mem1_reg_wdata <= _mem1_reg_wdata_T_4[55:24]; // @[src/main/scala/fpga/Core.scala 1805:28]
     end
     if (reset) begin // @[src/main/scala/fpga/Core.scala 261:39]
-      mem1_reg_is_mem_store <= 1'h0; // @[src/main/scala/fpga/Core.scala 261:39]
-    end else if (_T_45) begin // @[src/main/scala/fpga/Core.scala 1762:21]
-      mem1_reg_is_mem_store <= _mem1_reg_is_mem_load_T & _mem1_reg_unaligned_T_13 & ex1_en; // @[src/main/scala/fpga/Core.scala 1778:28]
-    end
-    if (reset) begin // @[src/main/scala/fpga/Core.scala 262:39]
-      mem1_reg_is_dram_load <= 1'h0; // @[src/main/scala/fpga/Core.scala 262:39]
-    end else if (_T_45) begin // @[src/main/scala/fpga/Core.scala 1762:21]
-      mem1_reg_is_dram_load <= mem1_is_dram & _mem1_reg_unaligned_T_12 & ex1_en; // @[src/main/scala/fpga/Core.scala 1779:28]
-    end
-    if (reset) begin // @[src/main/scala/fpga/Core.scala 263:39]
-      mem1_reg_is_dram_store <= 1'h0; // @[src/main/scala/fpga/Core.scala 263:39]
-    end else if (_T_45) begin // @[src/main/scala/fpga/Core.scala 1762:21]
-      mem1_reg_is_dram_store <= mem1_is_dram & _mem1_reg_unaligned_T_13 & ex1_en; // @[src/main/scala/fpga/Core.scala 1780:28]
+      mem1_reg_mem_w <= 3'h0; // @[src/main/scala/fpga/Core.scala 261:39]
+    end else if (_T_45) begin // @[src/main/scala/fpga/Core.scala 1795:21]
+      mem1_reg_mem_w <= ex1_reg_mem_w; // @[src/main/scala/fpga/Core.scala 1806:28]
     end
     if (reset) begin // @[src/main/scala/fpga/Core.scala 264:39]
-      mem1_reg_is_dram_fence <= 1'h0; // @[src/main/scala/fpga/Core.scala 264:39]
-    end else if (_T_45) begin // @[src/main/scala/fpga/Core.scala 1762:21]
-      mem1_reg_is_dram_fence <= ex1_reg_wb_sel == 3'h7 & ex1_en; // @[src/main/scala/fpga/Core.scala 1781:28]
+      mem1_reg_is_mem_load <= 1'h0; // @[src/main/scala/fpga/Core.scala 264:39]
+    end else if (_T_45) begin // @[src/main/scala/fpga/Core.scala 1795:21]
+      mem1_reg_is_mem_load <= ~mem1_is_dram & _mem1_reg_unaligned_T_12 & ex1_en; // @[src/main/scala/fpga/Core.scala 1810:28]
     end
     if (reset) begin // @[src/main/scala/fpga/Core.scala 265:39]
-      mem1_reg_is_valid_inst <= 1'h0; // @[src/main/scala/fpga/Core.scala 265:39]
-    end else if (_T_45) begin // @[src/main/scala/fpga/Core.scala 1762:21]
-      mem1_reg_is_valid_inst <= (_mem1_reg_unaligned_T_14 | _mem1_reg_is_dram_fence_T) & ex1_en; // @[src/main/scala/fpga/Core.scala 1782:28]
+      mem1_reg_is_mem_store <= 1'h0; // @[src/main/scala/fpga/Core.scala 265:39]
+    end else if (_T_45) begin // @[src/main/scala/fpga/Core.scala 1795:21]
+      mem1_reg_is_mem_store <= _mem1_reg_is_mem_load_T & _mem1_reg_unaligned_T_13 & ex1_en; // @[src/main/scala/fpga/Core.scala 1811:28]
     end
     if (reset) begin // @[src/main/scala/fpga/Core.scala 266:39]
-      mem1_reg_unaligned <= 1'h0; // @[src/main/scala/fpga/Core.scala 266:39]
-    end else if (~mem1_mem_stall & ~mem1_dram_stall & mem1_reg_unaligned) begin // @[src/main/scala/fpga/Core.scala 1791:68]
-      mem1_reg_unaligned <= 1'h0; // @[src/main/scala/fpga/Core.scala 1792:30]
-    end else if (_T_45) begin // @[src/main/scala/fpga/Core.scala 1762:21]
-      mem1_reg_unaligned <= _mem1_reg_unaligned_T_16; // @[src/main/scala/fpga/Core.scala 1768:28]
+      mem1_reg_is_dram_load <= 1'h0; // @[src/main/scala/fpga/Core.scala 266:39]
+    end else if (_T_45) begin // @[src/main/scala/fpga/Core.scala 1795:21]
+      mem1_reg_is_dram_load <= mem1_is_dram & _mem1_reg_unaligned_T_12 & ex1_en; // @[src/main/scala/fpga/Core.scala 1812:28]
     end
-    if (reset) begin // @[src/main/scala/fpga/Core.scala 269:40]
-      mem2_reg_wb_byte_offset <= 2'h0; // @[src/main/scala/fpga/Core.scala 269:40]
-    end else if (~mem2_dram_stall) begin // @[src/main/scala/fpga/Core.scala 1826:22]
-      mem2_reg_wb_byte_offset <= ex2_reg_alu_out[1:0]; // @[src/main/scala/fpga/Core.scala 1827:29]
+    if (reset) begin // @[src/main/scala/fpga/Core.scala 267:39]
+      mem1_reg_is_dram_store <= 1'h0; // @[src/main/scala/fpga/Core.scala 267:39]
+    end else if (_T_45) begin // @[src/main/scala/fpga/Core.scala 1795:21]
+      mem1_reg_is_dram_store <= mem1_is_dram & _mem1_reg_unaligned_T_13 & ex1_en; // @[src/main/scala/fpga/Core.scala 1813:28]
     end
-    if (reset) begin // @[src/main/scala/fpga/Core.scala 270:40]
-      mem2_reg_mem_w <= 3'h0; // @[src/main/scala/fpga/Core.scala 270:40]
-    end else if (~mem2_dram_stall) begin // @[src/main/scala/fpga/Core.scala 1826:22]
-      mem2_reg_mem_w <= mem1_reg_mem_w; // @[src/main/scala/fpga/Core.scala 1828:29]
+    if (reset) begin // @[src/main/scala/fpga/Core.scala 268:39]
+      mem1_reg_is_dram_fence <= 1'h0; // @[src/main/scala/fpga/Core.scala 268:39]
+    end else if (_T_45) begin // @[src/main/scala/fpga/Core.scala 1795:21]
+      mem1_reg_is_dram_fence <= ex1_reg_wb_sel == 3'h7 & ex1_en; // @[src/main/scala/fpga/Core.scala 1814:28]
     end
-    if (reset) begin // @[src/main/scala/fpga/Core.scala 272:40]
-      mem2_reg_wb_addr <= 5'h0; // @[src/main/scala/fpga/Core.scala 272:40]
-    end else if (~mem2_dram_stall) begin // @[src/main/scala/fpga/Core.scala 1826:22]
-      mem2_reg_wb_addr <= ex2_reg_wb_addr; // @[src/main/scala/fpga/Core.scala 1830:29]
+    if (reset) begin // @[src/main/scala/fpga/Core.scala 269:39]
+      mem1_reg_is_valid_inst <= 1'h0; // @[src/main/scala/fpga/Core.scala 269:39]
+    end else if (_T_45) begin // @[src/main/scala/fpga/Core.scala 1795:21]
+      mem1_reg_is_valid_inst <= (_mem1_reg_unaligned_T_14 | _mem1_reg_is_dram_fence_T) & ex1_en; // @[src/main/scala/fpga/Core.scala 1815:28]
+    end
+    if (reset) begin // @[src/main/scala/fpga/Core.scala 270:39]
+      mem1_reg_unaligned <= 1'h0; // @[src/main/scala/fpga/Core.scala 270:39]
+    end else if (~mem1_mem_stall & ~mem1_dram_stall & mem1_reg_unaligned) begin // @[src/main/scala/fpga/Core.scala 1824:68]
+      mem1_reg_unaligned <= 1'h0; // @[src/main/scala/fpga/Core.scala 1825:30]
+    end else if (_T_45) begin // @[src/main/scala/fpga/Core.scala 1795:21]
+      mem1_reg_unaligned <= _mem1_reg_unaligned_T_16; // @[src/main/scala/fpga/Core.scala 1801:28]
     end
     if (reset) begin // @[src/main/scala/fpga/Core.scala 273:40]
-      mem2_reg_is_valid_load <= 1'h0; // @[src/main/scala/fpga/Core.scala 273:40]
-    end else if (~mem2_dram_stall) begin // @[src/main/scala/fpga/Core.scala 1826:22]
-      mem2_reg_is_valid_load <= _T_118 & mem1_reg_is_mem_load | _T_119 & mem1_reg_is_dram_load; // @[src/main/scala/fpga/Core.scala 1831:29]
+      mem2_reg_wb_byte_offset <= 2'h0; // @[src/main/scala/fpga/Core.scala 273:40]
+    end else if (~mem2_dram_stall) begin // @[src/main/scala/fpga/Core.scala 1859:22]
+      mem2_reg_wb_byte_offset <= ex2_reg_alu_out[1:0]; // @[src/main/scala/fpga/Core.scala 1860:29]
     end
-    if (reset) begin // @[src/main/scala/fpga/Core.scala 275:40]
-      mem2_reg_is_valid_inst <= 1'h0; // @[src/main/scala/fpga/Core.scala 275:40]
-    end else if (~mem2_dram_stall) begin // @[src/main/scala/fpga/Core.scala 1826:22]
-      mem2_reg_is_valid_inst <= _T_120 & mem1_reg_is_valid_inst; // @[src/main/scala/fpga/Core.scala 1833:29]
+    if (reset) begin // @[src/main/scala/fpga/Core.scala 274:40]
+      mem2_reg_mem_w <= 3'h0; // @[src/main/scala/fpga/Core.scala 274:40]
+    end else if (~mem2_dram_stall) begin // @[src/main/scala/fpga/Core.scala 1859:22]
+      mem2_reg_mem_w <= mem1_reg_mem_w; // @[src/main/scala/fpga/Core.scala 1861:29]
     end
     if (reset) begin // @[src/main/scala/fpga/Core.scala 276:40]
-      mem2_reg_is_mem_load <= 1'h0; // @[src/main/scala/fpga/Core.scala 276:40]
-    end else if (~mem2_dram_stall) begin // @[src/main/scala/fpga/Core.scala 1826:22]
-      mem2_reg_is_mem_load <= _mem2_reg_is_valid_load_T_1; // @[src/main/scala/fpga/Core.scala 1834:29]
+      mem2_reg_wb_addr <= 5'h0; // @[src/main/scala/fpga/Core.scala 276:40]
+    end else if (~mem2_dram_stall) begin // @[src/main/scala/fpga/Core.scala 1859:22]
+      mem2_reg_wb_addr <= ex2_reg_wb_addr; // @[src/main/scala/fpga/Core.scala 1863:29]
     end
     if (reset) begin // @[src/main/scala/fpga/Core.scala 277:40]
-      mem2_reg_is_dram_load <= 1'h0; // @[src/main/scala/fpga/Core.scala 277:40]
-    end else if (~mem2_dram_stall) begin // @[src/main/scala/fpga/Core.scala 1826:22]
-      mem2_reg_is_dram_load <= _mem2_reg_is_valid_load_T_3; // @[src/main/scala/fpga/Core.scala 1835:29]
+      mem2_reg_is_valid_load <= 1'h0; // @[src/main/scala/fpga/Core.scala 277:40]
+    end else if (~mem2_dram_stall) begin // @[src/main/scala/fpga/Core.scala 1859:22]
+      mem2_reg_is_valid_load <= _T_118 & mem1_reg_is_mem_load | _T_119 & mem1_reg_is_dram_load; // @[src/main/scala/fpga/Core.scala 1864:29]
     end
-    if (reset) begin // @[src/main/scala/fpga/Core.scala 278:40]
-      mem2_reg_unaligned <= 1'h0; // @[src/main/scala/fpga/Core.scala 278:40]
-    end else if (~mem2_dram_stall) begin // @[src/main/scala/fpga/Core.scala 1826:22]
-      mem2_reg_unaligned <= mem1_reg_unaligned; // @[src/main/scala/fpga/Core.scala 1836:29]
+    if (reset) begin // @[src/main/scala/fpga/Core.scala 279:40]
+      mem2_reg_is_valid_inst <= 1'h0; // @[src/main/scala/fpga/Core.scala 279:40]
+    end else if (~mem2_dram_stall) begin // @[src/main/scala/fpga/Core.scala 1859:22]
+      mem2_reg_is_valid_inst <= _T_120 & mem1_reg_is_valid_inst; // @[src/main/scala/fpga/Core.scala 1866:29]
+    end
+    if (reset) begin // @[src/main/scala/fpga/Core.scala 280:40]
+      mem2_reg_is_mem_load <= 1'h0; // @[src/main/scala/fpga/Core.scala 280:40]
+    end else if (~mem2_dram_stall) begin // @[src/main/scala/fpga/Core.scala 1859:22]
+      mem2_reg_is_mem_load <= _mem2_reg_is_valid_load_T_1; // @[src/main/scala/fpga/Core.scala 1867:29]
     end
     if (reset) begin // @[src/main/scala/fpga/Core.scala 281:40]
-      mem3_reg_wb_byte_offset <= 2'h0; // @[src/main/scala/fpga/Core.scala 281:40]
-    end else begin
-      mem3_reg_wb_byte_offset <= mem2_reg_wb_byte_offset; // @[src/main/scala/fpga/Core.scala 1864:27]
+      mem2_reg_is_dram_load <= 1'h0; // @[src/main/scala/fpga/Core.scala 281:40]
+    end else if (~mem2_dram_stall) begin // @[src/main/scala/fpga/Core.scala 1859:22]
+      mem2_reg_is_dram_load <= _mem2_reg_is_valid_load_T_3; // @[src/main/scala/fpga/Core.scala 1868:29]
     end
     if (reset) begin // @[src/main/scala/fpga/Core.scala 282:40]
-      mem3_reg_mem_w <= 3'h0; // @[src/main/scala/fpga/Core.scala 282:40]
-    end else begin
-      mem3_reg_mem_w <= mem2_reg_mem_w; // @[src/main/scala/fpga/Core.scala 1865:27]
+      mem2_reg_unaligned <= 1'h0; // @[src/main/scala/fpga/Core.scala 282:40]
+    end else if (~mem2_dram_stall) begin // @[src/main/scala/fpga/Core.scala 1859:22]
+      mem2_reg_unaligned <= mem1_reg_unaligned; // @[src/main/scala/fpga/Core.scala 1869:29]
     end
-    if (reset) begin // @[src/main/scala/fpga/Core.scala 283:40]
-      mem3_reg_dmem_rdata <= 32'h0; // @[src/main/scala/fpga/Core.scala 283:40]
-    end else if (mem2_reg_is_dram_load) begin // @[src/main/scala/fpga/Core.scala 1866:33]
+    if (reset) begin // @[src/main/scala/fpga/Core.scala 285:40]
+      mem3_reg_wb_byte_offset <= 2'h0; // @[src/main/scala/fpga/Core.scala 285:40]
+    end else begin
+      mem3_reg_wb_byte_offset <= mem2_reg_wb_byte_offset; // @[src/main/scala/fpga/Core.scala 1897:27]
+    end
+    if (reset) begin // @[src/main/scala/fpga/Core.scala 286:40]
+      mem3_reg_mem_w <= 3'h0; // @[src/main/scala/fpga/Core.scala 286:40]
+    end else begin
+      mem3_reg_mem_w <= mem2_reg_mem_w; // @[src/main/scala/fpga/Core.scala 1898:27]
+    end
+    if (reset) begin // @[src/main/scala/fpga/Core.scala 287:40]
+      mem3_reg_dmem_rdata <= 32'h0; // @[src/main/scala/fpga/Core.scala 287:40]
+    end else if (mem2_reg_is_dram_load) begin // @[src/main/scala/fpga/Core.scala 1899:33]
       mem3_reg_dmem_rdata <= io_cache_rdata;
     end else begin
       mem3_reg_dmem_rdata <= io_dmem_rdata;
     end
-    if (reset) begin // @[src/main/scala/fpga/Core.scala 284:40]
-      mem3_reg_rdata_high <= 24'h0; // @[src/main/scala/fpga/Core.scala 284:40]
-    end else if (mem3_reg_unaligned) begin // @[src/main/scala/fpga/Core.scala 1889:29]
-      mem3_reg_rdata_high <= mem3_reg_dmem_rdata[23:0]; // @[src/main/scala/fpga/Core.scala 1890:25]
-    end
-    if (reset) begin // @[src/main/scala/fpga/Core.scala 285:40]
-      mem3_reg_wb_addr <= 5'h0; // @[src/main/scala/fpga/Core.scala 285:40]
-    end else begin
-      mem3_reg_wb_addr <= mem2_reg_wb_addr; // @[src/main/scala/fpga/Core.scala 1867:27]
-    end
-    if (reset) begin // @[src/main/scala/fpga/Core.scala 286:40]
-      mem3_reg_is_valid_load <= 1'h0; // @[src/main/scala/fpga/Core.scala 286:40]
-    end else begin
-      mem3_reg_is_valid_load <= _mem2_is_valid_load_T_2 & mem2_is_valid_load; // @[src/main/scala/fpga/Core.scala 1868:27]
-    end
-    if (reset) begin // @[src/main/scala/fpga/Core.scala 287:40]
-      mem3_reg_is_valid_inst <= 1'h0; // @[src/main/scala/fpga/Core.scala 287:40]
-    end else begin
-      mem3_reg_is_valid_inst <= _mem2_is_valid_load_T_2 & mem2_reg_is_valid_inst; // @[src/main/scala/fpga/Core.scala 1870:27]
+    if (reset) begin // @[src/main/scala/fpga/Core.scala 288:40]
+      mem3_reg_rdata_high <= 24'h0; // @[src/main/scala/fpga/Core.scala 288:40]
+    end else if (mem3_reg_unaligned) begin // @[src/main/scala/fpga/Core.scala 1922:29]
+      mem3_reg_rdata_high <= mem3_reg_dmem_rdata[23:0]; // @[src/main/scala/fpga/Core.scala 1923:25]
     end
     if (reset) begin // @[src/main/scala/fpga/Core.scala 289:40]
-      mem3_reg_unaligned <= 1'h0; // @[src/main/scala/fpga/Core.scala 289:40]
+      mem3_reg_wb_addr <= 5'h0; // @[src/main/scala/fpga/Core.scala 289:40]
     end else begin
-      mem3_reg_unaligned <= mem2_reg_unaligned; // @[src/main/scala/fpga/Core.scala 1872:27]
+      mem3_reg_wb_addr <= mem2_reg_wb_addr; // @[src/main/scala/fpga/Core.scala 1900:27]
     end
     if (reset) begin // @[src/main/scala/fpga/Core.scala 290:40]
-      mem3_reg_is_aligned_lw <= 1'h0; // @[src/main/scala/fpga/Core.scala 290:40]
+      mem3_reg_is_valid_load <= 1'h0; // @[src/main/scala/fpga/Core.scala 290:40]
     end else begin
-      mem3_reg_is_aligned_lw <= mem2_is_aligned_lw; // @[src/main/scala/fpga/Core.scala 1873:27]
+      mem3_reg_is_valid_load <= _mem2_is_valid_load_T_2 & mem2_is_valid_load; // @[src/main/scala/fpga/Core.scala 1901:27]
+    end
+    if (reset) begin // @[src/main/scala/fpga/Core.scala 291:40]
+      mem3_reg_is_valid_inst <= 1'h0; // @[src/main/scala/fpga/Core.scala 291:40]
+    end else begin
+      mem3_reg_is_valid_inst <= _mem2_is_valid_load_T_2 & mem2_reg_is_valid_inst; // @[src/main/scala/fpga/Core.scala 1903:27]
+    end
+    if (reset) begin // @[src/main/scala/fpga/Core.scala 293:40]
+      mem3_reg_unaligned <= 1'h0; // @[src/main/scala/fpga/Core.scala 293:40]
+    end else begin
+      mem3_reg_unaligned <= mem2_reg_unaligned; // @[src/main/scala/fpga/Core.scala 1905:27]
+    end
+    if (reset) begin // @[src/main/scala/fpga/Core.scala 294:40]
+      mem3_reg_is_aligned_lw <= 1'h0; // @[src/main/scala/fpga/Core.scala 294:40]
+    end else begin
+      mem3_reg_is_aligned_lw <= mem2_is_aligned_lw; // @[src/main/scala/fpga/Core.scala 1906:27]
     end
     id_reg_is_bp_fail <= reset | _ic_read_en4_T & _if2_is_valid_inst_T & _if2_is_valid_inst_T_1 & ~id_is_j & ~id_is_br
-       & id_reg_bp_taken; // @[src/main/scala/fpga/Core.scala 292:{37,37} 912:21]
-    if (reset) begin // @[src/main/scala/fpga/Core.scala 293:37]
-      id_reg_br_pc <= 31'h4000000; // @[src/main/scala/fpga/Core.scala 293:37]
-    end else if (id_is_half) begin // @[src/main/scala/fpga/Core.scala 911:22]
+       & id_reg_bp_taken; // @[src/main/scala/fpga/Core.scala 296:{37,37} 927:21]
+    if (reset) begin // @[src/main/scala/fpga/Core.scala 297:37]
+      id_reg_br_pc <= 31'h4000000; // @[src/main/scala/fpga/Core.scala 297:37]
+    end else if (id_is_half) begin // @[src/main/scala/fpga/Core.scala 926:22]
       id_reg_br_pc <= _id_reg_br_pc_T_1;
     end else begin
       id_reg_br_pc <= _id_reg_br_pc_T_3;
     end
-    if (reset) begin // @[src/main/scala/fpga/Core.scala 301:37]
-      ex1_reg_fw_en <= 1'h0; // @[src/main/scala/fpga/Core.scala 301:37]
-    end else if (_T_45) begin // @[src/main/scala/fpga/Core.scala 1223:20]
-      ex1_reg_fw_en <= rrd_fw_en_next; // @[src/main/scala/fpga/Core.scala 1251:27]
-    end
-    if (reset) begin // @[src/main/scala/fpga/Core.scala 303:37]
-      ex2_reg_fw_en <= 1'h0; // @[src/main/scala/fpga/Core.scala 303:37]
-    end else if (_T_45) begin // @[src/main/scala/fpga/Core.scala 1507:21]
-      ex2_reg_fw_en <= ex1_fw_en_next; // @[src/main/scala/fpga/Core.scala 1532:31]
-    end
     if (reset) begin // @[src/main/scala/fpga/Core.scala 305:37]
-      mem3_reg_fw_en <= 1'h0; // @[src/main/scala/fpga/Core.scala 305:37]
-    end else begin
-      mem3_reg_fw_en <= mem2_is_aligned_lw; // @[src/main/scala/fpga/Core.scala 1871:27]
+      ex1_reg_fw_en <= 1'h0; // @[src/main/scala/fpga/Core.scala 305:37]
+    end else if (_T_45) begin // @[src/main/scala/fpga/Core.scala 1252:20]
+      ex1_reg_fw_en <= rrd_fw_en_next; // @[src/main/scala/fpga/Core.scala 1282:27]
     end
-    if (reset) begin // @[src/main/scala/fpga/Core.scala 308:37]
-      ex2_reg_div_stall <= 1'h0; // @[src/main/scala/fpga/Core.scala 308:37]
-    end else if (_T_45) begin // @[src/main/scala/fpga/Core.scala 1507:21]
-      ex2_reg_div_stall <= ex2_div_stall_next | _ex2_reg_div_stall_T_4; // @[src/main/scala/fpga/Core.scala 1523:31]
-    end else begin
-      ex2_reg_div_stall <= ex2_div_stall_next | _ex2_reg_div_stall_T_9; // @[src/main/scala/fpga/Core.scala 1537:23]
+    if (reset) begin // @[src/main/scala/fpga/Core.scala 307:37]
+      ex2_reg_fw_en <= 1'h0; // @[src/main/scala/fpga/Core.scala 307:37]
+    end else if (_T_45) begin // @[src/main/scala/fpga/Core.scala 1540:21]
+      ex2_reg_fw_en <= ex1_fw_en_next; // @[src/main/scala/fpga/Core.scala 1565:31]
     end
-    if (reset) begin // @[src/main/scala/fpga/Core.scala 310:37]
-      ex2_reg_divrem_state <= 3'h0; // @[src/main/scala/fpga/Core.scala 310:37]
-    end else if (3'h0 == ex2_reg_divrem_state) begin // @[src/main/scala/fpga/Core.scala 1586:33]
-      if (ex2_reg_divrem) begin // @[src/main/scala/fpga/Core.scala 1588:29]
-        ex2_reg_divrem_state <= {{1'd0}, _GEN_538};
-      end
-    end else if (3'h1 == ex2_reg_divrem_state) begin // @[src/main/scala/fpga/Core.scala 1586:33]
-      if (ex2_reg_p_divisor[63:36] == 28'h0) begin // @[src/main/scala/fpga/Core.scala 1611:66]
-        ex2_reg_divrem_state <= 3'h2; // @[src/main/scala/fpga/Core.scala 1612:30]
-      end
-    end else if (3'h2 == ex2_reg_divrem_state) begin // @[src/main/scala/fpga/Core.scala 1586:33]
-      ex2_reg_divrem_state <= _GEN_547;
+    if (reset) begin // @[src/main/scala/fpga/Core.scala 309:37]
+      mem3_reg_fw_en <= 1'h0; // @[src/main/scala/fpga/Core.scala 309:37]
     end else begin
-      ex2_reg_divrem_state <= _GEN_553;
-    end
-    if (reset) begin // @[src/main/scala/fpga/Core.scala 311:37]
-      ex2_reg_is_br <= 1'h0; // @[src/main/scala/fpga/Core.scala 311:37]
-    end else begin
-      ex2_reg_is_br <= csr_is_br | ex1_is_br; // @[src/main/scala/fpga/Core.scala 1502:17]
+      mem3_reg_fw_en <= mem2_is_aligned_lw; // @[src/main/scala/fpga/Core.scala 1904:27]
     end
     if (reset) begin // @[src/main/scala/fpga/Core.scala 312:37]
-      ex2_reg_br_pc <= 31'h0; // @[src/main/scala/fpga/Core.scala 312:37]
+      ex2_reg_div_stall <= 1'h0; // @[src/main/scala/fpga/Core.scala 312:37]
+    end else if (_T_45) begin // @[src/main/scala/fpga/Core.scala 1540:21]
+      ex2_reg_div_stall <= ex2_div_stall_next | _ex2_reg_div_stall_T_4; // @[src/main/scala/fpga/Core.scala 1556:31]
+    end else begin
+      ex2_reg_div_stall <= ex2_div_stall_next | _ex2_reg_div_stall_T_9; // @[src/main/scala/fpga/Core.scala 1570:23]
+    end
+    if (reset) begin // @[src/main/scala/fpga/Core.scala 314:37]
+      ex2_reg_divrem_state <= 3'h0; // @[src/main/scala/fpga/Core.scala 314:37]
+    end else if (3'h0 == ex2_reg_divrem_state) begin // @[src/main/scala/fpga/Core.scala 1619:33]
+      if (ex2_reg_divrem) begin // @[src/main/scala/fpga/Core.scala 1621:29]
+        ex2_reg_divrem_state <= {{1'd0}, _GEN_552};
+      end
+    end else if (3'h1 == ex2_reg_divrem_state) begin // @[src/main/scala/fpga/Core.scala 1619:33]
+      if (ex2_reg_p_divisor[63:36] == 28'h0) begin // @[src/main/scala/fpga/Core.scala 1644:66]
+        ex2_reg_divrem_state <= 3'h2; // @[src/main/scala/fpga/Core.scala 1645:30]
+      end
+    end else if (3'h2 == ex2_reg_divrem_state) begin // @[src/main/scala/fpga/Core.scala 1619:33]
+      ex2_reg_divrem_state <= _GEN_561;
+    end else begin
+      ex2_reg_divrem_state <= _GEN_567;
+    end
+    if (reset) begin // @[src/main/scala/fpga/Core.scala 315:37]
+      ex2_reg_is_br <= 1'h0; // @[src/main/scala/fpga/Core.scala 315:37]
+    end else begin
+      ex2_reg_is_br <= csr_is_br | ex1_is_br; // @[src/main/scala/fpga/Core.scala 1535:17]
+    end
+    if (reset) begin // @[src/main/scala/fpga/Core.scala 316:37]
+      ex2_reg_br_pc <= 31'h0; // @[src/main/scala/fpga/Core.scala 316:37]
     end else if (csr_is_br) begin // @[src/main/scala/chisel3/util/Mux.scala 141:16]
-      if (csr_is_meintr) begin // @[src/main/scala/fpga/Core.scala 1460:24]
-        ex2_reg_br_pc <= csr_reg_trap_vector; // @[src/main/scala/fpga/Core.scala 1469:26]
-      end else if (csr_is_mtintr) begin // @[src/main/scala/fpga/Core.scala 1470:30]
-        ex2_reg_br_pc <= csr_reg_trap_vector; // @[src/main/scala/fpga/Core.scala 1479:26]
+      if (csr_is_meintr) begin // @[src/main/scala/fpga/Core.scala 1493:24]
+        ex2_reg_br_pc <= csr_reg_trap_vector; // @[src/main/scala/fpga/Core.scala 1502:26]
+      end else if (csr_is_mtintr) begin // @[src/main/scala/fpga/Core.scala 1503:30]
+        ex2_reg_br_pc <= csr_reg_trap_vector; // @[src/main/scala/fpga/Core.scala 1512:26]
       end else begin
-        ex2_reg_br_pc <= _GEN_493;
+        ex2_reg_br_pc <= _GEN_507;
       end
     end else if (_ex1_br_pc_T_1) begin // @[src/main/scala/chisel3/util/Mux.scala 141:16]
-      if (ex1_reg_is_j) begin // @[src/main/scala/fpga/Core.scala 1353:25]
+      if (ex1_reg_is_j) begin // @[src/main/scala/fpga/Core.scala 1386:25]
         ex2_reg_br_pc <= ex1_add_out[31:1];
       end else begin
         ex2_reg_br_pc <= ex1_reg_direct_jbr_pc;
       end
-    end else if (ex1_reg_is_half) begin // @[src/main/scala/fpga/Core.scala 1291:24]
+    end else if (ex1_reg_is_half) begin // @[src/main/scala/fpga/Core.scala 1324:24]
       ex2_reg_br_pc <= _ex1_next_pc_T_1;
     end else begin
       ex2_reg_br_pc <= _ex1_next_pc_T_3;
     end
-    if (reset) begin // @[src/main/scala/fpga/Core.scala 317:37]
-      ex2_reg_is_retired <= 1'h0; // @[src/main/scala/fpga/Core.scala 317:37]
+    if (reset) begin // @[src/main/scala/fpga/Core.scala 321:37]
+      ex2_reg_is_retired <= 1'h0; // @[src/main/scala/fpga/Core.scala 321:37]
     end else begin
-      ex2_reg_is_retired <= ex2_reg_is_valid_inst & _T_80 & ex2_reg_no_mem; // @[src/main/scala/fpga/Core.scala 1746:22]
+      ex2_reg_is_retired <= ex2_reg_is_valid_inst & _T_80 & ex2_reg_no_mem; // @[src/main/scala/fpga/Core.scala 1779:22]
     end
-    if (reset) begin // @[src/main/scala/fpga/Core.scala 318:37]
-      mem3_reg_is_retired <= 1'h0; // @[src/main/scala/fpga/Core.scala 318:37]
+    if (reset) begin // @[src/main/scala/fpga/Core.scala 322:37]
+      mem3_reg_is_retired <= 1'h0; // @[src/main/scala/fpga/Core.scala 322:37]
     end else begin
-      mem3_reg_is_retired <= mem3_reg_is_valid_inst; // @[src/main/scala/fpga/Core.scala 1906:23]
+      mem3_reg_is_retired <= mem3_reg_is_valid_inst; // @[src/main/scala/fpga/Core.scala 1939:23]
     end
-    if (reset) begin // @[src/main/scala/fpga/Core.scala 338:33]
-      ic_reg_read_rdy <= 1'h0; // @[src/main/scala/fpga/Core.scala 338:33]
-    end else if (if1_is_jump) begin // @[src/main/scala/fpga/Core.scala 389:21]
-      ic_reg_read_rdy <= ~if1_jump_addr[0]; // @[src/main/scala/fpga/Core.scala 395:22]
-    end else if (!(~io_imem_valid)) begin // @[src/main/scala/fpga/Core.scala 398:98]
-      ic_reg_read_rdy <= 1'h1; // @[src/main/scala/fpga/Core.scala 375:19]
+    if (reset) begin // @[src/main/scala/fpga/Core.scala 342:33]
+      ic_reg_read_rdy <= 1'h0; // @[src/main/scala/fpga/Core.scala 342:33]
+    end else if (if1_is_jump) begin // @[src/main/scala/fpga/Core.scala 393:21]
+      ic_reg_read_rdy <= ~if1_jump_addr[0]; // @[src/main/scala/fpga/Core.scala 399:22]
+    end else if (!(~io_imem_valid)) begin // @[src/main/scala/fpga/Core.scala 402:98]
+      ic_reg_read_rdy <= 1'h1; // @[src/main/scala/fpga/Core.scala 379:19]
     end
-    if (reset) begin // @[src/main/scala/fpga/Core.scala 339:33]
-      ic_reg_half_rdy <= 1'h0; // @[src/main/scala/fpga/Core.scala 339:33]
+    if (reset) begin // @[src/main/scala/fpga/Core.scala 343:33]
+      ic_reg_half_rdy <= 1'h0; // @[src/main/scala/fpga/Core.scala 343:33]
     end else begin
       ic_reg_half_rdy <= _GEN_191;
     end
-    if (reset) begin // @[src/main/scala/fpga/Core.scala 343:33]
-      ic_reg_imem_addr <= 31'h0; // @[src/main/scala/fpga/Core.scala 343:33]
-    end else if (if1_is_jump) begin // @[src/main/scala/fpga/Core.scala 389:21]
-      ic_reg_imem_addr <= ic_next_imem_addr; // @[src/main/scala/fpga/Core.scala 392:22]
-    end else if (!(~io_imem_valid)) begin // @[src/main/scala/fpga/Core.scala 398:98]
-      if (_T_3) begin // @[src/main/scala/fpga/Core.scala 449:23]
-        ic_reg_imem_addr <= ic_imem_addr_4; // @[src/main/scala/fpga/Core.scala 452:26]
+    if (reset) begin // @[src/main/scala/fpga/Core.scala 347:33]
+      ic_reg_imem_addr <= 31'h0; // @[src/main/scala/fpga/Core.scala 347:33]
+    end else if (if1_is_jump) begin // @[src/main/scala/fpga/Core.scala 393:21]
+      ic_reg_imem_addr <= ic_next_imem_addr; // @[src/main/scala/fpga/Core.scala 396:22]
+    end else if (!(~io_imem_valid)) begin // @[src/main/scala/fpga/Core.scala 402:98]
+      if (_T_3) begin // @[src/main/scala/fpga/Core.scala 453:23]
+        ic_reg_imem_addr <= ic_imem_addr_4; // @[src/main/scala/fpga/Core.scala 456:26]
       end else begin
         ic_reg_imem_addr <= _GEN_116;
       end
     end
-    if (reset) begin // @[src/main/scala/fpga/Core.scala 344:33]
-      ic_reg_addr_out <= 31'h0; // @[src/main/scala/fpga/Core.scala 344:33]
-    end else if (if1_is_jump) begin // @[src/main/scala/fpga/Core.scala 389:21]
+    if (reset) begin // @[src/main/scala/fpga/Core.scala 348:33]
+      ic_reg_addr_out <= 31'h0; // @[src/main/scala/fpga/Core.scala 348:33]
+    end else if (if1_is_jump) begin // @[src/main/scala/fpga/Core.scala 393:21]
       if (ex2_reg_is_br) begin // @[src/main/scala/chisel3/util/Mux.scala 141:16]
         ic_reg_addr_out <= ex2_reg_br_pc;
       end else if (id_reg_is_bp_fail) begin // @[src/main/scala/chisel3/util/Mux.scala 141:16]
@@ -4481,433 +4672,447 @@ module Core(
       end else begin
         ic_reg_addr_out <= id_reg_bp_taken_pc;
       end
-    end else if (!(~io_imem_valid)) begin // @[src/main/scala/fpga/Core.scala 398:98]
-      if (_T_3) begin // @[src/main/scala/fpga/Core.scala 449:23]
+    end else if (!(~io_imem_valid)) begin // @[src/main/scala/fpga/Core.scala 402:98]
+      if (_T_3) begin // @[src/main/scala/fpga/Core.scala 453:23]
         ic_reg_addr_out <= _GEN_47;
       end else begin
         ic_reg_addr_out <= _GEN_120;
       end
     end
-    if (reset) begin // @[src/main/scala/fpga/Core.scala 347:34]
-      ic_reg_inst <= 32'h0; // @[src/main/scala/fpga/Core.scala 347:34]
-    end else if (!(if1_is_jump)) begin // @[src/main/scala/fpga/Core.scala 389:21]
-      if (!(~io_imem_valid)) begin // @[src/main/scala/fpga/Core.scala 398:98]
-        if (_T_3) begin // @[src/main/scala/fpga/Core.scala 449:23]
-          ic_reg_inst <= io_imem_inst; // @[src/main/scala/fpga/Core.scala 453:26]
+    if (reset) begin // @[src/main/scala/fpga/Core.scala 351:34]
+      ic_reg_inst <= 32'h0; // @[src/main/scala/fpga/Core.scala 351:34]
+    end else if (!(if1_is_jump)) begin // @[src/main/scala/fpga/Core.scala 393:21]
+      if (!(~io_imem_valid)) begin // @[src/main/scala/fpga/Core.scala 402:98]
+        if (_T_3) begin // @[src/main/scala/fpga/Core.scala 453:23]
+          ic_reg_inst <= io_imem_inst; // @[src/main/scala/fpga/Core.scala 457:26]
         end else begin
           ic_reg_inst <= _GEN_117;
         end
       end
     end
-    if (reset) begin // @[src/main/scala/fpga/Core.scala 348:34]
-      ic_reg_inst_addr <= 31'h0; // @[src/main/scala/fpga/Core.scala 348:34]
-    end else if (!(if1_is_jump)) begin // @[src/main/scala/fpga/Core.scala 389:21]
-      if (!(~io_imem_valid)) begin // @[src/main/scala/fpga/Core.scala 398:98]
-        if (_T_3) begin // @[src/main/scala/fpga/Core.scala 449:23]
-          ic_reg_inst_addr <= ic_reg_imem_addr; // @[src/main/scala/fpga/Core.scala 454:26]
+    if (reset) begin // @[src/main/scala/fpga/Core.scala 352:34]
+      ic_reg_inst_addr <= 31'h0; // @[src/main/scala/fpga/Core.scala 352:34]
+    end else if (!(if1_is_jump)) begin // @[src/main/scala/fpga/Core.scala 393:21]
+      if (!(~io_imem_valid)) begin // @[src/main/scala/fpga/Core.scala 402:98]
+        if (_T_3) begin // @[src/main/scala/fpga/Core.scala 453:23]
+          ic_reg_inst_addr <= ic_reg_imem_addr; // @[src/main/scala/fpga/Core.scala 458:26]
         end else begin
           ic_reg_inst_addr <= _GEN_118;
         end
       end
     end
-    if (reset) begin // @[src/main/scala/fpga/Core.scala 349:34]
-      ic_reg_inst2 <= 32'h0; // @[src/main/scala/fpga/Core.scala 349:34]
-    end else if (!(if1_is_jump)) begin // @[src/main/scala/fpga/Core.scala 389:21]
-      if (!(~io_imem_valid)) begin // @[src/main/scala/fpga/Core.scala 398:98]
-        if (!(_T_3)) begin // @[src/main/scala/fpga/Core.scala 449:23]
+    if (reset) begin // @[src/main/scala/fpga/Core.scala 353:34]
+      ic_reg_inst2 <= 32'h0; // @[src/main/scala/fpga/Core.scala 353:34]
+    end else if (!(if1_is_jump)) begin // @[src/main/scala/fpga/Core.scala 393:21]
+      if (!(~io_imem_valid)) begin // @[src/main/scala/fpga/Core.scala 402:98]
+        if (!(_T_3)) begin // @[src/main/scala/fpga/Core.scala 453:23]
           ic_reg_inst2 <= _GEN_132;
         end
       end
     end
-    if (reset) begin // @[src/main/scala/fpga/Core.scala 352:25]
-      ic_state <= 3'h0; // @[src/main/scala/fpga/Core.scala 352:25]
-    end else if (if1_is_jump) begin // @[src/main/scala/fpga/Core.scala 389:21]
-      ic_state <= {{2'd0}, if1_jump_addr[0]}; // @[src/main/scala/fpga/Core.scala 394:22]
-    end else if (!(~io_imem_valid)) begin // @[src/main/scala/fpga/Core.scala 398:98]
-      if (_T_3) begin // @[src/main/scala/fpga/Core.scala 449:23]
+    if (reset) begin // @[src/main/scala/fpga/Core.scala 356:25]
+      ic_state <= 3'h0; // @[src/main/scala/fpga/Core.scala 356:25]
+    end else if (if1_is_jump) begin // @[src/main/scala/fpga/Core.scala 393:21]
+      ic_state <= {{2'd0}, if1_jump_addr[0]}; // @[src/main/scala/fpga/Core.scala 398:22]
+    end else if (!(~io_imem_valid)) begin // @[src/main/scala/fpga/Core.scala 402:98]
+      if (_T_3) begin // @[src/main/scala/fpga/Core.scala 453:23]
         ic_state <= _GEN_48;
       end else begin
         ic_state <= _GEN_131;
       end
     end
-    if (reset) begin // @[src/main/scala/fpga/Core.scala 360:41]
-      ic_reg_bp_next_taken0 <= 1'h0; // @[src/main/scala/fpga/Core.scala 360:41]
-    end else if (!(if1_is_jump)) begin // @[src/main/scala/fpga/Core.scala 389:21]
-      if (~io_imem_valid) begin // @[src/main/scala/fpga/Core.scala 398:98]
+    if (reset) begin // @[src/main/scala/fpga/Core.scala 364:41]
+      ic_reg_bp_next_taken0 <= 1'h0; // @[src/main/scala/fpga/Core.scala 364:41]
+    end else if (!(if1_is_jump)) begin // @[src/main/scala/fpga/Core.scala 393:21]
+      if (~io_imem_valid) begin // @[src/main/scala/fpga/Core.scala 402:98]
         ic_reg_bp_next_taken0 <= _GEN_36;
       end else begin
         ic_reg_bp_next_taken0 <= _GEN_36;
       end
     end
-    if (reset) begin // @[src/main/scala/fpga/Core.scala 361:41]
-      ic_reg_bp_next_taken_pc0 <= 31'h0; // @[src/main/scala/fpga/Core.scala 361:41]
-    end else if (!(if1_is_jump)) begin // @[src/main/scala/fpga/Core.scala 389:21]
-      if (~io_imem_valid) begin // @[src/main/scala/fpga/Core.scala 398:98]
+    if (reset) begin // @[src/main/scala/fpga/Core.scala 365:41]
+      ic_reg_bp_next_taken_pc0 <= 31'h0; // @[src/main/scala/fpga/Core.scala 365:41]
+    end else if (!(if1_is_jump)) begin // @[src/main/scala/fpga/Core.scala 393:21]
+      if (~io_imem_valid) begin // @[src/main/scala/fpga/Core.scala 402:98]
         ic_reg_bp_next_taken_pc0 <= _GEN_37;
       end else begin
         ic_reg_bp_next_taken_pc0 <= _GEN_37;
       end
     end
-    if (reset) begin // @[src/main/scala/fpga/Core.scala 362:41]
-      ic_reg_bp_next_cnt0 <= 2'h0; // @[src/main/scala/fpga/Core.scala 362:41]
-    end else if (!(if1_is_jump)) begin // @[src/main/scala/fpga/Core.scala 389:21]
-      if (~io_imem_valid) begin // @[src/main/scala/fpga/Core.scala 398:98]
+    if (reset) begin // @[src/main/scala/fpga/Core.scala 366:41]
+      ic_reg_bp_next_cnt0 <= 2'h0; // @[src/main/scala/fpga/Core.scala 366:41]
+    end else if (!(if1_is_jump)) begin // @[src/main/scala/fpga/Core.scala 393:21]
+      if (~io_imem_valid) begin // @[src/main/scala/fpga/Core.scala 402:98]
         ic_reg_bp_next_cnt0 <= _GEN_38;
       end else begin
         ic_reg_bp_next_cnt0 <= _GEN_38;
       end
     end
-    if (reset) begin // @[src/main/scala/fpga/Core.scala 363:41]
-      ic_reg_bp_next_taken1 <= 1'h0; // @[src/main/scala/fpga/Core.scala 363:41]
-    end else if (!(if1_is_jump)) begin // @[src/main/scala/fpga/Core.scala 389:21]
-      if (~io_imem_valid) begin // @[src/main/scala/fpga/Core.scala 398:98]
-        if (3'h0 == ic_state) begin // @[src/main/scala/fpga/Core.scala 403:23]
-          ic_reg_bp_next_taken1 <= ic_btb_io_lu_matches1 & ic_pht_io_lu_cnt1[0]; // @[src/main/scala/fpga/Core.scala 411:34]
+    if (reset) begin // @[src/main/scala/fpga/Core.scala 367:41]
+      ic_reg_bp_next_taken1 <= 1'h0; // @[src/main/scala/fpga/Core.scala 367:41]
+    end else if (!(if1_is_jump)) begin // @[src/main/scala/fpga/Core.scala 393:21]
+      if (~io_imem_valid) begin // @[src/main/scala/fpga/Core.scala 402:98]
+        if (3'h0 == ic_state) begin // @[src/main/scala/fpga/Core.scala 407:23]
+          ic_reg_bp_next_taken1 <= ic_btb_io_lu_matches1 & ic_pht_io_lu_cnt1[0]; // @[src/main/scala/fpga/Core.scala 415:34]
         end else begin
           ic_reg_bp_next_taken1 <= _GEN_27;
         end
-      end else if (_T_3) begin // @[src/main/scala/fpga/Core.scala 449:23]
-        ic_reg_bp_next_taken1 <= _ic_reg_bp_next_taken1_T_1; // @[src/main/scala/fpga/Core.scala 464:34]
+      end else if (_T_3) begin // @[src/main/scala/fpga/Core.scala 453:23]
+        ic_reg_bp_next_taken1 <= _ic_reg_bp_next_taken1_T_1; // @[src/main/scala/fpga/Core.scala 468:34]
       end else begin
         ic_reg_bp_next_taken1 <= _GEN_128;
       end
     end
-    if (reset) begin // @[src/main/scala/fpga/Core.scala 364:41]
-      ic_reg_bp_next_taken_pc1 <= 31'h0; // @[src/main/scala/fpga/Core.scala 364:41]
-    end else if (!(if1_is_jump)) begin // @[src/main/scala/fpga/Core.scala 389:21]
-      if (~io_imem_valid) begin // @[src/main/scala/fpga/Core.scala 398:98]
-        if (3'h0 == ic_state) begin // @[src/main/scala/fpga/Core.scala 403:23]
-          ic_reg_bp_next_taken_pc1 <= ic_btb_io_lu_taken_pc1; // @[src/main/scala/fpga/Core.scala 412:34]
+    if (reset) begin // @[src/main/scala/fpga/Core.scala 368:41]
+      ic_reg_bp_next_taken_pc1 <= 31'h0; // @[src/main/scala/fpga/Core.scala 368:41]
+    end else if (!(if1_is_jump)) begin // @[src/main/scala/fpga/Core.scala 393:21]
+      if (~io_imem_valid) begin // @[src/main/scala/fpga/Core.scala 402:98]
+        if (3'h0 == ic_state) begin // @[src/main/scala/fpga/Core.scala 407:23]
+          ic_reg_bp_next_taken_pc1 <= ic_btb_io_lu_taken_pc1; // @[src/main/scala/fpga/Core.scala 416:34]
         end else begin
           ic_reg_bp_next_taken_pc1 <= _GEN_28;
         end
-      end else if (_T_3) begin // @[src/main/scala/fpga/Core.scala 449:23]
-        ic_reg_bp_next_taken_pc1 <= ic_btb_io_lu_taken_pc1; // @[src/main/scala/fpga/Core.scala 465:34]
+      end else if (_T_3) begin // @[src/main/scala/fpga/Core.scala 453:23]
+        ic_reg_bp_next_taken_pc1 <= ic_btb_io_lu_taken_pc1; // @[src/main/scala/fpga/Core.scala 469:34]
       end else begin
         ic_reg_bp_next_taken_pc1 <= _GEN_129;
       end
     end
-    if (reset) begin // @[src/main/scala/fpga/Core.scala 365:41]
-      ic_reg_bp_next_cnt1 <= 2'h0; // @[src/main/scala/fpga/Core.scala 365:41]
-    end else if (!(if1_is_jump)) begin // @[src/main/scala/fpga/Core.scala 389:21]
-      if (~io_imem_valid) begin // @[src/main/scala/fpga/Core.scala 398:98]
-        if (3'h0 == ic_state) begin // @[src/main/scala/fpga/Core.scala 403:23]
-          ic_reg_bp_next_cnt1 <= ic_pht_io_lu_cnt1; // @[src/main/scala/fpga/Core.scala 413:34]
+    if (reset) begin // @[src/main/scala/fpga/Core.scala 369:41]
+      ic_reg_bp_next_cnt1 <= 2'h0; // @[src/main/scala/fpga/Core.scala 369:41]
+    end else if (!(if1_is_jump)) begin // @[src/main/scala/fpga/Core.scala 393:21]
+      if (~io_imem_valid) begin // @[src/main/scala/fpga/Core.scala 402:98]
+        if (3'h0 == ic_state) begin // @[src/main/scala/fpga/Core.scala 407:23]
+          ic_reg_bp_next_cnt1 <= ic_pht_io_lu_cnt1; // @[src/main/scala/fpga/Core.scala 417:34]
         end else begin
           ic_reg_bp_next_cnt1 <= _GEN_29;
         end
-      end else if (_T_3) begin // @[src/main/scala/fpga/Core.scala 449:23]
-        ic_reg_bp_next_cnt1 <= ic_pht_io_lu_cnt1; // @[src/main/scala/fpga/Core.scala 466:34]
+      end else if (_T_3) begin // @[src/main/scala/fpga/Core.scala 453:23]
+        ic_reg_bp_next_cnt1 <= ic_pht_io_lu_cnt1; // @[src/main/scala/fpga/Core.scala 470:34]
       end else begin
         ic_reg_bp_next_cnt1 <= _GEN_130;
       end
     end
-    if (reset) begin // @[src/main/scala/fpga/Core.scala 366:41]
-      ic_reg_bp_next_taken2 <= 1'h0; // @[src/main/scala/fpga/Core.scala 366:41]
-    end else if (!(if1_is_jump)) begin // @[src/main/scala/fpga/Core.scala 389:21]
-      if (~io_imem_valid) begin // @[src/main/scala/fpga/Core.scala 398:98]
+    if (reset) begin // @[src/main/scala/fpga/Core.scala 370:41]
+      ic_reg_bp_next_taken2 <= 1'h0; // @[src/main/scala/fpga/Core.scala 370:41]
+    end else if (!(if1_is_jump)) begin // @[src/main/scala/fpga/Core.scala 393:21]
+      if (~io_imem_valid) begin // @[src/main/scala/fpga/Core.scala 402:98]
         ic_reg_bp_next_taken2 <= _GEN_42;
       end else begin
         ic_reg_bp_next_taken2 <= _GEN_42;
       end
     end
-    if (reset) begin // @[src/main/scala/fpga/Core.scala 367:41]
-      ic_reg_bp_next_taken_pc2 <= 31'h0; // @[src/main/scala/fpga/Core.scala 367:41]
-    end else if (!(if1_is_jump)) begin // @[src/main/scala/fpga/Core.scala 389:21]
-      if (~io_imem_valid) begin // @[src/main/scala/fpga/Core.scala 398:98]
+    if (reset) begin // @[src/main/scala/fpga/Core.scala 371:41]
+      ic_reg_bp_next_taken_pc2 <= 31'h0; // @[src/main/scala/fpga/Core.scala 371:41]
+    end else if (!(if1_is_jump)) begin // @[src/main/scala/fpga/Core.scala 393:21]
+      if (~io_imem_valid) begin // @[src/main/scala/fpga/Core.scala 402:98]
         ic_reg_bp_next_taken_pc2 <= _GEN_43;
       end else begin
         ic_reg_bp_next_taken_pc2 <= _GEN_43;
       end
     end
-    if (reset) begin // @[src/main/scala/fpga/Core.scala 368:41]
-      ic_reg_bp_next_cnt2 <= 2'h0; // @[src/main/scala/fpga/Core.scala 368:41]
-    end else if (!(if1_is_jump)) begin // @[src/main/scala/fpga/Core.scala 389:21]
-      if (~io_imem_valid) begin // @[src/main/scala/fpga/Core.scala 398:98]
+    if (reset) begin // @[src/main/scala/fpga/Core.scala 372:41]
+      ic_reg_bp_next_cnt2 <= 2'h0; // @[src/main/scala/fpga/Core.scala 372:41]
+    end else if (!(if1_is_jump)) begin // @[src/main/scala/fpga/Core.scala 393:21]
+      if (~io_imem_valid) begin // @[src/main/scala/fpga/Core.scala 402:98]
         ic_reg_bp_next_cnt2 <= _GEN_44;
       end else begin
         ic_reg_bp_next_cnt2 <= _GEN_44;
-      end
-    end
-    if (reset) begin // @[src/main/scala/fpga/Core.scala 919:40]
-      id_reg_pc_delay <= 31'h0; // @[src/main/scala/fpga/Core.scala 919:40]
-    end else if (_if1_is_jump_T) begin // @[src/main/scala/fpga/Core.scala 948:45]
-      id_reg_pc_delay <= _GEN_217;
-    end else begin
-      id_reg_pc_delay <= _GEN_217;
-    end
-    if (reset) begin // @[src/main/scala/fpga/Core.scala 920:40]
-      id_reg_wb_addr_delay <= 5'h0; // @[src/main/scala/fpga/Core.scala 920:40]
-    end else if (_if1_is_jump_T) begin // @[src/main/scala/fpga/Core.scala 948:45]
-      id_reg_wb_addr_delay <= _GEN_226;
-    end else begin
-      id_reg_wb_addr_delay <= _GEN_226;
-    end
-    if (reset) begin // @[src/main/scala/fpga/Core.scala 921:40]
-      id_reg_op1_sel_delay <= 1'h0; // @[src/main/scala/fpga/Core.scala 921:40]
-    end else if (_if1_is_jump_T) begin // @[src/main/scala/fpga/Core.scala 948:45]
-      id_reg_op1_sel_delay <= _GEN_218;
-    end else begin
-      id_reg_op1_sel_delay <= _GEN_218;
-    end
-    if (reset) begin // @[src/main/scala/fpga/Core.scala 922:40]
-      id_reg_op2_sel_delay <= 1'h0; // @[src/main/scala/fpga/Core.scala 922:40]
-    end else if (_if1_is_jump_T) begin // @[src/main/scala/fpga/Core.scala 948:45]
-      id_reg_op2_sel_delay <= _GEN_219;
-    end else begin
-      id_reg_op2_sel_delay <= _GEN_219;
-    end
-    if (reset) begin // @[src/main/scala/fpga/Core.scala 923:40]
-      id_reg_op3_sel_delay <= 2'h0; // @[src/main/scala/fpga/Core.scala 923:40]
-    end else if (_if1_is_jump_T) begin // @[src/main/scala/fpga/Core.scala 948:45]
-      id_reg_op3_sel_delay <= _GEN_220;
-    end else begin
-      id_reg_op3_sel_delay <= _GEN_220;
-    end
-    if (reset) begin // @[src/main/scala/fpga/Core.scala 924:40]
-      id_reg_rs1_addr_delay <= 5'h0; // @[src/main/scala/fpga/Core.scala 924:40]
-    end else if (_if1_is_jump_T) begin // @[src/main/scala/fpga/Core.scala 948:45]
-      id_reg_rs1_addr_delay <= _GEN_221;
-    end else begin
-      id_reg_rs1_addr_delay <= _GEN_221;
-    end
-    if (reset) begin // @[src/main/scala/fpga/Core.scala 925:40]
-      id_reg_rs2_addr_delay <= 5'h0; // @[src/main/scala/fpga/Core.scala 925:40]
-    end else if (_if1_is_jump_T) begin // @[src/main/scala/fpga/Core.scala 948:45]
-      id_reg_rs2_addr_delay <= _GEN_222;
-    end else begin
-      id_reg_rs2_addr_delay <= _GEN_222;
-    end
-    if (reset) begin // @[src/main/scala/fpga/Core.scala 926:40]
-      id_reg_rs3_addr_delay <= 5'h0; // @[src/main/scala/fpga/Core.scala 926:40]
-    end else if (_if1_is_jump_T) begin // @[src/main/scala/fpga/Core.scala 948:45]
-      id_reg_rs3_addr_delay <= _GEN_223;
-    end else begin
-      id_reg_rs3_addr_delay <= _GEN_223;
-    end
-    if (reset) begin // @[src/main/scala/fpga/Core.scala 927:40]
-      id_reg_op1_data_delay <= 32'h0; // @[src/main/scala/fpga/Core.scala 927:40]
-    end else if (_if1_is_jump_T) begin // @[src/main/scala/fpga/Core.scala 948:45]
-      id_reg_op1_data_delay <= _GEN_224;
-    end else begin
-      id_reg_op1_data_delay <= _GEN_224;
-    end
-    if (reset) begin // @[src/main/scala/fpga/Core.scala 928:40]
-      id_reg_op2_data_delay <= 32'h0; // @[src/main/scala/fpga/Core.scala 928:40]
-    end else if (_if1_is_jump_T) begin // @[src/main/scala/fpga/Core.scala 948:45]
-      id_reg_op2_data_delay <= _GEN_225;
-    end else begin
-      id_reg_op2_data_delay <= _GEN_225;
-    end
-    if (reset) begin // @[src/main/scala/fpga/Core.scala 929:40]
-      id_reg_exe_fun_delay <= 4'h0; // @[src/main/scala/fpga/Core.scala 929:40]
-    end else if (_if1_is_jump_T) begin // @[src/main/scala/fpga/Core.scala 948:45]
-      id_reg_exe_fun_delay <= 4'h0; // @[src/main/scala/fpga/Core.scala 969:32]
-    end else if (_ic_read_en4_T) begin // @[src/main/scala/fpga/Core.scala 978:30]
-      if (_csignals_T_1) begin // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-        id_reg_exe_fun_delay <= 4'h0;
-      end else begin
-        id_reg_exe_fun_delay <= _csignals_T_382;
-      end
-    end
-    if (reset) begin // @[src/main/scala/fpga/Core.scala 930:40]
-      id_reg_rf_wen_delay <= 1'h0; // @[src/main/scala/fpga/Core.scala 930:40]
-    end else if (_if1_is_jump_T) begin // @[src/main/scala/fpga/Core.scala 948:45]
-      id_reg_rf_wen_delay <= 1'h0; // @[src/main/scala/fpga/Core.scala 968:32]
-    end else if (_ic_read_en4_T) begin // @[src/main/scala/fpga/Core.scala 978:30]
-      id_reg_rf_wen_delay <= csignals_4; // @[src/main/scala/fpga/Core.scala 989:29]
-    end
-    if (reset) begin // @[src/main/scala/fpga/Core.scala 931:40]
-      id_reg_wb_sel_delay <= 3'h0; // @[src/main/scala/fpga/Core.scala 931:40]
-    end else if (_if1_is_jump_T) begin // @[src/main/scala/fpga/Core.scala 948:45]
-      id_reg_wb_sel_delay <= 3'h0; // @[src/main/scala/fpga/Core.scala 970:32]
-    end else if (_ic_read_en4_T) begin // @[src/main/scala/fpga/Core.scala 978:30]
-      if (_csignals_T_1) begin // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-        id_reg_wb_sel_delay <= 3'h5;
-      end else begin
-        id_reg_wb_sel_delay <= _csignals_T_1017;
-      end
-    end
-    if (reset) begin // @[src/main/scala/fpga/Core.scala 932:40]
-      id_reg_csr_addr_delay <= 12'h0; // @[src/main/scala/fpga/Core.scala 932:40]
-    end else if (_if1_is_jump_T) begin // @[src/main/scala/fpga/Core.scala 948:45]
-      id_reg_csr_addr_delay <= _GEN_228;
-    end else begin
-      id_reg_csr_addr_delay <= _GEN_228;
-    end
-    if (reset) begin // @[src/main/scala/fpga/Core.scala 933:40]
-      id_reg_csr_cmd_delay <= 2'h0; // @[src/main/scala/fpga/Core.scala 933:40]
-    end else if (_if1_is_jump_T) begin // @[src/main/scala/fpga/Core.scala 948:45]
-      id_reg_csr_cmd_delay <= 2'h0; // @[src/main/scala/fpga/Core.scala 971:32]
-    end else if (_ic_read_en4_T) begin // @[src/main/scala/fpga/Core.scala 978:30]
-      if (_csignals_T_1) begin // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-        id_reg_csr_cmd_delay <= 2'h0;
-      end else begin
-        id_reg_csr_cmd_delay <= _csignals_T_1271;
       end
     end
     if (reset) begin // @[src/main/scala/fpga/Core.scala 934:40]
-      id_reg_imm_b_sext_delay <= 32'h0; // @[src/main/scala/fpga/Core.scala 934:40]
-    end else if (_if1_is_jump_T) begin // @[src/main/scala/fpga/Core.scala 948:45]
+      id_reg_pc_delay <= 31'h0; // @[src/main/scala/fpga/Core.scala 934:40]
+    end else if (_if1_is_jump_T) begin // @[src/main/scala/fpga/Core.scala 965:45]
+      id_reg_pc_delay <= _GEN_217;
+    end else begin
+      id_reg_pc_delay <= _GEN_217;
+    end
+    if (reset) begin // @[src/main/scala/fpga/Core.scala 935:40]
+      id_reg_wb_addr_delay <= 5'h0; // @[src/main/scala/fpga/Core.scala 935:40]
+    end else if (_if1_is_jump_T) begin // @[src/main/scala/fpga/Core.scala 965:45]
+      id_reg_wb_addr_delay <= _GEN_226;
+    end else begin
+      id_reg_wb_addr_delay <= _GEN_226;
+    end
+    if (reset) begin // @[src/main/scala/fpga/Core.scala 936:40]
+      id_reg_op1_sel_delay <= 1'h0; // @[src/main/scala/fpga/Core.scala 936:40]
+    end else if (_if1_is_jump_T) begin // @[src/main/scala/fpga/Core.scala 965:45]
+      id_reg_op1_sel_delay <= _GEN_218;
+    end else begin
+      id_reg_op1_sel_delay <= _GEN_218;
+    end
+    if (reset) begin // @[src/main/scala/fpga/Core.scala 937:40]
+      id_reg_op2_sel_delay <= 1'h0; // @[src/main/scala/fpga/Core.scala 937:40]
+    end else if (_if1_is_jump_T) begin // @[src/main/scala/fpga/Core.scala 965:45]
+      id_reg_op2_sel_delay <= _GEN_219;
+    end else begin
+      id_reg_op2_sel_delay <= _GEN_219;
+    end
+    if (reset) begin // @[src/main/scala/fpga/Core.scala 938:40]
+      id_reg_op3_sel_delay <= 2'h0; // @[src/main/scala/fpga/Core.scala 938:40]
+    end else if (_if1_is_jump_T) begin // @[src/main/scala/fpga/Core.scala 965:45]
+      id_reg_op3_sel_delay <= _GEN_220;
+    end else begin
+      id_reg_op3_sel_delay <= _GEN_220;
+    end
+    if (reset) begin // @[src/main/scala/fpga/Core.scala 939:40]
+      id_reg_rs1_addr_delay <= 5'h0; // @[src/main/scala/fpga/Core.scala 939:40]
+    end else if (_if1_is_jump_T) begin // @[src/main/scala/fpga/Core.scala 965:45]
+      id_reg_rs1_addr_delay <= _GEN_221;
+    end else begin
+      id_reg_rs1_addr_delay <= _GEN_221;
+    end
+    if (reset) begin // @[src/main/scala/fpga/Core.scala 940:40]
+      id_reg_rs2_addr_delay <= 5'h0; // @[src/main/scala/fpga/Core.scala 940:40]
+    end else if (_if1_is_jump_T) begin // @[src/main/scala/fpga/Core.scala 965:45]
+      id_reg_rs2_addr_delay <= _GEN_222;
+    end else begin
+      id_reg_rs2_addr_delay <= _GEN_222;
+    end
+    if (reset) begin // @[src/main/scala/fpga/Core.scala 941:40]
+      id_reg_rs3_addr_delay <= 5'h0; // @[src/main/scala/fpga/Core.scala 941:40]
+    end else if (_if1_is_jump_T) begin // @[src/main/scala/fpga/Core.scala 965:45]
+      id_reg_rs3_addr_delay <= _GEN_223;
+    end else begin
+      id_reg_rs3_addr_delay <= _GEN_223;
+    end
+    if (reset) begin // @[src/main/scala/fpga/Core.scala 942:40]
+      id_reg_op1_data_delay <= 32'h0; // @[src/main/scala/fpga/Core.scala 942:40]
+    end else if (_if1_is_jump_T) begin // @[src/main/scala/fpga/Core.scala 965:45]
+      id_reg_op1_data_delay <= _GEN_224;
+    end else begin
+      id_reg_op1_data_delay <= _GEN_224;
+    end
+    if (reset) begin // @[src/main/scala/fpga/Core.scala 943:40]
+      id_reg_op2_data_delay <= 32'h0; // @[src/main/scala/fpga/Core.scala 943:40]
+    end else if (_if1_is_jump_T) begin // @[src/main/scala/fpga/Core.scala 965:45]
+      id_reg_op2_data_delay <= _GEN_225;
+    end else begin
+      id_reg_op2_data_delay <= _GEN_225;
+    end
+    if (reset) begin // @[src/main/scala/fpga/Core.scala 944:40]
+      id_reg_exe_fun_delay <= 4'h0; // @[src/main/scala/fpga/Core.scala 944:40]
+    end else if (_if1_is_jump_T) begin // @[src/main/scala/fpga/Core.scala 965:45]
+      id_reg_exe_fun_delay <= 4'h0; // @[src/main/scala/fpga/Core.scala 988:32]
+    end else if (_ic_read_en4_T) begin // @[src/main/scala/fpga/Core.scala 997:30]
+      if (_csignals_T_1) begin // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+        id_reg_exe_fun_delay <= 4'h0;
+      end else begin
+        id_reg_exe_fun_delay <= _csignals_T_409;
+      end
+    end
+    if (reset) begin // @[src/main/scala/fpga/Core.scala 945:40]
+      id_reg_rf_wen_delay <= 1'h0; // @[src/main/scala/fpga/Core.scala 945:40]
+    end else if (_if1_is_jump_T) begin // @[src/main/scala/fpga/Core.scala 965:45]
+      id_reg_rf_wen_delay <= 1'h0; // @[src/main/scala/fpga/Core.scala 987:32]
+    end else if (_ic_read_en4_T) begin // @[src/main/scala/fpga/Core.scala 997:30]
+      id_reg_rf_wen_delay <= csignals_4; // @[src/main/scala/fpga/Core.scala 1008:29]
+    end
+    if (reset) begin // @[src/main/scala/fpga/Core.scala 946:40]
+      id_reg_wb_sel_delay <= 3'h0; // @[src/main/scala/fpga/Core.scala 946:40]
+    end else if (_if1_is_jump_T) begin // @[src/main/scala/fpga/Core.scala 965:45]
+      id_reg_wb_sel_delay <= 3'h0; // @[src/main/scala/fpga/Core.scala 989:32]
+    end else if (_ic_read_en4_T) begin // @[src/main/scala/fpga/Core.scala 997:30]
+      if (_csignals_T_1) begin // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+        id_reg_wb_sel_delay <= 3'h5;
+      end else begin
+        id_reg_wb_sel_delay <= _csignals_T_1089;
+      end
+    end
+    if (reset) begin // @[src/main/scala/fpga/Core.scala 947:40]
+      id_reg_csr_addr_delay <= 12'h0; // @[src/main/scala/fpga/Core.scala 947:40]
+    end else if (_if1_is_jump_T) begin // @[src/main/scala/fpga/Core.scala 965:45]
+      id_reg_csr_addr_delay <= _GEN_230;
+    end else begin
+      id_reg_csr_addr_delay <= _GEN_230;
+    end
+    if (reset) begin // @[src/main/scala/fpga/Core.scala 948:40]
+      id_reg_csr_cmd_delay <= 2'h0; // @[src/main/scala/fpga/Core.scala 948:40]
+    end else if (_if1_is_jump_T) begin // @[src/main/scala/fpga/Core.scala 965:45]
+      id_reg_csr_cmd_delay <= 2'h0; // @[src/main/scala/fpga/Core.scala 990:32]
+    end else if (_ic_read_en4_T) begin // @[src/main/scala/fpga/Core.scala 997:30]
+      if (_csignals_T_1) begin // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
+        id_reg_csr_cmd_delay <= 2'h0;
+      end else begin
+        id_reg_csr_cmd_delay <= _csignals_T_1361;
+      end
+    end
+    if (reset) begin // @[src/main/scala/fpga/Core.scala 949:40]
+      id_reg_imm_b_sext_delay <= 32'h0; // @[src/main/scala/fpga/Core.scala 949:40]
+    end else if (_if1_is_jump_T) begin // @[src/main/scala/fpga/Core.scala 965:45]
       id_reg_imm_b_sext_delay <= _GEN_227;
     end else begin
       id_reg_imm_b_sext_delay <= _GEN_227;
     end
-    if (reset) begin // @[src/main/scala/fpga/Core.scala 935:40]
-      id_reg_mem_w_delay <= 3'h0; // @[src/main/scala/fpga/Core.scala 935:40]
-    end else if (_if1_is_jump_T) begin // @[src/main/scala/fpga/Core.scala 948:45]
-      id_reg_mem_w_delay <= 3'h0; // @[src/main/scala/fpga/Core.scala 972:32]
-    end else if (_ic_read_en4_T) begin // @[src/main/scala/fpga/Core.scala 978:30]
+    if (reset) begin // @[src/main/scala/fpga/Core.scala 950:40]
+      id_reg_shamt_delay <= 2'h0; // @[src/main/scala/fpga/Core.scala 950:40]
+    end else if (_if1_is_jump_T) begin // @[src/main/scala/fpga/Core.scala 965:45]
+      id_reg_shamt_delay <= _GEN_228;
+    end else begin
+      id_reg_shamt_delay <= _GEN_228;
+    end
+    if (reset) begin // @[src/main/scala/fpga/Core.scala 951:40]
+      id_reg_op2op_delay <= 1'h0; // @[src/main/scala/fpga/Core.scala 951:40]
+    end else if (_if1_is_jump_T) begin // @[src/main/scala/fpga/Core.scala 965:45]
+      id_reg_op2op_delay <= _GEN_229;
+    end else begin
+      id_reg_op2op_delay <= _GEN_229;
+    end
+    if (reset) begin // @[src/main/scala/fpga/Core.scala 952:40]
+      id_reg_mem_w_delay <= 3'h0; // @[src/main/scala/fpga/Core.scala 952:40]
+    end else if (_if1_is_jump_T) begin // @[src/main/scala/fpga/Core.scala 965:45]
+      id_reg_mem_w_delay <= 3'h0; // @[src/main/scala/fpga/Core.scala 991:32]
+    end else if (_ic_read_en4_T) begin // @[src/main/scala/fpga/Core.scala 997:30]
       if (_csignals_T_1) begin // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
         id_reg_mem_w_delay <= 3'h5;
       end else begin
-        id_reg_mem_w_delay <= _csignals_T_1398;
+        id_reg_mem_w_delay <= _csignals_T_1497;
       end
     end
-    if (reset) begin // @[src/main/scala/fpga/Core.scala 937:40]
-      id_reg_is_br_delay <= 1'h0; // @[src/main/scala/fpga/Core.scala 937:40]
-    end else if (_if1_is_jump_T) begin // @[src/main/scala/fpga/Core.scala 948:45]
-      id_reg_is_br_delay <= 1'h0; // @[src/main/scala/fpga/Core.scala 973:32]
-    end else if (_ic_read_en4_T) begin // @[src/main/scala/fpga/Core.scala 978:30]
-      id_reg_is_br_delay <= id_is_br; // @[src/main/scala/fpga/Core.scala 997:29]
+    if (reset) begin // @[src/main/scala/fpga/Core.scala 954:40]
+      id_reg_is_br_delay <= 1'h0; // @[src/main/scala/fpga/Core.scala 954:40]
+    end else if (_if1_is_jump_T) begin // @[src/main/scala/fpga/Core.scala 965:45]
+      id_reg_is_br_delay <= 1'h0; // @[src/main/scala/fpga/Core.scala 992:32]
+    end else if (_ic_read_en4_T) begin // @[src/main/scala/fpga/Core.scala 997:30]
+      id_reg_is_br_delay <= id_is_br; // @[src/main/scala/fpga/Core.scala 1018:29]
     end
-    if (reset) begin // @[src/main/scala/fpga/Core.scala 938:40]
-      id_reg_is_j_delay <= 1'h0; // @[src/main/scala/fpga/Core.scala 938:40]
-    end else if (_if1_is_jump_T) begin // @[src/main/scala/fpga/Core.scala 948:45]
-      id_reg_is_j_delay <= 1'h0; // @[src/main/scala/fpga/Core.scala 974:32]
-    end else if (_ic_read_en4_T) begin // @[src/main/scala/fpga/Core.scala 978:30]
-      id_reg_is_j_delay <= id_is_j; // @[src/main/scala/fpga/Core.scala 998:29]
+    if (reset) begin // @[src/main/scala/fpga/Core.scala 955:40]
+      id_reg_is_j_delay <= 1'h0; // @[src/main/scala/fpga/Core.scala 955:40]
+    end else if (_if1_is_jump_T) begin // @[src/main/scala/fpga/Core.scala 965:45]
+      id_reg_is_j_delay <= 1'h0; // @[src/main/scala/fpga/Core.scala 993:32]
+    end else if (_ic_read_en4_T) begin // @[src/main/scala/fpga/Core.scala 997:30]
+      id_reg_is_j_delay <= id_is_j; // @[src/main/scala/fpga/Core.scala 1019:29]
     end
-    if (reset) begin // @[src/main/scala/fpga/Core.scala 939:40]
-      id_reg_bp_taken_delay <= 1'h0; // @[src/main/scala/fpga/Core.scala 939:40]
-    end else if (_if1_is_jump_T) begin // @[src/main/scala/fpga/Core.scala 948:45]
-      id_reg_bp_taken_delay <= 1'h0; // @[src/main/scala/fpga/Core.scala 975:32]
-    end else if (_ic_read_en4_T) begin // @[src/main/scala/fpga/Core.scala 978:30]
-      id_reg_bp_taken_delay <= id_reg_bp_taken; // @[src/main/scala/fpga/Core.scala 999:29]
+    if (reset) begin // @[src/main/scala/fpga/Core.scala 956:40]
+      id_reg_bp_taken_delay <= 1'h0; // @[src/main/scala/fpga/Core.scala 956:40]
+    end else if (_if1_is_jump_T) begin // @[src/main/scala/fpga/Core.scala 965:45]
+      id_reg_bp_taken_delay <= 1'h0; // @[src/main/scala/fpga/Core.scala 994:32]
+    end else if (_ic_read_en4_T) begin // @[src/main/scala/fpga/Core.scala 997:30]
+      id_reg_bp_taken_delay <= id_reg_bp_taken; // @[src/main/scala/fpga/Core.scala 1020:29]
     end
-    if (reset) begin // @[src/main/scala/fpga/Core.scala 940:41]
-      id_reg_bp_taken_pc_delay <= 31'h0; // @[src/main/scala/fpga/Core.scala 940:41]
-    end else if (_if1_is_jump_T) begin // @[src/main/scala/fpga/Core.scala 948:45]
-      id_reg_bp_taken_pc_delay <= _GEN_230;
+    if (reset) begin // @[src/main/scala/fpga/Core.scala 957:41]
+      id_reg_bp_taken_pc_delay <= 31'h0; // @[src/main/scala/fpga/Core.scala 957:41]
+    end else if (_if1_is_jump_T) begin // @[src/main/scala/fpga/Core.scala 965:45]
+      id_reg_bp_taken_pc_delay <= _GEN_232;
     end else begin
-      id_reg_bp_taken_pc_delay <= _GEN_230;
+      id_reg_bp_taken_pc_delay <= _GEN_232;
     end
-    if (reset) begin // @[src/main/scala/fpga/Core.scala 941:40]
-      id_reg_bp_cnt_delay <= 2'h0; // @[src/main/scala/fpga/Core.scala 941:40]
-    end else if (_if1_is_jump_T) begin // @[src/main/scala/fpga/Core.scala 948:45]
-      id_reg_bp_cnt_delay <= _GEN_231;
+    if (reset) begin // @[src/main/scala/fpga/Core.scala 958:40]
+      id_reg_bp_cnt_delay <= 2'h0; // @[src/main/scala/fpga/Core.scala 958:40]
+    end else if (_if1_is_jump_T) begin // @[src/main/scala/fpga/Core.scala 965:45]
+      id_reg_bp_cnt_delay <= _GEN_233;
     end else begin
-      id_reg_bp_cnt_delay <= _GEN_231;
+      id_reg_bp_cnt_delay <= _GEN_233;
     end
-    if (reset) begin // @[src/main/scala/fpga/Core.scala 942:40]
-      id_reg_is_half_delay <= 1'h0; // @[src/main/scala/fpga/Core.scala 942:40]
-    end else if (_if1_is_jump_T) begin // @[src/main/scala/fpga/Core.scala 948:45]
-      id_reg_is_half_delay <= _GEN_232;
+    if (reset) begin // @[src/main/scala/fpga/Core.scala 959:40]
+      id_reg_is_half_delay <= 1'h0; // @[src/main/scala/fpga/Core.scala 959:40]
+    end else if (_if1_is_jump_T) begin // @[src/main/scala/fpga/Core.scala 965:45]
+      id_reg_is_half_delay <= _GEN_234;
     end else begin
-      id_reg_is_half_delay <= _GEN_232;
+      id_reg_is_half_delay <= _GEN_234;
     end
-    if (reset) begin // @[src/main/scala/fpga/Core.scala 943:43]
-      id_reg_is_valid_inst_delay <= 1'h0; // @[src/main/scala/fpga/Core.scala 943:43]
-    end else if (_if1_is_jump_T) begin // @[src/main/scala/fpga/Core.scala 948:45]
-      id_reg_is_valid_inst_delay <= 1'h0; // @[src/main/scala/fpga/Core.scala 976:32]
-    end else if (_ic_read_en4_T) begin // @[src/main/scala/fpga/Core.scala 978:30]
-      id_reg_is_valid_inst_delay <= id_reg_inst != 32'h13; // @[src/main/scala/fpga/Core.scala 1003:32]
+    if (reset) begin // @[src/main/scala/fpga/Core.scala 960:43]
+      id_reg_is_valid_inst_delay <= 1'h0; // @[src/main/scala/fpga/Core.scala 960:43]
+    end else if (_if1_is_jump_T) begin // @[src/main/scala/fpga/Core.scala 965:45]
+      id_reg_is_valid_inst_delay <= 1'h0; // @[src/main/scala/fpga/Core.scala 995:32]
+    end else if (_ic_read_en4_T) begin // @[src/main/scala/fpga/Core.scala 997:30]
+      id_reg_is_valid_inst_delay <= id_reg_inst != 32'h13; // @[src/main/scala/fpga/Core.scala 1024:32]
     end
-    if (reset) begin // @[src/main/scala/fpga/Core.scala 944:40]
-      id_reg_is_trap_delay <= 1'h0; // @[src/main/scala/fpga/Core.scala 944:40]
-    end else if (_if1_is_jump_T) begin // @[src/main/scala/fpga/Core.scala 948:45]
-      id_reg_is_trap_delay <= 1'h0; // @[src/main/scala/fpga/Core.scala 977:32]
-    end else if (_ic_read_en4_T) begin // @[src/main/scala/fpga/Core.scala 978:30]
-      id_reg_is_trap_delay <= _id_csr_addr_T_2; // @[src/main/scala/fpga/Core.scala 1004:29]
+    if (reset) begin // @[src/main/scala/fpga/Core.scala 961:40]
+      id_reg_is_trap_delay <= 1'h0; // @[src/main/scala/fpga/Core.scala 961:40]
+    end else if (_if1_is_jump_T) begin // @[src/main/scala/fpga/Core.scala 965:45]
+      id_reg_is_trap_delay <= 1'h0; // @[src/main/scala/fpga/Core.scala 996:32]
+    end else if (_ic_read_en4_T) begin // @[src/main/scala/fpga/Core.scala 997:30]
+      id_reg_is_trap_delay <= _id_csr_addr_T_2; // @[src/main/scala/fpga/Core.scala 1025:29]
     end
-    if (reset) begin // @[src/main/scala/fpga/Core.scala 945:40]
-      id_reg_mcause_delay <= 32'h0; // @[src/main/scala/fpga/Core.scala 945:40]
-    end else if (_if1_is_jump_T) begin // @[src/main/scala/fpga/Core.scala 948:45]
-      id_reg_mcause_delay <= _GEN_233;
+    if (reset) begin // @[src/main/scala/fpga/Core.scala 962:40]
+      id_reg_mcause_delay <= 32'h0; // @[src/main/scala/fpga/Core.scala 962:40]
+    end else if (_if1_is_jump_T) begin // @[src/main/scala/fpga/Core.scala 965:45]
+      id_reg_mcause_delay <= _GEN_235;
     end else begin
-      id_reg_mcause_delay <= _GEN_233;
+      id_reg_mcause_delay <= _GEN_235;
     end
-    csr_reg_is_meintr <= _csr_reg_is_meintr_T_4 & _csr_reg_is_meintr_T_8; // @[src/main/scala/fpga/Core.scala 1397:15]
-    csr_reg_is_mtintr <= _csr_reg_is_mtintr_T_4 & _csr_reg_is_mtintr_T_8; // @[src/main/scala/fpga/Core.scala 1402:22]
-    ex2_reg_dividend <= _GEN_667[36:0]; // @[src/main/scala/fpga/Core.scala 1554:{37,37}]
-    if (reset) begin // @[src/main/scala/fpga/Core.scala 1555:37]
-      ex2_reg_divisor <= 36'h0; // @[src/main/scala/fpga/Core.scala 1555:37]
-    end else if (3'h0 == ex2_reg_divrem_state) begin // @[src/main/scala/fpga/Core.scala 1586:33]
-      ex2_reg_divisor <= _ex2_reg_divisor_T_1; // @[src/main/scala/fpga/Core.scala 1597:28]
-    end else if (3'h1 == ex2_reg_divrem_state) begin // @[src/main/scala/fpga/Core.scala 1586:33]
-      ex2_reg_divisor <= ex2_reg_p_divisor[37:2]; // @[src/main/scala/fpga/Core.scala 1615:28]
+    csr_reg_is_meintr <= _csr_reg_is_meintr_T_4 & _csr_reg_is_meintr_T_8; // @[src/main/scala/fpga/Core.scala 1430:15]
+    csr_reg_is_mtintr <= _csr_reg_is_mtintr_T_4 & _csr_reg_is_mtintr_T_8; // @[src/main/scala/fpga/Core.scala 1435:22]
+    ex2_reg_dividend <= _GEN_681[36:0]; // @[src/main/scala/fpga/Core.scala 1587:{37,37}]
+    if (reset) begin // @[src/main/scala/fpga/Core.scala 1588:37]
+      ex2_reg_divisor <= 36'h0; // @[src/main/scala/fpga/Core.scala 1588:37]
+    end else if (3'h0 == ex2_reg_divrem_state) begin // @[src/main/scala/fpga/Core.scala 1619:33]
+      ex2_reg_divisor <= _ex2_reg_divisor_T_1; // @[src/main/scala/fpga/Core.scala 1630:28]
+    end else if (3'h1 == ex2_reg_divrem_state) begin // @[src/main/scala/fpga/Core.scala 1619:33]
+      ex2_reg_divisor <= ex2_reg_p_divisor[37:2]; // @[src/main/scala/fpga/Core.scala 1648:28]
     end
-    if (reset) begin // @[src/main/scala/fpga/Core.scala 1556:37]
-      ex2_reg_p_divisor <= 64'h0; // @[src/main/scala/fpga/Core.scala 1556:37]
-    end else if (3'h0 == ex2_reg_divrem_state) begin // @[src/main/scala/fpga/Core.scala 1586:33]
-      ex2_reg_p_divisor <= _ex2_reg_p_divisor_T; // @[src/main/scala/fpga/Core.scala 1598:28]
-    end else if (3'h1 == ex2_reg_divrem_state) begin // @[src/main/scala/fpga/Core.scala 1586:33]
-      ex2_reg_p_divisor <= {{2'd0}, ex2_reg_p_divisor[63:2]}; // @[src/main/scala/fpga/Core.scala 1614:28]
+    if (reset) begin // @[src/main/scala/fpga/Core.scala 1589:37]
+      ex2_reg_p_divisor <= 64'h0; // @[src/main/scala/fpga/Core.scala 1589:37]
+    end else if (3'h0 == ex2_reg_divrem_state) begin // @[src/main/scala/fpga/Core.scala 1619:33]
+      ex2_reg_p_divisor <= _ex2_reg_p_divisor_T; // @[src/main/scala/fpga/Core.scala 1631:28]
+    end else if (3'h1 == ex2_reg_divrem_state) begin // @[src/main/scala/fpga/Core.scala 1619:33]
+      ex2_reg_p_divisor <= {{2'd0}, ex2_reg_p_divisor[63:2]}; // @[src/main/scala/fpga/Core.scala 1647:28]
     end
-    if (reset) begin // @[src/main/scala/fpga/Core.scala 1557:37]
-      ex2_reg_divrem_count <= 5'h0; // @[src/main/scala/fpga/Core.scala 1557:37]
-    end else if (3'h0 == ex2_reg_divrem_state) begin // @[src/main/scala/fpga/Core.scala 1586:33]
-      ex2_reg_divrem_count <= 5'h0; // @[src/main/scala/fpga/Core.scala 1599:28]
-    end else if (3'h1 == ex2_reg_divrem_state) begin // @[src/main/scala/fpga/Core.scala 1586:33]
-      ex2_reg_divrem_count <= _ex2_reg_divrem_count_T_1; // @[src/main/scala/fpga/Core.scala 1616:28]
-    end else if (3'h2 == ex2_reg_divrem_state) begin // @[src/main/scala/fpga/Core.scala 1586:33]
-      ex2_reg_divrem_count <= _ex2_reg_divrem_count_T_1; // @[src/main/scala/fpga/Core.scala 1673:28]
+    if (reset) begin // @[src/main/scala/fpga/Core.scala 1590:37]
+      ex2_reg_divrem_count <= 5'h0; // @[src/main/scala/fpga/Core.scala 1590:37]
+    end else if (3'h0 == ex2_reg_divrem_state) begin // @[src/main/scala/fpga/Core.scala 1619:33]
+      ex2_reg_divrem_count <= 5'h0; // @[src/main/scala/fpga/Core.scala 1632:28]
+    end else if (3'h1 == ex2_reg_divrem_state) begin // @[src/main/scala/fpga/Core.scala 1619:33]
+      ex2_reg_divrem_count <= _ex2_reg_divrem_count_T_1; // @[src/main/scala/fpga/Core.scala 1649:28]
+    end else if (3'h2 == ex2_reg_divrem_state) begin // @[src/main/scala/fpga/Core.scala 1619:33]
+      ex2_reg_divrem_count <= _ex2_reg_divrem_count_T_1; // @[src/main/scala/fpga/Core.scala 1706:28]
     end
-    if (reset) begin // @[src/main/scala/fpga/Core.scala 1558:37]
-      ex2_reg_rem_shift <= 5'h0; // @[src/main/scala/fpga/Core.scala 1558:37]
-    end else if (3'h0 == ex2_reg_divrem_state) begin // @[src/main/scala/fpga/Core.scala 1586:33]
-      ex2_reg_rem_shift <= 5'h0; // @[src/main/scala/fpga/Core.scala 1600:28]
-    end else if (!(3'h1 == ex2_reg_divrem_state)) begin // @[src/main/scala/fpga/Core.scala 1586:33]
-      if (3'h2 == ex2_reg_divrem_state) begin // @[src/main/scala/fpga/Core.scala 1586:33]
-        ex2_reg_rem_shift <= _ex2_reg_rem_shift_T_1; // @[src/main/scala/fpga/Core.scala 1672:25]
+    if (reset) begin // @[src/main/scala/fpga/Core.scala 1591:37]
+      ex2_reg_rem_shift <= 5'h0; // @[src/main/scala/fpga/Core.scala 1591:37]
+    end else if (3'h0 == ex2_reg_divrem_state) begin // @[src/main/scala/fpga/Core.scala 1619:33]
+      ex2_reg_rem_shift <= 5'h0; // @[src/main/scala/fpga/Core.scala 1633:28]
+    end else if (!(3'h1 == ex2_reg_divrem_state)) begin // @[src/main/scala/fpga/Core.scala 1619:33]
+      if (3'h2 == ex2_reg_divrem_state) begin // @[src/main/scala/fpga/Core.scala 1619:33]
+        ex2_reg_rem_shift <= _ex2_reg_rem_shift_T_1; // @[src/main/scala/fpga/Core.scala 1705:25]
       end
     end
-    if (reset) begin // @[src/main/scala/fpga/Core.scala 1559:37]
-      ex2_reg_extra_shift <= 1'h0; // @[src/main/scala/fpga/Core.scala 1559:37]
-    end else if (3'h0 == ex2_reg_divrem_state) begin // @[src/main/scala/fpga/Core.scala 1586:33]
-      if (~ex2_reg_init_divisor[1]) begin // @[src/main/scala/fpga/Core.scala 1602:46]
-        ex2_reg_extra_shift <= 1'h0; // @[src/main/scala/fpga/Core.scala 1603:29]
+    if (reset) begin // @[src/main/scala/fpga/Core.scala 1592:37]
+      ex2_reg_extra_shift <= 1'h0; // @[src/main/scala/fpga/Core.scala 1592:37]
+    end else if (3'h0 == ex2_reg_divrem_state) begin // @[src/main/scala/fpga/Core.scala 1619:33]
+      if (~ex2_reg_init_divisor[1]) begin // @[src/main/scala/fpga/Core.scala 1635:46]
+        ex2_reg_extra_shift <= 1'h0; // @[src/main/scala/fpga/Core.scala 1636:29]
       end else begin
-        ex2_reg_extra_shift <= 1'h1; // @[src/main/scala/fpga/Core.scala 1606:29]
+        ex2_reg_extra_shift <= 1'h1; // @[src/main/scala/fpga/Core.scala 1639:29]
       end
-    end else if (3'h1 == ex2_reg_divrem_state) begin // @[src/main/scala/fpga/Core.scala 1586:33]
-      if (~ex2_reg_p_divisor[35]) begin // @[src/main/scala/fpga/Core.scala 1617:52]
-        ex2_reg_extra_shift <= 1'h0; // @[src/main/scala/fpga/Core.scala 1618:29]
+    end else if (3'h1 == ex2_reg_divrem_state) begin // @[src/main/scala/fpga/Core.scala 1619:33]
+      if (~ex2_reg_p_divisor[35]) begin // @[src/main/scala/fpga/Core.scala 1650:52]
+        ex2_reg_extra_shift <= 1'h0; // @[src/main/scala/fpga/Core.scala 1651:29]
       end else begin
-        ex2_reg_extra_shift <= 1'h1; // @[src/main/scala/fpga/Core.scala 1621:29]
+        ex2_reg_extra_shift <= 1'h1; // @[src/main/scala/fpga/Core.scala 1654:29]
       end
     end
-    if (reset) begin // @[src/main/scala/fpga/Core.scala 1560:37]
-      ex2_reg_d <= 3'h0; // @[src/main/scala/fpga/Core.scala 1560:37]
-    end else if (3'h0 == ex2_reg_divrem_state) begin // @[src/main/scala/fpga/Core.scala 1586:33]
-      if (~ex2_reg_init_divisor[1]) begin // @[src/main/scala/fpga/Core.scala 1602:46]
-        ex2_reg_d <= 3'h0; // @[src/main/scala/fpga/Core.scala 1604:29]
+    if (reset) begin // @[src/main/scala/fpga/Core.scala 1593:37]
+      ex2_reg_d <= 3'h0; // @[src/main/scala/fpga/Core.scala 1593:37]
+    end else if (3'h0 == ex2_reg_divrem_state) begin // @[src/main/scala/fpga/Core.scala 1619:33]
+      if (~ex2_reg_init_divisor[1]) begin // @[src/main/scala/fpga/Core.scala 1635:46]
+        ex2_reg_d <= 3'h0; // @[src/main/scala/fpga/Core.scala 1637:29]
       end else begin
-        ex2_reg_d <= _ex2_reg_d_T_1; // @[src/main/scala/fpga/Core.scala 1607:29]
+        ex2_reg_d <= _ex2_reg_d_T_1; // @[src/main/scala/fpga/Core.scala 1640:29]
       end
-    end else if (3'h1 == ex2_reg_divrem_state) begin // @[src/main/scala/fpga/Core.scala 1586:33]
-      if (~ex2_reg_p_divisor[35]) begin // @[src/main/scala/fpga/Core.scala 1617:52]
-        ex2_reg_d <= ex2_reg_p_divisor[33:31]; // @[src/main/scala/fpga/Core.scala 1619:29]
+    end else if (3'h1 == ex2_reg_divrem_state) begin // @[src/main/scala/fpga/Core.scala 1619:33]
+      if (~ex2_reg_p_divisor[35]) begin // @[src/main/scala/fpga/Core.scala 1650:52]
+        ex2_reg_d <= ex2_reg_p_divisor[33:31]; // @[src/main/scala/fpga/Core.scala 1652:29]
       end else begin
-        ex2_reg_d <= ex2_reg_p_divisor[34:32]; // @[src/main/scala/fpga/Core.scala 1622:29]
+        ex2_reg_d <= ex2_reg_p_divisor[34:32]; // @[src/main/scala/fpga/Core.scala 1655:29]
       end
     end
-    if (reset) begin // @[src/main/scala/fpga/Core.scala 1561:37]
-      ex2_reg_reminder <= 32'h0; // @[src/main/scala/fpga/Core.scala 1561:37]
-    end else if (!(3'h0 == ex2_reg_divrem_state)) begin // @[src/main/scala/fpga/Core.scala 1586:33]
-      if (!(3'h1 == ex2_reg_divrem_state)) begin // @[src/main/scala/fpga/Core.scala 1586:33]
-        if (!(3'h2 == ex2_reg_divrem_state)) begin // @[src/main/scala/fpga/Core.scala 1586:33]
-          ex2_reg_reminder <= _GEN_552;
+    if (reset) begin // @[src/main/scala/fpga/Core.scala 1594:37]
+      ex2_reg_reminder <= 32'h0; // @[src/main/scala/fpga/Core.scala 1594:37]
+    end else if (!(3'h0 == ex2_reg_divrem_state)) begin // @[src/main/scala/fpga/Core.scala 1619:33]
+      if (!(3'h1 == ex2_reg_divrem_state)) begin // @[src/main/scala/fpga/Core.scala 1619:33]
+        if (!(3'h2 == ex2_reg_divrem_state)) begin // @[src/main/scala/fpga/Core.scala 1619:33]
+          ex2_reg_reminder <= _GEN_566;
         end
       end
     end
-    ex2_reg_quotient <= _GEN_669[31:0]; // @[src/main/scala/fpga/Core.scala 1562:{37,37}]
+    ex2_reg_quotient <= _GEN_683[31:0]; // @[src/main/scala/fpga/Core.scala 1595:{37,37}]
     `ifndef SYNTHESIS
     `ifdef PRINTF_COND
       if (`PRINTF_COND) begin
     `endif
         if (~reset) begin
-          $fwrite(32'h80000002,"ic_reg_addr_out: %x, ic_data_out: %x\n",{ic_reg_addr_out,1'h0},ic_data_out); // @[src/main/scala/fpga/Core.scala 603:9]
+          $fwrite(32'h80000002,"ic_reg_addr_out: %x, ic_data_out: %x\n",{ic_reg_addr_out,1'h0},ic_data_out); // @[src/main/scala/fpga/Core.scala 607:9]
         end
     `ifdef PRINTF_COND
       end
@@ -4919,7 +5124,7 @@ module Core(
     `endif
         if (_T_33) begin
           $fwrite(32'h80000002,"inst: %x, ic_read_rdy: %d, ic_state: %d, ic_addr_en: %d\n",if2_inst,ic_read_rdy,ic_state
-            ,if1_is_jump); // @[src/main/scala/fpga/Core.scala 604:9]
+            ,if1_is_jump); // @[src/main/scala/fpga/Core.scala 608:9]
         end
     `ifdef PRINTF_COND
       end
@@ -4930,7 +5135,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_33) begin
-          $fwrite(32'h80000002,"if2_pc           : 0x%x\n",_T_31); // @[src/main/scala/fpga/Core.scala 1949:9]
+          $fwrite(32'h80000002,"if2_pc           : 0x%x\n",_T_31); // @[src/main/scala/fpga/Core.scala 1982:9]
         end
     `ifdef PRINTF_COND
       end
@@ -4941,7 +5146,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_33) begin
-          $fwrite(32'h80000002,"if2_is_valid_inst: 0x%x\n",if2_is_valid_inst); // @[src/main/scala/fpga/Core.scala 1950:9]
+          $fwrite(32'h80000002,"if2_is_valid_inst: 0x%x\n",if2_is_valid_inst); // @[src/main/scala/fpga/Core.scala 1983:9]
         end
     `ifdef PRINTF_COND
       end
@@ -4952,7 +5157,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_33) begin
-          $fwrite(32'h80000002,"if2_inst         : 0x%x\n",if2_inst); // @[src/main/scala/fpga/Core.scala 1951:9]
+          $fwrite(32'h80000002,"if2_inst         : 0x%x\n",if2_inst); // @[src/main/scala/fpga/Core.scala 1984:9]
         end
     `ifdef PRINTF_COND
       end
@@ -4963,7 +5168,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_33) begin
-          $fwrite(32'h80000002,"ic_bp_taken      : 0x%x\n",ic_bp_taken); // @[src/main/scala/fpga/Core.scala 1952:9]
+          $fwrite(32'h80000002,"ic_bp_taken      : 0x%x\n",ic_bp_taken); // @[src/main/scala/fpga/Core.scala 1985:9]
         end
     `ifdef PRINTF_COND
       end
@@ -4974,7 +5179,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_33) begin
-          $fwrite(32'h80000002,"ic_bp_taken_pc   : 0x%x\n",{ic_bp_taken_pc,1'h0}); // @[src/main/scala/fpga/Core.scala 1953:9]
+          $fwrite(32'h80000002,"ic_bp_taken_pc   : 0x%x\n",{ic_bp_taken_pc,1'h0}); // @[src/main/scala/fpga/Core.scala 1986:9]
         end
     `ifdef PRINTF_COND
       end
@@ -4985,7 +5190,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_33) begin
-          $fwrite(32'h80000002,"ic_bp_cnt        : 0x%x\n",ic_bp_cnt); // @[src/main/scala/fpga/Core.scala 1954:9]
+          $fwrite(32'h80000002,"ic_bp_cnt        : 0x%x\n",ic_bp_cnt); // @[src/main/scala/fpga/Core.scala 1987:9]
         end
     `ifdef PRINTF_COND
       end
@@ -4996,7 +5201,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_33) begin
-          $fwrite(32'h80000002,"id_reg_pc        : 0x%x\n",_id_op1_data_T_1); // @[src/main/scala/fpga/Core.scala 1955:9]
+          $fwrite(32'h80000002,"id_reg_pc        : 0x%x\n",_id_op1_data_T_1); // @[src/main/scala/fpga/Core.scala 1988:9]
         end
     `ifdef PRINTF_COND
       end
@@ -5007,7 +5212,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_33) begin
-          $fwrite(32'h80000002,"id_reg_inst      : 0x%x\n",id_reg_inst); // @[src/main/scala/fpga/Core.scala 1956:9]
+          $fwrite(32'h80000002,"id_reg_inst      : 0x%x\n",id_reg_inst); // @[src/main/scala/fpga/Core.scala 1989:9]
         end
     `ifdef PRINTF_COND
       end
@@ -5018,7 +5223,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_33) begin
-          $fwrite(32'h80000002,"id_stall         : 0x%x\n",id_stall); // @[src/main/scala/fpga/Core.scala 1957:9]
+          $fwrite(32'h80000002,"id_stall         : 0x%x\n",id_stall); // @[src/main/scala/fpga/Core.scala 1990:9]
         end
     `ifdef PRINTF_COND
       end
@@ -5029,7 +5234,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_33) begin
-          $fwrite(32'h80000002,"id_inst          : 0x%x\n",id_reg_inst); // @[src/main/scala/fpga/Core.scala 1958:9]
+          $fwrite(32'h80000002,"id_inst          : 0x%x\n",id_reg_inst); // @[src/main/scala/fpga/Core.scala 1991:9]
         end
     `ifdef PRINTF_COND
       end
@@ -5040,7 +5245,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_33) begin
-          $fwrite(32'h80000002,"id_reg_bp_taken  : 0x%x\n",id_reg_bp_taken); // @[src/main/scala/fpga/Core.scala 1962:9]
+          $fwrite(32'h80000002,"id_reg_bp_taken  : 0x%x\n",id_reg_bp_taken); // @[src/main/scala/fpga/Core.scala 1995:9]
         end
     `ifdef PRINTF_COND
       end
@@ -5051,7 +5256,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_33) begin
-          $fwrite(32'h80000002,"id_reg_is_bp_fail: 0x%x\n",id_reg_is_bp_fail); // @[src/main/scala/fpga/Core.scala 1963:9]
+          $fwrite(32'h80000002,"id_reg_is_bp_fail: 0x%x\n",id_reg_is_bp_fail); // @[src/main/scala/fpga/Core.scala 1996:9]
         end
     `ifdef PRINTF_COND
       end
@@ -5062,7 +5267,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_33) begin
-          $fwrite(32'h80000002,"rrd_reg_pc       : 0x%x\n",{rrd_reg_pc,1'h0}); // @[src/main/scala/fpga/Core.scala 1964:9]
+          $fwrite(32'h80000002,"rrd_reg_pc       : 0x%x\n",{rrd_reg_pc,1'h0}); // @[src/main/scala/fpga/Core.scala 1997:9]
         end
     `ifdef PRINTF_COND
       end
@@ -5073,7 +5278,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_33) begin
-          $fwrite(32'h80000002,"rrd_reg_is_valid_: 0x%x\n",rrd_reg_is_valid_inst); // @[src/main/scala/fpga/Core.scala 1965:9]
+          $fwrite(32'h80000002,"rrd_reg_is_valid_: 0x%x\n",rrd_reg_is_valid_inst); // @[src/main/scala/fpga/Core.scala 1998:9]
         end
     `ifdef PRINTF_COND
       end
@@ -5084,7 +5289,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_33) begin
-          $fwrite(32'h80000002,"rrd_stall        : 0x%x\n",rrd_stall); // @[src/main/scala/fpga/Core.scala 1966:9]
+          $fwrite(32'h80000002,"rrd_stall        : 0x%x\n",rrd_stall); // @[src/main/scala/fpga/Core.scala 1999:9]
         end
     `ifdef PRINTF_COND
       end
@@ -5095,7 +5300,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_33) begin
-          $fwrite(32'h80000002,"rrd_op1_data     : 0x%x\n",rrd_op1_data); // @[src/main/scala/fpga/Core.scala 1969:9]
+          $fwrite(32'h80000002,"rrd_op1_data     : 0x%x\n",rrd_op1_data); // @[src/main/scala/fpga/Core.scala 2002:9]
         end
     `ifdef PRINTF_COND
       end
@@ -5106,7 +5311,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_33) begin
-          $fwrite(32'h80000002,"rrd_op2_data     : 0x%x\n",rrd_op2_data); // @[src/main/scala/fpga/Core.scala 1970:9]
+          $fwrite(32'h80000002,"rrd_op2_data     : 0x%x\n",rrd_op2_data); // @[src/main/scala/fpga/Core.scala 2003:9]
         end
     `ifdef PRINTF_COND
       end
@@ -5117,7 +5322,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_33) begin
-          $fwrite(32'h80000002,"rrd_op3_data     : 0x%x\n",rrd_op3_data); // @[src/main/scala/fpga/Core.scala 1971:9]
+          $fwrite(32'h80000002,"rrd_op3_data     : 0x%x\n",rrd_op3_data); // @[src/main/scala/fpga/Core.scala 2004:9]
         end
     `ifdef PRINTF_COND
       end
@@ -5128,7 +5333,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_33) begin
-          $fwrite(32'h80000002,"rrd_reg_op1_sel  : 0x%x\n",rrd_reg_op1_sel); // @[src/main/scala/fpga/Core.scala 1972:9]
+          $fwrite(32'h80000002,"rrd_reg_op1_sel  : 0x%x\n",rrd_reg_op1_sel); // @[src/main/scala/fpga/Core.scala 2005:9]
         end
     `ifdef PRINTF_COND
       end
@@ -5139,7 +5344,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_33) begin
-          $fwrite(32'h80000002,"rrd_reg_rs1_addr : 0x%x\n",rrd_reg_rs1_addr); // @[src/main/scala/fpga/Core.scala 1974:9]
+          $fwrite(32'h80000002,"rrd_reg_rs1_addr : 0x%x\n",rrd_reg_rs1_addr); // @[src/main/scala/fpga/Core.scala 2007:9]
         end
     `ifdef PRINTF_COND
       end
@@ -5150,7 +5355,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_33) begin
-          $fwrite(32'h80000002,"rrd_reg_wb_addr : 0x%x\n",rrd_reg_wb_addr); // @[src/main/scala/fpga/Core.scala 1975:9]
+          $fwrite(32'h80000002,"rrd_reg_wb_addr : 0x%x\n",rrd_reg_wb_addr); // @[src/main/scala/fpga/Core.scala 2008:9]
         end
     `ifdef PRINTF_COND
       end
@@ -5161,7 +5366,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_33) begin
-          $fwrite(32'h80000002,"rrd_reg_rf_wen : 0x%x\n",rrd_reg_rf_wen); // @[src/main/scala/fpga/Core.scala 1976:9]
+          $fwrite(32'h80000002,"rrd_reg_rf_wen : 0x%x\n",rrd_reg_rf_wen); // @[src/main/scala/fpga/Core.scala 2009:9]
         end
     `ifdef PRINTF_COND
       end
@@ -5172,7 +5377,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_33) begin
-          $fwrite(32'h80000002,"rrd_reg_wb_sel : 0x%x\n",rrd_reg_wb_sel); // @[src/main/scala/fpga/Core.scala 1977:9]
+          $fwrite(32'h80000002,"rrd_reg_wb_sel : 0x%x\n",rrd_reg_wb_sel); // @[src/main/scala/fpga/Core.scala 2010:9]
         end
     `ifdef PRINTF_COND
       end
@@ -5185,7 +5390,7 @@ module Core(
         if (_T_33) begin
           $fwrite(32'h80000002,"scoreboard      : 0x%x\n",{scoreboard_MPORT_7_data,scoreboard_MPORT_8_data,
             scoreboard_MPORT_9_data,scoreboard_MPORT_10_data,scoreboard_MPORT_11_data,scoreboard_MPORT_12_data,
-            scoreboard_MPORT_13_data,scoreboard_MPORT_14_data,hi_lo,lo}); // @[src/main/scala/fpga/Core.scala 1978:9]
+            scoreboard_MPORT_13_data,scoreboard_MPORT_14_data,hi_lo,lo}); // @[src/main/scala/fpga/Core.scala 2011:9]
         end
     `ifdef PRINTF_COND
       end
@@ -5196,7 +5401,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_33) begin
-          $fwrite(32'h80000002,"ex1_fw_data      : 0x%x\n",ex1_alu_out); // @[src/main/scala/fpga/Core.scala 1979:9]
+          $fwrite(32'h80000002,"ex1_fw_data      : 0x%x\n",ex1_alu_out); // @[src/main/scala/fpga/Core.scala 2012:9]
         end
     `ifdef PRINTF_COND
       end
@@ -5207,7 +5412,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_33) begin
-          $fwrite(32'h80000002,"ex1_reg_pc       : 0x%x\n",{ex1_reg_pc,1'h0}); // @[src/main/scala/fpga/Core.scala 1980:9]
+          $fwrite(32'h80000002,"ex1_reg_pc       : 0x%x\n",{ex1_reg_pc,1'h0}); // @[src/main/scala/fpga/Core.scala 2013:9]
         end
     `ifdef PRINTF_COND
       end
@@ -5218,7 +5423,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_33) begin
-          $fwrite(32'h80000002,"ex1_reg_is_valid_: 0x%x\n",ex1_reg_is_valid_inst); // @[src/main/scala/fpga/Core.scala 1981:9]
+          $fwrite(32'h80000002,"ex1_reg_is_valid_: 0x%x\n",ex1_reg_is_valid_inst); // @[src/main/scala/fpga/Core.scala 2014:9]
         end
     `ifdef PRINTF_COND
       end
@@ -5229,7 +5434,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_33) begin
-          $fwrite(32'h80000002,"ex1_reg_op1_data : 0x%x\n",ex1_reg_op1_data); // @[src/main/scala/fpga/Core.scala 1982:9]
+          $fwrite(32'h80000002,"ex1_reg_op1_data : 0x%x\n",ex1_reg_op1_data); // @[src/main/scala/fpga/Core.scala 2015:9]
         end
     `ifdef PRINTF_COND
       end
@@ -5240,7 +5445,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_33) begin
-          $fwrite(32'h80000002,"ex1_reg_op2_data : 0x%x\n",ex1_reg_op2_data); // @[src/main/scala/fpga/Core.scala 1983:9]
+          $fwrite(32'h80000002,"ex1_reg_op2_data : 0x%x\n",ex1_reg_op2_data); // @[src/main/scala/fpga/Core.scala 2016:9]
         end
     `ifdef PRINTF_COND
       end
@@ -5251,7 +5456,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_33) begin
-          $fwrite(32'h80000002,"ex1_alu_out      : 0x%x\n",ex1_alu_out); // @[src/main/scala/fpga/Core.scala 1984:9]
+          $fwrite(32'h80000002,"ex1_alu_out      : 0x%x\n",ex1_alu_out); // @[src/main/scala/fpga/Core.scala 2017:9]
         end
     `ifdef PRINTF_COND
       end
@@ -5262,7 +5467,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_33) begin
-          $fwrite(32'h80000002,"ex1_reg_exe_fun  : 0x%x\n",ex1_reg_exe_fun); // @[src/main/scala/fpga/Core.scala 1985:9]
+          $fwrite(32'h80000002,"ex1_reg_exe_fun  : 0x%x\n",ex1_reg_exe_fun); // @[src/main/scala/fpga/Core.scala 2018:9]
         end
     `ifdef PRINTF_COND
       end
@@ -5273,7 +5478,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_33) begin
-          $fwrite(32'h80000002,"ex1_reg_wb_sel   : 0x%x\n",ex1_reg_wb_sel); // @[src/main/scala/fpga/Core.scala 1986:9]
+          $fwrite(32'h80000002,"ex1_reg_wb_sel   : 0x%x\n",ex1_reg_wb_sel); // @[src/main/scala/fpga/Core.scala 2019:9]
         end
     `ifdef PRINTF_COND
       end
@@ -5284,7 +5489,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_33) begin
-          $fwrite(32'h80000002,"ex1_reg_wb_addr  : 0x%x\n",ex1_reg_wb_addr); // @[src/main/scala/fpga/Core.scala 1987:9]
+          $fwrite(32'h80000002,"ex1_reg_wb_addr  : 0x%x\n",ex1_reg_wb_addr); // @[src/main/scala/fpga/Core.scala 2020:9]
         end
     `ifdef PRINTF_COND
       end
@@ -5295,7 +5500,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_33) begin
-          $fwrite(32'h80000002,"ex1_reg_bp_taken : 0x%x\n",ex1_reg_bp_taken); // @[src/main/scala/fpga/Core.scala 1988:9]
+          $fwrite(32'h80000002,"ex1_reg_bp_taken : 0x%x\n",ex1_reg_bp_taken); // @[src/main/scala/fpga/Core.scala 2021:9]
         end
     `ifdef PRINTF_COND
       end
@@ -5306,7 +5511,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_33) begin
-          $fwrite(32'h80000002,"ex1_reg_bp_taken_: 0x%x\n",{ex1_reg_bp_taken_pc,1'h0}); // @[src/main/scala/fpga/Core.scala 1989:9]
+          $fwrite(32'h80000002,"ex1_reg_bp_taken_: 0x%x\n",{ex1_reg_bp_taken_pc,1'h0}); // @[src/main/scala/fpga/Core.scala 2022:9]
         end
     `ifdef PRINTF_COND
       end
@@ -5317,7 +5522,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_33) begin
-          $fwrite(32'h80000002,"ex1_is_br        : 0x%d\n",ex1_is_br); // @[src/main/scala/fpga/Core.scala 1990:9]
+          $fwrite(32'h80000002,"ex1_is_br        : 0x%d\n",ex1_is_br); // @[src/main/scala/fpga/Core.scala 2023:9]
         end
     `ifdef PRINTF_COND
       end
@@ -5328,7 +5533,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_33) begin
-          $fwrite(32'h80000002,"ex1_reg_bp_cnt   : 0x%d\n",ex1_reg_bp_cnt); // @[src/main/scala/fpga/Core.scala 1991:9]
+          $fwrite(32'h80000002,"ex1_reg_bp_cnt   : 0x%d\n",ex1_reg_bp_cnt); // @[src/main/scala/fpga/Core.scala 2024:9]
         end
     `ifdef PRINTF_COND
       end
@@ -5339,7 +5544,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_33) begin
-          $fwrite(32'h80000002,"ex2_reg_is_br    : 0x%d\n",ex2_reg_is_br); // @[src/main/scala/fpga/Core.scala 1992:9]
+          $fwrite(32'h80000002,"ex2_reg_is_br    : 0x%d\n",ex2_reg_is_br); // @[src/main/scala/fpga/Core.scala 2025:9]
         end
     `ifdef PRINTF_COND
       end
@@ -5350,7 +5555,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_33) begin
-          $fwrite(32'h80000002,"ex2_reg_br_pc  : 0x%x\n",{ex2_reg_br_pc,1'h0}); // @[src/main/scala/fpga/Core.scala 1993:9]
+          $fwrite(32'h80000002,"ex2_reg_br_pc  : 0x%x\n",{ex2_reg_br_pc,1'h0}); // @[src/main/scala/fpga/Core.scala 2026:9]
         end
     `ifdef PRINTF_COND
       end
@@ -5361,7 +5566,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_33) begin
-          $fwrite(32'h80000002,"ex2_reg_pc       : 0x%x\n",_io_debug_signal_ex2_reg_pc_T); // @[src/main/scala/fpga/Core.scala 1994:9]
+          $fwrite(32'h80000002,"ex2_reg_pc       : 0x%x\n",_io_debug_signal_ex2_reg_pc_T); // @[src/main/scala/fpga/Core.scala 2027:9]
         end
     `ifdef PRINTF_COND
       end
@@ -5372,7 +5577,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_33) begin
-          $fwrite(32'h80000002,"ex2_reg_is_valid_: 0x%x\n",ex2_reg_is_valid_inst); // @[src/main/scala/fpga/Core.scala 1995:9]
+          $fwrite(32'h80000002,"ex2_reg_is_valid_: 0x%x\n",ex2_reg_is_valid_inst); // @[src/main/scala/fpga/Core.scala 2028:9]
         end
     `ifdef PRINTF_COND
       end
@@ -5383,7 +5588,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_33) begin
-          $fwrite(32'h80000002,"ex2_stall        : 0x%x\n",ex2_stall); // @[src/main/scala/fpga/Core.scala 1996:9]
+          $fwrite(32'h80000002,"ex2_stall        : 0x%x\n",ex2_stall); // @[src/main/scala/fpga/Core.scala 2029:9]
         end
     `ifdef PRINTF_COND
       end
@@ -5394,7 +5599,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_33) begin
-          $fwrite(32'h80000002,"ex2_wb_data      : 0x%x\n",ex2_wb_data); // @[src/main/scala/fpga/Core.scala 1997:9]
+          $fwrite(32'h80000002,"ex2_wb_data      : 0x%x\n",ex2_wb_data); // @[src/main/scala/fpga/Core.scala 2030:9]
         end
     `ifdef PRINTF_COND
       end
@@ -5405,7 +5610,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_33) begin
-          $fwrite(32'h80000002,"ex2_alu_muldiv_ou: 0x%x\n",ex2_alu_muldiv_out); // @[src/main/scala/fpga/Core.scala 1998:9]
+          $fwrite(32'h80000002,"ex2_alu_muldiv_ou: 0x%x\n",ex2_alu_muldiv_out); // @[src/main/scala/fpga/Core.scala 2031:9]
         end
     `ifdef PRINTF_COND
       end
@@ -5416,7 +5621,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_33) begin
-          $fwrite(32'h80000002,"ex2_reg_wb_addr  : 0x%x\n",ex2_reg_wb_addr); // @[src/main/scala/fpga/Core.scala 1999:9]
+          $fwrite(32'h80000002,"ex2_reg_wb_addr  : 0x%x\n",ex2_reg_wb_addr); // @[src/main/scala/fpga/Core.scala 2032:9]
         end
     `ifdef PRINTF_COND
       end
@@ -5427,7 +5632,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_33) begin
-          $fwrite(32'h80000002,"mem1_reg_wdata    : 0x%x\n",mem1_reg_wdata); // @[src/main/scala/fpga/Core.scala 2001:9]
+          $fwrite(32'h80000002,"mem1_reg_wdata    : 0x%x\n",mem1_reg_wdata); // @[src/main/scala/fpga/Core.scala 2034:9]
         end
     `ifdef PRINTF_COND
       end
@@ -5438,7 +5643,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_33) begin
-          $fwrite(32'h80000002,"mem1_mem_stall   : 0x%x\n",mem1_mem_stall); // @[src/main/scala/fpga/Core.scala 2002:9]
+          $fwrite(32'h80000002,"mem1_mem_stall   : 0x%x\n",mem1_mem_stall); // @[src/main/scala/fpga/Core.scala 2035:9]
         end
     `ifdef PRINTF_COND
       end
@@ -5449,7 +5654,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_33) begin
-          $fwrite(32'h80000002,"mem1_dram_stall  : 0x%x\n",mem1_dram_stall); // @[src/main/scala/fpga/Core.scala 2003:9]
+          $fwrite(32'h80000002,"mem1_dram_stall  : 0x%x\n",mem1_dram_stall); // @[src/main/scala/fpga/Core.scala 2036:9]
         end
     `ifdef PRINTF_COND
       end
@@ -5460,7 +5665,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_33) begin
-          $fwrite(32'h80000002,"mem1_reg_unaligne: 0x%x\n",mem1_reg_unaligned); // @[src/main/scala/fpga/Core.scala 2004:9]
+          $fwrite(32'h80000002,"mem1_reg_unaligne: 0x%x\n",mem1_reg_unaligned); // @[src/main/scala/fpga/Core.scala 2037:9]
         end
     `ifdef PRINTF_COND
       end
@@ -5471,7 +5676,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_33) begin
-          $fwrite(32'h80000002,"mem1_is_valid_ins: 0x%x\n",mem1_reg_is_valid_inst); // @[src/main/scala/fpga/Core.scala 2005:9]
+          $fwrite(32'h80000002,"mem1_is_valid_ins: 0x%x\n",mem1_reg_is_valid_inst); // @[src/main/scala/fpga/Core.scala 2038:9]
         end
     `ifdef PRINTF_COND
       end
@@ -5482,7 +5687,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_33) begin
-          $fwrite(32'h80000002,"mem2_mem_stall   : 0x%x\n",1'h0); // @[src/main/scala/fpga/Core.scala 2006:9]
+          $fwrite(32'h80000002,"mem2_mem_stall   : 0x%x\n",1'h0); // @[src/main/scala/fpga/Core.scala 2039:9]
         end
     `ifdef PRINTF_COND
       end
@@ -5493,7 +5698,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_33) begin
-          $fwrite(32'h80000002,"mem2_dram_stall  : 0x%x\n",mem2_dram_stall); // @[src/main/scala/fpga/Core.scala 2007:9]
+          $fwrite(32'h80000002,"mem2_dram_stall  : 0x%x\n",mem2_dram_stall); // @[src/main/scala/fpga/Core.scala 2040:9]
         end
     `ifdef PRINTF_COND
       end
@@ -5504,7 +5709,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_33) begin
-          $fwrite(32'h80000002,"mem2_reg_is_valid: 0x%x\n",mem2_reg_is_valid_inst); // @[src/main/scala/fpga/Core.scala 2010:9]
+          $fwrite(32'h80000002,"mem2_reg_is_valid: 0x%x\n",mem2_reg_is_valid_inst); // @[src/main/scala/fpga/Core.scala 2043:9]
         end
     `ifdef PRINTF_COND
       end
@@ -5515,7 +5720,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_33) begin
-          $fwrite(32'h80000002,"mem2_reg_is_mem_l: 0x%x\n",mem2_reg_is_mem_load); // @[src/main/scala/fpga/Core.scala 2011:9]
+          $fwrite(32'h80000002,"mem2_reg_is_mem_l: 0x%x\n",mem2_reg_is_mem_load); // @[src/main/scala/fpga/Core.scala 2044:9]
         end
     `ifdef PRINTF_COND
       end
@@ -5526,7 +5731,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_33) begin
-          $fwrite(32'h80000002,"mem2_reg_is_dram_: 0x%x\n",mem2_reg_is_dram_load); // @[src/main/scala/fpga/Core.scala 2012:9]
+          $fwrite(32'h80000002,"mem2_reg_is_dram_: 0x%x\n",mem2_reg_is_dram_load); // @[src/main/scala/fpga/Core.scala 2045:9]
         end
     `ifdef PRINTF_COND
       end
@@ -5537,7 +5742,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_33) begin
-          $fwrite(32'h80000002,"mem2_reg_unaligne: 0x%x\n",mem2_reg_unaligned); // @[src/main/scala/fpga/Core.scala 2013:9]
+          $fwrite(32'h80000002,"mem2_reg_unaligne: 0x%x\n",mem2_reg_unaligned); // @[src/main/scala/fpga/Core.scala 2046:9]
         end
     `ifdef PRINTF_COND
       end
@@ -5548,7 +5753,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_33) begin
-          $fwrite(32'h80000002,"mem2_is_aligned_l: 0x%x\n",mem2_is_aligned_lw); // @[src/main/scala/fpga/Core.scala 2014:9]
+          $fwrite(32'h80000002,"mem2_is_aligned_l: 0x%x\n",mem2_is_aligned_lw); // @[src/main/scala/fpga/Core.scala 2047:9]
         end
     `ifdef PRINTF_COND
       end
@@ -5559,7 +5764,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_33) begin
-          $fwrite(32'h80000002,"mem2_reg_wb_addr : 0x%x\n",mem2_reg_wb_addr); // @[src/main/scala/fpga/Core.scala 2015:9]
+          $fwrite(32'h80000002,"mem2_reg_wb_addr : 0x%x\n",mem2_reg_wb_addr); // @[src/main/scala/fpga/Core.scala 2048:9]
         end
     `ifdef PRINTF_COND
       end
@@ -5570,7 +5775,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_33) begin
-          $fwrite(32'h80000002,"mem3_reg_dmem_rda: 0x%x\n",mem3_reg_dmem_rdata); // @[src/main/scala/fpga/Core.scala 2016:9]
+          $fwrite(32'h80000002,"mem3_reg_dmem_rda: 0x%x\n",mem3_reg_dmem_rdata); // @[src/main/scala/fpga/Core.scala 2049:9]
         end
     `ifdef PRINTF_COND
       end
@@ -5581,7 +5786,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_33) begin
-          $fwrite(32'h80000002,"mem3_wb_data_load: 0x%x\n",mem3_wb_data_load); // @[src/main/scala/fpga/Core.scala 2017:9]
+          $fwrite(32'h80000002,"mem3_wb_data_load: 0x%x\n",mem3_wb_data_load); // @[src/main/scala/fpga/Core.scala 2050:9]
         end
     `ifdef PRINTF_COND
       end
@@ -5592,7 +5797,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_33) begin
-          $fwrite(32'h80000002,"mem3_reg_unaligne: 0x%x\n",mem3_reg_unaligned); // @[src/main/scala/fpga/Core.scala 2018:9]
+          $fwrite(32'h80000002,"mem3_reg_unaligne: 0x%x\n",mem3_reg_unaligned); // @[src/main/scala/fpga/Core.scala 2051:9]
         end
     `ifdef PRINTF_COND
       end
@@ -5603,7 +5808,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_33) begin
-          $fwrite(32'h80000002,"mem3_reg_is_align: 0x%x\n",mem3_reg_is_aligned_lw); // @[src/main/scala/fpga/Core.scala 2019:9]
+          $fwrite(32'h80000002,"mem3_reg_is_align: 0x%x\n",mem3_reg_is_aligned_lw); // @[src/main/scala/fpga/Core.scala 2052:9]
         end
     `ifdef PRINTF_COND
       end
@@ -5614,7 +5819,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_33) begin
-          $fwrite(32'h80000002,"mem3_reg_is_valid: 0x%x\n",mem3_reg_is_valid_inst); // @[src/main/scala/fpga/Core.scala 2020:9]
+          $fwrite(32'h80000002,"mem3_reg_is_valid: 0x%x\n",mem3_reg_is_valid_inst); // @[src/main/scala/fpga/Core.scala 2053:9]
         end
     `ifdef PRINTF_COND
       end
@@ -5625,7 +5830,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_33) begin
-          $fwrite(32'h80000002,"mem3_reg_wb_addr : 0x%x\n",mem3_reg_wb_addr); // @[src/main/scala/fpga/Core.scala 2021:9]
+          $fwrite(32'h80000002,"mem3_reg_wb_addr : 0x%x\n",mem3_reg_wb_addr); // @[src/main/scala/fpga/Core.scala 2054:9]
         end
     `ifdef PRINTF_COND
       end
@@ -5636,7 +5841,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_33) begin
-          $fwrite(32'h80000002,"csr_is_meintr    : %d\n",csr_is_meintr); // @[src/main/scala/fpga/Core.scala 2023:9]
+          $fwrite(32'h80000002,"csr_is_meintr    : %d\n",csr_is_meintr); // @[src/main/scala/fpga/Core.scala 2056:9]
         end
     `ifdef PRINTF_COND
       end
@@ -5647,7 +5852,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_33) begin
-          $fwrite(32'h80000002,"csr_is_mtintr    : %d\n",csr_is_mtintr); // @[src/main/scala/fpga/Core.scala 2024:9]
+          $fwrite(32'h80000002,"csr_is_mtintr    : %d\n",csr_is_mtintr); // @[src/main/scala/fpga/Core.scala 2057:9]
         end
     `ifdef PRINTF_COND
       end
@@ -5658,7 +5863,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_33) begin
-          $fwrite(32'h80000002,"csr_is_trap      : %d\n",csr_is_trap); // @[src/main/scala/fpga/Core.scala 2025:9]
+          $fwrite(32'h80000002,"csr_is_trap      : %d\n",csr_is_trap); // @[src/main/scala/fpga/Core.scala 2058:9]
         end
     `ifdef PRINTF_COND
       end
@@ -5669,7 +5874,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_33) begin
-          $fwrite(32'h80000002,"csr_is_br        : %d\n",csr_is_br); // @[src/main/scala/fpga/Core.scala 2027:9]
+          $fwrite(32'h80000002,"csr_is_br        : %d\n",csr_is_br); // @[src/main/scala/fpga/Core.scala 2060:9]
         end
     `ifdef PRINTF_COND
       end
@@ -5680,7 +5885,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_33) begin
-          $fwrite(32'h80000002,"instret          : %d\n",instret); // @[src/main/scala/fpga/Core.scala 2030:9]
+          $fwrite(32'h80000002,"instret          : %d\n",instret); // @[src/main/scala/fpga/Core.scala 2063:9]
         end
     `ifdef PRINTF_COND
       end
@@ -5691,7 +5896,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_33) begin
-          $fwrite(32'h80000002,"cycle_counter    : %d\n",io_debug_signal_cycle_counter); // @[src/main/scala/fpga/Core.scala 2033:9]
+          $fwrite(32'h80000002,"cycle_counter    : %d\n",io_debug_signal_cycle_counter); // @[src/main/scala/fpga/Core.scala 2066:9]
         end
     `ifdef PRINTF_COND
       end
@@ -5702,7 +5907,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_33) begin
-          $fwrite(32'h80000002,"---------\n"); // @[src/main/scala/fpga/Core.scala 2034:9]
+          $fwrite(32'h80000002,"---------\n"); // @[src/main/scala/fpga/Core.scala 2067:9]
         end
     `ifdef PRINTF_COND
       end
@@ -5816,303 +6021,315 @@ initial begin
   _RAND_32 = {1{`RANDOM}};
   rrd_reg_imm_b_sext = _RAND_32[31:0];
   _RAND_33 = {1{`RANDOM}};
-  rrd_reg_mem_w = _RAND_33[2:0];
+  rrd_reg_shamt = _RAND_33[1:0];
   _RAND_34 = {1{`RANDOM}};
-  rrd_reg_is_br = _RAND_34[0:0];
+  rrd_reg_op2op = _RAND_34[0:0];
   _RAND_35 = {1{`RANDOM}};
-  rrd_reg_is_j = _RAND_35[0:0];
+  rrd_reg_mem_w = _RAND_35[2:0];
   _RAND_36 = {1{`RANDOM}};
-  rrd_reg_bp_taken = _RAND_36[0:0];
+  rrd_reg_is_br = _RAND_36[0:0];
   _RAND_37 = {1{`RANDOM}};
-  rrd_reg_bp_taken_pc = _RAND_37[30:0];
+  rrd_reg_is_j = _RAND_37[0:0];
   _RAND_38 = {1{`RANDOM}};
-  rrd_reg_bp_cnt = _RAND_38[1:0];
+  rrd_reg_bp_taken = _RAND_38[0:0];
   _RAND_39 = {1{`RANDOM}};
-  rrd_reg_is_half = _RAND_39[0:0];
+  rrd_reg_bp_taken_pc = _RAND_39[30:0];
   _RAND_40 = {1{`RANDOM}};
-  rrd_reg_is_valid_inst = _RAND_40[0:0];
+  rrd_reg_bp_cnt = _RAND_40[1:0];
   _RAND_41 = {1{`RANDOM}};
-  rrd_reg_is_trap = _RAND_41[0:0];
+  rrd_reg_is_half = _RAND_41[0:0];
   _RAND_42 = {1{`RANDOM}};
-  rrd_reg_mcause = _RAND_42[31:0];
+  rrd_reg_is_valid_inst = _RAND_42[0:0];
   _RAND_43 = {1{`RANDOM}};
-  ex1_reg_pc = _RAND_43[30:0];
+  rrd_reg_is_trap = _RAND_43[0:0];
   _RAND_44 = {1{`RANDOM}};
-  ex1_reg_wb_addr = _RAND_44[4:0];
+  rrd_reg_mcause = _RAND_44[31:0];
   _RAND_45 = {1{`RANDOM}};
-  ex1_reg_op1_data = _RAND_45[31:0];
+  ex1_reg_pc = _RAND_45[30:0];
   _RAND_46 = {1{`RANDOM}};
-  ex1_reg_op2_data = _RAND_46[31:0];
+  ex1_reg_wb_addr = _RAND_46[4:0];
   _RAND_47 = {1{`RANDOM}};
-  ex1_reg_op3_data = _RAND_47[31:0];
+  ex1_reg_op1_data = _RAND_47[31:0];
   _RAND_48 = {1{`RANDOM}};
-  ex1_reg_exe_fun = _RAND_48[3:0];
+  ex1_reg_op2_data = _RAND_48[31:0];
   _RAND_49 = {1{`RANDOM}};
-  ex1_reg_rf_wen = _RAND_49[0:0];
+  ex1_reg_op3_data = _RAND_49[31:0];
   _RAND_50 = {1{`RANDOM}};
-  ex1_reg_wb_sel = _RAND_50[2:0];
+  ex1_reg_exe_fun = _RAND_50[3:0];
   _RAND_51 = {1{`RANDOM}};
-  ex1_reg_csr_addr = _RAND_51[11:0];
+  ex1_reg_rf_wen = _RAND_51[0:0];
   _RAND_52 = {1{`RANDOM}};
-  ex1_reg_csr_cmd = _RAND_52[1:0];
+  ex1_reg_wb_sel = _RAND_52[2:0];
   _RAND_53 = {1{`RANDOM}};
-  ex1_reg_mem_w = _RAND_53[2:0];
+  ex1_reg_csr_addr = _RAND_53[11:0];
   _RAND_54 = {1{`RANDOM}};
-  ex1_reg_is_j = _RAND_54[0:0];
+  ex1_reg_csr_cmd = _RAND_54[1:0];
   _RAND_55 = {1{`RANDOM}};
-  ex1_reg_bp_taken = _RAND_55[0:0];
+  ex1_reg_shamt = _RAND_55[1:0];
   _RAND_56 = {1{`RANDOM}};
-  ex1_reg_bp_taken_pc = _RAND_56[30:0];
+  ex1_reg_op2op = _RAND_56[0:0];
   _RAND_57 = {1{`RANDOM}};
-  ex1_reg_bp_cnt = _RAND_57[1:0];
+  ex1_reg_mem_w = _RAND_57[2:0];
   _RAND_58 = {1{`RANDOM}};
-  ex1_reg_is_half = _RAND_58[0:0];
+  ex1_reg_is_j = _RAND_58[0:0];
   _RAND_59 = {1{`RANDOM}};
-  ex1_reg_is_valid_inst = _RAND_59[0:0];
+  ex1_reg_bp_taken = _RAND_59[0:0];
   _RAND_60 = {1{`RANDOM}};
-  ex1_reg_is_trap = _RAND_60[0:0];
+  ex1_reg_bp_taken_pc = _RAND_60[30:0];
   _RAND_61 = {1{`RANDOM}};
-  ex1_reg_is_mret = _RAND_61[0:0];
+  ex1_reg_bp_cnt = _RAND_61[1:0];
   _RAND_62 = {1{`RANDOM}};
-  ex1_reg_mcause = _RAND_62[31:0];
+  ex1_reg_is_half = _RAND_62[0:0];
   _RAND_63 = {1{`RANDOM}};
-  ex1_reg_mem_use_reg = _RAND_63[0:0];
+  ex1_reg_is_valid_inst = _RAND_63[0:0];
   _RAND_64 = {1{`RANDOM}};
-  ex1_reg_inst2_use_reg = _RAND_64[0:0];
+  ex1_reg_is_trap = _RAND_64[0:0];
   _RAND_65 = {1{`RANDOM}};
-  ex1_reg_inst3_use_reg = _RAND_65[0:0];
+  ex1_reg_is_mret = _RAND_65[0:0];
   _RAND_66 = {1{`RANDOM}};
-  ex1_reg_is_br = _RAND_66[0:0];
+  ex1_reg_mcause = _RAND_66[31:0];
   _RAND_67 = {1{`RANDOM}};
-  ex1_reg_direct_jbr_pc = _RAND_67[30:0];
+  ex1_reg_mem_use_reg = _RAND_67[0:0];
   _RAND_68 = {1{`RANDOM}};
-  ex2_reg_pc = _RAND_68[30:0];
+  ex1_reg_inst2_use_reg = _RAND_68[0:0];
   _RAND_69 = {1{`RANDOM}};
-  ex2_reg_wb_addr = _RAND_69[4:0];
-  _RAND_70 = {2{`RANDOM}};
-  ex2_reg_mullu = _RAND_70[47:0];
+  ex1_reg_inst3_use_reg = _RAND_69[0:0];
+  _RAND_70 = {1{`RANDOM}};
+  ex1_reg_is_br = _RAND_70[0:0];
   _RAND_71 = {1{`RANDOM}};
-  ex2_reg_mulls = _RAND_71[31:0];
-  _RAND_72 = {2{`RANDOM}};
-  ex2_reg_mulhuu = _RAND_72[47:0];
-  _RAND_73 = {2{`RANDOM}};
-  ex2_reg_mulhss = _RAND_73[47:0];
+  ex1_reg_direct_jbr_pc = _RAND_71[30:0];
+  _RAND_72 = {1{`RANDOM}};
+  ex2_reg_pc = _RAND_72[30:0];
+  _RAND_73 = {1{`RANDOM}};
+  ex2_reg_wb_addr = _RAND_73[4:0];
   _RAND_74 = {2{`RANDOM}};
-  ex2_reg_mulhsu = _RAND_74[47:0];
+  ex2_reg_mullu = _RAND_74[47:0];
   _RAND_75 = {1{`RANDOM}};
-  ex2_reg_exe_fun = _RAND_75[3:0];
-  _RAND_76 = {1{`RANDOM}};
-  ex2_reg_rf_wen = _RAND_76[0:0];
-  _RAND_77 = {1{`RANDOM}};
-  ex2_reg_wb_sel = _RAND_77[2:0];
-  _RAND_78 = {1{`RANDOM}};
-  ex2_reg_alu_out = _RAND_78[31:0];
+  ex2_reg_mulls = _RAND_75[31:0];
+  _RAND_76 = {2{`RANDOM}};
+  ex2_reg_mulhuu = _RAND_76[47:0];
+  _RAND_77 = {2{`RANDOM}};
+  ex2_reg_mulhss = _RAND_77[47:0];
+  _RAND_78 = {2{`RANDOM}};
+  ex2_reg_mulhsu = _RAND_78[47:0];
   _RAND_79 = {1{`RANDOM}};
-  ex2_reg_pc_bit_out = _RAND_79[31:0];
+  ex2_reg_exe_fun = _RAND_79[3:0];
   _RAND_80 = {1{`RANDOM}};
-  ex2_reg_is_valid_inst = _RAND_80[0:0];
+  ex2_reg_rf_wen = _RAND_80[0:0];
   _RAND_81 = {1{`RANDOM}};
-  ex2_reg_divrem = _RAND_81[0:0];
+  ex2_reg_wb_sel = _RAND_81[2:0];
   _RAND_82 = {1{`RANDOM}};
-  ex2_reg_sign_op1 = _RAND_82[0:0];
+  ex2_reg_alu_out = _RAND_82[31:0];
   _RAND_83 = {1{`RANDOM}};
-  ex2_reg_sign_op12 = _RAND_83[0:0];
+  ex2_reg_pc_bit_out = _RAND_83[31:0];
   _RAND_84 = {1{`RANDOM}};
-  ex2_reg_zero_op2 = _RAND_84[0:0];
-  _RAND_85 = {2{`RANDOM}};
-  ex2_reg_init_dividend = _RAND_85[36:0];
+  ex2_reg_is_valid_inst = _RAND_84[0:0];
+  _RAND_85 = {1{`RANDOM}};
+  ex2_reg_divrem = _RAND_85[0:0];
   _RAND_86 = {1{`RANDOM}};
-  ex2_reg_init_divisor = _RAND_86[31:0];
+  ex2_reg_sign_op1 = _RAND_86[0:0];
   _RAND_87 = {1{`RANDOM}};
-  ex2_reg_orig_dividend = _RAND_87[31:0];
+  ex2_reg_sign_op12 = _RAND_87[0:0];
   _RAND_88 = {1{`RANDOM}};
-  ex2_reg_inst3_use_reg = _RAND_88[0:0];
-  _RAND_89 = {1{`RANDOM}};
-  ex2_reg_no_mem = _RAND_89[0:0];
+  ex2_reg_zero_op2 = _RAND_88[0:0];
+  _RAND_89 = {2{`RANDOM}};
+  ex2_reg_init_dividend = _RAND_89[36:0];
   _RAND_90 = {1{`RANDOM}};
-  mem1_reg_mem_wstrb = _RAND_90[6:0];
+  ex2_reg_init_divisor = _RAND_90[31:0];
   _RAND_91 = {1{`RANDOM}};
-  mem1_reg_wdata = _RAND_91[31:0];
+  ex2_reg_orig_dividend = _RAND_91[31:0];
   _RAND_92 = {1{`RANDOM}};
-  mem1_reg_mem_w = _RAND_92[2:0];
+  ex2_reg_inst3_use_reg = _RAND_92[0:0];
   _RAND_93 = {1{`RANDOM}};
-  mem1_reg_is_mem_load = _RAND_93[0:0];
+  ex2_reg_no_mem = _RAND_93[0:0];
   _RAND_94 = {1{`RANDOM}};
-  mem1_reg_is_mem_store = _RAND_94[0:0];
+  mem1_reg_mem_wstrb = _RAND_94[6:0];
   _RAND_95 = {1{`RANDOM}};
-  mem1_reg_is_dram_load = _RAND_95[0:0];
+  mem1_reg_wdata = _RAND_95[31:0];
   _RAND_96 = {1{`RANDOM}};
-  mem1_reg_is_dram_store = _RAND_96[0:0];
+  mem1_reg_mem_w = _RAND_96[2:0];
   _RAND_97 = {1{`RANDOM}};
-  mem1_reg_is_dram_fence = _RAND_97[0:0];
+  mem1_reg_is_mem_load = _RAND_97[0:0];
   _RAND_98 = {1{`RANDOM}};
-  mem1_reg_is_valid_inst = _RAND_98[0:0];
+  mem1_reg_is_mem_store = _RAND_98[0:0];
   _RAND_99 = {1{`RANDOM}};
-  mem1_reg_unaligned = _RAND_99[0:0];
+  mem1_reg_is_dram_load = _RAND_99[0:0];
   _RAND_100 = {1{`RANDOM}};
-  mem2_reg_wb_byte_offset = _RAND_100[1:0];
+  mem1_reg_is_dram_store = _RAND_100[0:0];
   _RAND_101 = {1{`RANDOM}};
-  mem2_reg_mem_w = _RAND_101[2:0];
+  mem1_reg_is_dram_fence = _RAND_101[0:0];
   _RAND_102 = {1{`RANDOM}};
-  mem2_reg_wb_addr = _RAND_102[4:0];
+  mem1_reg_is_valid_inst = _RAND_102[0:0];
   _RAND_103 = {1{`RANDOM}};
-  mem2_reg_is_valid_load = _RAND_103[0:0];
+  mem1_reg_unaligned = _RAND_103[0:0];
   _RAND_104 = {1{`RANDOM}};
-  mem2_reg_is_valid_inst = _RAND_104[0:0];
+  mem2_reg_wb_byte_offset = _RAND_104[1:0];
   _RAND_105 = {1{`RANDOM}};
-  mem2_reg_is_mem_load = _RAND_105[0:0];
+  mem2_reg_mem_w = _RAND_105[2:0];
   _RAND_106 = {1{`RANDOM}};
-  mem2_reg_is_dram_load = _RAND_106[0:0];
+  mem2_reg_wb_addr = _RAND_106[4:0];
   _RAND_107 = {1{`RANDOM}};
-  mem2_reg_unaligned = _RAND_107[0:0];
+  mem2_reg_is_valid_load = _RAND_107[0:0];
   _RAND_108 = {1{`RANDOM}};
-  mem3_reg_wb_byte_offset = _RAND_108[1:0];
+  mem2_reg_is_valid_inst = _RAND_108[0:0];
   _RAND_109 = {1{`RANDOM}};
-  mem3_reg_mem_w = _RAND_109[2:0];
+  mem2_reg_is_mem_load = _RAND_109[0:0];
   _RAND_110 = {1{`RANDOM}};
-  mem3_reg_dmem_rdata = _RAND_110[31:0];
+  mem2_reg_is_dram_load = _RAND_110[0:0];
   _RAND_111 = {1{`RANDOM}};
-  mem3_reg_rdata_high = _RAND_111[23:0];
+  mem2_reg_unaligned = _RAND_111[0:0];
   _RAND_112 = {1{`RANDOM}};
-  mem3_reg_wb_addr = _RAND_112[4:0];
+  mem3_reg_wb_byte_offset = _RAND_112[1:0];
   _RAND_113 = {1{`RANDOM}};
-  mem3_reg_is_valid_load = _RAND_113[0:0];
+  mem3_reg_mem_w = _RAND_113[2:0];
   _RAND_114 = {1{`RANDOM}};
-  mem3_reg_is_valid_inst = _RAND_114[0:0];
+  mem3_reg_dmem_rdata = _RAND_114[31:0];
   _RAND_115 = {1{`RANDOM}};
-  mem3_reg_unaligned = _RAND_115[0:0];
+  mem3_reg_rdata_high = _RAND_115[23:0];
   _RAND_116 = {1{`RANDOM}};
-  mem3_reg_is_aligned_lw = _RAND_116[0:0];
+  mem3_reg_wb_addr = _RAND_116[4:0];
   _RAND_117 = {1{`RANDOM}};
-  id_reg_is_bp_fail = _RAND_117[0:0];
+  mem3_reg_is_valid_load = _RAND_117[0:0];
   _RAND_118 = {1{`RANDOM}};
-  id_reg_br_pc = _RAND_118[30:0];
+  mem3_reg_is_valid_inst = _RAND_118[0:0];
   _RAND_119 = {1{`RANDOM}};
-  ex1_reg_fw_en = _RAND_119[0:0];
+  mem3_reg_unaligned = _RAND_119[0:0];
   _RAND_120 = {1{`RANDOM}};
-  ex2_reg_fw_en = _RAND_120[0:0];
+  mem3_reg_is_aligned_lw = _RAND_120[0:0];
   _RAND_121 = {1{`RANDOM}};
-  mem3_reg_fw_en = _RAND_121[0:0];
+  id_reg_is_bp_fail = _RAND_121[0:0];
   _RAND_122 = {1{`RANDOM}};
-  ex2_reg_div_stall = _RAND_122[0:0];
+  id_reg_br_pc = _RAND_122[30:0];
   _RAND_123 = {1{`RANDOM}};
-  ex2_reg_divrem_state = _RAND_123[2:0];
+  ex1_reg_fw_en = _RAND_123[0:0];
   _RAND_124 = {1{`RANDOM}};
-  ex2_reg_is_br = _RAND_124[0:0];
+  ex2_reg_fw_en = _RAND_124[0:0];
   _RAND_125 = {1{`RANDOM}};
-  ex2_reg_br_pc = _RAND_125[30:0];
+  mem3_reg_fw_en = _RAND_125[0:0];
   _RAND_126 = {1{`RANDOM}};
-  ex2_reg_is_retired = _RAND_126[0:0];
+  ex2_reg_div_stall = _RAND_126[0:0];
   _RAND_127 = {1{`RANDOM}};
-  mem3_reg_is_retired = _RAND_127[0:0];
+  ex2_reg_divrem_state = _RAND_127[2:0];
   _RAND_128 = {1{`RANDOM}};
-  ic_reg_read_rdy = _RAND_128[0:0];
+  ex2_reg_is_br = _RAND_128[0:0];
   _RAND_129 = {1{`RANDOM}};
-  ic_reg_half_rdy = _RAND_129[0:0];
+  ex2_reg_br_pc = _RAND_129[30:0];
   _RAND_130 = {1{`RANDOM}};
-  ic_reg_imem_addr = _RAND_130[30:0];
+  ex2_reg_is_retired = _RAND_130[0:0];
   _RAND_131 = {1{`RANDOM}};
-  ic_reg_addr_out = _RAND_131[30:0];
+  mem3_reg_is_retired = _RAND_131[0:0];
   _RAND_132 = {1{`RANDOM}};
-  ic_reg_inst = _RAND_132[31:0];
+  ic_reg_read_rdy = _RAND_132[0:0];
   _RAND_133 = {1{`RANDOM}};
-  ic_reg_inst_addr = _RAND_133[30:0];
+  ic_reg_half_rdy = _RAND_133[0:0];
   _RAND_134 = {1{`RANDOM}};
-  ic_reg_inst2 = _RAND_134[31:0];
+  ic_reg_imem_addr = _RAND_134[30:0];
   _RAND_135 = {1{`RANDOM}};
-  ic_state = _RAND_135[2:0];
+  ic_reg_addr_out = _RAND_135[30:0];
   _RAND_136 = {1{`RANDOM}};
-  ic_reg_bp_next_taken0 = _RAND_136[0:0];
+  ic_reg_inst = _RAND_136[31:0];
   _RAND_137 = {1{`RANDOM}};
-  ic_reg_bp_next_taken_pc0 = _RAND_137[30:0];
+  ic_reg_inst_addr = _RAND_137[30:0];
   _RAND_138 = {1{`RANDOM}};
-  ic_reg_bp_next_cnt0 = _RAND_138[1:0];
+  ic_reg_inst2 = _RAND_138[31:0];
   _RAND_139 = {1{`RANDOM}};
-  ic_reg_bp_next_taken1 = _RAND_139[0:0];
+  ic_state = _RAND_139[2:0];
   _RAND_140 = {1{`RANDOM}};
-  ic_reg_bp_next_taken_pc1 = _RAND_140[30:0];
+  ic_reg_bp_next_taken0 = _RAND_140[0:0];
   _RAND_141 = {1{`RANDOM}};
-  ic_reg_bp_next_cnt1 = _RAND_141[1:0];
+  ic_reg_bp_next_taken_pc0 = _RAND_141[30:0];
   _RAND_142 = {1{`RANDOM}};
-  ic_reg_bp_next_taken2 = _RAND_142[0:0];
+  ic_reg_bp_next_cnt0 = _RAND_142[1:0];
   _RAND_143 = {1{`RANDOM}};
-  ic_reg_bp_next_taken_pc2 = _RAND_143[30:0];
+  ic_reg_bp_next_taken1 = _RAND_143[0:0];
   _RAND_144 = {1{`RANDOM}};
-  ic_reg_bp_next_cnt2 = _RAND_144[1:0];
+  ic_reg_bp_next_taken_pc1 = _RAND_144[30:0];
   _RAND_145 = {1{`RANDOM}};
-  id_reg_pc_delay = _RAND_145[30:0];
+  ic_reg_bp_next_cnt1 = _RAND_145[1:0];
   _RAND_146 = {1{`RANDOM}};
-  id_reg_wb_addr_delay = _RAND_146[4:0];
+  ic_reg_bp_next_taken2 = _RAND_146[0:0];
   _RAND_147 = {1{`RANDOM}};
-  id_reg_op1_sel_delay = _RAND_147[0:0];
+  ic_reg_bp_next_taken_pc2 = _RAND_147[30:0];
   _RAND_148 = {1{`RANDOM}};
-  id_reg_op2_sel_delay = _RAND_148[0:0];
+  ic_reg_bp_next_cnt2 = _RAND_148[1:0];
   _RAND_149 = {1{`RANDOM}};
-  id_reg_op3_sel_delay = _RAND_149[1:0];
+  id_reg_pc_delay = _RAND_149[30:0];
   _RAND_150 = {1{`RANDOM}};
-  id_reg_rs1_addr_delay = _RAND_150[4:0];
+  id_reg_wb_addr_delay = _RAND_150[4:0];
   _RAND_151 = {1{`RANDOM}};
-  id_reg_rs2_addr_delay = _RAND_151[4:0];
+  id_reg_op1_sel_delay = _RAND_151[0:0];
   _RAND_152 = {1{`RANDOM}};
-  id_reg_rs3_addr_delay = _RAND_152[4:0];
+  id_reg_op2_sel_delay = _RAND_152[0:0];
   _RAND_153 = {1{`RANDOM}};
-  id_reg_op1_data_delay = _RAND_153[31:0];
+  id_reg_op3_sel_delay = _RAND_153[1:0];
   _RAND_154 = {1{`RANDOM}};
-  id_reg_op2_data_delay = _RAND_154[31:0];
+  id_reg_rs1_addr_delay = _RAND_154[4:0];
   _RAND_155 = {1{`RANDOM}};
-  id_reg_exe_fun_delay = _RAND_155[3:0];
+  id_reg_rs2_addr_delay = _RAND_155[4:0];
   _RAND_156 = {1{`RANDOM}};
-  id_reg_rf_wen_delay = _RAND_156[0:0];
+  id_reg_rs3_addr_delay = _RAND_156[4:0];
   _RAND_157 = {1{`RANDOM}};
-  id_reg_wb_sel_delay = _RAND_157[2:0];
+  id_reg_op1_data_delay = _RAND_157[31:0];
   _RAND_158 = {1{`RANDOM}};
-  id_reg_csr_addr_delay = _RAND_158[11:0];
+  id_reg_op2_data_delay = _RAND_158[31:0];
   _RAND_159 = {1{`RANDOM}};
-  id_reg_csr_cmd_delay = _RAND_159[1:0];
+  id_reg_exe_fun_delay = _RAND_159[3:0];
   _RAND_160 = {1{`RANDOM}};
-  id_reg_imm_b_sext_delay = _RAND_160[31:0];
+  id_reg_rf_wen_delay = _RAND_160[0:0];
   _RAND_161 = {1{`RANDOM}};
-  id_reg_mem_w_delay = _RAND_161[2:0];
+  id_reg_wb_sel_delay = _RAND_161[2:0];
   _RAND_162 = {1{`RANDOM}};
-  id_reg_is_br_delay = _RAND_162[0:0];
+  id_reg_csr_addr_delay = _RAND_162[11:0];
   _RAND_163 = {1{`RANDOM}};
-  id_reg_is_j_delay = _RAND_163[0:0];
+  id_reg_csr_cmd_delay = _RAND_163[1:0];
   _RAND_164 = {1{`RANDOM}};
-  id_reg_bp_taken_delay = _RAND_164[0:0];
+  id_reg_imm_b_sext_delay = _RAND_164[31:0];
   _RAND_165 = {1{`RANDOM}};
-  id_reg_bp_taken_pc_delay = _RAND_165[30:0];
+  id_reg_shamt_delay = _RAND_165[1:0];
   _RAND_166 = {1{`RANDOM}};
-  id_reg_bp_cnt_delay = _RAND_166[1:0];
+  id_reg_op2op_delay = _RAND_166[0:0];
   _RAND_167 = {1{`RANDOM}};
-  id_reg_is_half_delay = _RAND_167[0:0];
+  id_reg_mem_w_delay = _RAND_167[2:0];
   _RAND_168 = {1{`RANDOM}};
-  id_reg_is_valid_inst_delay = _RAND_168[0:0];
+  id_reg_is_br_delay = _RAND_168[0:0];
   _RAND_169 = {1{`RANDOM}};
-  id_reg_is_trap_delay = _RAND_169[0:0];
+  id_reg_is_j_delay = _RAND_169[0:0];
   _RAND_170 = {1{`RANDOM}};
-  id_reg_mcause_delay = _RAND_170[31:0];
+  id_reg_bp_taken_delay = _RAND_170[0:0];
   _RAND_171 = {1{`RANDOM}};
-  csr_reg_is_meintr = _RAND_171[0:0];
+  id_reg_bp_taken_pc_delay = _RAND_171[30:0];
   _RAND_172 = {1{`RANDOM}};
-  csr_reg_is_mtintr = _RAND_172[0:0];
-  _RAND_173 = {2{`RANDOM}};
-  ex2_reg_dividend = _RAND_173[36:0];
-  _RAND_174 = {2{`RANDOM}};
-  ex2_reg_divisor = _RAND_174[35:0];
-  _RAND_175 = {2{`RANDOM}};
-  ex2_reg_p_divisor = _RAND_175[63:0];
+  id_reg_bp_cnt_delay = _RAND_172[1:0];
+  _RAND_173 = {1{`RANDOM}};
+  id_reg_is_half_delay = _RAND_173[0:0];
+  _RAND_174 = {1{`RANDOM}};
+  id_reg_is_valid_inst_delay = _RAND_174[0:0];
+  _RAND_175 = {1{`RANDOM}};
+  id_reg_is_trap_delay = _RAND_175[0:0];
   _RAND_176 = {1{`RANDOM}};
-  ex2_reg_divrem_count = _RAND_176[4:0];
+  id_reg_mcause_delay = _RAND_176[31:0];
   _RAND_177 = {1{`RANDOM}};
-  ex2_reg_rem_shift = _RAND_177[4:0];
+  csr_reg_is_meintr = _RAND_177[0:0];
   _RAND_178 = {1{`RANDOM}};
-  ex2_reg_extra_shift = _RAND_178[0:0];
-  _RAND_179 = {1{`RANDOM}};
-  ex2_reg_d = _RAND_179[2:0];
-  _RAND_180 = {1{`RANDOM}};
-  ex2_reg_reminder = _RAND_180[31:0];
-  _RAND_181 = {1{`RANDOM}};
-  ex2_reg_quotient = _RAND_181[31:0];
+  csr_reg_is_mtintr = _RAND_178[0:0];
+  _RAND_179 = {2{`RANDOM}};
+  ex2_reg_dividend = _RAND_179[36:0];
+  _RAND_180 = {2{`RANDOM}};
+  ex2_reg_divisor = _RAND_180[35:0];
+  _RAND_181 = {2{`RANDOM}};
+  ex2_reg_p_divisor = _RAND_181[63:0];
+  _RAND_182 = {1{`RANDOM}};
+  ex2_reg_divrem_count = _RAND_182[4:0];
+  _RAND_183 = {1{`RANDOM}};
+  ex2_reg_rem_shift = _RAND_183[4:0];
+  _RAND_184 = {1{`RANDOM}};
+  ex2_reg_extra_shift = _RAND_184[0:0];
+  _RAND_185 = {1{`RANDOM}};
+  ex2_reg_d = _RAND_185[2:0];
+  _RAND_186 = {1{`RANDOM}};
+  ex2_reg_reminder = _RAND_186[31:0];
+  _RAND_187 = {1{`RANDOM}};
+  ex2_reg_quotient = _RAND_187[31:0];
 `endif // RANDOMIZE_REG_INIT
   `endif // RANDOMIZE
 end // initial
