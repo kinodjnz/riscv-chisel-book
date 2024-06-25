@@ -7,11 +7,11 @@ TARGET := riscv32imc-unknown-none-elf
 CARGO := cargo
 ADDRESS_COMMENT := ./address_comment.rb
 
-LLVM_BIN_PATH ?= /usr/bin
-AS := $(LLVM_BIN_PATH)/llvm-mc
-OBJDUMP := $(LLVM_BIN_PATH)/llvm-objdump
-OBJCOPY := $(LLVM_BIN_PATH)/llvm-objcopy
-LD := $(LLVM_BIN_PATH)/ld.lld
+LLVM_PATH ?= /usr/bin
+AS := $(LLVM_PATH)/llvm-mc
+OBJDUMP := $(LLVM_PATH)/llvm-objdump
+OBJCOPY := $(LLVM_PATH)/llvm-objcopy
+LD := $(LLVM_PATH)/ld.lld
 
 # HEXDUMP := od
 # HEXDUMP_FLAGS := -An -tx4 -w4 -v

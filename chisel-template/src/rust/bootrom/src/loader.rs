@@ -10,6 +10,7 @@ fn read<T>(addr: *const u32, byte_offset: usize) -> T {
     unsafe { ((addr as *mut u8).add(byte_offset) as *mut T).read() }
 }
 
+#[inline(always)]
 fn array_to_u32<const N: usize>(b: &[u8; N]) -> u32 {
     b.iter().rev().fold(0u32, |acc, x| (acc << 8) + *x as u32)
 }

@@ -4,7 +4,7 @@ version = "0.1.0"
 edition = "2021"
 
 [profile.release]
-opt-level = "s"
+opt-level = "z"
 debug = 0
 overflow-checks = false
 lto = true
