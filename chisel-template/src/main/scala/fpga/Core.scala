@@ -187,6 +187,7 @@ class Core(
   val rrd_reg_shamt         = RegInit(0.U(2.W))
   val rrd_reg_op2op         = RegInit(0.U(OP2OP_LEN.W))
   val rrd_reg_mem_w         = RegInit(0.U(MW_LEN.W))
+  val rrd_reg_imm_mask_len  = RegInit(0.U(5.W))
   val rrd_reg_is_direct_j   = RegInit(false.B)
   val rrd_reg_is_br         = RegInit(false.B)
   val rrd_reg_is_j          = RegInit(false.B)
@@ -213,6 +214,7 @@ class Core(
   val ex1_reg_shamt         = RegInit(0.U(2.W))
   val ex1_reg_op2op         = RegInit(0.U(OP2OP_LEN.W))
   val ex1_reg_mem_w         = RegInit(0.U(MW_LEN.W))
+  val ex1_reg_imm_mask      = RegInit(0.U(WORD_LEN.W))
   val ex1_reg_is_j          = RegInit(false.B)
   val ex1_reg_bp_taken      = RegInit(false.B)
   val ex1_reg_bp_taken_pc   = RegInit(0.U(PC_LEN.W))
@@ -239,9 +241,10 @@ class Core(
   val ex2_reg_mulhsu        = RegInit(0.S((WORD_LEN*3/2).W))
   val ex2_reg_exe_fun       = RegInit(0.U(EXE_FUN_LEN.W))
   val ex2_reg_rf_wen        = RegInit(0.U(REN_LEN.W))
-  val ex2_reg_wb_sel        = RegInit(0.U(WB_SEL_LEN.W))
+  val ex2_reg_fun_sel       = RegInit(0.U(EX2_FUN_LEN.W))
   val ex2_reg_alu_out       = RegInit(0.U(WORD_LEN.W))
   val ex2_reg_pc_bit_out    = RegInit(0.U(WORD_LEN.W))
+  val ex2_reg_op3_data      = RegInit(0.U(WORD_LEN.W))
   val ex2_reg_is_valid_inst = RegInit(false.B)
   // val ex2_reminder          = Wire(UInt(WORD_LEN.W))
   // val ex2_quotient          = Wire(UInt(WORD_LEN.W))
@@ -687,6 +690,8 @@ class Core(
 
   val id_shamt = id_inst(14, 13)
 
+  val id_imm_mask_len = id_inst(31, 27)
+
   val csignals = ListLookup(id_inst,
                     List(ALU_X     , OP1_RS1   , OP2_RS2    , OP3_X     , REN_X, WB_X    , WBA_RD , CSR_X, MW_X  , OP2OP_NOP),
     Array(
@@ -775,6 +780,10 @@ class Core(
       FSL        -> List(ALU_FSL   , OP1_RS1   , OP2_RS2    , OP3_RS3   , REN_S, WB_ALU  , WBA_RD , CSR_X, MW_X  , OP2OP_NOP),
       FSR        -> List(ALU_FSR   , OP1_RS1   , OP2_RS2    , OP3_RS3   , REN_S, WB_ALU  , WBA_RD , CSR_X, MW_X  , OP2OP_NOP),
       FSRI       -> List(ALU_FSR   , OP1_RS1   , OP2_IMI    , OP3_RS3   , REN_S, WB_ALU  , WBA_RD , CSR_X, MW_X  , OP2OP_NOP),
+      BFM        -> List(ALU_BFM   , OP1_RS1   , OP2_RS2    , OP3_RD    , REN_S, WB_BIT  , WBA_RD , CSR_X, MW_X  , OP2OP_ZERO),
+      BFP        -> List(ALU_BFP   , OP1_RS1   , OP2_RS2    , OP3_RD    , REN_S, WB_BIT  , WBA_RD , CSR_X, MW_X  , OP2OP_NOP),
+      BFMI       -> List(ALU_BFM   , OP1_RS1   , OP2_IMI    , OP3_RD    , REN_S, WB_BIT  , WBA_RD , CSR_X, MW_X  , OP2OP_ZERO),
+      BFPI       -> List(ALU_BFP   , OP1_RS1   , OP2_IMI    , OP3_RD    , REN_S, WB_BIT  , WBA_RD , CSR_X, MW_X  , OP2OP_NOP),
       C_ILL      -> List(ALU_X     , OP1_X     , OP2_X      , OP3_X     , REN_X, WB_X    , WBA_C  , CSR_X, MW_X  , OP2OP_NOP),
       C_ADDI4SPN -> List(ALU_ADD   , OP1_C_SP  , OP2_C_IMIW , OP3_X     , REN_S, WB_ALU  , WBA_CP2, CSR_X, MW_X  , OP2OP_NOP),
       C_ADDI16SP -> List(ALU_ADD   , OP1_C_RS1 , OP2_C_IMI16, OP3_X     , REN_S, WB_ALU  , WBA_C  , CSR_X, MW_X  , OP2OP_NOP),
@@ -894,6 +903,7 @@ class Core(
     (id_op3_sel === OP3_C_RS2)   -> M_OP3_RS,
     (id_op3_sel === OP3_C_RS2P)  -> M_OP3_RS,
     (id_op3_sel === OP3_RS3)     -> M_OP3_RS,
+    (id_op3_sel === OP3_RD)      -> M_OP3_RS,
   ))
   val id_m_rs1_addr = MuxCase(id_rs1_addr, Seq(
     (id_op1_sel === OP1_C_RS1)  -> id_c_rs1_addr,
@@ -910,6 +920,7 @@ class Core(
     (id_op3_sel === OP3_C_RS2)  -> id_c_rs2_addr,
     (id_op3_sel === OP3_C_RS2P) -> id_c_rs2p_addr,
     (id_op3_sel === OP3_RS3)    -> id_rs3_addr,
+    (id_op3_sel === OP3_RD)     -> id_w_wb_addr,
   ))
   val id_m_imm_b_sext = MuxCase(id_imm_b_sext, Seq(
     (id_wba === WBA_CBR) -> id_c_imm_b,
@@ -950,6 +961,7 @@ class Core(
   val id_reg_shamt_delay      = RegInit(0.U(2.W))
   val id_reg_op2op_delay      = RegInit(0.U(OP2OP_LEN.W))
   val id_reg_mem_w_delay      = RegInit(0.U(MW_LEN.W))
+  val id_reg_imm_mask_len_delay = RegInit(0.U(5.W))
   val id_reg_is_direct_j_delay = RegInit(false.B)
   val id_reg_is_br_delay      = RegInit(false.B)
   val id_reg_is_j_delay       = RegInit(false.B)
@@ -977,6 +989,7 @@ class Core(
       id_reg_imm_b_sext_delay := id_m_imm_b_sext
       id_reg_shamt_delay      := id_shamt
       id_reg_op2op_delay      := id_op2op
+      id_reg_imm_mask_len_delay := id_imm_mask_len
       id_reg_csr_addr_delay   := id_csr_addr
       id_reg_is_direct_j_delay := id_is_direct_j
       id_reg_bp_taken_pc_delay := id_reg_bp_taken_pc
@@ -1011,6 +1024,7 @@ class Core(
     id_reg_imm_b_sext_delay := id_m_imm_b_sext
     id_reg_shamt_delay      := id_shamt
     id_reg_op2op_delay      := id_op2op
+    id_reg_imm_mask_len_delay := id_imm_mask_len
     id_reg_csr_addr_delay   := id_csr_addr
     id_reg_csr_cmd_delay    := id_csr_cmd
     id_reg_mem_w_delay      := id_mem_w
@@ -1053,6 +1067,7 @@ class Core(
       rrd_reg_csr_addr      := id_reg_csr_addr_delay
       rrd_reg_csr_cmd       := CSR_X
       rrd_reg_mem_w         := MW_X
+      rrd_reg_imm_mask_len  := id_reg_imm_mask_len_delay
       rrd_reg_is_direct_j   := false.B
       rrd_reg_is_br         := false.B
       rrd_reg_is_j          := false.B
@@ -1087,6 +1102,7 @@ class Core(
       rrd_reg_csr_addr      := id_csr_addr
       rrd_reg_csr_cmd       := CSR_X
       rrd_reg_mem_w         := MW_X
+      rrd_reg_imm_mask_len  := id_imm_mask_len
       rrd_reg_is_direct_j   := false.B
       rrd_reg_is_br         := false.B
       rrd_reg_is_j          := false.B
@@ -1123,6 +1139,7 @@ class Core(
       rrd_reg_csr_addr      := id_reg_csr_addr_delay
       rrd_reg_csr_cmd       := id_reg_csr_cmd_delay
       rrd_reg_mem_w         := id_reg_mem_w_delay
+      rrd_reg_imm_mask_len  := id_reg_imm_mask_len_delay
       rrd_reg_is_direct_j   := id_reg_is_direct_j_delay
       rrd_reg_is_br         := id_reg_is_br_delay
       rrd_reg_is_j          := id_reg_is_j_delay
@@ -1157,6 +1174,7 @@ class Core(
       rrd_reg_csr_addr      := id_csr_addr
       rrd_reg_csr_cmd       := id_csr_cmd
       rrd_reg_mem_w         := id_mem_w
+      rrd_reg_imm_mask_len  := id_imm_mask_len
       rrd_reg_is_direct_j   := id_is_direct_j
       rrd_reg_is_br         := id_is_br
       rrd_reg_is_j          := id_is_j
@@ -1223,6 +1241,11 @@ class Core(
      (rrd_reg_rs3_addr === mem3_reg_wb_addr)) -> mem3_fw_data,
   ))
 
+  val rrd_imm_mask = Mux(rrd_reg_imm_mask_len === 0.U,
+    Fill(WORD_LEN, 1.U(1.W)),
+    Cat((0 until WORD_LEN).reverse.map(bit => (bit.U < rrd_reg_imm_mask_len).asUInt))
+  )
+
   val rrd_direct_jbr_pc = rrd_reg_pc + rrd_reg_imm_b_sext(WORD_LEN-1, WORD_LEN-PC_LEN)
 
   val rrd_hazard = (rrd_reg_rf_wen === REN_S) && (rrd_reg_wb_addr =/= 0.U) && !rrd_stall && !ex2_reg_is_br
@@ -1265,6 +1288,7 @@ class Core(
     ex1_reg_shamt         := rrd_reg_shamt
     ex1_reg_op2op         := rrd_reg_op2op
     ex1_reg_mem_w         := rrd_reg_mem_w
+    ex1_reg_imm_mask      := rrd_imm_mask
     ex1_reg_is_mret       := !ex_is_bubble && (rrd_reg_exe_fun === CMD_MRET && rrd_reg_mem_w === MW_CSR)
     ex1_reg_is_br         := Mux(ex_is_bubble, false.B, rrd_reg_is_br)
     ex1_reg_is_j          := Mux(ex_is_bubble, false.B, rrd_reg_is_j)
@@ -1291,7 +1315,7 @@ class Core(
   val ex1_add_out = ex1_reg_op1_data + ex1_reg_op2_data
   val ex1_alu_out = MuxCase(0.U(WORD_LEN.W), Seq(
     (ex1_reg_exe_fun === ALU_ADD)   -> ex1_add_out,
-    (ex1_reg_exe_fun === ALU_SUB)   -> (ex1_reg_op1_data - ex1_reg_op2_data),
+    (ex1_reg_exe_fun === ALU_SUB)   -> (ex1_reg_op1_data - Mux(ex1_reg_op2op === OP2OP_NOP, ex1_reg_op2_data, 0.U(WORD_LEN.W))),
     (ex1_reg_exe_fun === ALU_AND)   -> (ex1_reg_op1_data & Mux(ex1_reg_op2op === OP2OP_NOP, ex1_reg_op2_data, ~ex1_reg_op2_data)),
     (ex1_reg_exe_fun === ALU_OR)    -> (ex1_reg_op1_data | Mux(ex1_reg_op2op === OP2OP_NOP, ex1_reg_op2_data, ~ex1_reg_op2_data)),
     (ex1_reg_exe_fun === ALU_XOR)   -> (ex1_reg_op1_data ^ Mux(ex1_reg_op2op === OP2OP_NOP, ex1_reg_op2_data, ~ex1_reg_op2_data)),
@@ -1336,6 +1360,18 @@ class Core(
     (ex1_reg_exe_fun === ALU_MIN)   -> Mux(ex1_reg_op1_data.asSInt < ex1_reg_op2_data.asSInt, ex1_reg_op1_data, ex1_reg_op2_data),
     (ex1_reg_exe_fun === ALU_MINU)  -> Mux(ex1_reg_op1_data < ex1_reg_op2_data, ex1_reg_op1_data, ex1_reg_op2_data),
     (ex1_reg_exe_fun === ALU_BSCTH) -> Cat((0 until 16).reverse.map(bit => scatter_bit(ex1_reg_op1_data, ex1_reg_op2_data, bit))),
+    (ex1_reg_exe_fun === ALU_BFM || ex1_reg_exe_fun === ALU_BFP)
+                                    -> (ex1_reg_imm_mask << ex1_reg_op2_data(4, 0))(WORD_LEN-1, 0),
+  ))
+
+  val ex1_fun_sel = MuxCase(EX2_ALU, Seq(
+    (
+      (ex1_reg_wb_sel === WB_PC || ex1_reg_wb_sel === WB_BIT) &&
+      (ex1_reg_exe_fun === ALU_BFM || ex1_reg_exe_fun === ALU_BFP)
+    )                                                          -> EX2_MASK,
+    (ex1_reg_wb_sel === WB_PC || ex1_reg_wb_sel === WB_BIT)    -> EX2_BIT,
+    (ex1_reg_wb_sel === WB_CSR || ex1_reg_wb_sel === WB_FENCE) -> EX2_CSR,
+    (ex1_reg_wb_sel === WB_MD)                                 -> EX2_MD,
   ))
 
   val ex1_divrem = WireDefault(false.B)
@@ -1549,7 +1585,8 @@ class Core(
     ex2_reg_pc_bit_out := ex1_pc_bit_out
     ex2_reg_exe_fun    := ex1_reg_exe_fun
     ex2_reg_rf_wen     := Mux(ex1_en, ex1_reg_rf_wen, REN_X)
-    ex2_reg_wb_sel     := ex1_reg_wb_sel
+    ex2_reg_fun_sel    := ex1_fun_sel
+    ex2_reg_op3_data   := ex1_reg_op3_data
     ex2_reg_no_mem     := (ex1_reg_wb_sel =/= WB_LD && ex1_reg_wb_sel =/= WB_ST && ex1_reg_wb_sel =/= WB_FENCE) && ex1_en
     ex2_reg_is_valid_inst := ex1_is_valid_inst
     ex2_reg_divrem            := ex1_divrem && ex1_en
@@ -1752,26 +1789,19 @@ class Core(
 
   //**********************************
   // EX2 Stage
+  val ex2_mask_out = Cat((0 until WORD_LEN).reverse.map(bit => Mux(ex2_reg_pc_bit_out(bit), ex2_reg_alu_out(bit), ex2_reg_op3_data(bit))))
+
   ex2_wb_data := MuxCase(ex2_reg_alu_out, Seq(
-    (
-      (ex2_reg_wb_sel === WB_PC) ||
-      (ex2_reg_wb_sel === WB_BIT)
-    ) -> ex2_reg_pc_bit_out,
-    (
-      (ex2_reg_wb_sel === WB_CSR) ||
-      (ex2_reg_wb_sel === WB_FENCE) // dummy for optimization
-    ) -> csr_rdata,
-    (ex2_reg_wb_sel === WB_MD) -> ex2_alu_muldiv_out,
+    (ex2_reg_fun_sel === EX2_MASK) -> ex2_mask_out,
+    (ex2_reg_fun_sel === EX2_BIT)  -> ex2_reg_pc_bit_out,
+    (ex2_reg_fun_sel === EX2_CSR || ex2_reg_fun_sel === EX2_CSR1) -> csr_rdata,
+    (ex2_reg_fun_sel === EX2_MD || ex2_reg_fun_sel === EX2_MD1)   -> ex2_alu_muldiv_out,
   ))
 
-  ex2_fw_data := Mux(
-    (
-      (ex2_reg_wb_sel === WB_PC) ||
-      (ex2_reg_wb_sel === WB_BIT)
-    ),
-    ex2_reg_pc_bit_out,
-    ex2_reg_alu_out,
-  )
+  ex2_fw_data := MuxCase(ex2_reg_alu_out, Seq(
+    (ex2_reg_fun_sel === EX2_MASK || ex2_reg_fun_sel === EX2_CSR) -> ex2_mask_out,
+    (ex2_reg_fun_sel === EX2_BIT || ex2_reg_fun_sel === EX2_CSR1) -> ex2_reg_pc_bit_out,
+  ))
   when (ex2_reg_inst3_use_reg && !ex2_div_stall) {
     scoreboard(ex2_reg_wb_addr) := false.B
   }
@@ -2014,7 +2044,9 @@ class Core(
   printf(p"ex1_reg_is_valid_: 0x${Hexadecimal(ex1_reg_is_valid_inst)}\n")
   printf(p"ex1_reg_op1_data : 0x${Hexadecimal(ex1_reg_op1_data)}\n")
   printf(p"ex1_reg_op2_data : 0x${Hexadecimal(ex1_reg_op2_data)}\n")
+  printf(p"ex1_reg_op3_data : 0x${Hexadecimal(ex1_reg_op3_data)}\n")
   printf(p"ex1_alu_out      : 0x${Hexadecimal(ex1_alu_out)}\n")
+  printf(p"ex1_pc_bit_out   : 0x${Hexadecimal(ex1_pc_bit_out)}\n")
   printf(p"ex1_reg_exe_fun  : 0x${Hexadecimal(ex1_reg_exe_fun)}\n")
   printf(p"ex1_reg_wb_sel   : 0x${Hexadecimal(ex1_reg_wb_sel)}\n")
   printf(p"ex1_reg_wb_addr  : 0x${Hexadecimal(ex1_reg_wb_addr)}\n")
