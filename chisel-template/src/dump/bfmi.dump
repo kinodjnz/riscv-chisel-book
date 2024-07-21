@@ -23,29 +23,29 @@ Disassembly of section .text:
       20: 13 01 81 67  	addi	sp, sp, 1656
       24: b7 e0 bc 9a  	lui	ra, 633806
       28: 93 80 a0 ef  	addi	ra, ra, -262   # 9abcdefa
-      2c: d7 00 81 24  	bfmi	ra, sp, 8, 4
-      30: b7 d3 bc 9a  	lui	t2, 633805
-      34: 93 83 a3 6f  	addi	t2, t2, 1786   # 9abcd6fa
-      38: 63 96 70 04  	bne	ra, t2, 0x84 <.Ltmp1>
+      2c: 57 06 41 0d  	bfmi	a2, sp, ra, 20
+      30: b7 e3 3c 12  	lui	t2, 74702
+      34: 93 83 a3 ef  	addi	t2, t2, -262   # 123cdefa
+      38: 63 16 76 04  	bne	a2, t2, 0x84 <.Ltmp1>
       3c: 8d 41        	li	gp, 3
       3e: 37 51 34 12  	lui	sp, 74565
       42: 13 01 81 67  	addi	sp, sp, 1656
       46: b7 e0 bc 9a  	lui	ra, 633806
       4a: 93 80 a0 ef  	addi	ra, ra, -262   # 9abcdefa
-      4e: d7 00 81 04  	bfmi	ra, sp, 8, 0
+      4e: 57 06 81 0c  	bfmi	a2, sp, ra, 8
       52: b7 53 34 12  	lui	t2, 74565
       56: 93 83 a3 6f  	addi	t2, t2, 1786   # 123456fa
-      5a: 63 95 70 02  	bne	ra, t2, 0x84 <.Ltmp1>
+      5a: 63 15 76 02  	bne	a2, t2, 0x84 <.Ltmp1>
       5e: 91 41        	li	gp, 4
       60: 37 51 34 12  	lui	sp, 74565
       64: 13 01 81 67  	addi	sp, sp, 1656
       68: b7 e0 bc 9a  	lui	ra, 633806
       6c: 93 80 a0 ef  	addi	ra, ra, -262   # 9abcdefa
-      70: d7 00 01 44  	bfmi	ra, sp, 0, 8
-      74: b7 e3 bc 9a  	lui	t2, 633806
-      78: 93 83 83 e7  	addi	t2, t2, -392   # 9abcde78
-      7c: 63 94 70 00  	bne	ra, t2, 0x84 <.Ltmp1>
-      80: 63 81 70 02  	beq	ra, t2, 0xa2 <.Ltmp4>
+      70: 57 06 01 0c  	bfmi	a2, sp, ra, 0
+      74: b7 53 34 12  	lui	t2, 74565
+      78: 93 83 83 67  	addi	t2, t2, 1656   # 12345678
+      7c: 63 14 76 00  	bne	a2, t2, 0x84 <.Ltmp1>
+      80: 63 01 76 02  	beq	a2, t2, 0xa2 <.Ltmp4>
 
 00000084 <.Ltmp1>:
       84: 0f 00 f0 0f  	fence

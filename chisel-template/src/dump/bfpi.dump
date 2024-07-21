@@ -23,52 +23,70 @@ Disassembly of section .text:
       20: 13 01 81 67  	addi	sp, sp, 1656
       24: b7 e0 bc 9a  	lui	ra, 633806
       28: 93 80 a0 ef  	addi	ra, ra, -262   # 9abcdefa
-      2c: d7 10 81 24  	bfpi	ra, sp, 8, 4
+      2c: 57 16 51 0e  	bfpi	a2, sp, ra, 8, 4
       30: b7 e3 bc 9a  	lui	t2, 633806
       34: 93 83 a3 8f  	addi	t2, t2, -1798   # 9abcd8fa
-      38: 63 96 70 04  	bne	ra, t2, 0x84 <.Ltmp1>
+      38: 63 18 76 08  	bne	a2, t2, 0xc8 <.Ltmp1>
       3c: 8d 41        	li	gp, 3
       3e: 37 51 34 12  	lui	sp, 74565
       42: 13 01 81 67  	addi	sp, sp, 1656
       46: b7 e0 bc 9a  	lui	ra, 633806
       4a: 93 80 a0 ef  	addi	ra, ra, -262   # 9abcdefa
-      4e: d7 10 81 04  	bfpi	ra, sp, 8, 0
-      52: b7 83 56 34  	lui	t2, 214376
-      56: 93 83 a3 8f  	addi	t2, t2, -1798   # 345678fa
-      5a: 63 95 70 02  	bne	ra, t2, 0x84 <.Ltmp1>
+      4e: 57 16 41 0c  	bfpi	a2, sp, ra, 4, 0
+      52: b7 63 45 23  	lui	t2, 144470
+      56: 93 83 a3 78  	addi	t2, t2, 1930   # 2345678a
+      5a: 63 17 76 06  	bne	a2, t2, 0xc8 <.Ltmp1>
       5e: 91 41        	li	gp, 4
       60: 37 51 34 12  	lui	sp, 74565
       64: 13 01 81 67  	addi	sp, sp, 1656
       68: b7 e0 bc 9a  	lui	ra, 633806
       6c: 93 80 a0 ef  	addi	ra, ra, -262   # 9abcdefa
-      70: d7 10 01 44  	bfpi	ra, sp, 0, 8
-      74: b7 e3 bc 9a  	lui	t2, 633806
-      78: 93 83 83 e7  	addi	t2, t2, -392   # 9abcde78
-      7c: 63 94 70 00  	bne	ra, t2, 0x84 <.Ltmp1>
-      80: 63 81 70 02  	beq	ra, t2, 0xa2 <.Ltmp4>
+      70: 57 16 81 0e  	bfpi	a2, sp, ra, 24, 8
+      74: b7 e3 bc 78  	lui	t2, 494542
+      78: 93 83 a3 ef  	addi	t2, t2, -262   # 78bcdefa
+      7c: 63 16 76 04  	bne	a2, t2, 0xc8 <.Ltmp1>
+      80: 95 41        	li	gp, 5
+      82: 37 51 34 12  	lui	sp, 74565
+      86: 13 01 81 67  	addi	sp, sp, 1656
+      8a: b7 e0 bc 9a  	lui	ra, 633806
+      8e: 93 80 a0 ef  	addi	ra, ra, -262   # 9abcdefa
+      92: 57 16 f1 0f  	bfpi	a2, sp, ra, 16, 16
+      96: b7 e3 78 56  	lui	t2, 354190
+      9a: 93 83 a3 ef  	addi	t2, t2, -262   # 5678defa
+      9e: 63 15 76 02  	bne	a2, t2, 0xc8 <.Ltmp1>
+      a2: 99 41        	li	gp, 6
+      a4: 37 51 34 12  	lui	sp, 74565
+      a8: 13 01 81 67  	addi	sp, sp, 1656
+      ac: b7 e0 bc 9a  	lui	ra, 633806
+      b0: 93 80 a0 ef  	addi	ra, ra, -262   # 9abcdefa
+      b4: 57 16 e1 0d  	bfpi	a2, sp, ra, 12, 3
+      b8: b7 93 bc 9a  	lui	t2, 633801
+      bc: 93 83 a3 ef  	addi	t2, t2, -262   # 9abc8efa
+      c0: 63 14 76 00  	bne	a2, t2, 0xc8 <.Ltmp1>
+      c4: 63 01 76 02  	beq	a2, t2, 0xe6 <.Ltmp6>
 
-00000084 <.Ltmp1>:
-      84: 0f 00 f0 0f  	fence
+000000c8 <.Ltmp1>:
+      c8: 0f 00 f0 0f  	fence
 
-00000088 <.Ltmp5>:
-      88: 63 80 01 00  	beqz	gp, 0x88 <.Ltmp5>
-      8c: 86 01        	slli	gp, gp, 1
-      8e: 93 e1 11 00  	ori	gp, gp, 1
-      92: 93 08 d0 05  	li	a7, 93
-      96: 0e 85        	mv	a0, gp
-      98: 73 00 00 00  	ecall
-      9c: 01 00        	nop
-      9e: 01 00        	nop
-      a0: d5 b7        	j	0x84 <.Ltmp1>
+000000cc <.Ltmp7>:
+      cc: 63 80 01 00  	beqz	gp, 0xcc <.Ltmp7>
+      d0: 86 01        	slli	gp, gp, 1
+      d2: 93 e1 11 00  	ori	gp, gp, 1
+      d6: 93 08 d0 05  	li	a7, 93
+      da: 0e 85        	mv	a0, gp
+      dc: 73 00 00 00  	ecall
+      e0: 01 00        	nop
+      e2: 01 00        	nop
+      e4: d5 b7        	j	0xc8 <.Ltmp1>
 
-000000a2 <.Ltmp4>:
-      a2: 0f 00 f0 0f  	fence
-      a6: 85 41        	li	gp, 1
-      a8: 93 08 d0 05  	li	a7, 93
-      ac: 01 45        	li	a0, 0
-      ae: 73 00 00 00  	ecall
-      b2: 01 00        	nop
-      b4: 01 00        	nop
-      b6: f5 b7        	j	0xa2 <.Ltmp4>
-      b8: 01 45        	li	a0, 0
-      ba: 82 80        	ret
+000000e6 <.Ltmp6>:
+      e6: 0f 00 f0 0f  	fence
+      ea: 85 41        	li	gp, 1
+      ec: 93 08 d0 05  	li	a7, 93
+      f0: 01 45        	li	a0, 0
+      f2: 73 00 00 00  	ecall
+      f6: 01 00        	nop
+      f8: 01 00        	nop
+      fa: f5 b7        	j	0xe6 <.Ltmp6>
+      fc: 01 45        	li	a0, 0
+      fe: 82 80        	ret

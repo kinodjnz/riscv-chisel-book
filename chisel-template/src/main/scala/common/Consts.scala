@@ -96,6 +96,8 @@ object Consts {
   val OP2_C_IMSH0 =  9.U(OP2_LEN.W)
   val OP2_IM255   = 10.U(OP2_LEN.W)
   val OP2_IM1     = 11.U(OP2_LEN.W)
+  val OP2_BFMI    = 12.U(OP2_LEN.W)
+  val OP2_BFPI    = 13.U(OP2_LEN.W)
   val OP2_X       = 15.U(OP2_LEN.W)
   val OP2_IMI     = 16.U(OP2_LEN.W)
   val OP2_IMS     = 17.U(OP2_LEN.W)
