@@ -34,7 +34,7 @@ object Consts {
   val ALU_BINV    = 14.U(EXE_FUN_LEN.W)
   val ALU_BSET    = 15.U(EXE_FUN_LEN.W)
 
-  // val ALU_ORCB    = 2.U(EXE_FUN_LEN.W)
+  val ALU_GORC    =  2.U(EXE_FUN_LEN.W)
   val ALU_BSCTH   =  3.U(EXE_FUN_LEN.W)
   val ALU_BFP     =  4.U(EXE_FUN_LEN.W)
   val ALU_REV8    =  5.U(EXE_FUN_LEN.W)

@@ -1,0 +1,75 @@
+
+target/gorci.elf.fat:	file format elf32-littleriscv
+
+Disassembly of section .text:
+
+00000000 <_start>:
+       0: 37 41 00 20  	lui	sp, 131076
+       4: 11 28        	jal	0x18 <main>
+       6: aa 81        	mv	gp, a0
+       8: 93 08 d0 05  	li	a7, 93
+       c: 01 00        	nop
+       e: 01 00        	nop
+      10: 01 00        	nop
+      12: 01 00        	nop
+      14: 73 00 00 00  	ecall
+
+00000018 <main>:
+      18: 09 a0        	j	0x1a <.Ltmp0>
+
+0000001a <.Ltmp0>:
+      1a: 89 41        	li	gp, 2
+      1c: 37 51 30 12  	lui	sp, 74501
+      20: 13 01 81 07  	addi	sp, sp, 120
+      24: 13 56 31 28  	orc.n	a2, sp
+      28: b7 f3 f0 ff  	lui	t2, 1048335
+      2c: 93 83 f3 0f  	addi	t2, t2, 255   # fff0f0ff
+      30: 63 1a 76 04  	bne	a2, t2, 0x84 <.Ltmp1>
+      34: 8d 41        	li	gp, 3
+      36: 37 01 09 00  	lui	sp, 144
+      3a: 19 01        	addi	sp, sp, 6
+      3c: 13 56 c1 28  	orc4.h	a2, sp
+      40: b7 63 99 99  	lui	t2, 629142
+      44: 93 83 63 66  	addi	t2, t2, 1638   # 99996666
+      48: 63 1e 76 02  	bne	a2, t2, 0x84 <.Ltmp1>
+      4c: 91 41        	li	gp, 4
+      4e: 37 01 a7 00  	lui	sp, 2672
+      52: 13 01 e1 06  	addi	sp, sp, 110
+      56: 13 56 81 28  	orc8.h	a2, sp
+      5a: b7 73 a7 a7  	lui	t2, 686711
+      5e: 93 83 e3 e6  	addi	t2, t2, -402   # a7a76e6e
+      62: 63 11 76 02  	bne	a2, t2, 0x84 <.Ltmp1>
+      66: 95 41        	li	gp, 5
+      68: 37 b1 00 00  	lui	sp, 11
+      6c: 13 01 e1 36  	addi	sp, sp, 878
+      70: 13 56 01 29  	orc16	a2, sp
+      74: b7 b3 6e b3  	lui	t2, 734955
+      78: 93 83 e3 36  	addi	t2, t2, 878   # b36eb36e
+      7c: 63 14 76 00  	bne	a2, t2, 0x84 <.Ltmp1>
+      80: 63 01 76 02  	beq	a2, t2, 0xa2 <.Ltmp5>
+
+00000084 <.Ltmp1>:
+      84: 0f 00 f0 0f  	fence
+
+00000088 <.Ltmp6>:
+      88: 63 80 01 00  	beqz	gp, 0x88 <.Ltmp6>
+      8c: 86 01        	slli	gp, gp, 1
+      8e: 93 e1 11 00  	ori	gp, gp, 1
+      92: 93 08 d0 05  	li	a7, 93
+      96: 0e 85        	mv	a0, gp
+      98: 73 00 00 00  	ecall
+      9c: 01 00        	nop
+      9e: 01 00        	nop
+      a0: d5 b7        	j	0x84 <.Ltmp1>
+
+000000a2 <.Ltmp5>:
+      a2: 0f 00 f0 0f  	fence
+      a6: 85 41        	li	gp, 1
+      a8: 93 08 d0 05  	li	a7, 93
+      ac: 01 45        	li	a0, 0
+      ae: 73 00 00 00  	ecall
+      b2: 01 00        	nop
+      b4: 01 00        	nop
+      b6: f5 b7        	j	0xa2 <.Ltmp5>
+      b8: 01 45        	li	a0, 0
+      ba: 82 80        	ret

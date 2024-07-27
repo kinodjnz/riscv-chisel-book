@@ -801,6 +801,7 @@ class Core(
       BFPP       -> List(ALU_BFP   , OP1_RS1   , OP2_RS2    , OP3_RS3   , REN_S, WB_BIT  , WBA_RD , CSR_X, MW_X  , OP2OP_NOP),
       BFMI       -> List(ALU_BFM   , OP1_RS1   , OP2_BFI    , OP3_RS3   , REN_S, WB_BIT  , WBA_RD , CSR_X, MW_X  , OP2OP_ZERO),
       BFPI       -> List(ALU_BFP   , OP1_RS1   , OP2_BFI    , OP3_RS3   , REN_S, WB_BIT  , WBA_RD , CSR_X, MW_X  , OP2OP_NOP),
+      GORCI      -> List(ALU_GORC  , OP1_RS1   , OP2_IMI    , OP3_X     , REN_S, WB_BIT  , WBA_RD , CSR_X, MW_X  , OP2OP_NOP),
       C_ILL      -> List(ALU_X     , OP1_X     , OP2_X      , OP3_X     , REN_X, WB_X    , WBA_C  , CSR_X, MW_X  , OP2OP_NOP),
       C_ADDI4SPN -> List(ALU_ADD   , OP1_C_SP  , OP2_C_IMIW , OP3_X     , REN_S, WB_ALU  , WBA_CP2, CSR_X, MW_X  , OP2OP_NOP),
       C_ADDI16SP -> List(ALU_ADD   , OP1_C_RS1 , OP2_C_IMI16, OP3_X     , REN_S, WB_ALU  , WBA_C  , CSR_X, MW_X  , OP2OP_NOP),
@@ -1384,6 +1385,18 @@ class Core(
     }
   }
 
+  def shift_or(value: UInt, enable: Bool, stage: Int): UInt = {
+    Cat((0 until WORD_LEN).reverse.map(bit => value(bit) | Mux(enable, value(bit ^ (1 << stage)), 0.U(1.W))))
+  }
+  def nested_shift_or(value: UInt, enables: UInt, stage: Int): UInt = {
+    if (stage > 0) {
+      val nested = nested_shift_or(value, enables, stage - 1)
+      shift_or(nested, enables(stage), stage)
+    } else {
+      shift_or(value, enables(stage), stage)
+    }
+  }
+
   val ex1_mask_len = Mux(ex1_reg_is_bflen, ex1_reg_imm_len, ex1_reg_op2_data(10, 6))
   val ex1_imm_mask = Mux(ex1_mask_len === 0.U,
     Fill(WORD_LEN, 1.U(1.W)),
@@ -1393,7 +1406,6 @@ class Core(
   val ex1_next_pc = Mux(ex1_reg_is_half, ex1_reg_pc + 1.U(PC_LEN.W), ex1_reg_pc + 2.U(PC_LEN.W))
   val ex1_pc_bit_out = MuxCase(0.U(WORD_LEN.W), Seq(
     (ex1_reg_wb_sel === WB_PC)      -> Cat(ex1_next_pc, 0.U(1.W)),
-    // (ex1_reg_exe_fun === ALU_ZEXTH) -> Cat(0.U(16.W), ex1_reg_op1_data(15, 0)),
     (ex1_reg_exe_fun === ALU_CPOP)  -> PopCount(ex1_reg_op1_data),
     (ex1_reg_exe_fun === ALU_CLZ)   -> PriorityEncoder(Cat(1.U(1.W), Reverse(ex1_reg_op1_data))),
     (ex1_reg_exe_fun === ALU_CTZ)   -> PriorityEncoder(Cat(1.U(1.W), ex1_reg_op1_data)),
@@ -1407,6 +1419,7 @@ class Core(
     (ex1_reg_exe_fun === ALU_BSCTH) -> Cat((0 until 16).reverse.map(bit => scatter_bit(ex1_reg_op1_data, ex1_reg_op2_data, bit))),
     (ex1_reg_exe_fun === ALU_BFM || ex1_reg_exe_fun === ALU_BFP)
                                     -> (ex1_imm_mask << ex1_reg_op2_data(4, 0))(WORD_LEN-1, 0),
+    (ex1_reg_exe_fun === ALU_GORC)  -> nested_shift_or(ex1_reg_op1_data, ex1_reg_op2_data, 4),
   ))
 
   val ex1_fun_sel = MuxCase(EX2_ALU, Seq(
