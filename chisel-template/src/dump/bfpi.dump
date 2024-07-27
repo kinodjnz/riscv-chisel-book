@@ -23,7 +23,7 @@ Disassembly of section .text:
       20: 13 01 81 67  	addi	sp, sp, 1656
       24: b7 e0 bc 9a  	lui	ra, 633806
       28: 93 80 a0 ef  	addi	ra, ra, -262   # 9abcdefa
-      2c: 57 16 51 0e  	bfpi	a2, sp, ra, 8, 4
+      2c: 57 36 81 0c  	bfpi	a2, sp, ra, 8, 4
       30: b7 e3 bc 9a  	lui	t2, 633806
       34: 93 83 a3 8f  	addi	t2, t2, -1798   # 9abcd8fa
       38: 63 18 76 08  	bne	a2, t2, 0xc8 <.Ltmp1>
@@ -32,7 +32,7 @@ Disassembly of section .text:
       42: 13 01 81 67  	addi	sp, sp, 1656
       46: b7 e0 bc 9a  	lui	ra, 633806
       4a: 93 80 a0 ef  	addi	ra, ra, -262   # 9abcdefa
-      4e: 57 16 41 0c  	bfpi	a2, sp, ra, 4, 0
+      4e: 57 36 41 08  	bfpi	a2, sp, ra, 4, 0
       52: b7 63 45 23  	lui	t2, 144470
       56: 93 83 a3 78  	addi	t2, t2, 1930   # 2345678a
       5a: 63 17 76 06  	bne	a2, t2, 0xc8 <.Ltmp1>
@@ -41,25 +41,25 @@ Disassembly of section .text:
       64: 13 01 81 67  	addi	sp, sp, 1656
       68: b7 e0 bc 9a  	lui	ra, 633806
       6c: 93 80 a0 ef  	addi	ra, ra, -262   # 9abcdefa
-      70: 57 16 81 0e  	bfpi	a2, sp, ra, 24, 8
+      70: 57 76 81 0f  	bfpi	a2, sp, ra, 24, 8
       74: b7 e3 bc 78  	lui	t2, 494542
       78: 93 83 a3 ef  	addi	t2, t2, -262   # 78bcdefa
       7c: 63 16 76 04  	bne	a2, t2, 0xc8 <.Ltmp1>
       80: 95 41        	li	gp, 5
       82: 37 51 34 12  	lui	sp, 74565
       86: 13 01 81 67  	addi	sp, sp, 1656
-      8a: b7 e0 bc 9a  	lui	ra, 633806
-      8e: 93 80 a0 ef  	addi	ra, ra, -262   # 9abcdefa
-      92: 57 16 f1 0f  	bfpi	a2, sp, ra, 16, 16
-      96: b7 e3 78 56  	lui	t2, 354190
-      9a: 93 83 a3 ef  	addi	t2, t2, -262   # 5678defa
+      8a: b7 e0 8c 9a  	lui	ra, 633038
+      8e: 93 80 a0 ef  	addi	ra, ra, -262   # 9a8cdefa
+      92: 57 36 01 0f  	bfpi	a2, sp, ra, 16, 6
+      96: b7 e3 b8 9a  	lui	t2, 633742
+      9a: 93 83 a3 ef  	addi	t2, t2, -262   # 9ab8defa
       9e: 63 15 76 02  	bne	a2, t2, 0xc8 <.Ltmp1>
       a2: 99 41        	li	gp, 6
       a4: 37 51 34 12  	lui	sp, 74565
       a8: 13 01 81 67  	addi	sp, sp, 1656
       ac: b7 e0 bc 9a  	lui	ra, 633806
       b0: 93 80 a0 ef  	addi	ra, ra, -262   # 9abcdefa
-      b4: 57 16 e1 0d  	bfpi	a2, sp, ra, 12, 3
+      b4: 57 76 c1 0a  	bfpi	a2, sp, ra, 12, 3
       b8: b7 93 bc 9a  	lui	t2, 633801
       bc: 93 83 a3 ef  	addi	t2, t2, -262   # 9abc8efa
       c0: 63 14 76 00  	bne	a2, t2, 0xc8 <.Ltmp1>

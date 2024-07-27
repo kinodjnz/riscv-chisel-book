@@ -1,0 +1,82 @@
+
+target/bfpp.elf.fat:	file format elf32-littleriscv
+
+Disassembly of section .text:
+
+00000000 <_start>:
+       0: 37 41 00 20  	lui	sp, 131076
+       4: 11 28        	jal	0x18 <main>
+       6: aa 81        	mv	gp, a0
+       8: 93 08 d0 05  	li	a7, 93
+       c: 01 00        	nop
+       e: 01 00        	nop
+      10: 01 00        	nop
+      12: 01 00        	nop
+      14: 73 00 00 00  	ecall
+
+00000018 <main>:
+      18: 09 a0        	j	0x1a <.Ltmp0>
+
+0000001a <.Ltmp0>:
+      1a: 89 41        	li	gp, 2
+      1c: 37 51 34 12  	lui	sp, 74565
+      20: 13 01 81 67  	addi	sp, sp, 1656
+      24: b7 e0 bc 9a  	lui	ra, 633806
+      28: 93 80 a0 ef  	addi	ra, ra, -262   # 9abcdefa
+      2c: 13 08 80 10  	li	a6, 264
+      30: 77 16 01 0d  	bfpp	a2, sp, ra, a6
+      34: b7 e3 bc 9a  	lui	t2, 633806
+      38: 93 83 a3 8f  	addi	t2, t2, -1798   # 9abcd8fa
+      3c: 63 19 76 04  	bne	a2, t2, 0x8e <.Ltmp1>
+      40: 8d 41        	li	gp, 3
+      42: 37 51 34 12  	lui	sp, 74565
+      46: 13 01 81 67  	addi	sp, sp, 1656
+      4a: b7 e0 bc 9a  	lui	ra, 633806
+      4e: 93 80 a0 ef  	addi	ra, ra, -262   # 9abcdefa
+      52: 21 48        	li	a6, 8
+      54: 77 16 01 0d  	bfpp	a2, sp, ra, a6
+      58: b7 83 56 34  	lui	t2, 214376
+      5c: 93 83 a3 8f  	addi	t2, t2, -1798   # 345678fa
+      60: 63 17 76 02  	bne	a2, t2, 0x8e <.Ltmp1>
+      64: 91 41        	li	gp, 4
+      66: 37 51 34 12  	lui	sp, 74565
+      6a: 13 01 81 67  	addi	sp, sp, 1656
+      6e: b7 e0 bc 9a  	lui	ra, 633806
+      72: 93 80 a0 ef  	addi	ra, ra, -262   # 9abcdefa
+      76: 13 08 00 20  	li	a6, 512
+      7a: 77 16 01 0d  	bfpp	a2, sp, ra, a6
+      7e: b7 e3 bc 9a  	lui	t2, 633806
+      82: 93 83 83 e7  	addi	t2, t2, -392   # 9abcde78
+      86: 63 14 76 00  	bne	a2, t2, 0x8e <.Ltmp1>
+      8a: 63 01 76 02  	beq	a2, t2, 0xac <.Ltmp4>
+
+0000008e <.Ltmp1>:
+      8e: 0f 00 f0 0f  	fence
+
+00000092 <.Ltmp5>:
+      92: 63 80 01 00  	beqz	gp, 0x92 <.Ltmp5>
+      96: 86 01        	slli	gp, gp, 1
+      98: 93 e1 11 00  	ori	gp, gp, 1
+      9c: 93 08 d0 05  	li	a7, 93
+      a0: 0e 85        	mv	a0, gp
+      a2: 73 00 00 00  	ecall
+      a6: 01 00        	nop
+      a8: 01 00        	nop
+      aa: d5 b7        	j	0x8e <.Ltmp1>
+
+000000ac <.Ltmp4>:
+      ac: 0f 00 f0 0f  	fence
+      b0: 85 41        	li	gp, 1
+      b2: 93 08 d0 05  	li	a7, 93
+      b6: 01 45        	li	a0, 0
+      b8: 73 00 00 00  	ecall
+      bc: 01 00        	nop
+      be: 01 00        	nop
+      c0: f5 b7        	j	0xac <.Ltmp4>
+      c2: 01 45        	li	a0, 0
+      c4: 82 80        	ret
+
+Disassembly of section .data:
+
+000000c6 <.data>:
+      c6: 00 00        	unimp

@@ -23,7 +23,7 @@ Disassembly of section .text:
       20: 13 01 81 67  	addi	sp, sp, 1656
       24: b7 e0 bc 9a  	lui	ra, 633806
       28: 93 80 a0 ef  	addi	ra, ra, -262   # 9abcdefa
-      2c: 57 06 41 0d  	bfmi	a2, sp, ra, 20
+      2c: 57 26 41 09  	bfmi	a2, sp, ra, 20, 0
       30: b7 e3 3c 12  	lui	t2, 74702
       34: 93 83 a3 ef  	addi	t2, t2, -262   # 123cdefa
       38: 63 16 76 04  	bne	a2, t2, 0x84 <.Ltmp1>
@@ -32,18 +32,18 @@ Disassembly of section .text:
       42: 13 01 81 67  	addi	sp, sp, 1656
       46: b7 e0 bc 9a  	lui	ra, 633806
       4a: 93 80 a0 ef  	addi	ra, ra, -262   # 9abcdefa
-      4e: 57 06 81 0c  	bfmi	a2, sp, ra, 8
-      52: b7 53 34 12  	lui	t2, 74565
-      56: 93 83 a3 6f  	addi	t2, t2, 1786   # 123456fa
+      4e: 57 66 81 0e  	bfmi	a2, sp, ra, 8, 8
+      52: b7 53 bc 9a  	lui	t2, 633797
+      56: 93 83 a3 6f  	addi	t2, t2, 1786   # 9abc56fa
       5a: 63 15 76 02  	bne	a2, t2, 0x84 <.Ltmp1>
       5e: 91 41        	li	gp, 4
       60: 37 51 34 12  	lui	sp, 74565
       64: 13 01 81 67  	addi	sp, sp, 1656
       68: b7 e0 bc 9a  	lui	ra, 633806
       6c: 93 80 a0 ef  	addi	ra, ra, -262   # 9abcdefa
-      70: 57 06 01 0c  	bfmi	a2, sp, ra, 0
-      74: b7 53 34 12  	lui	t2, 74565
-      78: 93 83 83 67  	addi	t2, t2, 1656   # 12345678
+      70: 57 26 01 0c  	bfmi	a2, sp, ra, 0, 4
+      74: b7 e3 bc 9a  	lui	t2, 633806
+      78: 93 83 83 ef  	addi	t2, t2, -264   # 9abcdef8
       7c: 63 14 76 00  	bne	a2, t2, 0x84 <.Ltmp1>
       80: 63 01 76 02  	beq	a2, t2, 0xa2 <.Ltmp4>
 
