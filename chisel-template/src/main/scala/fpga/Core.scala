@@ -1356,9 +1356,9 @@ class Core(
   val ex1_alu_out = MuxCase(0.U(WORD_LEN.W), Seq(
     (ex1_reg_exe_fun === ALU_ADD)     -> ((ex1_reg_op1_data << ex1_reg_shamt)(WORD_LEN-1, 0) + ex1_reg_op2_data),
     (ex1_reg_exe_fun === ALU_SUB)     -> (ex1_reg_op1_data - Mux(ex1_reg_op2op === OP2OP_NOP, ex1_reg_op2_data, 0.U(WORD_LEN.W))),
+    (ex1_reg_exe_fun === ALU_XOR)     -> (ex1_reg_op1_data ^ Mux(ex1_reg_op2op === OP2OP_NOP, ex1_reg_op2_data, ~ex1_reg_op2_data)),
     (ex1_reg_exe_fun === ALU_AND)     -> (ex1_reg_op1_data & Mux(ex1_reg_op2op === OP2OP_NOP, ex1_reg_op2_data, ~ex1_reg_op2_data)),
     (ex1_reg_exe_fun === ALU_OR)      -> (ex1_reg_op1_data | Mux(ex1_reg_op2op === OP2OP_NOP, ex1_reg_op2_data, ~ex1_reg_op2_data)),
-    (ex1_reg_exe_fun === ALU_XOR)     -> (ex1_reg_op1_data ^ Mux(ex1_reg_op2op === OP2OP_NOP, ex1_reg_op2_data, ~ex1_reg_op2_data)),
     (ex1_reg_exe_fun === ALU_FSL)     -> (Cat(ex1_reg_op1_data, ex1_reg_op3_data(WORD_LEN-1, 1)) >> (~ex1_reg_op2_data)(4, 0))(WORD_LEN-1, 0),
     (ex1_reg_exe_fun === ALU_FSR)     -> (Cat(ex1_reg_op3_data(WORD_LEN-2, 0), ex1_reg_op1_data) >> ex1_reg_op2_data(4, 0))(WORD_LEN-1, 0),
     (ex1_reg_exe_fun === ALU_SLT)     -> (ex1_reg_op1_data.asSInt < ex1_reg_op2_data.asSInt).asUInt,

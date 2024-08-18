@@ -31,8 +31,8 @@ object Consts {
   val ALU_MINMAX  = 10.U(EXE_FUN_LEN.W)
   val ALU_MINMAXU = 11.U(EXE_FUN_LEN.W)
   val ALU_BEXT    = 12.U(EXE_FUN_LEN.W)
-  val ALU_BCLR    = 13.U(EXE_FUN_LEN.W)
-  val ALU_BINV    = 14.U(EXE_FUN_LEN.W)
+  val ALU_BINV    = 13.U(EXE_FUN_LEN.W)
+  val ALU_BCLR    = 14.U(EXE_FUN_LEN.W)
   val ALU_BSET    = 15.U(EXE_FUN_LEN.W)
 
   val ALU_GORC    =  2.U(EXE_FUN_LEN.W)

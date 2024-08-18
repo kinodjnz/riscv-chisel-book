@@ -3,7 +3,7 @@ use super::uart;
 use core::arch::asm;
 
 fn read_unaligned<T>(addr: *const u32, byte_offset: usize) -> T {
-    unsafe { ((addr as *mut u8).add(byte_offset) as *mut T).read_unaligned() }
+    unsafe { ((addr as *mut u8).add(byte_offset) as *mut T).read/*_unaligned*/() }
 }
 
 fn read<T>(addr: *const u32, byte_offset: usize) -> T {
