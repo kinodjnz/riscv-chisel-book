@@ -101,6 +101,40 @@ class PipelineProbe(enable_pipeline_probe: Boolean) extends Bundle {
   val mem3_retired = Output(UInt(len_m.W))
 }
 
+class InstructionDecoderOutput(val inst_id_len: Int) extends Bundle {
+  val pc            = UInt(PC_LEN.W)
+  val wb_addr       = UInt(ADDR_LEN.W)
+  val op1_sel       = UInt(M_OP1_LEN.W)
+  val op2_sel       = UInt(M_OP2_LEN.W)
+  val op3_sel       = UInt(M_OP3_LEN.W)
+  val rs1_addr      = UInt(ADDR_LEN.W)
+  val rs2_addr      = UInt(ADDR_LEN.W)
+  val rs3_addr      = UInt(ADDR_LEN.W)
+  val op1_data      = UInt(WORD_LEN.W)
+  val op2_data_im1  = UInt(WORD_LEN.W)
+  val op2_data_im0  = UInt(12.W)
+  val exe_fun       = UInt(EXE_FUN_LEN.W)
+  val rf_wen        = UInt(REN_LEN.W)
+  val wb_sel        = UInt(WB_SEL_LEN.W)
+  val csr_addr      = UInt(CSR_ADDR_LEN.W)
+  val csr_cmd       = UInt(CSR_LEN.W)
+  val imm_b_sext    = UInt(WORD_LEN.W)
+  val shamt         = UInt(2.W)
+  val op2op         = UInt(OP2OP_LEN.W)
+  val mem_w         = UInt(MW_LEN.W)
+  val is_bflen      = Bool()
+  val is_br         = Bool()
+  val is_j          = Bool()
+  val bp_taken      = Bool()
+  val bp_taken_pc   = UInt(PC_LEN.W)
+  val bp_cnt        = UInt(2.W)
+  val is_half       = Bool()
+  val is_valid_inst = Bool()
+  val is_trap       = Bool()
+  val mcause        = UInt(WORD_LEN.W)
+  val inst_id       = UInt(inst_id_len.W)
+}
+
 class Core(
   start_address: BigInt = 0,
   dram_start: BigInt = 0x2000_0000L,
@@ -189,7 +223,6 @@ class Core(
   val rrd_reg_op2op         = RegInit(0.U(OP2OP_LEN.W))
   val rrd_reg_mem_w         = RegInit(0.U(MW_LEN.W))
   val rrd_reg_is_bflen      = RegInit(false.B)
-  val rrd_reg_is_direct_j   = RegInit(false.B)
   val rrd_reg_is_br         = RegInit(false.B)
   val rrd_reg_is_j          = RegInit(false.B)
   val rrd_reg_bp_taken      = RegInit(false.B)
@@ -964,7 +997,6 @@ class Core(
     (id_wba === WBA_CB2) -> id_c_imm_b2,
   ))
 
-  val id_is_direct_j = (id_op2_sel === OP2_IMJ) || (id_op2_sel === OP2_C_IMJ)
   val id_is_br = (id_mem_w === MW_BR)
   val id_is_j = (id_wb_sel === WB_PC)
   val id_is_trap = (id_exe_fun === CMD_ECALL && id_mem_w === MW_CSR)
@@ -979,262 +1011,110 @@ class Core(
     io.pipeline_probe.id_inst_id := id_reg_inst_id
   }
 
-  val id_reg_pc_delay         = RegInit(0.U(PC_LEN.W))
-  val id_reg_wb_addr_delay    = RegInit(0.U(ADDR_LEN.W))
-  val id_reg_op1_sel_delay    = RegInit(0.U(M_OP1_LEN.W))
-  val id_reg_op2_sel_delay    = RegInit(0.U(M_OP2_LEN.W))
-  val id_reg_op3_sel_delay    = RegInit(0.U(M_OP3_LEN.W))
-  val id_reg_rs1_addr_delay   = RegInit(0.U(ADDR_LEN.W))
-  val id_reg_rs2_addr_delay   = RegInit(0.U(ADDR_LEN.W))
-  val id_reg_rs3_addr_delay   = RegInit(0.U(ADDR_LEN.W))
-  val id_reg_op1_data_delay   = RegInit(0.U(WORD_LEN.W))
-  val id_reg_op2_data_im1_delay = RegInit(0.U(WORD_LEN.W))
-  val id_reg_op2_data_im0_delay = RegInit(0.U(12.W))
-  val id_reg_exe_fun_delay    = RegInit(0.U(EXE_FUN_LEN.W))
-  val id_reg_rf_wen_delay     = RegInit(0.U(REN_LEN.W))
-  val id_reg_wb_sel_delay     = RegInit(0.U(WB_SEL_LEN.W))
-  val id_reg_csr_addr_delay   = RegInit(0.U(CSR_ADDR_LEN.W))
-  val id_reg_csr_cmd_delay    = RegInit(0.U(CSR_LEN.W))
-  val id_reg_imm_b_sext_delay = RegInit(0.U(WORD_LEN.W))
-  val id_reg_shamt_delay      = RegInit(0.U(2.W))
-  val id_reg_op2op_delay      = RegInit(0.U(OP2OP_LEN.W))
-  val id_reg_mem_w_delay      = RegInit(0.U(MW_LEN.W))
-  val id_reg_is_bflen_delay   = RegInit(false.B)
-  val id_reg_is_direct_j_delay = RegInit(false.B)
-  val id_reg_is_br_delay      = RegInit(false.B)
-  val id_reg_is_j_delay       = RegInit(false.B)
-  val id_reg_bp_taken_delay   = RegInit(false.B)
-  val id_reg_bp_taken_pc_delay = RegInit(0.U(PC_LEN.W))
-  val id_reg_bp_cnt_delay     = RegInit(0.U(2.W))
-  val id_reg_is_half_delay    = RegInit(false.B)
-  val id_reg_is_valid_inst_delay = RegInit(false.B)
-  val id_reg_is_trap_delay    = RegInit(false.B)
-  val id_reg_mcause_delay     = RegInit(0.U(WORD_LEN.W))
-  // val id_reg_mtval_delay      = RegInit(0.U(WORD_LEN.W))
+  val id_output_queue = Module(new Queue(new InstructionDecoderOutput(inst_id_len), 1, pipe = false, flow = true))
 
+  id_output_queue.io.enq.valid              := !id_reg_stall
+  id_output_queue.io.enq.bits.pc            := id_reg_pc
+  id_output_queue.io.enq.bits.op1_sel       := id_m_op1_sel
+  id_output_queue.io.enq.bits.op2_sel       := id_m_op2_sel
+  id_output_queue.io.enq.bits.op3_sel       := id_m_op3_sel
+  id_output_queue.io.enq.bits.rs1_addr      := id_m_rs1_addr
+  id_output_queue.io.enq.bits.rs2_addr      := id_m_rs2_addr
+  id_output_queue.io.enq.bits.rs3_addr      := id_m_rs3_addr
+  id_output_queue.io.enq.bits.op1_data      := id_op1_data
+  id_output_queue.io.enq.bits.op2_data_im1  := id_op2_data_im1
+  id_output_queue.io.enq.bits.op2_data_im0  := id_op2_data_im0
+  id_output_queue.io.enq.bits.wb_addr       := id_wb_addr
+  id_output_queue.io.enq.bits.imm_b_sext    := id_m_imm_b_sext
+  id_output_queue.io.enq.bits.shamt         := id_shamt
+  id_output_queue.io.enq.bits.op2op         := id_op2op
+  id_output_queue.io.enq.bits.is_bflen      := id_is_bflen
+  id_output_queue.io.enq.bits.csr_addr      := id_csr_addr
+  id_output_queue.io.enq.bits.bp_taken_pc   := id_reg_bp_taken_pc
+  id_output_queue.io.enq.bits.bp_cnt        := id_reg_bp_cnt
+  id_output_queue.io.enq.bits.is_half       := id_is_half
+  id_output_queue.io.enq.bits.mcause        := id_mcause
   when (ex2_reg_is_br || id_reg_is_bp_fail) {
-    when (!id_reg_stall) {
-      id_reg_pc_delay          := id_reg_pc
-      id_reg_op1_sel_delay    := id_m_op1_sel
-      id_reg_op2_sel_delay    := id_m_op2_sel
-      id_reg_op3_sel_delay    := id_m_op3_sel
-      id_reg_rs1_addr_delay   := id_m_rs1_addr
-      id_reg_rs2_addr_delay   := id_m_rs2_addr
-      id_reg_rs3_addr_delay   := id_m_rs3_addr
-      id_reg_op1_data_delay   := id_op1_data
-      id_reg_op2_data_im1_delay := id_op2_data_im1
-      id_reg_op2_data_im0_delay := id_op2_data_im0
-      id_reg_wb_addr_delay    := id_wb_addr
-      id_reg_imm_b_sext_delay := id_m_imm_b_sext
-      id_reg_shamt_delay      := id_shamt
-      id_reg_op2op_delay      := id_op2op
-      id_reg_csr_addr_delay   := id_csr_addr
-      id_reg_is_bflen_delay   := id_is_bflen
-      id_reg_is_direct_j_delay := id_is_direct_j
-      id_reg_bp_taken_pc_delay := id_reg_bp_taken_pc
-      id_reg_bp_cnt_delay     := id_reg_bp_cnt
-      id_reg_is_half_delay    := id_is_half
-      id_reg_mcause_delay     := id_mcause
-    }
-    id_reg_rf_wen_delay        := REN_X
-    id_reg_exe_fun_delay       := ALU_ADD
-    id_reg_wb_sel_delay        := WB_X
-    id_reg_csr_cmd_delay       := CSR_X
-    id_reg_mem_w_delay         := MW_X
-    id_reg_is_br_delay         := false.B
-    id_reg_is_j_delay          := false.B
-    id_reg_bp_taken_delay      := false.B
-    id_reg_is_valid_inst_delay := false.B
-    id_reg_is_trap_delay       := false.B
-  }.elsewhen (!id_reg_stall) {
-    id_reg_pc_delay         := id_reg_pc
-    id_reg_op1_sel_delay    := id_m_op1_sel
-    id_reg_op2_sel_delay    := id_m_op2_sel
-    id_reg_op3_sel_delay    := id_m_op3_sel
-    id_reg_rs1_addr_delay   := id_m_rs1_addr
-    id_reg_rs2_addr_delay   := id_m_rs2_addr
-    id_reg_rs3_addr_delay   := id_m_rs3_addr
-    id_reg_op1_data_delay   := id_op1_data
-    id_reg_op2_data_im1_delay := id_op2_data_im1
-    id_reg_op2_data_im0_delay := id_op2_data_im0
-    id_reg_wb_addr_delay    := id_wb_addr
-    id_reg_rf_wen_delay     := id_rf_wen
-    id_reg_exe_fun_delay    := id_exe_fun
-    id_reg_wb_sel_delay     := id_wb_sel
-    id_reg_imm_b_sext_delay := id_m_imm_b_sext
-    id_reg_shamt_delay      := id_shamt
-    id_reg_op2op_delay      := id_op2op
-    id_reg_is_bflen_delay   := id_is_bflen
-    id_reg_csr_addr_delay   := id_csr_addr
-    id_reg_csr_cmd_delay    := id_csr_cmd
-    id_reg_mem_w_delay      := id_mem_w
-    id_reg_is_direct_j_delay := id_is_direct_j
-    id_reg_is_br_delay      := id_is_br
-    id_reg_is_j_delay       := id_is_j
-    id_reg_bp_taken_delay   := id_reg_bp_taken
-    id_reg_bp_taken_pc_delay := id_reg_bp_taken_pc
-    id_reg_bp_cnt_delay     := id_reg_bp_cnt
-    id_reg_is_half_delay    := id_is_half
-    id_reg_is_valid_inst_delay := id_inst =/= BUBBLE
-    id_reg_is_trap_delay    := id_is_trap
-    id_reg_mcause_delay     := id_mcause
-    // id_reg_mtval_delay      := id_mtval
-    if (enable_pipeline_probe) {
-      id_reg_inst_id_delay  := id_reg_inst_id
-    }
+    id_output_queue.io.enq.bits.rf_wen        := REN_X
+    id_output_queue.io.enq.bits.exe_fun       := ALU_ADD
+    id_output_queue.io.enq.bits.wb_sel        := WB_X
+    id_output_queue.io.enq.bits.csr_cmd       := CSR_X
+    id_output_queue.io.enq.bits.mem_w         := MW_X
+    id_output_queue.io.enq.bits.is_br         := false.B
+    id_output_queue.io.enq.bits.is_j          := false.B
+    id_output_queue.io.enq.bits.bp_taken      := false.B
+    id_output_queue.io.enq.bits.is_valid_inst := false.B
+    id_output_queue.io.enq.bits.is_trap       := false.B
+  }.otherwise {
+    id_output_queue.io.enq.bits.rf_wen        := id_rf_wen
+    id_output_queue.io.enq.bits.exe_fun       := id_exe_fun
+    id_output_queue.io.enq.bits.wb_sel        := id_wb_sel
+    id_output_queue.io.enq.bits.csr_cmd       := id_csr_cmd
+    id_output_queue.io.enq.bits.mem_w         := id_mem_w
+    id_output_queue.io.enq.bits.is_br         := id_is_br
+    id_output_queue.io.enq.bits.is_j          := id_is_j
+    id_output_queue.io.enq.bits.bp_taken      := id_reg_bp_taken
+    id_output_queue.io.enq.bits.is_valid_inst := id_inst =/= BUBBLE
+    id_output_queue.io.enq.bits.is_trap       := id_is_trap
+  }
+  if (enable_pipeline_probe) {
+    id_output_queue.io.enq.bits.inst_id := id_reg_inst_id
+  } else {
+    id_output_queue.io.enq.bits.inst_id := 0.U(1.W)
   }
 
   //**********************************
   // ID/RRD register
-  when (ex2_reg_is_br || id_reg_is_bp_fail) {
-    when(id_reg_stall) {
-      rrd_reg_pc            := id_reg_pc_delay
-      rrd_reg_op1_sel       := id_reg_op1_sel_delay
-      rrd_reg_op2_sel       := id_reg_op2_sel_delay
-      rrd_reg_op3_sel       := id_reg_op3_sel_delay
-      rrd_reg_rs1_addr      := id_reg_rs1_addr_delay
-      rrd_reg_rs2_addr      := id_reg_rs2_addr_delay
-      rrd_reg_rs3_addr      := id_reg_rs3_addr_delay
-      rrd_reg_op1_data      := id_reg_op1_data_delay
-      rrd_reg_op2_data_im1  := id_reg_op2_data_im1_delay
-      rrd_reg_op2_data_im0  := id_reg_op2_data_im0_delay
-      rrd_reg_wb_addr       := id_reg_wb_addr_delay
+  id_output_queue.io.deq.ready := (ex2_reg_is_br || id_reg_is_bp_fail) || (!rrd_stall && !ex2_stall)
+  when ((ex2_reg_is_br || id_reg_is_bp_fail) || (!rrd_stall && !ex2_stall)) {
+    rrd_reg_pc            := id_output_queue.io.deq.bits.pc
+    rrd_reg_op1_sel       := id_output_queue.io.deq.bits.op1_sel
+    rrd_reg_op2_sel       := id_output_queue.io.deq.bits.op2_sel
+    rrd_reg_op3_sel       := id_output_queue.io.deq.bits.op3_sel
+    rrd_reg_rs1_addr      := id_output_queue.io.deq.bits.rs1_addr
+    rrd_reg_rs2_addr      := id_output_queue.io.deq.bits.rs2_addr
+    rrd_reg_rs3_addr      := id_output_queue.io.deq.bits.rs3_addr
+    rrd_reg_op1_data      := id_output_queue.io.deq.bits.op1_data
+    rrd_reg_op2_data_im1  := id_output_queue.io.deq.bits.op2_data_im1
+    rrd_reg_op2_data_im0  := id_output_queue.io.deq.bits.op2_data_im0
+    rrd_reg_wb_addr       := id_output_queue.io.deq.bits.wb_addr
+    rrd_reg_imm_b_sext    := id_output_queue.io.deq.bits.imm_b_sext
+    rrd_reg_shamt         := id_output_queue.io.deq.bits.shamt
+    rrd_reg_op2op         := id_output_queue.io.deq.bits.op2op
+    rrd_reg_is_bflen      := id_output_queue.io.deq.bits.is_bflen
+    rrd_reg_csr_addr      := id_output_queue.io.deq.bits.csr_addr
+    rrd_reg_bp_taken_pc   := id_output_queue.io.deq.bits.bp_taken_pc
+    rrd_reg_bp_cnt        := id_output_queue.io.deq.bits.bp_cnt
+    rrd_reg_is_half       := id_output_queue.io.deq.bits.is_half
+    rrd_reg_mcause        := id_output_queue.io.deq.bits.mcause
+    when (ex2_reg_is_br || id_reg_is_bp_fail) {
       rrd_reg_rf_wen        := REN_X
       rrd_reg_exe_fun       := ALU_ADD
       rrd_reg_wb_sel        := WB_X
-      rrd_reg_imm_b_sext    := id_reg_imm_b_sext_delay
-      rrd_reg_shamt         := id_reg_shamt_delay
-      rrd_reg_op2op         := id_reg_op2op_delay
-      rrd_reg_is_bflen      := id_reg_is_bflen_delay
-      rrd_reg_csr_addr      := id_reg_csr_addr_delay
       rrd_reg_csr_cmd       := CSR_X
       rrd_reg_mem_w         := MW_X
-      rrd_reg_is_direct_j   := false.B
       rrd_reg_is_br         := false.B
       rrd_reg_is_j          := false.B
       rrd_reg_bp_taken      := false.B
-      rrd_reg_bp_taken_pc   := id_reg_bp_taken_pc_delay
-      rrd_reg_bp_cnt        := id_reg_bp_cnt_delay
-      rrd_reg_is_half       := id_reg_is_half_delay
       rrd_reg_is_valid_inst := false.B
       rrd_reg_is_trap       := false.B
-      rrd_reg_mcause        := id_reg_mcause_delay
-      // rrd_reg_mtval         := id_reg_mtval_delay
-      if (enable_pipeline_probe) {
-        rrd_reg_inst_id     := id_reg_inst_id_delay
-      }
     }.otherwise {
-      rrd_reg_pc            := id_reg_pc
-      rrd_reg_op1_sel       := id_m_op1_sel
-      rrd_reg_op2_sel       := id_m_op2_sel
-      rrd_reg_op3_sel       := id_m_op3_sel
-      rrd_reg_rs1_addr      := id_m_rs1_addr
-      rrd_reg_rs2_addr      := id_m_rs2_addr
-      rrd_reg_rs3_addr      := id_m_rs3_addr
-      rrd_reg_op1_data      := id_op1_data
-      rrd_reg_op2_data_im1  := id_op2_data_im1
-      rrd_reg_op2_data_im0  := id_op2_data_im0
-      rrd_reg_wb_addr       := id_wb_addr
-      rrd_reg_rf_wen        := REN_X
-      rrd_reg_exe_fun       := ALU_ADD
-      rrd_reg_wb_sel        := WB_X
-      rrd_reg_imm_b_sext    := id_m_imm_b_sext
-      rrd_reg_shamt         := id_shamt
-      rrd_reg_op2op         := id_op2op
-      rrd_reg_is_bflen      := id_is_bflen
-      rrd_reg_csr_addr      := id_csr_addr
-      rrd_reg_csr_cmd       := CSR_X
-      rrd_reg_mem_w         := MW_X
-      rrd_reg_is_direct_j   := false.B
-      rrd_reg_is_br         := false.B
-      rrd_reg_is_j          := false.B
-      rrd_reg_bp_taken      := false.B
-      rrd_reg_bp_taken_pc   := id_reg_bp_taken_pc
-      rrd_reg_bp_cnt        := id_reg_bp_cnt
-      rrd_reg_is_half       := id_is_half
-      rrd_reg_is_valid_inst := false.B
-      rrd_reg_is_trap       := false.B
-      rrd_reg_mcause        := id_mcause
-      // rrd_reg_mtval         := id_mtval
-      if (enable_pipeline_probe) {
-        rrd_reg_inst_id     := id_reg_inst_id
-      }
+      rrd_reg_rf_wen        := id_output_queue.io.deq.bits.rf_wen
+      rrd_reg_exe_fun       := id_output_queue.io.deq.bits.exe_fun
+      rrd_reg_wb_sel        := id_output_queue.io.deq.bits.wb_sel
+      rrd_reg_csr_cmd       := id_output_queue.io.deq.bits.csr_cmd
+      rrd_reg_mem_w         := id_output_queue.io.deq.bits.mem_w
+      rrd_reg_is_br         := id_output_queue.io.deq.bits.is_br
+      rrd_reg_is_j          := id_output_queue.io.deq.bits.is_j
+      rrd_reg_bp_taken      := id_output_queue.io.deq.bits.bp_taken
+      rrd_reg_is_valid_inst := id_output_queue.io.deq.bits.is_valid_inst
+      rrd_reg_is_trap       := id_output_queue.io.deq.bits.is_trap
     }
-  }.elsewhen(!rrd_stall && !ex2_stall) {
-    when(id_reg_stall) {
-      rrd_reg_pc            := id_reg_pc_delay
-      rrd_reg_op1_sel       := id_reg_op1_sel_delay
-      rrd_reg_op2_sel       := id_reg_op2_sel_delay
-      rrd_reg_op3_sel       := id_reg_op3_sel_delay
-      rrd_reg_rs1_addr      := id_reg_rs1_addr_delay
-      rrd_reg_rs2_addr      := id_reg_rs2_addr_delay
-      rrd_reg_rs3_addr      := id_reg_rs3_addr_delay
-      rrd_reg_op1_data      := id_reg_op1_data_delay
-      rrd_reg_op2_data_im1  := id_reg_op2_data_im1_delay
-      rrd_reg_op2_data_im0  := id_reg_op2_data_im0_delay
-      rrd_reg_wb_addr       := id_reg_wb_addr_delay
-      rrd_reg_rf_wen        := id_reg_rf_wen_delay
-      rrd_reg_exe_fun       := id_reg_exe_fun_delay
-      rrd_reg_wb_sel        := id_reg_wb_sel_delay
-      rrd_reg_imm_b_sext    := id_reg_imm_b_sext_delay
-      rrd_reg_shamt         := id_reg_shamt_delay
-      rrd_reg_op2op         := id_reg_op2op_delay
-      rrd_reg_is_bflen      := id_reg_is_bflen_delay
-      rrd_reg_csr_addr      := id_reg_csr_addr_delay
-      rrd_reg_csr_cmd       := id_reg_csr_cmd_delay
-      rrd_reg_mem_w         := id_reg_mem_w_delay
-      rrd_reg_is_direct_j   := id_reg_is_direct_j_delay
-      rrd_reg_is_br         := id_reg_is_br_delay
-      rrd_reg_is_j          := id_reg_is_j_delay
-      rrd_reg_bp_taken      := id_reg_bp_taken_delay
-      rrd_reg_bp_taken_pc   := id_reg_bp_taken_pc_delay
-      rrd_reg_bp_cnt        := id_reg_bp_cnt_delay
-      rrd_reg_is_half       := id_reg_is_half_delay
-      rrd_reg_is_valid_inst := id_reg_is_valid_inst_delay
-      rrd_reg_is_trap       := id_reg_is_trap_delay
-      rrd_reg_mcause        := id_reg_mcause_delay
-      // rrd_reg_mtval         := id_reg_mtval_delay
-      if (enable_pipeline_probe) {
-        rrd_reg_inst_id     := id_reg_inst_id_delay
-      }
-    }.otherwise {
-      rrd_reg_pc            := id_reg_pc
-      rrd_reg_op1_sel       := id_m_op1_sel
-      rrd_reg_op2_sel       := id_m_op2_sel
-      rrd_reg_op3_sel       := id_m_op3_sel
-      rrd_reg_rs1_addr      := id_m_rs1_addr
-      rrd_reg_rs2_addr      := id_m_rs2_addr
-      rrd_reg_rs3_addr      := id_m_rs3_addr
-      rrd_reg_op1_data      := id_op1_data
-      rrd_reg_op2_data_im1  := id_op2_data_im1
-      rrd_reg_op2_data_im0  := id_op2_data_im0
-      rrd_reg_wb_addr       := id_wb_addr
-      rrd_reg_rf_wen        := id_rf_wen
-      rrd_reg_exe_fun       := id_exe_fun
-      rrd_reg_wb_sel        := id_wb_sel
-      rrd_reg_imm_b_sext    := id_m_imm_b_sext
-      rrd_reg_shamt         := id_shamt
-      rrd_reg_op2op         := id_op2op
-      rrd_reg_is_bflen      := id_is_bflen
-      rrd_reg_csr_addr      := id_csr_addr
-      rrd_reg_csr_cmd       := id_csr_cmd
-      rrd_reg_mem_w         := id_mem_w
-      rrd_reg_is_direct_j   := id_is_direct_j
-      rrd_reg_is_br         := id_is_br
-      rrd_reg_is_j          := id_is_j
-      rrd_reg_bp_taken      := id_reg_bp_taken
-      rrd_reg_bp_taken_pc   := id_reg_bp_taken_pc
-      rrd_reg_bp_cnt        := id_reg_bp_cnt
-      rrd_reg_is_half       := id_is_half
-      rrd_reg_is_valid_inst := id_inst =/= BUBBLE
-      rrd_reg_is_trap       := id_is_trap
-      rrd_reg_mcause        := id_mcause
-      // rrd_reg_mtval         := id_mtval
-      if (enable_pipeline_probe) {
-        rrd_reg_inst_id     := id_reg_inst_id
-      }
+    if (enable_pipeline_probe) {
+      rrd_reg_inst_id     := id_output_queue.io.deq.bits.inst_id
     }
   }
+
   //**********************************
   // Register read (RRD) Stage
 
