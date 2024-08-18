@@ -3,13 +3,13 @@
     "class":"firrtl.transforms.DedupedResult",
     "original":"~RiscV|DCache",
     "duplicate":"~RiscV|RiscV/dcache1:DCache",
-    "index":0.3181818181818182
+    "index":0.34782608695652173
   },
   {
     "class":"firrtl.transforms.DedupedResult",
     "original":"~RiscV|DCache_1",
     "duplicate":"~RiscV|RiscV/dcache2:DCache",
-    "index":0.36363636363636365
+    "index":0.391304347826087
   },
   {
     "class":"firrtl.EmitCircuitAnnotation",
