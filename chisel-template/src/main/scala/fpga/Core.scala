@@ -195,7 +195,7 @@ class Core(
   val id_reg_bp_taken_pc    = RegInit(0.U(PC_LEN.W))
   val id_reg_bp_cnt         = RegInit(0.U(2.W))
 
-  val id_reg_stall          = RegInit(false.B)
+  val id_reg_stall          = Wire(Bool()) // RegInit(false.B)
   val id_reg_is_trap        = RegInit(false.B)
   val id_reg_mcause         = RegInit(0.U(WORD_LEN.W))
   // val id_reg_mtval          = RegInit(0.U(WORD_LEN.W))
@@ -648,10 +648,10 @@ class Core(
   //**********************************
   // IF2/ID Register
 
-  when (ex2_reg_is_br || !id_reg_stall) {
+  when (ex2_reg_is_br || id_reg_is_bp_fail || !id_reg_stall) {
     // 優先順位重要！ジャンプ成立とストールが同時発生した場合、ジャンプ処理を優先
     // ストールとBP同時の場合、BP発生源の命令を生かすためストール優先
-    id_reg_valid_inst := if2_is_valid_inst
+    id_reg_valid_inst := if2_is_valid_inst && (if2_inst =/= BUBBLE)
     id_reg_inst       := if2_inst
     id_reg_bp_taken   := if2_bp_taken
   }
@@ -665,8 +665,10 @@ class Core(
   //**********************************
   // Instruction Decode (ID) Stage
 
+  val id_output_queue = Module(new Queue(new InstructionDecoderOutput(inst_id_len), 1, pipe = false, flow = true))
+
   id_stall := rrd_stall || ex2_stall
-  id_reg_stall := id_stall
+  id_reg_stall := !id_output_queue.io.enq.ready
 
   // branch,jump時にIDをBUBBLE化
   // val id_inst = Mux(ex2_reg_is_br || id_reg_is_bp_fail, BUBBLE, id_reg_inst)
@@ -1004,16 +1006,15 @@ class Core(
   // val id_mtval = 0.U(WORD_LEN.W)
 
   id_reg_br_pc := Mux(id_is_half, id_reg_pc + 1.U(PC_LEN.W), id_reg_pc + 2.U(PC_LEN.W))
-  id_reg_is_bp_fail := !id_reg_stall && !ex2_reg_is_br && !id_reg_is_bp_fail && !id_is_j && !id_is_br && id_reg_bp_taken
+  val id_is_bp_fail = !id_is_j && !id_is_br && id_reg_bp_taken
+  id_reg_is_bp_fail := /*!id_reg_stall &&*/ !ex2_reg_is_br && !id_reg_is_bp_fail && id_is_bp_fail
 
   if (enable_pipeline_probe) {
     io.pipeline_probe.id_valid   := (id_inst =/= BUBBLE)
     io.pipeline_probe.id_inst_id := id_reg_inst_id
   }
 
-  val id_output_queue = Module(new Queue(new InstructionDecoderOutput(inst_id_len), 1, pipe = false, flow = true))
-
-  id_output_queue.io.enq.valid              := !id_reg_stall
+  id_output_queue.io.enq.valid              := !ex2_reg_is_br && !id_is_bp_fail && !id_reg_is_bp_fail
   id_output_queue.io.enq.bits.pc            := id_reg_pc
   id_output_queue.io.enq.bits.op1_sel       := id_m_op1_sel
   id_output_queue.io.enq.bits.op2_sel       := id_m_op2_sel
@@ -1034,29 +1035,16 @@ class Core(
   id_output_queue.io.enq.bits.bp_cnt        := id_reg_bp_cnt
   id_output_queue.io.enq.bits.is_half       := id_is_half
   id_output_queue.io.enq.bits.mcause        := id_mcause
-  when (ex2_reg_is_br || id_reg_is_bp_fail) {
-    id_output_queue.io.enq.bits.rf_wen        := REN_X
-    id_output_queue.io.enq.bits.exe_fun       := ALU_ADD
-    id_output_queue.io.enq.bits.wb_sel        := WB_X
-    id_output_queue.io.enq.bits.csr_cmd       := CSR_X
-    id_output_queue.io.enq.bits.mem_w         := MW_X
-    id_output_queue.io.enq.bits.is_br         := false.B
-    id_output_queue.io.enq.bits.is_j          := false.B
-    id_output_queue.io.enq.bits.bp_taken      := false.B
-    id_output_queue.io.enq.bits.is_valid_inst := false.B
-    id_output_queue.io.enq.bits.is_trap       := false.B
-  }.otherwise {
-    id_output_queue.io.enq.bits.rf_wen        := id_rf_wen
-    id_output_queue.io.enq.bits.exe_fun       := id_exe_fun
-    id_output_queue.io.enq.bits.wb_sel        := id_wb_sel
-    id_output_queue.io.enq.bits.csr_cmd       := id_csr_cmd
-    id_output_queue.io.enq.bits.mem_w         := id_mem_w
-    id_output_queue.io.enq.bits.is_br         := id_is_br
-    id_output_queue.io.enq.bits.is_j          := id_is_j
-    id_output_queue.io.enq.bits.bp_taken      := id_reg_bp_taken
-    id_output_queue.io.enq.bits.is_valid_inst := id_inst =/= BUBBLE
-    id_output_queue.io.enq.bits.is_trap       := id_is_trap
-  }
+  id_output_queue.io.enq.bits.rf_wen        := id_rf_wen
+  id_output_queue.io.enq.bits.exe_fun       := id_exe_fun
+  id_output_queue.io.enq.bits.wb_sel        := id_wb_sel
+  id_output_queue.io.enq.bits.csr_cmd       := id_csr_cmd
+  id_output_queue.io.enq.bits.mem_w         := id_mem_w
+  id_output_queue.io.enq.bits.is_br         := id_is_br
+  id_output_queue.io.enq.bits.is_j          := id_is_j
+  id_output_queue.io.enq.bits.bp_taken      := id_reg_bp_taken
+  id_output_queue.io.enq.bits.is_valid_inst := id_reg_valid_inst
+  id_output_queue.io.enq.bits.is_trap       := id_is_trap
   if (enable_pipeline_probe) {
     id_output_queue.io.enq.bits.inst_id := id_reg_inst_id
   } else {
@@ -1065,8 +1053,8 @@ class Core(
 
   //**********************************
   // ID/RRD register
-  id_output_queue.io.deq.ready := (ex2_reg_is_br || id_reg_is_bp_fail) || (!rrd_stall && !ex2_stall)
-  when ((ex2_reg_is_br || id_reg_is_bp_fail) || (!rrd_stall && !ex2_stall)) {
+  id_output_queue.io.deq.ready := ex2_reg_is_br || (!rrd_stall && !ex2_stall)
+  when (ex2_reg_is_br || (!rrd_stall && !ex2_stall)) {
     rrd_reg_pc            := id_output_queue.io.deq.bits.pc
     rrd_reg_op1_sel       := id_output_queue.io.deq.bits.op1_sel
     rrd_reg_op2_sel       := id_output_queue.io.deq.bits.op2_sel
@@ -1087,7 +1075,7 @@ class Core(
     rrd_reg_bp_cnt        := id_output_queue.io.deq.bits.bp_cnt
     rrd_reg_is_half       := id_output_queue.io.deq.bits.is_half
     rrd_reg_mcause        := id_output_queue.io.deq.bits.mcause
-    when (ex2_reg_is_br || id_reg_is_bp_fail) {
+    when (ex2_reg_is_br || !id_output_queue.io.deq.valid) {
       rrd_reg_rf_wen        := REN_X
       rrd_reg_exe_fun       := ALU_ADD
       rrd_reg_wb_sel        := WB_X
