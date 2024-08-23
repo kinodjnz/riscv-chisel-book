@@ -6,6 +6,7 @@ import common.Instructions._
 import common.Consts._
 import chisel3.util.experimental.loadMemoryFromFileInline
 import chisel3.ChiselEnum
+import common.OptionExtension._
 
 class LongCounter(unitWidth: Int, unitCount: Int) extends Module {
   val counterWidth = unitWidth * unitCount
@@ -71,34 +72,32 @@ object DmemState extends ChiselEnum {
   val Reading = Value
 }
 
-class SimProbe(enable_sim_probe: Boolean) extends Bundle {
-  val len_m = if (enable_sim_probe) 1 else 0
-  val gp   = Output(UInt((WORD_LEN*len_m).W))
-  val exit = Output(UInt(len_m.W))
+class SimProbe extends Bundle {
+  val gp   = Output(UInt((WORD_LEN).W))
+  val exit = Output(Bool())
 }
 
-class PipelineProbe(enable_pipeline_probe: Boolean) extends Bundle {
-  val len_m = if (enable_pipeline_probe) 1 else 0
-  val if2_valid   = Output(UInt(len_m.W))
-  val if2_inst_id = Output(UInt((32*len_m).W))
-  val if2_pc      = Output(UInt((WORD_LEN*len_m).W))
-  val if2_inst    = Output(UInt((WORD_LEN*len_m).W))
-  val id_valid    = Output(UInt(len_m.W))
-  val id_inst_id  = Output(UInt((32*len_m).W))
-  val rrd_valid   = Output(UInt(len_m.W))
-  val rrd_inst_id = Output(UInt((32*len_m).W))
-  val ex1_valid   = Output(UInt(len_m.W))
-  val ex1_inst_id = Output(UInt((32*len_m).W))
-  val ex2_valid   = Output(UInt(len_m.W))
-  val ex2_inst_id = Output(UInt((32*len_m).W))
-  val ex2_retired = Output(UInt(len_m.W))
-  val mem1_valid   = Output(UInt(len_m.W))
-  val mem1_inst_id = Output(UInt((32*len_m).W))
-  val mem2_valid   = Output(UInt(len_m.W))
-  val mem2_inst_id = Output(UInt((32*len_m).W))
-  val mem3_valid   = Output(UInt(len_m.W))
-  val mem3_inst_id = Output(UInt((32*len_m).W))
-  val mem3_retired = Output(UInt(len_m.W))
+class PipelineProbe extends Bundle {
+  val if2_valid    = Output(Bool())
+  val if2_inst_id  = Output(UInt(INST_ID_LEN.W))
+  val if2_pc       = Output(UInt(INST_ID_LEN.W))
+  val if2_inst     = Output(UInt(INST_ID_LEN.W))
+  val id_valid     = Output(Bool())
+  val id_inst_id   = Output(UInt(INST_ID_LEN.W))
+  val rrd_valid    = Output(Bool())
+  val rrd_inst_id  = Output(UInt(INST_ID_LEN.W))
+  val ex1_valid    = Output(Bool())
+  val ex1_inst_id  = Output(UInt(INST_ID_LEN.W))
+  val ex2_valid    = Output(Bool())
+  val ex2_inst_id  = Output(UInt(INST_ID_LEN.W))
+  val ex2_retired  = Output(Bool())
+  val mem1_valid   = Output(Bool())
+  val mem1_inst_id = Output(UInt(INST_ID_LEN.W))
+  val mem2_valid   = Output(Bool())
+  val mem2_inst_id = Output(UInt(INST_ID_LEN.W))
+  val mem3_valid   = Output(Bool())
+  val mem3_inst_id = Output(UInt(INST_ID_LEN.W))
+  val mem3_retired = Output(Bool())
 }
 
 class Core(
@@ -117,18 +116,10 @@ class Core(
       val mtimer_mem = new DmemPortIo()
       val intr = Input(Bool())
       val debug_signal = new CoreDebugSignals()
-      val sim_probe = new SimProbe(enable_sim_probe)
-      val pipeline_probe = new PipelineProbe(enable_pipeline_probe)
+      val sim_probe = Option.when(enable_sim_probe)(new SimProbe())
+      val pipeline_probe = Option.when(enable_pipeline_probe)(new PipelineProbe())
     }
   )
-
-  val inst_id_len: Int = if (enable_pipeline_probe) 32 else 1
-  if (!enable_sim_probe) {
-    io.sim_probe := DontCare
-  }
-  if (!enable_pipeline_probe) {
-    io.pipeline_probe := DontCare
-  }
 
   val regfile = Mem(32, UInt(WORD_LEN.W))
   //val csr_regfile = Mem(4096, UInt(WORD_LEN.W)) 
@@ -321,14 +312,14 @@ class Core(
   val ex2_reg_en           = RegInit(false.B)
   val ex2_wb_data          = Wire(UInt(WORD_LEN.W))
 
-  val if2_reg_inst_id      = RegInit(Fill(inst_id_len, 1.U(1.W)))
-  val id_reg_inst_id_delay = RegInit(0.U(inst_id_len.W))
-  val rrd_reg_inst_id      = RegInit(0.U(inst_id_len.W))
-  val ex1_reg_inst_id      = RegInit(0.U(inst_id_len.W))
-  val ex2_reg_inst_id      = RegInit(0.U(inst_id_len.W))
-  val mem1_reg_inst_id     = RegInit(0.U(inst_id_len.W))
-  val mem2_reg_inst_id     = RegInit(0.U(inst_id_len.W))
-  val mem3_reg_inst_id     = RegInit(0.U(inst_id_len.W))
+  val if2_reg_inst_id      = Option.when(enable_pipeline_probe)(RegInit(Fill(INST_ID_LEN, 1.U(1.W))))
+  val id_reg_inst_id_delay = Option.when(enable_pipeline_probe)(RegInit(0.U(INST_ID_LEN.W)))
+  val rrd_reg_inst_id      = Option.when(enable_pipeline_probe)(RegInit(0.U(INST_ID_LEN.W)))
+  val ex1_reg_inst_id      = Option.when(enable_pipeline_probe)(RegInit(0.U(INST_ID_LEN.W)))
+  val ex2_reg_inst_id      = Option.when(enable_pipeline_probe)(RegInit(0.U(INST_ID_LEN.W)))
+  val mem1_reg_inst_id     = Option.when(enable_pipeline_probe)(RegInit(0.U(INST_ID_LEN.W)))
+  val mem2_reg_inst_id     = Option.when(enable_pipeline_probe)(RegInit(0.U(INST_ID_LEN.W)))
+  val mem3_reg_inst_id     = Option.when(enable_pipeline_probe)(RegInit(0.U(INST_ID_LEN.W)))
 
   //**********************************
   // Instruction Fetch And Branch Prediction
@@ -589,18 +580,14 @@ class Core(
   val if2_is_valid_inst = !id_flush && !id_reg_bp_taken && if2_is_inst_read
   val if2_inst = Mux(if2_is_valid_inst, ic_data_out, BUBBLE)
   val if2_bp_taken = if2_is_valid_inst && ic_bp_taken
-  if (enable_pipeline_probe) {
-    val if2_probe_valid_inst = !id_reg_stall && if2_is_valid_inst
-    val if2_inst_id = Mux(if2_probe_valid_inst,
-      if2_reg_inst_id + 1.U,
-      if2_reg_inst_id,
-    )
-    if2_reg_inst_id := if2_inst_id
-    io.pipeline_probe.if2_valid   := if2_probe_valid_inst
-    io.pipeline_probe.if2_inst_id := if2_inst_id
-    io.pipeline_probe.if2_pc      := Cat(if2_pc, 0.U(1.W))
-    io.pipeline_probe.if2_inst    := if2_inst
-  }
+
+  val if2_probe_valid_inst = !id_reg_stall && if2_is_valid_inst
+  val if2_inst_id = if2_reg_inst_id.map(_ + Mux(if2_probe_valid_inst, 1.U, 0.U))
+  map2(if2_reg_inst_id, if2_inst_id)(_ := _)
+  io.pipeline_probe.foreach(_.if2_valid := if2_probe_valid_inst)
+  map2(io.pipeline_probe, if2_inst_id)(_.if2_inst_id := _)
+  io.pipeline_probe.foreach(_.if2_pc    := Cat(if2_pc, 0.U(1.W)))
+  io.pipeline_probe.foreach(_.if2_inst  := if2_inst)
   
   printf(p"ic_reg_addr_out: ${Hexadecimal(Cat(ic_reg_addr_out, 0.U(1.W)))}, ic_data_out: ${Hexadecimal(ic_data_out)}\n")
   printf(p"inst: ${Hexadecimal(if2_inst)}, ic_read_rdy: ${ic_read_rdy}, ic_state: ${ic_state.asUInt}, ic_addr_en: ${ic_addr_en.asUInt}\n")
@@ -618,7 +605,7 @@ class Core(
   //**********************************
   // Instruction Decode (ID) Stage
 
-  val id_stage = Module(new InstructionDecoder(inst_id_len, enable_pipeline_probe))
+  val id_stage = Module(new InstructionDecoder(enable_pipeline_probe))
 
   id_stage.io.in.bits.is_valid_inst := if2_is_valid_inst && (if2_inst =/= BUBBLE)
   id_stage.io.in.bits.inst          := if2_inst
@@ -626,17 +613,15 @@ class Core(
   id_stage.io.in.bits.pc            := ic_reg_addr_out
   id_stage.io.in.bits.bp_taken_pc   := ic_bp_taken_pc
   id_stage.io.in.bits.bp_cnt        := ic_bp_cnt
-  id_stage.io.in.bits.inst_id       := if2_reg_inst_id
+  map2(id_stage.io.in.bits.inst_id, if2_reg_inst_id)(_ := _)
 
   id_reg_stall      := !id_stage.io.in.ready
   id_flush          := id_stage.io.in.flush
   id_reg_is_bp_fail := id_stage.io.update_pc.en
   id_reg_br_pc      := id_stage.io.update_pc.pc
 
-  if (enable_pipeline_probe) {
-    io.pipeline_probe.id_valid   := id_stage.io.out.bits.is_valid_inst
-    io.pipeline_probe.id_inst_id := id_stage.io.pipeline_probe.id_inst_id
-  }
+  map2(io.pipeline_probe, id_stage.io.pipeline_probe.id_valid)(_.id_valid := _)
+  map2(io.pipeline_probe, id_stage.io.pipeline_probe.id_inst_id)(_.id_inst_id := _)
 
   //**********************************
   // ID/RRD register
@@ -675,9 +660,7 @@ class Core(
     rrd_reg_bp_taken      := id_stage.io.out.bits.bp_taken
     rrd_reg_is_valid_inst := id_stage.io.out.bits.is_valid_inst
     rrd_reg_is_trap       := id_stage.io.out.bits.is_trap
-    if (enable_pipeline_probe) {
-      rrd_reg_inst_id     := id_stage.io.out.bits.inst_id
-    }
+    map2(rrd_reg_inst_id, id_stage.io.out.bits.inst_id)(_ := _)
   }
 
   //**********************************
@@ -749,10 +732,8 @@ class Core(
       rrd_inst3_use_reg := (rrd_reg_wb_sel === WB_MD || rrd_reg_wb_sel === WB_CSR)
   }
 
-  if (enable_pipeline_probe) {
-    io.pipeline_probe.rrd_valid   := rrd_reg_is_valid_inst && !ex2_reg_is_br
-    io.pipeline_probe.rrd_inst_id := rrd_reg_inst_id
-  }
+  io.pipeline_probe.foreach(_.rrd_valid := rrd_reg_is_valid_inst && !ex2_reg_is_br)
+  map2(io.pipeline_probe, rrd_reg_inst_id)(_.rrd_inst_id := _)
 
   //**********************************
   // RRD/EX1 register
@@ -789,9 +770,7 @@ class Core(
     ex1_reg_inst2_use_reg := rrd_inst2_use_reg
     ex1_reg_inst3_use_reg := rrd_inst3_use_reg
     ex1_reg_fw_en         := rrd_fw_en_next
-    if (enable_pipeline_probe) {
-      ex1_reg_inst_id     := rrd_reg_inst_id
-    }
+    map2(ex1_reg_inst_id, rrd_reg_inst_id)(_ := _)
   }
 
   //**********************************
@@ -956,10 +935,8 @@ class Core(
   val ex1_hazard = (ex1_reg_rf_wen === REN_S) && (ex1_reg_wb_addr =/= 0.U) && ex1_en
   val ex1_fw_en_next = ex1_hazard && (ex1_reg_wb_sel =/= WB_MD) && (ex1_reg_wb_sel =/= WB_LD)
 
-  if (enable_pipeline_probe) {
-    io.pipeline_probe.ex1_valid   := ex1_en
-    io.pipeline_probe.ex1_inst_id := ex1_reg_inst_id
-  }
+  io.pipeline_probe.foreach(_.ex1_valid := ex1_en)
+  map2(io.pipeline_probe, ex1_reg_inst_id)(_.ex1_inst_id := _)
 
   //**********************************
   // EX1 CSR Stage
@@ -1108,9 +1085,7 @@ class Core(
     ex2_reg_orig_dividend     := ex1_orig_dividend
     ex2_reg_inst3_use_reg     := ex1_reg_inst3_use_reg && ex1_en
     ex2_reg_fw_en             := ex1_fw_en_next
-    if (enable_pipeline_probe) {
-      ex2_reg_inst_id         := ex1_reg_inst_id
-    }
+    map2(ex2_reg_inst_id, ex1_reg_inst_id)(_ := _)
   }.otherwise {
     ex2_reg_div_stall := ex2_div_stall_next ||
       (ex2_reg_divrem && (ex2_reg_divrem_state === DivremState.Idle || ex2_reg_divrem_state === DivremState.Finished))
@@ -1320,11 +1295,9 @@ class Core(
     regfile(ex2_reg_wb_addr) := ex2_wb_data
   }
 
-  if (enable_pipeline_probe) {
-    io.pipeline_probe.ex2_valid   := ex2_reg_no_mem
-    io.pipeline_probe.ex2_inst_id := ex2_reg_inst_id
-    io.pipeline_probe.ex2_retired := !ex2_reg_div_stall && ex2_reg_no_mem
-  }
+  io.pipeline_probe.foreach(_.ex2_valid := ex2_reg_no_mem)
+  map2(io.pipeline_probe, ex2_reg_inst_id)(_.ex2_inst_id := _)
+  io.pipeline_probe.foreach(_.ex2_retired := !ex2_reg_div_stall && ex2_reg_no_mem)
 
   //**********************************
   // EX1/MEM1 register
@@ -1351,9 +1324,7 @@ class Core(
     mem1_reg_is_dram_store := mem1_is_dram && (ex1_reg_wb_sel === WB_ST) && ex1_en
     mem1_reg_is_dram_fence := (ex1_reg_wb_sel === WB_FENCE) && ex1_en
     mem1_reg_is_valid_inst := (ex1_reg_wb_sel === WB_LD || ex1_reg_wb_sel === WB_ST || ex1_reg_wb_sel === WB_FENCE) && ex1_en
-    if (enable_pipeline_probe) {
-      mem1_reg_inst_id     := ex1_reg_inst_id
-    }
+    map2(mem1_reg_inst_id, ex1_reg_inst_id)(_ := _)
   }
 
   //**********************************
@@ -1387,10 +1358,8 @@ class Core(
 
   mem_stall := mem1_mem_stall || mem1_dram_stall || mem1_reg_unaligned || mem2_stall
 
-  if (enable_pipeline_probe) {
-    io.pipeline_probe.mem1_valid   := mem1_reg_is_valid_inst
-    io.pipeline_probe.mem1_inst_id := mem1_reg_inst_id
-  }
+  io.pipeline_probe.foreach(_.mem1_valid := mem1_reg_is_valid_inst)
+  map2(io.pipeline_probe, mem1_reg_inst_id)(_.mem1_inst_id := _)
 
   //**********************************
   // MEM1/MEM2 regsiter
@@ -1405,9 +1374,7 @@ class Core(
     mem2_reg_is_mem_load    := !mem1_mem_stall && mem1_reg_is_mem_load
     mem2_reg_is_dram_load   := !mem1_dram_stall && mem1_reg_is_dram_load
     mem2_reg_unaligned      := mem1_reg_unaligned
-    if (enable_pipeline_probe) {
-      mem2_reg_inst_id     := mem1_reg_inst_id
-    }
+    map2(mem2_reg_inst_id, mem1_reg_inst_id)(_ := _)
   }
 
   //**********************************
@@ -1416,10 +1383,8 @@ class Core(
   val mem2_dram_stall = (mem2_reg_is_dram_load && !io.cache.rvalid)
   mem2_stall := mem2_mem_stall || mem2_dram_stall
 
-  if (enable_pipeline_probe) {
-    io.pipeline_probe.mem2_valid   := !mem2_reg_unaligned && mem2_reg_is_valid_inst
-    io.pipeline_probe.mem2_inst_id := mem2_reg_inst_id
-  }
+  io.pipeline_probe.foreach(_.mem2_valid := !mem2_reg_unaligned && mem2_reg_is_valid_inst)
+  map2(io.pipeline_probe, mem2_reg_inst_id)(_.mem2_inst_id := _)
 
   val mem2_is_valid_load = !mem2_stall && !mem2_reg_unaligned && mem2_reg_is_valid_load
   val mem2_is_aligned_lw = !mem2_stall && mem2_reg_is_valid_load && mem2_reg_wb_byte_offset === "b00".U &&
@@ -1442,10 +1407,8 @@ class Core(
   mem3_reg_fw_en          := mem2_fw_en_next
   mem3_reg_unaligned      := mem2_reg_unaligned
   mem3_reg_is_aligned_lw  := mem2_is_aligned_lw
-  if (enable_pipeline_probe) {
-    when (!mem2_stall) {
-      mem3_reg_inst_id    := mem2_reg_inst_id
-    }
+  when (!mem2_stall) {
+    map2(mem3_reg_inst_id, mem2_reg_inst_id)(_ := _)
   }
 
   //**********************************
@@ -1482,11 +1445,9 @@ class Core(
     instret := instret + 1.U
   }
 
-  if (enable_pipeline_probe) {
-    io.pipeline_probe.mem3_valid   := mem3_reg_is_valid_inst
-    io.pipeline_probe.mem3_inst_id := mem3_reg_inst_id
-    io.pipeline_probe.mem3_retired := mem3_reg_is_valid_inst
-  }
+  io.pipeline_probe.foreach(_.mem3_valid := mem3_reg_is_valid_inst)
+  map2(io.pipeline_probe, mem3_reg_inst_id)(_.mem3_inst_id := _)
+  io.pipeline_probe.foreach(_.mem3_retired := mem3_reg_is_valid_inst)
 
   // Debug signals
   io.debug_signal.cycle_counter       := cycle_counter.io.value(47, 0)
@@ -1510,10 +1471,10 @@ class Core(
   //**********************************
   // IO & Debug
   if (enable_sim_probe) {
-    io.sim_probe.gp   := regfile(3)
+    io.sim_probe.foreach(_.gp := regfile(3))
     val exit = ex1_reg_is_trap && (ex1_reg_mcause === CSR_MCAUSE_ECALL_M) && (regfile(17) === 93.U(WORD_LEN.W))
     val do_exit = RegNext(exit)
-    io.sim_probe.exit := RegNext(do_exit).asUInt
+    io.sim_probe.foreach(_.exit := RegNext(do_exit).asUInt)
   }
 
   //printf(p"if1_reg_pc       : 0x${Hexadecimal(if1_reg_pc)}\n")

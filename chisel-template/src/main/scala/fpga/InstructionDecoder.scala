@@ -4,10 +4,11 @@ import chisel3._
 import chisel3.util._
 import common.Instructions._
 import common.Consts._
+import common.OptionExtension._
 import chisel3.util.experimental.loadMemoryFromFileInline
 import chisel3.ChiselEnum
 
-class InstructionDecoderOutput(val inst_id_len: Int) extends Bundle {
+class InstructionDecoderOutput(val enable_pipeline_probe: Boolean) extends Bundle {
   val pc            = UInt(PC_LEN.W)
   val wb_addr       = UInt(ADDR_LEN.W)
   val op1_sel       = UInt(M_OP1_LEN.W)
@@ -38,7 +39,7 @@ class InstructionDecoderOutput(val inst_id_len: Int) extends Bundle {
   val is_valid_inst = Bool()
   val is_trap       = Bool()
   val mcause        = UInt(WORD_LEN.W)
-  val inst_id       = UInt(inst_id_len.W)
+  val inst_id       = Option.when(enable_pipeline_probe)(UInt(INST_ID_LEN.W))
 }
 
 class PipelineStageIO[+T <: Data](gen: T) extends Bundle {
@@ -47,14 +48,14 @@ class PipelineStageIO[+T <: Data](gen: T) extends Bundle {
   val bits  = Output(gen)
 }
 
-class InstructionFetcherOutput(val inst_id_len: Int) extends Bundle {
+class InstructionFetcherOutput(val enable_pipeline_probe: Boolean) extends Bundle {
   val is_valid_inst = Bool()
   val inst          = UInt(WORD_LEN.W)
   val bp_taken      = Bool()
   val pc            = UInt(PC_LEN.W)
   val bp_taken_pc   = UInt(PC_LEN.W)
   val bp_cnt        = UInt(2.W)
-  val inst_id       = UInt(inst_id_len.W)
+  val inst_id       = Option.when(enable_pipeline_probe)(UInt(INST_ID_LEN.W))
 }
 
 class UpdatePC extends Bundle {
@@ -63,13 +64,13 @@ class UpdatePC extends Bundle {
 }
 
 object InstructionDecoderInputIO {
-  def apply(inst_id_len: Int): PipelineStageIO[InstructionFetcherOutput] =
-    new PipelineStageIO(new InstructionFetcherOutput(inst_id_len))
+  def apply(enable_pipeline_probe: Boolean): PipelineStageIO[InstructionFetcherOutput] =
+    new PipelineStageIO(new InstructionFetcherOutput(enable_pipeline_probe))
 }
 
 object InstructionDecoderOutputIO {
-  def apply(inst_id_len: Int): PipelineStageIO[InstructionDecoderOutput] =
-    Flipped(new PipelineStageIO(new InstructionDecoderOutput(inst_id_len)))
+  def apply(enable_pipeline_probe: Boolean): PipelineStageIO[InstructionDecoderOutput] =
+    Flipped(new PipelineStageIO(new InstructionDecoderOutput(enable_pipeline_probe)))
 }
 
 class InstructionDecoderDebugSignals extends Bundle {
@@ -78,27 +79,24 @@ class InstructionDecoderDebugSignals extends Bundle {
 }
 
 class InstructionDecoderPipelineProbe(enable_pipeline_probe: Boolean) extends Bundle {
-  val len_m = if (enable_pipeline_probe) 1 else 0
-  val id_valid    = Output(UInt(len_m.W))
-  val id_inst_id  = Output(UInt((32*len_m).W))
+  val id_valid    = Option.when(enable_pipeline_probe)(Output(Bool()))
+  val id_inst_id  = Option.when(enable_pipeline_probe)(Output(UInt(32.W)))
 }
 
 class InstructionDecoderIO(
-  val inst_id_len: Int,
   val enable_pipeline_probe: Boolean = false,
 ) extends Bundle {
-  val in = Flipped(InstructionDecoderInputIO(inst_id_len))
-  val out = Flipped(InstructionDecoderOutputIO(inst_id_len))
+  val in = Flipped(InstructionDecoderInputIO(enable_pipeline_probe))
+  val out = Flipped(InstructionDecoderOutputIO(enable_pipeline_probe))
   val update_pc = new UpdatePC()
   val debug_signals = new InstructionDecoderDebugSignals()
   val pipeline_probe = new InstructionDecoderPipelineProbe(enable_pipeline_probe)
 }
 
 class InstructionDecoder(
-  val inst_id_len: Int,
   val enable_pipeline_probe: Boolean = false,
 ) extends Module {
-  val io = IO(new InstructionDecoderIO(inst_id_len, enable_pipeline_probe))
+  val io = IO(new InstructionDecoderIO(enable_pipeline_probe))
 
   val id_reg_is_valid_inst = RegInit(false.B)
   val id_reg_inst          = RegInit(BUBBLE)
@@ -113,7 +111,7 @@ class InstructionDecoder(
   val id_reg_mcause         = RegInit(0.U(WORD_LEN.W))
   val id_reg_is_br          = RegInit(false.B)
 
-  val id_output_queue = Module(new Queue(new InstructionDecoderOutput(inst_id_len), 1, pipe = false, flow = true))
+  val id_output_queue = Module(new Queue(new InstructionDecoderOutput(enable_pipeline_probe), 1, pipe = false, flow = true))
 
   val id_in_ready = id_output_queue.io.enq.ready
 
@@ -129,7 +127,7 @@ class InstructionDecoder(
     id_reg_bp_taken_pc := io.in.bits.bp_taken_pc
     id_reg_bp_cnt      := io.in.bits.bp_cnt
   }
-  val id_reg_inst_id = io.in.bits.inst_id
+  val id_inst_id = io.in.bits.inst_id
 
   io.in.ready := id_in_ready
   io.in.flush := io.out.flush || id_reg_is_bp_fail
@@ -474,13 +472,8 @@ class InstructionDecoder(
   io.update_pc.en := id_reg_is_bp_fail /*|| id_reg_bp_taken*/
   io.update_pc.pc := id_reg_next_pc // Mux(id_reg_is_bp_fail, id_reg_next_pc, id_reg_bp_taken_pc)
 
-  if (enable_pipeline_probe) {
-    io.pipeline_probe.id_valid   := (id_inst =/= BUBBLE)
-    io.pipeline_probe.id_inst_id := id_reg_inst_id
-  } else {
-    io.pipeline_probe.id_valid   := false.B
-    io.pipeline_probe.id_inst_id := 0.U(1.W)
-  }
+  io.pipeline_probe.id_valid.foreach(_ := id_reg_is_valid_inst)
+  map2(io.pipeline_probe.id_inst_id, id_inst_id)(_ := _)
 
   id_output_queue.io.enq.valid              := !io.out.flush && !id_is_bp_fail && !id_reg_is_bp_fail
   id_output_queue.io.enq.bits.pc            := id_reg_pc
@@ -513,11 +506,7 @@ class InstructionDecoder(
   id_output_queue.io.enq.bits.bp_taken      := id_reg_bp_taken
   id_output_queue.io.enq.bits.is_valid_inst := id_reg_is_valid_inst
   id_output_queue.io.enq.bits.is_trap       := id_is_trap
-  if (enable_pipeline_probe) {
-    id_output_queue.io.enq.bits.inst_id := id_reg_inst_id
-  } else {
-    id_output_queue.io.enq.bits.inst_id := 0.U(1.W)
-  }
+  map2(id_output_queue.io.enq.bits.inst_id, id_inst_id)(_ := _)
 
   id_output_queue.io.deq.ready := io.out.flush || io.out.ready
 
@@ -564,9 +553,5 @@ class InstructionDecoder(
     io.out.bits.is_valid_inst := id_output_queue.io.deq.bits.is_valid_inst
     io.out.bits.is_trap       := id_output_queue.io.deq.bits.is_trap
   }
-  if (enable_pipeline_probe) {
-    io.out.bits.inst_id := id_output_queue.io.deq.bits.inst_id
-  } else {
-    io.out.bits.inst_id := 0.U(1.W)
-  }
+  map2(io.out.bits.inst_id, id_output_queue.io.deq.bits.inst_id)(_ := _)
 }

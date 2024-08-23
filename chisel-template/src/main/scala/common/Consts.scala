@@ -10,11 +10,7 @@ object Consts {
   val UNIMP         = "x_c0001073".U(WORD_LEN.W) // [CSRRW x0, cycle, x0]
   val ADDR_LEN      = 5 // rs1,rs2,wb
   val CSR_ADDR_LEN  = 12
-  val VLEN          = 128
-  val LMUL_LEN      = 2
-  val SEW_LEN       = 11
-  val VL_ADDR       = 0xC20
-  val VTYPE_ADDR    = 0xC21
+  val INST_ID_LEN   = 32
 
   val EXE_FUN_LEN = 4
   val ALU_X       =  0.U(EXE_FUN_LEN.W)

@@ -13,8 +13,8 @@ class SimTop(memoryPath: String, with_sdc: Boolean, enable_pipeline_probe: Boole
   val startAddress = 0x00000000L
 
   val io = IO(new Bundle {
-    val sim_probe = new SimProbe(true)
-    val pipeline_probe = new PipelineProbe(enable_pipeline_probe)
+    val sim_probe = new SimProbe()
+    val pipeline_probe = new PipelineProbe()
   })
   val core = Module(new Core(startAddress, 0x2000_0000L, 0x1000_0000L, true, enable_pipeline_probe))
   val memory = Module(new Memory())
@@ -75,6 +75,6 @@ class SimTop(memoryPath: String, with_sdc: Boolean, enable_pipeline_probe: Boole
   core.io.pht_mem <> pht_mem.io.pht_mem
 
   core.io.intr := 0.U
-  io.sim_probe <> core.io.sim_probe
-  io.pipeline_probe <> core.io.pipeline_probe
+  core.io.sim_probe.foreach(io.sim_probe <> _)
+  core.io.pipeline_probe.foreach(io.pipeline_probe <> _)
 }
