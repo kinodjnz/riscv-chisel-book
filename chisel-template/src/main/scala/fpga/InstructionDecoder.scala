@@ -38,7 +38,7 @@ class InstructionDecoderOutput(val enable_pipeline_probe: Boolean) extends Bundl
   val is_half       = Bool()
   val is_valid_inst = Bool()
   val is_trap       = Bool()
-  val mcause        = UInt(WORD_LEN.W)
+  val mcause_code   = UInt(CSR_MCAUSE_CODE_LEN.W)
   val inst_id       = Option.when(enable_pipeline_probe)(UInt(INST_ID_LEN.W))
 }
 
@@ -106,10 +106,6 @@ class InstructionDecoder(
   val id_reg_bp_cnt        = RegInit(0.U(2.W))
   val id_reg_next_pc       = RegInit(0.U(PC_LEN.W))
   val id_reg_is_bp_fail    = RegInit(false.B)
-
-  val id_reg_is_trap        = RegInit(false.B)
-  val id_reg_mcause         = RegInit(0.U(WORD_LEN.W))
-  val id_reg_is_br          = RegInit(false.B)
 
   val id_output_queue = Module(new Queue(new InstructionDecoderOutput(enable_pipeline_probe), 1, pipe = false, flow = true))
 
@@ -463,7 +459,7 @@ class InstructionDecoder(
   val id_is_br = (id_mem_w === MW_BR)
   val id_is_j = (id_wb_sel === WB_PC)
   val id_is_trap = (id_exe_fun === CMD_ECALL && id_mem_w === MW_CSR)
-  val id_mcause = CSR_MCAUSE_ECALL_M
+  val id_mcause_code = CSR_MCAUSE_CODE_ECALL_M
   // val id_mtval = 0.U(WORD_LEN.W)
 
   id_reg_next_pc := Mux(id_is_half, id_reg_pc + 1.U(PC_LEN.W), id_reg_pc + 2.U(PC_LEN.W))
@@ -495,7 +491,7 @@ class InstructionDecoder(
   id_output_queue.io.enq.bits.bp_taken_pc   := id_reg_bp_taken_pc
   id_output_queue.io.enq.bits.bp_cnt        := id_reg_bp_cnt
   id_output_queue.io.enq.bits.is_half       := id_is_half
-  id_output_queue.io.enq.bits.mcause        := id_mcause
+  id_output_queue.io.enq.bits.mcause_code   := id_mcause_code
   id_output_queue.io.enq.bits.rf_wen        := id_rf_wen
   id_output_queue.io.enq.bits.exe_fun       := id_exe_fun
   id_output_queue.io.enq.bits.wb_sel        := id_wb_sel
@@ -529,7 +525,7 @@ class InstructionDecoder(
   io.out.bits.bp_taken_pc   := id_output_queue.io.deq.bits.bp_taken_pc
   io.out.bits.bp_cnt        := id_output_queue.io.deq.bits.bp_cnt
   io.out.bits.is_half       := id_output_queue.io.deq.bits.is_half
-  io.out.bits.mcause        := id_output_queue.io.deq.bits.mcause
+  io.out.bits.mcause_code   := id_output_queue.io.deq.bits.mcause_code
   when (io.out.flush || !id_output_queue.io.deq.valid) {
     io.out.bits.rf_wen        := REN_X
     io.out.bits.exe_fun       := ALU_ADD

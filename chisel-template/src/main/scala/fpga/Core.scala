@@ -178,7 +178,7 @@ class Core(
   val rrd_reg_is_half       = RegInit(false.B)
   val rrd_reg_is_valid_inst = RegInit(false.B)
   val rrd_reg_is_trap       = RegInit(false.B)
-  val rrd_reg_mcause        = RegInit(0.U(WORD_LEN.W))
+  val rrd_reg_mcause_code   = RegInit(0.U(CSR_MCAUSE_CODE_LEN.W))
   // val rrd_reg_mtval          = RegInit(0.U(WORD_LEN.W))
 
   // RRD/EX1 State
@@ -205,7 +205,7 @@ class Core(
   val ex1_reg_is_valid_inst = RegInit(false.B)
   val ex1_reg_is_trap       = RegInit(false.B)
   val ex1_reg_is_mret       = RegInit(false.B)
-  val ex1_reg_mcause        = RegInit(0.U(WORD_LEN.W))
+  val ex1_reg_mcause_code   = RegInit(0.U(CSR_MCAUSE_CODE_LEN.W))
   // val ex1_reg_mtval         = RegInit(0.U(WORD_LEN.W))
   val ex1_reg_mem_use_reg   = RegInit(false.B)
   val ex1_reg_inst2_use_reg = RegInit(false.B)
@@ -649,7 +649,7 @@ class Core(
     rrd_reg_bp_taken_pc   := id_stage.io.out.bits.bp_taken_pc
     rrd_reg_bp_cnt        := id_stage.io.out.bits.bp_cnt
     rrd_reg_is_half       := id_stage.io.out.bits.is_half
-    rrd_reg_mcause        := id_stage.io.out.bits.mcause
+    rrd_reg_mcause_code   := id_stage.io.out.bits.mcause_code
     rrd_reg_rf_wen        := id_stage.io.out.bits.rf_wen
     rrd_reg_exe_fun       := id_stage.io.out.bits.exe_fun
     rrd_reg_wb_sel        := id_stage.io.out.bits.wb_sel
@@ -764,7 +764,7 @@ class Core(
     ex1_reg_is_half       := rrd_reg_is_half
     ex1_reg_is_valid_inst := rrd_reg_is_valid_inst && !ex_is_bubble
     ex1_reg_is_trap       := Mux(ex_is_bubble, false.B, rrd_reg_is_trap)
-    ex1_reg_mcause        := rrd_reg_mcause
+    ex1_reg_mcause_code   := rrd_reg_mcause_code
     // ex1_reg_mtval         := rrd_reg_mtval
     ex1_reg_mem_use_reg   := rrd_mem_use_reg
     ex1_reg_inst2_use_reg := rrd_inst2_use_reg
@@ -1032,7 +1032,7 @@ class Core(
     csr_is_br            := true.B
     csr_br_pc            := csr_reg_trap_vector
   }.elsewhen (csr_is_trap) {
-    csr_reg_mcause       := ex1_reg_mcause
+    csr_reg_mcause       := CSR_MCAUSE_ECALL_M // ex1_reg_mcause
     // csr_mtval         := ex1_reg_mtval
     csr_reg_mepc         := ex1_reg_pc
     csr_reg_mstatus_mpie := csr_reg_mstatus_mie
@@ -1472,7 +1472,7 @@ class Core(
   // IO & Debug
   if (enable_sim_probe) {
     io.sim_probe.foreach(_.gp := regfile(3))
-    val exit = ex1_reg_is_trap && (ex1_reg_mcause === CSR_MCAUSE_ECALL_M) && (regfile(17) === 93.U(WORD_LEN.W))
+    val exit = ex1_reg_is_trap && (ex1_reg_mcause_code === CSR_MCAUSE_CODE_ECALL_M) && (regfile(17) === 93.U(WORD_LEN.W))
     val do_exit = RegNext(exit)
     io.sim_probe.foreach(_.exit := RegNext(do_exit).asUInt)
   }
