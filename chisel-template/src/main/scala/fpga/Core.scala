@@ -675,7 +675,7 @@ class Core(
     )
 
   val rrd_op1_data = MuxCase(rrd_reg_op1_data, Seq(
-    (rrd_reg_op1_sel === M_OP1_RS && rrd_reg_rs1_addr === 0.U) -> 0.U(WORD_LEN.W),
+    // (rrd_reg_op1_sel === M_OP1_RS && rrd_reg_rs1_addr === 0.U) -> 0.U(WORD_LEN.W),
     (ex1_reg_fw_en &&
      (rrd_reg_op1_sel === M_OP1_RS) &&
      (rrd_reg_rs1_addr === ex1_reg_wb_addr)) -> ex1_fw_data,
@@ -688,7 +688,7 @@ class Core(
     (rrd_reg_op1_sel === M_OP1_RS) -> regfile(rrd_reg_rs1_addr),
   ))
   val rrd_op2_data = MuxCase(rrd_reg_op2_data_im1 | Cat(0.U(20.W), rrd_reg_op2_data_im0), Seq(
-    (rrd_reg_op2_sel === M_OP2_RS && rrd_reg_rs2_addr === 0.U) -> 0.U(WORD_LEN.W),
+    // (rrd_reg_op2_sel === M_OP2_RS && rrd_reg_rs2_addr === 0.U) -> 0.U(WORD_LEN.W),
     (ex1_reg_fw_en &&
      (rrd_reg_op2_sel === M_OP2_RS) &&
      (rrd_reg_rs2_addr === ex1_reg_wb_addr)) -> ex1_fw_data,
@@ -704,7 +704,7 @@ class Core(
     (rrd_reg_op3_sel === M_OP3_Z)   -> 0.U(WORD_LEN.W),
     (rrd_reg_op3_sel === M_OP3_MSB) -> Fill(WORD_LEN, rrd_op1_data(WORD_LEN-1, WORD_LEN-1)),
     (rrd_reg_op3_sel === M_OP3_OP1) -> rrd_op1_data,
-    (rrd_reg_rs3_addr === 0.U)    -> 0.U(WORD_LEN.W),
+    // (rrd_reg_rs3_addr === 0.U)    -> 0.U(WORD_LEN.W),
     (ex1_reg_fw_en &&
      (rrd_reg_rs3_addr === ex1_reg_wb_addr)) -> ex1_fw_data,
     (ex2_reg_fw_en &&

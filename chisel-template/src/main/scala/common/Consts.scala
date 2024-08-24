@@ -62,10 +62,10 @@ object Consts {
   val CMD_MRET    = 15.U(EXE_FUN_LEN.W)
 
   val OP1_LEN    = 3
-  val OP1_X      = 0.U(OP1_LEN.W)
   val OP1_Z      = 0.U(OP1_LEN.W)
   val OP1_PC     = 1.U(OP1_LEN.W)
   val OP1_IMZ    = 2.U(OP1_LEN.W)
+  val OP1_X      = 3.U(OP1_LEN.W)
   val OP1_RS1    = 4.U(OP1_LEN.W)
   val OP1_C_RS1  = 5.U(OP1_LEN.W)
   val OP1_C_SP   = 6.U(OP1_LEN.W)
