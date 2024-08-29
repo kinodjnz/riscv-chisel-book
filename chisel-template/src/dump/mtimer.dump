@@ -1,0 +1,69 @@
+
+target/mtimer.elf.fat:	file format elf32-littleriscv
+
+Disassembly of section .text:
+
+00000000 <_start>:
+       0: 20004137     	lui	sp, 0x20004
+       4: 208d         	jal	0x66 <main>
+       6: 81aa         	mv	gp, a0
+       8: 05d00893     	li	a7, 0x5d
+       c: 0001         	nop
+       e: 0001         	nop
+      10: 0001         	nop
+      12: 0001         	nop
+      14: 00000073     	ecall
+
+00000018 <intr_handler>:
+      18: 1131         	addi	sp, sp, -0x14
+      1a: c016         	sw	t0, 0x0(sp)
+      1c: c21a         	sw	t1, 0x4(sp)
+      1e: c41e         	sw	t2, 0x8(sp)
+      20: c62a         	sw	a0, 0xc(sp)
+      22: c82e         	sw	a1, 0x10(sp)
+      24: 30002337     	lui	t1, 0x30002
+
+00000028 <.Ltmp0>:
+      28: 00432583     	lw	a1, 0x4(t1)
+      2c: 00032383     	lw	t2, 0x0(t1)
+      30: 00432283     	lw	t0, 0x4(t1)
+      34: fe559ae3     	bne	a1, t0, 0x28 <.Ltmp0>
+      38: 06438513     	addi	a0, t2, 0x64
+      3c: 007533b3     	sltu	t2, a0, t2
+      40: 959e         	add	a1, a1, t2
+      42: 52fd         	li	t0, -0x1
+      44: 00532423     	sw	t0, 0x8(t1)
+      48: 00b32623     	sw	a1, 0xc(t1)
+      4c: 00a32423     	sw	a0, 0x8(t1)
+      50: 0021b293     	sltiu	t0, gp, 0x2
+      54: 9196         	add	gp, gp, t0
+      56: 45c2         	lw	a1, 0x10(sp)
+      58: 4532         	lw	a0, 0xc(sp)
+      5a: 43a2         	lw	t2, 0x8(sp)
+      5c: 4312         	lw	t1, 0x4(sp)
+      5e: 4282         	lw	t0, 0x0(sp)
+      60: 0151         	addi	sp, sp, 0x14
+      62: 30200073     	mret
+
+00000066 <main>:
+      66: 4181         	li	gp, 0x0
+      68: 30002337     	lui	t1, 0x30002
+      6c: 06400293     	li	t0, 0x64
+      70: 00032623     	sw	zero, 0xc(t1)
+      74: 00532423     	sw	t0, 0x8(t1)
+
+00000078 <.Ltmp1>:
+      78: 00000297     	auipc	t0, 0x0
+      7c: fa028293     	addi	t0, t0, -0x60   # 00000078
+      80: 30529073     	csrw	mtvec, t0
+      84: 30046073     	csrsi	mstatus, 0x8
+      88: 08000293     	li	t0, 0x80
+      8c: 3042a073     	csrs	mie, t0
+      90: 06400293     	li	t0, 0x64
+
+00000094 <.Ltmp2>:
+      94: 12fd         	addi	t0, t0, -0x1
+      96: fe029fe3     	bnez	t0, 0x94 <.Ltmp2>
+      9a: 30006073     	csrsi	mstatus, 0x0
+      9e: fff18513     	addi	a0, gp, -0x1
+      a2: 8082         	ret
