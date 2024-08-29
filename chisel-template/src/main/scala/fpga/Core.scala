@@ -33,29 +33,32 @@ class LongCounter(unitWidth: Int, unitCount: Int) extends Module {
 class CoreDebugSignals extends Bundle {
   val ex2_reg_pc        = Output(UInt(WORD_LEN.W))
   val ex2_is_valid_inst = Output(Bool())
-  // val csr_rdata = Output(UInt(WORD_LEN.W))
-  // val ex1_reg_csr_addr = Output(UInt(CSR_ADDR_LEN.W))
-  val me_intr       = Output(Bool())
-  val mt_intr       = Output(Bool())
-  val trap          = Output(Bool())
-  val cycle_counter = Output(UInt(48.W))
-  val id_pc         = Output(UInt(WORD_LEN.W))
-  val id_inst       = Output(UInt(WORD_LEN.W))
-  val mem3_rdata    = Output(UInt(WORD_LEN.W))
-  val mem3_rvalid   = Output(Bool())
-  val rwaddr        = Output(UInt(WORD_LEN.W))
-  val ex2_reg_is_br = Output(Bool())
+  // val csr_rdata         = Output(UInt(WORD_LEN.W))
+  // val ex1_reg_csr_addr  = Output(UInt(CSR_ADDR_LEN.W))
+  val me_intr           = Output(Bool())
+  val mt_intr           = Output(Bool())
+  val trap              = Output(Bool())
+  val cycle_counter     = Output(UInt(48.W))
+  val id_pc             = Output(UInt(WORD_LEN.W))
+  val id_inst           = Output(UInt(WORD_LEN.W))
+  val mem3_rdata        = Output(UInt(WORD_LEN.W))
+  val mem3_rvalid       = Output(Bool())
+  val rwaddr            = Output(UInt(WORD_LEN.W))
+  val ex2_reg_is_br     = Output(Bool())
   val id_reg_is_bp_fail = Output(Bool())
-  val id_reg_bp_taken = Output(Bool())
-  val ic_state      = Output(UInt(3.W))
+  val id_reg_bp_taken   = Output(Bool())
+  val ic_state          = Output(UInt(3.W))
 }
 
 object IcState extends ChiselEnum {
   val Empty = Value     // reg: empty, reg2: empty, imem: this
-  val EmptyHalf = Value // reg: empty, reg2: empty, imem: this, half address
   val Full = Value      // reg: full,  reg2: empty, imem: next
   val Full2Half = Value // reg: full,  reg2: full,  imem: next, half address
   val FullHalf = Value  // reg: full,  reg2: empty, imem: next, half address
+  val EmptyHalf = Value // reg: empty, reg2: empty, imem: this, half address
+  val DummyFull = Value
+  val DummyFull2Half = Value
+  val DummyFullHalf = Value
 }
 
 object DivremState extends ChiselEnum {
@@ -281,8 +284,8 @@ class Core(
   // val id_reg_is_bp_fail    = RegInit(true.B) // jump start_address when first time
   // val id_reg_br_pc         = RegInit((start_address >> (WORD_LEN-PC_LEN)).U(PC_LEN.W))
   val id_flush             = Wire(Bool())
-  val id_reg_is_bp_fail    = Wire(Bool())
-  val id_reg_br_pc         = Wire(UInt(PC_LEN.W))
+  val id_update_pc_en      = Wire(Bool())
+  val id_update_pc         = Wire(UInt(PC_LEN.W))
   // val id_stall             = Wire(Bool())
   val rrd_stall            = Wire(Bool())
   val ex2_stall            = Wire(Bool())
@@ -363,82 +366,88 @@ class Core(
   val ic_imem_addr_2 = Cat(ic_reg_imem_addr(PC_LEN-1, 1), 1.U(1.W))
   val ic_imem_addr_4 = ic_reg_imem_addr + 2.U(PC_LEN.W)
   val ic_inst_addr_2 = Cat(ic_reg_inst_addr(PC_LEN-1, 1), 1.U(1.W))
-  io.imem.addr := Cat(ic_reg_imem_addr, 0.U(1.W))
+  // io.imem.addr := Cat(ic_reg_imem_addr, 0.U(1.W))
+  io.imem.addr := DontCare
   io.imem.en := true.B
   ic_reg_read_rdy := true.B
   ic_reg_half_rdy := true.B
   ic_read_rdy := ic_reg_read_rdy
   ic_half_rdy := ic_reg_half_rdy
-  ic_data_out := BUBBLE
+  ic_data_out := DontCare
   ic_addr_out := ic_reg_addr_out
   ic_reg_addr_out := ic_addr_out
-  ic_btb.io.lu.pc := ic_reg_imem_addr
-  ic_pht.io.lu.pc := ic_reg_imem_addr
-  ic_bp_taken     := false.B
-  ic_bp_taken_pc  := 0.U
-  ic_bp_cnt       := 0.U
+  // ic_btb.io.lu.pc := ic_reg_imem_addr
+  // ic_pht.io.lu.pc := ic_reg_imem_addr
+  // ic_bp_taken     := false.B
+  // ic_bp_taken_pc  := 0.U
+  // ic_bp_cnt       := 0.U
+  ic_btb.io.lu.pc := DontCare
+  ic_pht.io.lu.pc := DontCare
+  ic_bp_taken     := DontCare
+  ic_bp_taken_pc  := DontCare
+  ic_bp_cnt       := DontCare
   ic_pht.io.mem <> io.pht_mem
 
-  when (ic_addr_en) {
-    val ic_next_imem_addr = Cat(ic_addr(PC_LEN-1, 1), 0.U(1.W))
-    io.imem.addr     := Cat(ic_next_imem_addr, 0.U(1.W))
-    ic_reg_imem_addr := ic_next_imem_addr
-    ic_addr_out      := ic_addr
-    ic_state         := Mux(ic_addr(0).asBool, IcState.EmptyHalf, IcState.Empty)
-    ic_reg_read_rdy  := !ic_addr(0).asBool
-    ic_btb.io.lu.pc  := ic_next_imem_addr
-    ic_pht.io.lu.pc  := ic_next_imem_addr
-  }.elsewhen (/*ic_state =/= IcState.Full && ic_state =/= IcState.Full2Half &&*/ !io.imem.valid) {
-    ic_reg_read_rdy := ic_reg_read_rdy
-    ic_reg_half_rdy := ic_reg_half_rdy
-    ic_read_rdy     := false.B
-    ic_half_rdy     := false.B
-    switch (ic_state) {
-      is (IcState.Empty) {
-        ic_bp_taken    := ic_btb.io.lu.matches0 && ic_pht.io.lu.cnt0(0)
-        ic_bp_taken_pc := ic_btb.io.lu.taken_pc0
-        ic_bp_cnt      := ic_pht.io.lu.cnt0
-        ic_reg_bp_next_taken0    := ic_btb.io.lu.matches0 && ic_pht.io.lu.cnt0(0)
-        ic_reg_bp_next_taken_pc0 := ic_btb.io.lu.taken_pc0
-        ic_reg_bp_next_cnt0      := ic_pht.io.lu.cnt0
-        ic_reg_bp_next_taken1    := ic_btb.io.lu.matches1 && ic_pht.io.lu.cnt1(0)
-        ic_reg_bp_next_taken_pc1 := ic_btb.io.lu.taken_pc1
-        ic_reg_bp_next_cnt1      := ic_pht.io.lu.cnt1
-      }
-      is (IcState.EmptyHalf) {
-        ic_bp_taken    := ic_btb.io.lu.matches1 && ic_pht.io.lu.cnt1(0)
-        ic_bp_taken_pc := ic_btb.io.lu.taken_pc1
-        ic_bp_cnt      := ic_pht.io.lu.cnt1
-        ic_reg_bp_next_taken0    := ic_btb.io.lu.matches0 && ic_pht.io.lu.cnt0(0)
-        ic_reg_bp_next_taken_pc0 := ic_btb.io.lu.taken_pc0
-        ic_reg_bp_next_cnt0      := ic_pht.io.lu.cnt0
-        ic_reg_bp_next_taken1    := ic_btb.io.lu.matches1 && ic_pht.io.lu.cnt1(0)
-        ic_reg_bp_next_taken_pc1 := ic_btb.io.lu.taken_pc1
-        ic_reg_bp_next_cnt1      := ic_pht.io.lu.cnt1
-      }
-      is (IcState.Full) {
-        ic_bp_taken    := ic_reg_bp_next_taken0
-        ic_bp_taken_pc := ic_reg_bp_next_taken_pc0
-        ic_bp_cnt      := ic_reg_bp_next_cnt0
-      }
-      is (IcState.FullHalf) {
-        ic_bp_taken    := ic_reg_bp_next_taken1
-        ic_bp_taken_pc := ic_reg_bp_next_taken_pc1
-        ic_bp_cnt      := ic_reg_bp_next_cnt1
-        ic_reg_bp_next_taken0    := ic_btb.io.lu.matches0 && ic_pht.io.lu.cnt0(0)
-        ic_reg_bp_next_taken_pc0 := ic_btb.io.lu.taken_pc0
-        ic_reg_bp_next_cnt0      := ic_pht.io.lu.cnt0
-        ic_reg_bp_next_taken2    := ic_reg_bp_next_taken1
-        ic_reg_bp_next_taken_pc2 := ic_reg_bp_next_taken_pc1
-        ic_reg_bp_next_cnt2      := ic_reg_bp_next_cnt1
-      }
-      is (IcState.Full2Half) {
-        ic_bp_taken    := ic_reg_bp_next_taken2
-        ic_bp_taken_pc := ic_reg_bp_next_taken_pc2
-        ic_bp_cnt      := ic_reg_bp_next_cnt2
-      }
-    }
-  }.otherwise {
+  // when (ic_addr_en) {
+  //   val ic_next_imem_addr = Cat(ic_addr(PC_LEN-1, 1), 0.U(1.W))
+  //   io.imem.addr     := Cat(ic_next_imem_addr, 0.U(1.W))
+  //   ic_reg_imem_addr := ic_next_imem_addr
+  //   ic_addr_out      := ic_addr
+  //   ic_state         := Mux(ic_addr(0).asBool, IcState.EmptyHalf, IcState.Empty)
+  //   ic_reg_read_rdy  := !ic_addr(0).asBool
+  //   ic_btb.io.lu.pc  := ic_next_imem_addr
+  //   ic_pht.io.lu.pc  := ic_next_imem_addr
+  // }.elsewhen (/*ic_state =/= IcState.Full && ic_state =/= IcState.Full2Half &&*/ !io.imem.valid) {
+  //   ic_reg_read_rdy := ic_reg_read_rdy
+  //   ic_reg_half_rdy := ic_reg_half_rdy
+  //   ic_read_rdy     := false.B
+  //   ic_half_rdy     := false.B
+  //   switch (ic_state) {
+  //     is (IcState.Empty) {
+  //       ic_bp_taken    := ic_btb.io.lu.matches0 && ic_pht.io.lu.cnt0(0)
+  //       ic_bp_taken_pc := ic_btb.io.lu.taken_pc0
+  //       ic_bp_cnt      := ic_pht.io.lu.cnt0
+  //       ic_reg_bp_next_taken0    := ic_btb.io.lu.matches0 && ic_pht.io.lu.cnt0(0)
+  //       ic_reg_bp_next_taken_pc0 := ic_btb.io.lu.taken_pc0
+  //       ic_reg_bp_next_cnt0      := ic_pht.io.lu.cnt0
+  //       ic_reg_bp_next_taken1    := ic_btb.io.lu.matches1 && ic_pht.io.lu.cnt1(0)
+  //       ic_reg_bp_next_taken_pc1 := ic_btb.io.lu.taken_pc1
+  //       ic_reg_bp_next_cnt1      := ic_pht.io.lu.cnt1
+  //     }
+  //     is (IcState.EmptyHalf) {
+  //       ic_bp_taken    := ic_btb.io.lu.matches1 && ic_pht.io.lu.cnt1(0)
+  //       ic_bp_taken_pc := ic_btb.io.lu.taken_pc1
+  //       ic_bp_cnt      := ic_pht.io.lu.cnt1
+  //       ic_reg_bp_next_taken0    := ic_btb.io.lu.matches0 && ic_pht.io.lu.cnt0(0)
+  //       ic_reg_bp_next_taken_pc0 := ic_btb.io.lu.taken_pc0
+  //       ic_reg_bp_next_cnt0      := ic_pht.io.lu.cnt0
+  //       ic_reg_bp_next_taken1    := ic_btb.io.lu.matches1 && ic_pht.io.lu.cnt1(0)
+  //       ic_reg_bp_next_taken_pc1 := ic_btb.io.lu.taken_pc1
+  //       ic_reg_bp_next_cnt1      := ic_pht.io.lu.cnt1
+  //     }
+  //     is (IcState.Full) {
+  //       ic_bp_taken    := ic_reg_bp_next_taken0
+  //       ic_bp_taken_pc := ic_reg_bp_next_taken_pc0
+  //       ic_bp_cnt      := ic_reg_bp_next_cnt0
+  //     }
+  //     is (IcState.FullHalf) {
+  //       ic_bp_taken    := ic_reg_bp_next_taken1
+  //       ic_bp_taken_pc := ic_reg_bp_next_taken_pc1
+  //       ic_bp_cnt      := ic_reg_bp_next_cnt1
+  //       ic_reg_bp_next_taken0    := ic_btb.io.lu.matches0 && ic_pht.io.lu.cnt0(0)
+  //       ic_reg_bp_next_taken_pc0 := ic_btb.io.lu.taken_pc0
+  //       ic_reg_bp_next_cnt0      := ic_pht.io.lu.cnt0
+  //       ic_reg_bp_next_taken2    := ic_reg_bp_next_taken1
+  //       ic_reg_bp_next_taken_pc2 := ic_reg_bp_next_taken_pc1
+  //       ic_reg_bp_next_cnt2      := ic_reg_bp_next_cnt1
+  //     }
+  //     is (IcState.Full2Half) {
+  //       ic_bp_taken    := ic_reg_bp_next_taken2
+  //       ic_bp_taken_pc := ic_reg_bp_next_taken_pc2
+  //       ic_bp_cnt      := ic_reg_bp_next_cnt2
+  //     }
+  //   }
+  // }.otherwise {
     switch (ic_state) {
       is (IcState.Empty) {
         io.imem.addr     := Cat(ic_imem_addr_4, 0.U(1.W))
@@ -490,8 +499,9 @@ class Core(
           ic_state := IcState.Empty
         }
       }
-      is (IcState.Full) {
+      is (IcState.Full, IcState.DummyFull) {
         io.imem.addr    := Cat(ic_reg_imem_addr, 0.U(1.W))
+        ic_reg_imem_addr := ic_reg_imem_addr
         ic_data_out     := ic_reg_inst
         ic_btb.io.lu.pc := ic_reg_imem_addr
         ic_pht.io.lu.pc := ic_reg_imem_addr
@@ -506,7 +516,7 @@ class Core(
           ic_state := IcState.Empty
         }
       }
-      is (IcState.FullHalf) {
+      is (IcState.FullHalf, IcState.DummyFullHalf) {
         io.imem.addr      := Cat(ic_imem_addr_4, 0.U(1.W))
         ic_reg_imem_addr  := ic_imem_addr_4
         ic_data_out       := Cat(io.imem.inst(WORD_LEN/2-1, 0), ic_reg_inst(WORD_LEN-1, WORD_LEN/2))
@@ -522,9 +532,11 @@ class Core(
         ic_reg_bp_next_taken0    := ic_btb.io.lu.matches0 && ic_pht.io.lu.cnt0(0)
         ic_reg_bp_next_taken_pc0 := ic_btb.io.lu.taken_pc0
         ic_reg_bp_next_cnt0      := ic_pht.io.lu.cnt0
-        ic_reg_bp_next_taken1    := ic_btb.io.lu.matches1 && ic_pht.io.lu.cnt1(0)
-        ic_reg_bp_next_taken_pc1 := ic_btb.io.lu.taken_pc1
-        ic_reg_bp_next_cnt1      := ic_pht.io.lu.cnt1
+        when (io.imem.valid) {
+          ic_reg_bp_next_taken1    := ic_btb.io.lu.matches1 && ic_pht.io.lu.cnt1(0)
+          ic_reg_bp_next_taken_pc1 := ic_btb.io.lu.taken_pc1
+          ic_reg_bp_next_cnt1      := ic_pht.io.lu.cnt1
+        }
         ic_reg_bp_next_taken2    := ic_reg_bp_next_taken1
         ic_reg_bp_next_taken_pc2 := ic_reg_bp_next_taken_pc1
         ic_reg_bp_next_cnt2      := ic_reg_bp_next_cnt1
@@ -537,14 +549,15 @@ class Core(
           ic_state := IcState.FullHalf
         }
       }
-      is (IcState.Full2Half) {
-        io.imem.addr    := Cat(ic_reg_imem_addr, 0.U(1.W))
-        ic_data_out     := Cat(ic_reg_inst(WORD_LEN/2-1, 0), ic_reg_inst2(WORD_LEN-1, WORD_LEN/2))
-        ic_btb.io.lu.pc := ic_reg_imem_addr
-        ic_pht.io.lu.pc := ic_reg_imem_addr
-        ic_bp_taken     := ic_reg_bp_next_taken2
-        ic_bp_taken_pc  := ic_reg_bp_next_taken_pc2
-        ic_bp_cnt       := ic_reg_bp_next_cnt2
+      is (IcState.Full2Half, IcState.DummyFull2Half) {
+        io.imem.addr     := Cat(ic_reg_imem_addr, 0.U(1.W))
+        ic_reg_imem_addr := ic_reg_imem_addr
+        ic_data_out      := Cat(ic_reg_inst(WORD_LEN/2-1, 0), ic_reg_inst2(WORD_LEN-1, WORD_LEN/2))
+        ic_btb.io.lu.pc  := ic_reg_imem_addr
+        ic_pht.io.lu.pc  := ic_reg_imem_addr
+        ic_bp_taken      := ic_reg_bp_next_taken2
+        ic_bp_taken_pc   := ic_reg_bp_next_taken_pc2
+        ic_bp_cnt        := ic_reg_bp_next_cnt2
         when (ic_read_en2) {
           ic_addr_out := ic_reg_inst_addr
           ic_state := IcState.Full
@@ -554,6 +567,27 @@ class Core(
         }
       }
     }
+  // }
+  when (ic_addr_en) {
+    val ic_next_imem_addr = Cat(ic_addr(PC_LEN-1, 1), 0.U(1.W))
+    io.imem.addr     := Cat(ic_next_imem_addr, 0.U(1.W))
+    ic_reg_imem_addr := ic_next_imem_addr
+    ic_addr_out      := ic_addr
+    ic_state         := Mux(ic_addr(0).asBool, IcState.EmptyHalf, IcState.Empty)
+    ic_reg_read_rdy  := !ic_addr(0).asBool
+    ic_btb.io.lu.pc  := ic_next_imem_addr
+    ic_pht.io.lu.pc  := ic_next_imem_addr
+  }.elsewhen (/*ic_state =/= IcState.Full && ic_state =/= IcState.Full2Half &&*/ !io.imem.valid) {
+    io.imem.addr     := Cat(ic_reg_imem_addr, 0.U(1.W))
+    ic_reg_imem_addr := ic_reg_imem_addr
+    ic_addr_out      := ic_reg_addr_out
+    ic_state         := ic_state
+    ic_reg_read_rdy  := ic_reg_read_rdy
+    ic_reg_half_rdy  := ic_reg_half_rdy
+    ic_read_rdy      := false.B
+    ic_half_rdy      := false.B
+    ic_btb.io.lu.pc  := ic_reg_imem_addr
+    ic_pht.io.lu.pc  := ic_reg_imem_addr
   }
 
   //**********************************
@@ -561,10 +595,9 @@ class Core(
 
   val if1_jump_addr = MuxCase(id_reg_bp_taken_pc, Seq(
     ex2_reg_is_br     -> ex2_reg_br_pc,
-    id_reg_is_bp_fail -> id_reg_br_pc,
-    // if2_reg_bp_taken  -> if2_reg_bp_taken_pc,
+    id_update_pc_en   -> id_update_pc,
   ))
-  val if1_is_jump = ex2_reg_is_br || id_reg_is_bp_fail || id_reg_bp_taken
+  val if1_is_jump = ex2_reg_is_br || id_update_pc_en || id_reg_bp_taken
 
   ic_addr_en  := if1_is_jump
   ic_addr     := if1_jump_addr
@@ -589,8 +622,8 @@ class Core(
   io.pipeline_probe.foreach(_.if2_pc    := Cat(if2_pc, 0.U(1.W)))
   io.pipeline_probe.foreach(_.if2_inst  := if2_inst)
   
-  printf(p"ic_reg_addr_out: ${Hexadecimal(Cat(ic_reg_addr_out, 0.U(1.W)))}, ic_data_out: ${Hexadecimal(ic_data_out)}\n")
-  printf(p"inst: ${Hexadecimal(if2_inst)}, ic_read_rdy: ${ic_read_rdy}, ic_state: ${ic_state.asUInt}, ic_addr_en: ${ic_addr_en.asUInt}\n")
+  printf(cf"ic_reg_addr_out: 0x${Cat(ic_reg_addr_out, 0.U(1.W))}%x, ic_data_out: 0x${ic_data_out}%x\n")
+  printf(cf"inst: 0x${if2_inst}%x, ic_read_rdy: ${ic_read_rdy}, ic_state: ${ic_state.asUInt}, ic_addr_en: ${ic_addr_en.asUInt}\n")
 
   //**********************************
   // IF2/ID Register
@@ -607,7 +640,7 @@ class Core(
 
   val id_stage = Module(new InstructionDecoder(enable_pipeline_probe))
 
-  id_stage.io.in.bits.is_valid_inst := if2_is_valid_inst && (if2_inst =/= BUBBLE)
+  id_stage.io.in.bits.is_valid_inst := if2_is_valid_inst /*&& (if2_inst =/= BUBBLE)*/
   id_stage.io.in.bits.inst          := if2_inst
   id_stage.io.in.bits.bp_taken      := if2_bp_taken
   id_stage.io.in.bits.pc            := ic_reg_addr_out
@@ -615,10 +648,10 @@ class Core(
   id_stage.io.in.bits.bp_cnt        := ic_bp_cnt
   map2(id_stage.io.in.bits.inst_id, if2_reg_inst_id)(_ := _)
 
-  id_reg_stall      := !id_stage.io.in.ready
-  id_flush          := id_stage.io.in.flush
-  id_reg_is_bp_fail := id_stage.io.update_pc.en
-  id_reg_br_pc      := id_stage.io.update_pc.pc
+  id_reg_stall    := !id_stage.io.in.ready
+  id_flush        := id_stage.io.in.flush
+  id_update_pc_en := id_stage.io.update_pc.en
+  id_update_pc    := id_stage.io.update_pc.pc
 
   map2(io.pipeline_probe, id_stage.io.pipeline_probe.id_valid)(_.id_valid := _)
   map2(io.pipeline_probe, id_stage.io.pipeline_probe.id_inst_id)(_.id_inst_id := _)
@@ -1264,11 +1297,11 @@ class Core(
       ex2_reg_divrem_state := DivremState.Idle
     }
   }
-  // printf(p"ex2_reg_divrem_state : 0x${Hexadecimal(ex2_reg_divrem_state.asUInt)}\n")
-  // printf(p"ex2_reg_dividend     : 0x${Hexadecimal(ex2_reg_dividend)}\n")
-  // printf(p"ex2_reg_divisor      : 0x${Hexadecimal(ex2_reg_divisor)}\n")
-  // printf(p"ex2_reg_divrem_count : 0x${Hexadecimal(ex2_reg_divrem_count)}\n")
-  // printf(p"ex2_reg_rem_shift    : 0x${Hexadecimal(ex2_reg_rem_shift)}\n")
+  // printf(cf"ex2_reg_divrem_state : 0x${ex2_reg_divrem_state.asUInt}%x\n")
+  // printf(cf"ex2_reg_dividend     : 0x${ex2_reg_dividend}%x\n")
+  // printf(cf"ex2_reg_divisor      : 0x${ex2_reg_divisor}%x\n")
+  // printf(cf"ex2_reg_divrem_count : 0x${ex2_reg_divrem_count}%x\n")
+  // printf(cf"ex2_reg_rem_shift    : 0x${ex2_reg_rem_shift}%x\n")
 
   //**********************************
   // EX2 Stage
@@ -1464,7 +1497,7 @@ class Core(
   io.debug_signal.mem3_rvalid         := mem3_reg_is_valid_load
   io.debug_signal.rwaddr              := ex2_wb_data
   io.debug_signal.ex2_reg_is_br       := ex2_reg_is_br
-  io.debug_signal.id_reg_is_bp_fail   := id_reg_is_bp_fail
+  io.debug_signal.id_reg_is_bp_fail   := id_update_pc_en
   io.debug_signal.id_reg_bp_taken     := id_reg_bp_taken
   io.debug_signal.ic_state            := ic_state.asUInt
 
@@ -1477,92 +1510,93 @@ class Core(
     io.sim_probe.foreach(_.exit := RegNext(do_exit).asUInt)
   }
 
-  //printf(p"if1_reg_pc       : 0x${Hexadecimal(if1_reg_pc)}\n")
-  printf(p"if2_pc           : 0x${Hexadecimal(Cat(if2_pc, 0.U(1.W)))}\n")
-  printf(p"if2_is_valid_inst: 0x${Hexadecimal(if2_is_valid_inst)}\n")
-  printf(p"if2_inst         : 0x${Hexadecimal(if2_inst)}\n")
-  printf(p"ic_bp_taken      : 0x${Hexadecimal(ic_bp_taken)}\n")
-  printf(p"ic_bp_taken_pc   : 0x${Hexadecimal(Cat(ic_bp_taken_pc, 0.U(1.W)))}\n")
-  printf(p"ic_bp_cnt        : 0x${Hexadecimal(ic_bp_cnt)}\n")
-  printf(p"id_reg_pc        : 0x${Hexadecimal(id_stage.io.debug_signals.id_pc)}\n")
-  printf(p"id_reg_inst      : 0x${Hexadecimal(id_stage.io.debug_signals.id_inst)}\n")
-  printf(p"id_reg_stall     : 0x${Hexadecimal(id_reg_stall)}\n")
-  // printf(p"id_rs1_data      : 0x${Hexadecimal(id_rs1_data)}\n")
-  // printf(p"id_rs2_data      : 0x${Hexadecimal(id_rs2_data)}\n")
-  // printf(p"id_wb_addr       : 0x${Hexadecimal(id_wb_addr)}\n")
-  printf(p"id_reg_bp_taken  : 0x${Hexadecimal(id_reg_bp_taken)}\n")
-  printf(p"id_reg_is_bp_fail: 0x${Hexadecimal(id_reg_is_bp_fail)}\n")
-  printf(p"rrd_reg_pc       : 0x${Hexadecimal(Cat(rrd_reg_pc, 0.U(1.W)))}\n")
-  printf(p"rrd_reg_is_valid_: 0x${Hexadecimal(rrd_reg_is_valid_inst)}\n")
-  printf(p"rrd_stall        : 0x${Hexadecimal(rrd_stall)}\n")
-  // printf(p"rrd_reg_rs1_addr : 0x${Hexadecimal(rrd_reg_rs1_addr)}\n")
-  // printf(p"rrd_reg_rs2_addr : 0x${Hexadecimal(rrd_reg_rs2_addr)}\n")
-  printf(p"rrd_op1_data     : 0x${Hexadecimal(rrd_op1_data)}\n")
-  printf(p"rrd_op2_data     : 0x${Hexadecimal(rrd_op2_data)}\n")
-  printf(p"rrd_op3_data     : 0x${Hexadecimal(rrd_op3_data)}\n")
-  printf(p"rrd_reg_op1_sel  : 0x${Hexadecimal(rrd_reg_op1_sel)}\n")
-  // printf(p"ex1_reg_fw_en    : 0x${Hexadecimal(ex1_reg_fw_en)}\n")
-  printf(p"rrd_reg_rs1_addr : 0x${Hexadecimal(rrd_reg_rs1_addr)}\n")
-  printf(p"rrd_reg_wb_addr : 0x${Hexadecimal(rrd_reg_wb_addr)}\n")
-  printf(p"rrd_reg_rf_wen : 0x${Hexadecimal(rrd_reg_rf_wen)}\n")
-  printf(p"rrd_reg_wb_sel : 0x${Hexadecimal(rrd_reg_wb_sel)}\n")
-  printf(p"scoreboard      : 0x${Hexadecimal(Cat((0 until 32).map(i => scoreboard(i).asUInt)))}\n")
-  printf(p"ex1_fw_data      : 0x${Hexadecimal(ex1_fw_data)}\n")
-  printf(p"ex1_reg_pc       : 0x${Hexadecimal(Cat(ex1_reg_pc, 0.U(1.W)))}\n")
-  printf(p"ex1_reg_is_valid_: 0x${Hexadecimal(ex1_reg_is_valid_inst)}\n")
-  printf(p"ex1_reg_op1_data : 0x${Hexadecimal(ex1_reg_op1_data)}\n")
-  printf(p"ex1_reg_op2_data : 0x${Hexadecimal(ex1_reg_op2_data)}\n")
-  printf(p"ex1_reg_op3_data : 0x${Hexadecimal(ex1_reg_op3_data)}\n")
-  printf(p"ex1_alu_out      : 0x${Hexadecimal(ex1_alu_out)}\n")
-  printf(p"ex1_pc_bit_out   : 0x${Hexadecimal(ex1_pc_bit_out)}\n")
-  printf(p"ex1_reg_exe_fun  : 0x${Hexadecimal(ex1_reg_exe_fun)}\n")
-  printf(p"ex1_reg_wb_sel   : 0x${Hexadecimal(ex1_reg_wb_sel)}\n")
-  printf(p"ex1_reg_wb_addr  : 0x${Hexadecimal(ex1_reg_wb_addr)}\n")
-  printf(p"ex1_reg_bp_taken : 0x${Hexadecimal(ex1_reg_bp_taken)}\n")
-  printf(p"ex1_reg_bp_taken_: 0x${Hexadecimal(Cat(ex1_reg_bp_taken_pc, 0.U(1.W)))}\n")
-  printf(p"ex1_is_br        : 0x${ex1_is_br}\n")
-  printf(p"ex1_reg_bp_cnt   : 0x${ex1_reg_bp_cnt}\n")
-  printf(p"ex2_reg_is_br    : 0x${ex2_reg_is_br}\n")
-  printf(p"ex2_reg_br_pc  : 0x${Hexadecimal(Cat(ex2_reg_br_pc, 0.U(1.W)))}\n")
-  printf(p"ex2_reg_pc       : 0x${Hexadecimal(Cat(ex2_reg_pc, 0.U(1.W)))}\n")
-  printf(p"ex2_reg_is_valid_: 0x${Hexadecimal(ex2_reg_is_valid_inst)}\n")
-  printf(p"ex2_stall        : 0x${Hexadecimal(ex2_stall)}\n")
-  printf(p"ex2_wb_data      : 0x${Hexadecimal(ex2_wb_data)}\n")
-  printf(p"ex2_alu_muldiv_ou: 0x${Hexadecimal(ex2_alu_muldiv_out)}\n")
-  printf(p"ex2_reg_wb_addr  : 0x${Hexadecimal(ex2_reg_wb_addr)}\n")
-  // printf(p"mem1_reg_mem_w    : 0x${Hexadecimal(mem1_reg_mem_w)}\n")
-  printf(p"mem1_reg_wdata    : 0x${Hexadecimal(mem1_reg_wdata)}\n")
-  printf(p"mem1_mem_stall   : 0x${Hexadecimal(mem1_mem_stall)}\n")
-  printf(p"mem1_dram_stall  : 0x${Hexadecimal(mem1_dram_stall)}\n")
-  printf(p"mem1_reg_unaligne: 0x${Hexadecimal(mem1_reg_unaligned)}\n")
-  printf(p"mem1_is_valid_ins: 0x${Hexadecimal(mem1_reg_is_valid_inst)}\n")
-  printf(p"mem2_mem_stall   : 0x${Hexadecimal(mem2_mem_stall)}\n")
-  printf(p"mem2_dram_stall  : 0x${Hexadecimal(mem2_dram_stall)}\n")
-  // printf(p"mem2_reg_dmem_rda: 0x${Hexadecimal(mem2_reg_dmem_rdata)}\n")
-  // printf(p"mem2_reg_mem_use_: 0x${Hexadecimal(mem2_reg_mem_use_reg)}\n")
-  printf(p"mem2_reg_is_valid: 0x${Hexadecimal(mem2_reg_is_valid_inst)}\n")
-  printf(p"mem2_reg_is_mem_l: 0x${Hexadecimal(mem2_reg_is_mem_load)}\n")
-  printf(p"mem2_reg_is_dram_: 0x${Hexadecimal(mem2_reg_is_dram_load)}\n")
-  printf(p"mem2_reg_unaligne: 0x${Hexadecimal(mem2_reg_unaligned)}\n")
-  printf(p"mem2_is_aligned_l: 0x${Hexadecimal(mem2_is_aligned_lw)}\n")
-  printf(p"mem2_reg_wb_addr : 0x${Hexadecimal(mem2_reg_wb_addr)}\n")
-  printf(p"mem3_reg_dmem_rda: 0x${Hexadecimal(mem3_reg_dmem_rdata)}\n")
-  printf(p"mem3_wb_data_load: 0x${Hexadecimal(mem3_wb_data_load)}\n")
-  printf(p"mem3_reg_unaligne: 0x${Hexadecimal(mem3_reg_unaligned)}\n")
-  printf(p"mem3_reg_is_align: 0x${Hexadecimal(mem3_reg_is_aligned_lw)}\n")
-  printf(p"mem3_reg_is_valid: 0x${Hexadecimal(mem3_reg_is_valid_inst)}\n")
-  printf(p"mem3_reg_wb_addr : 0x${Hexadecimal(mem3_reg_wb_addr)}\n")
-  // printf(p"mem3_reg_mem_use_: 0x${Hexadecimal(mem3_reg_mem_use_reg)}\n")
-  printf(p"csr_is_meintr    : ${csr_is_meintr}\n")
-  printf(p"csr_is_mtintr    : ${csr_is_mtintr}\n")
-  printf(p"csr_is_trap      : ${csr_is_trap}\n")
-  // printf(p"csr_reg_mepc         : 0x${Hexadecimal(csr_reg_mepc)}\n")
-  printf(p"csr_is_br        : ${csr_is_br}\n")
-  // printf(p"csr_wdata        : 0x${Hexadecimal(csr_wdata)}\n")
-  // printf(p"ex1_reg_csr_cmd  : 0x${Hexadecimal(ex1_reg_csr_cmd)}\n")
-  printf(p"instret          : ${instret}\n")
-  // printf(p"mem1_reg_is_dram_fence: ${mem1_reg_is_dram_fence}\n")
-  // printf(p"io.cache.ibusy   : ${io.cache.ibusy}\n")
-  printf(p"cycle_counter    : ${io.debug_signal.cycle_counter}\n")
+  //printf(cf"if1_reg_pc       : 0x${if1_reg_pc}%x\n")
+  printf(cf"if2_pc           : 0x${Cat(if2_pc, 0.U(1.W))}%x\n")
+  printf(cf"if2_is_valid_inst: ${if2_is_valid_inst}%d\n")
+  printf(cf"if2_inst         : 0x${if2_inst}%x\n")
+  printf(cf"ic_bp_taken      : ${ic_bp_taken}%d\n")
+  printf(cf"ic_bp_taken_pc   : 0x${Cat(ic_bp_taken_pc, 0.U(1.W))}%x\n")
+  printf(cf"ic_bp_cnt        : 0x${ic_bp_cnt}%x\n")
+  printf(cf"id_reg_pc        : 0x${id_stage.io.debug_signals.id_pc}%x\n")
+  printf(cf"id_reg_inst      : 0x${id_stage.io.debug_signals.id_inst}%x\n")
+  printf(cf"id_reg_bp_taken  : ${id_reg_bp_taken}%d\n")
+  printf(cf"id_is_valid_inst : ${id_stage.io.pipeline_probe.id_valid.getOrElse(false.B)}%d\n")
+  printf(cf"id_reg_stall     : ${id_reg_stall}%d\n")
+  // printf(cf"id_rs1_data      : 0x${id_rs1_data}%x\n")
+  // printf(cf"id_rs2_data      : 0x${id_rs2_data}%x\n")
+  // printf(cf"id_wb_addr       : 0x${id_wb_addr}%x\n")
+  printf(cf"id_reg_is_bp_fail: ${id_update_pc_en}%d\n")
+  printf(cf"rrd_reg_pc       : 0x${Cat(rrd_reg_pc, 0.U(1.W))}%x\n")
+  printf(cf"rrd_reg_is_valid_: ${rrd_reg_is_valid_inst}%d\n")
+  printf(cf"rrd_stall        : ${rrd_stall}%d\n")
+  // printf(cf"rrd_reg_rs1_addr : 0x${rrd_reg_rs1_addr}%x\n")
+  // printf(cf"rrd_reg_rs2_addr : 0x${rrd_reg_rs2_addr}%x\n")
+  printf(cf"rrd_op1_data     : 0x${rrd_op1_data}%x\n")
+  printf(cf"rrd_op2_data     : 0x${rrd_op2_data}%x\n")
+  printf(cf"rrd_op3_data     : 0x${rrd_op3_data}%x\n")
+  printf(cf"rrd_reg_op1_sel  : 0x${rrd_reg_op1_sel}%x\n")
+  // printf(cf"ex1_reg_fw_en    : ${ex1_reg_fw_en}%d\n")
+  printf(cf"rrd_reg_rs1_addr : 0x${rrd_reg_rs1_addr}%x\n")
+  printf(cf"rrd_reg_wb_addr  : 0x${rrd_reg_wb_addr}%x\n")
+  printf(cf"rrd_reg_rf_wen   : 0x${rrd_reg_rf_wen}%x\n")
+  printf(cf"rrd_reg_wb_sel   : 0x${rrd_reg_wb_sel}%x\n")
+  printf(cf"scoreboard       : 0x${Cat((0 until 32).map(i => scoreboard(i).asUInt))}%x\n")
+  printf(cf"ex1_fw_data      : 0x${ex1_fw_data}%x\n")
+  printf(cf"ex1_reg_pc       : 0x${Cat(ex1_reg_pc, 0.U(1.W))}%x\n")
+  printf(cf"ex1_reg_is_valid_: ${ex1_reg_is_valid_inst}%d\n")
+  printf(cf"ex1_reg_op1_data : 0x${ex1_reg_op1_data}%x\n")
+  printf(cf"ex1_reg_op2_data : 0x${ex1_reg_op2_data}%x\n")
+  printf(cf"ex1_reg_op3_data : 0x${ex1_reg_op3_data}%x\n")
+  printf(cf"ex1_alu_out      : 0x${ex1_alu_out}%x\n")
+  printf(cf"ex1_pc_bit_out   : 0x${ex1_pc_bit_out}%x\n")
+  printf(cf"ex1_reg_exe_fun  : 0x${ex1_reg_exe_fun}%x\n")
+  printf(cf"ex1_reg_wb_sel   : 0x${ex1_reg_wb_sel}%x\n")
+  printf(cf"ex1_reg_wb_addr  : 0x${ex1_reg_wb_addr}%x\n")
+  printf(cf"ex1_reg_bp_taken : ${ex1_reg_bp_taken}%d\n")
+  printf(cf"ex1_reg_bp_taken_: 0x${Cat(ex1_reg_bp_taken_pc, 0.U(1.W))}%x\n")
+  printf(cf"ex1_is_br        : ${ex1_is_br}%d\n")
+  printf(cf"ex1_reg_bp_cnt   : 0x${ex1_reg_bp_cnt}%x\n")
+  printf(cf"ex2_reg_is_br    : ${ex2_reg_is_br}%d\n")
+  printf(cf"ex2_reg_br_pc    : 0x${Cat(ex2_reg_br_pc, 0.U(1.W))}%x\n")
+  printf(cf"ex2_reg_pc       : 0x${Cat(ex2_reg_pc, 0.U(1.W))}%x\n")
+  printf(cf"ex2_reg_is_valid_: ${ex2_reg_is_valid_inst}%d\n")
+  printf(cf"ex2_stall        : ${ex2_stall}%d\n")
+  printf(cf"ex2_wb_data      : 0x${ex2_wb_data}%x\n")
+  printf(cf"ex2_alu_muldiv_ou: 0x${ex2_alu_muldiv_out}%x\n")
+  printf(cf"ex2_reg_wb_addr  : 0x${ex2_reg_wb_addr}%x\n")
+  // printf(cf"mem1_reg_mem_w   : 0x${mem1_reg_mem_w}%x\n")
+  printf(cf"mem1_reg_wdata   : 0x${mem1_reg_wdata}%x\n")
+  printf(cf"mem1_mem_stall   : ${mem1_mem_stall}%d\n")
+  printf(cf"mem1_dram_stall  : ${mem1_dram_stall}%d\n")
+  printf(cf"mem1_reg_unaligne: ${mem1_reg_unaligned}%d\n")
+  printf(cf"mem1_is_valid_ins: ${mem1_reg_is_valid_inst}%d\n")
+  printf(cf"mem2_mem_stall   : ${mem2_mem_stall}%d\n")
+  printf(cf"mem2_dram_stall  : ${mem2_dram_stall}%d\n")
+  // printf(cf"mem2_reg_dmem_rda: 0x${mem2_reg_dmem_rdata}%x\n")
+  // printf(cf"mem2_reg_mem_use_: 0x${mem2_reg_mem_use_reg}%x\n")
+  printf(cf"mem2_reg_is_valid: ${mem2_reg_is_valid_inst}%d\n")
+  printf(cf"mem2_reg_is_mem_l: ${mem2_reg_is_mem_load}%d\n")
+  printf(cf"mem2_reg_is_dram_: ${mem2_reg_is_dram_load}%d\n")
+  printf(cf"mem2_reg_unaligne: ${mem2_reg_unaligned}%d\n")
+  printf(cf"mem2_is_aligned_l: ${mem2_is_aligned_lw}%d\n")
+  printf(cf"mem2_reg_wb_addr : 0x${mem2_reg_wb_addr}%x\n")
+  printf(cf"mem3_reg_dmem_rda: 0x${mem3_reg_dmem_rdata}%x\n")
+  printf(cf"mem3_wb_data_load: 0x${mem3_wb_data_load}%x\n")
+  printf(cf"mem3_reg_unaligne: ${mem3_reg_unaligned}%d\n")
+  printf(cf"mem3_reg_is_align: ${mem3_reg_is_aligned_lw}%d\n")
+  printf(cf"mem3_reg_is_valid: ${mem3_reg_is_valid_inst}%d\n")
+  printf(cf"mem3_reg_wb_addr : 0x${mem3_reg_wb_addr}%x\n")
+  // printf(cf"mem3_reg_mem_use_: 0x${mem3_reg_mem_use_reg}%x\n")
+  printf(cf"csr_is_meintr    : ${csr_is_meintr}\n")
+  printf(cf"csr_is_mtintr    : ${csr_is_mtintr}\n")
+  printf(cf"csr_is_trap      : ${csr_is_trap}\n")
+  // printf(cf"csr_reg_mepc     : 0x${csr_reg_mepc}%x\n")
+  printf(cf"csr_is_br        : ${csr_is_br}\n")
+  // printf(cf"csr_wdata        : 0x${csr_wdata}%x\n")
+  // printf(cf"ex1_reg_csr_cmd  : 0x${ex1_reg_csr_cmd}%x\n")
+  printf(cf"instret          : ${instret}%d\n")
+  // printf(cf"mem1_reg_is_dram_fence: ${mem1_reg_is_dram_fence}\n")
+  // printf(cf"io.cache.ibusy   : ${io.cache.ibusy}\n")
+  printf(cf"cycle_counter    : ${io.debug_signal.cycle_counter}%d\n")
   printf("---------\n")
 }

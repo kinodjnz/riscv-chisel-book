@@ -98,10 +98,10 @@ class PHT(pht_len: Int) extends Module {
   io.mem.waddr := io.up.pc(PHT_INDEX_BITS-1, 0)
   io.mem.wdata := io.up.cnt
 
-  // printf(p"io.lu.pc         : 0x${Hexadecimal(Cat(io.lu.pc, 0.U(1.W)))}\n")
-  // printf(p"io.lu.cnt0       : 0x${Hexadecimal(io.lu.cnt0)}\n")
-  // printf(p"io.lu.cnt1       : 0x${Hexadecimal(io.lu.cnt1)}\n")
-  // printf(p"io.up.en         : 0x${io.up.en}\n")
-  // printf(p"io.up.pc         : 0x${Hexadecimal(Cat(io.up.pc, 0.U(1.W)))}\n")
-  // printf(p"io.up.cnt        : 0x${Hexadecimal(io.up.cnt)}\n")
+  // printf(cf"io.lu.pc         : 0x${Cat(io.lu.pc, 0.U(1.W))}%x\n")
+  // printf(cf"io.lu.cnt0       : 0x${io.lu.cnt0}%x\n")
+  // printf(cf"io.lu.cnt1       : 0x${io.lu.cnt1}%x\n")
+  // printf(cf"io.up.en         : ${io.up.en}\n")
+  // printf(cf"io.up.pc         : 0x${Cat(io.up.pc, 0.U(1.W))}%x\n")
+  // printf(cf"io.up.cnt        : 0x${io.up.cnt}%x\n")
 }

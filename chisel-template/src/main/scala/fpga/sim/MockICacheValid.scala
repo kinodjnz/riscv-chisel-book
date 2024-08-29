@@ -28,10 +28,10 @@ class MockICacheValid extends Module {
     ))
   }
 
-  // printf(p"icv.ren           : 0x${Hexadecimal(io.icache_valid.ren)}\n")
-  // printf(p"icv.addr          : 0x${Hexadecimal(io.icache_valid.addr)}\n")
-  // printf(p"icv.rdata         : 0x${Hexadecimal(io.icache_valid.rdata)}\n")
-  // printf(p"icv.invalidate    : 0x${Hexadecimal(io.icache_valid.invalidate)}\n")
-  // printf(p"icv.iaddr         : 0x${Hexadecimal(io.icache_valid.iaddr)}\n")
-  // printf(p"icv.idata         : 0x${Hexadecimal(io.icache_valid.idata)}\n")
+  // printf(cf"icv.ren           : 0x${io.icache_valid.ren}%x\n")
+  // printf(cf"icv.addr          : 0x${io.icache_valid.addr}%x\n")
+  // printf(cf"icv.rdata         : 0x${io.icache_valid.rdata}%x\n")
+  // printf(cf"icv.invalidate    : 0x${io.icache_valid.invalidate}%x\n")
+  // printf(cf"icv.iaddr         : 0x${io.icache_valid.iaddr}%x\n")
+  // printf(cf"icv.idata         : 0x${io.icache_valid.idata}%x\n")
 }

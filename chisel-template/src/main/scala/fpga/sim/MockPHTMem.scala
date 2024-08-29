@@ -21,5 +21,5 @@ class MockPHTMem extends Module {
   when (io.pht_mem.wen) {
     mem.write(io.pht_mem.waddr, io.pht_mem.wdata)
   }
-  printf(p"rdata          : 0x${Hexadecimal(rdata)}\n")
+  printf(cf"rdata          : 0x${rdata}%x\n")
 }

@@ -192,9 +192,9 @@ class Sdc() extends Module {
         rx_res_crc(4) := rx_res_crc(3)
         rx_res_crc(5) := rx_res_crc(4)
         rx_res_crc(6) := rx_res_crc(5)
-        //printf(p"rx_res_crc    : 0x${Hexadecimal(Cat(rx_res_crc.reverse))}\n")
+        //printf(cf"rx_res_crc    : 0x${Cat(rx_res_crc.reverse)}%x\n")
         when (rx_res_counter === 1.U) {
-          //printf(p"final rx_crc  : 0x${Hexadecimal(Cat(rx_res_crc.reverse))}\n")
+          //printf(cf"final rx_crc  : 0x${Cat(rx_res_crc.reverse)}%x\n")
           rx_res_in_progress := false.B
           rx_res := Cat(Cat(rx_res_bits.reverse), rx_res_next)
           rx_res_ready := true.B
@@ -234,11 +234,11 @@ class Sdc() extends Module {
       tx_cmd_crc(5),
     )
     tx_cmd_crc := crc
-    //printf(p"tx_cmd_crc    : 0x${Hexadecimal(Cat(tx_cmd_crc.reverse))}\n")
-    //printf(p"tx_crc        : 0x${Hexadecimal(Cat(crc.reverse))}\n")
+    //printf(cf"tx_cmd_crc    : 0x${Cat(tx_cmd_crc.reverse)}%x\n")
+    //printf(cf"tx_crc        : 0x${Cat(crc.reverse)}%x\n")
     when (tx_cmd_counter === 9.U) {
       (0 to 6).foreach(i => tx_cmd(i) := crc(6 - i))
-      //printf(p"final tx_crc  : 0x${Hexadecimal(Cat(crc.reverse))}\n")
+      //printf(cf"final tx_crc  : 0x${Cat(crc.reverse)}%x\n")
     }
   }.elsewhen (tx_cmd_counter === 0.U && reg_clk_counter === 0.U && reg_clk) {
     reg_tx_cmd_wrt := false.B
@@ -433,8 +433,8 @@ class Sdc() extends Module {
       tx_dat_crc(14),
     )
     tx_dat_crc := crc
-    //printf(p"tx_dat_crc    : 0x${Hexadecimal(Cat(tx_dat_crc.reverse))}\n")
-    //printf(p"tx_crc        : 0x${Hexadecimal(Cat(crc.reverse))}\n")
+    //printf(cf"tx_dat_crc    : 0x${Cat(tx_dat_crc.reverse)}%x\n")
+    //printf(cf"tx_crc        : 0x${Cat(crc.reverse)}%x\n")
     when (tx_dat_counter(10, 5) =/= 0.U && tx_dat_counter(2, 0) === 2.U) {
       io.sdbuf.ren1 := true.B
       tx_dat_prepared_read := true.B
@@ -448,7 +448,7 @@ class Sdc() extends Module {
     when (tx_dat_counter === 18.U) {
       (0 to 15).foreach(i => tx_dat(i) := crc(15 - i))
       tx_dat(16) := 15.U(4.W)
-      //printf(p"final tx_crc  : 0x${Hexadecimal(Cat(crc.reverse))}\n")
+      //printf(cf"final tx_crc  : 0x${Cat(crc.reverse)}%x\n")
     }
     when (tx_dat_counter === 1.U) {
       reg_tx_dat_wrt := false.B
@@ -661,18 +661,18 @@ class Sdc() extends Module {
     (tx_empty_intr_en && tx_dat_started && (tx_dat_read_sel ^ tx_dat_write_sel) =/= "b10".U)
     (tx_end_intr_en && tx_dat_started && tx_dat_end)
 
-  printf(p"sdc.clk           : 0x${Hexadecimal(reg_clk)}\n")
-  printf(p"sdc.cmd_wrt       : 0x${Hexadecimal(io.sdc_port.cmd_wrt)}\n")
-  printf(p"sdc.cmd_out       : 0x${Hexadecimal(io.sdc_port.cmd_out)}\n")
-  printf(p"rx_res_counter    : 0x${Hexadecimal(rx_res_counter)}\n")
-  printf(p"rx_dat_counter    : 0x${Hexadecimal(rx_dat_counter)}\n")
-  printf(p"rx_dat_next       : 0x${Hexadecimal(rx_dat_next)}\n")
-  printf(p"tx_cmd_counter    : 0x${Hexadecimal(tx_cmd_counter)}\n")
-  printf(p"tx_dat_counter    : 0x${Hexadecimal(tx_dat_counter)}\n")
-  printf(p"tx_cmd_timer      : 0x${Hexadecimal(tx_cmd_timer)}\n")
-  printf(p"rx_busy_timer     : 0x${Hexadecimal(rx_busy_timer)}\n")
-  printf(p"tx_dat_read_sel   : 0x${Hexadecimal(tx_dat_read_sel)}\n")
-  printf(p"tx_dat_write_sel  : 0x${Hexadecimal(tx_dat_write_sel)}\n")
-  printf(p"tx_dat_started    : ${tx_dat_started}\n")
-  printf(p"tx_dat_in_progress: ${tx_dat_in_progress}\n")
+  printf(cf"sdc.clk           : 0x${reg_clk}%x\n")
+  printf(cf"sdc.cmd_wrt       : 0x${io.sdc_port.cmd_wrt}%x\n")
+  printf(cf"sdc.cmd_out       : 0x${io.sdc_port.cmd_out}%x\n")
+  printf(cf"rx_res_counter    : 0x${rx_res_counter}%x\n")
+  printf(cf"rx_dat_counter    : 0x${rx_dat_counter}%x\n")
+  printf(cf"rx_dat_next       : 0x${rx_dat_next}%x\n")
+  printf(cf"tx_cmd_counter    : 0x${tx_cmd_counter}%x\n")
+  printf(cf"tx_dat_counter    : 0x${tx_dat_counter}%x\n")
+  printf(cf"tx_cmd_timer      : 0x${tx_cmd_timer}%x\n")
+  printf(cf"rx_busy_timer     : 0x${rx_busy_timer}%x\n")
+  printf(cf"tx_dat_read_sel   : 0x${tx_dat_read_sel}%x\n")
+  printf(cf"tx_dat_write_sel  : 0x${tx_dat_write_sel}%x\n")
+  printf(cf"tx_dat_started    : ${tx_dat_started}\n")
+  printf(cf"tx_dat_in_progress: ${tx_dat_in_progress}\n")
 }

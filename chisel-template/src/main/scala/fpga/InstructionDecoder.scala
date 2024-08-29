@@ -504,7 +504,7 @@ class InstructionDecoder(
   val id_is_bp_fail = !id_is_j && !id_is_br && id_reg_bp_taken
   id_reg_is_bp_fail := !io.out.flush && !id_reg_is_bp_fail && id_is_bp_fail
   io.update_pc.en := id_reg_is_bp_fail /*|| id_reg_bp_taken*/
-  io.update_pc.pc := id_reg_next_pc // Mux(id_reg_is_bp_fail, id_reg_next_pc, id_reg_bp_taken_pc)
+  io.update_pc.pc := id_reg_next_pc //Mux(id_reg_is_bp_fail, id_reg_next_pc, id_reg_bp_taken_pc)
 
   io.pipeline_probe.id_valid.foreach(_ := id_reg_is_valid_inst)
   map2(io.pipeline_probe.id_inst_id, id_inst_id)(_ := _)

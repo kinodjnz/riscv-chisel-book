@@ -119,7 +119,7 @@ class MockSd extends Module {
   io.sdc_port.res_in := res_bits(0)
   io.sdc_port.dat_in := dat_bits(0)
 
-  printf(p"sd_state           : 0x${Hexadecimal(sd_state.asUInt)}\n")
+  printf(cf"sd_state           : 0x${sd_state.asUInt}%x\n")
 }
 
 class MockSdBuf extends Module {
