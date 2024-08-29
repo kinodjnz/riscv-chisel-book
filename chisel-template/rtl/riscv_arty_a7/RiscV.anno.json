@@ -100,14 +100,22 @@
     "enumTypeName":"fpga.DramState"
   },
   {
+    "class":"chisel3.experimental.EnumAnnotations$EnumComponentAnnotation",
+    "target":"RiscV.Core._ic_state_T_2",
+    "enumTypeName":"fpga.IcState"
+  },
+  {
     "class":"chisel3.experimental.EnumAnnotations$EnumDefAnnotation",
     "typeName":"fpga.IcState",
     "definition":{
-      "Full2Half":3,
+      "Full2Half":2,
+      "DummyFull2Half":6,
+      "DummyFullHalf":7,
+      "DummyFull":5,
       "Empty":0,
-      "EmptyHalf":1,
-      "Full":2,
-      "FullHalf":4
+      "EmptyHalf":4,
+      "Full":1,
+      "FullHalf":3
     }
   },
   {
