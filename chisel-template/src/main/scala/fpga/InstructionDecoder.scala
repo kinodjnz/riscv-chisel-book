@@ -126,7 +126,7 @@ class InstructionDecoder(
   val id_inst_id = io.in.bits.inst_id
 
   io.in.ready := id_in_ready
-  io.in.flush := io.out.flush || id_reg_is_bp_fail
+  io.in.flush := io.out.flush /*|| id_reg_is_bp_fail*/
 
   io.debug_signals.id_pc   := Cat(id_reg_pc, 0.U((WORD_LEN-PC_LEN).W))
   io.debug_signals.id_inst := id_reg_inst
@@ -509,7 +509,7 @@ class InstructionDecoder(
   io.pipeline_probe.id_valid.foreach(_ := id_reg_is_valid_inst)
   map2(io.pipeline_probe.id_inst_id, id_inst_id)(_ := _)
 
-  id_output_queue.io.enq.valid              := !io.out.flush && !id_is_bp_fail && !id_reg_is_bp_fail
+  id_output_queue.io.enq.valid              := !io.out.flush /* && !id_is_bp_fail && !id_reg_is_bp_fail*/
   id_output_queue.io.enq.bits.pc            := id_reg_pc
   id_output_queue.io.enq.bits.op1_sel       := id_m_op1_sel
   id_output_queue.io.enq.bits.op2_sel       := id_m_op2_sel

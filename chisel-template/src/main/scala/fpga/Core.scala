@@ -7,6 +7,7 @@ import common.Consts._
 import chisel3.util.experimental.loadMemoryFromFileInline
 import chisel3.ChiselEnum
 import common.OptionExtension._
+import ZeroBranchPredictionConsts._
 
 class LongCounter(unitWidth: Int, unitCount: Int) extends Module {
   val counterWidth = unitWidth * unitCount
@@ -80,6 +81,19 @@ class SimProbe extends Bundle {
   val exit = Output(Bool())
 }
 
+object ZeroBranchPredictionConsts {
+  val ZBTB_INDEX_LEN   = 4
+  val ZBTB_ENTRIES     = 1 << ZBTB_INDEX_LEN
+  val ZBTB_TAG_BITS    = 7
+  val ZBTB_TARGET_BITS = PC_LEN
+}
+
+class ZeroBranchTargetBuffer extends Bundle {
+  val en     = Bool()
+  val tag    = UInt(ZBTB_TAG_BITS.W)
+  val target = UInt(ZBTB_TARGET_BITS.W)
+}
+
 class PipelineProbe extends Bundle {
   val if2_valid    = Output(Bool())
   val if2_inst_id  = Output(UInt(INST_ID_LEN.W))
@@ -147,9 +161,15 @@ class Core(
   //**********************************
   // Pipeline State Registers
 
-  val id_reg_stall       = Wire(Bool())
-  val id_reg_bp_taken    = RegInit(true.B) // jump start_address when first time
-  val id_reg_bp_taken_pc = RegInit((start_address >> (WORD_LEN-PC_LEN)).U(PC_LEN.W))
+  val if2_reg_zbp_taken    = RegInit(false.B)
+  val if2_reg_zbp_taken_pc = RegInit(0.U(PC_LEN.W))
+  val if2_zbp_taken        = Wire(Bool())
+
+  val id_reg_stall        = Wire(Bool())
+  val id_reg_bp_taken     = RegInit(true.B) // jump start_address when first time
+  val id_reg_bp_taken_pc  = RegInit((start_address >> (WORD_LEN-PC_LEN)).U(PC_LEN.W))
+  val id_reg_bp_not_taken = RegInit(false.B)
+  val id_reg_bp_pc        = RegInit(0.U(ZBTB_INDEX_LEN.W))
 
   // ID/RRD State
   val rrd_reg_pc            = RegInit(0.U(PC_LEN.W))
@@ -363,6 +383,7 @@ class Core(
   val ic_reg_bp_next_taken2    = RegInit(false.B)
   val ic_reg_bp_next_taken_pc2 = RegInit(0.U(PC_LEN.W))
   val ic_reg_bp_next_cnt2      = RegInit(0.U(2.W))
+  val ic_zbp                   = Mem(ZBTB_ENTRIES, new ZeroBranchTargetBuffer())
 
   val ic_imem_addr_2 = Cat(ic_reg_imem_addr(PC_LEN-1, 1), 1.U(1.W))
   val ic_imem_addr_4 = ic_reg_imem_addr + 2.U(PC_LEN.W)
@@ -384,6 +405,10 @@ class Core(
   ic_bp_taken_pc  := DontCare
   ic_bp_cnt       := DontCare
   ic_pht.io.mem <> io.pht_mem
+
+  val zbp_entry = ic_zbp(ic_addr_out(ZBTB_INDEX_LEN-1, 0))
+  val ic_zbp_taken    = zbp_entry.en && (zbp_entry.tag === ic_imem_addr(ZBTB_TAG_BITS+ZBTB_INDEX_LEN-1, ZBTB_INDEX_LEN))
+  val ic_zbp_taken_pc = zbp_entry.target
 
   switch (ic_state) {
     is (IcState.Empty) {
@@ -510,11 +535,12 @@ class Core(
   //**********************************
   // Instruction Fetch (IF) 1 Stage
 
-  val if1_jump_addr = MuxCase(id_reg_bp_taken_pc, Seq(
+  val if1_jump_addr = MuxCase(if2_reg_zbp_taken_pc, Seq(
     ex2_reg_is_br     -> ex2_reg_br_pc,
-    id_update_pc_en   -> id_update_pc,
+    // id_update_pc_en   -> id_update_pc,
+    id_reg_bp_taken   -> id_reg_bp_taken_pc
   ))
-  val if1_is_jump = ex2_reg_is_br || id_update_pc_en || id_reg_bp_taken
+  val if1_is_jump = ex2_reg_is_br || /*id_update_pc_en ||*/ id_reg_bp_taken || if2_zbp_taken
 
   ic_addr_en  := if1_is_jump
   ic_addr     := if1_jump_addr
@@ -531,6 +557,10 @@ class Core(
   val if2_inst = Mux(if2_is_valid_inst, ic_data_out, BUBBLE)
   val if2_bp_taken = if2_is_valid_inst && ic_bp_taken
 
+  if2_reg_zbp_taken    := ic_zbp_taken
+  if2_reg_zbp_taken_pc := ic_zbp_taken_pc
+  if2_zbp_taken        := !id_reg_stall && if2_is_valid_inst && if2_reg_zbp_taken
+
   val if2_probe_valid_inst = !id_reg_stall && if2_is_valid_inst
   val if2_inst_id = if2_reg_inst_id.map(_ + Mux(if2_probe_valid_inst, 1.U, 0.U))
   map2(if2_reg_inst_id, if2_inst_id)(_ := _)
@@ -539,31 +569,33 @@ class Core(
   io.pipeline_probe.foreach(_.if2_pc    := Cat(if2_pc, 0.U(1.W)))
   io.pipeline_probe.foreach(_.if2_inst  := if2_inst)
   
+  printf(cf"ic_addr_out: 0x${Cat(ic_addr_out, 0.U(1.W))}%x\n")
   printf(cf"ic_reg_addr_out: 0x${Cat(ic_reg_addr_out, 0.U(1.W))}%x, ic_data_out: 0x${ic_data_out}%x\n")
   printf(cf"inst: 0x${if2_inst}%x, ic_read_rdy: ${ic_read_rdy}, ic_state: ${ic_state.asUInt}, ic_addr_en: ${ic_addr_en.asUInt}\n")
 
   //**********************************
   // IF2/ID Register
 
-  id_reg_bp_taken    := !id_reg_stall && if2_bp_taken
-  id_reg_bp_taken_pc := ic_bp_taken_pc
-  // when (id_flush || !id_reg_stall) {
-  //   id_reg_bp_taken := if2_bp_taken
-  // }
-  // when (!id_reg_stall) {
-  //   id_reg_bp_taken_pc := ic_bp_taken_pc
-  // }
+  val if2_next_pc = Mux(if2_is_half_inst, if2_pc + 1.U(PC_LEN.W), if2_pc + 2.U(PC_LEN.W))
+  id_reg_bp_taken    := if2_is_valid_inst && !id_reg_stall && ((ic_bp_taken && !if2_reg_zbp_taken) || (!ic_bp_taken && if2_reg_zbp_taken))
+  id_reg_bp_taken_pc := Mux(if2_reg_zbp_taken, if2_next_pc, ic_bp_taken_pc)
+
+  id_reg_bp_not_taken := if2_is_valid_inst && !id_reg_stall && !ic_bp_taken && if2_reg_zbp_taken
+  id_reg_bp_pc        := if2_pc(ZBTB_INDEX_LEN-1, 0)
+  when (id_reg_bp_not_taken) {
+    ic_zbp(id_reg_bp_pc).en := false.B
+  }
 
   //**********************************
   // Instruction Decode (ID) Stage
 
   val id_stage = Module(new InstructionDecoder(enable_pipeline_probe))
 
-  id_stage.io.in.bits.is_valid_inst := if2_is_valid_inst /*&& (if2_inst =/= BUBBLE)*/
+  id_stage.io.in.bits.is_valid_inst := if2_is_valid_inst
   id_stage.io.in.bits.inst          := if2_inst
   id_stage.io.in.bits.bp_taken      := if2_bp_taken
   id_stage.io.in.bits.pc            := ic_reg_addr_out
-  id_stage.io.in.bits.bp_taken_pc   := ic_bp_taken_pc
+  id_stage.io.in.bits.bp_taken_pc   := Mux(if2_reg_zbp_taken, if2_reg_zbp_taken_pc, ic_bp_taken_pc)
   id_stage.io.in.bits.bp_cnt        := ic_bp_cnt
   map2(id_stage.io.in.bits.inst_id, if2_reg_inst_id)(_ := _)
 
@@ -692,15 +724,12 @@ class Core(
   //**********************************
   // RRD/EX1 register
   when(!ex2_stall) {
-    val ex_is_bubble = rrd_stall || ex2_reg_is_br
     ex1_reg_pc            := rrd_reg_pc
     ex1_reg_op1_data      := rrd_op1_data
     ex1_reg_op2_data      := rrd_op2_data
     ex1_reg_op3_data      := rrd_op3_data
     ex1_reg_wb_addr       := rrd_reg_wb_addr
-    ex1_reg_rf_wen        := Mux(ex_is_bubble, REN_X, rrd_reg_rf_wen)
     ex1_reg_exe_fun       := rrd_reg_exe_fun
-    ex1_reg_wb_sel        := Mux(ex_is_bubble, WB_X, rrd_reg_wb_sel)
     ex1_reg_direct_jbr_pc := rrd_direct_jbr_pc
     ex1_reg_csr_addr      := rrd_reg_csr_addr
     ex1_reg_csr_cmd       := rrd_reg_csr_cmd
@@ -709,15 +738,9 @@ class Core(
     ex1_reg_is_bflen      := rrd_reg_is_bflen
     ex1_reg_imm_len       := rrd_reg_op2_data_im0(10, 6)
     ex1_reg_mem_w         := rrd_reg_mem_w
-    ex1_reg_is_mret       := !ex_is_bubble && (rrd_reg_exe_fun === CMD_MRET && rrd_reg_mem_w === MW_CSR)
-    ex1_reg_is_br         := Mux(ex_is_bubble, false.B, rrd_reg_is_br)
-    ex1_reg_is_j          := Mux(ex_is_bubble, false.B, rrd_reg_is_j)
-    ex1_reg_bp_taken      := Mux(ex_is_bubble, false.B, rrd_reg_bp_taken)
     ex1_reg_bp_taken_pc   := rrd_reg_bp_taken_pc
     ex1_reg_bp_cnt        := rrd_reg_bp_cnt
     ex1_reg_is_half       := rrd_reg_is_half
-    ex1_reg_is_valid_inst := rrd_reg_is_valid_inst && !ex_is_bubble
-    ex1_reg_is_trap       := Mux(ex_is_bubble, false.B, rrd_reg_is_trap)
     ex1_reg_mcause_code   := rrd_reg_mcause_code
     // ex1_reg_mtval         := rrd_reg_mtval
     ex1_reg_mem_use_reg   := rrd_mem_use_reg
@@ -725,6 +748,24 @@ class Core(
     ex1_reg_inst3_use_reg := rrd_inst3_use_reg
     ex1_reg_fw_en         := rrd_fw_en_next
     map2(ex1_reg_inst_id, rrd_reg_inst_id)(_ := _)
+    ex1_reg_is_valid_inst := rrd_reg_is_valid_inst && !rrd_stall
+    ex1_reg_rf_wen        := Mux(rrd_stall, REN_X, rrd_reg_rf_wen)
+    ex1_reg_wb_sel        := Mux(rrd_stall, WB_X, rrd_reg_wb_sel)
+    ex1_reg_is_mret       := !rrd_stall && (rrd_reg_exe_fun === CMD_MRET && rrd_reg_mem_w === MW_CSR)
+    ex1_reg_is_br         := Mux(rrd_stall, false.B, rrd_reg_is_br)
+    ex1_reg_is_j          := Mux(rrd_stall, false.B, rrd_reg_is_j)
+    ex1_reg_bp_taken      := Mux(rrd_stall, false.B, rrd_reg_bp_taken)
+    ex1_reg_is_trap       := Mux(rrd_stall, false.B, rrd_reg_is_trap)
+  }
+  when (ex2_reg_is_br) {
+    ex1_reg_is_valid_inst := false.B
+    ex1_reg_rf_wen        := REN_X
+    ex1_reg_wb_sel        := WB_X
+    ex1_reg_is_mret       := false.B
+    ex1_reg_is_br         := false.B
+    ex1_reg_is_j          := false.B
+    ex1_reg_bp_taken      := false.B
+    ex1_reg_is_trap       := false.B
   }
 
   //**********************************
@@ -879,6 +920,14 @@ class Core(
     Cat(ex1_reg_bp_cnt(0, 0), (!ex1_reg_bp_cnt(1) | ex1_reg_bp_cnt(0)).asUInt),
     Cat(!ex1_reg_bp_cnt(0, 0), (ex1_reg_bp_cnt(1) & ex1_reg_bp_cnt(0)).asUInt),
   )
+
+  when (ex1_en && ((ex1_is_cond_br_inst && ex1_is_cond_br) || ex1_is_uncond_br)) {
+    val zbtb_entry = Wire(new ZeroBranchTargetBuffer())
+    zbtb_entry.en     := true.B
+    zbtb_entry.tag    := ex1_reg_pc(ZBTB_TAG_BITS+ZBTB_INDEX_LEN-1, ZBTB_INDEX_LEN)
+    zbtb_entry.target := ex1_taken_pc
+    ic_zbp(ex1_reg_pc(ZBTB_INDEX_LEN-1, 0)) := zbtb_entry
+  }
 
   ex1_fw_data := ex1_alu_out
 
@@ -1431,16 +1480,20 @@ class Core(
     io.sim_probe.foreach(_.exit := RegNext(do_exit).asUInt)
   }
 
+  // printf(cf"ic_addr_out      : 0x${Cat(ic_addr_out, 0.U(1.W))}%x\n")
   //printf(cf"if1_reg_pc       : 0x${if1_reg_pc}%x\n")
   printf(cf"if2_pc           : 0x${Cat(if2_pc, 0.U(1.W))}%x\n")
   printf(cf"if2_is_valid_inst: ${if2_is_valid_inst}%d\n")
   printf(cf"if2_inst         : 0x${if2_inst}%x\n")
+  printf(cf"if2_reg_zbp_taken: ${if2_reg_zbp_taken}%d\n")
+  printf(cf"if2_reg_zbp_taken: 0x${Cat(if2_reg_zbp_taken_pc, 0.U(1.W))}%x\n")
   printf(cf"ic_bp_taken      : ${ic_bp_taken}%d\n")
   printf(cf"ic_bp_taken_pc   : 0x${Cat(ic_bp_taken_pc, 0.U(1.W))}%x\n")
   printf(cf"ic_bp_cnt        : 0x${ic_bp_cnt}%x\n")
   printf(cf"id_reg_pc        : 0x${id_stage.io.debug_signals.id_pc}%x\n")
   printf(cf"id_reg_inst      : 0x${id_stage.io.debug_signals.id_inst}%x\n")
   printf(cf"id_reg_bp_taken  : ${id_reg_bp_taken}%d\n")
+  printf(cf"id_reg_bp_taken_p: 0x${Cat(id_reg_bp_taken_pc, 0.U(1.W))}%x\n")
   printf(cf"id_is_valid_inst : ${id_stage.io.pipeline_probe.id_valid.getOrElse(false.B)}%d\n")
   printf(cf"id_reg_stall     : ${id_reg_stall}%d\n")
   // printf(cf"id_rs1_data      : 0x${id_rs1_data}%x\n")
