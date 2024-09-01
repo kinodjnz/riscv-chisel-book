@@ -18,7 +18,7 @@ class SimTop(memoryPath: String, with_sdc: Boolean, enable_pipeline_probe: Boole
   })
   val core = Module(new Core(startAddress, 0x2000_0000L, 0x1000_0000L, true, enable_pipeline_probe))
   val memory = Module(new Memory())
-  val boot_rom = Module(new BootRom(memoryPath, imemSizeInBytes, true))
+  val boot_rom = Module(new BootRom(memoryPath, imemSizeInBytes, true, true))
 
   val dmem_decoder = Module(new DMemDecoder(
     Seq(
@@ -47,7 +47,7 @@ class SimTop(memoryPath: String, with_sdc: Boolean, enable_pipeline_probe: Boole
   }
 
   val imem_decoder = Module(new IMemDecoder(Seq(
-    (BigInt(startAddress), BigInt(imemSizeInBytes)),
+    (BigInt(startAddress), BigInt(0x10000000L/*imemSizeInBytes*/)),
     (BigInt(0x20000000L), BigInt(dmemSizeInBytes)),
   )))
   imem_decoder.io.targets(0) <> boot_rom.io.imem

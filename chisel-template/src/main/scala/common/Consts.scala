@@ -218,6 +218,7 @@ object Consts {
   val BP_CACHE_LEN  = 256
 
   val PC_LEN           = WORD_LEN - 1
+  val ZBTB_ENTRIES     = 16
   val BTB_INDEX_BITS   = 9
   val BTB_INDEX_LEN    = 1 << BTB_INDEX_BITS
   val BTB_TAG_IGNORE   = 4 // ignore leading 4 bits of pc

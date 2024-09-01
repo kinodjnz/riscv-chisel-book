@@ -15,7 +15,7 @@ class Config(clockHz: Int) extends Module {
     val mem = new DmemPortIo
   })
 
-  io.mem.rdata := MuxLookup(io.mem.raddr(2, 2), "xDEADBEEF".U, Seq(
+  io.mem.rdata := MuxLookup(io.mem.raddr(2, 2), "xDEADBEEF".U)(Seq(
     0.U -> "x01234567".U,
     1.U -> clockHz.U,
   ))
@@ -111,7 +111,7 @@ class RiscV(clockHz: Int) extends Module {
   dmem_decoder.io.targets(6) <> config.io.mem
 
   val imem_decoder = Module(new IMemDecoder(Seq(
-    (BigInt(startAddress), BigInt(imemSizeInBytes)),
+    (BigInt(startAddress), BigInt(startAddress/*imemSizeInBytes*/)),
     (BigInt(0x20000000L), BigInt(dmemSizeInBytes)),
   )))
   imem_decoder.io.targets(0) <> boot_rom.io.imem

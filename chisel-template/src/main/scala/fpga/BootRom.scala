@@ -9,14 +9,17 @@ import chisel3.util.experimental.loadMemoryFromFileInline
 import chisel3.experimental.{annotate, ChiselAnnotation}
 import firrtl.annotations.MemorySynthInit
 
-class BootRom(data_memory_path: String = null, imem_size_in_bytes: Int = 2048, enable_sim_wstrb: Boolean = false) extends Module {
+class BootRom(data_memory_path: String = null, imem_size_in_bytes: Int = 2048, enable_sim_wstrb: Boolean = false, disable_imem_read_delay: Boolean = true) extends Module {
   val io = IO(new Bundle {
     val imem = new ImemPortIo()
     val dmem = new DmemPortIo()
   })
 
-  val imem_inst = RegInit(0.U(WORD_LEN.W))
+  val addr_len = log2Ceil(imem_size_in_bytes) - 2
+
+  val imem_inst  = RegInit(0.U(WORD_LEN.W))
   val imem_rdata = RegInit(0.U(WORD_LEN.W))
+  val imem_addr  = RegInit(0.U(addr_len.W))
 
   annotate(new ChiselAnnotation {
     override def toFirrtl =
@@ -26,11 +29,15 @@ class BootRom(data_memory_path: String = null, imem_size_in_bytes: Int = 2048, e
   val imem = Mem(imem_size_in_bytes/4, UInt(WORD_LEN.W))
   loadMemoryFromFileInline(imem, data_memory_path)
 
-  when (io.imem.en) {
-    imem_inst := imem.read(io.imem.addr(log2Ceil(imem_size_in_bytes) - 1, 2))
+  imem_addr := io.imem.addr(addr_len + 1, 2)
+  if (disable_imem_read_delay) {
+    imem_inst := imem.read(io.imem.addr(addr_len + 1, 2))
+    io.imem.valid := RegNext(io.imem.en, false.B)
+  } else {
+    imem_inst := imem.read(imem_addr)
+    io.imem.valid := RegNext(imem_addr === io.imem.addr(addr_len + 1, 2), false.B)
   }
   io.imem.inst := imem_inst
-  io.imem.valid := RegNext(io.imem.en, false.B)
 
   val rwaddr = Mux(io.dmem.wen, io.dmem.waddr, io.dmem.raddr)(log2Ceil(imem_size_in_bytes) - 1, 2)
   when (io.dmem.wen) {

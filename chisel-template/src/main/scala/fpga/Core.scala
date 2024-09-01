@@ -7,7 +7,6 @@ import common.Consts._
 import chisel3.util.experimental.loadMemoryFromFileInline
 import chisel3.ChiselEnum
 import common.OptionExtension._
-import ZeroBranchPredictionConsts._
 
 class LongCounter(unitWidth: Int, unitCount: Int) extends Module {
   val counterWidth = unitWidth * unitCount
@@ -81,19 +80,6 @@ class SimProbe extends Bundle {
   val exit = Output(Bool())
 }
 
-object ZeroBranchPredictionConsts {
-  val ZBTB_INDEX_LEN   = 4
-  val ZBTB_ENTRIES     = 1 << ZBTB_INDEX_LEN
-  val ZBTB_TAG_BITS    = 7
-  val ZBTB_TARGET_BITS = PC_LEN
-}
-
-class ZeroBranchTargetBuffer extends Bundle {
-  val en     = Bool()
-  val tag    = UInt(ZBTB_TAG_BITS.W)
-  val target = UInt(ZBTB_TARGET_BITS.W)
-}
-
 class PipelineProbe extends Bundle {
   val if2_valid    = Output(Bool())
   val if2_inst_id  = Output(UInt(INST_ID_LEN.W))
@@ -161,15 +147,13 @@ class Core(
   //**********************************
   // Pipeline State Registers
 
-  val if2_reg_zbp_taken    = RegInit(false.B)
-  val if2_reg_zbp_taken_pc = RegInit(0.U(PC_LEN.W))
-  val if2_zbp_taken        = Wire(Bool())
+  val if2_zbp_taken = Wire(Bool())
 
   val id_reg_stall        = Wire(Bool())
   val id_reg_bp_taken     = RegInit(true.B) // jump start_address when first time
   val id_reg_bp_taken_pc  = RegInit((start_address >> (WORD_LEN-PC_LEN)).U(PC_LEN.W))
   val id_reg_bp_not_taken = RegInit(false.B)
-  val id_reg_bp_pc        = RegInit(0.U(ZBTB_INDEX_LEN.W))
+  val id_reg_bp_pc        = RegInit(0.U(PC_LEN.W))
 
   // ID/RRD State
   val rrd_reg_pc            = RegInit(0.U(PC_LEN.W))
@@ -370,6 +354,7 @@ class Core(
 
   val ic_btb = Module(new BTB(BTB_INDEX_LEN))
   val ic_pht = Module(new PHT(PHT_INDEX_LEN))
+  val ic_zbtb = Module(new ZBTB(ZBTB_ENTRIES))
 
   val ic_bp_taken              = Wire(Bool())
   val ic_bp_taken_pc           = Wire(UInt(PC_LEN.W))
@@ -383,32 +368,42 @@ class Core(
   val ic_reg_bp_next_taken2    = RegInit(false.B)
   val ic_reg_bp_next_taken_pc2 = RegInit(0.U(PC_LEN.W))
   val ic_reg_bp_next_cnt2      = RegInit(0.U(2.W))
-  val ic_zbp                   = Mem(ZBTB_ENTRIES, new ZeroBranchTargetBuffer())
+  val ic_zbp_taken             = Wire(Bool())
+  val ic_zbp_target            = Wire(UInt(PC_LEN.W))
+  val ic_reg_zbp_next_taken0   = RegInit(false.B)
+  val ic_reg_zbp_next_target0  = RegInit(0.U(PC_LEN.W))
+  val ic_reg_zbp_next_taken1   = RegInit(false.B)
+  val ic_reg_zbp_next_target1  = RegInit(0.U(PC_LEN.W))
+  val ic_reg_zbp_next_taken2   = RegInit(false.B)
+  val ic_reg_zbp_next_target2  = RegInit(0.U(PC_LEN.W))
 
   val ic_imem_addr_2 = Cat(ic_reg_imem_addr(PC_LEN-1, 1), 1.U(1.W))
   val ic_imem_addr_4 = ic_reg_imem_addr + 2.U(PC_LEN.W)
   val ic_inst_addr_2 = Cat(ic_reg_inst_addr(PC_LEN-1, 1), 1.U(1.W))
-  ic_imem_addr    := DontCare
+  ic_imem_addr     := DontCare
   ic_reg_imem_addr := ic_imem_addr
-  io.imem.addr    := Cat(ic_imem_addr, 0.U(1.W))
-  io.imem.en      := true.B
-  ic_btb.io.lu.pc := ic_imem_addr
-  ic_pht.io.lu.pc := ic_imem_addr
-  ic_reg_read_rdy := true.B
-  ic_reg_half_rdy := true.B
-  ic_read_rdy     := ic_reg_read_rdy
-  ic_half_rdy     := ic_reg_half_rdy
-  ic_data_out     := DontCare
-  ic_addr_out     := ic_reg_addr_out
-  ic_reg_addr_out := ic_addr_out
-  ic_bp_taken     := DontCare
-  ic_bp_taken_pc  := DontCare
-  ic_bp_cnt       := DontCare
+  io.imem.addr     := Cat(ic_imem_addr, 0.U(1.W))
+  io.imem.en       := true.B
+  ic_btb.io.lu.pc  := ic_imem_addr
+  ic_pht.io.lu.pc  := ic_imem_addr
+  ic_reg_read_rdy  := true.B
+  ic_reg_half_rdy  := true.B
+  ic_read_rdy      := ic_reg_read_rdy
+  ic_half_rdy      := ic_reg_half_rdy
+  ic_data_out      := DontCare
+  ic_addr_out      := ic_reg_addr_out
+  ic_reg_addr_out  := ic_addr_out
+  ic_bp_taken      := DontCare
+  ic_bp_taken_pc   := DontCare
+  ic_bp_cnt        := DontCare
+  ic_zbtb.io.lu.pc := ic_imem_addr
+  ic_zbp_taken     := DontCare
+  ic_zbp_target    := DontCare
   ic_pht.io.mem <> io.pht_mem
 
-  val zbp_entry = ic_zbp(ic_addr_out(ZBTB_INDEX_LEN-1, 0))
-  val ic_zbp_taken    = zbp_entry.en && (zbp_entry.tag === ic_imem_addr(ZBTB_TAG_BITS+ZBTB_INDEX_LEN-1, ZBTB_INDEX_LEN))
-  val ic_zbp_taken_pc = zbp_entry.target
+  // val zbp_entry = ic_zbp(ic_reg_addr_out(ZBTB_INDEX_LEN-1, 0)) // FIXME
+  // val ic_zbp_taken    = zbp_entry.en && (zbp_entry.tag === ic_imem_addr(ZBTB_TAG_BITS+ZBTB_INDEX_LEN-1, ZBTB_INDEX_LEN))
+  // val ic_zbp_taken_pc = zbp_entry.target
 
   switch (ic_state) {
     is (IcState.Empty) {
@@ -425,6 +420,12 @@ class Core(
       ic_reg_bp_next_taken1    := ic_btb.io.lu.matches1 && ic_pht.io.lu.cnt1(0)
       ic_reg_bp_next_taken_pc1 := ic_btb.io.lu.taken_pc1
       ic_reg_bp_next_cnt1      := ic_pht.io.lu.cnt1
+      ic_zbp_taken             := ic_zbtb.io.lu.matches0
+      ic_zbp_target            := ic_zbtb.io.lu.target0
+      ic_reg_zbp_next_taken0   := ic_zbtb.io.lu.matches0
+      ic_reg_zbp_next_target0  := ic_zbtb.io.lu.target0
+      ic_reg_zbp_next_taken1   := ic_zbtb.io.lu.matches1
+      ic_reg_zbp_next_target1  := ic_zbtb.io.lu.target1
       ic_state := IcState.Full
       when (ic_read_en2) {
         ic_addr_out := ic_imem_addr_2
@@ -449,6 +450,12 @@ class Core(
       ic_reg_bp_next_taken1    := ic_btb.io.lu.matches1 && ic_pht.io.lu.cnt1(0)
       ic_reg_bp_next_taken_pc1 := ic_btb.io.lu.taken_pc1
       ic_reg_bp_next_cnt1      := ic_pht.io.lu.cnt1
+      ic_zbp_taken             := ic_zbtb.io.lu.matches1
+      ic_zbp_target            := ic_zbtb.io.lu.target1
+      ic_reg_zbp_next_taken0   := ic_zbtb.io.lu.matches0
+      ic_reg_zbp_next_target0  := ic_zbtb.io.lu.target0
+      ic_reg_zbp_next_taken1   := ic_zbtb.io.lu.matches1
+      ic_reg_zbp_next_target1  := ic_zbtb.io.lu.target1
       ic_state := IcState.FullHalf
       when (ic_read_en2) {
         ic_addr_out := ic_imem_addr_4
@@ -461,6 +468,8 @@ class Core(
       ic_bp_taken     := ic_reg_bp_next_taken0
       ic_bp_taken_pc  := ic_reg_bp_next_taken_pc0
       ic_bp_cnt       := ic_reg_bp_next_cnt0
+      ic_zbp_taken    := ic_zbtb.io.lu.matches0
+      ic_zbp_target   := ic_zbtb.io.lu.target0
       when (ic_read_en2) {
         ic_addr_out := ic_inst_addr_2
         ic_state := IcState.FullHalf
@@ -482,14 +491,22 @@ class Core(
       ic_reg_bp_next_taken0    := ic_btb.io.lu.matches0 && ic_pht.io.lu.cnt0(0)
       ic_reg_bp_next_taken_pc0 := ic_btb.io.lu.taken_pc0
       ic_reg_bp_next_cnt0      := ic_pht.io.lu.cnt0
+      ic_zbp_taken             := ic_reg_zbp_next_taken1
+      ic_zbp_target            := ic_reg_zbp_next_target1
+      ic_reg_zbp_next_taken0   := ic_zbtb.io.lu.matches0
+      ic_reg_zbp_next_target0  := ic_zbtb.io.lu.target0
       when (io.imem.valid) {
         ic_reg_bp_next_taken1    := ic_btb.io.lu.matches1 && ic_pht.io.lu.cnt1(0)
         ic_reg_bp_next_taken_pc1 := ic_btb.io.lu.taken_pc1
         ic_reg_bp_next_cnt1      := ic_pht.io.lu.cnt1
+        ic_reg_zbp_next_taken1   := ic_zbtb.io.lu.matches1
+        ic_reg_zbp_next_target1  := ic_zbtb.io.lu.target1
       }
       ic_reg_bp_next_taken2    := ic_reg_bp_next_taken1
       ic_reg_bp_next_taken_pc2 := ic_reg_bp_next_taken_pc1
       ic_reg_bp_next_cnt2      := ic_reg_bp_next_cnt1
+      ic_reg_zbp_next_taken2   := ic_zbtb.io.lu.matches1
+      ic_reg_zbp_next_target2  := ic_zbtb.io.lu.target1
       ic_state := IcState.Full2Half
       when (ic_read_en2) {
         ic_addr_out := ic_reg_imem_addr
@@ -505,6 +522,8 @@ class Core(
       ic_bp_taken      := ic_reg_bp_next_taken2
       ic_bp_taken_pc   := ic_reg_bp_next_taken_pc2
       ic_bp_cnt        := ic_reg_bp_next_cnt2
+      ic_zbp_taken     := ic_reg_zbp_next_taken2
+      ic_zbp_target    := ic_reg_zbp_next_target2
       when (ic_read_en2) {
         ic_addr_out := ic_reg_inst_addr
         ic_state := IcState.Full
@@ -535,7 +554,7 @@ class Core(
   //**********************************
   // Instruction Fetch (IF) 1 Stage
 
-  val if1_jump_addr = MuxCase(if2_reg_zbp_taken_pc, Seq(
+  val if1_jump_addr = MuxCase(ic_zbp_target, Seq(
     ex2_reg_is_br     -> ex2_reg_br_pc,
     // id_update_pc_en   -> id_update_pc,
     id_reg_bp_taken   -> id_reg_bp_taken_pc
@@ -557,9 +576,8 @@ class Core(
   val if2_inst = Mux(if2_is_valid_inst, ic_data_out, BUBBLE)
   val if2_bp_taken = if2_is_valid_inst && ic_bp_taken
 
-  if2_reg_zbp_taken    := ic_zbp_taken
-  if2_reg_zbp_taken_pc := ic_zbp_taken_pc
-  if2_zbp_taken        := !id_reg_stall && if2_is_valid_inst && if2_reg_zbp_taken
+  // if2_zbp_taken        := !id_reg_stall && if2_is_valid_inst && ic_zbp_taken // FIX timing
+  if2_zbp_taken        := !id_reg_stall && !id_flush && !id_reg_bp_taken && ic_read_rdy && ic_zbp_taken
 
   val if2_probe_valid_inst = !id_reg_stall && if2_is_valid_inst
   val if2_inst_id = if2_reg_inst_id.map(_ + Mux(if2_probe_valid_inst, 1.U, 0.U))
@@ -577,14 +595,14 @@ class Core(
   // IF2/ID Register
 
   val if2_next_pc = Mux(if2_is_half_inst, if2_pc + 1.U(PC_LEN.W), if2_pc + 2.U(PC_LEN.W))
-  id_reg_bp_taken    := if2_is_valid_inst && !id_reg_stall && ((ic_bp_taken && !if2_reg_zbp_taken) || (!ic_bp_taken && if2_reg_zbp_taken))
-  id_reg_bp_taken_pc := Mux(if2_reg_zbp_taken, if2_next_pc, ic_bp_taken_pc)
+  id_reg_bp_taken    := if2_is_valid_inst && !id_reg_stall && ((ic_bp_taken && !if2_zbp_taken) || (!ic_bp_taken && if2_zbp_taken))
+  id_reg_bp_taken_pc := Mux(ic_zbp_taken, if2_next_pc, ic_bp_taken_pc)
 
-  id_reg_bp_not_taken := if2_is_valid_inst && !id_reg_stall && !ic_bp_taken && if2_reg_zbp_taken
-  id_reg_bp_pc        := if2_pc(ZBTB_INDEX_LEN-1, 0)
-  when (id_reg_bp_not_taken) {
-    ic_zbp(id_reg_bp_pc).en := false.B
-  }
+  id_reg_bp_not_taken := if2_is_valid_inst && !id_reg_stall && !ic_bp_taken && if2_zbp_taken
+  id_reg_bp_pc        := if2_pc
+
+  ic_zbtb.io.inv.en := id_reg_bp_not_taken
+  ic_zbtb.io.inv.pc := id_reg_bp_pc
 
   //**********************************
   // Instruction Decode (ID) Stage
@@ -595,7 +613,7 @@ class Core(
   id_stage.io.in.bits.inst          := if2_inst
   id_stage.io.in.bits.bp_taken      := if2_bp_taken
   id_stage.io.in.bits.pc            := ic_reg_addr_out
-  id_stage.io.in.bits.bp_taken_pc   := Mux(if2_reg_zbp_taken, if2_reg_zbp_taken_pc, ic_bp_taken_pc)
+  id_stage.io.in.bits.bp_taken_pc   := Mux(ic_zbp_taken, ic_zbp_target, ic_bp_taken_pc)
   id_stage.io.in.bits.bp_cnt        := ic_bp_cnt
   map2(id_stage.io.in.bits.inst_id, if2_reg_inst_id)(_ := _)
 
@@ -921,13 +939,9 @@ class Core(
     Cat(!ex1_reg_bp_cnt(0, 0), (ex1_reg_bp_cnt(1) & ex1_reg_bp_cnt(0)).asUInt),
   )
 
-  when (ex1_en && ((ex1_is_cond_br_inst && ex1_is_cond_br) || ex1_is_uncond_br)) {
-    val zbtb_entry = Wire(new ZeroBranchTargetBuffer())
-    zbtb_entry.en     := true.B
-    zbtb_entry.tag    := ex1_reg_pc(ZBTB_TAG_BITS+ZBTB_INDEX_LEN-1, ZBTB_INDEX_LEN)
-    zbtb_entry.target := ex1_taken_pc
-    ic_zbp(ex1_reg_pc(ZBTB_INDEX_LEN-1, 0)) := zbtb_entry
-  }
+  ic_zbtb.io.up.en     := ex1_en && ((ex1_is_cond_br_inst && ex1_is_cond_br) || ex1_is_uncond_br)
+  ic_zbtb.io.up.pc     := ex1_reg_pc
+  ic_zbtb.io.up.target := ex1_taken_pc
 
   ex1_fw_data := ex1_alu_out
 
@@ -1485,8 +1499,8 @@ class Core(
   printf(cf"if2_pc           : 0x${Cat(if2_pc, 0.U(1.W))}%x\n")
   printf(cf"if2_is_valid_inst: ${if2_is_valid_inst}%d\n")
   printf(cf"if2_inst         : 0x${if2_inst}%x\n")
-  printf(cf"if2_reg_zbp_taken: ${if2_reg_zbp_taken}%d\n")
-  printf(cf"if2_reg_zbp_taken: 0x${Cat(if2_reg_zbp_taken_pc, 0.U(1.W))}%x\n")
+  printf(cf"if2_zbp_taken    : ${if2_zbp_taken}%d\n")
+  printf(cf"ic_zbp_target    : 0x${Cat(ic_zbp_target, 0.U(1.W))}%x\n")
   printf(cf"ic_bp_taken      : ${ic_bp_taken}%d\n")
   printf(cf"ic_bp_taken_pc   : 0x${Cat(ic_bp_taken_pc, 0.U(1.W))}%x\n")
   printf(cf"ic_bp_cnt        : 0x${ic_bp_cnt}%x\n")
@@ -1499,7 +1513,7 @@ class Core(
   // printf(cf"id_rs1_data      : 0x${id_rs1_data}%x\n")
   // printf(cf"id_rs2_data      : 0x${id_rs2_data}%x\n")
   // printf(cf"id_wb_addr       : 0x${id_wb_addr}%x\n")
-  printf(cf"id_reg_is_bp_fail: ${id_update_pc_en}%d\n")
+  // printf(cf"id_reg_is_bp_fail: ${id_update_pc_en}%d\n")
   printf(cf"rrd_reg_pc       : 0x${Cat(rrd_reg_pc, 0.U(1.W))}%x\n")
   printf(cf"rrd_reg_is_valid_: ${rrd_reg_is_valid_inst}%d\n")
   printf(cf"rrd_stall        : ${rrd_stall}%d\n")
