@@ -353,6 +353,8 @@ connect_debug_port u_ila_0/probe0 [get_nets [list {io_debugSignals_core_btb_lu_p
 
 connect_debug_port u_ila_0/probe15 [get_nets [list io_debugSignals_core_if2_reg_bp_taken]]
 
+connect_debug_port u_ila_0/probe15 [get_nets [list io_debugSignals_core_id_reg_is_bp_fail]]
+
 create_debug_core u_ila_0 ila
 set_property ALL_PROBE_SAME_MU true [get_debug_cores u_ila_0]
 set_property ALL_PROBE_SAME_MU_CNT 1 [get_debug_cores u_ila_0]
@@ -426,7 +428,7 @@ connect_debug_port u_ila_0/probe14 [get_nets [list io_debugSignals_core_id_reg_b
 create_debug_port u_ila_0 probe
 set_property PROBE_TYPE DATA_AND_TRIGGER [get_debug_ports u_ila_0/probe15]
 set_property port_width 1 [get_debug_ports u_ila_0/probe15]
-connect_debug_port u_ila_0/probe15 [get_nets [list io_debugSignals_core_id_reg_is_bp_fail]]
+connect_debug_port u_ila_0/probe15 [get_nets [list io_debugSignals_core_if2_zbp_taken]]
 create_debug_port u_ila_0 probe
 set_property PROBE_TYPE DATA_AND_TRIGGER [get_debug_ports u_ila_0/probe16]
 set_property port_width 1 [get_debug_ports u_ila_0/probe16]
