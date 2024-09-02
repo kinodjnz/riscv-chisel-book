@@ -58,11 +58,6 @@ class InstructionFetcherOutput(val enable_pipeline_probe: Boolean) extends Bundl
   val inst_id       = Option.when(enable_pipeline_probe)(UInt(INST_ID_LEN.W))
 }
 
-class UpdatePC extends Bundle {
-  val en = Output(Bool())
-  val pc = Output(UInt(PC_LEN.W))
-}
-
 object InstructionDecoderInputIO {
   def apply(enable_pipeline_probe: Boolean): PipelineStageIO[InstructionFetcherOutput] =
     new PipelineStageIO(new InstructionFetcherOutput(enable_pipeline_probe))
@@ -88,7 +83,6 @@ class InstructionDecoderIO(
 ) extends Bundle {
   val in = Flipped(InstructionDecoderInputIO(enable_pipeline_probe))
   val out = Flipped(InstructionDecoderOutputIO(enable_pipeline_probe))
-  val update_pc = new UpdatePC()
   val debug_signals = new InstructionDecoderDebugSignals()
   val pipeline_probe = new InstructionDecoderPipelineProbe(enable_pipeline_probe)
 }
@@ -104,7 +98,6 @@ class InstructionDecoder(
   val id_reg_pc            = RegInit(0.U(PC_LEN.W))
   val id_reg_bp_taken_pc   = RegInit(0.U(PC_LEN.W))
   val id_reg_bp_cnt        = RegInit(0.U(2.W))
-  val id_reg_next_pc       = RegInit(0.U(PC_LEN.W))
   val id_reg_is_bp_fail    = RegInit(false.B)
 
   val id_output_queue = Module(new Queue(new InstructionDecoderOutput(enable_pipeline_probe), 1, pipe = false, flow = true))
@@ -500,16 +493,10 @@ class InstructionDecoder(
   val id_mcause_code = CSR_MCAUSE_CODE_ECALL_M
   // val id_mtval = 0.U(WORD_LEN.W)
 
-  id_reg_next_pc := Mux(id_is_half, id_reg_pc + 1.U(PC_LEN.W), id_reg_pc + 2.U(PC_LEN.W))
-  val id_is_bp_fail = !id_is_j && !id_is_br && id_reg_bp_taken
-  id_reg_is_bp_fail := !io.out.flush && !id_reg_is_bp_fail && id_is_bp_fail
-  io.update_pc.en := id_reg_is_bp_fail /*|| id_reg_bp_taken*/
-  io.update_pc.pc := id_reg_next_pc //Mux(id_reg_is_bp_fail, id_reg_next_pc, id_reg_bp_taken_pc)
-
   io.pipeline_probe.id_valid.foreach(_ := id_reg_is_valid_inst)
   map2(io.pipeline_probe.id_inst_id, id_inst_id)(_ := _)
 
-  id_output_queue.io.enq.valid              := !io.out.flush /* && !id_is_bp_fail && !id_reg_is_bp_fail*/
+  id_output_queue.io.enq.valid              := !io.out.flush
   id_output_queue.io.enq.bits.pc            := id_reg_pc
   id_output_queue.io.enq.bits.op1_sel       := id_m_op1_sel
   id_output_queue.io.enq.bits.op2_sel       := id_m_op2_sel

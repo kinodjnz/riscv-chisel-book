@@ -45,8 +45,8 @@ class CoreDebugSignals extends Bundle {
   val mem3_rvalid       = Output(Bool())
   val rwaddr            = Output(UInt(WORD_LEN.W))
   val ex2_reg_is_br     = Output(Bool())
-  val id_reg_is_bp_fail = Output(Bool())
   val id_reg_bp_taken   = Output(Bool())
+  val if2_zbp_taken     = Output(Bool())
   val ic_state          = Output(UInt(3.W))
 }
 
@@ -288,8 +288,6 @@ class Core(
   // val id_reg_is_bp_fail    = RegInit(true.B) // jump start_address when first time
   // val id_reg_br_pc         = RegInit((start_address >> (WORD_LEN-PC_LEN)).U(PC_LEN.W))
   val id_flush             = Wire(Bool())
-  val id_update_pc_en      = Wire(Bool())
-  val id_update_pc         = Wire(UInt(PC_LEN.W))
   // val id_stall             = Wire(Bool())
   val rrd_stall            = Wire(Bool())
   val ex2_stall            = Wire(Bool())
@@ -556,10 +554,9 @@ class Core(
 
   val if1_jump_addr = MuxCase(ic_zbp_target, Seq(
     ex2_reg_is_br     -> ex2_reg_br_pc,
-    // id_update_pc_en   -> id_update_pc,
     id_reg_bp_taken   -> id_reg_bp_taken_pc
   ))
-  val if1_is_jump = ex2_reg_is_br || /*id_update_pc_en ||*/ id_reg_bp_taken || if2_zbp_taken
+  val if1_is_jump = ex2_reg_is_br || id_reg_bp_taken || if2_zbp_taken
 
   ic_addr_en  := if1_is_jump
   ic_addr     := if1_jump_addr
@@ -576,8 +573,7 @@ class Core(
   val if2_inst = Mux(if2_is_valid_inst, ic_data_out, BUBBLE)
   val if2_bp_taken = if2_is_valid_inst && ic_bp_taken
 
-  // if2_zbp_taken        := !id_reg_stall && if2_is_valid_inst && ic_zbp_taken // FIX timing
-  if2_zbp_taken        := !id_reg_stall && !id_flush && !id_reg_bp_taken && ic_read_rdy && ic_zbp_taken
+  if2_zbp_taken := !id_reg_stall && !id_flush && !id_reg_bp_taken && ic_read_rdy && ic_zbp_taken
 
   val if2_probe_valid_inst = !id_reg_stall && if2_is_valid_inst
   val if2_inst_id = if2_reg_inst_id.map(_ + Mux(if2_probe_valid_inst, 1.U, 0.U))
@@ -619,8 +615,6 @@ class Core(
 
   id_reg_stall    := !id_stage.io.in.ready
   id_flush        := id_stage.io.in.flush
-  id_update_pc_en := id_stage.io.update_pc.en
-  id_update_pc    := id_stage.io.update_pc.pc
 
   map2(io.pipeline_probe, id_stage.io.pipeline_probe.id_valid)(_.id_valid := _)
   map2(io.pipeline_probe, id_stage.io.pipeline_probe.id_inst_id)(_.id_inst_id := _)
@@ -1481,8 +1475,8 @@ class Core(
   io.debug_signal.mem3_rvalid         := mem3_reg_is_valid_load
   io.debug_signal.rwaddr              := ex2_wb_data
   io.debug_signal.ex2_reg_is_br       := ex2_reg_is_br
-  io.debug_signal.id_reg_is_bp_fail   := id_update_pc_en
   io.debug_signal.id_reg_bp_taken     := id_reg_bp_taken
+  io.debug_signal.if2_zbp_taken       := if2_zbp_taken
   io.debug_signal.ic_state            := ic_state.asUInt
 
   //**********************************
@@ -1513,7 +1507,6 @@ class Core(
   // printf(cf"id_rs1_data      : 0x${id_rs1_data}%x\n")
   // printf(cf"id_rs2_data      : 0x${id_rs2_data}%x\n")
   // printf(cf"id_wb_addr       : 0x${id_wb_addr}%x\n")
-  // printf(cf"id_reg_is_bp_fail: ${id_update_pc_en}%d\n")
   printf(cf"rrd_reg_pc       : 0x${Cat(rrd_reg_pc, 0.U(1.W))}%x\n")
   printf(cf"rrd_reg_is_valid_: ${rrd_reg_is_valid_inst}%d\n")
   printf(cf"rrd_stall        : ${rrd_stall}%d\n")
