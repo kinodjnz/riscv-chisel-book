@@ -54,7 +54,6 @@ object ICacheState extends ChiselEnum {
   val Lookup = Value
   val Read = Value
   val WaitingSnoop = Value
-  val RespondSnoop = Value
   val WaitingRead = Value
   val Invalidate2 = Value
 }
@@ -296,16 +295,20 @@ class Memory() extends Module {
   val i_reg_valid_rdata = RegInit(0.U((1 << ICACHE_VALID_DATA_BITS).W))
   val i_reg_cur_tag_index = RegInit(Fill(ICACHE_TAG_BITS+ICACHE_INDEX_BITS, 1.U(1.W)))
   val i_reg_addr_match = RegInit(false.B)
+  val i_reg_next_inst = RegInit(0.U(WORD_LEN.W))
+  val i_reg_sel_next_inst = RegInit(false.B)
 
   val dcache_snoop_en = Wire(Bool())
   val dcache_snoop_addr = Wire(new DCacheAddrBundle())
   val dcache_snoop_status = Wire(DCacheSnoopStatus())
   val dcache_snoop_line = Wire(UInt(CACHE_LINE_LEN.W))
 
-  io.imem.inst := "xdeadbeef".U
+  io.imem.inst := Mux(i_reg_sel_next_inst, i_reg_next_inst, io.icache.rdata) //0.U(WORD_LEN.W)
   io.imem.valid := false.B
   io.cache.ibusy := true.B
   i_reg_next_addr := io.imem.addr.asTypeOf(new ICacheAddrBundle())
+  i_reg_addr_match := false.B
+  i_reg_sel_next_inst := false.B
   dcache_snoop_en := false.B
   dcache_snoop_addr := DontCare
   dram_i_ren := false.B
@@ -328,6 +331,7 @@ class Memory() extends Module {
       io.cache.ibusy := false.B
       val req_addr = io.imem.addr.asTypeOf(new ICacheAddrBundle())
       i_reg_req_addr := req_addr
+      i_reg_addr_match := true.B
       when (io.cache.iinvalidate) {
         io.icache_valid.invalidate := true.B
         io.icache_valid.iaddr := 0.U(1.W)
@@ -345,7 +349,6 @@ class Memory() extends Module {
           icache_state := ICacheState.Prelookup
         }
       }
-      i_reg_addr_match := true.B
     }
     is (ICacheState.Prelookup) {
       i_reg_valid_rdata := io.icache_valid.rdata
@@ -363,7 +366,6 @@ class Memory() extends Module {
       }
     }
     is (ICacheState.Lookup) {
-      io.imem.inst := io.icache.rdata
       when (i_reg_addr_match) {
         io.imem.valid := true.B
       }
@@ -371,17 +373,17 @@ class Memory() extends Module {
       val req_addr = io.imem.addr.asTypeOf(new ICacheAddrBundle())
       i_reg_req_addr := req_addr
       i_reg_addr_match := true.B
+      io.icache_valid.iaddr := 0.U(1.W)
+      io.icache_valid.idata := 0.U((1 << ICACHE_INVALIDATE_DATA_BITS).W)
+      io.icache.raddr := Cat(req_addr.index, req_addr.line_off(CACHE_LINE_BITS-1, 2))
+      io.icache_valid.addr := req_addr.index(ICACHE_INDEX_BITS-1, ICACHE_INVALIDATE_ADDR_BITS)
       when (io.cache.iinvalidate) {
         io.icache_valid.invalidate := true.B
-        io.icache_valid.iaddr := 0.U(1.W)
-        io.icache_valid.idata := 0.U((1 << ICACHE_INVALIDATE_DATA_BITS).W)
         icache_state := ICacheState.Invalidate2
       }.elsewhen (io.imem.en) {
         i_reg_tag := i_tag_array.read(req_addr.index)
         io.icache.ren := true.B
-        io.icache.raddr := Cat(req_addr.index, req_addr.line_off(CACHE_LINE_BITS-1, 2))
         io.icache_valid.ren := true.B
-        io.icache_valid.addr := req_addr.index(ICACHE_INDEX_BITS-1, ICACHE_INVALIDATE_ADDR_BITS)
         when (i_reg_cur_tag_index === Cat(req_addr.tag, req_addr.index)) {
           icache_state := ICacheState.Lookup
         }.otherwise {
@@ -392,59 +394,41 @@ class Memory() extends Module {
       }
     }
     is (ICacheState.WaitingSnoop) {
+      io.icache.waddr := i_reg_req_addr.index
+      io.icache.wdata := dcache_snoop_line
+      io.icache_valid.addr := i_reg_req_addr.index(ICACHE_INDEX_BITS-1, ICACHE_INVALIDATE_ADDR_BITS)
+      val icache_valid_wdata = (i_reg_valid_rdata | (1.U << i_reg_req_addr.index(ICACHE_VALID_DATA_BITS-1, 0)))((1 << ICACHE_VALID_DATA_BITS)-1, 0)
+      io.icache_valid.wdata := icache_valid_wdata
+      i_reg_next_inst := (dcache_snoop_line >> Cat(i_reg_next_addr.line_off(CACHE_LINE_BITS-1, 2), 0.U(5.W)))(WORD_LEN-1, 0)
+      i_reg_sel_next_inst := true.B
+      val i_next_addr = io.imem.addr.asTypeOf(new ICacheAddrBundle())
+      i_reg_addr_match := (i_reg_req_addr.tag(ICACHE_TAG_BITS-1, 0) === i_next_addr.tag(ICACHE_TAG_BITS-1, 0) &&
+          i_reg_req_addr.index === i_next_addr.index &&
+          i_reg_req_addr.line_off(CACHE_LINE_BITS-1, 2) === i_next_addr.line_off(CACHE_LINE_BITS-1, 2))
+      dcache_snoop_addr := i_reg_req_addr.asUInt.asTypeOf(new DCacheAddrBundle())
+      dram_i_addr := Cat(i_reg_req_addr.tag(ICACHE_TAG_BITS-1, 0), i_reg_req_addr.index)
       switch (dcache_snoop_status) {
         is (DCacheSnoopStatus.Busy) {
           dcache_snoop_en := true.B
-          dcache_snoop_addr := i_reg_req_addr.asUInt.asTypeOf(new DCacheAddrBundle())
         }
         is (DCacheSnoopStatus.Found) {
           i_reg_line := dcache_snoop_line
           i_tag_array.write(i_reg_req_addr.index, VecInit(i_reg_req_addr.tag))
           io.icache.wen := true.B
-          io.icache.waddr := i_reg_req_addr.index
-          io.icache.wdata := dcache_snoop_line
           io.icache_valid.ren := true.B
           io.icache_valid.wen := true.B
-          io.icache_valid.addr := i_reg_req_addr.index(ICACHE_INDEX_BITS-1, ICACHE_INVALIDATE_ADDR_BITS)
-          val icache_valid_wdata = (i_reg_valid_rdata | (1.U << i_reg_req_addr.index(ICACHE_VALID_DATA_BITS-1, 0)))((1 << ICACHE_VALID_DATA_BITS)-1, 0)
-          io.icache_valid.wdata := icache_valid_wdata
           i_reg_cur_tag_index := Cat(i_reg_req_addr.tag, i_reg_req_addr.index)
           i_reg_valid_rdata := icache_valid_wdata
-          icache_state := ICacheState.RespondSnoop
+          icache_state := ICacheState.Lookup
         }
         is (DCacheSnoopStatus.NotFound) {
           when (!dram_i_busy) {
             dram_i_ren := true.B
-            dram_i_addr := Cat(i_reg_req_addr.tag(ICACHE_TAG_BITS-1, 0), i_reg_req_addr.index)
             icache_state := ICacheState.WaitingRead
           }.otherwise {
             icache_state := ICacheState.Read
           }
         }
-      }
-    }
-    is (ICacheState.RespondSnoop) {
-      io.imem.inst := (i_reg_line >> Cat(i_reg_next_addr.line_off(CACHE_LINE_BITS-1, 2), 0.U(5.W)))(WORD_LEN-1, 0)
-      when (i_reg_req_addr.tag(ICACHE_TAG_BITS-1, 0) === i_reg_next_addr.tag(ICACHE_TAG_BITS-1, 0) &&
-          i_reg_req_addr.index === i_reg_next_addr.index) {
-        io.imem.valid := true.B
-      }
-      val req_addr = io.imem.addr.asTypeOf(new ICacheAddrBundle())
-      i_reg_req_addr := req_addr
-      i_reg_addr_match := true.B
-      when (io.imem.en) {
-        i_reg_tag := i_tag_array.read(req_addr.index)
-        io.icache.ren := true.B
-        io.icache.raddr := Cat(req_addr.index, req_addr.line_off(CACHE_LINE_BITS-1, 2))
-        io.icache_valid.ren := true.B
-        io.icache_valid.addr := req_addr.index(ICACHE_INDEX_BITS-1, ICACHE_INVALIDATE_ADDR_BITS)
-        when (i_reg_cur_tag_index === Cat(req_addr.tag, req_addr.index)) {
-          icache_state := ICacheState.Lookup
-        }.otherwise {
-          icache_state := ICacheState.Prelookup
-        }
-      }.otherwise {
-        icache_state := ICacheState.Ready
       }
     }
     is (ICacheState.Read) {
@@ -455,25 +439,26 @@ class Memory() extends Module {
       }
     }
     is (ICacheState.WaitingRead) {
+      val line = dram_rdata
+      io.icache.waddr := i_reg_req_addr.index
+      io.icache.wdata := line
+      io.icache_valid.addr := i_reg_req_addr.index(ICACHE_INDEX_BITS-1, ICACHE_INVALIDATE_ADDR_BITS)
+      val icache_valid_wdata = (i_reg_valid_rdata | (1.U << i_reg_req_addr.index(ICACHE_VALID_DATA_BITS-1, 0)))((1 << ICACHE_VALID_DATA_BITS)-1, 0)
+      io.icache_valid.wdata := icache_valid_wdata
+      i_reg_next_inst := (line >> Cat(i_reg_next_addr.line_off(CACHE_LINE_BITS-1, 2), 0.U(5.W)))(WORD_LEN-1, 0)
+      i_reg_sel_next_inst := true.B
+      val i_next_addr = io.imem.addr.asTypeOf(new ICacheAddrBundle())
+      i_reg_addr_match := (i_reg_req_addr.tag(ICACHE_TAG_BITS-1, 0) === i_next_addr.tag(ICACHE_TAG_BITS-1, 0) &&
+          i_reg_req_addr.index === i_next_addr.index &&
+          i_reg_req_addr.line_off(CACHE_LINE_BITS-1, 2) === i_next_addr.line_off(CACHE_LINE_BITS-1, 2))
       when (dram_i_rdata_valid) {
-        val line = dram_rdata
-        io.imem.inst := (line >> Cat(i_reg_next_addr.line_off(CACHE_LINE_BITS-1, 2), 0.U(5.W)))(WORD_LEN-1, 0)
-        when (i_reg_req_addr.tag(ICACHE_TAG_BITS-1, 0) === i_reg_next_addr.tag(ICACHE_TAG_BITS-1, 0) &&
-            i_reg_req_addr.index === i_reg_next_addr.index) {
-          io.imem.valid := true.B
-        }
         i_tag_array.write(i_reg_req_addr.index, VecInit(i_reg_req_addr.tag))
         io.icache.wen := true.B
-        io.icache.waddr := i_reg_req_addr.index
-        io.icache.wdata := line
         io.icache_valid.ren := true.B
         io.icache_valid.wen := true.B
-        io.icache_valid.addr := i_reg_req_addr.index(ICACHE_INDEX_BITS-1, ICACHE_INVALIDATE_ADDR_BITS)
-        val icache_valid_wdata = (i_reg_valid_rdata | (1.U << i_reg_req_addr.index(ICACHE_VALID_DATA_BITS-1, 0)))((1 << ICACHE_VALID_DATA_BITS)-1, 0)
-        io.icache_valid.wdata := icache_valid_wdata
         i_reg_cur_tag_index := Cat(i_reg_req_addr.tag, i_reg_req_addr.index)
         i_reg_valid_rdata := icache_valid_wdata
-        icache_state := ICacheState.Ready
+        icache_state := ICacheState.Lookup
       }
     }
     is (ICacheState.Invalidate2) {
@@ -850,10 +835,12 @@ class Memory() extends Module {
   io.icache_state := icache_state.asUInt
   io.dram_state := reg_dram_state.asUInt
 
-  // printf(cf"io.imem.en      : ${io.imem.en}\n")
-  // printf(cf"io.imem.addr    : 0x${io.imem.addr}%x\n")
-  // printf(cf"io.imem.inst    : 0x${io.imem.inst}%x\n")
-  // printf(cf"io.imem.valid   : ${io.imem.valid}\n")
+  // printf(cf"io.imem.en          : ${io.imem.en}\n")
+  // printf(cf"io.imem.addr        : 0x${io.imem.addr}%x\n")
+  // printf(cf"io.imem.inst        : 0x${io.imem.inst}%x\n")
+  // printf(cf"io.imem.valid       : ${io.imem.valid}\n")
+  // printf(cf"i_reg_addr_match    : ${i_reg_addr_match}\n")
+  // printf(cf"i_reg_sel_next_inst : ${i_reg_sel_next_inst}\n")
   // printf(cf"dcache_snoop_en     : ${dcache_snoop_en}\n")
   // printf(cf"dcache_snoop_addr   : 0x${dcache_snoop_addr.asUInt}%x\n")
   // printf(cf"dcache_snoop_line   : 0x${dcache_snoop_line}%x\n")
