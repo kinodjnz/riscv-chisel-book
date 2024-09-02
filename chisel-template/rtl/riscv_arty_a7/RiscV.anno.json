@@ -3,13 +3,13 @@
     "class":"firrtl.transforms.DedupedResult",
     "original":"~RiscV|DCache",
     "duplicate":"~RiscV|RiscV/dcache1:DCache",
-    "index":0.375
+    "index":0.4
   },
   {
     "class":"firrtl.transforms.DedupedResult",
     "original":"~RiscV|DCache_1",
     "duplicate":"~RiscV|RiscV/dcache2:DCache",
-    "index":0.4166666666666667
+    "index":0.44
   },
   {
     "class":"firrtl.EmitCircuitAnnotation",
@@ -202,6 +202,13 @@
     "sources":[
       "~RiscV|RiscV>io_dram_init_calib_complete",
       "~RiscV|RiscV>io_dram_busy"
+    ]
+  },
+  {
+    "class":"firrtl.transforms.CombinationalPath",
+    "sink":"~RiscV|RiscV>io_debugSignals_core_if2_zbp_taken",
+    "sources":[
+      "~RiscV|RiscV>io_dram_rdata_valid"
     ]
   },
   {
