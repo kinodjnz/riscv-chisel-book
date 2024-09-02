@@ -55,11 +55,10 @@
     "typeName":"fpga.ICacheState",
     "definition":{
       "Read":3,
-      "Invalidate2":7,
+      "Invalidate2":6,
       "Lookup":2,
-      "WaitingRead":6,
+      "WaitingRead":5,
       "WaitingSnoop":4,
-      "RespondSnoop":5,
       "Ready":0,
       "Prelookup":1
     }
@@ -160,13 +159,6 @@
   },
   {
     "class":"firrtl.transforms.CombinationalPath",
-    "sink":"~RiscV|RiscV>io_debugSignals_mem_imem_addr",
-    "sources":[
-      "~RiscV|RiscV>io_dram_rdata_valid"
-    ]
-  },
-  {
-    "class":"firrtl.transforms.CombinationalPath",
     "sink":"~RiscV|RiscV>io_dram_addr",
     "sources":[
       "~RiscV|RiscV>io_dram_init_calib_complete",
@@ -202,13 +194,6 @@
     "sources":[
       "~RiscV|RiscV>io_dram_init_calib_complete",
       "~RiscV|RiscV>io_dram_busy"
-    ]
-  },
-  {
-    "class":"firrtl.transforms.CombinationalPath",
-    "sink":"~RiscV|RiscV>io_debugSignals_core_if2_zbp_taken",
-    "sources":[
-      "~RiscV|RiscV>io_dram_rdata_valid"
     ]
   },
   {

@@ -8123,59 +8123,59 @@ endmodule
 module Memory(
   input          clock,
   input          reset,
-  input          io_imem_en, // @[src/main/scala/fpga/Memory.scala 167:14]
-  input  [31:0]  io_imem_addr, // @[src/main/scala/fpga/Memory.scala 167:14]
-  output [31:0]  io_imem_inst, // @[src/main/scala/fpga/Memory.scala 167:14]
-  output         io_imem_valid, // @[src/main/scala/fpga/Memory.scala 167:14]
-  input          io_cache_iinvalidate, // @[src/main/scala/fpga/Memory.scala 167:14]
-  output         io_cache_ibusy, // @[src/main/scala/fpga/Memory.scala 167:14]
-  input  [31:0]  io_cache_raddr, // @[src/main/scala/fpga/Memory.scala 167:14]
-  output [31:0]  io_cache_rdata, // @[src/main/scala/fpga/Memory.scala 167:14]
-  input          io_cache_ren, // @[src/main/scala/fpga/Memory.scala 167:14]
-  output         io_cache_rvalid, // @[src/main/scala/fpga/Memory.scala 167:14]
-  output         io_cache_rready, // @[src/main/scala/fpga/Memory.scala 167:14]
-  input  [31:0]  io_cache_waddr, // @[src/main/scala/fpga/Memory.scala 167:14]
-  input          io_cache_wen, // @[src/main/scala/fpga/Memory.scala 167:14]
-  output         io_cache_wready, // @[src/main/scala/fpga/Memory.scala 167:14]
-  input  [3:0]   io_cache_wstrb, // @[src/main/scala/fpga/Memory.scala 167:14]
-  input  [31:0]  io_cache_wdata, // @[src/main/scala/fpga/Memory.scala 167:14]
-  output         io_dramPort_ren, // @[src/main/scala/fpga/Memory.scala 167:14]
-  output         io_dramPort_wen, // @[src/main/scala/fpga/Memory.scala 167:14]
-  output [27:0]  io_dramPort_addr, // @[src/main/scala/fpga/Memory.scala 167:14]
-  output [127:0] io_dramPort_wdata, // @[src/main/scala/fpga/Memory.scala 167:14]
-  input          io_dramPort_init_calib_complete, // @[src/main/scala/fpga/Memory.scala 167:14]
-  input  [127:0] io_dramPort_rdata, // @[src/main/scala/fpga/Memory.scala 167:14]
-  input          io_dramPort_rdata_valid, // @[src/main/scala/fpga/Memory.scala 167:14]
-  input          io_dramPort_busy, // @[src/main/scala/fpga/Memory.scala 167:14]
-  output         io_cache_array1_ren, // @[src/main/scala/fpga/Memory.scala 167:14]
-  output         io_cache_array1_wen, // @[src/main/scala/fpga/Memory.scala 167:14]
-  output [31:0]  io_cache_array1_we, // @[src/main/scala/fpga/Memory.scala 167:14]
-  output [6:0]   io_cache_array1_raddr, // @[src/main/scala/fpga/Memory.scala 167:14]
-  output [6:0]   io_cache_array1_waddr, // @[src/main/scala/fpga/Memory.scala 167:14]
-  output [255:0] io_cache_array1_wdata, // @[src/main/scala/fpga/Memory.scala 167:14]
-  input  [255:0] io_cache_array1_rdata, // @[src/main/scala/fpga/Memory.scala 167:14]
-  output         io_cache_array2_ren, // @[src/main/scala/fpga/Memory.scala 167:14]
-  output         io_cache_array2_wen, // @[src/main/scala/fpga/Memory.scala 167:14]
-  output [31:0]  io_cache_array2_we, // @[src/main/scala/fpga/Memory.scala 167:14]
-  output [6:0]   io_cache_array2_raddr, // @[src/main/scala/fpga/Memory.scala 167:14]
-  output [6:0]   io_cache_array2_waddr, // @[src/main/scala/fpga/Memory.scala 167:14]
-  output [255:0] io_cache_array2_wdata, // @[src/main/scala/fpga/Memory.scala 167:14]
-  input  [255:0] io_cache_array2_rdata, // @[src/main/scala/fpga/Memory.scala 167:14]
-  output         io_icache_ren, // @[src/main/scala/fpga/Memory.scala 167:14]
-  output         io_icache_wen, // @[src/main/scala/fpga/Memory.scala 167:14]
-  output [9:0]   io_icache_raddr, // @[src/main/scala/fpga/Memory.scala 167:14]
-  input  [31:0]  io_icache_rdata, // @[src/main/scala/fpga/Memory.scala 167:14]
-  output [6:0]   io_icache_waddr, // @[src/main/scala/fpga/Memory.scala 167:14]
-  output [255:0] io_icache_wdata, // @[src/main/scala/fpga/Memory.scala 167:14]
-  output         io_icache_valid_ren, // @[src/main/scala/fpga/Memory.scala 167:14]
-  output         io_icache_valid_wen, // @[src/main/scala/fpga/Memory.scala 167:14]
-  output         io_icache_valid_invalidate, // @[src/main/scala/fpga/Memory.scala 167:14]
-  output [5:0]   io_icache_valid_addr, // @[src/main/scala/fpga/Memory.scala 167:14]
-  output         io_icache_valid_iaddr, // @[src/main/scala/fpga/Memory.scala 167:14]
-  input  [1:0]   io_icache_valid_rdata, // @[src/main/scala/fpga/Memory.scala 167:14]
-  output [1:0]   io_icache_valid_wdata, // @[src/main/scala/fpga/Memory.scala 167:14]
-  output [2:0]   io_icache_state, // @[src/main/scala/fpga/Memory.scala 167:14]
-  output [2:0]   io_dram_state // @[src/main/scala/fpga/Memory.scala 167:14]
+  input          io_imem_en, // @[src/main/scala/fpga/Memory.scala 166:14]
+  input  [31:0]  io_imem_addr, // @[src/main/scala/fpga/Memory.scala 166:14]
+  output [31:0]  io_imem_inst, // @[src/main/scala/fpga/Memory.scala 166:14]
+  output         io_imem_valid, // @[src/main/scala/fpga/Memory.scala 166:14]
+  input          io_cache_iinvalidate, // @[src/main/scala/fpga/Memory.scala 166:14]
+  output         io_cache_ibusy, // @[src/main/scala/fpga/Memory.scala 166:14]
+  input  [31:0]  io_cache_raddr, // @[src/main/scala/fpga/Memory.scala 166:14]
+  output [31:0]  io_cache_rdata, // @[src/main/scala/fpga/Memory.scala 166:14]
+  input          io_cache_ren, // @[src/main/scala/fpga/Memory.scala 166:14]
+  output         io_cache_rvalid, // @[src/main/scala/fpga/Memory.scala 166:14]
+  output         io_cache_rready, // @[src/main/scala/fpga/Memory.scala 166:14]
+  input  [31:0]  io_cache_waddr, // @[src/main/scala/fpga/Memory.scala 166:14]
+  input          io_cache_wen, // @[src/main/scala/fpga/Memory.scala 166:14]
+  output         io_cache_wready, // @[src/main/scala/fpga/Memory.scala 166:14]
+  input  [3:0]   io_cache_wstrb, // @[src/main/scala/fpga/Memory.scala 166:14]
+  input  [31:0]  io_cache_wdata, // @[src/main/scala/fpga/Memory.scala 166:14]
+  output         io_dramPort_ren, // @[src/main/scala/fpga/Memory.scala 166:14]
+  output         io_dramPort_wen, // @[src/main/scala/fpga/Memory.scala 166:14]
+  output [27:0]  io_dramPort_addr, // @[src/main/scala/fpga/Memory.scala 166:14]
+  output [127:0] io_dramPort_wdata, // @[src/main/scala/fpga/Memory.scala 166:14]
+  input          io_dramPort_init_calib_complete, // @[src/main/scala/fpga/Memory.scala 166:14]
+  input  [127:0] io_dramPort_rdata, // @[src/main/scala/fpga/Memory.scala 166:14]
+  input          io_dramPort_rdata_valid, // @[src/main/scala/fpga/Memory.scala 166:14]
+  input          io_dramPort_busy, // @[src/main/scala/fpga/Memory.scala 166:14]
+  output         io_cache_array1_ren, // @[src/main/scala/fpga/Memory.scala 166:14]
+  output         io_cache_array1_wen, // @[src/main/scala/fpga/Memory.scala 166:14]
+  output [31:0]  io_cache_array1_we, // @[src/main/scala/fpga/Memory.scala 166:14]
+  output [6:0]   io_cache_array1_raddr, // @[src/main/scala/fpga/Memory.scala 166:14]
+  output [6:0]   io_cache_array1_waddr, // @[src/main/scala/fpga/Memory.scala 166:14]
+  output [255:0] io_cache_array1_wdata, // @[src/main/scala/fpga/Memory.scala 166:14]
+  input  [255:0] io_cache_array1_rdata, // @[src/main/scala/fpga/Memory.scala 166:14]
+  output         io_cache_array2_ren, // @[src/main/scala/fpga/Memory.scala 166:14]
+  output         io_cache_array2_wen, // @[src/main/scala/fpga/Memory.scala 166:14]
+  output [31:0]  io_cache_array2_we, // @[src/main/scala/fpga/Memory.scala 166:14]
+  output [6:0]   io_cache_array2_raddr, // @[src/main/scala/fpga/Memory.scala 166:14]
+  output [6:0]   io_cache_array2_waddr, // @[src/main/scala/fpga/Memory.scala 166:14]
+  output [255:0] io_cache_array2_wdata, // @[src/main/scala/fpga/Memory.scala 166:14]
+  input  [255:0] io_cache_array2_rdata, // @[src/main/scala/fpga/Memory.scala 166:14]
+  output         io_icache_ren, // @[src/main/scala/fpga/Memory.scala 166:14]
+  output         io_icache_wen, // @[src/main/scala/fpga/Memory.scala 166:14]
+  output [9:0]   io_icache_raddr, // @[src/main/scala/fpga/Memory.scala 166:14]
+  input  [31:0]  io_icache_rdata, // @[src/main/scala/fpga/Memory.scala 166:14]
+  output [6:0]   io_icache_waddr, // @[src/main/scala/fpga/Memory.scala 166:14]
+  output [255:0] io_icache_wdata, // @[src/main/scala/fpga/Memory.scala 166:14]
+  output         io_icache_valid_ren, // @[src/main/scala/fpga/Memory.scala 166:14]
+  output         io_icache_valid_wen, // @[src/main/scala/fpga/Memory.scala 166:14]
+  output         io_icache_valid_invalidate, // @[src/main/scala/fpga/Memory.scala 166:14]
+  output [5:0]   io_icache_valid_addr, // @[src/main/scala/fpga/Memory.scala 166:14]
+  output         io_icache_valid_iaddr, // @[src/main/scala/fpga/Memory.scala 166:14]
+  input  [1:0]   io_icache_valid_rdata, // @[src/main/scala/fpga/Memory.scala 166:14]
+  output [1:0]   io_icache_valid_wdata, // @[src/main/scala/fpga/Memory.scala 166:14]
+  output [2:0]   io_icache_state, // @[src/main/scala/fpga/Memory.scala 166:14]
+  output [2:0]   io_dram_state // @[src/main/scala/fpga/Memory.scala 166:14]
 );
 `ifdef RANDOMIZE_MEM_INIT
   reg [31:0] _RAND_0;
@@ -8204,7 +8204,7 @@ module Memory(
   reg [31:0] _RAND_21;
   reg [255:0] _RAND_22;
   reg [31:0] _RAND_23;
-  reg [255:0] _RAND_24;
+  reg [31:0] _RAND_24;
   reg [31:0] _RAND_25;
   reg [31:0] _RAND_26;
   reg [31:0] _RAND_27;
@@ -8215,1328 +8215,1282 @@ module Memory(
   reg [31:0] _RAND_32;
   reg [31:0] _RAND_33;
   reg [31:0] _RAND_34;
-  reg [31:0] _RAND_35;
 `endif // RANDOMIZE_REG_INIT
-  reg [15:0] i_tag_array_0 [0:127]; // @[src/main/scala/fpga/Memory.scala 289:24]
-  wire  i_tag_array_0_MPORT_en; // @[src/main/scala/fpga/Memory.scala 289:24]
-  wire [6:0] i_tag_array_0_MPORT_addr; // @[src/main/scala/fpga/Memory.scala 289:24]
-  wire [15:0] i_tag_array_0_MPORT_data; // @[src/main/scala/fpga/Memory.scala 289:24]
-  wire  i_tag_array_0_MPORT_1_en; // @[src/main/scala/fpga/Memory.scala 289:24]
-  wire [6:0] i_tag_array_0_MPORT_1_addr; // @[src/main/scala/fpga/Memory.scala 289:24]
-  wire [15:0] i_tag_array_0_MPORT_1_data; // @[src/main/scala/fpga/Memory.scala 289:24]
-  wire  i_tag_array_0_MPORT_3_en; // @[src/main/scala/fpga/Memory.scala 289:24]
-  wire [6:0] i_tag_array_0_MPORT_3_addr; // @[src/main/scala/fpga/Memory.scala 289:24]
-  wire [15:0] i_tag_array_0_MPORT_3_data; // @[src/main/scala/fpga/Memory.scala 289:24]
-  wire [15:0] i_tag_array_0_MPORT_2_data; // @[src/main/scala/fpga/Memory.scala 289:24]
-  wire [6:0] i_tag_array_0_MPORT_2_addr; // @[src/main/scala/fpga/Memory.scala 289:24]
-  wire  i_tag_array_0_MPORT_2_mask; // @[src/main/scala/fpga/Memory.scala 289:24]
-  wire  i_tag_array_0_MPORT_2_en; // @[src/main/scala/fpga/Memory.scala 289:24]
-  wire [15:0] i_tag_array_0_MPORT_4_data; // @[src/main/scala/fpga/Memory.scala 289:24]
-  wire [6:0] i_tag_array_0_MPORT_4_addr; // @[src/main/scala/fpga/Memory.scala 289:24]
-  wire  i_tag_array_0_MPORT_4_mask; // @[src/main/scala/fpga/Memory.scala 289:24]
-  wire  i_tag_array_0_MPORT_4_en; // @[src/main/scala/fpga/Memory.scala 289:24]
-  reg [15:0] tag_array_0 [0:127]; // @[src/main/scala/fpga/Memory.scala 501:22]
-  wire  tag_array_0_MPORT_5_en; // @[src/main/scala/fpga/Memory.scala 501:22]
-  wire [6:0] tag_array_0_MPORT_5_addr; // @[src/main/scala/fpga/Memory.scala 501:22]
-  wire [15:0] tag_array_0_MPORT_5_data; // @[src/main/scala/fpga/Memory.scala 501:22]
-  wire  tag_array_0_MPORT_6_en; // @[src/main/scala/fpga/Memory.scala 501:22]
-  wire [6:0] tag_array_0_MPORT_6_addr; // @[src/main/scala/fpga/Memory.scala 501:22]
-  wire [15:0] tag_array_0_MPORT_6_data; // @[src/main/scala/fpga/Memory.scala 501:22]
-  wire  tag_array_0_MPORT_7_en; // @[src/main/scala/fpga/Memory.scala 501:22]
-  wire [6:0] tag_array_0_MPORT_7_addr; // @[src/main/scala/fpga/Memory.scala 501:22]
-  wire [15:0] tag_array_0_MPORT_7_data; // @[src/main/scala/fpga/Memory.scala 501:22]
-  wire  tag_array_0_MPORT_8_en; // @[src/main/scala/fpga/Memory.scala 501:22]
-  wire [6:0] tag_array_0_MPORT_8_addr; // @[src/main/scala/fpga/Memory.scala 501:22]
-  wire [15:0] tag_array_0_MPORT_8_data; // @[src/main/scala/fpga/Memory.scala 501:22]
-  wire  tag_array_0_MPORT_11_en; // @[src/main/scala/fpga/Memory.scala 501:22]
-  wire [6:0] tag_array_0_MPORT_11_addr; // @[src/main/scala/fpga/Memory.scala 501:22]
-  wire [15:0] tag_array_0_MPORT_11_data; // @[src/main/scala/fpga/Memory.scala 501:22]
-  wire  tag_array_0_MPORT_12_en; // @[src/main/scala/fpga/Memory.scala 501:22]
-  wire [6:0] tag_array_0_MPORT_12_addr; // @[src/main/scala/fpga/Memory.scala 501:22]
-  wire [15:0] tag_array_0_MPORT_12_data; // @[src/main/scala/fpga/Memory.scala 501:22]
-  wire [15:0] tag_array_0_MPORT_13_data; // @[src/main/scala/fpga/Memory.scala 501:22]
-  wire [6:0] tag_array_0_MPORT_13_addr; // @[src/main/scala/fpga/Memory.scala 501:22]
-  wire  tag_array_0_MPORT_13_mask; // @[src/main/scala/fpga/Memory.scala 501:22]
-  wire  tag_array_0_MPORT_13_en; // @[src/main/scala/fpga/Memory.scala 501:22]
-  wire [15:0] tag_array_0_MPORT_15_data; // @[src/main/scala/fpga/Memory.scala 501:22]
-  wire [6:0] tag_array_0_MPORT_15_addr; // @[src/main/scala/fpga/Memory.scala 501:22]
-  wire  tag_array_0_MPORT_15_mask; // @[src/main/scala/fpga/Memory.scala 501:22]
-  wire  tag_array_0_MPORT_15_en; // @[src/main/scala/fpga/Memory.scala 501:22]
-  wire [15:0] tag_array_0_MPORT_17_data; // @[src/main/scala/fpga/Memory.scala 501:22]
-  wire [6:0] tag_array_0_MPORT_17_addr; // @[src/main/scala/fpga/Memory.scala 501:22]
-  wire  tag_array_0_MPORT_17_mask; // @[src/main/scala/fpga/Memory.scala 501:22]
-  wire  tag_array_0_MPORT_17_en; // @[src/main/scala/fpga/Memory.scala 501:22]
-  wire [15:0] tag_array_0_MPORT_19_data; // @[src/main/scala/fpga/Memory.scala 501:22]
-  wire [6:0] tag_array_0_MPORT_19_addr; // @[src/main/scala/fpga/Memory.scala 501:22]
-  wire  tag_array_0_MPORT_19_mask; // @[src/main/scala/fpga/Memory.scala 501:22]
-  wire  tag_array_0_MPORT_19_en; // @[src/main/scala/fpga/Memory.scala 501:22]
-  reg [15:0] tag_array_1 [0:127]; // @[src/main/scala/fpga/Memory.scala 501:22]
-  wire  tag_array_1_MPORT_5_en; // @[src/main/scala/fpga/Memory.scala 501:22]
-  wire [6:0] tag_array_1_MPORT_5_addr; // @[src/main/scala/fpga/Memory.scala 501:22]
-  wire [15:0] tag_array_1_MPORT_5_data; // @[src/main/scala/fpga/Memory.scala 501:22]
-  wire  tag_array_1_MPORT_6_en; // @[src/main/scala/fpga/Memory.scala 501:22]
-  wire [6:0] tag_array_1_MPORT_6_addr; // @[src/main/scala/fpga/Memory.scala 501:22]
-  wire [15:0] tag_array_1_MPORT_6_data; // @[src/main/scala/fpga/Memory.scala 501:22]
-  wire  tag_array_1_MPORT_7_en; // @[src/main/scala/fpga/Memory.scala 501:22]
-  wire [6:0] tag_array_1_MPORT_7_addr; // @[src/main/scala/fpga/Memory.scala 501:22]
-  wire [15:0] tag_array_1_MPORT_7_data; // @[src/main/scala/fpga/Memory.scala 501:22]
-  wire  tag_array_1_MPORT_8_en; // @[src/main/scala/fpga/Memory.scala 501:22]
-  wire [6:0] tag_array_1_MPORT_8_addr; // @[src/main/scala/fpga/Memory.scala 501:22]
-  wire [15:0] tag_array_1_MPORT_8_data; // @[src/main/scala/fpga/Memory.scala 501:22]
-  wire  tag_array_1_MPORT_11_en; // @[src/main/scala/fpga/Memory.scala 501:22]
-  wire [6:0] tag_array_1_MPORT_11_addr; // @[src/main/scala/fpga/Memory.scala 501:22]
-  wire [15:0] tag_array_1_MPORT_11_data; // @[src/main/scala/fpga/Memory.scala 501:22]
-  wire  tag_array_1_MPORT_12_en; // @[src/main/scala/fpga/Memory.scala 501:22]
-  wire [6:0] tag_array_1_MPORT_12_addr; // @[src/main/scala/fpga/Memory.scala 501:22]
-  wire [15:0] tag_array_1_MPORT_12_data; // @[src/main/scala/fpga/Memory.scala 501:22]
-  wire [15:0] tag_array_1_MPORT_13_data; // @[src/main/scala/fpga/Memory.scala 501:22]
-  wire [6:0] tag_array_1_MPORT_13_addr; // @[src/main/scala/fpga/Memory.scala 501:22]
-  wire  tag_array_1_MPORT_13_mask; // @[src/main/scala/fpga/Memory.scala 501:22]
-  wire  tag_array_1_MPORT_13_en; // @[src/main/scala/fpga/Memory.scala 501:22]
-  wire [15:0] tag_array_1_MPORT_15_data; // @[src/main/scala/fpga/Memory.scala 501:22]
-  wire [6:0] tag_array_1_MPORT_15_addr; // @[src/main/scala/fpga/Memory.scala 501:22]
-  wire  tag_array_1_MPORT_15_mask; // @[src/main/scala/fpga/Memory.scala 501:22]
-  wire  tag_array_1_MPORT_15_en; // @[src/main/scala/fpga/Memory.scala 501:22]
-  wire [15:0] tag_array_1_MPORT_17_data; // @[src/main/scala/fpga/Memory.scala 501:22]
-  wire [6:0] tag_array_1_MPORT_17_addr; // @[src/main/scala/fpga/Memory.scala 501:22]
-  wire  tag_array_1_MPORT_17_mask; // @[src/main/scala/fpga/Memory.scala 501:22]
-  wire  tag_array_1_MPORT_17_en; // @[src/main/scala/fpga/Memory.scala 501:22]
-  wire [15:0] tag_array_1_MPORT_19_data; // @[src/main/scala/fpga/Memory.scala 501:22]
-  wire [6:0] tag_array_1_MPORT_19_addr; // @[src/main/scala/fpga/Memory.scala 501:22]
-  wire  tag_array_1_MPORT_19_mask; // @[src/main/scala/fpga/Memory.scala 501:22]
-  wire  tag_array_1_MPORT_19_en; // @[src/main/scala/fpga/Memory.scala 501:22]
-  reg  lru_array_way_hot [0:127]; // @[src/main/scala/fpga/Memory.scala 502:22]
-  wire  lru_array_way_hot_reg_lru_MPORT_en; // @[src/main/scala/fpga/Memory.scala 502:22]
-  wire [6:0] lru_array_way_hot_reg_lru_MPORT_addr; // @[src/main/scala/fpga/Memory.scala 502:22]
-  wire  lru_array_way_hot_reg_lru_MPORT_data; // @[src/main/scala/fpga/Memory.scala 502:22]
-  wire  lru_array_way_hot_reg_lru_MPORT_1_en; // @[src/main/scala/fpga/Memory.scala 502:22]
-  wire [6:0] lru_array_way_hot_reg_lru_MPORT_1_addr; // @[src/main/scala/fpga/Memory.scala 502:22]
-  wire  lru_array_way_hot_reg_lru_MPORT_1_data; // @[src/main/scala/fpga/Memory.scala 502:22]
-  wire  lru_array_way_hot_reg_lru_MPORT_2_en; // @[src/main/scala/fpga/Memory.scala 502:22]
-  wire [6:0] lru_array_way_hot_reg_lru_MPORT_2_addr; // @[src/main/scala/fpga/Memory.scala 502:22]
-  wire  lru_array_way_hot_reg_lru_MPORT_2_data; // @[src/main/scala/fpga/Memory.scala 502:22]
-  wire  lru_array_way_hot_MPORT_9_data; // @[src/main/scala/fpga/Memory.scala 502:22]
-  wire [6:0] lru_array_way_hot_MPORT_9_addr; // @[src/main/scala/fpga/Memory.scala 502:22]
-  wire  lru_array_way_hot_MPORT_9_mask; // @[src/main/scala/fpga/Memory.scala 502:22]
-  wire  lru_array_way_hot_MPORT_9_en; // @[src/main/scala/fpga/Memory.scala 502:22]
-  wire  lru_array_way_hot_MPORT_10_data; // @[src/main/scala/fpga/Memory.scala 502:22]
-  wire [6:0] lru_array_way_hot_MPORT_10_addr; // @[src/main/scala/fpga/Memory.scala 502:22]
-  wire  lru_array_way_hot_MPORT_10_mask; // @[src/main/scala/fpga/Memory.scala 502:22]
-  wire  lru_array_way_hot_MPORT_10_en; // @[src/main/scala/fpga/Memory.scala 502:22]
-  wire  lru_array_way_hot_MPORT_14_data; // @[src/main/scala/fpga/Memory.scala 502:22]
-  wire [6:0] lru_array_way_hot_MPORT_14_addr; // @[src/main/scala/fpga/Memory.scala 502:22]
-  wire  lru_array_way_hot_MPORT_14_mask; // @[src/main/scala/fpga/Memory.scala 502:22]
-  wire  lru_array_way_hot_MPORT_14_en; // @[src/main/scala/fpga/Memory.scala 502:22]
-  wire  lru_array_way_hot_MPORT_16_data; // @[src/main/scala/fpga/Memory.scala 502:22]
-  wire [6:0] lru_array_way_hot_MPORT_16_addr; // @[src/main/scala/fpga/Memory.scala 502:22]
-  wire  lru_array_way_hot_MPORT_16_mask; // @[src/main/scala/fpga/Memory.scala 502:22]
-  wire  lru_array_way_hot_MPORT_16_en; // @[src/main/scala/fpga/Memory.scala 502:22]
-  wire  lru_array_way_hot_MPORT_18_data; // @[src/main/scala/fpga/Memory.scala 502:22]
-  wire [6:0] lru_array_way_hot_MPORT_18_addr; // @[src/main/scala/fpga/Memory.scala 502:22]
-  wire  lru_array_way_hot_MPORT_18_mask; // @[src/main/scala/fpga/Memory.scala 502:22]
-  wire  lru_array_way_hot_MPORT_18_en; // @[src/main/scala/fpga/Memory.scala 502:22]
-  wire  lru_array_way_hot_MPORT_20_data; // @[src/main/scala/fpga/Memory.scala 502:22]
-  wire [6:0] lru_array_way_hot_MPORT_20_addr; // @[src/main/scala/fpga/Memory.scala 502:22]
-  wire  lru_array_way_hot_MPORT_20_mask; // @[src/main/scala/fpga/Memory.scala 502:22]
-  wire  lru_array_way_hot_MPORT_20_en; // @[src/main/scala/fpga/Memory.scala 502:22]
-  reg  lru_array_dirty1 [0:127]; // @[src/main/scala/fpga/Memory.scala 502:22]
-  wire  lru_array_dirty1_reg_lru_MPORT_en; // @[src/main/scala/fpga/Memory.scala 502:22]
-  wire [6:0] lru_array_dirty1_reg_lru_MPORT_addr; // @[src/main/scala/fpga/Memory.scala 502:22]
-  wire  lru_array_dirty1_reg_lru_MPORT_data; // @[src/main/scala/fpga/Memory.scala 502:22]
-  wire  lru_array_dirty1_reg_lru_MPORT_1_en; // @[src/main/scala/fpga/Memory.scala 502:22]
-  wire [6:0] lru_array_dirty1_reg_lru_MPORT_1_addr; // @[src/main/scala/fpga/Memory.scala 502:22]
-  wire  lru_array_dirty1_reg_lru_MPORT_1_data; // @[src/main/scala/fpga/Memory.scala 502:22]
-  wire  lru_array_dirty1_reg_lru_MPORT_2_en; // @[src/main/scala/fpga/Memory.scala 502:22]
-  wire [6:0] lru_array_dirty1_reg_lru_MPORT_2_addr; // @[src/main/scala/fpga/Memory.scala 502:22]
-  wire  lru_array_dirty1_reg_lru_MPORT_2_data; // @[src/main/scala/fpga/Memory.scala 502:22]
-  wire  lru_array_dirty1_MPORT_9_data; // @[src/main/scala/fpga/Memory.scala 502:22]
-  wire [6:0] lru_array_dirty1_MPORT_9_addr; // @[src/main/scala/fpga/Memory.scala 502:22]
-  wire  lru_array_dirty1_MPORT_9_mask; // @[src/main/scala/fpga/Memory.scala 502:22]
-  wire  lru_array_dirty1_MPORT_9_en; // @[src/main/scala/fpga/Memory.scala 502:22]
-  wire  lru_array_dirty1_MPORT_10_data; // @[src/main/scala/fpga/Memory.scala 502:22]
-  wire [6:0] lru_array_dirty1_MPORT_10_addr; // @[src/main/scala/fpga/Memory.scala 502:22]
-  wire  lru_array_dirty1_MPORT_10_mask; // @[src/main/scala/fpga/Memory.scala 502:22]
-  wire  lru_array_dirty1_MPORT_10_en; // @[src/main/scala/fpga/Memory.scala 502:22]
-  wire  lru_array_dirty1_MPORT_14_data; // @[src/main/scala/fpga/Memory.scala 502:22]
-  wire [6:0] lru_array_dirty1_MPORT_14_addr; // @[src/main/scala/fpga/Memory.scala 502:22]
-  wire  lru_array_dirty1_MPORT_14_mask; // @[src/main/scala/fpga/Memory.scala 502:22]
-  wire  lru_array_dirty1_MPORT_14_en; // @[src/main/scala/fpga/Memory.scala 502:22]
-  wire  lru_array_dirty1_MPORT_16_data; // @[src/main/scala/fpga/Memory.scala 502:22]
-  wire [6:0] lru_array_dirty1_MPORT_16_addr; // @[src/main/scala/fpga/Memory.scala 502:22]
-  wire  lru_array_dirty1_MPORT_16_mask; // @[src/main/scala/fpga/Memory.scala 502:22]
-  wire  lru_array_dirty1_MPORT_16_en; // @[src/main/scala/fpga/Memory.scala 502:22]
-  wire  lru_array_dirty1_MPORT_18_data; // @[src/main/scala/fpga/Memory.scala 502:22]
-  wire [6:0] lru_array_dirty1_MPORT_18_addr; // @[src/main/scala/fpga/Memory.scala 502:22]
-  wire  lru_array_dirty1_MPORT_18_mask; // @[src/main/scala/fpga/Memory.scala 502:22]
-  wire  lru_array_dirty1_MPORT_18_en; // @[src/main/scala/fpga/Memory.scala 502:22]
-  wire  lru_array_dirty1_MPORT_20_data; // @[src/main/scala/fpga/Memory.scala 502:22]
-  wire [6:0] lru_array_dirty1_MPORT_20_addr; // @[src/main/scala/fpga/Memory.scala 502:22]
-  wire  lru_array_dirty1_MPORT_20_mask; // @[src/main/scala/fpga/Memory.scala 502:22]
-  wire  lru_array_dirty1_MPORT_20_en; // @[src/main/scala/fpga/Memory.scala 502:22]
-  reg  lru_array_dirty2 [0:127]; // @[src/main/scala/fpga/Memory.scala 502:22]
-  wire  lru_array_dirty2_reg_lru_MPORT_en; // @[src/main/scala/fpga/Memory.scala 502:22]
-  wire [6:0] lru_array_dirty2_reg_lru_MPORT_addr; // @[src/main/scala/fpga/Memory.scala 502:22]
-  wire  lru_array_dirty2_reg_lru_MPORT_data; // @[src/main/scala/fpga/Memory.scala 502:22]
-  wire  lru_array_dirty2_reg_lru_MPORT_1_en; // @[src/main/scala/fpga/Memory.scala 502:22]
-  wire [6:0] lru_array_dirty2_reg_lru_MPORT_1_addr; // @[src/main/scala/fpga/Memory.scala 502:22]
-  wire  lru_array_dirty2_reg_lru_MPORT_1_data; // @[src/main/scala/fpga/Memory.scala 502:22]
-  wire  lru_array_dirty2_reg_lru_MPORT_2_en; // @[src/main/scala/fpga/Memory.scala 502:22]
-  wire [6:0] lru_array_dirty2_reg_lru_MPORT_2_addr; // @[src/main/scala/fpga/Memory.scala 502:22]
-  wire  lru_array_dirty2_reg_lru_MPORT_2_data; // @[src/main/scala/fpga/Memory.scala 502:22]
-  wire  lru_array_dirty2_MPORT_9_data; // @[src/main/scala/fpga/Memory.scala 502:22]
-  wire [6:0] lru_array_dirty2_MPORT_9_addr; // @[src/main/scala/fpga/Memory.scala 502:22]
-  wire  lru_array_dirty2_MPORT_9_mask; // @[src/main/scala/fpga/Memory.scala 502:22]
-  wire  lru_array_dirty2_MPORT_9_en; // @[src/main/scala/fpga/Memory.scala 502:22]
-  wire  lru_array_dirty2_MPORT_10_data; // @[src/main/scala/fpga/Memory.scala 502:22]
-  wire [6:0] lru_array_dirty2_MPORT_10_addr; // @[src/main/scala/fpga/Memory.scala 502:22]
-  wire  lru_array_dirty2_MPORT_10_mask; // @[src/main/scala/fpga/Memory.scala 502:22]
-  wire  lru_array_dirty2_MPORT_10_en; // @[src/main/scala/fpga/Memory.scala 502:22]
-  wire  lru_array_dirty2_MPORT_14_data; // @[src/main/scala/fpga/Memory.scala 502:22]
-  wire [6:0] lru_array_dirty2_MPORT_14_addr; // @[src/main/scala/fpga/Memory.scala 502:22]
-  wire  lru_array_dirty2_MPORT_14_mask; // @[src/main/scala/fpga/Memory.scala 502:22]
-  wire  lru_array_dirty2_MPORT_14_en; // @[src/main/scala/fpga/Memory.scala 502:22]
-  wire  lru_array_dirty2_MPORT_16_data; // @[src/main/scala/fpga/Memory.scala 502:22]
-  wire [6:0] lru_array_dirty2_MPORT_16_addr; // @[src/main/scala/fpga/Memory.scala 502:22]
-  wire  lru_array_dirty2_MPORT_16_mask; // @[src/main/scala/fpga/Memory.scala 502:22]
-  wire  lru_array_dirty2_MPORT_16_en; // @[src/main/scala/fpga/Memory.scala 502:22]
-  wire  lru_array_dirty2_MPORT_18_data; // @[src/main/scala/fpga/Memory.scala 502:22]
-  wire [6:0] lru_array_dirty2_MPORT_18_addr; // @[src/main/scala/fpga/Memory.scala 502:22]
-  wire  lru_array_dirty2_MPORT_18_mask; // @[src/main/scala/fpga/Memory.scala 502:22]
-  wire  lru_array_dirty2_MPORT_18_en; // @[src/main/scala/fpga/Memory.scala 502:22]
-  wire  lru_array_dirty2_MPORT_20_data; // @[src/main/scala/fpga/Memory.scala 502:22]
-  wire [6:0] lru_array_dirty2_MPORT_20_addr; // @[src/main/scala/fpga/Memory.scala 502:22]
-  wire  lru_array_dirty2_MPORT_20_mask; // @[src/main/scala/fpga/Memory.scala 502:22]
-  wire  lru_array_dirty2_MPORT_20_en; // @[src/main/scala/fpga/Memory.scala 502:22]
-  reg [2:0] reg_dram_state; // @[src/main/scala/fpga/Memory.scala 191:31]
-  reg [26:0] reg_dram_addr; // @[src/main/scala/fpga/Memory.scala 192:31]
-  reg [127:0] reg_dram_wdata; // @[src/main/scala/fpga/Memory.scala 193:31]
-  reg [127:0] reg_dram_rdata; // @[src/main/scala/fpga/Memory.scala 194:31]
-  reg  reg_dram_di; // @[src/main/scala/fpga/Memory.scala 195:28]
-  wire  _T_3 = ~io_dramPort_busy; // @[src/main/scala/fpga/Memory.scala 211:48]
-  reg [2:0] icache_state; // @[src/main/scala/fpga/Memory.scala 291:29]
-  wire  _T_25 = 3'h0 == icache_state; // @[src/main/scala/fpga/Memory.scala 326:25]
-  reg [2:0] dcache_state; // @[src/main/scala/fpga/Memory.scala 504:29]
-  wire  _T_83 = 3'h0 == dcache_state; // @[src/main/scala/fpga/Memory.scala 571:25]
-  reg [15:0] reg_tag_0; // @[src/main/scala/fpga/Memory.scala 505:24]
-  reg [15:0] reg_req_addr_tag; // @[src/main/scala/fpga/Memory.scala 511:29]
-  wire  _T_88 = reg_tag_0 == reg_req_addr_tag; // @[src/main/scala/fpga/Memory.scala 607:24]
-  reg [15:0] reg_tag_1; // @[src/main/scala/fpga/Memory.scala 505:24]
-  wire  _T_89 = reg_tag_1 == reg_req_addr_tag; // @[src/main/scala/fpga/Memory.scala 610:30]
-  wire [1:0] _GEN_472 = reg_tag_1 == reg_req_addr_tag ? 2'h1 : 2'h2; // @[src/main/scala/fpga/Memory.scala 610:52 612:29 614:29]
-  wire [1:0] _GEN_474 = reg_tag_0 == reg_req_addr_tag ? 2'h1 : _GEN_472; // @[src/main/scala/fpga/Memory.scala 607:46 609:29]
-  wire [1:0] _GEN_1075 = 3'h1 == dcache_state ? _GEN_474 : 2'h0; // @[src/main/scala/fpga/Memory.scala 540:23 571:25]
-  wire [1:0] dcache_snoop_status = 3'h0 == dcache_state ? 2'h0 : _GEN_1075; // @[src/main/scala/fpga/Memory.scala 540:23 571:25]
-  wire  _T_47 = 2'h0 == dcache_snoop_status; // @[src/main/scala/fpga/Memory.scala 395:36]
-  wire  _GEN_24 = io_dramPort_init_calib_complete & ~io_dramPort_busy ? 1'h0 : 1'h1; // @[src/main/scala/fpga/Memory.scala 204:20 211:67 212:21]
-  wire  dram_i_busy = 3'h0 == reg_dram_state ? _GEN_24 : 1'h1; // @[src/main/scala/fpga/Memory.scala 204:20 209:27]
-  wire  _T_54 = ~dram_i_busy; // @[src/main/scala/fpga/Memory.scala 416:17]
-  reg [15:0] i_reg_req_addr_tag; // @[src/main/scala/fpga/Memory.scala 294:31]
-  reg [6:0] i_reg_req_addr_index; // @[src/main/scala/fpga/Memory.scala 294:31]
-  wire [22:0] _dram_i_addr_T_1 = {i_reg_req_addr_tag,i_reg_req_addr_index}; // @[src/main/scala/fpga/Memory.scala 418:31]
-  wire [22:0] _GEN_290 = 3'h4 == icache_state ? _dram_i_addr_T_1 : _dram_i_addr_T_1; // @[src/main/scala/fpga/Memory.scala 326:25]
-  wire [26:0] dram_i_addr = {{4'd0}, _GEN_290}; // @[src/main/scala/fpga/Memory.scala 182:26]
-  wire [30:0] _io_dramPort_addr_T = {dram_i_addr,4'h0}; // @[src/main/scala/fpga/Memory.scala 215:34]
-  wire  _T_95 = _T_88 | _T_89; // @[src/main/scala/fpga/Memory.scala 626:45]
-  reg  reg_lru_way_hot; // @[src/main/scala/fpga/Memory.scala 510:24]
-  reg  reg_lru_dirty1; // @[src/main/scala/fpga/Memory.scala 510:24]
-  reg  reg_lru_dirty2; // @[src/main/scala/fpga/Memory.scala 510:24]
-  wire  _T_101 = reg_lru_way_hot & reg_lru_dirty1 | ~reg_lru_way_hot & reg_lru_dirty2; // @[src/main/scala/fpga/Memory.scala 667:63]
-  reg [6:0] reg_req_addr_index; // @[src/main/scala/fpga/Memory.scala 511:29]
-  wire [22:0] _dram_d_addr_T_1 = {reg_tag_0,reg_req_addr_index}; // @[src/main/scala/fpga/Memory.scala 675:29]
-  wire [22:0] _dram_d_addr_T_3 = {reg_tag_1,reg_req_addr_index}; // @[src/main/scala/fpga/Memory.scala 678:29]
-  wire [22:0] _GEN_490 = reg_lru_way_hot ? _dram_d_addr_T_1 : _dram_d_addr_T_3; // @[src/main/scala/fpga/Memory.scala 674:40 675:23 678:23]
-  wire [22:0] _dram_d_addr_T_5 = {reg_req_addr_tag,reg_req_addr_index}; // @[src/main/scala/fpga/Memory.scala 688:27]
-  wire [22:0] _GEN_494 = reg_lru_way_hot & reg_lru_dirty1 | ~reg_lru_way_hot & reg_lru_dirty2 ? _GEN_490 :
-    _dram_d_addr_T_5; // @[src/main/scala/fpga/Memory.scala 667:111 688:21]
-  wire  _GEN_155 = 2'h1 == dcache_snoop_status ? 1'h0 : 2'h2 == dcache_snoop_status & _T_54; // @[src/main/scala/fpga/Memory.scala 311:14 395:36]
-  wire  _GEN_173 = 2'h0 == dcache_snoop_status ? 1'h0 : _GEN_155; // @[src/main/scala/fpga/Memory.scala 311:14 395:36]
-  wire  _GEN_255 = 3'h5 == icache_state ? 1'h0 : 3'h3 == icache_state & _T_54; // @[src/main/scala/fpga/Memory.scala 311:14 326:25]
-  wire  _GEN_289 = 3'h4 == icache_state ? _GEN_173 : _GEN_255; // @[src/main/scala/fpga/Memory.scala 326:25]
-  wire  _GEN_346 = 3'h2 == icache_state ? 1'h0 : _GEN_289; // @[src/main/scala/fpga/Memory.scala 311:14 326:25]
-  wire  _GEN_391 = 3'h1 == icache_state ? 1'h0 : _GEN_346; // @[src/main/scala/fpga/Memory.scala 311:14 326:25]
-  wire  dram_i_ren = 3'h0 == icache_state ? 1'h0 : _GEN_391; // @[src/main/scala/fpga/Memory.scala 311:14 326:25]
-  wire  _GEN_30 = io_dramPort_init_calib_complete & ~io_dramPort_busy ? dram_i_ren : 1'h1; // @[src/main/scala/fpga/Memory.scala 205:20 211:67]
-  wire  dram_d_busy = 3'h0 == reg_dram_state ? _GEN_30 : 1'h1; // @[src/main/scala/fpga/Memory.scala 205:20 209:27]
-  wire  _T_138 = ~dram_d_busy; // @[src/main/scala/fpga/Memory.scala 795:13]
-  wire [22:0] _GEN_858 = 3'h3 == dcache_state ? _GEN_494 : _dram_d_addr_T_5; // @[src/main/scala/fpga/Memory.scala 571:25]
-  wire [22:0] _GEN_902 = 3'h4 == dcache_state ? _GEN_494 : _GEN_858; // @[src/main/scala/fpga/Memory.scala 571:25]
-  wire [22:0] _GEN_1008 = 3'h2 == dcache_state ? _GEN_494 : _GEN_902; // @[src/main/scala/fpga/Memory.scala 571:25]
-  wire [26:0] dram_d_addr = {{4'd0}, _GEN_1008}; // @[src/main/scala/fpga/Memory.scala 187:26]
-  wire [30:0] _io_dramPort_addr_T_1 = {dram_d_addr,4'h0}; // @[src/main/scala/fpga/Memory.scala 223:36]
-  wire [255:0] cold_line = reg_lru_way_hot ? io_cache_array1_rdata : io_cache_array2_rdata; // @[src/main/scala/fpga/Memory.scala 568:19]
-  reg [255:0] reg_line; // @[src/main/scala/fpga/Memory.scala 508:25]
-  wire [255:0] _GEN_899 = 3'h4 == dcache_state ? reg_line : cold_line; // @[src/main/scala/fpga/Memory.scala 571:25 693:20]
-  wire [255:0] dram_d_wdata = 3'h2 == dcache_state ? cold_line : _GEN_899; // @[src/main/scala/fpga/Memory.scala 571:25 625:20]
-  wire  _GEN_489 = dram_d_busy ? 1'h0 : 1'h1; // @[src/main/scala/fpga/Memory.scala 523:14 668:28 671:22]
-  wire  _GEN_495 = reg_lru_way_hot & reg_lru_dirty1 | ~reg_lru_way_hot & reg_lru_dirty2 ? 1'h0 : _GEN_489; // @[src/main/scala/fpga/Memory.scala 667:111 522:14]
-  wire  _GEN_520 = _T_88 | _T_89 ? 1'h0 : _GEN_495; // @[src/main/scala/fpga/Memory.scala 522:14 626:81]
-  wire  _GEN_529 = _T_101 ? 1'h0 : _T_138; // @[src/main/scala/fpga/Memory.scala 694:105 522:14]
-  wire  _GEN_765 = 3'h5 == dcache_state & _T_138; // @[src/main/scala/fpga/Memory.scala 522:14 571:25]
-  wire  _GEN_859 = 3'h3 == dcache_state ? _GEN_520 : _GEN_765; // @[src/main/scala/fpga/Memory.scala 571:25]
-  wire  _GEN_903 = 3'h4 == dcache_state ? _GEN_529 : _GEN_859; // @[src/main/scala/fpga/Memory.scala 571:25]
-  wire  _GEN_1009 = 3'h2 == dcache_state ? _GEN_520 : _GEN_903; // @[src/main/scala/fpga/Memory.scala 571:25]
-  wire  _GEN_1102 = 3'h1 == dcache_state ? 1'h0 : _GEN_1009; // @[src/main/scala/fpga/Memory.scala 522:14 571:25]
-  wire  dram_d_ren = 3'h0 == dcache_state ? 1'h0 : _GEN_1102; // @[src/main/scala/fpga/Memory.scala 522:14 571:25]
-  wire [26:0] _GEN_2 = dram_d_ren ? dram_d_addr : reg_dram_addr; // @[src/main/scala/fpga/Memory.scala 230:35 233:27 192:31]
-  wire  _GEN_3 = dram_d_ren ? 1'h0 : reg_dram_di; // @[src/main/scala/fpga/Memory.scala 230:35 234:25 195:28]
-  wire [2:0] _GEN_4 = dram_d_ren ? 3'h2 : reg_dram_state; // @[src/main/scala/fpga/Memory.scala 230:35 235:28 191:31]
-  wire  _GEN_493 = (reg_lru_way_hot & reg_lru_dirty1 | ~reg_lru_way_hot & reg_lru_dirty2) & _GEN_489; // @[src/main/scala/fpga/Memory.scala 667:111 523:14]
-  wire  _GEN_518 = _T_88 | _T_89 ? 1'h0 : _GEN_493; // @[src/main/scala/fpga/Memory.scala 523:14 626:81]
-  wire  _GEN_526 = _T_101 & _T_138; // @[src/main/scala/fpga/Memory.scala 694:105 523:14]
-  wire  _GEN_857 = 3'h3 == dcache_state & _GEN_518; // @[src/main/scala/fpga/Memory.scala 523:14 571:25]
-  wire  _GEN_900 = 3'h4 == dcache_state ? _GEN_526 : _GEN_857; // @[src/main/scala/fpga/Memory.scala 571:25]
-  wire  _GEN_1007 = 3'h2 == dcache_state ? _GEN_518 : _GEN_900; // @[src/main/scala/fpga/Memory.scala 571:25]
-  wire  _GEN_1100 = 3'h1 == dcache_state ? 1'h0 : _GEN_1007; // @[src/main/scala/fpga/Memory.scala 523:14 571:25]
-  wire  dram_d_wen = 3'h0 == dcache_state ? 1'h0 : _GEN_1100; // @[src/main/scala/fpga/Memory.scala 523:14 571:25]
-  wire [30:0] _GEN_6 = dram_d_wen ? _io_dramPort_addr_T_1 : _io_dramPort_addr_T_1; // @[src/main/scala/fpga/Memory.scala 221:29 223:30]
-  wire [26:0] _GEN_9 = dram_d_wen ? dram_d_addr : _GEN_2; // @[src/main/scala/fpga/Memory.scala 221:29 226:27]
-  wire [127:0] _GEN_10 = dram_d_wen ? dram_d_wdata[255:128] : reg_dram_wdata; // @[src/main/scala/fpga/Memory.scala 221:29 227:28 193:31]
-  wire  _GEN_11 = dram_d_wen ? 1'h0 : _GEN_3; // @[src/main/scala/fpga/Memory.scala 221:29 228:25]
-  wire [2:0] _GEN_12 = dram_d_wen ? 3'h1 : _GEN_4; // @[src/main/scala/fpga/Memory.scala 221:29 229:28]
-  wire  _GEN_13 = dram_d_wen ? 1'h0 : dram_d_ren; // @[src/main/scala/fpga/Memory.scala 197:19 221:29]
-  wire  _GEN_14 = dram_i_ren | _GEN_13; // @[src/main/scala/fpga/Memory.scala 213:27 214:27]
-  wire [30:0] _GEN_15 = dram_i_ren ? _io_dramPort_addr_T : _GEN_6; // @[src/main/scala/fpga/Memory.scala 213:27 215:28]
-  wire  _GEN_17 = dram_i_ren | _GEN_11; // @[src/main/scala/fpga/Memory.scala 213:27 217:23]
-  wire  _GEN_20 = dram_i_ren ? 1'h0 : dram_d_wen; // @[src/main/scala/fpga/Memory.scala 198:19 213:27]
-  wire  _GEN_25 = io_dramPort_init_calib_complete & ~io_dramPort_busy & _GEN_14; // @[src/main/scala/fpga/Memory.scala 197:19 211:67]
-  wire  _GEN_28 = io_dramPort_init_calib_complete & ~io_dramPort_busy ? _GEN_17 : reg_dram_di; // @[src/main/scala/fpga/Memory.scala 195:28 211:67]
-  wire  _GEN_31 = io_dramPort_init_calib_complete & ~io_dramPort_busy & _GEN_20; // @[src/main/scala/fpga/Memory.scala 198:19 211:67]
-  wire [30:0] _io_dramPort_addr_T_3 = {reg_dram_addr,4'h8}; // @[src/main/scala/fpga/Memory.scala 243:32]
-  wire [127:0] _GEN_40 = io_dramPort_rdata_valid ? io_dramPort_rdata : reg_dram_rdata; // @[src/main/scala/fpga/Memory.scala 253:40 254:26 194:31]
-  wire [2:0] _GEN_41 = io_dramPort_rdata_valid ? 3'h5 : 3'h4; // @[src/main/scala/fpga/Memory.scala 253:40 255:26 257:26]
-  wire [2:0] _GEN_42 = io_dramPort_rdata_valid ? 3'h3 : reg_dram_state; // @[src/main/scala/fpga/Memory.scala 259:44 261:24 191:31]
-  wire [2:0] _GEN_46 = _T_3 ? _GEN_41 : _GEN_42; // @[src/main/scala/fpga/Memory.scala 250:32]
-  wire [2:0] _GEN_49 = _T_3 ? 3'h5 : reg_dram_state; // @[src/main/scala/fpga/Memory.scala 265:32 268:24 191:31]
-  wire [2:0] _GEN_50 = io_dramPort_rdata_valid ? 3'h5 : reg_dram_state; // @[src/main/scala/fpga/Memory.scala 272:38 274:24 191:31]
-  wire [255:0] dram_rdata = {io_dramPort_rdata,reg_dram_rdata}; // @[src/main/scala/fpga/Memory.scala 281:26]
-  wire  _GEN_52 = io_dramPort_rdata_valid & reg_dram_di; // @[src/main/scala/fpga/Memory.scala 207:22 278:38 282:28]
-  wire  _GEN_53 = io_dramPort_rdata_valid & ~reg_dram_di; // @[src/main/scala/fpga/Memory.scala 208:22 278:38 283:28]
-  wire [2:0] _GEN_54 = io_dramPort_rdata_valid ? 3'h0 : reg_dram_state; // @[src/main/scala/fpga/Memory.scala 278:38 284:24 191:31]
-  wire [2:0] _GEN_58 = 3'h5 == reg_dram_state ? _GEN_54 : reg_dram_state; // @[src/main/scala/fpga/Memory.scala 209:27 191:31]
-  wire [127:0] _GEN_59 = 3'h4 == reg_dram_state ? _GEN_40 : reg_dram_rdata; // @[src/main/scala/fpga/Memory.scala 209:27 194:31]
-  wire [2:0] _GEN_60 = 3'h4 == reg_dram_state ? _GEN_50 : _GEN_58; // @[src/main/scala/fpga/Memory.scala 209:27]
-  wire  _GEN_62 = 3'h4 == reg_dram_state ? 1'h0 : 3'h5 == reg_dram_state & _GEN_52; // @[src/main/scala/fpga/Memory.scala 207:22 209:27]
-  wire  _GEN_63 = 3'h4 == reg_dram_state ? 1'h0 : 3'h5 == reg_dram_state & _GEN_53; // @[src/main/scala/fpga/Memory.scala 208:22 209:27]
-  wire  _GEN_64 = 3'h3 == reg_dram_state & _T_3; // @[src/main/scala/fpga/Memory.scala 197:19 209:27]
-  wire [2:0] _GEN_66 = 3'h3 == reg_dram_state ? _GEN_49 : _GEN_60; // @[src/main/scala/fpga/Memory.scala 209:27]
-  wire [127:0] _GEN_67 = 3'h3 == reg_dram_state ? reg_dram_rdata : _GEN_59; // @[src/main/scala/fpga/Memory.scala 209:27 194:31]
-  wire  _GEN_69 = 3'h3 == reg_dram_state ? 1'h0 : _GEN_62; // @[src/main/scala/fpga/Memory.scala 207:22 209:27]
-  wire  _GEN_70 = 3'h3 == reg_dram_state ? 1'h0 : _GEN_63; // @[src/main/scala/fpga/Memory.scala 208:22 209:27]
-  wire  _GEN_71 = 3'h2 == reg_dram_state ? _T_3 : _GEN_64; // @[src/main/scala/fpga/Memory.scala 209:27]
-  wire [30:0] _GEN_72 = 3'h2 == reg_dram_state ? _io_dramPort_addr_T_3 : _io_dramPort_addr_T_3; // @[src/main/scala/fpga/Memory.scala 209:27]
-  wire  _GEN_76 = 3'h2 == reg_dram_state ? 1'h0 : _GEN_69; // @[src/main/scala/fpga/Memory.scala 207:22 209:27]
-  wire  _GEN_77 = 3'h2 == reg_dram_state ? 1'h0 : _GEN_70; // @[src/main/scala/fpga/Memory.scala 208:22 209:27]
-  wire  _GEN_78 = 3'h1 == reg_dram_state & _T_3; // @[src/main/scala/fpga/Memory.scala 198:19 209:27]
-  wire [30:0] _GEN_79 = 3'h1 == reg_dram_state ? _io_dramPort_addr_T_3 : _GEN_72; // @[src/main/scala/fpga/Memory.scala 209:27]
-  wire  _GEN_83 = 3'h1 == reg_dram_state ? 1'h0 : _GEN_71; // @[src/main/scala/fpga/Memory.scala 197:19 209:27]
-  wire  _GEN_86 = 3'h1 == reg_dram_state ? 1'h0 : _GEN_76; // @[src/main/scala/fpga/Memory.scala 207:22 209:27]
-  wire  _GEN_87 = 3'h1 == reg_dram_state ? 1'h0 : _GEN_77; // @[src/main/scala/fpga/Memory.scala 208:22 209:27]
-  wire [30:0] _GEN_90 = 3'h0 == reg_dram_state ? _GEN_15 : _GEN_79; // @[src/main/scala/fpga/Memory.scala 209:27]
-  wire  _GEN_92 = 3'h0 == reg_dram_state ? _GEN_28 : reg_dram_di; // @[src/main/scala/fpga/Memory.scala 209:27 195:28]
-  wire  dram_i_rdata_valid = 3'h0 == reg_dram_state ? 1'h0 : _GEN_86; // @[src/main/scala/fpga/Memory.scala 207:22 209:27]
-  wire  dram_d_rdata_valid = 3'h0 == reg_dram_state ? 1'h0 : _GEN_87; // @[src/main/scala/fpga/Memory.scala 208:22 209:27]
-  reg [15:0] i_reg_tag_0; // @[src/main/scala/fpga/Memory.scala 292:26]
-  reg [255:0] i_reg_line; // @[src/main/scala/fpga/Memory.scala 293:27]
-  reg [4:0] i_reg_req_addr_line_off; // @[src/main/scala/fpga/Memory.scala 294:31]
-  reg [15:0] i_reg_next_addr_tag; // @[src/main/scala/fpga/Memory.scala 295:32]
-  reg [6:0] i_reg_next_addr_index; // @[src/main/scala/fpga/Memory.scala 295:32]
-  reg [4:0] i_reg_next_addr_line_off; // @[src/main/scala/fpga/Memory.scala 295:32]
-  reg [1:0] i_reg_valid_rdata; // @[src/main/scala/fpga/Memory.scala 296:34]
-  reg [22:0] i_reg_cur_tag_index; // @[src/main/scala/fpga/Memory.scala 297:36]
-  reg  i_reg_addr_match; // @[src/main/scala/fpga/Memory.scala 298:33]
-  wire [9:0] _io_icache_raddr_T_1 = {io_imem_addr[11:5],io_imem_addr[4:2]}; // @[src/main/scala/fpga/Memory.scala 339:31]
-  wire [22:0] _T_26 = {io_imem_addr[27:12],io_imem_addr[11:5]}; // @[src/main/scala/fpga/Memory.scala 342:42]
-  wire [1:0] _GEN_103 = i_reg_cur_tag_index == _T_26 ? 2'h2 : 2'h1; // @[src/main/scala/fpga/Memory.scala 342:74 343:24 345:24]
-  wire  _GEN_117 = io_cache_iinvalidate ? 1'h0 : io_imem_en; // @[src/main/scala/fpga/Memory.scala 289:24 331:35]
-  wire  _i_reg_addr_match_T_3 = i_reg_req_addr_index == io_imem_addr[11:5]; // @[src/main/scala/fpga/Memory.scala 354:32]
-  wire  _i_reg_addr_match_T_4 = i_reg_req_addr_tag == io_imem_addr[27:12] & _i_reg_addr_match_T_3; // @[src/main/scala/fpga/Memory.scala 353:111]
-  wire  _i_reg_addr_match_T_7 = i_reg_req_addr_line_off[4:2] == io_imem_addr[4:2]; // @[src/main/scala/fpga/Memory.scala 355:57]
-  wire  _i_reg_addr_match_T_8 = _i_reg_addr_match_T_4 & _i_reg_addr_match_T_7; // @[src/main/scala/fpga/Memory.scala 354:54]
-  wire [1:0] _T_32 = io_icache_valid_rdata >> i_reg_req_addr_index[0]; // @[src/main/scala/fpga/Memory.scala 356:36]
-  wire  _T_36 = _T_32[0] & i_reg_tag_0 == i_reg_req_addr_tag; // @[src/main/scala/fpga/Memory.scala 356:105]
-  wire [9:0] _io_icache_raddr_T_3 = {i_reg_req_addr_index,i_reg_req_addr_line_off[4:2]}; // @[src/main/scala/fpga/Memory.scala 358:31]
-  wire [15:0] _GEN_128 = io_imem_en ? i_tag_array_0_MPORT_1_data : i_reg_tag_0; // @[src/main/scala/fpga/Memory.scala 379:31 380:19 292:26]
-  wire [1:0] _GEN_131 = io_imem_en ? _GEN_103 : 2'h0; // @[src/main/scala/fpga/Memory.scala 379:31 391:22]
-  wire [2:0] _GEN_132 = io_cache_iinvalidate ? 3'h7 : {{1'd0}, _GEN_131}; // @[src/main/scala/fpga/Memory.scala 374:35 378:22]
-  wire [15:0] _GEN_134 = io_cache_iinvalidate ? i_reg_tag_0 : _GEN_128; // @[src/main/scala/fpga/Memory.scala 292:26 374:35]
-  wire [27:0] _dcache_snoop_addr_T = {i_reg_req_addr_tag,i_reg_req_addr_index,i_reg_req_addr_line_off}; // @[src/main/scala/fpga/Memory.scala 398:47]
-  wire [4:0] dcache_snoop_addr_line_off = _dcache_snoop_addr_T[4:0]; // @[src/main/scala/fpga/Memory.scala 398:62]
-  wire [6:0] dcache_snoop_addr_index = _dcache_snoop_addr_T[11:5]; // @[src/main/scala/fpga/Memory.scala 398:62]
-  wire [15:0] dcache_snoop_addr_tag = _dcache_snoop_addr_T[27:12]; // @[src/main/scala/fpga/Memory.scala 398:62]
-  wire [1:0] _icache_valid_wdata_T_1 = 2'h1 << i_reg_req_addr_index[0]; // @[src/main/scala/fpga/Memory.scala 409:62]
-  wire [1:0] icache_valid_wdata = i_reg_valid_rdata | _icache_valid_wdata_T_1; // @[src/main/scala/fpga/Memory.scala 409:55]
-  wire [2:0] _GEN_139 = ~dram_i_busy ? 3'h6 : 3'h3; // @[src/main/scala/fpga/Memory.scala 416:31 419:26 421:26]
-  wire [2:0] _GEN_142 = 2'h2 == dcache_snoop_status ? _GEN_139 : icache_state; // @[src/main/scala/fpga/Memory.scala 291:29 395:36]
-  wire [255:0] dcache_snoop_line = reg_tag_0 == reg_req_addr_tag ? io_cache_array1_rdata : io_cache_array2_rdata; // @[src/main/scala/fpga/Memory.scala 607:46 608:27]
-  wire [255:0] _GEN_143 = 2'h1 == dcache_snoop_status ? dcache_snoop_line : i_reg_line; // @[src/main/scala/fpga/Memory.scala 395:36 401:22 293:27]
-  wire [22:0] _GEN_152 = 2'h1 == dcache_snoop_status ? _dram_i_addr_T_1 : i_reg_cur_tag_index; // @[src/main/scala/fpga/Memory.scala 395:36 411:31 297:36]
-  wire [1:0] _GEN_153 = 2'h1 == dcache_snoop_status ? icache_valid_wdata : i_reg_valid_rdata; // @[src/main/scala/fpga/Memory.scala 395:36 412:29 296:34]
-  wire [2:0] _GEN_154 = 2'h1 == dcache_snoop_status ? 3'h5 : _GEN_142; // @[src/main/scala/fpga/Memory.scala 395:36 413:24]
-  wire [255:0] _GEN_161 = 2'h0 == dcache_snoop_status ? i_reg_line : _GEN_143; // @[src/main/scala/fpga/Memory.scala 293:27 395:36]
-  wire  _GEN_164 = 2'h0 == dcache_snoop_status ? 1'h0 : 2'h1 == dcache_snoop_status; // @[src/main/scala/fpga/Memory.scala 289:24 395:36]
-  wire [22:0] _GEN_170 = 2'h0 == dcache_snoop_status ? i_reg_cur_tag_index : _GEN_152; // @[src/main/scala/fpga/Memory.scala 297:36 395:36]
-  wire [1:0] _GEN_171 = 2'h0 == dcache_snoop_status ? i_reg_valid_rdata : _GEN_153; // @[src/main/scala/fpga/Memory.scala 296:34 395:36]
-  wire [2:0] _GEN_172 = 2'h0 == dcache_snoop_status ? icache_state : _GEN_154; // @[src/main/scala/fpga/Memory.scala 291:29 395:36]
-  wire [7:0] _io_imem_inst_T_1 = {i_reg_next_addr_line_off[4:2],5'h0}; // @[src/main/scala/fpga/Memory.scala 427:41]
-  wire [255:0] _io_imem_inst_T_2 = i_reg_line >> _io_imem_inst_T_1; // @[src/main/scala/fpga/Memory.scala 427:35]
-  wire  _T_61 = i_reg_req_addr_index == i_reg_next_addr_index; // @[src/main/scala/fpga/Memory.scala 429:32]
-  wire  _T_62 = i_reg_req_addr_tag == i_reg_next_addr_tag & _T_61; // @[src/main/scala/fpga/Memory.scala 428:100]
-  wire [15:0] _GEN_178 = io_imem_en ? i_tag_array_0_MPORT_3_data : i_reg_tag_0; // @[src/main/scala/fpga/Memory.scala 435:25 436:19 292:26]
-  wire [2:0] _GEN_184 = _T_54 ? 3'h6 : icache_state; // @[src/main/scala/fpga/Memory.scala 451:27 454:22 291:29]
-  wire [255:0] _io_imem_inst_T_6 = dram_rdata >> _io_imem_inst_T_1; // @[src/main/scala/fpga/Memory.scala 460:31]
-  wire [31:0] _GEN_186 = dram_i_rdata_valid ? _io_imem_inst_T_6[31:0] : 32'hdeadbeef; // @[src/main/scala/fpga/Memory.scala 305:16 458:33 460:22]
-  wire  _GEN_187 = dram_i_rdata_valid & _T_62; // @[src/main/scala/fpga/Memory.scala 306:17 458:33]
-  wire [22:0] _GEN_196 = dram_i_rdata_valid ? _dram_i_addr_T_1 : i_reg_cur_tag_index; // @[src/main/scala/fpga/Memory.scala 458:33 474:29 297:36]
-  wire [1:0] _GEN_197 = dram_i_rdata_valid ? icache_valid_wdata : i_reg_valid_rdata; // @[src/main/scala/fpga/Memory.scala 458:33 475:27 296:34]
-  wire [2:0] _GEN_198 = dram_i_rdata_valid ? 3'h0 : icache_state; // @[src/main/scala/fpga/Memory.scala 458:33 476:22 291:29]
-  wire [22:0] _GEN_203 = 3'h7 == icache_state ? 23'h7fffff : i_reg_cur_tag_index; // @[src/main/scala/fpga/Memory.scala 326:25 484:27 297:36]
-  wire [2:0] _GEN_204 = 3'h7 == icache_state ? 3'h0 : icache_state; // @[src/main/scala/fpga/Memory.scala 326:25 496:22 291:29]
-  wire [31:0] _GEN_205 = 3'h6 == icache_state ? _GEN_186 : 32'hdeadbeef; // @[src/main/scala/fpga/Memory.scala 305:16 326:25]
-  wire [22:0] _GEN_215 = 3'h6 == icache_state ? _GEN_196 : _GEN_203; // @[src/main/scala/fpga/Memory.scala 326:25]
-  wire [1:0] _GEN_216 = 3'h6 == icache_state ? _GEN_197 : i_reg_valid_rdata; // @[src/main/scala/fpga/Memory.scala 326:25 296:34]
-  wire [2:0] _GEN_217 = 3'h6 == icache_state ? _GEN_198 : _GEN_204; // @[src/main/scala/fpga/Memory.scala 326:25]
-  wire  _GEN_219 = 3'h6 == icache_state ? 1'h0 : 3'h7 == icache_state; // @[src/main/scala/fpga/Memory.scala 326:25 320:30]
-  wire [2:0] _GEN_224 = 3'h3 == icache_state ? _GEN_184 : _GEN_217; // @[src/main/scala/fpga/Memory.scala 326:25]
-  wire [31:0] _GEN_225 = 3'h3 == icache_state ? 32'hdeadbeef : _GEN_205; // @[src/main/scala/fpga/Memory.scala 305:16 326:25]
-  wire  _GEN_226 = 3'h3 == icache_state ? 1'h0 : 3'h6 == icache_state & _GEN_187; // @[src/main/scala/fpga/Memory.scala 306:17 326:25]
-  wire  _GEN_229 = 3'h3 == icache_state ? 1'h0 : 3'h6 == icache_state & dram_i_rdata_valid; // @[src/main/scala/fpga/Memory.scala 289:24 326:25]
-  wire [22:0] _GEN_235 = 3'h3 == icache_state ? i_reg_cur_tag_index : _GEN_215; // @[src/main/scala/fpga/Memory.scala 326:25 297:36]
-  wire [1:0] _GEN_236 = 3'h3 == icache_state ? i_reg_valid_rdata : _GEN_216; // @[src/main/scala/fpga/Memory.scala 326:25 296:34]
-  wire  _GEN_238 = 3'h3 == icache_state ? 1'h0 : _GEN_219; // @[src/main/scala/fpga/Memory.scala 326:25 320:30]
-  wire [31:0] _GEN_241 = 3'h5 == icache_state ? _io_imem_inst_T_2[31:0] : _GEN_225; // @[src/main/scala/fpga/Memory.scala 326:25 427:20]
-  wire  _GEN_242 = 3'h5 == icache_state ? _T_62 : _GEN_226; // @[src/main/scala/fpga/Memory.scala 326:25]
-  wire [15:0] _GEN_243 = 3'h5 == icache_state ? io_imem_addr[27:12] : i_reg_req_addr_tag; // @[src/main/scala/fpga/Memory.scala 326:25 433:22 294:31]
-  wire [6:0] _GEN_244 = 3'h5 == icache_state ? io_imem_addr[11:5] : i_reg_req_addr_index; // @[src/main/scala/fpga/Memory.scala 326:25 433:22 294:31]
-  wire [4:0] _GEN_245 = 3'h5 == icache_state ? io_imem_addr[4:0] : i_reg_req_addr_line_off; // @[src/main/scala/fpga/Memory.scala 326:25 433:22 294:31]
-  wire  _GEN_246 = 3'h5 == icache_state | i_reg_addr_match; // @[src/main/scala/fpga/Memory.scala 326:25 434:24 298:33]
-  wire [15:0] _GEN_250 = 3'h5 == icache_state ? _GEN_178 : i_reg_tag_0; // @[src/main/scala/fpga/Memory.scala 326:25 292:26]
-  wire  _GEN_252 = 3'h5 == icache_state ? io_imem_en : _GEN_229; // @[src/main/scala/fpga/Memory.scala 326:25]
-  wire [5:0] _GEN_253 = 3'h5 == icache_state ? io_imem_addr[11:6] : i_reg_req_addr_index[6:1]; // @[src/main/scala/fpga/Memory.scala 326:25]
-  wire [2:0] _GEN_254 = 3'h5 == icache_state ? {{1'd0}, _GEN_131} : _GEN_224; // @[src/main/scala/fpga/Memory.scala 326:25]
-  wire  _GEN_259 = 3'h5 == icache_state ? 1'h0 : _GEN_229; // @[src/main/scala/fpga/Memory.scala 289:24 326:25]
-  wire [22:0] _GEN_264 = 3'h5 == icache_state ? i_reg_cur_tag_index : _GEN_235; // @[src/main/scala/fpga/Memory.scala 326:25 297:36]
-  wire [1:0] _GEN_265 = 3'h5 == icache_state ? i_reg_valid_rdata : _GEN_236; // @[src/main/scala/fpga/Memory.scala 326:25 296:34]
-  wire  _GEN_267 = 3'h5 == icache_state ? 1'h0 : _GEN_238; // @[src/main/scala/fpga/Memory.scala 326:25 320:30]
-  wire [255:0] _GEN_274 = 3'h4 == icache_state ? _GEN_161 : i_reg_line; // @[src/main/scala/fpga/Memory.scala 326:25 293:27]
-  wire  _GEN_280 = 3'h4 == icache_state ? _GEN_164 : _GEN_259; // @[src/main/scala/fpga/Memory.scala 326:25]
-  wire  _GEN_283 = 3'h4 == icache_state ? _GEN_164 : _GEN_252; // @[src/main/scala/fpga/Memory.scala 326:25]
-  wire [5:0] _GEN_284 = 3'h4 == icache_state ? i_reg_req_addr_index[6:1] : _GEN_253; // @[src/main/scala/fpga/Memory.scala 326:25]
-  wire [22:0] _GEN_286 = 3'h4 == icache_state ? _GEN_170 : _GEN_264; // @[src/main/scala/fpga/Memory.scala 326:25]
-  wire [1:0] _GEN_287 = 3'h4 == icache_state ? _GEN_171 : _GEN_265; // @[src/main/scala/fpga/Memory.scala 326:25]
-  wire [2:0] _GEN_288 = 3'h4 == icache_state ? _GEN_172 : _GEN_254; // @[src/main/scala/fpga/Memory.scala 326:25]
-  wire [31:0] _GEN_291 = 3'h4 == icache_state ? 32'hdeadbeef : _GEN_241; // @[src/main/scala/fpga/Memory.scala 305:16 326:25]
-  wire  _GEN_292 = 3'h4 == icache_state ? 1'h0 : _GEN_242; // @[src/main/scala/fpga/Memory.scala 306:17 326:25]
-  wire [15:0] _GEN_293 = 3'h4 == icache_state ? i_reg_req_addr_tag : _GEN_243; // @[src/main/scala/fpga/Memory.scala 326:25 294:31]
-  wire [6:0] _GEN_294 = 3'h4 == icache_state ? i_reg_req_addr_index : _GEN_244; // @[src/main/scala/fpga/Memory.scala 326:25 294:31]
-  wire [4:0] _GEN_295 = 3'h4 == icache_state ? i_reg_req_addr_line_off : _GEN_245; // @[src/main/scala/fpga/Memory.scala 326:25 294:31]
-  wire  _GEN_296 = 3'h4 == icache_state ? i_reg_addr_match : _GEN_246; // @[src/main/scala/fpga/Memory.scala 326:25 298:33]
-  wire  _GEN_299 = 3'h4 == icache_state ? 1'h0 : 3'h5 == icache_state & io_imem_en; // @[src/main/scala/fpga/Memory.scala 289:24 326:25]
-  wire [15:0] _GEN_300 = 3'h4 == icache_state ? i_reg_tag_0 : _GEN_250; // @[src/main/scala/fpga/Memory.scala 326:25 292:26]
-  wire  _GEN_304 = 3'h4 == icache_state ? 1'h0 : _GEN_259; // @[src/main/scala/fpga/Memory.scala 289:24 326:25]
-  wire  _GEN_308 = 3'h4 == icache_state ? 1'h0 : _GEN_267; // @[src/main/scala/fpga/Memory.scala 326:25 320:30]
-  wire [31:0] _GEN_311 = 3'h2 == icache_state ? io_icache_rdata : _GEN_291; // @[src/main/scala/fpga/Memory.scala 326:25 366:20]
-  wire  _GEN_312 = 3'h2 == icache_state ? i_reg_addr_match : _GEN_292; // @[src/main/scala/fpga/Memory.scala 326:25]
-  wire  _GEN_313 = 3'h2 == icache_state ? 1'h0 : 1'h1; // @[src/main/scala/fpga/Memory.scala 326:25 370:22]
-  wire  _GEN_317 = 3'h2 == icache_state | _GEN_296; // @[src/main/scala/fpga/Memory.scala 326:25 373:24]
-  wire  _GEN_318 = 3'h2 == icache_state ? io_cache_iinvalidate : _GEN_308; // @[src/main/scala/fpga/Memory.scala 326:25]
-  wire  _GEN_326 = 3'h2 == icache_state ? _GEN_117 : _GEN_299; // @[src/main/scala/fpga/Memory.scala 326:25]
-  wire [9:0] _GEN_327 = 3'h2 == icache_state ? _io_icache_raddr_T_1 : _io_icache_raddr_T_1; // @[src/main/scala/fpga/Memory.scala 326:25]
-  wire  _GEN_328 = 3'h2 == icache_state ? _GEN_117 : _GEN_283; // @[src/main/scala/fpga/Memory.scala 326:25]
-  wire [5:0] _GEN_329 = 3'h2 == icache_state ? io_imem_addr[11:6] : _GEN_284; // @[src/main/scala/fpga/Memory.scala 326:25]
-  wire  _GEN_330 = 3'h2 == icache_state ? 1'h0 : 3'h4 == icache_state & _T_47; // @[src/main/scala/fpga/Memory.scala 309:19 326:25]
-  wire  _GEN_337 = 3'h2 == icache_state ? 1'h0 : 3'h4 == icache_state & _GEN_164; // @[src/main/scala/fpga/Memory.scala 289:24 326:25]
-  wire  _GEN_340 = 3'h2 == icache_state ? 1'h0 : _GEN_280; // @[src/main/scala/fpga/Memory.scala 314:17 326:25]
-  wire  _GEN_350 = 3'h2 == icache_state ? 1'h0 : _GEN_299; // @[src/main/scala/fpga/Memory.scala 289:24 326:25]
-  wire  _GEN_353 = 3'h2 == icache_state ? 1'h0 : _GEN_304; // @[src/main/scala/fpga/Memory.scala 289:24 326:25]
-  wire  _GEN_357 = 3'h1 == icache_state ? _i_reg_addr_match_T_8 : _GEN_317; // @[src/main/scala/fpga/Memory.scala 326:25 353:24]
-  wire  _GEN_358 = 3'h1 == icache_state ? _T_36 : _GEN_326; // @[src/main/scala/fpga/Memory.scala 326:25]
-  wire [9:0] _GEN_359 = 3'h1 == icache_state ? _io_icache_raddr_T_3 : _GEN_327; // @[src/main/scala/fpga/Memory.scala 326:25]
-  wire [31:0] _GEN_362 = 3'h1 == icache_state ? 32'hdeadbeef : _GEN_311; // @[src/main/scala/fpga/Memory.scala 305:16 326:25]
-  wire  _GEN_363 = 3'h1 == icache_state ? 1'h0 : _GEN_312; // @[src/main/scala/fpga/Memory.scala 306:17 326:25]
-  wire  _GEN_364 = 3'h1 == icache_state | _GEN_313; // @[src/main/scala/fpga/Memory.scala 307:18 326:25]
-  wire  _GEN_368 = 3'h1 == icache_state ? 1'h0 : _GEN_318; // @[src/main/scala/fpga/Memory.scala 326:25 320:30]
-  wire  _GEN_373 = 3'h1 == icache_state ? 1'h0 : 3'h2 == icache_state & _GEN_117; // @[src/main/scala/fpga/Memory.scala 289:24 326:25]
-  wire  _GEN_375 = 3'h1 == icache_state ? 1'h0 : _GEN_328; // @[src/main/scala/fpga/Memory.scala 318:23 326:25]
-  wire  _GEN_377 = 3'h1 == icache_state ? 1'h0 : _GEN_330; // @[src/main/scala/fpga/Memory.scala 309:19 326:25]
-  wire  _GEN_384 = 3'h1 == icache_state ? 1'h0 : _GEN_337; // @[src/main/scala/fpga/Memory.scala 289:24 326:25]
-  wire  _GEN_387 = 3'h1 == icache_state ? 1'h0 : _GEN_340; // @[src/main/scala/fpga/Memory.scala 314:17 326:25]
-  wire  _GEN_395 = 3'h1 == icache_state ? 1'h0 : _GEN_350; // @[src/main/scala/fpga/Memory.scala 289:24 326:25]
-  wire  _GEN_398 = 3'h1 == icache_state ? 1'h0 : _GEN_353; // @[src/main/scala/fpga/Memory.scala 289:24 326:25]
-  wire  _GEN_417 = 3'h0 == icache_state | _GEN_357; // @[src/main/scala/fpga/Memory.scala 326:25 348:24]
-  wire  dcache_snoop_en = 3'h0 == icache_state ? 1'h0 : _GEN_377; // @[src/main/scala/fpga/Memory.scala 309:19 326:25]
-  reg [4:0] reg_req_addr_line_off; // @[src/main/scala/fpga/Memory.scala 511:29]
-  reg [31:0] reg_wdata; // @[src/main/scala/fpga/Memory.scala 512:26]
-  reg [3:0] reg_wstrb; // @[src/main/scala/fpga/Memory.scala 513:26]
-  reg  reg_ren; // @[src/main/scala/fpga/Memory.scala 514:24]
-  wire [7:0] _reg_read_word_T_1 = {reg_req_addr_line_off[4:2],5'h0}; // @[src/main/scala/fpga/Memory.scala 564:35]
-  wire [255:0] _reg_read_word_T_2 = io_cache_array1_rdata >> _reg_read_word_T_1; // @[src/main/scala/fpga/Memory.scala 564:29]
-  wire [255:0] _reg_read_word_T_6 = io_cache_array2_rdata >> _reg_read_word_T_1; // @[src/main/scala/fpga/Memory.scala 566:29]
-  wire [31:0] _GEN_449 = _T_88 ? _reg_read_word_T_2[31:0] : _reg_read_word_T_6[31:0]; // @[src/main/scala/fpga/Memory.scala 563:42 564:19 566:19]
-  wire [31:0] _req_addr_T_9 = io_cache_ren ? io_cache_raddr : io_cache_waddr; // @[src/main/scala/fpga/Memory.scala 585:27]
-  wire [4:0] req_addr_3_line_off = _req_addr_T_9[4:0]; // @[src/main/scala/fpga/Memory.scala 585:82]
-  wire [6:0] req_addr_3_index = _req_addr_T_9[11:5]; // @[src/main/scala/fpga/Memory.scala 585:82]
-  wire [15:0] req_addr_3_tag = _req_addr_T_9[27:12]; // @[src/main/scala/fpga/Memory.scala 585:82]
-  wire [1:0] _GEN_450 = io_cache_ren ? 2'h2 : 2'h3; // @[src/main/scala/fpga/Memory.scala 598:31 599:26 601:26]
-  wire [15:0] _GEN_452 = dcache_snoop_en ? dcache_snoop_addr_tag : req_addr_3_tag; // @[src/main/scala/fpga/Memory.scala 573:30 575:22 586:22]
-  wire [6:0] _GEN_453 = dcache_snoop_en ? dcache_snoop_addr_index : req_addr_3_index; // @[src/main/scala/fpga/Memory.scala 573:30 575:22 586:22]
-  wire [4:0] _GEN_454 = dcache_snoop_en ? dcache_snoop_addr_line_off : req_addr_3_line_off; // @[src/main/scala/fpga/Memory.scala 573:30 575:22 586:22]
-  wire  _GEN_462 = dcache_snoop_en ? 1'h0 : 1'h1; // @[src/main/scala/fpga/Memory.scala 518:19 573:30 583:25]
-  wire [31:0] _GEN_463 = dcache_snoop_en ? reg_wdata : io_cache_wdata; // @[src/main/scala/fpga/Memory.scala 512:26 573:30 587:19]
-  wire [3:0] _GEN_464 = dcache_snoop_en ? reg_wstrb : io_cache_wstrb; // @[src/main/scala/fpga/Memory.scala 513:26 573:30 588:19]
-  wire  _GEN_465 = dcache_snoop_en ? reg_ren : io_cache_ren; // @[src/main/scala/fpga/Memory.scala 514:24 573:30 589:17]
-  wire [1:0] _GEN_476 = io_cache_wen ? 2'h3 : 2'h0; // @[src/main/scala/fpga/Memory.scala 661:37 662:28 664:26]
-  wire [1:0] _GEN_477 = io_cache_ren ? 2'h2 : _GEN_476; // @[src/main/scala/fpga/Memory.scala 659:31 660:28]
-  wire [15:0] _GEN_481 = dcache_snoop_en ? tag_array_0_MPORT_7_data : tag_array_0_MPORT_8_data; // @[src/main/scala/fpga/Memory.scala 635:32 638:19 652:19]
-  wire [15:0] _GEN_482 = dcache_snoop_en ? tag_array_1_MPORT_7_data : tag_array_1_MPORT_8_data; // @[src/main/scala/fpga/Memory.scala 635:32 638:19 652:19]
-  wire [1:0] _GEN_483 = dcache_snoop_en ? 2'h1 : _GEN_477; // @[src/main/scala/fpga/Memory.scala 635:32 643:24]
-  wire  _GEN_485 = dcache_snoop_en ? reg_lru_way_hot : lru_array_way_hot_reg_lru_MPORT_1_data; // @[src/main/scala/fpga/Memory.scala 510:24 635:32 653:19]
-  wire  _GEN_486 = dcache_snoop_en ? reg_lru_dirty1 : lru_array_dirty1_reg_lru_MPORT_1_data; // @[src/main/scala/fpga/Memory.scala 510:24 635:32 653:19]
-  wire  _GEN_487 = dcache_snoop_en ? reg_lru_dirty2 : lru_array_dirty2_reg_lru_MPORT_1_data; // @[src/main/scala/fpga/Memory.scala 510:24 635:32 653:19]
-  wire [2:0] _GEN_488 = dram_d_busy ? 3'h4 : 3'h5; // @[src/main/scala/fpga/Memory.scala 668:28 669:24 672:24]
-  wire [2:0] _GEN_491 = dram_d_busy ? 3'h4 : 3'h6; // @[src/main/scala/fpga/Memory.scala 682:28 683:24 686:24]
-  wire [2:0] _GEN_492 = reg_lru_way_hot & reg_lru_dirty1 | ~reg_lru_way_hot & reg_lru_dirty2 ? _GEN_488 : _GEN_491; // @[src/main/scala/fpga/Memory.scala 667:111]
-  wire [15:0] _GEN_498 = _T_88 | _T_89 ? _GEN_452 : reg_req_addr_tag; // @[src/main/scala/fpga/Memory.scala 511:29 626:81]
-  wire [6:0] _GEN_499 = _T_88 | _T_89 ? _GEN_453 : reg_req_addr_index; // @[src/main/scala/fpga/Memory.scala 511:29 626:81]
-  wire [4:0] _GEN_500 = _T_88 | _T_89 ? _GEN_454 : reg_req_addr_line_off; // @[src/main/scala/fpga/Memory.scala 511:29 626:81]
-  wire  _GEN_503 = (_T_88 | _T_89) & dcache_snoop_en; // @[src/main/scala/fpga/Memory.scala 501:22 626:81]
-  wire [15:0] _GEN_504 = _T_88 | _T_89 ? _GEN_481 : reg_tag_0; // @[src/main/scala/fpga/Memory.scala 505:24 626:81]
-  wire [15:0] _GEN_505 = _T_88 | _T_89 ? _GEN_482 : reg_tag_1; // @[src/main/scala/fpga/Memory.scala 505:24 626:81]
-  wire [2:0] _GEN_508 = _T_88 | _T_89 ? {{1'd0}, _GEN_483} : _GEN_492; // @[src/main/scala/fpga/Memory.scala 626:81]
-  wire  _GEN_509 = (_T_88 | _T_89) & _GEN_462; // @[src/main/scala/fpga/Memory.scala 518:19 626:81]
-  wire [31:0] _GEN_510 = _T_88 | _T_89 ? _GEN_463 : reg_wdata; // @[src/main/scala/fpga/Memory.scala 512:26 626:81]
-  wire [3:0] _GEN_511 = _T_88 | _T_89 ? _GEN_464 : reg_wstrb; // @[src/main/scala/fpga/Memory.scala 513:26 626:81]
-  wire  _GEN_512 = _T_88 | _T_89 ? _GEN_465 : reg_ren; // @[src/main/scala/fpga/Memory.scala 514:24 626:81]
-  wire  _GEN_515 = _T_88 | _T_89 ? _GEN_485 : reg_lru_way_hot; // @[src/main/scala/fpga/Memory.scala 510:24 626:81]
-  wire  _GEN_516 = _T_88 | _T_89 ? _GEN_486 : reg_lru_dirty1; // @[src/main/scala/fpga/Memory.scala 510:24 626:81]
-  wire  _GEN_517 = _T_88 | _T_89 ? _GEN_487 : reg_lru_dirty2; // @[src/main/scala/fpga/Memory.scala 510:24 626:81]
-  wire [2:0] _GEN_522 = _T_138 ? 3'h5 : dcache_state; // @[src/main/scala/fpga/Memory.scala 695:29 697:24 504:29]
-  wire [2:0] _GEN_525 = _T_138 ? 3'h6 : dcache_state; // @[src/main/scala/fpga/Memory.scala 707:29 709:24 504:29]
-  wire [2:0] _GEN_527 = _T_101 ? _GEN_522 : _GEN_525; // @[src/main/scala/fpga/Memory.scala 694:105]
-  wire [4:0] _wstrb_T_1 = {reg_req_addr_line_off[4:2],2'h0}; // @[src/main/scala/fpga/Memory.scala 721:47]
-  wire [31:0] _wstrb_T_3 = {28'h0,reg_wstrb}; // @[src/main/scala/fpga/Memory.scala 549:37]
-  wire [62:0] _GEN_0 = {{31'd0}, _wstrb_T_3}; // @[src/main/scala/fpga/Memory.scala 552:30]
-  wire [62:0] _wstrb_T_4 = _GEN_0 << _wstrb_T_1; // @[src/main/scala/fpga/Memory.scala 552:30]
-  wire [31:0] wstrb = _wstrb_T_4[31:0]; // @[src/main/scala/fpga/Memory.scala 552:39]
-  wire [255:0] _wdata_T_1 = {224'h0,reg_wdata}; // @[src/main/scala/fpga/Memory.scala 546:42]
-  wire [510:0] _GEN_1 = {{255'd0}, _wdata_T_1}; // @[src/main/scala/fpga/Memory.scala 722:44]
-  wire [510:0] _wdata_T_4 = _GEN_1 << _reg_read_word_T_1; // @[src/main/scala/fpga/Memory.scala 722:44]
-  wire [255:0] wdata = _wdata_T_4[255:0]; // @[src/main/scala/fpga/Memory.scala 722:106]
-  wire [2:0] _T_121 = {2'h1,reg_lru_dirty2}; // @[src/main/scala/fpga/Memory.scala 733:50]
-  wire [2:0] _T_125 = {1'h1,reg_lru_dirty1,1'h1}; // @[src/main/scala/fpga/Memory.scala 736:50]
-  wire  _GEN_537 = _T_88 ? 1'h0 : 1'h1; // @[src/main/scala/fpga/Memory.scala 533:25 731:48 735:31]
-  wire [15:0] _GEN_547 = dcache_snoop_en ? tag_array_0_MPORT_11_data : tag_array_0_MPORT_12_data; // @[src/main/scala/fpga/Memory.scala 738:32 741:19 755:19]
-  wire [15:0] _GEN_548 = dcache_snoop_en ? tag_array_1_MPORT_11_data : tag_array_1_MPORT_12_data; // @[src/main/scala/fpga/Memory.scala 738:32 741:19 755:19]
-  wire  _GEN_550 = dcache_snoop_en ? reg_lru_way_hot : lru_array_way_hot_reg_lru_MPORT_2_data; // @[src/main/scala/fpga/Memory.scala 510:24 738:32 756:19]
-  wire  _GEN_551 = dcache_snoop_en ? reg_lru_dirty1 : lru_array_dirty1_reg_lru_MPORT_2_data; // @[src/main/scala/fpga/Memory.scala 510:24 738:32 756:19]
-  wire  _GEN_552 = dcache_snoop_en ? reg_lru_dirty2 : lru_array_dirty2_reg_lru_MPORT_2_data; // @[src/main/scala/fpga/Memory.scala 510:24 738:32 756:19]
-  wire  _GEN_558 = _T_95 & _T_88; // @[src/main/scala/fpga/Memory.scala 527:25 730:81]
-  wire  _GEN_565 = _T_95 & _GEN_537; // @[src/main/scala/fpga/Memory.scala 533:25 730:81]
-  wire [15:0] _GEN_578 = _T_95 ? _GEN_547 : reg_tag_0; // @[src/main/scala/fpga/Memory.scala 505:24 730:81]
-  wire [15:0] _GEN_579 = _T_95 ? _GEN_548 : reg_tag_1; // @[src/main/scala/fpga/Memory.scala 505:24 730:81]
-  wire  _GEN_589 = _T_95 ? _GEN_550 : reg_lru_way_hot; // @[src/main/scala/fpga/Memory.scala 510:24 730:81]
-  wire  _GEN_590 = _T_95 ? _GEN_551 : reg_lru_dirty1; // @[src/main/scala/fpga/Memory.scala 510:24 730:81]
-  wire  _GEN_591 = _T_95 ? _GEN_552 : reg_lru_dirty2; // @[src/main/scala/fpga/Memory.scala 510:24 730:81]
-  wire [255:0] _io_cache_rdata_T_10 = dram_rdata >> _reg_read_word_T_1; // @[src/main/scala/fpga/Memory.scala 803:31]
-  wire  _T_143 = reg_lru_way_hot & reg_ren; // @[src/main/scala/fpga/Memory.scala 817:41]
-  wire [2:0] _T_144 = {2'h0,reg_lru_dirty2}; // @[src/main/scala/fpga/Memory.scala 820:52]
-  wire [2:0] _T_148 = {1'h1,reg_lru_dirty1,1'h0}; // @[src/main/scala/fpga/Memory.scala 824:52]
-  wire  _GEN_610 = reg_lru_way_hot & reg_ren ? 1'h0 : 1'h1; // @[src/main/scala/fpga/Memory.scala 501:22 817:53]
-  wire [7:0] _io_cache_array1_wdata_T_3 = wstrb[0] ? _wdata_T_4[7:0] : dram_rdata[7:0]; // @[src/main/scala/fpga/Memory.scala 830:16]
-  wire [7:0] _io_cache_array1_wdata_T_7 = wstrb[1] ? _wdata_T_4[15:8] : dram_rdata[15:8]; // @[src/main/scala/fpga/Memory.scala 830:16]
-  wire [7:0] _io_cache_array1_wdata_T_11 = wstrb[2] ? _wdata_T_4[23:16] : dram_rdata[23:16]; // @[src/main/scala/fpga/Memory.scala 830:16]
-  wire [7:0] _io_cache_array1_wdata_T_15 = wstrb[3] ? _wdata_T_4[31:24] : dram_rdata[31:24]; // @[src/main/scala/fpga/Memory.scala 830:16]
-  wire [7:0] _io_cache_array1_wdata_T_19 = wstrb[4] ? _wdata_T_4[39:32] : dram_rdata[39:32]; // @[src/main/scala/fpga/Memory.scala 830:16]
-  wire [7:0] _io_cache_array1_wdata_T_23 = wstrb[5] ? _wdata_T_4[47:40] : dram_rdata[47:40]; // @[src/main/scala/fpga/Memory.scala 830:16]
-  wire [7:0] _io_cache_array1_wdata_T_27 = wstrb[6] ? _wdata_T_4[55:48] : dram_rdata[55:48]; // @[src/main/scala/fpga/Memory.scala 830:16]
-  wire [7:0] _io_cache_array1_wdata_T_31 = wstrb[7] ? _wdata_T_4[63:56] : dram_rdata[63:56]; // @[src/main/scala/fpga/Memory.scala 830:16]
-  wire [7:0] _io_cache_array1_wdata_T_35 = wstrb[8] ? _wdata_T_4[71:64] : dram_rdata[71:64]; // @[src/main/scala/fpga/Memory.scala 830:16]
-  wire [7:0] _io_cache_array1_wdata_T_39 = wstrb[9] ? _wdata_T_4[79:72] : dram_rdata[79:72]; // @[src/main/scala/fpga/Memory.scala 830:16]
-  wire [7:0] _io_cache_array1_wdata_T_43 = wstrb[10] ? _wdata_T_4[87:80] : dram_rdata[87:80]; // @[src/main/scala/fpga/Memory.scala 830:16]
-  wire [7:0] _io_cache_array1_wdata_T_47 = wstrb[11] ? _wdata_T_4[95:88] : dram_rdata[95:88]; // @[src/main/scala/fpga/Memory.scala 830:16]
-  wire [7:0] _io_cache_array1_wdata_T_51 = wstrb[12] ? _wdata_T_4[103:96] : dram_rdata[103:96]; // @[src/main/scala/fpga/Memory.scala 830:16]
-  wire [7:0] _io_cache_array1_wdata_T_55 = wstrb[13] ? _wdata_T_4[111:104] : dram_rdata[111:104]; // @[src/main/scala/fpga/Memory.scala 830:16]
-  wire [7:0] _io_cache_array1_wdata_T_59 = wstrb[14] ? _wdata_T_4[119:112] : dram_rdata[119:112]; // @[src/main/scala/fpga/Memory.scala 830:16]
-  wire [7:0] _io_cache_array1_wdata_T_63 = wstrb[15] ? _wdata_T_4[127:120] : dram_rdata[127:120]; // @[src/main/scala/fpga/Memory.scala 830:16]
-  wire [7:0] _io_cache_array1_wdata_T_67 = wstrb[16] ? _wdata_T_4[135:128] : dram_rdata[135:128]; // @[src/main/scala/fpga/Memory.scala 830:16]
-  wire [7:0] _io_cache_array1_wdata_T_71 = wstrb[17] ? _wdata_T_4[143:136] : dram_rdata[143:136]; // @[src/main/scala/fpga/Memory.scala 830:16]
-  wire [7:0] _io_cache_array1_wdata_T_75 = wstrb[18] ? _wdata_T_4[151:144] : dram_rdata[151:144]; // @[src/main/scala/fpga/Memory.scala 830:16]
-  wire [7:0] _io_cache_array1_wdata_T_79 = wstrb[19] ? _wdata_T_4[159:152] : dram_rdata[159:152]; // @[src/main/scala/fpga/Memory.scala 830:16]
-  wire [7:0] _io_cache_array1_wdata_T_83 = wstrb[20] ? _wdata_T_4[167:160] : dram_rdata[167:160]; // @[src/main/scala/fpga/Memory.scala 830:16]
-  wire [7:0] _io_cache_array1_wdata_T_87 = wstrb[21] ? _wdata_T_4[175:168] : dram_rdata[175:168]; // @[src/main/scala/fpga/Memory.scala 830:16]
-  wire [7:0] _io_cache_array1_wdata_T_91 = wstrb[22] ? _wdata_T_4[183:176] : dram_rdata[183:176]; // @[src/main/scala/fpga/Memory.scala 830:16]
-  wire [7:0] _io_cache_array1_wdata_T_95 = wstrb[23] ? _wdata_T_4[191:184] : dram_rdata[191:184]; // @[src/main/scala/fpga/Memory.scala 830:16]
-  wire [7:0] _io_cache_array1_wdata_T_99 = wstrb[24] ? _wdata_T_4[199:192] : dram_rdata[199:192]; // @[src/main/scala/fpga/Memory.scala 830:16]
-  wire [7:0] _io_cache_array1_wdata_T_103 = wstrb[25] ? _wdata_T_4[207:200] : dram_rdata[207:200]; // @[src/main/scala/fpga/Memory.scala 830:16]
-  wire [7:0] _io_cache_array1_wdata_T_107 = wstrb[26] ? _wdata_T_4[215:208] : dram_rdata[215:208]; // @[src/main/scala/fpga/Memory.scala 830:16]
-  wire [7:0] _io_cache_array1_wdata_T_111 = wstrb[27] ? _wdata_T_4[223:216] : dram_rdata[223:216]; // @[src/main/scala/fpga/Memory.scala 830:16]
-  wire [7:0] _io_cache_array1_wdata_T_115 = wstrb[28] ? _wdata_T_4[231:224] : dram_rdata[231:224]; // @[src/main/scala/fpga/Memory.scala 830:16]
-  wire [7:0] _io_cache_array1_wdata_T_119 = wstrb[29] ? _wdata_T_4[239:232] : dram_rdata[239:232]; // @[src/main/scala/fpga/Memory.scala 830:16]
-  wire [7:0] _io_cache_array1_wdata_T_123 = wstrb[30] ? _wdata_T_4[247:240] : dram_rdata[247:240]; // @[src/main/scala/fpga/Memory.scala 830:16]
-  wire [7:0] _io_cache_array1_wdata_T_127 = wstrb[31] ? _wdata_T_4[255:248] : dram_rdata[255:248]; // @[src/main/scala/fpga/Memory.scala 830:16]
+  reg [15:0] i_tag_array_0 [0:127]; // @[src/main/scala/fpga/Memory.scala 288:24]
+  wire  i_tag_array_0_MPORT_en; // @[src/main/scala/fpga/Memory.scala 288:24]
+  wire [6:0] i_tag_array_0_MPORT_addr; // @[src/main/scala/fpga/Memory.scala 288:24]
+  wire [15:0] i_tag_array_0_MPORT_data; // @[src/main/scala/fpga/Memory.scala 288:24]
+  wire  i_tag_array_0_MPORT_1_en; // @[src/main/scala/fpga/Memory.scala 288:24]
+  wire [6:0] i_tag_array_0_MPORT_1_addr; // @[src/main/scala/fpga/Memory.scala 288:24]
+  wire [15:0] i_tag_array_0_MPORT_1_data; // @[src/main/scala/fpga/Memory.scala 288:24]
+  wire [15:0] i_tag_array_0_MPORT_2_data; // @[src/main/scala/fpga/Memory.scala 288:24]
+  wire [6:0] i_tag_array_0_MPORT_2_addr; // @[src/main/scala/fpga/Memory.scala 288:24]
+  wire  i_tag_array_0_MPORT_2_mask; // @[src/main/scala/fpga/Memory.scala 288:24]
+  wire  i_tag_array_0_MPORT_2_en; // @[src/main/scala/fpga/Memory.scala 288:24]
+  wire [15:0] i_tag_array_0_MPORT_3_data; // @[src/main/scala/fpga/Memory.scala 288:24]
+  wire [6:0] i_tag_array_0_MPORT_3_addr; // @[src/main/scala/fpga/Memory.scala 288:24]
+  wire  i_tag_array_0_MPORT_3_mask; // @[src/main/scala/fpga/Memory.scala 288:24]
+  wire  i_tag_array_0_MPORT_3_en; // @[src/main/scala/fpga/Memory.scala 288:24]
+  reg [15:0] tag_array_0 [0:127]; // @[src/main/scala/fpga/Memory.scala 486:22]
+  wire  tag_array_0_MPORT_4_en; // @[src/main/scala/fpga/Memory.scala 486:22]
+  wire [6:0] tag_array_0_MPORT_4_addr; // @[src/main/scala/fpga/Memory.scala 486:22]
+  wire [15:0] tag_array_0_MPORT_4_data; // @[src/main/scala/fpga/Memory.scala 486:22]
+  wire  tag_array_0_MPORT_5_en; // @[src/main/scala/fpga/Memory.scala 486:22]
+  wire [6:0] tag_array_0_MPORT_5_addr; // @[src/main/scala/fpga/Memory.scala 486:22]
+  wire [15:0] tag_array_0_MPORT_5_data; // @[src/main/scala/fpga/Memory.scala 486:22]
+  wire  tag_array_0_MPORT_6_en; // @[src/main/scala/fpga/Memory.scala 486:22]
+  wire [6:0] tag_array_0_MPORT_6_addr; // @[src/main/scala/fpga/Memory.scala 486:22]
+  wire [15:0] tag_array_0_MPORT_6_data; // @[src/main/scala/fpga/Memory.scala 486:22]
+  wire  tag_array_0_MPORT_7_en; // @[src/main/scala/fpga/Memory.scala 486:22]
+  wire [6:0] tag_array_0_MPORT_7_addr; // @[src/main/scala/fpga/Memory.scala 486:22]
+  wire [15:0] tag_array_0_MPORT_7_data; // @[src/main/scala/fpga/Memory.scala 486:22]
+  wire  tag_array_0_MPORT_10_en; // @[src/main/scala/fpga/Memory.scala 486:22]
+  wire [6:0] tag_array_0_MPORT_10_addr; // @[src/main/scala/fpga/Memory.scala 486:22]
+  wire [15:0] tag_array_0_MPORT_10_data; // @[src/main/scala/fpga/Memory.scala 486:22]
+  wire  tag_array_0_MPORT_11_en; // @[src/main/scala/fpga/Memory.scala 486:22]
+  wire [6:0] tag_array_0_MPORT_11_addr; // @[src/main/scala/fpga/Memory.scala 486:22]
+  wire [15:0] tag_array_0_MPORT_11_data; // @[src/main/scala/fpga/Memory.scala 486:22]
+  wire [15:0] tag_array_0_MPORT_12_data; // @[src/main/scala/fpga/Memory.scala 486:22]
+  wire [6:0] tag_array_0_MPORT_12_addr; // @[src/main/scala/fpga/Memory.scala 486:22]
+  wire  tag_array_0_MPORT_12_mask; // @[src/main/scala/fpga/Memory.scala 486:22]
+  wire  tag_array_0_MPORT_12_en; // @[src/main/scala/fpga/Memory.scala 486:22]
+  wire [15:0] tag_array_0_MPORT_14_data; // @[src/main/scala/fpga/Memory.scala 486:22]
+  wire [6:0] tag_array_0_MPORT_14_addr; // @[src/main/scala/fpga/Memory.scala 486:22]
+  wire  tag_array_0_MPORT_14_mask; // @[src/main/scala/fpga/Memory.scala 486:22]
+  wire  tag_array_0_MPORT_14_en; // @[src/main/scala/fpga/Memory.scala 486:22]
+  wire [15:0] tag_array_0_MPORT_16_data; // @[src/main/scala/fpga/Memory.scala 486:22]
+  wire [6:0] tag_array_0_MPORT_16_addr; // @[src/main/scala/fpga/Memory.scala 486:22]
+  wire  tag_array_0_MPORT_16_mask; // @[src/main/scala/fpga/Memory.scala 486:22]
+  wire  tag_array_0_MPORT_16_en; // @[src/main/scala/fpga/Memory.scala 486:22]
+  wire [15:0] tag_array_0_MPORT_18_data; // @[src/main/scala/fpga/Memory.scala 486:22]
+  wire [6:0] tag_array_0_MPORT_18_addr; // @[src/main/scala/fpga/Memory.scala 486:22]
+  wire  tag_array_0_MPORT_18_mask; // @[src/main/scala/fpga/Memory.scala 486:22]
+  wire  tag_array_0_MPORT_18_en; // @[src/main/scala/fpga/Memory.scala 486:22]
+  reg [15:0] tag_array_1 [0:127]; // @[src/main/scala/fpga/Memory.scala 486:22]
+  wire  tag_array_1_MPORT_4_en; // @[src/main/scala/fpga/Memory.scala 486:22]
+  wire [6:0] tag_array_1_MPORT_4_addr; // @[src/main/scala/fpga/Memory.scala 486:22]
+  wire [15:0] tag_array_1_MPORT_4_data; // @[src/main/scala/fpga/Memory.scala 486:22]
+  wire  tag_array_1_MPORT_5_en; // @[src/main/scala/fpga/Memory.scala 486:22]
+  wire [6:0] tag_array_1_MPORT_5_addr; // @[src/main/scala/fpga/Memory.scala 486:22]
+  wire [15:0] tag_array_1_MPORT_5_data; // @[src/main/scala/fpga/Memory.scala 486:22]
+  wire  tag_array_1_MPORT_6_en; // @[src/main/scala/fpga/Memory.scala 486:22]
+  wire [6:0] tag_array_1_MPORT_6_addr; // @[src/main/scala/fpga/Memory.scala 486:22]
+  wire [15:0] tag_array_1_MPORT_6_data; // @[src/main/scala/fpga/Memory.scala 486:22]
+  wire  tag_array_1_MPORT_7_en; // @[src/main/scala/fpga/Memory.scala 486:22]
+  wire [6:0] tag_array_1_MPORT_7_addr; // @[src/main/scala/fpga/Memory.scala 486:22]
+  wire [15:0] tag_array_1_MPORT_7_data; // @[src/main/scala/fpga/Memory.scala 486:22]
+  wire  tag_array_1_MPORT_10_en; // @[src/main/scala/fpga/Memory.scala 486:22]
+  wire [6:0] tag_array_1_MPORT_10_addr; // @[src/main/scala/fpga/Memory.scala 486:22]
+  wire [15:0] tag_array_1_MPORT_10_data; // @[src/main/scala/fpga/Memory.scala 486:22]
+  wire  tag_array_1_MPORT_11_en; // @[src/main/scala/fpga/Memory.scala 486:22]
+  wire [6:0] tag_array_1_MPORT_11_addr; // @[src/main/scala/fpga/Memory.scala 486:22]
+  wire [15:0] tag_array_1_MPORT_11_data; // @[src/main/scala/fpga/Memory.scala 486:22]
+  wire [15:0] tag_array_1_MPORT_12_data; // @[src/main/scala/fpga/Memory.scala 486:22]
+  wire [6:0] tag_array_1_MPORT_12_addr; // @[src/main/scala/fpga/Memory.scala 486:22]
+  wire  tag_array_1_MPORT_12_mask; // @[src/main/scala/fpga/Memory.scala 486:22]
+  wire  tag_array_1_MPORT_12_en; // @[src/main/scala/fpga/Memory.scala 486:22]
+  wire [15:0] tag_array_1_MPORT_14_data; // @[src/main/scala/fpga/Memory.scala 486:22]
+  wire [6:0] tag_array_1_MPORT_14_addr; // @[src/main/scala/fpga/Memory.scala 486:22]
+  wire  tag_array_1_MPORT_14_mask; // @[src/main/scala/fpga/Memory.scala 486:22]
+  wire  tag_array_1_MPORT_14_en; // @[src/main/scala/fpga/Memory.scala 486:22]
+  wire [15:0] tag_array_1_MPORT_16_data; // @[src/main/scala/fpga/Memory.scala 486:22]
+  wire [6:0] tag_array_1_MPORT_16_addr; // @[src/main/scala/fpga/Memory.scala 486:22]
+  wire  tag_array_1_MPORT_16_mask; // @[src/main/scala/fpga/Memory.scala 486:22]
+  wire  tag_array_1_MPORT_16_en; // @[src/main/scala/fpga/Memory.scala 486:22]
+  wire [15:0] tag_array_1_MPORT_18_data; // @[src/main/scala/fpga/Memory.scala 486:22]
+  wire [6:0] tag_array_1_MPORT_18_addr; // @[src/main/scala/fpga/Memory.scala 486:22]
+  wire  tag_array_1_MPORT_18_mask; // @[src/main/scala/fpga/Memory.scala 486:22]
+  wire  tag_array_1_MPORT_18_en; // @[src/main/scala/fpga/Memory.scala 486:22]
+  reg  lru_array_way_hot [0:127]; // @[src/main/scala/fpga/Memory.scala 487:22]
+  wire  lru_array_way_hot_reg_lru_MPORT_en; // @[src/main/scala/fpga/Memory.scala 487:22]
+  wire [6:0] lru_array_way_hot_reg_lru_MPORT_addr; // @[src/main/scala/fpga/Memory.scala 487:22]
+  wire  lru_array_way_hot_reg_lru_MPORT_data; // @[src/main/scala/fpga/Memory.scala 487:22]
+  wire  lru_array_way_hot_reg_lru_MPORT_1_en; // @[src/main/scala/fpga/Memory.scala 487:22]
+  wire [6:0] lru_array_way_hot_reg_lru_MPORT_1_addr; // @[src/main/scala/fpga/Memory.scala 487:22]
+  wire  lru_array_way_hot_reg_lru_MPORT_1_data; // @[src/main/scala/fpga/Memory.scala 487:22]
+  wire  lru_array_way_hot_reg_lru_MPORT_2_en; // @[src/main/scala/fpga/Memory.scala 487:22]
+  wire [6:0] lru_array_way_hot_reg_lru_MPORT_2_addr; // @[src/main/scala/fpga/Memory.scala 487:22]
+  wire  lru_array_way_hot_reg_lru_MPORT_2_data; // @[src/main/scala/fpga/Memory.scala 487:22]
+  wire  lru_array_way_hot_MPORT_8_data; // @[src/main/scala/fpga/Memory.scala 487:22]
+  wire [6:0] lru_array_way_hot_MPORT_8_addr; // @[src/main/scala/fpga/Memory.scala 487:22]
+  wire  lru_array_way_hot_MPORT_8_mask; // @[src/main/scala/fpga/Memory.scala 487:22]
+  wire  lru_array_way_hot_MPORT_8_en; // @[src/main/scala/fpga/Memory.scala 487:22]
+  wire  lru_array_way_hot_MPORT_9_data; // @[src/main/scala/fpga/Memory.scala 487:22]
+  wire [6:0] lru_array_way_hot_MPORT_9_addr; // @[src/main/scala/fpga/Memory.scala 487:22]
+  wire  lru_array_way_hot_MPORT_9_mask; // @[src/main/scala/fpga/Memory.scala 487:22]
+  wire  lru_array_way_hot_MPORT_9_en; // @[src/main/scala/fpga/Memory.scala 487:22]
+  wire  lru_array_way_hot_MPORT_13_data; // @[src/main/scala/fpga/Memory.scala 487:22]
+  wire [6:0] lru_array_way_hot_MPORT_13_addr; // @[src/main/scala/fpga/Memory.scala 487:22]
+  wire  lru_array_way_hot_MPORT_13_mask; // @[src/main/scala/fpga/Memory.scala 487:22]
+  wire  lru_array_way_hot_MPORT_13_en; // @[src/main/scala/fpga/Memory.scala 487:22]
+  wire  lru_array_way_hot_MPORT_15_data; // @[src/main/scala/fpga/Memory.scala 487:22]
+  wire [6:0] lru_array_way_hot_MPORT_15_addr; // @[src/main/scala/fpga/Memory.scala 487:22]
+  wire  lru_array_way_hot_MPORT_15_mask; // @[src/main/scala/fpga/Memory.scala 487:22]
+  wire  lru_array_way_hot_MPORT_15_en; // @[src/main/scala/fpga/Memory.scala 487:22]
+  wire  lru_array_way_hot_MPORT_17_data; // @[src/main/scala/fpga/Memory.scala 487:22]
+  wire [6:0] lru_array_way_hot_MPORT_17_addr; // @[src/main/scala/fpga/Memory.scala 487:22]
+  wire  lru_array_way_hot_MPORT_17_mask; // @[src/main/scala/fpga/Memory.scala 487:22]
+  wire  lru_array_way_hot_MPORT_17_en; // @[src/main/scala/fpga/Memory.scala 487:22]
+  wire  lru_array_way_hot_MPORT_19_data; // @[src/main/scala/fpga/Memory.scala 487:22]
+  wire [6:0] lru_array_way_hot_MPORT_19_addr; // @[src/main/scala/fpga/Memory.scala 487:22]
+  wire  lru_array_way_hot_MPORT_19_mask; // @[src/main/scala/fpga/Memory.scala 487:22]
+  wire  lru_array_way_hot_MPORT_19_en; // @[src/main/scala/fpga/Memory.scala 487:22]
+  reg  lru_array_dirty1 [0:127]; // @[src/main/scala/fpga/Memory.scala 487:22]
+  wire  lru_array_dirty1_reg_lru_MPORT_en; // @[src/main/scala/fpga/Memory.scala 487:22]
+  wire [6:0] lru_array_dirty1_reg_lru_MPORT_addr; // @[src/main/scala/fpga/Memory.scala 487:22]
+  wire  lru_array_dirty1_reg_lru_MPORT_data; // @[src/main/scala/fpga/Memory.scala 487:22]
+  wire  lru_array_dirty1_reg_lru_MPORT_1_en; // @[src/main/scala/fpga/Memory.scala 487:22]
+  wire [6:0] lru_array_dirty1_reg_lru_MPORT_1_addr; // @[src/main/scala/fpga/Memory.scala 487:22]
+  wire  lru_array_dirty1_reg_lru_MPORT_1_data; // @[src/main/scala/fpga/Memory.scala 487:22]
+  wire  lru_array_dirty1_reg_lru_MPORT_2_en; // @[src/main/scala/fpga/Memory.scala 487:22]
+  wire [6:0] lru_array_dirty1_reg_lru_MPORT_2_addr; // @[src/main/scala/fpga/Memory.scala 487:22]
+  wire  lru_array_dirty1_reg_lru_MPORT_2_data; // @[src/main/scala/fpga/Memory.scala 487:22]
+  wire  lru_array_dirty1_MPORT_8_data; // @[src/main/scala/fpga/Memory.scala 487:22]
+  wire [6:0] lru_array_dirty1_MPORT_8_addr; // @[src/main/scala/fpga/Memory.scala 487:22]
+  wire  lru_array_dirty1_MPORT_8_mask; // @[src/main/scala/fpga/Memory.scala 487:22]
+  wire  lru_array_dirty1_MPORT_8_en; // @[src/main/scala/fpga/Memory.scala 487:22]
+  wire  lru_array_dirty1_MPORT_9_data; // @[src/main/scala/fpga/Memory.scala 487:22]
+  wire [6:0] lru_array_dirty1_MPORT_9_addr; // @[src/main/scala/fpga/Memory.scala 487:22]
+  wire  lru_array_dirty1_MPORT_9_mask; // @[src/main/scala/fpga/Memory.scala 487:22]
+  wire  lru_array_dirty1_MPORT_9_en; // @[src/main/scala/fpga/Memory.scala 487:22]
+  wire  lru_array_dirty1_MPORT_13_data; // @[src/main/scala/fpga/Memory.scala 487:22]
+  wire [6:0] lru_array_dirty1_MPORT_13_addr; // @[src/main/scala/fpga/Memory.scala 487:22]
+  wire  lru_array_dirty1_MPORT_13_mask; // @[src/main/scala/fpga/Memory.scala 487:22]
+  wire  lru_array_dirty1_MPORT_13_en; // @[src/main/scala/fpga/Memory.scala 487:22]
+  wire  lru_array_dirty1_MPORT_15_data; // @[src/main/scala/fpga/Memory.scala 487:22]
+  wire [6:0] lru_array_dirty1_MPORT_15_addr; // @[src/main/scala/fpga/Memory.scala 487:22]
+  wire  lru_array_dirty1_MPORT_15_mask; // @[src/main/scala/fpga/Memory.scala 487:22]
+  wire  lru_array_dirty1_MPORT_15_en; // @[src/main/scala/fpga/Memory.scala 487:22]
+  wire  lru_array_dirty1_MPORT_17_data; // @[src/main/scala/fpga/Memory.scala 487:22]
+  wire [6:0] lru_array_dirty1_MPORT_17_addr; // @[src/main/scala/fpga/Memory.scala 487:22]
+  wire  lru_array_dirty1_MPORT_17_mask; // @[src/main/scala/fpga/Memory.scala 487:22]
+  wire  lru_array_dirty1_MPORT_17_en; // @[src/main/scala/fpga/Memory.scala 487:22]
+  wire  lru_array_dirty1_MPORT_19_data; // @[src/main/scala/fpga/Memory.scala 487:22]
+  wire [6:0] lru_array_dirty1_MPORT_19_addr; // @[src/main/scala/fpga/Memory.scala 487:22]
+  wire  lru_array_dirty1_MPORT_19_mask; // @[src/main/scala/fpga/Memory.scala 487:22]
+  wire  lru_array_dirty1_MPORT_19_en; // @[src/main/scala/fpga/Memory.scala 487:22]
+  reg  lru_array_dirty2 [0:127]; // @[src/main/scala/fpga/Memory.scala 487:22]
+  wire  lru_array_dirty2_reg_lru_MPORT_en; // @[src/main/scala/fpga/Memory.scala 487:22]
+  wire [6:0] lru_array_dirty2_reg_lru_MPORT_addr; // @[src/main/scala/fpga/Memory.scala 487:22]
+  wire  lru_array_dirty2_reg_lru_MPORT_data; // @[src/main/scala/fpga/Memory.scala 487:22]
+  wire  lru_array_dirty2_reg_lru_MPORT_1_en; // @[src/main/scala/fpga/Memory.scala 487:22]
+  wire [6:0] lru_array_dirty2_reg_lru_MPORT_1_addr; // @[src/main/scala/fpga/Memory.scala 487:22]
+  wire  lru_array_dirty2_reg_lru_MPORT_1_data; // @[src/main/scala/fpga/Memory.scala 487:22]
+  wire  lru_array_dirty2_reg_lru_MPORT_2_en; // @[src/main/scala/fpga/Memory.scala 487:22]
+  wire [6:0] lru_array_dirty2_reg_lru_MPORT_2_addr; // @[src/main/scala/fpga/Memory.scala 487:22]
+  wire  lru_array_dirty2_reg_lru_MPORT_2_data; // @[src/main/scala/fpga/Memory.scala 487:22]
+  wire  lru_array_dirty2_MPORT_8_data; // @[src/main/scala/fpga/Memory.scala 487:22]
+  wire [6:0] lru_array_dirty2_MPORT_8_addr; // @[src/main/scala/fpga/Memory.scala 487:22]
+  wire  lru_array_dirty2_MPORT_8_mask; // @[src/main/scala/fpga/Memory.scala 487:22]
+  wire  lru_array_dirty2_MPORT_8_en; // @[src/main/scala/fpga/Memory.scala 487:22]
+  wire  lru_array_dirty2_MPORT_9_data; // @[src/main/scala/fpga/Memory.scala 487:22]
+  wire [6:0] lru_array_dirty2_MPORT_9_addr; // @[src/main/scala/fpga/Memory.scala 487:22]
+  wire  lru_array_dirty2_MPORT_9_mask; // @[src/main/scala/fpga/Memory.scala 487:22]
+  wire  lru_array_dirty2_MPORT_9_en; // @[src/main/scala/fpga/Memory.scala 487:22]
+  wire  lru_array_dirty2_MPORT_13_data; // @[src/main/scala/fpga/Memory.scala 487:22]
+  wire [6:0] lru_array_dirty2_MPORT_13_addr; // @[src/main/scala/fpga/Memory.scala 487:22]
+  wire  lru_array_dirty2_MPORT_13_mask; // @[src/main/scala/fpga/Memory.scala 487:22]
+  wire  lru_array_dirty2_MPORT_13_en; // @[src/main/scala/fpga/Memory.scala 487:22]
+  wire  lru_array_dirty2_MPORT_15_data; // @[src/main/scala/fpga/Memory.scala 487:22]
+  wire [6:0] lru_array_dirty2_MPORT_15_addr; // @[src/main/scala/fpga/Memory.scala 487:22]
+  wire  lru_array_dirty2_MPORT_15_mask; // @[src/main/scala/fpga/Memory.scala 487:22]
+  wire  lru_array_dirty2_MPORT_15_en; // @[src/main/scala/fpga/Memory.scala 487:22]
+  wire  lru_array_dirty2_MPORT_17_data; // @[src/main/scala/fpga/Memory.scala 487:22]
+  wire [6:0] lru_array_dirty2_MPORT_17_addr; // @[src/main/scala/fpga/Memory.scala 487:22]
+  wire  lru_array_dirty2_MPORT_17_mask; // @[src/main/scala/fpga/Memory.scala 487:22]
+  wire  lru_array_dirty2_MPORT_17_en; // @[src/main/scala/fpga/Memory.scala 487:22]
+  wire  lru_array_dirty2_MPORT_19_data; // @[src/main/scala/fpga/Memory.scala 487:22]
+  wire [6:0] lru_array_dirty2_MPORT_19_addr; // @[src/main/scala/fpga/Memory.scala 487:22]
+  wire  lru_array_dirty2_MPORT_19_mask; // @[src/main/scala/fpga/Memory.scala 487:22]
+  wire  lru_array_dirty2_MPORT_19_en; // @[src/main/scala/fpga/Memory.scala 487:22]
+  reg [2:0] reg_dram_state; // @[src/main/scala/fpga/Memory.scala 190:31]
+  reg [26:0] reg_dram_addr; // @[src/main/scala/fpga/Memory.scala 191:31]
+  reg [127:0] reg_dram_wdata; // @[src/main/scala/fpga/Memory.scala 192:31]
+  reg [127:0] reg_dram_rdata; // @[src/main/scala/fpga/Memory.scala 193:31]
+  reg  reg_dram_di; // @[src/main/scala/fpga/Memory.scala 194:28]
+  wire  _T_3 = ~io_dramPort_busy; // @[src/main/scala/fpga/Memory.scala 210:48]
+  reg [2:0] icache_state; // @[src/main/scala/fpga/Memory.scala 290:29]
+  wire  _T_25 = 3'h0 == icache_state; // @[src/main/scala/fpga/Memory.scala 329:25]
+  reg [15:0] i_reg_req_addr_tag; // @[src/main/scala/fpga/Memory.scala 293:31]
+  reg [6:0] i_reg_req_addr_index; // @[src/main/scala/fpga/Memory.scala 293:31]
+  wire [22:0] _dram_i_addr_T_1 = {i_reg_req_addr_tag,i_reg_req_addr_index}; // @[src/main/scala/fpga/Memory.scala 409:25]
+  wire  _GEN_24 = io_dramPort_init_calib_complete & ~io_dramPort_busy ? 1'h0 : 1'h1; // @[src/main/scala/fpga/Memory.scala 203:20 210:67 211:21]
+  wire  dram_i_busy = 3'h0 == reg_dram_state ? _GEN_24 : 1'h1; // @[src/main/scala/fpga/Memory.scala 203:20 208:27]
+  wire  _T_58 = ~dram_i_busy; // @[src/main/scala/fpga/Memory.scala 435:13]
+  wire [22:0] _GEN_225 = 3'h4 == icache_state ? _dram_i_addr_T_1 : _dram_i_addr_T_1; // @[src/main/scala/fpga/Memory.scala 329:25 409:19]
+  wire [26:0] dram_i_addr = {{4'd0}, _GEN_225}; // @[src/main/scala/fpga/Memory.scala 181:26]
+  wire [30:0] _io_dramPort_addr_T = {dram_i_addr,4'h0}; // @[src/main/scala/fpga/Memory.scala 214:34]
+  reg [2:0] dcache_state; // @[src/main/scala/fpga/Memory.scala 489:29]
+  wire  _T_68 = 3'h0 == dcache_state; // @[src/main/scala/fpga/Memory.scala 556:25]
+  reg [15:0] reg_tag_0; // @[src/main/scala/fpga/Memory.scala 490:24]
+  reg [15:0] reg_req_addr_tag; // @[src/main/scala/fpga/Memory.scala 496:29]
+  wire  _T_78 = reg_tag_0 == reg_req_addr_tag; // @[src/main/scala/fpga/Memory.scala 611:24]
+  reg [15:0] reg_tag_1; // @[src/main/scala/fpga/Memory.scala 490:24]
+  wire  _T_79 = reg_tag_1 == reg_req_addr_tag; // @[src/main/scala/fpga/Memory.scala 611:59]
+  wire  _T_80 = reg_tag_0 == reg_req_addr_tag | reg_tag_1 == reg_req_addr_tag; // @[src/main/scala/fpga/Memory.scala 611:45]
+  reg  reg_lru_way_hot; // @[src/main/scala/fpga/Memory.scala 495:24]
+  reg  reg_lru_dirty1; // @[src/main/scala/fpga/Memory.scala 495:24]
+  reg  reg_lru_dirty2; // @[src/main/scala/fpga/Memory.scala 495:24]
+  wire  _T_86 = reg_lru_way_hot & reg_lru_dirty1 | ~reg_lru_way_hot & reg_lru_dirty2; // @[src/main/scala/fpga/Memory.scala 652:63]
+  reg [6:0] reg_req_addr_index; // @[src/main/scala/fpga/Memory.scala 496:29]
+  wire [22:0] _dram_d_addr_T_1 = {reg_tag_0,reg_req_addr_index}; // @[src/main/scala/fpga/Memory.scala 660:29]
+  wire [22:0] _dram_d_addr_T_3 = {reg_tag_1,reg_req_addr_index}; // @[src/main/scala/fpga/Memory.scala 663:29]
+  wire [22:0] _GEN_419 = reg_lru_way_hot ? _dram_d_addr_T_1 : _dram_d_addr_T_3; // @[src/main/scala/fpga/Memory.scala 659:40 660:23 663:23]
+  wire [22:0] _dram_d_addr_T_5 = {reg_req_addr_tag,reg_req_addr_index}; // @[src/main/scala/fpga/Memory.scala 673:27]
+  wire [22:0] _GEN_423 = reg_lru_way_hot & reg_lru_dirty1 | ~reg_lru_way_hot & reg_lru_dirty2 ? _GEN_419 :
+    _dram_d_addr_T_5; // @[src/main/scala/fpga/Memory.scala 652:111 673:21]
+  wire [1:0] _GEN_401 = _T_79 ? 2'h1 : 2'h2; // @[src/main/scala/fpga/Memory.scala 595:52 597:29 599:29]
+  wire [1:0] _GEN_403 = _T_78 ? 2'h1 : _GEN_401; // @[src/main/scala/fpga/Memory.scala 592:46 594:29]
+  wire [1:0] _GEN_1004 = 3'h1 == dcache_state ? _GEN_403 : 2'h0; // @[src/main/scala/fpga/Memory.scala 525:23 556:25]
+  wire [1:0] dcache_snoop_status = 3'h0 == dcache_state ? 2'h0 : _GEN_1004; // @[src/main/scala/fpga/Memory.scala 525:23 556:25]
+  wire  _T_47 = 2'h0 == dcache_snoop_status; // @[src/main/scala/fpga/Memory.scala 410:36]
+  wire  _GEN_146 = 2'h1 == dcache_snoop_status ? 1'h0 : 2'h2 == dcache_snoop_status & _T_58; // @[src/main/scala/fpga/Memory.scala 314:14 410:36]
+  wire  _GEN_157 = 2'h0 == dcache_snoop_status ? 1'h0 : _GEN_146; // @[src/main/scala/fpga/Memory.scala 314:14 410:36]
+  wire  _GEN_194 = 3'h3 == icache_state & _T_58; // @[src/main/scala/fpga/Memory.scala 314:14 329:25]
+  wire  _GEN_237 = 3'h4 == icache_state ? _GEN_157 : _GEN_194; // @[src/main/scala/fpga/Memory.scala 329:25]
+  wire  _GEN_283 = 3'h2 == icache_state ? 1'h0 : _GEN_237; // @[src/main/scala/fpga/Memory.scala 314:14 329:25]
+  wire  _GEN_326 = 3'h1 == icache_state ? 1'h0 : _GEN_283; // @[src/main/scala/fpga/Memory.scala 314:14 329:25]
+  wire  dram_i_ren = 3'h0 == icache_state ? 1'h0 : _GEN_326; // @[src/main/scala/fpga/Memory.scala 314:14 329:25]
+  wire  _GEN_30 = io_dramPort_init_calib_complete & ~io_dramPort_busy ? dram_i_ren : 1'h1; // @[src/main/scala/fpga/Memory.scala 204:20 210:67]
+  wire  dram_d_busy = 3'h0 == reg_dram_state ? _GEN_30 : 1'h1; // @[src/main/scala/fpga/Memory.scala 204:20 208:27]
+  wire  _T_123 = ~dram_d_busy; // @[src/main/scala/fpga/Memory.scala 780:13]
+  wire [22:0] _GEN_787 = 3'h3 == dcache_state ? _GEN_423 : _dram_d_addr_T_5; // @[src/main/scala/fpga/Memory.scala 556:25]
+  wire [22:0] _GEN_831 = 3'h4 == dcache_state ? _GEN_423 : _GEN_787; // @[src/main/scala/fpga/Memory.scala 556:25]
+  wire [22:0] _GEN_937 = 3'h2 == dcache_state ? _GEN_423 : _GEN_831; // @[src/main/scala/fpga/Memory.scala 556:25]
+  wire [26:0] dram_d_addr = {{4'd0}, _GEN_937}; // @[src/main/scala/fpga/Memory.scala 186:26]
+  wire [30:0] _io_dramPort_addr_T_1 = {dram_d_addr,4'h0}; // @[src/main/scala/fpga/Memory.scala 222:36]
+  wire [255:0] cold_line = reg_lru_way_hot ? io_cache_array1_rdata : io_cache_array2_rdata; // @[src/main/scala/fpga/Memory.scala 553:19]
+  reg [255:0] reg_line; // @[src/main/scala/fpga/Memory.scala 493:25]
+  wire [255:0] _GEN_828 = 3'h4 == dcache_state ? reg_line : cold_line; // @[src/main/scala/fpga/Memory.scala 556:25 678:20]
+  wire [255:0] dram_d_wdata = 3'h2 == dcache_state ? cold_line : _GEN_828; // @[src/main/scala/fpga/Memory.scala 556:25 610:20]
+  wire  _GEN_418 = dram_d_busy ? 1'h0 : 1'h1; // @[src/main/scala/fpga/Memory.scala 508:14 653:28 656:22]
+  wire  _GEN_424 = reg_lru_way_hot & reg_lru_dirty1 | ~reg_lru_way_hot & reg_lru_dirty2 ? 1'h0 : _GEN_418; // @[src/main/scala/fpga/Memory.scala 652:111 507:14]
+  wire  _GEN_449 = reg_tag_0 == reg_req_addr_tag | reg_tag_1 == reg_req_addr_tag ? 1'h0 : _GEN_424; // @[src/main/scala/fpga/Memory.scala 507:14 611:81]
+  wire  _GEN_458 = _T_86 ? 1'h0 : _T_123; // @[src/main/scala/fpga/Memory.scala 679:105 507:14]
+  wire  _GEN_694 = 3'h5 == dcache_state & _T_123; // @[src/main/scala/fpga/Memory.scala 507:14 556:25]
+  wire  _GEN_788 = 3'h3 == dcache_state ? _GEN_449 : _GEN_694; // @[src/main/scala/fpga/Memory.scala 556:25]
+  wire  _GEN_832 = 3'h4 == dcache_state ? _GEN_458 : _GEN_788; // @[src/main/scala/fpga/Memory.scala 556:25]
+  wire  _GEN_938 = 3'h2 == dcache_state ? _GEN_449 : _GEN_832; // @[src/main/scala/fpga/Memory.scala 556:25]
+  wire  _GEN_1031 = 3'h1 == dcache_state ? 1'h0 : _GEN_938; // @[src/main/scala/fpga/Memory.scala 507:14 556:25]
+  wire  dram_d_ren = 3'h0 == dcache_state ? 1'h0 : _GEN_1031; // @[src/main/scala/fpga/Memory.scala 507:14 556:25]
+  wire [26:0] _GEN_2 = dram_d_ren ? dram_d_addr : reg_dram_addr; // @[src/main/scala/fpga/Memory.scala 229:35 232:27 191:31]
+  wire  _GEN_3 = dram_d_ren ? 1'h0 : reg_dram_di; // @[src/main/scala/fpga/Memory.scala 229:35 233:25 194:28]
+  wire [2:0] _GEN_4 = dram_d_ren ? 3'h2 : reg_dram_state; // @[src/main/scala/fpga/Memory.scala 229:35 234:28 190:31]
+  wire  _GEN_422 = (reg_lru_way_hot & reg_lru_dirty1 | ~reg_lru_way_hot & reg_lru_dirty2) & _GEN_418; // @[src/main/scala/fpga/Memory.scala 652:111 508:14]
+  wire  _GEN_447 = reg_tag_0 == reg_req_addr_tag | reg_tag_1 == reg_req_addr_tag ? 1'h0 : _GEN_422; // @[src/main/scala/fpga/Memory.scala 508:14 611:81]
+  wire  _GEN_455 = _T_86 & _T_123; // @[src/main/scala/fpga/Memory.scala 679:105 508:14]
+  wire  _GEN_786 = 3'h3 == dcache_state & _GEN_447; // @[src/main/scala/fpga/Memory.scala 508:14 556:25]
+  wire  _GEN_829 = 3'h4 == dcache_state ? _GEN_455 : _GEN_786; // @[src/main/scala/fpga/Memory.scala 556:25]
+  wire  _GEN_936 = 3'h2 == dcache_state ? _GEN_447 : _GEN_829; // @[src/main/scala/fpga/Memory.scala 556:25]
+  wire  _GEN_1029 = 3'h1 == dcache_state ? 1'h0 : _GEN_936; // @[src/main/scala/fpga/Memory.scala 508:14 556:25]
+  wire  dram_d_wen = 3'h0 == dcache_state ? 1'h0 : _GEN_1029; // @[src/main/scala/fpga/Memory.scala 508:14 556:25]
+  wire [30:0] _GEN_6 = dram_d_wen ? _io_dramPort_addr_T_1 : _io_dramPort_addr_T_1; // @[src/main/scala/fpga/Memory.scala 220:29 222:30]
+  wire [26:0] _GEN_9 = dram_d_wen ? dram_d_addr : _GEN_2; // @[src/main/scala/fpga/Memory.scala 220:29 225:27]
+  wire [127:0] _GEN_10 = dram_d_wen ? dram_d_wdata[255:128] : reg_dram_wdata; // @[src/main/scala/fpga/Memory.scala 220:29 226:28 192:31]
+  wire  _GEN_11 = dram_d_wen ? 1'h0 : _GEN_3; // @[src/main/scala/fpga/Memory.scala 220:29 227:25]
+  wire [2:0] _GEN_12 = dram_d_wen ? 3'h1 : _GEN_4; // @[src/main/scala/fpga/Memory.scala 220:29 228:28]
+  wire  _GEN_13 = dram_d_wen ? 1'h0 : dram_d_ren; // @[src/main/scala/fpga/Memory.scala 196:19 220:29]
+  wire  _GEN_14 = dram_i_ren | _GEN_13; // @[src/main/scala/fpga/Memory.scala 212:27 213:27]
+  wire [30:0] _GEN_15 = dram_i_ren ? _io_dramPort_addr_T : _GEN_6; // @[src/main/scala/fpga/Memory.scala 212:27 214:28]
+  wire  _GEN_17 = dram_i_ren | _GEN_11; // @[src/main/scala/fpga/Memory.scala 212:27 216:23]
+  wire  _GEN_20 = dram_i_ren ? 1'h0 : dram_d_wen; // @[src/main/scala/fpga/Memory.scala 197:19 212:27]
+  wire  _GEN_25 = io_dramPort_init_calib_complete & ~io_dramPort_busy & _GEN_14; // @[src/main/scala/fpga/Memory.scala 196:19 210:67]
+  wire  _GEN_28 = io_dramPort_init_calib_complete & ~io_dramPort_busy ? _GEN_17 : reg_dram_di; // @[src/main/scala/fpga/Memory.scala 194:28 210:67]
+  wire  _GEN_31 = io_dramPort_init_calib_complete & ~io_dramPort_busy & _GEN_20; // @[src/main/scala/fpga/Memory.scala 197:19 210:67]
+  wire [30:0] _io_dramPort_addr_T_3 = {reg_dram_addr,4'h8}; // @[src/main/scala/fpga/Memory.scala 242:32]
+  wire [127:0] _GEN_40 = io_dramPort_rdata_valid ? io_dramPort_rdata : reg_dram_rdata; // @[src/main/scala/fpga/Memory.scala 252:40 253:26 193:31]
+  wire [2:0] _GEN_41 = io_dramPort_rdata_valid ? 3'h5 : 3'h4; // @[src/main/scala/fpga/Memory.scala 252:40 254:26 256:26]
+  wire [2:0] _GEN_42 = io_dramPort_rdata_valid ? 3'h3 : reg_dram_state; // @[src/main/scala/fpga/Memory.scala 258:44 260:24 190:31]
+  wire [2:0] _GEN_46 = _T_3 ? _GEN_41 : _GEN_42; // @[src/main/scala/fpga/Memory.scala 249:32]
+  wire [2:0] _GEN_49 = _T_3 ? 3'h5 : reg_dram_state; // @[src/main/scala/fpga/Memory.scala 264:32 267:24 190:31]
+  wire [2:0] _GEN_50 = io_dramPort_rdata_valid ? 3'h5 : reg_dram_state; // @[src/main/scala/fpga/Memory.scala 271:38 273:24 190:31]
+  wire [255:0] dram_rdata = {io_dramPort_rdata,reg_dram_rdata}; // @[src/main/scala/fpga/Memory.scala 280:26]
+  wire  _GEN_52 = io_dramPort_rdata_valid & reg_dram_di; // @[src/main/scala/fpga/Memory.scala 206:22 277:38 281:28]
+  wire  _GEN_53 = io_dramPort_rdata_valid & ~reg_dram_di; // @[src/main/scala/fpga/Memory.scala 207:22 277:38 282:28]
+  wire [2:0] _GEN_54 = io_dramPort_rdata_valid ? 3'h0 : reg_dram_state; // @[src/main/scala/fpga/Memory.scala 277:38 283:24 190:31]
+  wire [2:0] _GEN_58 = 3'h5 == reg_dram_state ? _GEN_54 : reg_dram_state; // @[src/main/scala/fpga/Memory.scala 208:27 190:31]
+  wire [127:0] _GEN_59 = 3'h4 == reg_dram_state ? _GEN_40 : reg_dram_rdata; // @[src/main/scala/fpga/Memory.scala 208:27 193:31]
+  wire [2:0] _GEN_60 = 3'h4 == reg_dram_state ? _GEN_50 : _GEN_58; // @[src/main/scala/fpga/Memory.scala 208:27]
+  wire  _GEN_62 = 3'h4 == reg_dram_state ? 1'h0 : 3'h5 == reg_dram_state & _GEN_52; // @[src/main/scala/fpga/Memory.scala 206:22 208:27]
+  wire  _GEN_63 = 3'h4 == reg_dram_state ? 1'h0 : 3'h5 == reg_dram_state & _GEN_53; // @[src/main/scala/fpga/Memory.scala 207:22 208:27]
+  wire  _GEN_64 = 3'h3 == reg_dram_state & _T_3; // @[src/main/scala/fpga/Memory.scala 196:19 208:27]
+  wire [2:0] _GEN_66 = 3'h3 == reg_dram_state ? _GEN_49 : _GEN_60; // @[src/main/scala/fpga/Memory.scala 208:27]
+  wire [127:0] _GEN_67 = 3'h3 == reg_dram_state ? reg_dram_rdata : _GEN_59; // @[src/main/scala/fpga/Memory.scala 208:27 193:31]
+  wire  _GEN_69 = 3'h3 == reg_dram_state ? 1'h0 : _GEN_62; // @[src/main/scala/fpga/Memory.scala 206:22 208:27]
+  wire  _GEN_70 = 3'h3 == reg_dram_state ? 1'h0 : _GEN_63; // @[src/main/scala/fpga/Memory.scala 207:22 208:27]
+  wire  _GEN_71 = 3'h2 == reg_dram_state ? _T_3 : _GEN_64; // @[src/main/scala/fpga/Memory.scala 208:27]
+  wire [30:0] _GEN_72 = 3'h2 == reg_dram_state ? _io_dramPort_addr_T_3 : _io_dramPort_addr_T_3; // @[src/main/scala/fpga/Memory.scala 208:27]
+  wire  _GEN_76 = 3'h2 == reg_dram_state ? 1'h0 : _GEN_69; // @[src/main/scala/fpga/Memory.scala 206:22 208:27]
+  wire  _GEN_77 = 3'h2 == reg_dram_state ? 1'h0 : _GEN_70; // @[src/main/scala/fpga/Memory.scala 207:22 208:27]
+  wire  _GEN_78 = 3'h1 == reg_dram_state & _T_3; // @[src/main/scala/fpga/Memory.scala 197:19 208:27]
+  wire [30:0] _GEN_79 = 3'h1 == reg_dram_state ? _io_dramPort_addr_T_3 : _GEN_72; // @[src/main/scala/fpga/Memory.scala 208:27]
+  wire  _GEN_83 = 3'h1 == reg_dram_state ? 1'h0 : _GEN_71; // @[src/main/scala/fpga/Memory.scala 196:19 208:27]
+  wire  _GEN_86 = 3'h1 == reg_dram_state ? 1'h0 : _GEN_76; // @[src/main/scala/fpga/Memory.scala 206:22 208:27]
+  wire  _GEN_87 = 3'h1 == reg_dram_state ? 1'h0 : _GEN_77; // @[src/main/scala/fpga/Memory.scala 207:22 208:27]
+  wire [30:0] _GEN_90 = 3'h0 == reg_dram_state ? _GEN_15 : _GEN_79; // @[src/main/scala/fpga/Memory.scala 208:27]
+  wire  _GEN_92 = 3'h0 == reg_dram_state ? _GEN_28 : reg_dram_di; // @[src/main/scala/fpga/Memory.scala 208:27 194:28]
+  wire  dram_i_rdata_valid = 3'h0 == reg_dram_state ? 1'h0 : _GEN_86; // @[src/main/scala/fpga/Memory.scala 206:22 208:27]
+  wire  dram_d_rdata_valid = 3'h0 == reg_dram_state ? 1'h0 : _GEN_87; // @[src/main/scala/fpga/Memory.scala 207:22 208:27]
+  reg [15:0] i_reg_tag_0; // @[src/main/scala/fpga/Memory.scala 291:26]
+  reg [4:0] i_reg_req_addr_line_off; // @[src/main/scala/fpga/Memory.scala 293:31]
+  reg [4:0] i_reg_next_addr_line_off; // @[src/main/scala/fpga/Memory.scala 294:32]
+  reg [1:0] i_reg_valid_rdata; // @[src/main/scala/fpga/Memory.scala 295:34]
+  reg [22:0] i_reg_cur_tag_index; // @[src/main/scala/fpga/Memory.scala 296:36]
+  reg  i_reg_addr_match; // @[src/main/scala/fpga/Memory.scala 297:33]
+  reg [31:0] i_reg_next_inst; // @[src/main/scala/fpga/Memory.scala 298:32]
+  reg  i_reg_sel_next_inst; // @[src/main/scala/fpga/Memory.scala 299:36]
+  wire [9:0] _io_icache_raddr_T_1 = {io_imem_addr[11:5],io_imem_addr[4:2]}; // @[src/main/scala/fpga/Memory.scala 343:31]
+  wire [22:0] _T_26 = {io_imem_addr[27:12],io_imem_addr[11:5]}; // @[src/main/scala/fpga/Memory.scala 346:42]
+  wire [1:0] _GEN_103 = i_reg_cur_tag_index == _T_26 ? 2'h2 : 2'h1; // @[src/main/scala/fpga/Memory.scala 346:74 347:24 349:24]
+  wire  _GEN_117 = io_cache_iinvalidate ? 1'h0 : io_imem_en; // @[src/main/scala/fpga/Memory.scala 288:24 335:35]
+  wire  _i_reg_addr_match_T_3 = i_reg_req_addr_index == io_imem_addr[11:5]; // @[src/main/scala/fpga/Memory.scala 357:32]
+  wire  _i_reg_addr_match_T_4 = i_reg_req_addr_tag == io_imem_addr[27:12] & _i_reg_addr_match_T_3; // @[src/main/scala/fpga/Memory.scala 356:111]
+  wire  _i_reg_addr_match_T_7 = i_reg_req_addr_line_off[4:2] == io_imem_addr[4:2]; // @[src/main/scala/fpga/Memory.scala 358:57]
+  wire  _i_reg_addr_match_T_8 = _i_reg_addr_match_T_4 & _i_reg_addr_match_T_7; // @[src/main/scala/fpga/Memory.scala 357:54]
+  wire [1:0] _T_32 = io_icache_valid_rdata >> i_reg_req_addr_index[0]; // @[src/main/scala/fpga/Memory.scala 359:36]
+  wire  _T_36 = _T_32[0] & i_reg_tag_0 == i_reg_req_addr_tag; // @[src/main/scala/fpga/Memory.scala 359:105]
+  wire [9:0] _io_icache_raddr_T_3 = {i_reg_req_addr_index,i_reg_req_addr_line_off[4:2]}; // @[src/main/scala/fpga/Memory.scala 361:31]
+  wire [15:0] _GEN_128 = io_imem_en ? i_tag_array_0_MPORT_1_data : i_reg_tag_0; // @[src/main/scala/fpga/Memory.scala 383:31 384:19 291:26]
+  wire [1:0] _GEN_129 = io_imem_en ? _GEN_103 : 2'h0; // @[src/main/scala/fpga/Memory.scala 383:31 393:22]
+  wire [2:0] _GEN_130 = io_cache_iinvalidate ? 3'h6 : {{1'd0}, _GEN_129}; // @[src/main/scala/fpga/Memory.scala 380:35 382:22]
+  wire [15:0] _GEN_132 = io_cache_iinvalidate ? i_reg_tag_0 : _GEN_128; // @[src/main/scala/fpga/Memory.scala 291:26 380:35]
+  wire [1:0] _icache_valid_wdata_T_1 = 2'h1 << i_reg_req_addr_index[0]; // @[src/main/scala/fpga/Memory.scala 400:58]
+  wire [1:0] icache_valid_wdata = i_reg_valid_rdata | _icache_valid_wdata_T_1; // @[src/main/scala/fpga/Memory.scala 400:51]
+  wire [7:0] _i_reg_next_inst_T_1 = {i_reg_next_addr_line_off[4:2],5'h0}; // @[src/main/scala/fpga/Memory.scala 402:51]
+  wire [255:0] dcache_snoop_line = _T_78 ? io_cache_array1_rdata : io_cache_array2_rdata; // @[src/main/scala/fpga/Memory.scala 592:46 593:27]
+  wire [255:0] _i_reg_next_inst_T_2 = dcache_snoop_line >> _i_reg_next_inst_T_1; // @[src/main/scala/fpga/Memory.scala 402:45]
+  wire [27:0] _dcache_snoop_addr_T = {i_reg_req_addr_tag,i_reg_req_addr_index,i_reg_req_addr_line_off}; // @[src/main/scala/fpga/Memory.scala 408:43]
+  wire [4:0] dcache_snoop_addr_line_off = _dcache_snoop_addr_T[4:0]; // @[src/main/scala/fpga/Memory.scala 408:58]
+  wire [6:0] dcache_snoop_addr_index = _dcache_snoop_addr_T[11:5]; // @[src/main/scala/fpga/Memory.scala 408:58]
+  wire [15:0] dcache_snoop_addr_tag = _dcache_snoop_addr_T[27:12]; // @[src/main/scala/fpga/Memory.scala 408:58]
+  wire [2:0] _GEN_134 = _T_58 ? 3'h5 : 3'h3; // @[src/main/scala/fpga/Memory.scala 425:31 427:26 429:26]
+  wire [2:0] _GEN_136 = 2'h2 == dcache_snoop_status ? _GEN_134 : icache_state; // @[src/main/scala/fpga/Memory.scala 290:29 410:36]
+  wire [22:0] _GEN_143 = 2'h1 == dcache_snoop_status ? _dram_i_addr_T_1 : i_reg_cur_tag_index; // @[src/main/scala/fpga/Memory.scala 410:36 420:31 296:36]
+  wire [1:0] _GEN_144 = 2'h1 == dcache_snoop_status ? icache_valid_wdata : i_reg_valid_rdata; // @[src/main/scala/fpga/Memory.scala 410:36 421:29 295:34]
+  wire [2:0] _GEN_145 = 2'h1 == dcache_snoop_status ? 3'h2 : _GEN_136; // @[src/main/scala/fpga/Memory.scala 410:36 422:24]
+  wire  _GEN_151 = 2'h0 == dcache_snoop_status ? 1'h0 : 2'h1 == dcache_snoop_status; // @[src/main/scala/fpga/Memory.scala 288:24 410:36]
+  wire [22:0] _GEN_154 = 2'h0 == dcache_snoop_status ? i_reg_cur_tag_index : _GEN_143; // @[src/main/scala/fpga/Memory.scala 296:36 410:36]
+  wire [1:0] _GEN_155 = 2'h0 == dcache_snoop_status ? i_reg_valid_rdata : _GEN_144; // @[src/main/scala/fpga/Memory.scala 295:34 410:36]
+  wire [2:0] _GEN_156 = 2'h0 == dcache_snoop_status ? icache_state : _GEN_145; // @[src/main/scala/fpga/Memory.scala 290:29 410:36]
+  wire [2:0] _GEN_160 = ~dram_i_busy ? 3'h5 : icache_state; // @[src/main/scala/fpga/Memory.scala 435:27 438:22 290:29]
+  wire [255:0] _i_reg_next_inst_T_6 = dram_rdata >> _i_reg_next_inst_T_1; // @[src/main/scala/fpga/Memory.scala 448:32]
+  wire [22:0] _GEN_166 = dram_i_rdata_valid ? _dram_i_addr_T_1 : i_reg_cur_tag_index; // @[src/main/scala/fpga/Memory.scala 454:33 459:29 296:36]
+  wire [1:0] _GEN_167 = dram_i_rdata_valid ? icache_valid_wdata : i_reg_valid_rdata; // @[src/main/scala/fpga/Memory.scala 454:33 460:27 295:34]
+  wire [2:0] _GEN_168 = dram_i_rdata_valid ? 3'h2 : icache_state; // @[src/main/scala/fpga/Memory.scala 454:33 461:22 290:29]
+  wire [22:0] _GEN_173 = 3'h6 == icache_state ? 23'h7fffff : i_reg_cur_tag_index; // @[src/main/scala/fpga/Memory.scala 329:25 469:27 296:36]
+  wire [2:0] _GEN_174 = 3'h6 == icache_state ? 3'h0 : icache_state; // @[src/main/scala/fpga/Memory.scala 329:25 481:22 290:29]
+  wire [31:0] _GEN_179 = 3'h5 == icache_state ? _i_reg_next_inst_T_6[31:0] : i_reg_next_inst; // @[src/main/scala/fpga/Memory.scala 329:25 448:23 298:32]
+  wire  _GEN_181 = 3'h5 == icache_state & _i_reg_addr_match_T_8; // @[src/main/scala/fpga/Memory.scala 310:20 329:25 451:24]
+  wire [22:0] _GEN_187 = 3'h5 == icache_state ? _GEN_166 : _GEN_173; // @[src/main/scala/fpga/Memory.scala 329:25]
+  wire [1:0] _GEN_188 = 3'h5 == icache_state ? _GEN_167 : i_reg_valid_rdata; // @[src/main/scala/fpga/Memory.scala 329:25 295:34]
+  wire [2:0] _GEN_189 = 3'h5 == icache_state ? _GEN_168 : _GEN_174; // @[src/main/scala/fpga/Memory.scala 329:25]
+  wire  _GEN_191 = 3'h5 == icache_state ? 1'h0 : 3'h6 == icache_state; // @[src/main/scala/fpga/Memory.scala 329:25 323:30]
+  wire [2:0] _GEN_196 = 3'h3 == icache_state ? _GEN_160 : _GEN_189; // @[src/main/scala/fpga/Memory.scala 329:25]
+  wire [31:0] _GEN_201 = 3'h3 == icache_state ? i_reg_next_inst : _GEN_179; // @[src/main/scala/fpga/Memory.scala 329:25 298:32]
+  wire  _GEN_202 = 3'h3 == icache_state ? 1'h0 : 3'h5 == icache_state; // @[src/main/scala/fpga/Memory.scala 311:23 329:25]
+  wire  _GEN_203 = 3'h3 == icache_state ? 1'h0 : _GEN_181; // @[src/main/scala/fpga/Memory.scala 310:20 329:25]
+  wire  _GEN_206 = 3'h3 == icache_state ? 1'h0 : 3'h5 == icache_state & dram_i_rdata_valid; // @[src/main/scala/fpga/Memory.scala 288:24 329:25]
+  wire [22:0] _GEN_209 = 3'h3 == icache_state ? i_reg_cur_tag_index : _GEN_187; // @[src/main/scala/fpga/Memory.scala 329:25 296:36]
+  wire [1:0] _GEN_210 = 3'h3 == icache_state ? i_reg_valid_rdata : _GEN_188; // @[src/main/scala/fpga/Memory.scala 329:25 295:34]
+  wire  _GEN_212 = 3'h3 == icache_state ? 1'h0 : _GEN_191; // @[src/main/scala/fpga/Memory.scala 329:25 323:30]
+  wire [5:0] _GEN_217 = 3'h4 == icache_state ? i_reg_req_addr_index[6:1] : i_reg_req_addr_index[6:1]; // @[src/main/scala/fpga/Memory.scala 329:25 399:28]
+  wire [31:0] _GEN_219 = 3'h4 == icache_state ? _i_reg_next_inst_T_2[31:0] : _GEN_201; // @[src/main/scala/fpga/Memory.scala 329:25 402:23]
+  wire  _GEN_220 = 3'h4 == icache_state | _GEN_202; // @[src/main/scala/fpga/Memory.scala 329:25 403:27]
+  wire  _GEN_221 = 3'h4 == icache_state ? _i_reg_addr_match_T_8 : _GEN_203; // @[src/main/scala/fpga/Memory.scala 329:25 405:24]
+  wire  _GEN_233 = 3'h4 == icache_state ? _GEN_151 : _GEN_206; // @[src/main/scala/fpga/Memory.scala 329:25]
+  wire [22:0] _GEN_234 = 3'h4 == icache_state ? _GEN_154 : _GEN_209; // @[src/main/scala/fpga/Memory.scala 329:25]
+  wire [1:0] _GEN_235 = 3'h4 == icache_state ? _GEN_155 : _GEN_210; // @[src/main/scala/fpga/Memory.scala 329:25]
+  wire [2:0] _GEN_236 = 3'h4 == icache_state ? _GEN_156 : _GEN_196; // @[src/main/scala/fpga/Memory.scala 329:25]
+  wire  _GEN_240 = 3'h4 == icache_state ? 1'h0 : _GEN_206; // @[src/main/scala/fpga/Memory.scala 288:24 329:25]
+  wire  _GEN_244 = 3'h4 == icache_state ? 1'h0 : _GEN_212; // @[src/main/scala/fpga/Memory.scala 329:25 323:30]
+  wire  _GEN_248 = 3'h2 == icache_state ? 1'h0 : 1'h1; // @[src/main/scala/fpga/Memory.scala 329:25 372:22]
+  wire  _GEN_252 = 3'h2 == icache_state | _GEN_221; // @[src/main/scala/fpga/Memory.scala 329:25 375:24]
+  wire [5:0] _GEN_256 = 3'h2 == icache_state ? io_imem_addr[11:6] : _GEN_217; // @[src/main/scala/fpga/Memory.scala 329:25 379:28]
+  wire  _GEN_257 = 3'h2 == icache_state ? io_cache_iinvalidate : _GEN_244; // @[src/main/scala/fpga/Memory.scala 329:25]
+  wire  _GEN_261 = 3'h2 == icache_state & _GEN_117; // @[src/main/scala/fpga/Memory.scala 288:24 329:25]
+  wire  _GEN_263 = 3'h2 == icache_state ? _GEN_117 : _GEN_233; // @[src/main/scala/fpga/Memory.scala 329:25]
+  wire  _GEN_273 = 3'h2 == icache_state ? 1'h0 : 3'h4 == icache_state & _T_47; // @[src/main/scala/fpga/Memory.scala 312:19 329:25]
+  wire  _GEN_277 = 3'h2 == icache_state ? 1'h0 : 3'h4 == icache_state & _GEN_151; // @[src/main/scala/fpga/Memory.scala 288:24 329:25]
+  wire  _GEN_280 = 3'h2 == icache_state ? 1'h0 : _GEN_233; // @[src/main/scala/fpga/Memory.scala 317:17 329:25]
+  wire  _GEN_286 = 3'h2 == icache_state ? 1'h0 : _GEN_240; // @[src/main/scala/fpga/Memory.scala 288:24 329:25]
+  wire  _GEN_290 = 3'h1 == icache_state ? _i_reg_addr_match_T_8 : _GEN_252; // @[src/main/scala/fpga/Memory.scala 329:25 356:24]
+  wire  _GEN_291 = 3'h1 == icache_state ? _T_36 : _GEN_261; // @[src/main/scala/fpga/Memory.scala 329:25]
+  wire [9:0] _GEN_292 = 3'h1 == icache_state ? _io_icache_raddr_T_3 : _io_icache_raddr_T_1; // @[src/main/scala/fpga/Memory.scala 329:25]
+  wire  _GEN_295 = 3'h1 == icache_state ? 1'h0 : 3'h2 == icache_state & i_reg_addr_match; // @[src/main/scala/fpga/Memory.scala 307:17 329:25]
+  wire  _GEN_296 = 3'h1 == icache_state | _GEN_248; // @[src/main/scala/fpga/Memory.scala 308:18 329:25]
+  wire  _GEN_303 = 3'h1 == icache_state ? 1'h0 : _GEN_257; // @[src/main/scala/fpga/Memory.scala 329:25 323:30]
+  wire  _GEN_306 = 3'h1 == icache_state ? 1'h0 : 3'h2 == icache_state & _GEN_117; // @[src/main/scala/fpga/Memory.scala 288:24 329:25]
+  wire  _GEN_308 = 3'h1 == icache_state ? 1'h0 : _GEN_263; // @[src/main/scala/fpga/Memory.scala 321:23 329:25]
+  wire  _GEN_318 = 3'h1 == icache_state ? 1'h0 : _GEN_273; // @[src/main/scala/fpga/Memory.scala 312:19 329:25]
+  wire  _GEN_322 = 3'h1 == icache_state ? 1'h0 : _GEN_277; // @[src/main/scala/fpga/Memory.scala 288:24 329:25]
+  wire  _GEN_325 = 3'h1 == icache_state ? 1'h0 : _GEN_280; // @[src/main/scala/fpga/Memory.scala 317:17 329:25]
+  wire  _GEN_329 = 3'h1 == icache_state ? 1'h0 : _GEN_286; // @[src/main/scala/fpga/Memory.scala 288:24 329:25]
+  wire  _GEN_336 = 3'h0 == icache_state | _GEN_290; // @[src/main/scala/fpga/Memory.scala 329:25 334:24]
+  wire  dcache_snoop_en = 3'h0 == icache_state ? 1'h0 : _GEN_318; // @[src/main/scala/fpga/Memory.scala 312:19 329:25]
+  reg [4:0] reg_req_addr_line_off; // @[src/main/scala/fpga/Memory.scala 496:29]
+  reg [31:0] reg_wdata; // @[src/main/scala/fpga/Memory.scala 497:26]
+  reg [3:0] reg_wstrb; // @[src/main/scala/fpga/Memory.scala 498:26]
+  reg  reg_ren; // @[src/main/scala/fpga/Memory.scala 499:24]
+  wire [7:0] _reg_read_word_T_1 = {reg_req_addr_line_off[4:2],5'h0}; // @[src/main/scala/fpga/Memory.scala 549:35]
+  wire [255:0] _reg_read_word_T_2 = io_cache_array1_rdata >> _reg_read_word_T_1; // @[src/main/scala/fpga/Memory.scala 549:29]
+  wire [255:0] _reg_read_word_T_6 = io_cache_array2_rdata >> _reg_read_word_T_1; // @[src/main/scala/fpga/Memory.scala 551:29]
+  wire [31:0] _GEN_378 = _T_78 ? _reg_read_word_T_2[31:0] : _reg_read_word_T_6[31:0]; // @[src/main/scala/fpga/Memory.scala 548:42 549:19 551:19]
+  wire [31:0] _req_addr_T_6 = io_cache_ren ? io_cache_raddr : io_cache_waddr; // @[src/main/scala/fpga/Memory.scala 570:27]
+  wire [4:0] req_addr_2_line_off = _req_addr_T_6[4:0]; // @[src/main/scala/fpga/Memory.scala 570:82]
+  wire [6:0] req_addr_2_index = _req_addr_T_6[11:5]; // @[src/main/scala/fpga/Memory.scala 570:82]
+  wire [15:0] req_addr_2_tag = _req_addr_T_6[27:12]; // @[src/main/scala/fpga/Memory.scala 570:82]
+  wire [1:0] _GEN_379 = io_cache_ren ? 2'h2 : 2'h3; // @[src/main/scala/fpga/Memory.scala 583:31 584:26 586:26]
+  wire [15:0] _GEN_381 = dcache_snoop_en ? dcache_snoop_addr_tag : req_addr_2_tag; // @[src/main/scala/fpga/Memory.scala 558:30 560:22 571:22]
+  wire [6:0] _GEN_382 = dcache_snoop_en ? dcache_snoop_addr_index : req_addr_2_index; // @[src/main/scala/fpga/Memory.scala 558:30 560:22 571:22]
+  wire [4:0] _GEN_383 = dcache_snoop_en ? dcache_snoop_addr_line_off : req_addr_2_line_off; // @[src/main/scala/fpga/Memory.scala 558:30 560:22 571:22]
+  wire  _GEN_391 = dcache_snoop_en ? 1'h0 : 1'h1; // @[src/main/scala/fpga/Memory.scala 503:19 558:30 568:25]
+  wire [31:0] _GEN_392 = dcache_snoop_en ? reg_wdata : io_cache_wdata; // @[src/main/scala/fpga/Memory.scala 497:26 558:30 572:19]
+  wire [3:0] _GEN_393 = dcache_snoop_en ? reg_wstrb : io_cache_wstrb; // @[src/main/scala/fpga/Memory.scala 498:26 558:30 573:19]
+  wire  _GEN_394 = dcache_snoop_en ? reg_ren : io_cache_ren; // @[src/main/scala/fpga/Memory.scala 499:24 558:30 574:17]
+  wire [1:0] _GEN_405 = io_cache_wen ? 2'h3 : 2'h0; // @[src/main/scala/fpga/Memory.scala 646:37 647:28 649:26]
+  wire [1:0] _GEN_406 = io_cache_ren ? 2'h2 : _GEN_405; // @[src/main/scala/fpga/Memory.scala 644:31 645:28]
+  wire [15:0] _GEN_410 = dcache_snoop_en ? tag_array_0_MPORT_6_data : tag_array_0_MPORT_7_data; // @[src/main/scala/fpga/Memory.scala 620:32 623:19 637:19]
+  wire [15:0] _GEN_411 = dcache_snoop_en ? tag_array_1_MPORT_6_data : tag_array_1_MPORT_7_data; // @[src/main/scala/fpga/Memory.scala 620:32 623:19 637:19]
+  wire [1:0] _GEN_412 = dcache_snoop_en ? 2'h1 : _GEN_406; // @[src/main/scala/fpga/Memory.scala 620:32 628:24]
+  wire  _GEN_414 = dcache_snoop_en ? reg_lru_way_hot : lru_array_way_hot_reg_lru_MPORT_1_data; // @[src/main/scala/fpga/Memory.scala 495:24 620:32 638:19]
+  wire  _GEN_415 = dcache_snoop_en ? reg_lru_dirty1 : lru_array_dirty1_reg_lru_MPORT_1_data; // @[src/main/scala/fpga/Memory.scala 495:24 620:32 638:19]
+  wire  _GEN_416 = dcache_snoop_en ? reg_lru_dirty2 : lru_array_dirty2_reg_lru_MPORT_1_data; // @[src/main/scala/fpga/Memory.scala 495:24 620:32 638:19]
+  wire [2:0] _GEN_417 = dram_d_busy ? 3'h4 : 3'h5; // @[src/main/scala/fpga/Memory.scala 653:28 654:24 657:24]
+  wire [2:0] _GEN_420 = dram_d_busy ? 3'h4 : 3'h6; // @[src/main/scala/fpga/Memory.scala 667:28 668:24 671:24]
+  wire [2:0] _GEN_421 = reg_lru_way_hot & reg_lru_dirty1 | ~reg_lru_way_hot & reg_lru_dirty2 ? _GEN_417 : _GEN_420; // @[src/main/scala/fpga/Memory.scala 652:111]
+  wire [15:0] _GEN_427 = reg_tag_0 == reg_req_addr_tag | reg_tag_1 == reg_req_addr_tag ? _GEN_381 : reg_req_addr_tag; // @[src/main/scala/fpga/Memory.scala 496:29 611:81]
+  wire [6:0] _GEN_428 = reg_tag_0 == reg_req_addr_tag | reg_tag_1 == reg_req_addr_tag ? _GEN_382 : reg_req_addr_index; // @[src/main/scala/fpga/Memory.scala 496:29 611:81]
+  wire [4:0] _GEN_429 = reg_tag_0 == reg_req_addr_tag | reg_tag_1 == reg_req_addr_tag ? _GEN_383 : reg_req_addr_line_off
+    ; // @[src/main/scala/fpga/Memory.scala 496:29 611:81]
+  wire  _GEN_432 = (reg_tag_0 == reg_req_addr_tag | reg_tag_1 == reg_req_addr_tag) & dcache_snoop_en; // @[src/main/scala/fpga/Memory.scala 486:22 611:81]
+  wire [15:0] _GEN_433 = reg_tag_0 == reg_req_addr_tag | reg_tag_1 == reg_req_addr_tag ? _GEN_410 : reg_tag_0; // @[src/main/scala/fpga/Memory.scala 490:24 611:81]
+  wire [15:0] _GEN_434 = reg_tag_0 == reg_req_addr_tag | reg_tag_1 == reg_req_addr_tag ? _GEN_411 : reg_tag_1; // @[src/main/scala/fpga/Memory.scala 490:24 611:81]
+  wire [2:0] _GEN_437 = reg_tag_0 == reg_req_addr_tag | reg_tag_1 == reg_req_addr_tag ? {{1'd0}, _GEN_412} : _GEN_421; // @[src/main/scala/fpga/Memory.scala 611:81]
+  wire  _GEN_438 = (reg_tag_0 == reg_req_addr_tag | reg_tag_1 == reg_req_addr_tag) & _GEN_391; // @[src/main/scala/fpga/Memory.scala 503:19 611:81]
+  wire [31:0] _GEN_439 = reg_tag_0 == reg_req_addr_tag | reg_tag_1 == reg_req_addr_tag ? _GEN_392 : reg_wdata; // @[src/main/scala/fpga/Memory.scala 497:26 611:81]
+  wire [3:0] _GEN_440 = reg_tag_0 == reg_req_addr_tag | reg_tag_1 == reg_req_addr_tag ? _GEN_393 : reg_wstrb; // @[src/main/scala/fpga/Memory.scala 498:26 611:81]
+  wire  _GEN_441 = reg_tag_0 == reg_req_addr_tag | reg_tag_1 == reg_req_addr_tag ? _GEN_394 : reg_ren; // @[src/main/scala/fpga/Memory.scala 499:24 611:81]
+  wire  _GEN_444 = reg_tag_0 == reg_req_addr_tag | reg_tag_1 == reg_req_addr_tag ? _GEN_414 : reg_lru_way_hot; // @[src/main/scala/fpga/Memory.scala 495:24 611:81]
+  wire  _GEN_445 = reg_tag_0 == reg_req_addr_tag | reg_tag_1 == reg_req_addr_tag ? _GEN_415 : reg_lru_dirty1; // @[src/main/scala/fpga/Memory.scala 495:24 611:81]
+  wire  _GEN_446 = reg_tag_0 == reg_req_addr_tag | reg_tag_1 == reg_req_addr_tag ? _GEN_416 : reg_lru_dirty2; // @[src/main/scala/fpga/Memory.scala 495:24 611:81]
+  wire [2:0] _GEN_451 = _T_123 ? 3'h5 : dcache_state; // @[src/main/scala/fpga/Memory.scala 680:29 682:24 489:29]
+  wire [2:0] _GEN_454 = _T_123 ? 3'h6 : dcache_state; // @[src/main/scala/fpga/Memory.scala 692:29 694:24 489:29]
+  wire [2:0] _GEN_456 = _T_86 ? _GEN_451 : _GEN_454; // @[src/main/scala/fpga/Memory.scala 679:105]
+  wire [4:0] _wstrb_T_1 = {reg_req_addr_line_off[4:2],2'h0}; // @[src/main/scala/fpga/Memory.scala 706:47]
+  wire [31:0] _wstrb_T_3 = {28'h0,reg_wstrb}; // @[src/main/scala/fpga/Memory.scala 534:37]
+  wire [62:0] _GEN_0 = {{31'd0}, _wstrb_T_3}; // @[src/main/scala/fpga/Memory.scala 537:30]
+  wire [62:0] _wstrb_T_4 = _GEN_0 << _wstrb_T_1; // @[src/main/scala/fpga/Memory.scala 537:30]
+  wire [31:0] wstrb = _wstrb_T_4[31:0]; // @[src/main/scala/fpga/Memory.scala 537:39]
+  wire [255:0] _wdata_T_1 = {224'h0,reg_wdata}; // @[src/main/scala/fpga/Memory.scala 531:42]
+  wire [510:0] _GEN_1 = {{255'd0}, _wdata_T_1}; // @[src/main/scala/fpga/Memory.scala 707:44]
+  wire [510:0] _wdata_T_4 = _GEN_1 << _reg_read_word_T_1; // @[src/main/scala/fpga/Memory.scala 707:44]
+  wire [255:0] wdata = _wdata_T_4[255:0]; // @[src/main/scala/fpga/Memory.scala 707:106]
+  wire [2:0] _T_106 = {2'h1,reg_lru_dirty2}; // @[src/main/scala/fpga/Memory.scala 718:50]
+  wire [2:0] _T_110 = {1'h1,reg_lru_dirty1,1'h1}; // @[src/main/scala/fpga/Memory.scala 721:50]
+  wire  _GEN_466 = _T_78 ? 1'h0 : 1'h1; // @[src/main/scala/fpga/Memory.scala 518:25 716:48 720:31]
+  wire [15:0] _GEN_476 = dcache_snoop_en ? tag_array_0_MPORT_10_data : tag_array_0_MPORT_11_data; // @[src/main/scala/fpga/Memory.scala 723:32 726:19 740:19]
+  wire [15:0] _GEN_477 = dcache_snoop_en ? tag_array_1_MPORT_10_data : tag_array_1_MPORT_11_data; // @[src/main/scala/fpga/Memory.scala 723:32 726:19 740:19]
+  wire  _GEN_479 = dcache_snoop_en ? reg_lru_way_hot : lru_array_way_hot_reg_lru_MPORT_2_data; // @[src/main/scala/fpga/Memory.scala 495:24 723:32 741:19]
+  wire  _GEN_480 = dcache_snoop_en ? reg_lru_dirty1 : lru_array_dirty1_reg_lru_MPORT_2_data; // @[src/main/scala/fpga/Memory.scala 495:24 723:32 741:19]
+  wire  _GEN_481 = dcache_snoop_en ? reg_lru_dirty2 : lru_array_dirty2_reg_lru_MPORT_2_data; // @[src/main/scala/fpga/Memory.scala 495:24 723:32 741:19]
+  wire  _GEN_487 = _T_80 & _T_78; // @[src/main/scala/fpga/Memory.scala 512:25 715:81]
+  wire  _GEN_494 = _T_80 & _GEN_466; // @[src/main/scala/fpga/Memory.scala 518:25 715:81]
+  wire [15:0] _GEN_507 = _T_80 ? _GEN_476 : reg_tag_0; // @[src/main/scala/fpga/Memory.scala 490:24 715:81]
+  wire [15:0] _GEN_508 = _T_80 ? _GEN_477 : reg_tag_1; // @[src/main/scala/fpga/Memory.scala 490:24 715:81]
+  wire  _GEN_518 = _T_80 ? _GEN_479 : reg_lru_way_hot; // @[src/main/scala/fpga/Memory.scala 495:24 715:81]
+  wire  _GEN_519 = _T_80 ? _GEN_480 : reg_lru_dirty1; // @[src/main/scala/fpga/Memory.scala 495:24 715:81]
+  wire  _GEN_520 = _T_80 ? _GEN_481 : reg_lru_dirty2; // @[src/main/scala/fpga/Memory.scala 495:24 715:81]
+  wire [255:0] _io_cache_rdata_T_10 = dram_rdata >> _reg_read_word_T_1; // @[src/main/scala/fpga/Memory.scala 788:31]
+  wire  _T_128 = reg_lru_way_hot & reg_ren; // @[src/main/scala/fpga/Memory.scala 802:41]
+  wire [2:0] _T_129 = {2'h0,reg_lru_dirty2}; // @[src/main/scala/fpga/Memory.scala 805:52]
+  wire [2:0] _T_133 = {1'h1,reg_lru_dirty1,1'h0}; // @[src/main/scala/fpga/Memory.scala 809:52]
+  wire  _GEN_539 = reg_lru_way_hot & reg_ren ? 1'h0 : 1'h1; // @[src/main/scala/fpga/Memory.scala 486:22 802:53]
+  wire [7:0] _io_cache_array1_wdata_T_3 = wstrb[0] ? _wdata_T_4[7:0] : dram_rdata[7:0]; // @[src/main/scala/fpga/Memory.scala 815:16]
+  wire [7:0] _io_cache_array1_wdata_T_7 = wstrb[1] ? _wdata_T_4[15:8] : dram_rdata[15:8]; // @[src/main/scala/fpga/Memory.scala 815:16]
+  wire [7:0] _io_cache_array1_wdata_T_11 = wstrb[2] ? _wdata_T_4[23:16] : dram_rdata[23:16]; // @[src/main/scala/fpga/Memory.scala 815:16]
+  wire [7:0] _io_cache_array1_wdata_T_15 = wstrb[3] ? _wdata_T_4[31:24] : dram_rdata[31:24]; // @[src/main/scala/fpga/Memory.scala 815:16]
+  wire [7:0] _io_cache_array1_wdata_T_19 = wstrb[4] ? _wdata_T_4[39:32] : dram_rdata[39:32]; // @[src/main/scala/fpga/Memory.scala 815:16]
+  wire [7:0] _io_cache_array1_wdata_T_23 = wstrb[5] ? _wdata_T_4[47:40] : dram_rdata[47:40]; // @[src/main/scala/fpga/Memory.scala 815:16]
+  wire [7:0] _io_cache_array1_wdata_T_27 = wstrb[6] ? _wdata_T_4[55:48] : dram_rdata[55:48]; // @[src/main/scala/fpga/Memory.scala 815:16]
+  wire [7:0] _io_cache_array1_wdata_T_31 = wstrb[7] ? _wdata_T_4[63:56] : dram_rdata[63:56]; // @[src/main/scala/fpga/Memory.scala 815:16]
+  wire [7:0] _io_cache_array1_wdata_T_35 = wstrb[8] ? _wdata_T_4[71:64] : dram_rdata[71:64]; // @[src/main/scala/fpga/Memory.scala 815:16]
+  wire [7:0] _io_cache_array1_wdata_T_39 = wstrb[9] ? _wdata_T_4[79:72] : dram_rdata[79:72]; // @[src/main/scala/fpga/Memory.scala 815:16]
+  wire [7:0] _io_cache_array1_wdata_T_43 = wstrb[10] ? _wdata_T_4[87:80] : dram_rdata[87:80]; // @[src/main/scala/fpga/Memory.scala 815:16]
+  wire [7:0] _io_cache_array1_wdata_T_47 = wstrb[11] ? _wdata_T_4[95:88] : dram_rdata[95:88]; // @[src/main/scala/fpga/Memory.scala 815:16]
+  wire [7:0] _io_cache_array1_wdata_T_51 = wstrb[12] ? _wdata_T_4[103:96] : dram_rdata[103:96]; // @[src/main/scala/fpga/Memory.scala 815:16]
+  wire [7:0] _io_cache_array1_wdata_T_55 = wstrb[13] ? _wdata_T_4[111:104] : dram_rdata[111:104]; // @[src/main/scala/fpga/Memory.scala 815:16]
+  wire [7:0] _io_cache_array1_wdata_T_59 = wstrb[14] ? _wdata_T_4[119:112] : dram_rdata[119:112]; // @[src/main/scala/fpga/Memory.scala 815:16]
+  wire [7:0] _io_cache_array1_wdata_T_63 = wstrb[15] ? _wdata_T_4[127:120] : dram_rdata[127:120]; // @[src/main/scala/fpga/Memory.scala 815:16]
+  wire [7:0] _io_cache_array1_wdata_T_67 = wstrb[16] ? _wdata_T_4[135:128] : dram_rdata[135:128]; // @[src/main/scala/fpga/Memory.scala 815:16]
+  wire [7:0] _io_cache_array1_wdata_T_71 = wstrb[17] ? _wdata_T_4[143:136] : dram_rdata[143:136]; // @[src/main/scala/fpga/Memory.scala 815:16]
+  wire [7:0] _io_cache_array1_wdata_T_75 = wstrb[18] ? _wdata_T_4[151:144] : dram_rdata[151:144]; // @[src/main/scala/fpga/Memory.scala 815:16]
+  wire [7:0] _io_cache_array1_wdata_T_79 = wstrb[19] ? _wdata_T_4[159:152] : dram_rdata[159:152]; // @[src/main/scala/fpga/Memory.scala 815:16]
+  wire [7:0] _io_cache_array1_wdata_T_83 = wstrb[20] ? _wdata_T_4[167:160] : dram_rdata[167:160]; // @[src/main/scala/fpga/Memory.scala 815:16]
+  wire [7:0] _io_cache_array1_wdata_T_87 = wstrb[21] ? _wdata_T_4[175:168] : dram_rdata[175:168]; // @[src/main/scala/fpga/Memory.scala 815:16]
+  wire [7:0] _io_cache_array1_wdata_T_91 = wstrb[22] ? _wdata_T_4[183:176] : dram_rdata[183:176]; // @[src/main/scala/fpga/Memory.scala 815:16]
+  wire [7:0] _io_cache_array1_wdata_T_95 = wstrb[23] ? _wdata_T_4[191:184] : dram_rdata[191:184]; // @[src/main/scala/fpga/Memory.scala 815:16]
+  wire [7:0] _io_cache_array1_wdata_T_99 = wstrb[24] ? _wdata_T_4[199:192] : dram_rdata[199:192]; // @[src/main/scala/fpga/Memory.scala 815:16]
+  wire [7:0] _io_cache_array1_wdata_T_103 = wstrb[25] ? _wdata_T_4[207:200] : dram_rdata[207:200]; // @[src/main/scala/fpga/Memory.scala 815:16]
+  wire [7:0] _io_cache_array1_wdata_T_107 = wstrb[26] ? _wdata_T_4[215:208] : dram_rdata[215:208]; // @[src/main/scala/fpga/Memory.scala 815:16]
+  wire [7:0] _io_cache_array1_wdata_T_111 = wstrb[27] ? _wdata_T_4[223:216] : dram_rdata[223:216]; // @[src/main/scala/fpga/Memory.scala 815:16]
+  wire [7:0] _io_cache_array1_wdata_T_115 = wstrb[28] ? _wdata_T_4[231:224] : dram_rdata[231:224]; // @[src/main/scala/fpga/Memory.scala 815:16]
+  wire [7:0] _io_cache_array1_wdata_T_119 = wstrb[29] ? _wdata_T_4[239:232] : dram_rdata[239:232]; // @[src/main/scala/fpga/Memory.scala 815:16]
+  wire [7:0] _io_cache_array1_wdata_T_123 = wstrb[30] ? _wdata_T_4[247:240] : dram_rdata[247:240]; // @[src/main/scala/fpga/Memory.scala 815:16]
+  wire [7:0] _io_cache_array1_wdata_T_127 = wstrb[31] ? _wdata_T_4[255:248] : dram_rdata[255:248]; // @[src/main/scala/fpga/Memory.scala 815:16]
   wire [63:0] io_cache_array1_wdata_lo_lo = {_io_cache_array1_wdata_T_31,_io_cache_array1_wdata_T_27,
     _io_cache_array1_wdata_T_23,_io_cache_array1_wdata_T_19,_io_cache_array1_wdata_T_15,_io_cache_array1_wdata_T_11,
-    _io_cache_array1_wdata_T_7,_io_cache_array1_wdata_T_3}; // @[src/main/scala/fpga/Memory.scala 829:39]
+    _io_cache_array1_wdata_T_7,_io_cache_array1_wdata_T_3}; // @[src/main/scala/fpga/Memory.scala 814:39]
   wire [127:0] io_cache_array1_wdata_lo = {_io_cache_array1_wdata_T_63,_io_cache_array1_wdata_T_59,
     _io_cache_array1_wdata_T_55,_io_cache_array1_wdata_T_51,_io_cache_array1_wdata_T_47,_io_cache_array1_wdata_T_43,
-    _io_cache_array1_wdata_T_39,_io_cache_array1_wdata_T_35,io_cache_array1_wdata_lo_lo}; // @[src/main/scala/fpga/Memory.scala 829:39]
+    _io_cache_array1_wdata_T_39,_io_cache_array1_wdata_T_35,io_cache_array1_wdata_lo_lo}; // @[src/main/scala/fpga/Memory.scala 814:39]
   wire [63:0] io_cache_array1_wdata_hi_lo = {_io_cache_array1_wdata_T_95,_io_cache_array1_wdata_T_91,
     _io_cache_array1_wdata_T_87,_io_cache_array1_wdata_T_83,_io_cache_array1_wdata_T_79,_io_cache_array1_wdata_T_75,
-    _io_cache_array1_wdata_T_71,_io_cache_array1_wdata_T_67}; // @[src/main/scala/fpga/Memory.scala 829:39]
+    _io_cache_array1_wdata_T_71,_io_cache_array1_wdata_T_67}; // @[src/main/scala/fpga/Memory.scala 814:39]
   wire [255:0] _io_cache_array1_wdata_T_128 = {_io_cache_array1_wdata_T_127,_io_cache_array1_wdata_T_123,
     _io_cache_array1_wdata_T_119,_io_cache_array1_wdata_T_115,_io_cache_array1_wdata_T_111,_io_cache_array1_wdata_T_107,
-    _io_cache_array1_wdata_T_103,_io_cache_array1_wdata_T_99,io_cache_array1_wdata_hi_lo,io_cache_array1_wdata_lo}; // @[src/main/scala/fpga/Memory.scala 829:39]
-  wire  _GEN_628 = reg_lru_way_hot ? 1'h0 : 1'h1; // @[src/main/scala/fpga/Memory.scala 501:22 835:42]
-  wire [255:0] _GEN_635 = reg_ren ? dram_rdata : _io_cache_array1_wdata_T_128; // @[src/main/scala/fpga/Memory.scala 814:24 815:33 829:33]
-  wire  _GEN_639 = reg_ren & _T_143; // @[src/main/scala/fpga/Memory.scala 501:22 814:24]
-  wire  _GEN_643 = reg_ren ? _T_143 : reg_lru_way_hot; // @[src/main/scala/fpga/Memory.scala 814:24]
-  wire  _GEN_649 = reg_ren & _GEN_610; // @[src/main/scala/fpga/Memory.scala 501:22 814:24]
-  wire  _GEN_653 = reg_ren ? _GEN_610 : _GEN_628; // @[src/main/scala/fpga/Memory.scala 814:24]
-  wire  _GEN_659 = reg_ren ? 1'h0 : reg_lru_way_hot; // @[src/main/scala/fpga/Memory.scala 501:22 814:24]
-  wire  _GEN_668 = reg_ren ? 1'h0 : _GEN_628; // @[src/main/scala/fpga/Memory.scala 501:22 814:24]
-  wire  _GEN_676 = dram_d_rdata_valid & reg_ren; // @[src/main/scala/fpga/Memory.scala 520:19 808:33]
-  wire  _GEN_681 = dram_d_rdata_valid & _GEN_639; // @[src/main/scala/fpga/Memory.scala 501:22 808:33]
-  wire  _GEN_685 = dram_d_rdata_valid & _GEN_643; // @[src/main/scala/fpga/Memory.scala 527:25 808:33]
-  wire  _GEN_691 = dram_d_rdata_valid & _GEN_649; // @[src/main/scala/fpga/Memory.scala 501:22 808:33]
-  wire  _GEN_695 = dram_d_rdata_valid & _GEN_653; // @[src/main/scala/fpga/Memory.scala 533:25 808:33]
-  wire  _GEN_701 = dram_d_rdata_valid & _GEN_659; // @[src/main/scala/fpga/Memory.scala 501:22 808:33]
-  wire  _GEN_710 = dram_d_rdata_valid & _GEN_668; // @[src/main/scala/fpga/Memory.scala 501:22 808:33]
-  wire [2:0] _GEN_717 = dram_d_rdata_valid ? 3'h0 : dcache_state; // @[src/main/scala/fpga/Memory.scala 808:33 845:22 504:29]
-  wire [31:0] _GEN_719 = 3'h6 == dcache_state ? 32'hffffffff : 32'h0; // @[src/main/scala/fpga/Memory.scala 528:25 571:25 804:26]
-  wire [2:0] _GEN_764 = 3'h6 == dcache_state ? _GEN_717 : dcache_state; // @[src/main/scala/fpga/Memory.scala 571:25 504:29]
-  wire [2:0] _GEN_767 = 3'h5 == dcache_state ? _GEN_525 : _GEN_764; // @[src/main/scala/fpga/Memory.scala 571:25]
-  wire [31:0] _GEN_769 = 3'h5 == dcache_state ? 32'h0 : _GEN_719; // @[src/main/scala/fpga/Memory.scala 528:25 571:25]
-  wire  _GEN_773 = 3'h5 == dcache_state ? 1'h0 : 3'h6 == dcache_state & _GEN_676; // @[src/main/scala/fpga/Memory.scala 520:19 571:25]
-  wire  _GEN_778 = 3'h5 == dcache_state ? 1'h0 : 3'h6 == dcache_state & _GEN_681; // @[src/main/scala/fpga/Memory.scala 501:22 571:25]
-  wire  _GEN_782 = 3'h5 == dcache_state ? 1'h0 : 3'h6 == dcache_state & _GEN_685; // @[src/main/scala/fpga/Memory.scala 527:25 571:25]
-  wire  _GEN_788 = 3'h5 == dcache_state ? 1'h0 : 3'h6 == dcache_state & _GEN_691; // @[src/main/scala/fpga/Memory.scala 501:22 571:25]
-  wire  _GEN_792 = 3'h5 == dcache_state ? 1'h0 : 3'h6 == dcache_state & _GEN_695; // @[src/main/scala/fpga/Memory.scala 533:25 571:25]
-  wire  _GEN_798 = 3'h5 == dcache_state ? 1'h0 : 3'h6 == dcache_state & _GEN_701; // @[src/main/scala/fpga/Memory.scala 501:22 571:25]
-  wire  _GEN_807 = 3'h5 == dcache_state ? 1'h0 : 3'h6 == dcache_state & _GEN_710; // @[src/main/scala/fpga/Memory.scala 501:22 571:25]
-  wire [31:0] _GEN_816 = 3'h3 == dcache_state ? wstrb : _GEN_769; // @[src/main/scala/fpga/Memory.scala 571:25 725:26]
-  wire  _GEN_820 = 3'h3 == dcache_state ? _GEN_558 : _GEN_782; // @[src/main/scala/fpga/Memory.scala 571:25]
-  wire  _GEN_828 = 3'h3 == dcache_state ? _GEN_565 : _GEN_792; // @[src/main/scala/fpga/Memory.scala 571:25]
-  wire [15:0] _GEN_836 = 3'h3 == dcache_state ? _GEN_498 : reg_req_addr_tag; // @[src/main/scala/fpga/Memory.scala 571:25 511:29]
-  wire [6:0] _GEN_837 = 3'h3 == dcache_state ? _GEN_499 : reg_req_addr_index; // @[src/main/scala/fpga/Memory.scala 571:25 511:29]
-  wire [4:0] _GEN_838 = 3'h3 == dcache_state ? _GEN_500 : reg_req_addr_line_off; // @[src/main/scala/fpga/Memory.scala 571:25 511:29]
-  wire [15:0] _GEN_842 = 3'h3 == dcache_state ? _GEN_578 : reg_tag_0; // @[src/main/scala/fpga/Memory.scala 505:24 571:25]
-  wire [15:0] _GEN_843 = 3'h3 == dcache_state ? _GEN_579 : reg_tag_1; // @[src/main/scala/fpga/Memory.scala 505:24 571:25]
-  wire [2:0] _GEN_846 = 3'h3 == dcache_state ? _GEN_508 : _GEN_767; // @[src/main/scala/fpga/Memory.scala 571:25]
-  wire [31:0] _GEN_848 = 3'h3 == dcache_state ? _GEN_510 : reg_wdata; // @[src/main/scala/fpga/Memory.scala 571:25 512:26]
-  wire [3:0] _GEN_849 = 3'h3 == dcache_state ? _GEN_511 : reg_wstrb; // @[src/main/scala/fpga/Memory.scala 571:25 513:26]
-  wire  _GEN_850 = 3'h3 == dcache_state ? _GEN_512 : reg_ren; // @[src/main/scala/fpga/Memory.scala 514:24 571:25]
-  wire  _GEN_854 = 3'h3 == dcache_state ? _GEN_589 : reg_lru_way_hot; // @[src/main/scala/fpga/Memory.scala 510:24 571:25]
-  wire  _GEN_855 = 3'h3 == dcache_state ? _GEN_590 : reg_lru_dirty1; // @[src/main/scala/fpga/Memory.scala 510:24 571:25]
-  wire  _GEN_856 = 3'h3 == dcache_state ? _GEN_591 : reg_lru_dirty2; // @[src/main/scala/fpga/Memory.scala 510:24 571:25]
-  wire  _GEN_861 = 3'h3 == dcache_state ? 1'h0 : _GEN_773; // @[src/main/scala/fpga/Memory.scala 520:19 571:25]
-  wire  _GEN_864 = 3'h3 == dcache_state ? 1'h0 : _GEN_778; // @[src/main/scala/fpga/Memory.scala 501:22 571:25]
-  wire  _GEN_873 = 3'h3 == dcache_state ? 1'h0 : _GEN_788; // @[src/main/scala/fpga/Memory.scala 501:22 571:25]
-  wire  _GEN_882 = 3'h3 == dcache_state ? 1'h0 : _GEN_798; // @[src/main/scala/fpga/Memory.scala 501:22 571:25]
-  wire  _GEN_891 = 3'h3 == dcache_state ? 1'h0 : _GEN_807; // @[src/main/scala/fpga/Memory.scala 501:22 571:25]
-  wire [2:0] _GEN_901 = 3'h4 == dcache_state ? _GEN_527 : _GEN_846; // @[src/main/scala/fpga/Memory.scala 571:25]
-  wire [31:0] _GEN_906 = 3'h4 == dcache_state ? 32'h0 : _GEN_816; // @[src/main/scala/fpga/Memory.scala 528:25 571:25]
-  wire  _GEN_909 = 3'h4 == dcache_state ? 1'h0 : _GEN_820; // @[src/main/scala/fpga/Memory.scala 527:25 571:25]
-  wire  _GEN_912 = 3'h4 == dcache_state ? 1'h0 : 3'h3 == dcache_state & _GEN_558; // @[src/main/scala/fpga/Memory.scala 502:22 571:25]
-  wire  _GEN_917 = 3'h4 == dcache_state ? 1'h0 : _GEN_828; // @[src/main/scala/fpga/Memory.scala 533:25 571:25]
-  wire  _GEN_920 = 3'h4 == dcache_state ? 1'h0 : 3'h3 == dcache_state & _GEN_565; // @[src/main/scala/fpga/Memory.scala 502:22 571:25]
-  wire [15:0] _GEN_925 = 3'h4 == dcache_state ? reg_req_addr_tag : _GEN_836; // @[src/main/scala/fpga/Memory.scala 571:25 511:29]
-  wire [6:0] _GEN_926 = 3'h4 == dcache_state ? reg_req_addr_index : _GEN_837; // @[src/main/scala/fpga/Memory.scala 571:25 511:29]
-  wire [4:0] _GEN_927 = 3'h4 == dcache_state ? reg_req_addr_line_off : _GEN_838; // @[src/main/scala/fpga/Memory.scala 571:25 511:29]
-  wire  _GEN_930 = 3'h4 == dcache_state ? 1'h0 : 3'h3 == dcache_state & _GEN_503; // @[src/main/scala/fpga/Memory.scala 501:22 571:25]
-  wire [15:0] _GEN_931 = 3'h4 == dcache_state ? reg_tag_0 : _GEN_842; // @[src/main/scala/fpga/Memory.scala 505:24 571:25]
-  wire [15:0] _GEN_932 = 3'h4 == dcache_state ? reg_tag_1 : _GEN_843; // @[src/main/scala/fpga/Memory.scala 505:24 571:25]
-  wire  _GEN_933 = 3'h4 == dcache_state ? 1'h0 : 3'h3 == dcache_state & _T_95; // @[src/main/scala/fpga/Memory.scala 526:25 571:25]
-  wire  _GEN_935 = 3'h4 == dcache_state ? 1'h0 : 3'h3 == dcache_state & _GEN_509; // @[src/main/scala/fpga/Memory.scala 518:19 571:25]
-  wire [31:0] _GEN_936 = 3'h4 == dcache_state ? reg_wdata : _GEN_848; // @[src/main/scala/fpga/Memory.scala 571:25 512:26]
-  wire [3:0] _GEN_937 = 3'h4 == dcache_state ? reg_wstrb : _GEN_849; // @[src/main/scala/fpga/Memory.scala 571:25 513:26]
-  wire  _GEN_938 = 3'h4 == dcache_state ? reg_ren : _GEN_850; // @[src/main/scala/fpga/Memory.scala 514:24 571:25]
-  wire  _GEN_942 = 3'h4 == dcache_state ? reg_lru_way_hot : _GEN_854; // @[src/main/scala/fpga/Memory.scala 510:24 571:25]
-  wire  _GEN_943 = 3'h4 == dcache_state ? reg_lru_dirty1 : _GEN_855; // @[src/main/scala/fpga/Memory.scala 510:24 571:25]
-  wire  _GEN_944 = 3'h4 == dcache_state ? reg_lru_dirty2 : _GEN_856; // @[src/main/scala/fpga/Memory.scala 510:24 571:25]
-  wire  _GEN_946 = 3'h4 == dcache_state ? 1'h0 : _GEN_861; // @[src/main/scala/fpga/Memory.scala 520:19 571:25]
-  wire  _GEN_949 = 3'h4 == dcache_state ? 1'h0 : _GEN_864; // @[src/main/scala/fpga/Memory.scala 501:22 571:25]
-  wire  _GEN_958 = 3'h4 == dcache_state ? 1'h0 : _GEN_873; // @[src/main/scala/fpga/Memory.scala 501:22 571:25]
-  wire  _GEN_967 = 3'h4 == dcache_state ? 1'h0 : _GEN_882; // @[src/main/scala/fpga/Memory.scala 501:22 571:25]
-  wire  _GEN_976 = 3'h4 == dcache_state ? 1'h0 : _GEN_891; // @[src/main/scala/fpga/Memory.scala 501:22 571:25]
-  wire  _GEN_984 = 3'h2 == dcache_state ? _T_95 : _GEN_946; // @[src/main/scala/fpga/Memory.scala 571:25]
-  wire  _GEN_994 = 3'h2 == dcache_state ? _T_95 : _GEN_933; // @[src/main/scala/fpga/Memory.scala 571:25]
-  wire [6:0] _GEN_995 = 3'h2 == dcache_state ? _GEN_453 : _GEN_453; // @[src/main/scala/fpga/Memory.scala 571:25]
-  wire  _GEN_997 = 3'h2 == dcache_state ? _GEN_509 : _GEN_935; // @[src/main/scala/fpga/Memory.scala 571:25]
-  wire  _GEN_1000 = 3'h2 == dcache_state ? _GEN_512 : _GEN_938; // @[src/main/scala/fpga/Memory.scala 571:25]
-  wire [31:0] _GEN_1013 = 3'h2 == dcache_state ? 32'h0 : _GEN_906; // @[src/main/scala/fpga/Memory.scala 528:25 571:25]
-  wire  _GEN_1016 = 3'h2 == dcache_state ? 1'h0 : _GEN_909; // @[src/main/scala/fpga/Memory.scala 527:25 571:25]
-  wire  _GEN_1019 = 3'h2 == dcache_state ? 1'h0 : _GEN_912; // @[src/main/scala/fpga/Memory.scala 502:22 571:25]
-  wire  _GEN_1024 = 3'h2 == dcache_state ? 1'h0 : _GEN_917; // @[src/main/scala/fpga/Memory.scala 533:25 571:25]
-  wire  _GEN_1027 = 3'h2 == dcache_state ? 1'h0 : _GEN_920; // @[src/main/scala/fpga/Memory.scala 502:22 571:25]
-  wire  _GEN_1034 = 3'h2 == dcache_state ? 1'h0 : _GEN_930; // @[src/main/scala/fpga/Memory.scala 501:22 571:25]
-  wire  _GEN_1037 = 3'h2 == dcache_state ? 1'h0 : _GEN_935; // @[src/main/scala/fpga/Memory.scala 501:22 571:25]
-  wire  _GEN_1040 = 3'h2 == dcache_state ? 1'h0 : _GEN_949; // @[src/main/scala/fpga/Memory.scala 501:22 571:25]
-  wire  _GEN_1049 = 3'h2 == dcache_state ? 1'h0 : _GEN_958; // @[src/main/scala/fpga/Memory.scala 501:22 571:25]
-  wire  _GEN_1058 = 3'h2 == dcache_state ? 1'h0 : _GEN_967; // @[src/main/scala/fpga/Memory.scala 501:22 571:25]
-  wire  _GEN_1067 = 3'h2 == dcache_state ? 1'h0 : _GEN_976; // @[src/main/scala/fpga/Memory.scala 501:22 571:25]
-  wire  _GEN_1078 = 3'h1 == dcache_state ? 1'h0 : _GEN_984; // @[src/main/scala/fpga/Memory.scala 520:19 571:25]
-  wire  _GEN_1085 = 3'h1 == dcache_state ? 1'h0 : 3'h2 == dcache_state & _GEN_503; // @[src/main/scala/fpga/Memory.scala 501:22 571:25]
-  wire  _GEN_1088 = 3'h1 == dcache_state ? 1'h0 : _GEN_994; // @[src/main/scala/fpga/Memory.scala 526:25 571:25]
-  wire  _GEN_1090 = 3'h1 == dcache_state ? 1'h0 : _GEN_997; // @[src/main/scala/fpga/Memory.scala 518:19 571:25]
-  wire  _GEN_1093 = 3'h1 == dcache_state ? reg_ren : _GEN_1000; // @[src/main/scala/fpga/Memory.scala 514:24 571:25]
-  wire  _GEN_1096 = 3'h1 == dcache_state ? 1'h0 : 3'h2 == dcache_state & _GEN_509; // @[src/main/scala/fpga/Memory.scala 501:22 571:25]
-  wire [31:0] _GEN_1106 = 3'h1 == dcache_state ? 32'h0 : _GEN_1013; // @[src/main/scala/fpga/Memory.scala 528:25 571:25]
-  wire  _GEN_1109 = 3'h1 == dcache_state ? 1'h0 : _GEN_1016; // @[src/main/scala/fpga/Memory.scala 527:25 571:25]
-  wire  _GEN_1112 = 3'h1 == dcache_state ? 1'h0 : _GEN_1019; // @[src/main/scala/fpga/Memory.scala 502:22 571:25]
-  wire  _GEN_1117 = 3'h1 == dcache_state ? 1'h0 : _GEN_1024; // @[src/main/scala/fpga/Memory.scala 533:25 571:25]
-  wire  _GEN_1120 = 3'h1 == dcache_state ? 1'h0 : _GEN_1027; // @[src/main/scala/fpga/Memory.scala 502:22 571:25]
-  wire  _GEN_1127 = 3'h1 == dcache_state ? 1'h0 : _GEN_1034; // @[src/main/scala/fpga/Memory.scala 501:22 571:25]
-  wire  _GEN_1130 = 3'h1 == dcache_state ? 1'h0 : _GEN_1037; // @[src/main/scala/fpga/Memory.scala 501:22 571:25]
-  wire  _GEN_1133 = 3'h1 == dcache_state ? 1'h0 : _GEN_1040; // @[src/main/scala/fpga/Memory.scala 501:22 571:25]
-  wire  _GEN_1142 = 3'h1 == dcache_state ? 1'h0 : _GEN_1049; // @[src/main/scala/fpga/Memory.scala 501:22 571:25]
-  wire  _GEN_1151 = 3'h1 == dcache_state ? 1'h0 : _GEN_1058; // @[src/main/scala/fpga/Memory.scala 501:22 571:25]
-  wire  _GEN_1160 = 3'h1 == dcache_state ? 1'h0 : _GEN_1067; // @[src/main/scala/fpga/Memory.scala 501:22 571:25]
-  wire  _GEN_1181 = 3'h0 == dcache_state ? _GEN_465 : _GEN_1093; // @[src/main/scala/fpga/Memory.scala 571:25]
-  wire  _T_163 = ~reset; // @[src/main/scala/fpga/Memory.scala 887:9]
+    _io_cache_array1_wdata_T_103,_io_cache_array1_wdata_T_99,io_cache_array1_wdata_hi_lo,io_cache_array1_wdata_lo}; // @[src/main/scala/fpga/Memory.scala 814:39]
+  wire  _GEN_557 = reg_lru_way_hot ? 1'h0 : 1'h1; // @[src/main/scala/fpga/Memory.scala 486:22 820:42]
+  wire [255:0] _GEN_564 = reg_ren ? dram_rdata : _io_cache_array1_wdata_T_128; // @[src/main/scala/fpga/Memory.scala 799:24 800:33 814:33]
+  wire  _GEN_568 = reg_ren & _T_128; // @[src/main/scala/fpga/Memory.scala 486:22 799:24]
+  wire  _GEN_572 = reg_ren ? _T_128 : reg_lru_way_hot; // @[src/main/scala/fpga/Memory.scala 799:24]
+  wire  _GEN_578 = reg_ren & _GEN_539; // @[src/main/scala/fpga/Memory.scala 486:22 799:24]
+  wire  _GEN_582 = reg_ren ? _GEN_539 : _GEN_557; // @[src/main/scala/fpga/Memory.scala 799:24]
+  wire  _GEN_588 = reg_ren ? 1'h0 : reg_lru_way_hot; // @[src/main/scala/fpga/Memory.scala 486:22 799:24]
+  wire  _GEN_597 = reg_ren ? 1'h0 : _GEN_557; // @[src/main/scala/fpga/Memory.scala 486:22 799:24]
+  wire  _GEN_605 = dram_d_rdata_valid & reg_ren; // @[src/main/scala/fpga/Memory.scala 505:19 793:33]
+  wire  _GEN_610 = dram_d_rdata_valid & _GEN_568; // @[src/main/scala/fpga/Memory.scala 486:22 793:33]
+  wire  _GEN_614 = dram_d_rdata_valid & _GEN_572; // @[src/main/scala/fpga/Memory.scala 512:25 793:33]
+  wire  _GEN_620 = dram_d_rdata_valid & _GEN_578; // @[src/main/scala/fpga/Memory.scala 486:22 793:33]
+  wire  _GEN_624 = dram_d_rdata_valid & _GEN_582; // @[src/main/scala/fpga/Memory.scala 518:25 793:33]
+  wire  _GEN_630 = dram_d_rdata_valid & _GEN_588; // @[src/main/scala/fpga/Memory.scala 486:22 793:33]
+  wire  _GEN_639 = dram_d_rdata_valid & _GEN_597; // @[src/main/scala/fpga/Memory.scala 486:22 793:33]
+  wire [2:0] _GEN_646 = dram_d_rdata_valid ? 3'h0 : dcache_state; // @[src/main/scala/fpga/Memory.scala 793:33 830:22 489:29]
+  wire [31:0] _GEN_648 = 3'h6 == dcache_state ? 32'hffffffff : 32'h0; // @[src/main/scala/fpga/Memory.scala 513:25 556:25 789:26]
+  wire [2:0] _GEN_693 = 3'h6 == dcache_state ? _GEN_646 : dcache_state; // @[src/main/scala/fpga/Memory.scala 556:25 489:29]
+  wire [2:0] _GEN_696 = 3'h5 == dcache_state ? _GEN_454 : _GEN_693; // @[src/main/scala/fpga/Memory.scala 556:25]
+  wire [31:0] _GEN_698 = 3'h5 == dcache_state ? 32'h0 : _GEN_648; // @[src/main/scala/fpga/Memory.scala 513:25 556:25]
+  wire  _GEN_702 = 3'h5 == dcache_state ? 1'h0 : 3'h6 == dcache_state & _GEN_605; // @[src/main/scala/fpga/Memory.scala 505:19 556:25]
+  wire  _GEN_707 = 3'h5 == dcache_state ? 1'h0 : 3'h6 == dcache_state & _GEN_610; // @[src/main/scala/fpga/Memory.scala 486:22 556:25]
+  wire  _GEN_711 = 3'h5 == dcache_state ? 1'h0 : 3'h6 == dcache_state & _GEN_614; // @[src/main/scala/fpga/Memory.scala 512:25 556:25]
+  wire  _GEN_717 = 3'h5 == dcache_state ? 1'h0 : 3'h6 == dcache_state & _GEN_620; // @[src/main/scala/fpga/Memory.scala 486:22 556:25]
+  wire  _GEN_721 = 3'h5 == dcache_state ? 1'h0 : 3'h6 == dcache_state & _GEN_624; // @[src/main/scala/fpga/Memory.scala 518:25 556:25]
+  wire  _GEN_727 = 3'h5 == dcache_state ? 1'h0 : 3'h6 == dcache_state & _GEN_630; // @[src/main/scala/fpga/Memory.scala 486:22 556:25]
+  wire  _GEN_736 = 3'h5 == dcache_state ? 1'h0 : 3'h6 == dcache_state & _GEN_639; // @[src/main/scala/fpga/Memory.scala 486:22 556:25]
+  wire [31:0] _GEN_745 = 3'h3 == dcache_state ? wstrb : _GEN_698; // @[src/main/scala/fpga/Memory.scala 556:25 710:26]
+  wire  _GEN_749 = 3'h3 == dcache_state ? _GEN_487 : _GEN_711; // @[src/main/scala/fpga/Memory.scala 556:25]
+  wire  _GEN_757 = 3'h3 == dcache_state ? _GEN_494 : _GEN_721; // @[src/main/scala/fpga/Memory.scala 556:25]
+  wire [15:0] _GEN_765 = 3'h3 == dcache_state ? _GEN_427 : reg_req_addr_tag; // @[src/main/scala/fpga/Memory.scala 556:25 496:29]
+  wire [6:0] _GEN_766 = 3'h3 == dcache_state ? _GEN_428 : reg_req_addr_index; // @[src/main/scala/fpga/Memory.scala 556:25 496:29]
+  wire [4:0] _GEN_767 = 3'h3 == dcache_state ? _GEN_429 : reg_req_addr_line_off; // @[src/main/scala/fpga/Memory.scala 556:25 496:29]
+  wire [15:0] _GEN_771 = 3'h3 == dcache_state ? _GEN_507 : reg_tag_0; // @[src/main/scala/fpga/Memory.scala 490:24 556:25]
+  wire [15:0] _GEN_772 = 3'h3 == dcache_state ? _GEN_508 : reg_tag_1; // @[src/main/scala/fpga/Memory.scala 490:24 556:25]
+  wire [2:0] _GEN_775 = 3'h3 == dcache_state ? _GEN_437 : _GEN_696; // @[src/main/scala/fpga/Memory.scala 556:25]
+  wire [31:0] _GEN_777 = 3'h3 == dcache_state ? _GEN_439 : reg_wdata; // @[src/main/scala/fpga/Memory.scala 556:25 497:26]
+  wire [3:0] _GEN_778 = 3'h3 == dcache_state ? _GEN_440 : reg_wstrb; // @[src/main/scala/fpga/Memory.scala 556:25 498:26]
+  wire  _GEN_779 = 3'h3 == dcache_state ? _GEN_441 : reg_ren; // @[src/main/scala/fpga/Memory.scala 499:24 556:25]
+  wire  _GEN_783 = 3'h3 == dcache_state ? _GEN_518 : reg_lru_way_hot; // @[src/main/scala/fpga/Memory.scala 495:24 556:25]
+  wire  _GEN_784 = 3'h3 == dcache_state ? _GEN_519 : reg_lru_dirty1; // @[src/main/scala/fpga/Memory.scala 495:24 556:25]
+  wire  _GEN_785 = 3'h3 == dcache_state ? _GEN_520 : reg_lru_dirty2; // @[src/main/scala/fpga/Memory.scala 495:24 556:25]
+  wire  _GEN_790 = 3'h3 == dcache_state ? 1'h0 : _GEN_702; // @[src/main/scala/fpga/Memory.scala 505:19 556:25]
+  wire  _GEN_793 = 3'h3 == dcache_state ? 1'h0 : _GEN_707; // @[src/main/scala/fpga/Memory.scala 486:22 556:25]
+  wire  _GEN_802 = 3'h3 == dcache_state ? 1'h0 : _GEN_717; // @[src/main/scala/fpga/Memory.scala 486:22 556:25]
+  wire  _GEN_811 = 3'h3 == dcache_state ? 1'h0 : _GEN_727; // @[src/main/scala/fpga/Memory.scala 486:22 556:25]
+  wire  _GEN_820 = 3'h3 == dcache_state ? 1'h0 : _GEN_736; // @[src/main/scala/fpga/Memory.scala 486:22 556:25]
+  wire [2:0] _GEN_830 = 3'h4 == dcache_state ? _GEN_456 : _GEN_775; // @[src/main/scala/fpga/Memory.scala 556:25]
+  wire [31:0] _GEN_835 = 3'h4 == dcache_state ? 32'h0 : _GEN_745; // @[src/main/scala/fpga/Memory.scala 513:25 556:25]
+  wire  _GEN_838 = 3'h4 == dcache_state ? 1'h0 : _GEN_749; // @[src/main/scala/fpga/Memory.scala 512:25 556:25]
+  wire  _GEN_841 = 3'h4 == dcache_state ? 1'h0 : 3'h3 == dcache_state & _GEN_487; // @[src/main/scala/fpga/Memory.scala 487:22 556:25]
+  wire  _GEN_846 = 3'h4 == dcache_state ? 1'h0 : _GEN_757; // @[src/main/scala/fpga/Memory.scala 518:25 556:25]
+  wire  _GEN_849 = 3'h4 == dcache_state ? 1'h0 : 3'h3 == dcache_state & _GEN_494; // @[src/main/scala/fpga/Memory.scala 487:22 556:25]
+  wire [15:0] _GEN_854 = 3'h4 == dcache_state ? reg_req_addr_tag : _GEN_765; // @[src/main/scala/fpga/Memory.scala 556:25 496:29]
+  wire [6:0] _GEN_855 = 3'h4 == dcache_state ? reg_req_addr_index : _GEN_766; // @[src/main/scala/fpga/Memory.scala 556:25 496:29]
+  wire [4:0] _GEN_856 = 3'h4 == dcache_state ? reg_req_addr_line_off : _GEN_767; // @[src/main/scala/fpga/Memory.scala 556:25 496:29]
+  wire  _GEN_859 = 3'h4 == dcache_state ? 1'h0 : 3'h3 == dcache_state & _GEN_432; // @[src/main/scala/fpga/Memory.scala 486:22 556:25]
+  wire [15:0] _GEN_860 = 3'h4 == dcache_state ? reg_tag_0 : _GEN_771; // @[src/main/scala/fpga/Memory.scala 490:24 556:25]
+  wire [15:0] _GEN_861 = 3'h4 == dcache_state ? reg_tag_1 : _GEN_772; // @[src/main/scala/fpga/Memory.scala 490:24 556:25]
+  wire  _GEN_862 = 3'h4 == dcache_state ? 1'h0 : 3'h3 == dcache_state & _T_80; // @[src/main/scala/fpga/Memory.scala 511:25 556:25]
+  wire  _GEN_864 = 3'h4 == dcache_state ? 1'h0 : 3'h3 == dcache_state & _GEN_438; // @[src/main/scala/fpga/Memory.scala 503:19 556:25]
+  wire [31:0] _GEN_865 = 3'h4 == dcache_state ? reg_wdata : _GEN_777; // @[src/main/scala/fpga/Memory.scala 556:25 497:26]
+  wire [3:0] _GEN_866 = 3'h4 == dcache_state ? reg_wstrb : _GEN_778; // @[src/main/scala/fpga/Memory.scala 556:25 498:26]
+  wire  _GEN_867 = 3'h4 == dcache_state ? reg_ren : _GEN_779; // @[src/main/scala/fpga/Memory.scala 499:24 556:25]
+  wire  _GEN_871 = 3'h4 == dcache_state ? reg_lru_way_hot : _GEN_783; // @[src/main/scala/fpga/Memory.scala 495:24 556:25]
+  wire  _GEN_872 = 3'h4 == dcache_state ? reg_lru_dirty1 : _GEN_784; // @[src/main/scala/fpga/Memory.scala 495:24 556:25]
+  wire  _GEN_873 = 3'h4 == dcache_state ? reg_lru_dirty2 : _GEN_785; // @[src/main/scala/fpga/Memory.scala 495:24 556:25]
+  wire  _GEN_875 = 3'h4 == dcache_state ? 1'h0 : _GEN_790; // @[src/main/scala/fpga/Memory.scala 505:19 556:25]
+  wire  _GEN_878 = 3'h4 == dcache_state ? 1'h0 : _GEN_793; // @[src/main/scala/fpga/Memory.scala 486:22 556:25]
+  wire  _GEN_887 = 3'h4 == dcache_state ? 1'h0 : _GEN_802; // @[src/main/scala/fpga/Memory.scala 486:22 556:25]
+  wire  _GEN_896 = 3'h4 == dcache_state ? 1'h0 : _GEN_811; // @[src/main/scala/fpga/Memory.scala 486:22 556:25]
+  wire  _GEN_905 = 3'h4 == dcache_state ? 1'h0 : _GEN_820; // @[src/main/scala/fpga/Memory.scala 486:22 556:25]
+  wire  _GEN_913 = 3'h2 == dcache_state ? _T_80 : _GEN_875; // @[src/main/scala/fpga/Memory.scala 556:25]
+  wire  _GEN_923 = 3'h2 == dcache_state ? _T_80 : _GEN_862; // @[src/main/scala/fpga/Memory.scala 556:25]
+  wire [6:0] _GEN_924 = 3'h2 == dcache_state ? _GEN_382 : _GEN_382; // @[src/main/scala/fpga/Memory.scala 556:25]
+  wire  _GEN_926 = 3'h2 == dcache_state ? _GEN_438 : _GEN_864; // @[src/main/scala/fpga/Memory.scala 556:25]
+  wire  _GEN_929 = 3'h2 == dcache_state ? _GEN_441 : _GEN_867; // @[src/main/scala/fpga/Memory.scala 556:25]
+  wire [31:0] _GEN_942 = 3'h2 == dcache_state ? 32'h0 : _GEN_835; // @[src/main/scala/fpga/Memory.scala 513:25 556:25]
+  wire  _GEN_945 = 3'h2 == dcache_state ? 1'h0 : _GEN_838; // @[src/main/scala/fpga/Memory.scala 512:25 556:25]
+  wire  _GEN_948 = 3'h2 == dcache_state ? 1'h0 : _GEN_841; // @[src/main/scala/fpga/Memory.scala 487:22 556:25]
+  wire  _GEN_953 = 3'h2 == dcache_state ? 1'h0 : _GEN_846; // @[src/main/scala/fpga/Memory.scala 518:25 556:25]
+  wire  _GEN_956 = 3'h2 == dcache_state ? 1'h0 : _GEN_849; // @[src/main/scala/fpga/Memory.scala 487:22 556:25]
+  wire  _GEN_963 = 3'h2 == dcache_state ? 1'h0 : _GEN_859; // @[src/main/scala/fpga/Memory.scala 486:22 556:25]
+  wire  _GEN_966 = 3'h2 == dcache_state ? 1'h0 : _GEN_864; // @[src/main/scala/fpga/Memory.scala 486:22 556:25]
+  wire  _GEN_969 = 3'h2 == dcache_state ? 1'h0 : _GEN_878; // @[src/main/scala/fpga/Memory.scala 486:22 556:25]
+  wire  _GEN_978 = 3'h2 == dcache_state ? 1'h0 : _GEN_887; // @[src/main/scala/fpga/Memory.scala 486:22 556:25]
+  wire  _GEN_987 = 3'h2 == dcache_state ? 1'h0 : _GEN_896; // @[src/main/scala/fpga/Memory.scala 486:22 556:25]
+  wire  _GEN_996 = 3'h2 == dcache_state ? 1'h0 : _GEN_905; // @[src/main/scala/fpga/Memory.scala 486:22 556:25]
+  wire  _GEN_1007 = 3'h1 == dcache_state ? 1'h0 : _GEN_913; // @[src/main/scala/fpga/Memory.scala 505:19 556:25]
+  wire  _GEN_1014 = 3'h1 == dcache_state ? 1'h0 : 3'h2 == dcache_state & _GEN_432; // @[src/main/scala/fpga/Memory.scala 486:22 556:25]
+  wire  _GEN_1017 = 3'h1 == dcache_state ? 1'h0 : _GEN_923; // @[src/main/scala/fpga/Memory.scala 511:25 556:25]
+  wire  _GEN_1019 = 3'h1 == dcache_state ? 1'h0 : _GEN_926; // @[src/main/scala/fpga/Memory.scala 503:19 556:25]
+  wire  _GEN_1022 = 3'h1 == dcache_state ? reg_ren : _GEN_929; // @[src/main/scala/fpga/Memory.scala 499:24 556:25]
+  wire  _GEN_1025 = 3'h1 == dcache_state ? 1'h0 : 3'h2 == dcache_state & _GEN_438; // @[src/main/scala/fpga/Memory.scala 486:22 556:25]
+  wire [31:0] _GEN_1035 = 3'h1 == dcache_state ? 32'h0 : _GEN_942; // @[src/main/scala/fpga/Memory.scala 513:25 556:25]
+  wire  _GEN_1038 = 3'h1 == dcache_state ? 1'h0 : _GEN_945; // @[src/main/scala/fpga/Memory.scala 512:25 556:25]
+  wire  _GEN_1041 = 3'h1 == dcache_state ? 1'h0 : _GEN_948; // @[src/main/scala/fpga/Memory.scala 487:22 556:25]
+  wire  _GEN_1046 = 3'h1 == dcache_state ? 1'h0 : _GEN_953; // @[src/main/scala/fpga/Memory.scala 518:25 556:25]
+  wire  _GEN_1049 = 3'h1 == dcache_state ? 1'h0 : _GEN_956; // @[src/main/scala/fpga/Memory.scala 487:22 556:25]
+  wire  _GEN_1056 = 3'h1 == dcache_state ? 1'h0 : _GEN_963; // @[src/main/scala/fpga/Memory.scala 486:22 556:25]
+  wire  _GEN_1059 = 3'h1 == dcache_state ? 1'h0 : _GEN_966; // @[src/main/scala/fpga/Memory.scala 486:22 556:25]
+  wire  _GEN_1062 = 3'h1 == dcache_state ? 1'h0 : _GEN_969; // @[src/main/scala/fpga/Memory.scala 486:22 556:25]
+  wire  _GEN_1071 = 3'h1 == dcache_state ? 1'h0 : _GEN_978; // @[src/main/scala/fpga/Memory.scala 486:22 556:25]
+  wire  _GEN_1080 = 3'h1 == dcache_state ? 1'h0 : _GEN_987; // @[src/main/scala/fpga/Memory.scala 486:22 556:25]
+  wire  _GEN_1089 = 3'h1 == dcache_state ? 1'h0 : _GEN_996; // @[src/main/scala/fpga/Memory.scala 486:22 556:25]
+  wire  _GEN_1110 = 3'h0 == dcache_state ? _GEN_394 : _GEN_1022; // @[src/main/scala/fpga/Memory.scala 556:25]
+  wire  _T_148 = ~reset; // @[src/main/scala/fpga/Memory.scala 874:9]
   assign i_tag_array_0_MPORT_en = _T_25 & _GEN_117;
   assign i_tag_array_0_MPORT_addr = io_imem_addr[11:5];
-  assign i_tag_array_0_MPORT_data = i_tag_array_0[i_tag_array_0_MPORT_addr]; // @[src/main/scala/fpga/Memory.scala 289:24]
-  assign i_tag_array_0_MPORT_1_en = _T_25 ? 1'h0 : _GEN_373;
+  assign i_tag_array_0_MPORT_data = i_tag_array_0[i_tag_array_0_MPORT_addr]; // @[src/main/scala/fpga/Memory.scala 288:24]
+  assign i_tag_array_0_MPORT_1_en = _T_25 ? 1'h0 : _GEN_306;
   assign i_tag_array_0_MPORT_1_addr = io_imem_addr[11:5];
-  assign i_tag_array_0_MPORT_1_data = i_tag_array_0[i_tag_array_0_MPORT_1_addr]; // @[src/main/scala/fpga/Memory.scala 289:24]
-  assign i_tag_array_0_MPORT_3_en = _T_25 ? 1'h0 : _GEN_395;
-  assign i_tag_array_0_MPORT_3_addr = io_imem_addr[11:5];
-  assign i_tag_array_0_MPORT_3_data = i_tag_array_0[i_tag_array_0_MPORT_3_addr]; // @[src/main/scala/fpga/Memory.scala 289:24]
+  assign i_tag_array_0_MPORT_1_data = i_tag_array_0[i_tag_array_0_MPORT_1_addr]; // @[src/main/scala/fpga/Memory.scala 288:24]
   assign i_tag_array_0_MPORT_2_data = i_reg_req_addr_tag;
   assign i_tag_array_0_MPORT_2_addr = i_reg_req_addr_index;
   assign i_tag_array_0_MPORT_2_mask = 1'h1;
-  assign i_tag_array_0_MPORT_2_en = _T_25 ? 1'h0 : _GEN_384;
-  assign i_tag_array_0_MPORT_4_data = i_reg_req_addr_tag;
-  assign i_tag_array_0_MPORT_4_addr = i_reg_req_addr_index;
-  assign i_tag_array_0_MPORT_4_mask = 1'h1;
-  assign i_tag_array_0_MPORT_4_en = _T_25 ? 1'h0 : _GEN_398;
-  assign tag_array_0_MPORT_5_en = _T_83 & dcache_snoop_en;
-  assign tag_array_0_MPORT_5_addr = _dcache_snoop_addr_T[11:5];
-  assign tag_array_0_MPORT_5_data = tag_array_0[tag_array_0_MPORT_5_addr]; // @[src/main/scala/fpga/Memory.scala 501:22]
-  assign tag_array_0_MPORT_6_en = _T_83 & _GEN_462;
-  assign tag_array_0_MPORT_6_addr = _req_addr_T_9[11:5];
-  assign tag_array_0_MPORT_6_data = tag_array_0[tag_array_0_MPORT_6_addr]; // @[src/main/scala/fpga/Memory.scala 501:22]
-  assign tag_array_0_MPORT_7_en = _T_83 ? 1'h0 : _GEN_1085;
-  assign tag_array_0_MPORT_7_addr = _dcache_snoop_addr_T[11:5];
-  assign tag_array_0_MPORT_7_data = tag_array_0[tag_array_0_MPORT_7_addr]; // @[src/main/scala/fpga/Memory.scala 501:22]
-  assign tag_array_0_MPORT_8_en = _T_83 ? 1'h0 : _GEN_1096;
-  assign tag_array_0_MPORT_8_addr = _req_addr_T_9[11:5];
-  assign tag_array_0_MPORT_8_data = tag_array_0[tag_array_0_MPORT_8_addr]; // @[src/main/scala/fpga/Memory.scala 501:22]
-  assign tag_array_0_MPORT_11_en = _T_83 ? 1'h0 : _GEN_1127;
-  assign tag_array_0_MPORT_11_addr = _dcache_snoop_addr_T[11:5];
-  assign tag_array_0_MPORT_11_data = tag_array_0[tag_array_0_MPORT_11_addr]; // @[src/main/scala/fpga/Memory.scala 501:22]
-  assign tag_array_0_MPORT_12_en = _T_83 ? 1'h0 : _GEN_1130;
-  assign tag_array_0_MPORT_12_addr = _req_addr_T_9[11:5];
-  assign tag_array_0_MPORT_12_data = tag_array_0[tag_array_0_MPORT_12_addr]; // @[src/main/scala/fpga/Memory.scala 501:22]
-  assign tag_array_0_MPORT_13_data = reg_req_addr_tag;
-  assign tag_array_0_MPORT_13_addr = reg_req_addr_index;
-  assign tag_array_0_MPORT_13_mask = 1'h1;
-  assign tag_array_0_MPORT_13_en = _T_83 ? 1'h0 : _GEN_1133;
-  assign tag_array_0_MPORT_15_data = reg_tag_0;
-  assign tag_array_0_MPORT_15_addr = reg_req_addr_index;
-  assign tag_array_0_MPORT_15_mask = 1'h1;
-  assign tag_array_0_MPORT_15_en = _T_83 ? 1'h0 : _GEN_1142;
-  assign tag_array_0_MPORT_17_data = reg_req_addr_tag;
-  assign tag_array_0_MPORT_17_addr = reg_req_addr_index;
-  assign tag_array_0_MPORT_17_mask = 1'h1;
-  assign tag_array_0_MPORT_17_en = _T_83 ? 1'h0 : _GEN_1151;
-  assign tag_array_0_MPORT_19_data = reg_tag_0;
-  assign tag_array_0_MPORT_19_addr = reg_req_addr_index;
-  assign tag_array_0_MPORT_19_mask = 1'h1;
-  assign tag_array_0_MPORT_19_en = _T_83 ? 1'h0 : _GEN_1160;
-  assign tag_array_1_MPORT_5_en = _T_83 & dcache_snoop_en;
-  assign tag_array_1_MPORT_5_addr = _dcache_snoop_addr_T[11:5];
-  assign tag_array_1_MPORT_5_data = tag_array_1[tag_array_1_MPORT_5_addr]; // @[src/main/scala/fpga/Memory.scala 501:22]
-  assign tag_array_1_MPORT_6_en = _T_83 & _GEN_462;
-  assign tag_array_1_MPORT_6_addr = _req_addr_T_9[11:5];
-  assign tag_array_1_MPORT_6_data = tag_array_1[tag_array_1_MPORT_6_addr]; // @[src/main/scala/fpga/Memory.scala 501:22]
-  assign tag_array_1_MPORT_7_en = _T_83 ? 1'h0 : _GEN_1085;
-  assign tag_array_1_MPORT_7_addr = _dcache_snoop_addr_T[11:5];
-  assign tag_array_1_MPORT_7_data = tag_array_1[tag_array_1_MPORT_7_addr]; // @[src/main/scala/fpga/Memory.scala 501:22]
-  assign tag_array_1_MPORT_8_en = _T_83 ? 1'h0 : _GEN_1096;
-  assign tag_array_1_MPORT_8_addr = _req_addr_T_9[11:5];
-  assign tag_array_1_MPORT_8_data = tag_array_1[tag_array_1_MPORT_8_addr]; // @[src/main/scala/fpga/Memory.scala 501:22]
-  assign tag_array_1_MPORT_11_en = _T_83 ? 1'h0 : _GEN_1127;
-  assign tag_array_1_MPORT_11_addr = _dcache_snoop_addr_T[11:5];
-  assign tag_array_1_MPORT_11_data = tag_array_1[tag_array_1_MPORT_11_addr]; // @[src/main/scala/fpga/Memory.scala 501:22]
-  assign tag_array_1_MPORT_12_en = _T_83 ? 1'h0 : _GEN_1130;
-  assign tag_array_1_MPORT_12_addr = _req_addr_T_9[11:5];
-  assign tag_array_1_MPORT_12_data = tag_array_1[tag_array_1_MPORT_12_addr]; // @[src/main/scala/fpga/Memory.scala 501:22]
-  assign tag_array_1_MPORT_13_data = reg_tag_1;
-  assign tag_array_1_MPORT_13_addr = reg_req_addr_index;
-  assign tag_array_1_MPORT_13_mask = 1'h1;
-  assign tag_array_1_MPORT_13_en = _T_83 ? 1'h0 : _GEN_1133;
-  assign tag_array_1_MPORT_15_data = reg_req_addr_tag;
-  assign tag_array_1_MPORT_15_addr = reg_req_addr_index;
-  assign tag_array_1_MPORT_15_mask = 1'h1;
-  assign tag_array_1_MPORT_15_en = _T_83 ? 1'h0 : _GEN_1142;
-  assign tag_array_1_MPORT_17_data = reg_tag_1;
-  assign tag_array_1_MPORT_17_addr = reg_req_addr_index;
-  assign tag_array_1_MPORT_17_mask = 1'h1;
-  assign tag_array_1_MPORT_17_en = _T_83 ? 1'h0 : _GEN_1151;
-  assign tag_array_1_MPORT_19_data = reg_req_addr_tag;
-  assign tag_array_1_MPORT_19_addr = reg_req_addr_index;
-  assign tag_array_1_MPORT_19_mask = 1'h1;
-  assign tag_array_1_MPORT_19_en = _T_83 ? 1'h0 : _GEN_1160;
-  assign lru_array_way_hot_reg_lru_MPORT_en = _T_83 & _GEN_462;
-  assign lru_array_way_hot_reg_lru_MPORT_addr = _req_addr_T_9[11:5];
-  assign lru_array_way_hot_reg_lru_MPORT_data = lru_array_way_hot[lru_array_way_hot_reg_lru_MPORT_addr]; // @[src/main/scala/fpga/Memory.scala 502:22]
-  assign lru_array_way_hot_reg_lru_MPORT_1_en = _T_83 ? 1'h0 : _GEN_1096;
-  assign lru_array_way_hot_reg_lru_MPORT_1_addr = _req_addr_T_9[11:5];
-  assign lru_array_way_hot_reg_lru_MPORT_1_data = lru_array_way_hot[lru_array_way_hot_reg_lru_MPORT_1_addr]; // @[src/main/scala/fpga/Memory.scala 502:22]
-  assign lru_array_way_hot_reg_lru_MPORT_2_en = _T_83 ? 1'h0 : _GEN_1130;
-  assign lru_array_way_hot_reg_lru_MPORT_2_addr = _req_addr_T_9[11:5];
-  assign lru_array_way_hot_reg_lru_MPORT_2_data = lru_array_way_hot[lru_array_way_hot_reg_lru_MPORT_2_addr]; // @[src/main/scala/fpga/Memory.scala 502:22]
-  assign lru_array_way_hot_MPORT_9_data = _T_121[2];
+  assign i_tag_array_0_MPORT_2_en = _T_25 ? 1'h0 : _GEN_322;
+  assign i_tag_array_0_MPORT_3_data = i_reg_req_addr_tag;
+  assign i_tag_array_0_MPORT_3_addr = i_reg_req_addr_index;
+  assign i_tag_array_0_MPORT_3_mask = 1'h1;
+  assign i_tag_array_0_MPORT_3_en = _T_25 ? 1'h0 : _GEN_329;
+  assign tag_array_0_MPORT_4_en = _T_68 & dcache_snoop_en;
+  assign tag_array_0_MPORT_4_addr = _dcache_snoop_addr_T[11:5];
+  assign tag_array_0_MPORT_4_data = tag_array_0[tag_array_0_MPORT_4_addr]; // @[src/main/scala/fpga/Memory.scala 486:22]
+  assign tag_array_0_MPORT_5_en = _T_68 & _GEN_391;
+  assign tag_array_0_MPORT_5_addr = _req_addr_T_6[11:5];
+  assign tag_array_0_MPORT_5_data = tag_array_0[tag_array_0_MPORT_5_addr]; // @[src/main/scala/fpga/Memory.scala 486:22]
+  assign tag_array_0_MPORT_6_en = _T_68 ? 1'h0 : _GEN_1014;
+  assign tag_array_0_MPORT_6_addr = _dcache_snoop_addr_T[11:5];
+  assign tag_array_0_MPORT_6_data = tag_array_0[tag_array_0_MPORT_6_addr]; // @[src/main/scala/fpga/Memory.scala 486:22]
+  assign tag_array_0_MPORT_7_en = _T_68 ? 1'h0 : _GEN_1025;
+  assign tag_array_0_MPORT_7_addr = _req_addr_T_6[11:5];
+  assign tag_array_0_MPORT_7_data = tag_array_0[tag_array_0_MPORT_7_addr]; // @[src/main/scala/fpga/Memory.scala 486:22]
+  assign tag_array_0_MPORT_10_en = _T_68 ? 1'h0 : _GEN_1056;
+  assign tag_array_0_MPORT_10_addr = _dcache_snoop_addr_T[11:5];
+  assign tag_array_0_MPORT_10_data = tag_array_0[tag_array_0_MPORT_10_addr]; // @[src/main/scala/fpga/Memory.scala 486:22]
+  assign tag_array_0_MPORT_11_en = _T_68 ? 1'h0 : _GEN_1059;
+  assign tag_array_0_MPORT_11_addr = _req_addr_T_6[11:5];
+  assign tag_array_0_MPORT_11_data = tag_array_0[tag_array_0_MPORT_11_addr]; // @[src/main/scala/fpga/Memory.scala 486:22]
+  assign tag_array_0_MPORT_12_data = reg_req_addr_tag;
+  assign tag_array_0_MPORT_12_addr = reg_req_addr_index;
+  assign tag_array_0_MPORT_12_mask = 1'h1;
+  assign tag_array_0_MPORT_12_en = _T_68 ? 1'h0 : _GEN_1062;
+  assign tag_array_0_MPORT_14_data = reg_tag_0;
+  assign tag_array_0_MPORT_14_addr = reg_req_addr_index;
+  assign tag_array_0_MPORT_14_mask = 1'h1;
+  assign tag_array_0_MPORT_14_en = _T_68 ? 1'h0 : _GEN_1071;
+  assign tag_array_0_MPORT_16_data = reg_req_addr_tag;
+  assign tag_array_0_MPORT_16_addr = reg_req_addr_index;
+  assign tag_array_0_MPORT_16_mask = 1'h1;
+  assign tag_array_0_MPORT_16_en = _T_68 ? 1'h0 : _GEN_1080;
+  assign tag_array_0_MPORT_18_data = reg_tag_0;
+  assign tag_array_0_MPORT_18_addr = reg_req_addr_index;
+  assign tag_array_0_MPORT_18_mask = 1'h1;
+  assign tag_array_0_MPORT_18_en = _T_68 ? 1'h0 : _GEN_1089;
+  assign tag_array_1_MPORT_4_en = _T_68 & dcache_snoop_en;
+  assign tag_array_1_MPORT_4_addr = _dcache_snoop_addr_T[11:5];
+  assign tag_array_1_MPORT_4_data = tag_array_1[tag_array_1_MPORT_4_addr]; // @[src/main/scala/fpga/Memory.scala 486:22]
+  assign tag_array_1_MPORT_5_en = _T_68 & _GEN_391;
+  assign tag_array_1_MPORT_5_addr = _req_addr_T_6[11:5];
+  assign tag_array_1_MPORT_5_data = tag_array_1[tag_array_1_MPORT_5_addr]; // @[src/main/scala/fpga/Memory.scala 486:22]
+  assign tag_array_1_MPORT_6_en = _T_68 ? 1'h0 : _GEN_1014;
+  assign tag_array_1_MPORT_6_addr = _dcache_snoop_addr_T[11:5];
+  assign tag_array_1_MPORT_6_data = tag_array_1[tag_array_1_MPORT_6_addr]; // @[src/main/scala/fpga/Memory.scala 486:22]
+  assign tag_array_1_MPORT_7_en = _T_68 ? 1'h0 : _GEN_1025;
+  assign tag_array_1_MPORT_7_addr = _req_addr_T_6[11:5];
+  assign tag_array_1_MPORT_7_data = tag_array_1[tag_array_1_MPORT_7_addr]; // @[src/main/scala/fpga/Memory.scala 486:22]
+  assign tag_array_1_MPORT_10_en = _T_68 ? 1'h0 : _GEN_1056;
+  assign tag_array_1_MPORT_10_addr = _dcache_snoop_addr_T[11:5];
+  assign tag_array_1_MPORT_10_data = tag_array_1[tag_array_1_MPORT_10_addr]; // @[src/main/scala/fpga/Memory.scala 486:22]
+  assign tag_array_1_MPORT_11_en = _T_68 ? 1'h0 : _GEN_1059;
+  assign tag_array_1_MPORT_11_addr = _req_addr_T_6[11:5];
+  assign tag_array_1_MPORT_11_data = tag_array_1[tag_array_1_MPORT_11_addr]; // @[src/main/scala/fpga/Memory.scala 486:22]
+  assign tag_array_1_MPORT_12_data = reg_tag_1;
+  assign tag_array_1_MPORT_12_addr = reg_req_addr_index;
+  assign tag_array_1_MPORT_12_mask = 1'h1;
+  assign tag_array_1_MPORT_12_en = _T_68 ? 1'h0 : _GEN_1062;
+  assign tag_array_1_MPORT_14_data = reg_req_addr_tag;
+  assign tag_array_1_MPORT_14_addr = reg_req_addr_index;
+  assign tag_array_1_MPORT_14_mask = 1'h1;
+  assign tag_array_1_MPORT_14_en = _T_68 ? 1'h0 : _GEN_1071;
+  assign tag_array_1_MPORT_16_data = reg_tag_1;
+  assign tag_array_1_MPORT_16_addr = reg_req_addr_index;
+  assign tag_array_1_MPORT_16_mask = 1'h1;
+  assign tag_array_1_MPORT_16_en = _T_68 ? 1'h0 : _GEN_1080;
+  assign tag_array_1_MPORT_18_data = reg_req_addr_tag;
+  assign tag_array_1_MPORT_18_addr = reg_req_addr_index;
+  assign tag_array_1_MPORT_18_mask = 1'h1;
+  assign tag_array_1_MPORT_18_en = _T_68 ? 1'h0 : _GEN_1089;
+  assign lru_array_way_hot_reg_lru_MPORT_en = _T_68 & _GEN_391;
+  assign lru_array_way_hot_reg_lru_MPORT_addr = _req_addr_T_6[11:5];
+  assign lru_array_way_hot_reg_lru_MPORT_data = lru_array_way_hot[lru_array_way_hot_reg_lru_MPORT_addr]; // @[src/main/scala/fpga/Memory.scala 487:22]
+  assign lru_array_way_hot_reg_lru_MPORT_1_en = _T_68 ? 1'h0 : _GEN_1025;
+  assign lru_array_way_hot_reg_lru_MPORT_1_addr = _req_addr_T_6[11:5];
+  assign lru_array_way_hot_reg_lru_MPORT_1_data = lru_array_way_hot[lru_array_way_hot_reg_lru_MPORT_1_addr]; // @[src/main/scala/fpga/Memory.scala 487:22]
+  assign lru_array_way_hot_reg_lru_MPORT_2_en = _T_68 ? 1'h0 : _GEN_1059;
+  assign lru_array_way_hot_reg_lru_MPORT_2_addr = _req_addr_T_6[11:5];
+  assign lru_array_way_hot_reg_lru_MPORT_2_data = lru_array_way_hot[lru_array_way_hot_reg_lru_MPORT_2_addr]; // @[src/main/scala/fpga/Memory.scala 487:22]
+  assign lru_array_way_hot_MPORT_8_data = _T_106[2];
+  assign lru_array_way_hot_MPORT_8_addr = reg_req_addr_index;
+  assign lru_array_way_hot_MPORT_8_mask = 1'h1;
+  assign lru_array_way_hot_MPORT_8_en = _T_68 ? 1'h0 : _GEN_1041;
+  assign lru_array_way_hot_MPORT_9_data = _T_110[2];
   assign lru_array_way_hot_MPORT_9_addr = reg_req_addr_index;
   assign lru_array_way_hot_MPORT_9_mask = 1'h1;
-  assign lru_array_way_hot_MPORT_9_en = _T_83 ? 1'h0 : _GEN_1112;
-  assign lru_array_way_hot_MPORT_10_data = _T_125[2];
-  assign lru_array_way_hot_MPORT_10_addr = reg_req_addr_index;
-  assign lru_array_way_hot_MPORT_10_mask = 1'h1;
-  assign lru_array_way_hot_MPORT_10_en = _T_83 ? 1'h0 : _GEN_1120;
-  assign lru_array_way_hot_MPORT_14_data = _T_144[2];
-  assign lru_array_way_hot_MPORT_14_addr = reg_req_addr_index;
-  assign lru_array_way_hot_MPORT_14_mask = 1'h1;
-  assign lru_array_way_hot_MPORT_14_en = _T_83 ? 1'h0 : _GEN_1133;
-  assign lru_array_way_hot_MPORT_16_data = _T_148[2];
-  assign lru_array_way_hot_MPORT_16_addr = reg_req_addr_index;
-  assign lru_array_way_hot_MPORT_16_mask = 1'h1;
-  assign lru_array_way_hot_MPORT_16_en = _T_83 ? 1'h0 : _GEN_1142;
-  assign lru_array_way_hot_MPORT_18_data = _T_121[2];
-  assign lru_array_way_hot_MPORT_18_addr = reg_req_addr_index;
-  assign lru_array_way_hot_MPORT_18_mask = 1'h1;
-  assign lru_array_way_hot_MPORT_18_en = _T_83 ? 1'h0 : _GEN_1151;
-  assign lru_array_way_hot_MPORT_20_data = _T_125[2];
-  assign lru_array_way_hot_MPORT_20_addr = reg_req_addr_index;
-  assign lru_array_way_hot_MPORT_20_mask = 1'h1;
-  assign lru_array_way_hot_MPORT_20_en = _T_83 ? 1'h0 : _GEN_1160;
-  assign lru_array_dirty1_reg_lru_MPORT_en = _T_83 & _GEN_462;
-  assign lru_array_dirty1_reg_lru_MPORT_addr = _req_addr_T_9[11:5];
-  assign lru_array_dirty1_reg_lru_MPORT_data = lru_array_dirty1[lru_array_dirty1_reg_lru_MPORT_addr]; // @[src/main/scala/fpga/Memory.scala 502:22]
-  assign lru_array_dirty1_reg_lru_MPORT_1_en = _T_83 ? 1'h0 : _GEN_1096;
-  assign lru_array_dirty1_reg_lru_MPORT_1_addr = _req_addr_T_9[11:5];
-  assign lru_array_dirty1_reg_lru_MPORT_1_data = lru_array_dirty1[lru_array_dirty1_reg_lru_MPORT_1_addr]; // @[src/main/scala/fpga/Memory.scala 502:22]
-  assign lru_array_dirty1_reg_lru_MPORT_2_en = _T_83 ? 1'h0 : _GEN_1130;
-  assign lru_array_dirty1_reg_lru_MPORT_2_addr = _req_addr_T_9[11:5];
-  assign lru_array_dirty1_reg_lru_MPORT_2_data = lru_array_dirty1[lru_array_dirty1_reg_lru_MPORT_2_addr]; // @[src/main/scala/fpga/Memory.scala 502:22]
-  assign lru_array_dirty1_MPORT_9_data = _T_121[1];
+  assign lru_array_way_hot_MPORT_9_en = _T_68 ? 1'h0 : _GEN_1049;
+  assign lru_array_way_hot_MPORT_13_data = _T_129[2];
+  assign lru_array_way_hot_MPORT_13_addr = reg_req_addr_index;
+  assign lru_array_way_hot_MPORT_13_mask = 1'h1;
+  assign lru_array_way_hot_MPORT_13_en = _T_68 ? 1'h0 : _GEN_1062;
+  assign lru_array_way_hot_MPORT_15_data = _T_133[2];
+  assign lru_array_way_hot_MPORT_15_addr = reg_req_addr_index;
+  assign lru_array_way_hot_MPORT_15_mask = 1'h1;
+  assign lru_array_way_hot_MPORT_15_en = _T_68 ? 1'h0 : _GEN_1071;
+  assign lru_array_way_hot_MPORT_17_data = _T_106[2];
+  assign lru_array_way_hot_MPORT_17_addr = reg_req_addr_index;
+  assign lru_array_way_hot_MPORT_17_mask = 1'h1;
+  assign lru_array_way_hot_MPORT_17_en = _T_68 ? 1'h0 : _GEN_1080;
+  assign lru_array_way_hot_MPORT_19_data = _T_110[2];
+  assign lru_array_way_hot_MPORT_19_addr = reg_req_addr_index;
+  assign lru_array_way_hot_MPORT_19_mask = 1'h1;
+  assign lru_array_way_hot_MPORT_19_en = _T_68 ? 1'h0 : _GEN_1089;
+  assign lru_array_dirty1_reg_lru_MPORT_en = _T_68 & _GEN_391;
+  assign lru_array_dirty1_reg_lru_MPORT_addr = _req_addr_T_6[11:5];
+  assign lru_array_dirty1_reg_lru_MPORT_data = lru_array_dirty1[lru_array_dirty1_reg_lru_MPORT_addr]; // @[src/main/scala/fpga/Memory.scala 487:22]
+  assign lru_array_dirty1_reg_lru_MPORT_1_en = _T_68 ? 1'h0 : _GEN_1025;
+  assign lru_array_dirty1_reg_lru_MPORT_1_addr = _req_addr_T_6[11:5];
+  assign lru_array_dirty1_reg_lru_MPORT_1_data = lru_array_dirty1[lru_array_dirty1_reg_lru_MPORT_1_addr]; // @[src/main/scala/fpga/Memory.scala 487:22]
+  assign lru_array_dirty1_reg_lru_MPORT_2_en = _T_68 ? 1'h0 : _GEN_1059;
+  assign lru_array_dirty1_reg_lru_MPORT_2_addr = _req_addr_T_6[11:5];
+  assign lru_array_dirty1_reg_lru_MPORT_2_data = lru_array_dirty1[lru_array_dirty1_reg_lru_MPORT_2_addr]; // @[src/main/scala/fpga/Memory.scala 487:22]
+  assign lru_array_dirty1_MPORT_8_data = _T_106[1];
+  assign lru_array_dirty1_MPORT_8_addr = reg_req_addr_index;
+  assign lru_array_dirty1_MPORT_8_mask = 1'h1;
+  assign lru_array_dirty1_MPORT_8_en = _T_68 ? 1'h0 : _GEN_1041;
+  assign lru_array_dirty1_MPORT_9_data = _T_110[1];
   assign lru_array_dirty1_MPORT_9_addr = reg_req_addr_index;
   assign lru_array_dirty1_MPORT_9_mask = 1'h1;
-  assign lru_array_dirty1_MPORT_9_en = _T_83 ? 1'h0 : _GEN_1112;
-  assign lru_array_dirty1_MPORT_10_data = _T_125[1];
-  assign lru_array_dirty1_MPORT_10_addr = reg_req_addr_index;
-  assign lru_array_dirty1_MPORT_10_mask = 1'h1;
-  assign lru_array_dirty1_MPORT_10_en = _T_83 ? 1'h0 : _GEN_1120;
-  assign lru_array_dirty1_MPORT_14_data = _T_144[1];
-  assign lru_array_dirty1_MPORT_14_addr = reg_req_addr_index;
-  assign lru_array_dirty1_MPORT_14_mask = 1'h1;
-  assign lru_array_dirty1_MPORT_14_en = _T_83 ? 1'h0 : _GEN_1133;
-  assign lru_array_dirty1_MPORT_16_data = _T_148[1];
-  assign lru_array_dirty1_MPORT_16_addr = reg_req_addr_index;
-  assign lru_array_dirty1_MPORT_16_mask = 1'h1;
-  assign lru_array_dirty1_MPORT_16_en = _T_83 ? 1'h0 : _GEN_1142;
-  assign lru_array_dirty1_MPORT_18_data = _T_121[1];
-  assign lru_array_dirty1_MPORT_18_addr = reg_req_addr_index;
-  assign lru_array_dirty1_MPORT_18_mask = 1'h1;
-  assign lru_array_dirty1_MPORT_18_en = _T_83 ? 1'h0 : _GEN_1151;
-  assign lru_array_dirty1_MPORT_20_data = _T_125[1];
-  assign lru_array_dirty1_MPORT_20_addr = reg_req_addr_index;
-  assign lru_array_dirty1_MPORT_20_mask = 1'h1;
-  assign lru_array_dirty1_MPORT_20_en = _T_83 ? 1'h0 : _GEN_1160;
-  assign lru_array_dirty2_reg_lru_MPORT_en = _T_83 & _GEN_462;
-  assign lru_array_dirty2_reg_lru_MPORT_addr = _req_addr_T_9[11:5];
-  assign lru_array_dirty2_reg_lru_MPORT_data = lru_array_dirty2[lru_array_dirty2_reg_lru_MPORT_addr]; // @[src/main/scala/fpga/Memory.scala 502:22]
-  assign lru_array_dirty2_reg_lru_MPORT_1_en = _T_83 ? 1'h0 : _GEN_1096;
-  assign lru_array_dirty2_reg_lru_MPORT_1_addr = _req_addr_T_9[11:5];
-  assign lru_array_dirty2_reg_lru_MPORT_1_data = lru_array_dirty2[lru_array_dirty2_reg_lru_MPORT_1_addr]; // @[src/main/scala/fpga/Memory.scala 502:22]
-  assign lru_array_dirty2_reg_lru_MPORT_2_en = _T_83 ? 1'h0 : _GEN_1130;
-  assign lru_array_dirty2_reg_lru_MPORT_2_addr = _req_addr_T_9[11:5];
-  assign lru_array_dirty2_reg_lru_MPORT_2_data = lru_array_dirty2[lru_array_dirty2_reg_lru_MPORT_2_addr]; // @[src/main/scala/fpga/Memory.scala 502:22]
-  assign lru_array_dirty2_MPORT_9_data = _T_121[0];
+  assign lru_array_dirty1_MPORT_9_en = _T_68 ? 1'h0 : _GEN_1049;
+  assign lru_array_dirty1_MPORT_13_data = _T_129[1];
+  assign lru_array_dirty1_MPORT_13_addr = reg_req_addr_index;
+  assign lru_array_dirty1_MPORT_13_mask = 1'h1;
+  assign lru_array_dirty1_MPORT_13_en = _T_68 ? 1'h0 : _GEN_1062;
+  assign lru_array_dirty1_MPORT_15_data = _T_133[1];
+  assign lru_array_dirty1_MPORT_15_addr = reg_req_addr_index;
+  assign lru_array_dirty1_MPORT_15_mask = 1'h1;
+  assign lru_array_dirty1_MPORT_15_en = _T_68 ? 1'h0 : _GEN_1071;
+  assign lru_array_dirty1_MPORT_17_data = _T_106[1];
+  assign lru_array_dirty1_MPORT_17_addr = reg_req_addr_index;
+  assign lru_array_dirty1_MPORT_17_mask = 1'h1;
+  assign lru_array_dirty1_MPORT_17_en = _T_68 ? 1'h0 : _GEN_1080;
+  assign lru_array_dirty1_MPORT_19_data = _T_110[1];
+  assign lru_array_dirty1_MPORT_19_addr = reg_req_addr_index;
+  assign lru_array_dirty1_MPORT_19_mask = 1'h1;
+  assign lru_array_dirty1_MPORT_19_en = _T_68 ? 1'h0 : _GEN_1089;
+  assign lru_array_dirty2_reg_lru_MPORT_en = _T_68 & _GEN_391;
+  assign lru_array_dirty2_reg_lru_MPORT_addr = _req_addr_T_6[11:5];
+  assign lru_array_dirty2_reg_lru_MPORT_data = lru_array_dirty2[lru_array_dirty2_reg_lru_MPORT_addr]; // @[src/main/scala/fpga/Memory.scala 487:22]
+  assign lru_array_dirty2_reg_lru_MPORT_1_en = _T_68 ? 1'h0 : _GEN_1025;
+  assign lru_array_dirty2_reg_lru_MPORT_1_addr = _req_addr_T_6[11:5];
+  assign lru_array_dirty2_reg_lru_MPORT_1_data = lru_array_dirty2[lru_array_dirty2_reg_lru_MPORT_1_addr]; // @[src/main/scala/fpga/Memory.scala 487:22]
+  assign lru_array_dirty2_reg_lru_MPORT_2_en = _T_68 ? 1'h0 : _GEN_1059;
+  assign lru_array_dirty2_reg_lru_MPORT_2_addr = _req_addr_T_6[11:5];
+  assign lru_array_dirty2_reg_lru_MPORT_2_data = lru_array_dirty2[lru_array_dirty2_reg_lru_MPORT_2_addr]; // @[src/main/scala/fpga/Memory.scala 487:22]
+  assign lru_array_dirty2_MPORT_8_data = _T_106[0];
+  assign lru_array_dirty2_MPORT_8_addr = reg_req_addr_index;
+  assign lru_array_dirty2_MPORT_8_mask = 1'h1;
+  assign lru_array_dirty2_MPORT_8_en = _T_68 ? 1'h0 : _GEN_1041;
+  assign lru_array_dirty2_MPORT_9_data = _T_110[0];
   assign lru_array_dirty2_MPORT_9_addr = reg_req_addr_index;
   assign lru_array_dirty2_MPORT_9_mask = 1'h1;
-  assign lru_array_dirty2_MPORT_9_en = _T_83 ? 1'h0 : _GEN_1112;
-  assign lru_array_dirty2_MPORT_10_data = _T_125[0];
-  assign lru_array_dirty2_MPORT_10_addr = reg_req_addr_index;
-  assign lru_array_dirty2_MPORT_10_mask = 1'h1;
-  assign lru_array_dirty2_MPORT_10_en = _T_83 ? 1'h0 : _GEN_1120;
-  assign lru_array_dirty2_MPORT_14_data = _T_144[0];
-  assign lru_array_dirty2_MPORT_14_addr = reg_req_addr_index;
-  assign lru_array_dirty2_MPORT_14_mask = 1'h1;
-  assign lru_array_dirty2_MPORT_14_en = _T_83 ? 1'h0 : _GEN_1133;
-  assign lru_array_dirty2_MPORT_16_data = _T_148[0];
-  assign lru_array_dirty2_MPORT_16_addr = reg_req_addr_index;
-  assign lru_array_dirty2_MPORT_16_mask = 1'h1;
-  assign lru_array_dirty2_MPORT_16_en = _T_83 ? 1'h0 : _GEN_1142;
-  assign lru_array_dirty2_MPORT_18_data = _T_121[0];
-  assign lru_array_dirty2_MPORT_18_addr = reg_req_addr_index;
-  assign lru_array_dirty2_MPORT_18_mask = 1'h1;
-  assign lru_array_dirty2_MPORT_18_en = _T_83 ? 1'h0 : _GEN_1151;
-  assign lru_array_dirty2_MPORT_20_data = _T_125[0];
-  assign lru_array_dirty2_MPORT_20_addr = reg_req_addr_index;
-  assign lru_array_dirty2_MPORT_20_mask = 1'h1;
-  assign lru_array_dirty2_MPORT_20_en = _T_83 ? 1'h0 : _GEN_1160;
-  assign io_imem_inst = 3'h0 == icache_state ? 32'hdeadbeef : _GEN_362; // @[src/main/scala/fpga/Memory.scala 305:16 326:25]
-  assign io_imem_valid = 3'h0 == icache_state ? 1'h0 : _GEN_363; // @[src/main/scala/fpga/Memory.scala 306:17 326:25]
-  assign io_cache_ibusy = 3'h0 == icache_state ? 1'h0 : _GEN_364; // @[src/main/scala/fpga/Memory.scala 326:25 328:22]
-  assign io_cache_rdata = 3'h2 == dcache_state ? _GEN_449 : _io_cache_rdata_T_10[31:0]; // @[src/main/scala/fpga/Memory.scala 571:25]
-  assign io_cache_rvalid = 3'h0 == dcache_state ? 1'h0 : _GEN_1078; // @[src/main/scala/fpga/Memory.scala 520:19 571:25]
-  assign io_cache_rready = 3'h0 == dcache_state ? _GEN_462 : _GEN_1090; // @[src/main/scala/fpga/Memory.scala 571:25]
-  assign io_cache_wready = 3'h0 == dcache_state ? _GEN_462 : _GEN_1090; // @[src/main/scala/fpga/Memory.scala 571:25]
-  assign io_dramPort_ren = 3'h0 == reg_dram_state ? _GEN_25 : _GEN_83; // @[src/main/scala/fpga/Memory.scala 209:27]
-  assign io_dramPort_wen = 3'h0 == reg_dram_state ? _GEN_31 : _GEN_78; // @[src/main/scala/fpga/Memory.scala 209:27]
+  assign lru_array_dirty2_MPORT_9_en = _T_68 ? 1'h0 : _GEN_1049;
+  assign lru_array_dirty2_MPORT_13_data = _T_129[0];
+  assign lru_array_dirty2_MPORT_13_addr = reg_req_addr_index;
+  assign lru_array_dirty2_MPORT_13_mask = 1'h1;
+  assign lru_array_dirty2_MPORT_13_en = _T_68 ? 1'h0 : _GEN_1062;
+  assign lru_array_dirty2_MPORT_15_data = _T_133[0];
+  assign lru_array_dirty2_MPORT_15_addr = reg_req_addr_index;
+  assign lru_array_dirty2_MPORT_15_mask = 1'h1;
+  assign lru_array_dirty2_MPORT_15_en = _T_68 ? 1'h0 : _GEN_1071;
+  assign lru_array_dirty2_MPORT_17_data = _T_106[0];
+  assign lru_array_dirty2_MPORT_17_addr = reg_req_addr_index;
+  assign lru_array_dirty2_MPORT_17_mask = 1'h1;
+  assign lru_array_dirty2_MPORT_17_en = _T_68 ? 1'h0 : _GEN_1080;
+  assign lru_array_dirty2_MPORT_19_data = _T_110[0];
+  assign lru_array_dirty2_MPORT_19_addr = reg_req_addr_index;
+  assign lru_array_dirty2_MPORT_19_mask = 1'h1;
+  assign lru_array_dirty2_MPORT_19_en = _T_68 ? 1'h0 : _GEN_1089;
+  assign io_imem_inst = i_reg_sel_next_inst ? i_reg_next_inst : io_icache_rdata; // @[src/main/scala/fpga/Memory.scala 306:22]
+  assign io_imem_valid = 3'h0 == icache_state ? 1'h0 : _GEN_295; // @[src/main/scala/fpga/Memory.scala 307:17 329:25]
+  assign io_cache_ibusy = 3'h0 == icache_state ? 1'h0 : _GEN_296; // @[src/main/scala/fpga/Memory.scala 329:25 331:22]
+  assign io_cache_rdata = 3'h2 == dcache_state ? _GEN_378 : _io_cache_rdata_T_10[31:0]; // @[src/main/scala/fpga/Memory.scala 556:25]
+  assign io_cache_rvalid = 3'h0 == dcache_state ? 1'h0 : _GEN_1007; // @[src/main/scala/fpga/Memory.scala 505:19 556:25]
+  assign io_cache_rready = 3'h0 == dcache_state ? _GEN_391 : _GEN_1019; // @[src/main/scala/fpga/Memory.scala 556:25]
+  assign io_cache_wready = 3'h0 == dcache_state ? _GEN_391 : _GEN_1019; // @[src/main/scala/fpga/Memory.scala 556:25]
+  assign io_dramPort_ren = 3'h0 == reg_dram_state ? _GEN_25 : _GEN_83; // @[src/main/scala/fpga/Memory.scala 208:27]
+  assign io_dramPort_wen = 3'h0 == reg_dram_state ? _GEN_31 : _GEN_78; // @[src/main/scala/fpga/Memory.scala 208:27]
   assign io_dramPort_addr = _GEN_90[27:0];
-  assign io_dramPort_wdata = 3'h0 == reg_dram_state ? dram_d_wdata[127:0] : reg_dram_wdata; // @[src/main/scala/fpga/Memory.scala 209:27]
-  assign io_cache_array1_ren = 3'h0 == dcache_state | _GEN_1088; // @[src/main/scala/fpga/Memory.scala 571:25]
-  assign io_cache_array1_wen = 3'h0 == dcache_state ? 1'h0 : _GEN_1109; // @[src/main/scala/fpga/Memory.scala 527:25 571:25]
-  assign io_cache_array1_we = 3'h0 == dcache_state ? 32'h0 : _GEN_1106; // @[src/main/scala/fpga/Memory.scala 528:25 571:25]
-  assign io_cache_array1_raddr = 3'h0 == dcache_state ? _GEN_453 : _GEN_995; // @[src/main/scala/fpga/Memory.scala 571:25]
-  assign io_cache_array1_waddr = reg_req_addr_index; // @[src/main/scala/fpga/Memory.scala 530:25 571:25]
-  assign io_cache_array1_wdata = 3'h3 == dcache_state ? wdata : _GEN_635; // @[src/main/scala/fpga/Memory.scala 571:25 724:29]
-  assign io_cache_array2_ren = 3'h0 == dcache_state | _GEN_1088; // @[src/main/scala/fpga/Memory.scala 571:25]
-  assign io_cache_array2_wen = 3'h0 == dcache_state ? 1'h0 : _GEN_1117; // @[src/main/scala/fpga/Memory.scala 533:25 571:25]
-  assign io_cache_array2_we = 3'h0 == dcache_state ? 32'h0 : _GEN_1106; // @[src/main/scala/fpga/Memory.scala 534:25 571:25]
-  assign io_cache_array2_raddr = 3'h0 == dcache_state ? _GEN_453 : _GEN_995; // @[src/main/scala/fpga/Memory.scala 571:25]
-  assign io_cache_array2_waddr = reg_req_addr_index; // @[src/main/scala/fpga/Memory.scala 530:25 571:25]
-  assign io_cache_array2_wdata = 3'h3 == dcache_state ? wdata : _GEN_635; // @[src/main/scala/fpga/Memory.scala 571:25 727:29]
-  assign io_icache_ren = 3'h0 == icache_state ? _GEN_117 : _GEN_358; // @[src/main/scala/fpga/Memory.scala 326:25]
-  assign io_icache_wen = 3'h0 == icache_state ? 1'h0 : _GEN_387; // @[src/main/scala/fpga/Memory.scala 314:17 326:25]
-  assign io_icache_raddr = 3'h0 == icache_state ? _io_icache_raddr_T_1 : _GEN_359; // @[src/main/scala/fpga/Memory.scala 326:25]
-  assign io_icache_waddr = i_reg_req_addr_index; // @[src/main/scala/fpga/Memory.scala 326:25]
-  assign io_icache_wdata = 3'h4 == icache_state ? dcache_snoop_line : dram_rdata; // @[src/main/scala/fpga/Memory.scala 326:25]
-  assign io_icache_valid_ren = 3'h0 == icache_state ? _GEN_117 : _GEN_375; // @[src/main/scala/fpga/Memory.scala 326:25]
-  assign io_icache_valid_wen = 3'h0 == icache_state ? 1'h0 : _GEN_387; // @[src/main/scala/fpga/Memory.scala 314:17 326:25]
-  assign io_icache_valid_invalidate = 3'h0 == icache_state ? io_cache_iinvalidate : _GEN_368; // @[src/main/scala/fpga/Memory.scala 326:25]
-  assign io_icache_valid_addr = 3'h0 == icache_state ? io_imem_addr[11:6] : _GEN_329; // @[src/main/scala/fpga/Memory.scala 326:25]
-  assign io_icache_valid_iaddr = 3'h0 == icache_state ? 1'h0 : _GEN_313; // @[src/main/scala/fpga/Memory.scala 326:25]
-  assign io_icache_valid_wdata = 3'h4 == icache_state ? icache_valid_wdata : icache_valid_wdata; // @[src/main/scala/fpga/Memory.scala 326:25]
-  assign io_icache_state = icache_state; // @[src/main/scala/fpga/Memory.scala 850:35]
-  assign io_dram_state = reg_dram_state; // @[src/main/scala/fpga/Memory.scala 851:35]
+  assign io_dramPort_wdata = 3'h0 == reg_dram_state ? dram_d_wdata[127:0] : reg_dram_wdata; // @[src/main/scala/fpga/Memory.scala 208:27]
+  assign io_cache_array1_ren = 3'h0 == dcache_state | _GEN_1017; // @[src/main/scala/fpga/Memory.scala 556:25]
+  assign io_cache_array1_wen = 3'h0 == dcache_state ? 1'h0 : _GEN_1038; // @[src/main/scala/fpga/Memory.scala 512:25 556:25]
+  assign io_cache_array1_we = 3'h0 == dcache_state ? 32'h0 : _GEN_1035; // @[src/main/scala/fpga/Memory.scala 513:25 556:25]
+  assign io_cache_array1_raddr = 3'h0 == dcache_state ? _GEN_382 : _GEN_924; // @[src/main/scala/fpga/Memory.scala 556:25]
+  assign io_cache_array1_waddr = reg_req_addr_index; // @[src/main/scala/fpga/Memory.scala 515:25 556:25]
+  assign io_cache_array1_wdata = 3'h3 == dcache_state ? wdata : _GEN_564; // @[src/main/scala/fpga/Memory.scala 556:25 709:29]
+  assign io_cache_array2_ren = 3'h0 == dcache_state | _GEN_1017; // @[src/main/scala/fpga/Memory.scala 556:25]
+  assign io_cache_array2_wen = 3'h0 == dcache_state ? 1'h0 : _GEN_1046; // @[src/main/scala/fpga/Memory.scala 518:25 556:25]
+  assign io_cache_array2_we = 3'h0 == dcache_state ? 32'h0 : _GEN_1035; // @[src/main/scala/fpga/Memory.scala 519:25 556:25]
+  assign io_cache_array2_raddr = 3'h0 == dcache_state ? _GEN_382 : _GEN_924; // @[src/main/scala/fpga/Memory.scala 556:25]
+  assign io_cache_array2_waddr = reg_req_addr_index; // @[src/main/scala/fpga/Memory.scala 515:25 556:25]
+  assign io_cache_array2_wdata = 3'h3 == dcache_state ? wdata : _GEN_564; // @[src/main/scala/fpga/Memory.scala 556:25 712:29]
+  assign io_icache_ren = 3'h0 == icache_state ? _GEN_117 : _GEN_291; // @[src/main/scala/fpga/Memory.scala 329:25]
+  assign io_icache_wen = 3'h0 == icache_state ? 1'h0 : _GEN_325; // @[src/main/scala/fpga/Memory.scala 317:17 329:25]
+  assign io_icache_raddr = 3'h0 == icache_state ? _io_icache_raddr_T_1 : _GEN_292; // @[src/main/scala/fpga/Memory.scala 329:25]
+  assign io_icache_waddr = i_reg_req_addr_index; // @[src/main/scala/fpga/Memory.scala 329:25 397:23]
+  assign io_icache_wdata = 3'h4 == icache_state ? dcache_snoop_line : dram_rdata; // @[src/main/scala/fpga/Memory.scala 329:25 398:23]
+  assign io_icache_valid_ren = 3'h0 == icache_state ? _GEN_117 : _GEN_308; // @[src/main/scala/fpga/Memory.scala 329:25]
+  assign io_icache_valid_wen = 3'h0 == icache_state ? 1'h0 : _GEN_325; // @[src/main/scala/fpga/Memory.scala 317:17 329:25]
+  assign io_icache_valid_invalidate = 3'h0 == icache_state ? io_cache_iinvalidate : _GEN_303; // @[src/main/scala/fpga/Memory.scala 329:25]
+  assign io_icache_valid_addr = 3'h0 == icache_state ? io_imem_addr[11:6] : _GEN_256; // @[src/main/scala/fpga/Memory.scala 329:25]
+  assign io_icache_valid_iaddr = 3'h0 == icache_state ? 1'h0 : _GEN_248; // @[src/main/scala/fpga/Memory.scala 329:25]
+  assign io_icache_valid_wdata = 3'h4 == icache_state ? icache_valid_wdata : icache_valid_wdata; // @[src/main/scala/fpga/Memory.scala 329:25 401:29]
+  assign io_icache_state = icache_state; // @[src/main/scala/fpga/Memory.scala 835:35]
+  assign io_dram_state = reg_dram_state; // @[src/main/scala/fpga/Memory.scala 836:35]
   always @(posedge clock) begin
     if (i_tag_array_0_MPORT_2_en & i_tag_array_0_MPORT_2_mask) begin
-      i_tag_array_0[i_tag_array_0_MPORT_2_addr] <= i_tag_array_0_MPORT_2_data; // @[src/main/scala/fpga/Memory.scala 289:24]
+      i_tag_array_0[i_tag_array_0_MPORT_2_addr] <= i_tag_array_0_MPORT_2_data; // @[src/main/scala/fpga/Memory.scala 288:24]
     end
-    if (i_tag_array_0_MPORT_4_en & i_tag_array_0_MPORT_4_mask) begin
-      i_tag_array_0[i_tag_array_0_MPORT_4_addr] <= i_tag_array_0_MPORT_4_data; // @[src/main/scala/fpga/Memory.scala 289:24]
+    if (i_tag_array_0_MPORT_3_en & i_tag_array_0_MPORT_3_mask) begin
+      i_tag_array_0[i_tag_array_0_MPORT_3_addr] <= i_tag_array_0_MPORT_3_data; // @[src/main/scala/fpga/Memory.scala 288:24]
     end
-    if (tag_array_0_MPORT_13_en & tag_array_0_MPORT_13_mask) begin
-      tag_array_0[tag_array_0_MPORT_13_addr] <= tag_array_0_MPORT_13_data; // @[src/main/scala/fpga/Memory.scala 501:22]
+    if (tag_array_0_MPORT_12_en & tag_array_0_MPORT_12_mask) begin
+      tag_array_0[tag_array_0_MPORT_12_addr] <= tag_array_0_MPORT_12_data; // @[src/main/scala/fpga/Memory.scala 486:22]
     end
-    if (tag_array_0_MPORT_15_en & tag_array_0_MPORT_15_mask) begin
-      tag_array_0[tag_array_0_MPORT_15_addr] <= tag_array_0_MPORT_15_data; // @[src/main/scala/fpga/Memory.scala 501:22]
+    if (tag_array_0_MPORT_14_en & tag_array_0_MPORT_14_mask) begin
+      tag_array_0[tag_array_0_MPORT_14_addr] <= tag_array_0_MPORT_14_data; // @[src/main/scala/fpga/Memory.scala 486:22]
     end
-    if (tag_array_0_MPORT_17_en & tag_array_0_MPORT_17_mask) begin
-      tag_array_0[tag_array_0_MPORT_17_addr] <= tag_array_0_MPORT_17_data; // @[src/main/scala/fpga/Memory.scala 501:22]
+    if (tag_array_0_MPORT_16_en & tag_array_0_MPORT_16_mask) begin
+      tag_array_0[tag_array_0_MPORT_16_addr] <= tag_array_0_MPORT_16_data; // @[src/main/scala/fpga/Memory.scala 486:22]
     end
-    if (tag_array_0_MPORT_19_en & tag_array_0_MPORT_19_mask) begin
-      tag_array_0[tag_array_0_MPORT_19_addr] <= tag_array_0_MPORT_19_data; // @[src/main/scala/fpga/Memory.scala 501:22]
+    if (tag_array_0_MPORT_18_en & tag_array_0_MPORT_18_mask) begin
+      tag_array_0[tag_array_0_MPORT_18_addr] <= tag_array_0_MPORT_18_data; // @[src/main/scala/fpga/Memory.scala 486:22]
     end
-    if (tag_array_1_MPORT_13_en & tag_array_1_MPORT_13_mask) begin
-      tag_array_1[tag_array_1_MPORT_13_addr] <= tag_array_1_MPORT_13_data; // @[src/main/scala/fpga/Memory.scala 501:22]
+    if (tag_array_1_MPORT_12_en & tag_array_1_MPORT_12_mask) begin
+      tag_array_1[tag_array_1_MPORT_12_addr] <= tag_array_1_MPORT_12_data; // @[src/main/scala/fpga/Memory.scala 486:22]
     end
-    if (tag_array_1_MPORT_15_en & tag_array_1_MPORT_15_mask) begin
-      tag_array_1[tag_array_1_MPORT_15_addr] <= tag_array_1_MPORT_15_data; // @[src/main/scala/fpga/Memory.scala 501:22]
+    if (tag_array_1_MPORT_14_en & tag_array_1_MPORT_14_mask) begin
+      tag_array_1[tag_array_1_MPORT_14_addr] <= tag_array_1_MPORT_14_data; // @[src/main/scala/fpga/Memory.scala 486:22]
     end
-    if (tag_array_1_MPORT_17_en & tag_array_1_MPORT_17_mask) begin
-      tag_array_1[tag_array_1_MPORT_17_addr] <= tag_array_1_MPORT_17_data; // @[src/main/scala/fpga/Memory.scala 501:22]
+    if (tag_array_1_MPORT_16_en & tag_array_1_MPORT_16_mask) begin
+      tag_array_1[tag_array_1_MPORT_16_addr] <= tag_array_1_MPORT_16_data; // @[src/main/scala/fpga/Memory.scala 486:22]
     end
-    if (tag_array_1_MPORT_19_en & tag_array_1_MPORT_19_mask) begin
-      tag_array_1[tag_array_1_MPORT_19_addr] <= tag_array_1_MPORT_19_data; // @[src/main/scala/fpga/Memory.scala 501:22]
+    if (tag_array_1_MPORT_18_en & tag_array_1_MPORT_18_mask) begin
+      tag_array_1[tag_array_1_MPORT_18_addr] <= tag_array_1_MPORT_18_data; // @[src/main/scala/fpga/Memory.scala 486:22]
+    end
+    if (lru_array_way_hot_MPORT_8_en & lru_array_way_hot_MPORT_8_mask) begin
+      lru_array_way_hot[lru_array_way_hot_MPORT_8_addr] <= lru_array_way_hot_MPORT_8_data; // @[src/main/scala/fpga/Memory.scala 487:22]
     end
     if (lru_array_way_hot_MPORT_9_en & lru_array_way_hot_MPORT_9_mask) begin
-      lru_array_way_hot[lru_array_way_hot_MPORT_9_addr] <= lru_array_way_hot_MPORT_9_data; // @[src/main/scala/fpga/Memory.scala 502:22]
+      lru_array_way_hot[lru_array_way_hot_MPORT_9_addr] <= lru_array_way_hot_MPORT_9_data; // @[src/main/scala/fpga/Memory.scala 487:22]
     end
-    if (lru_array_way_hot_MPORT_10_en & lru_array_way_hot_MPORT_10_mask) begin
-      lru_array_way_hot[lru_array_way_hot_MPORT_10_addr] <= lru_array_way_hot_MPORT_10_data; // @[src/main/scala/fpga/Memory.scala 502:22]
+    if (lru_array_way_hot_MPORT_13_en & lru_array_way_hot_MPORT_13_mask) begin
+      lru_array_way_hot[lru_array_way_hot_MPORT_13_addr] <= lru_array_way_hot_MPORT_13_data; // @[src/main/scala/fpga/Memory.scala 487:22]
     end
-    if (lru_array_way_hot_MPORT_14_en & lru_array_way_hot_MPORT_14_mask) begin
-      lru_array_way_hot[lru_array_way_hot_MPORT_14_addr] <= lru_array_way_hot_MPORT_14_data; // @[src/main/scala/fpga/Memory.scala 502:22]
+    if (lru_array_way_hot_MPORT_15_en & lru_array_way_hot_MPORT_15_mask) begin
+      lru_array_way_hot[lru_array_way_hot_MPORT_15_addr] <= lru_array_way_hot_MPORT_15_data; // @[src/main/scala/fpga/Memory.scala 487:22]
     end
-    if (lru_array_way_hot_MPORT_16_en & lru_array_way_hot_MPORT_16_mask) begin
-      lru_array_way_hot[lru_array_way_hot_MPORT_16_addr] <= lru_array_way_hot_MPORT_16_data; // @[src/main/scala/fpga/Memory.scala 502:22]
+    if (lru_array_way_hot_MPORT_17_en & lru_array_way_hot_MPORT_17_mask) begin
+      lru_array_way_hot[lru_array_way_hot_MPORT_17_addr] <= lru_array_way_hot_MPORT_17_data; // @[src/main/scala/fpga/Memory.scala 487:22]
     end
-    if (lru_array_way_hot_MPORT_18_en & lru_array_way_hot_MPORT_18_mask) begin
-      lru_array_way_hot[lru_array_way_hot_MPORT_18_addr] <= lru_array_way_hot_MPORT_18_data; // @[src/main/scala/fpga/Memory.scala 502:22]
+    if (lru_array_way_hot_MPORT_19_en & lru_array_way_hot_MPORT_19_mask) begin
+      lru_array_way_hot[lru_array_way_hot_MPORT_19_addr] <= lru_array_way_hot_MPORT_19_data; // @[src/main/scala/fpga/Memory.scala 487:22]
     end
-    if (lru_array_way_hot_MPORT_20_en & lru_array_way_hot_MPORT_20_mask) begin
-      lru_array_way_hot[lru_array_way_hot_MPORT_20_addr] <= lru_array_way_hot_MPORT_20_data; // @[src/main/scala/fpga/Memory.scala 502:22]
+    if (lru_array_dirty1_MPORT_8_en & lru_array_dirty1_MPORT_8_mask) begin
+      lru_array_dirty1[lru_array_dirty1_MPORT_8_addr] <= lru_array_dirty1_MPORT_8_data; // @[src/main/scala/fpga/Memory.scala 487:22]
     end
     if (lru_array_dirty1_MPORT_9_en & lru_array_dirty1_MPORT_9_mask) begin
-      lru_array_dirty1[lru_array_dirty1_MPORT_9_addr] <= lru_array_dirty1_MPORT_9_data; // @[src/main/scala/fpga/Memory.scala 502:22]
+      lru_array_dirty1[lru_array_dirty1_MPORT_9_addr] <= lru_array_dirty1_MPORT_9_data; // @[src/main/scala/fpga/Memory.scala 487:22]
     end
-    if (lru_array_dirty1_MPORT_10_en & lru_array_dirty1_MPORT_10_mask) begin
-      lru_array_dirty1[lru_array_dirty1_MPORT_10_addr] <= lru_array_dirty1_MPORT_10_data; // @[src/main/scala/fpga/Memory.scala 502:22]
+    if (lru_array_dirty1_MPORT_13_en & lru_array_dirty1_MPORT_13_mask) begin
+      lru_array_dirty1[lru_array_dirty1_MPORT_13_addr] <= lru_array_dirty1_MPORT_13_data; // @[src/main/scala/fpga/Memory.scala 487:22]
     end
-    if (lru_array_dirty1_MPORT_14_en & lru_array_dirty1_MPORT_14_mask) begin
-      lru_array_dirty1[lru_array_dirty1_MPORT_14_addr] <= lru_array_dirty1_MPORT_14_data; // @[src/main/scala/fpga/Memory.scala 502:22]
+    if (lru_array_dirty1_MPORT_15_en & lru_array_dirty1_MPORT_15_mask) begin
+      lru_array_dirty1[lru_array_dirty1_MPORT_15_addr] <= lru_array_dirty1_MPORT_15_data; // @[src/main/scala/fpga/Memory.scala 487:22]
     end
-    if (lru_array_dirty1_MPORT_16_en & lru_array_dirty1_MPORT_16_mask) begin
-      lru_array_dirty1[lru_array_dirty1_MPORT_16_addr] <= lru_array_dirty1_MPORT_16_data; // @[src/main/scala/fpga/Memory.scala 502:22]
+    if (lru_array_dirty1_MPORT_17_en & lru_array_dirty1_MPORT_17_mask) begin
+      lru_array_dirty1[lru_array_dirty1_MPORT_17_addr] <= lru_array_dirty1_MPORT_17_data; // @[src/main/scala/fpga/Memory.scala 487:22]
     end
-    if (lru_array_dirty1_MPORT_18_en & lru_array_dirty1_MPORT_18_mask) begin
-      lru_array_dirty1[lru_array_dirty1_MPORT_18_addr] <= lru_array_dirty1_MPORT_18_data; // @[src/main/scala/fpga/Memory.scala 502:22]
+    if (lru_array_dirty1_MPORT_19_en & lru_array_dirty1_MPORT_19_mask) begin
+      lru_array_dirty1[lru_array_dirty1_MPORT_19_addr] <= lru_array_dirty1_MPORT_19_data; // @[src/main/scala/fpga/Memory.scala 487:22]
     end
-    if (lru_array_dirty1_MPORT_20_en & lru_array_dirty1_MPORT_20_mask) begin
-      lru_array_dirty1[lru_array_dirty1_MPORT_20_addr] <= lru_array_dirty1_MPORT_20_data; // @[src/main/scala/fpga/Memory.scala 502:22]
+    if (lru_array_dirty2_MPORT_8_en & lru_array_dirty2_MPORT_8_mask) begin
+      lru_array_dirty2[lru_array_dirty2_MPORT_8_addr] <= lru_array_dirty2_MPORT_8_data; // @[src/main/scala/fpga/Memory.scala 487:22]
     end
     if (lru_array_dirty2_MPORT_9_en & lru_array_dirty2_MPORT_9_mask) begin
-      lru_array_dirty2[lru_array_dirty2_MPORT_9_addr] <= lru_array_dirty2_MPORT_9_data; // @[src/main/scala/fpga/Memory.scala 502:22]
+      lru_array_dirty2[lru_array_dirty2_MPORT_9_addr] <= lru_array_dirty2_MPORT_9_data; // @[src/main/scala/fpga/Memory.scala 487:22]
     end
-    if (lru_array_dirty2_MPORT_10_en & lru_array_dirty2_MPORT_10_mask) begin
-      lru_array_dirty2[lru_array_dirty2_MPORT_10_addr] <= lru_array_dirty2_MPORT_10_data; // @[src/main/scala/fpga/Memory.scala 502:22]
+    if (lru_array_dirty2_MPORT_13_en & lru_array_dirty2_MPORT_13_mask) begin
+      lru_array_dirty2[lru_array_dirty2_MPORT_13_addr] <= lru_array_dirty2_MPORT_13_data; // @[src/main/scala/fpga/Memory.scala 487:22]
     end
-    if (lru_array_dirty2_MPORT_14_en & lru_array_dirty2_MPORT_14_mask) begin
-      lru_array_dirty2[lru_array_dirty2_MPORT_14_addr] <= lru_array_dirty2_MPORT_14_data; // @[src/main/scala/fpga/Memory.scala 502:22]
+    if (lru_array_dirty2_MPORT_15_en & lru_array_dirty2_MPORT_15_mask) begin
+      lru_array_dirty2[lru_array_dirty2_MPORT_15_addr] <= lru_array_dirty2_MPORT_15_data; // @[src/main/scala/fpga/Memory.scala 487:22]
     end
-    if (lru_array_dirty2_MPORT_16_en & lru_array_dirty2_MPORT_16_mask) begin
-      lru_array_dirty2[lru_array_dirty2_MPORT_16_addr] <= lru_array_dirty2_MPORT_16_data; // @[src/main/scala/fpga/Memory.scala 502:22]
+    if (lru_array_dirty2_MPORT_17_en & lru_array_dirty2_MPORT_17_mask) begin
+      lru_array_dirty2[lru_array_dirty2_MPORT_17_addr] <= lru_array_dirty2_MPORT_17_data; // @[src/main/scala/fpga/Memory.scala 487:22]
     end
-    if (lru_array_dirty2_MPORT_18_en & lru_array_dirty2_MPORT_18_mask) begin
-      lru_array_dirty2[lru_array_dirty2_MPORT_18_addr] <= lru_array_dirty2_MPORT_18_data; // @[src/main/scala/fpga/Memory.scala 502:22]
+    if (lru_array_dirty2_MPORT_19_en & lru_array_dirty2_MPORT_19_mask) begin
+      lru_array_dirty2[lru_array_dirty2_MPORT_19_addr] <= lru_array_dirty2_MPORT_19_data; // @[src/main/scala/fpga/Memory.scala 487:22]
     end
-    if (lru_array_dirty2_MPORT_20_en & lru_array_dirty2_MPORT_20_mask) begin
-      lru_array_dirty2[lru_array_dirty2_MPORT_20_addr] <= lru_array_dirty2_MPORT_20_data; // @[src/main/scala/fpga/Memory.scala 502:22]
-    end
-    if (reset) begin // @[src/main/scala/fpga/Memory.scala 191:31]
-      reg_dram_state <= 3'h0; // @[src/main/scala/fpga/Memory.scala 191:31]
-    end else if (3'h0 == reg_dram_state) begin // @[src/main/scala/fpga/Memory.scala 209:27]
-      if (io_dramPort_init_calib_complete & ~io_dramPort_busy) begin // @[src/main/scala/fpga/Memory.scala 211:67]
-        if (dram_i_ren) begin // @[src/main/scala/fpga/Memory.scala 213:27]
-          reg_dram_state <= 3'h2; // @[src/main/scala/fpga/Memory.scala 218:26]
+    if (reset) begin // @[src/main/scala/fpga/Memory.scala 190:31]
+      reg_dram_state <= 3'h0; // @[src/main/scala/fpga/Memory.scala 190:31]
+    end else if (3'h0 == reg_dram_state) begin // @[src/main/scala/fpga/Memory.scala 208:27]
+      if (io_dramPort_init_calib_complete & ~io_dramPort_busy) begin // @[src/main/scala/fpga/Memory.scala 210:67]
+        if (dram_i_ren) begin // @[src/main/scala/fpga/Memory.scala 212:27]
+          reg_dram_state <= 3'h2; // @[src/main/scala/fpga/Memory.scala 217:26]
         end else begin
           reg_dram_state <= _GEN_12;
         end
       end
-    end else if (3'h1 == reg_dram_state) begin // @[src/main/scala/fpga/Memory.scala 209:27]
-      if (_T_3) begin // @[src/main/scala/fpga/Memory.scala 241:32]
-        reg_dram_state <= 3'h0; // @[src/main/scala/fpga/Memory.scala 246:24]
+    end else if (3'h1 == reg_dram_state) begin // @[src/main/scala/fpga/Memory.scala 208:27]
+      if (_T_3) begin // @[src/main/scala/fpga/Memory.scala 240:32]
+        reg_dram_state <= 3'h0; // @[src/main/scala/fpga/Memory.scala 245:24]
       end
-    end else if (3'h2 == reg_dram_state) begin // @[src/main/scala/fpga/Memory.scala 209:27]
+    end else if (3'h2 == reg_dram_state) begin // @[src/main/scala/fpga/Memory.scala 208:27]
       reg_dram_state <= _GEN_46;
     end else begin
       reg_dram_state <= _GEN_66;
     end
-    if (reset) begin // @[src/main/scala/fpga/Memory.scala 192:31]
-      reg_dram_addr <= 27'h0; // @[src/main/scala/fpga/Memory.scala 192:31]
-    end else if (3'h0 == reg_dram_state) begin // @[src/main/scala/fpga/Memory.scala 209:27]
-      if (io_dramPort_init_calib_complete & ~io_dramPort_busy) begin // @[src/main/scala/fpga/Memory.scala 211:67]
-        if (dram_i_ren) begin // @[src/main/scala/fpga/Memory.scala 213:27]
-          reg_dram_addr <= dram_i_addr; // @[src/main/scala/fpga/Memory.scala 216:25]
+    if (reset) begin // @[src/main/scala/fpga/Memory.scala 191:31]
+      reg_dram_addr <= 27'h0; // @[src/main/scala/fpga/Memory.scala 191:31]
+    end else if (3'h0 == reg_dram_state) begin // @[src/main/scala/fpga/Memory.scala 208:27]
+      if (io_dramPort_init_calib_complete & ~io_dramPort_busy) begin // @[src/main/scala/fpga/Memory.scala 210:67]
+        if (dram_i_ren) begin // @[src/main/scala/fpga/Memory.scala 212:27]
+          reg_dram_addr <= dram_i_addr; // @[src/main/scala/fpga/Memory.scala 215:25]
         end else begin
           reg_dram_addr <= _GEN_9;
         end
       end
     end
-    if (reset) begin // @[src/main/scala/fpga/Memory.scala 193:31]
-      reg_dram_wdata <= 128'h0; // @[src/main/scala/fpga/Memory.scala 193:31]
-    end else if (3'h0 == reg_dram_state) begin // @[src/main/scala/fpga/Memory.scala 209:27]
-      if (io_dramPort_init_calib_complete & ~io_dramPort_busy) begin // @[src/main/scala/fpga/Memory.scala 211:67]
-        if (!(dram_i_ren)) begin // @[src/main/scala/fpga/Memory.scala 213:27]
+    if (reset) begin // @[src/main/scala/fpga/Memory.scala 192:31]
+      reg_dram_wdata <= 128'h0; // @[src/main/scala/fpga/Memory.scala 192:31]
+    end else if (3'h0 == reg_dram_state) begin // @[src/main/scala/fpga/Memory.scala 208:27]
+      if (io_dramPort_init_calib_complete & ~io_dramPort_busy) begin // @[src/main/scala/fpga/Memory.scala 210:67]
+        if (!(dram_i_ren)) begin // @[src/main/scala/fpga/Memory.scala 212:27]
           reg_dram_wdata <= _GEN_10;
         end
       end
     end
-    if (reset) begin // @[src/main/scala/fpga/Memory.scala 194:31]
-      reg_dram_rdata <= 128'h0; // @[src/main/scala/fpga/Memory.scala 194:31]
-    end else if (!(3'h0 == reg_dram_state)) begin // @[src/main/scala/fpga/Memory.scala 209:27]
-      if (!(3'h1 == reg_dram_state)) begin // @[src/main/scala/fpga/Memory.scala 209:27]
-        if (3'h2 == reg_dram_state) begin // @[src/main/scala/fpga/Memory.scala 209:27]
+    if (reset) begin // @[src/main/scala/fpga/Memory.scala 193:31]
+      reg_dram_rdata <= 128'h0; // @[src/main/scala/fpga/Memory.scala 193:31]
+    end else if (!(3'h0 == reg_dram_state)) begin // @[src/main/scala/fpga/Memory.scala 208:27]
+      if (!(3'h1 == reg_dram_state)) begin // @[src/main/scala/fpga/Memory.scala 208:27]
+        if (3'h2 == reg_dram_state) begin // @[src/main/scala/fpga/Memory.scala 208:27]
           reg_dram_rdata <= _GEN_40;
         end else begin
           reg_dram_rdata <= _GEN_67;
         end
       end
     end
-    reg_dram_di <= reset | _GEN_92; // @[src/main/scala/fpga/Memory.scala 195:{28,28}]
-    if (reset) begin // @[src/main/scala/fpga/Memory.scala 291:29]
-      icache_state <= 3'h0; // @[src/main/scala/fpga/Memory.scala 291:29]
-    end else if (3'h0 == icache_state) begin // @[src/main/scala/fpga/Memory.scala 326:25]
-      if (io_cache_iinvalidate) begin // @[src/main/scala/fpga/Memory.scala 331:35]
-        icache_state <= 3'h7; // @[src/main/scala/fpga/Memory.scala 335:22]
-      end else if (io_imem_en) begin // @[src/main/scala/fpga/Memory.scala 336:31]
+    reg_dram_di <= reset | _GEN_92; // @[src/main/scala/fpga/Memory.scala 194:{28,28}]
+    if (reset) begin // @[src/main/scala/fpga/Memory.scala 290:29]
+      icache_state <= 3'h0; // @[src/main/scala/fpga/Memory.scala 290:29]
+    end else if (3'h0 == icache_state) begin // @[src/main/scala/fpga/Memory.scala 329:25]
+      if (io_cache_iinvalidate) begin // @[src/main/scala/fpga/Memory.scala 335:35]
+        icache_state <= 3'h6; // @[src/main/scala/fpga/Memory.scala 339:22]
+      end else if (io_imem_en) begin // @[src/main/scala/fpga/Memory.scala 340:31]
         icache_state <= {{1'd0}, _GEN_103};
       end
-    end else if (3'h1 == icache_state) begin // @[src/main/scala/fpga/Memory.scala 326:25]
-      if (_T_32[0] & i_reg_tag_0 == i_reg_req_addr_tag) begin // @[src/main/scala/fpga/Memory.scala 356:145]
-        icache_state <= 3'h2; // @[src/main/scala/fpga/Memory.scala 360:22]
+    end else if (3'h1 == icache_state) begin // @[src/main/scala/fpga/Memory.scala 329:25]
+      if (_T_32[0] & i_reg_tag_0 == i_reg_req_addr_tag) begin // @[src/main/scala/fpga/Memory.scala 359:145]
+        icache_state <= 3'h2; // @[src/main/scala/fpga/Memory.scala 363:22]
       end else begin
-        icache_state <= 3'h4; // @[src/main/scala/fpga/Memory.scala 362:22]
+        icache_state <= 3'h4; // @[src/main/scala/fpga/Memory.scala 365:22]
       end
-    end else if (3'h2 == icache_state) begin // @[src/main/scala/fpga/Memory.scala 326:25]
-      icache_state <= _GEN_132;
+    end else if (3'h2 == icache_state) begin // @[src/main/scala/fpga/Memory.scala 329:25]
+      icache_state <= _GEN_130;
     end else begin
-      icache_state <= _GEN_288;
+      icache_state <= _GEN_236;
     end
-    if (reset) begin // @[src/main/scala/fpga/Memory.scala 504:29]
-      dcache_state <= 3'h0; // @[src/main/scala/fpga/Memory.scala 504:29]
-    end else if (3'h0 == dcache_state) begin // @[src/main/scala/fpga/Memory.scala 571:25]
-      if (dcache_snoop_en) begin // @[src/main/scala/fpga/Memory.scala 573:30]
-        dcache_state <= 3'h1; // @[src/main/scala/fpga/Memory.scala 581:22]
-      end else if (io_cache_ren | io_cache_wen) begin // @[src/main/scala/fpga/Memory.scala 597:45]
-        dcache_state <= {{1'd0}, _GEN_450};
+    if (reset) begin // @[src/main/scala/fpga/Memory.scala 293:31]
+      i_reg_req_addr_tag <= 16'h0; // @[src/main/scala/fpga/Memory.scala 293:31]
+    end else if (3'h0 == icache_state) begin // @[src/main/scala/fpga/Memory.scala 329:25]
+      i_reg_req_addr_tag <= io_imem_addr[27:12]; // @[src/main/scala/fpga/Memory.scala 333:22]
+    end else if (!(3'h1 == icache_state)) begin // @[src/main/scala/fpga/Memory.scala 329:25]
+      if (3'h2 == icache_state) begin // @[src/main/scala/fpga/Memory.scala 329:25]
+        i_reg_req_addr_tag <= io_imem_addr[27:12]; // @[src/main/scala/fpga/Memory.scala 374:22]
       end
-    end else if (3'h1 == dcache_state) begin // @[src/main/scala/fpga/Memory.scala 571:25]
-      dcache_state <= 3'h0; // @[src/main/scala/fpga/Memory.scala 616:20]
-    end else if (3'h2 == dcache_state) begin // @[src/main/scala/fpga/Memory.scala 571:25]
-      dcache_state <= _GEN_508;
+    end
+    if (reset) begin // @[src/main/scala/fpga/Memory.scala 293:31]
+      i_reg_req_addr_index <= 7'h0; // @[src/main/scala/fpga/Memory.scala 293:31]
+    end else if (3'h0 == icache_state) begin // @[src/main/scala/fpga/Memory.scala 329:25]
+      i_reg_req_addr_index <= io_imem_addr[11:5]; // @[src/main/scala/fpga/Memory.scala 333:22]
+    end else if (!(3'h1 == icache_state)) begin // @[src/main/scala/fpga/Memory.scala 329:25]
+      if (3'h2 == icache_state) begin // @[src/main/scala/fpga/Memory.scala 329:25]
+        i_reg_req_addr_index <= io_imem_addr[11:5]; // @[src/main/scala/fpga/Memory.scala 374:22]
+      end
+    end
+    if (reset) begin // @[src/main/scala/fpga/Memory.scala 489:29]
+      dcache_state <= 3'h0; // @[src/main/scala/fpga/Memory.scala 489:29]
+    end else if (3'h0 == dcache_state) begin // @[src/main/scala/fpga/Memory.scala 556:25]
+      if (dcache_snoop_en) begin // @[src/main/scala/fpga/Memory.scala 558:30]
+        dcache_state <= 3'h1; // @[src/main/scala/fpga/Memory.scala 566:22]
+      end else if (io_cache_ren | io_cache_wen) begin // @[src/main/scala/fpga/Memory.scala 582:45]
+        dcache_state <= {{1'd0}, _GEN_379};
+      end
+    end else if (3'h1 == dcache_state) begin // @[src/main/scala/fpga/Memory.scala 556:25]
+      dcache_state <= 3'h0; // @[src/main/scala/fpga/Memory.scala 601:20]
+    end else if (3'h2 == dcache_state) begin // @[src/main/scala/fpga/Memory.scala 556:25]
+      dcache_state <= _GEN_437;
     end else begin
-      dcache_state <= _GEN_901;
+      dcache_state <= _GEN_830;
     end
-    if (reset) begin // @[src/main/scala/fpga/Memory.scala 505:24]
-      reg_tag_0 <= 16'h0; // @[src/main/scala/fpga/Memory.scala 505:24]
-    end else if (3'h0 == dcache_state) begin // @[src/main/scala/fpga/Memory.scala 571:25]
-      if (dcache_snoop_en) begin // @[src/main/scala/fpga/Memory.scala 573:30]
-        reg_tag_0 <= tag_array_0_MPORT_5_data; // @[src/main/scala/fpga/Memory.scala 576:17]
+    if (reset) begin // @[src/main/scala/fpga/Memory.scala 490:24]
+      reg_tag_0 <= 16'h0; // @[src/main/scala/fpga/Memory.scala 490:24]
+    end else if (3'h0 == dcache_state) begin // @[src/main/scala/fpga/Memory.scala 556:25]
+      if (dcache_snoop_en) begin // @[src/main/scala/fpga/Memory.scala 558:30]
+        reg_tag_0 <= tag_array_0_MPORT_4_data; // @[src/main/scala/fpga/Memory.scala 561:17]
       end else begin
-        reg_tag_0 <= tag_array_0_MPORT_6_data; // @[src/main/scala/fpga/Memory.scala 590:17]
+        reg_tag_0 <= tag_array_0_MPORT_5_data; // @[src/main/scala/fpga/Memory.scala 575:17]
       end
-    end else if (!(3'h1 == dcache_state)) begin // @[src/main/scala/fpga/Memory.scala 571:25]
-      if (3'h2 == dcache_state) begin // @[src/main/scala/fpga/Memory.scala 571:25]
-        reg_tag_0 <= _GEN_504;
+    end else if (!(3'h1 == dcache_state)) begin // @[src/main/scala/fpga/Memory.scala 556:25]
+      if (3'h2 == dcache_state) begin // @[src/main/scala/fpga/Memory.scala 556:25]
+        reg_tag_0 <= _GEN_433;
       end else begin
-        reg_tag_0 <= _GEN_931;
-      end
-    end
-    if (reset) begin // @[src/main/scala/fpga/Memory.scala 511:29]
-      reg_req_addr_tag <= 16'h0; // @[src/main/scala/fpga/Memory.scala 511:29]
-    end else if (3'h0 == dcache_state) begin // @[src/main/scala/fpga/Memory.scala 571:25]
-      if (dcache_snoop_en) begin // @[src/main/scala/fpga/Memory.scala 573:30]
-        reg_req_addr_tag <= dcache_snoop_addr_tag; // @[src/main/scala/fpga/Memory.scala 575:22]
-      end else begin
-        reg_req_addr_tag <= req_addr_3_tag; // @[src/main/scala/fpga/Memory.scala 586:22]
-      end
-    end else if (!(3'h1 == dcache_state)) begin // @[src/main/scala/fpga/Memory.scala 571:25]
-      if (3'h2 == dcache_state) begin // @[src/main/scala/fpga/Memory.scala 571:25]
-        reg_req_addr_tag <= _GEN_498;
-      end else begin
-        reg_req_addr_tag <= _GEN_925;
+        reg_tag_0 <= _GEN_860;
       end
     end
-    if (reset) begin // @[src/main/scala/fpga/Memory.scala 505:24]
-      reg_tag_1 <= 16'h0; // @[src/main/scala/fpga/Memory.scala 505:24]
-    end else if (3'h0 == dcache_state) begin // @[src/main/scala/fpga/Memory.scala 571:25]
-      if (dcache_snoop_en) begin // @[src/main/scala/fpga/Memory.scala 573:30]
-        reg_tag_1 <= tag_array_1_MPORT_5_data; // @[src/main/scala/fpga/Memory.scala 576:17]
+    if (reset) begin // @[src/main/scala/fpga/Memory.scala 496:29]
+      reg_req_addr_tag <= 16'h0; // @[src/main/scala/fpga/Memory.scala 496:29]
+    end else if (3'h0 == dcache_state) begin // @[src/main/scala/fpga/Memory.scala 556:25]
+      if (dcache_snoop_en) begin // @[src/main/scala/fpga/Memory.scala 558:30]
+        reg_req_addr_tag <= dcache_snoop_addr_tag; // @[src/main/scala/fpga/Memory.scala 560:22]
       end else begin
-        reg_tag_1 <= tag_array_1_MPORT_6_data; // @[src/main/scala/fpga/Memory.scala 590:17]
+        reg_req_addr_tag <= req_addr_2_tag; // @[src/main/scala/fpga/Memory.scala 571:22]
       end
-    end else if (!(3'h1 == dcache_state)) begin // @[src/main/scala/fpga/Memory.scala 571:25]
-      if (3'h2 == dcache_state) begin // @[src/main/scala/fpga/Memory.scala 571:25]
-        reg_tag_1 <= _GEN_505;
+    end else if (!(3'h1 == dcache_state)) begin // @[src/main/scala/fpga/Memory.scala 556:25]
+      if (3'h2 == dcache_state) begin // @[src/main/scala/fpga/Memory.scala 556:25]
+        reg_req_addr_tag <= _GEN_427;
       end else begin
-        reg_tag_1 <= _GEN_932;
+        reg_req_addr_tag <= _GEN_854;
       end
     end
-    if (reset) begin // @[src/main/scala/fpga/Memory.scala 294:31]
-      i_reg_req_addr_tag <= 16'h0; // @[src/main/scala/fpga/Memory.scala 294:31]
-    end else if (3'h0 == icache_state) begin // @[src/main/scala/fpga/Memory.scala 326:25]
-      i_reg_req_addr_tag <= io_imem_addr[27:12]; // @[src/main/scala/fpga/Memory.scala 330:22]
-    end else if (!(3'h1 == icache_state)) begin // @[src/main/scala/fpga/Memory.scala 326:25]
-      if (3'h2 == icache_state) begin // @[src/main/scala/fpga/Memory.scala 326:25]
-        i_reg_req_addr_tag <= io_imem_addr[27:12]; // @[src/main/scala/fpga/Memory.scala 372:22]
+    if (reset) begin // @[src/main/scala/fpga/Memory.scala 490:24]
+      reg_tag_1 <= 16'h0; // @[src/main/scala/fpga/Memory.scala 490:24]
+    end else if (3'h0 == dcache_state) begin // @[src/main/scala/fpga/Memory.scala 556:25]
+      if (dcache_snoop_en) begin // @[src/main/scala/fpga/Memory.scala 558:30]
+        reg_tag_1 <= tag_array_1_MPORT_4_data; // @[src/main/scala/fpga/Memory.scala 561:17]
       end else begin
-        i_reg_req_addr_tag <= _GEN_293;
+        reg_tag_1 <= tag_array_1_MPORT_5_data; // @[src/main/scala/fpga/Memory.scala 575:17]
+      end
+    end else if (!(3'h1 == dcache_state)) begin // @[src/main/scala/fpga/Memory.scala 556:25]
+      if (3'h2 == dcache_state) begin // @[src/main/scala/fpga/Memory.scala 556:25]
+        reg_tag_1 <= _GEN_434;
+      end else begin
+        reg_tag_1 <= _GEN_861;
       end
     end
-    if (reset) begin // @[src/main/scala/fpga/Memory.scala 294:31]
-      i_reg_req_addr_index <= 7'h0; // @[src/main/scala/fpga/Memory.scala 294:31]
-    end else if (3'h0 == icache_state) begin // @[src/main/scala/fpga/Memory.scala 326:25]
-      i_reg_req_addr_index <= io_imem_addr[11:5]; // @[src/main/scala/fpga/Memory.scala 330:22]
-    end else if (!(3'h1 == icache_state)) begin // @[src/main/scala/fpga/Memory.scala 326:25]
-      if (3'h2 == icache_state) begin // @[src/main/scala/fpga/Memory.scala 326:25]
-        i_reg_req_addr_index <= io_imem_addr[11:5]; // @[src/main/scala/fpga/Memory.scala 372:22]
+    if (reset) begin // @[src/main/scala/fpga/Memory.scala 495:24]
+      reg_lru_way_hot <= 1'h0; // @[src/main/scala/fpga/Memory.scala 495:24]
+    end else if (3'h0 == dcache_state) begin // @[src/main/scala/fpga/Memory.scala 556:25]
+      if (!(dcache_snoop_en)) begin // @[src/main/scala/fpga/Memory.scala 558:30]
+        reg_lru_way_hot <= lru_array_way_hot_reg_lru_MPORT_data; // @[src/main/scala/fpga/Memory.scala 576:17]
+      end
+    end else if (!(3'h1 == dcache_state)) begin // @[src/main/scala/fpga/Memory.scala 556:25]
+      if (3'h2 == dcache_state) begin // @[src/main/scala/fpga/Memory.scala 556:25]
+        reg_lru_way_hot <= _GEN_444;
       end else begin
-        i_reg_req_addr_index <= _GEN_294;
+        reg_lru_way_hot <= _GEN_871;
       end
     end
-    if (reset) begin // @[src/main/scala/fpga/Memory.scala 510:24]
-      reg_lru_way_hot <= 1'h0; // @[src/main/scala/fpga/Memory.scala 510:24]
-    end else if (3'h0 == dcache_state) begin // @[src/main/scala/fpga/Memory.scala 571:25]
-      if (!(dcache_snoop_en)) begin // @[src/main/scala/fpga/Memory.scala 573:30]
-        reg_lru_way_hot <= lru_array_way_hot_reg_lru_MPORT_data; // @[src/main/scala/fpga/Memory.scala 591:17]
+    if (reset) begin // @[src/main/scala/fpga/Memory.scala 495:24]
+      reg_lru_dirty1 <= 1'h0; // @[src/main/scala/fpga/Memory.scala 495:24]
+    end else if (3'h0 == dcache_state) begin // @[src/main/scala/fpga/Memory.scala 556:25]
+      if (!(dcache_snoop_en)) begin // @[src/main/scala/fpga/Memory.scala 558:30]
+        reg_lru_dirty1 <= lru_array_dirty1_reg_lru_MPORT_data; // @[src/main/scala/fpga/Memory.scala 576:17]
       end
-    end else if (!(3'h1 == dcache_state)) begin // @[src/main/scala/fpga/Memory.scala 571:25]
-      if (3'h2 == dcache_state) begin // @[src/main/scala/fpga/Memory.scala 571:25]
-        reg_lru_way_hot <= _GEN_515;
+    end else if (!(3'h1 == dcache_state)) begin // @[src/main/scala/fpga/Memory.scala 556:25]
+      if (3'h2 == dcache_state) begin // @[src/main/scala/fpga/Memory.scala 556:25]
+        reg_lru_dirty1 <= _GEN_445;
       end else begin
-        reg_lru_way_hot <= _GEN_942;
+        reg_lru_dirty1 <= _GEN_872;
       end
     end
-    if (reset) begin // @[src/main/scala/fpga/Memory.scala 510:24]
-      reg_lru_dirty1 <= 1'h0; // @[src/main/scala/fpga/Memory.scala 510:24]
-    end else if (3'h0 == dcache_state) begin // @[src/main/scala/fpga/Memory.scala 571:25]
-      if (!(dcache_snoop_en)) begin // @[src/main/scala/fpga/Memory.scala 573:30]
-        reg_lru_dirty1 <= lru_array_dirty1_reg_lru_MPORT_data; // @[src/main/scala/fpga/Memory.scala 591:17]
+    if (reset) begin // @[src/main/scala/fpga/Memory.scala 495:24]
+      reg_lru_dirty2 <= 1'h0; // @[src/main/scala/fpga/Memory.scala 495:24]
+    end else if (3'h0 == dcache_state) begin // @[src/main/scala/fpga/Memory.scala 556:25]
+      if (!(dcache_snoop_en)) begin // @[src/main/scala/fpga/Memory.scala 558:30]
+        reg_lru_dirty2 <= lru_array_dirty2_reg_lru_MPORT_data; // @[src/main/scala/fpga/Memory.scala 576:17]
       end
-    end else if (!(3'h1 == dcache_state)) begin // @[src/main/scala/fpga/Memory.scala 571:25]
-      if (3'h2 == dcache_state) begin // @[src/main/scala/fpga/Memory.scala 571:25]
-        reg_lru_dirty1 <= _GEN_516;
+    end else if (!(3'h1 == dcache_state)) begin // @[src/main/scala/fpga/Memory.scala 556:25]
+      if (3'h2 == dcache_state) begin // @[src/main/scala/fpga/Memory.scala 556:25]
+        reg_lru_dirty2 <= _GEN_446;
       end else begin
-        reg_lru_dirty1 <= _GEN_943;
+        reg_lru_dirty2 <= _GEN_873;
       end
     end
-    if (reset) begin // @[src/main/scala/fpga/Memory.scala 510:24]
-      reg_lru_dirty2 <= 1'h0; // @[src/main/scala/fpga/Memory.scala 510:24]
-    end else if (3'h0 == dcache_state) begin // @[src/main/scala/fpga/Memory.scala 571:25]
-      if (!(dcache_snoop_en)) begin // @[src/main/scala/fpga/Memory.scala 573:30]
-        reg_lru_dirty2 <= lru_array_dirty2_reg_lru_MPORT_data; // @[src/main/scala/fpga/Memory.scala 591:17]
-      end
-    end else if (!(3'h1 == dcache_state)) begin // @[src/main/scala/fpga/Memory.scala 571:25]
-      if (3'h2 == dcache_state) begin // @[src/main/scala/fpga/Memory.scala 571:25]
-        reg_lru_dirty2 <= _GEN_517;
+    if (reset) begin // @[src/main/scala/fpga/Memory.scala 496:29]
+      reg_req_addr_index <= 7'h0; // @[src/main/scala/fpga/Memory.scala 496:29]
+    end else if (3'h0 == dcache_state) begin // @[src/main/scala/fpga/Memory.scala 556:25]
+      if (dcache_snoop_en) begin // @[src/main/scala/fpga/Memory.scala 558:30]
+        reg_req_addr_index <= dcache_snoop_addr_index; // @[src/main/scala/fpga/Memory.scala 560:22]
       end else begin
-        reg_lru_dirty2 <= _GEN_944;
+        reg_req_addr_index <= req_addr_2_index; // @[src/main/scala/fpga/Memory.scala 571:22]
+      end
+    end else if (!(3'h1 == dcache_state)) begin // @[src/main/scala/fpga/Memory.scala 556:25]
+      if (3'h2 == dcache_state) begin // @[src/main/scala/fpga/Memory.scala 556:25]
+        reg_req_addr_index <= _GEN_428;
+      end else begin
+        reg_req_addr_index <= _GEN_855;
       end
     end
-    if (reset) begin // @[src/main/scala/fpga/Memory.scala 511:29]
-      reg_req_addr_index <= 7'h0; // @[src/main/scala/fpga/Memory.scala 511:29]
-    end else if (3'h0 == dcache_state) begin // @[src/main/scala/fpga/Memory.scala 571:25]
-      if (dcache_snoop_en) begin // @[src/main/scala/fpga/Memory.scala 573:30]
-        reg_req_addr_index <= dcache_snoop_addr_index; // @[src/main/scala/fpga/Memory.scala 575:22]
-      end else begin
-        reg_req_addr_index <= req_addr_3_index; // @[src/main/scala/fpga/Memory.scala 586:22]
-      end
-    end else if (!(3'h1 == dcache_state)) begin // @[src/main/scala/fpga/Memory.scala 571:25]
-      if (3'h2 == dcache_state) begin // @[src/main/scala/fpga/Memory.scala 571:25]
-        reg_req_addr_index <= _GEN_499;
-      end else begin
-        reg_req_addr_index <= _GEN_926;
-      end
-    end
-    if (reset) begin // @[src/main/scala/fpga/Memory.scala 508:25]
-      reg_line <= 256'h0; // @[src/main/scala/fpga/Memory.scala 508:25]
-    end else if (3'h0 == dcache_state) begin // @[src/main/scala/fpga/Memory.scala 571:25]
-      reg_line <= cold_line; // @[src/main/scala/fpga/Memory.scala 569:12]
-    end else if (3'h1 == dcache_state) begin // @[src/main/scala/fpga/Memory.scala 571:25]
-      reg_line <= cold_line; // @[src/main/scala/fpga/Memory.scala 569:12]
-    end else if (3'h2 == dcache_state) begin // @[src/main/scala/fpga/Memory.scala 571:25]
-      reg_line <= cold_line; // @[src/main/scala/fpga/Memory.scala 625:20]
+    if (reset) begin // @[src/main/scala/fpga/Memory.scala 493:25]
+      reg_line <= 256'h0; // @[src/main/scala/fpga/Memory.scala 493:25]
+    end else if (3'h0 == dcache_state) begin // @[src/main/scala/fpga/Memory.scala 556:25]
+      reg_line <= cold_line; // @[src/main/scala/fpga/Memory.scala 554:12]
+    end else if (3'h1 == dcache_state) begin // @[src/main/scala/fpga/Memory.scala 556:25]
+      reg_line <= cold_line; // @[src/main/scala/fpga/Memory.scala 554:12]
+    end else if (3'h2 == dcache_state) begin // @[src/main/scala/fpga/Memory.scala 556:25]
+      reg_line <= cold_line; // @[src/main/scala/fpga/Memory.scala 610:20]
     end else begin
-      reg_line <= _GEN_899;
+      reg_line <= _GEN_828;
     end
-    if (reset) begin // @[src/main/scala/fpga/Memory.scala 292:26]
-      i_reg_tag_0 <= 16'h0; // @[src/main/scala/fpga/Memory.scala 292:26]
-    end else if (3'h0 == icache_state) begin // @[src/main/scala/fpga/Memory.scala 326:25]
-      if (!(io_cache_iinvalidate)) begin // @[src/main/scala/fpga/Memory.scala 331:35]
-        if (io_imem_en) begin // @[src/main/scala/fpga/Memory.scala 336:31]
-          i_reg_tag_0 <= i_tag_array_0_MPORT_data; // @[src/main/scala/fpga/Memory.scala 337:19]
+    if (reset) begin // @[src/main/scala/fpga/Memory.scala 291:26]
+      i_reg_tag_0 <= 16'h0; // @[src/main/scala/fpga/Memory.scala 291:26]
+    end else if (3'h0 == icache_state) begin // @[src/main/scala/fpga/Memory.scala 329:25]
+      if (!(io_cache_iinvalidate)) begin // @[src/main/scala/fpga/Memory.scala 335:35]
+        if (io_imem_en) begin // @[src/main/scala/fpga/Memory.scala 340:31]
+          i_reg_tag_0 <= i_tag_array_0_MPORT_data; // @[src/main/scala/fpga/Memory.scala 341:19]
         end
       end
-    end else if (!(3'h1 == icache_state)) begin // @[src/main/scala/fpga/Memory.scala 326:25]
-      if (3'h2 == icache_state) begin // @[src/main/scala/fpga/Memory.scala 326:25]
-        i_reg_tag_0 <= _GEN_134;
-      end else begin
-        i_reg_tag_0 <= _GEN_300;
+    end else if (!(3'h1 == icache_state)) begin // @[src/main/scala/fpga/Memory.scala 329:25]
+      if (3'h2 == icache_state) begin // @[src/main/scala/fpga/Memory.scala 329:25]
+        i_reg_tag_0 <= _GEN_132;
       end
     end
-    if (reset) begin // @[src/main/scala/fpga/Memory.scala 293:27]
-      i_reg_line <= 256'h0; // @[src/main/scala/fpga/Memory.scala 293:27]
-    end else if (!(3'h0 == icache_state)) begin // @[src/main/scala/fpga/Memory.scala 326:25]
-      if (!(3'h1 == icache_state)) begin // @[src/main/scala/fpga/Memory.scala 326:25]
-        if (!(3'h2 == icache_state)) begin // @[src/main/scala/fpga/Memory.scala 326:25]
-          i_reg_line <= _GEN_274;
+    if (reset) begin // @[src/main/scala/fpga/Memory.scala 293:31]
+      i_reg_req_addr_line_off <= 5'h0; // @[src/main/scala/fpga/Memory.scala 293:31]
+    end else if (3'h0 == icache_state) begin // @[src/main/scala/fpga/Memory.scala 329:25]
+      i_reg_req_addr_line_off <= io_imem_addr[4:0]; // @[src/main/scala/fpga/Memory.scala 333:22]
+    end else if (!(3'h1 == icache_state)) begin // @[src/main/scala/fpga/Memory.scala 329:25]
+      if (3'h2 == icache_state) begin // @[src/main/scala/fpga/Memory.scala 329:25]
+        i_reg_req_addr_line_off <= io_imem_addr[4:0]; // @[src/main/scala/fpga/Memory.scala 374:22]
+      end
+    end
+    if (reset) begin // @[src/main/scala/fpga/Memory.scala 294:32]
+      i_reg_next_addr_line_off <= 5'h0; // @[src/main/scala/fpga/Memory.scala 294:32]
+    end else begin
+      i_reg_next_addr_line_off <= io_imem_addr[4:0]; // @[src/main/scala/fpga/Memory.scala 309:19]
+    end
+    if (reset) begin // @[src/main/scala/fpga/Memory.scala 295:34]
+      i_reg_valid_rdata <= 2'h0; // @[src/main/scala/fpga/Memory.scala 295:34]
+    end else if (!(3'h0 == icache_state)) begin // @[src/main/scala/fpga/Memory.scala 329:25]
+      if (3'h1 == icache_state) begin // @[src/main/scala/fpga/Memory.scala 329:25]
+        i_reg_valid_rdata <= io_icache_valid_rdata; // @[src/main/scala/fpga/Memory.scala 354:25]
+      end else if (!(3'h2 == icache_state)) begin // @[src/main/scala/fpga/Memory.scala 329:25]
+        i_reg_valid_rdata <= _GEN_235;
+      end
+    end
+    if (reset) begin // @[src/main/scala/fpga/Memory.scala 296:36]
+      i_reg_cur_tag_index <= 23'h7fffff; // @[src/main/scala/fpga/Memory.scala 296:36]
+    end else if (!(3'h0 == icache_state)) begin // @[src/main/scala/fpga/Memory.scala 329:25]
+      if (3'h1 == icache_state) begin // @[src/main/scala/fpga/Memory.scala 329:25]
+        if (_T_32[0] & i_reg_tag_0 == i_reg_req_addr_tag) begin // @[src/main/scala/fpga/Memory.scala 359:145]
+          i_reg_cur_tag_index <= _dram_i_addr_T_1; // @[src/main/scala/fpga/Memory.scala 362:29]
+        end
+      end else if (!(3'h2 == icache_state)) begin // @[src/main/scala/fpga/Memory.scala 329:25]
+        i_reg_cur_tag_index <= _GEN_234;
+      end
+    end
+    if (reset) begin // @[src/main/scala/fpga/Memory.scala 297:33]
+      i_reg_addr_match <= 1'h0; // @[src/main/scala/fpga/Memory.scala 297:33]
+    end else begin
+      i_reg_addr_match <= _GEN_336;
+    end
+    if (reset) begin // @[src/main/scala/fpga/Memory.scala 298:32]
+      i_reg_next_inst <= 32'h0; // @[src/main/scala/fpga/Memory.scala 298:32]
+    end else if (!(3'h0 == icache_state)) begin // @[src/main/scala/fpga/Memory.scala 329:25]
+      if (!(3'h1 == icache_state)) begin // @[src/main/scala/fpga/Memory.scala 329:25]
+        if (!(3'h2 == icache_state)) begin // @[src/main/scala/fpga/Memory.scala 329:25]
+          i_reg_next_inst <= _GEN_219;
         end
       end
     end
-    if (reset) begin // @[src/main/scala/fpga/Memory.scala 294:31]
-      i_reg_req_addr_line_off <= 5'h0; // @[src/main/scala/fpga/Memory.scala 294:31]
-    end else if (3'h0 == icache_state) begin // @[src/main/scala/fpga/Memory.scala 326:25]
-      i_reg_req_addr_line_off <= io_imem_addr[4:0]; // @[src/main/scala/fpga/Memory.scala 330:22]
-    end else if (!(3'h1 == icache_state)) begin // @[src/main/scala/fpga/Memory.scala 326:25]
-      if (3'h2 == icache_state) begin // @[src/main/scala/fpga/Memory.scala 326:25]
-        i_reg_req_addr_line_off <= io_imem_addr[4:0]; // @[src/main/scala/fpga/Memory.scala 372:22]
-      end else begin
-        i_reg_req_addr_line_off <= _GEN_295;
-      end
-    end
-    if (reset) begin // @[src/main/scala/fpga/Memory.scala 295:32]
-      i_reg_next_addr_tag <= 16'h0; // @[src/main/scala/fpga/Memory.scala 295:32]
+    if (reset) begin // @[src/main/scala/fpga/Memory.scala 299:36]
+      i_reg_sel_next_inst <= 1'h0; // @[src/main/scala/fpga/Memory.scala 299:36]
+    end else if (3'h0 == icache_state) begin // @[src/main/scala/fpga/Memory.scala 329:25]
+      i_reg_sel_next_inst <= 1'h0; // @[src/main/scala/fpga/Memory.scala 311:23]
+    end else if (3'h1 == icache_state) begin // @[src/main/scala/fpga/Memory.scala 329:25]
+      i_reg_sel_next_inst <= 1'h0; // @[src/main/scala/fpga/Memory.scala 311:23]
+    end else if (3'h2 == icache_state) begin // @[src/main/scala/fpga/Memory.scala 329:25]
+      i_reg_sel_next_inst <= 1'h0; // @[src/main/scala/fpga/Memory.scala 311:23]
     end else begin
-      i_reg_next_addr_tag <= io_imem_addr[27:12]; // @[src/main/scala/fpga/Memory.scala 308:19]
+      i_reg_sel_next_inst <= _GEN_220;
     end
-    if (reset) begin // @[src/main/scala/fpga/Memory.scala 295:32]
-      i_reg_next_addr_index <= 7'h0; // @[src/main/scala/fpga/Memory.scala 295:32]
-    end else begin
-      i_reg_next_addr_index <= io_imem_addr[11:5]; // @[src/main/scala/fpga/Memory.scala 308:19]
-    end
-    if (reset) begin // @[src/main/scala/fpga/Memory.scala 295:32]
-      i_reg_next_addr_line_off <= 5'h0; // @[src/main/scala/fpga/Memory.scala 295:32]
-    end else begin
-      i_reg_next_addr_line_off <= io_imem_addr[4:0]; // @[src/main/scala/fpga/Memory.scala 308:19]
-    end
-    if (reset) begin // @[src/main/scala/fpga/Memory.scala 296:34]
-      i_reg_valid_rdata <= 2'h0; // @[src/main/scala/fpga/Memory.scala 296:34]
-    end else if (!(3'h0 == icache_state)) begin // @[src/main/scala/fpga/Memory.scala 326:25]
-      if (3'h1 == icache_state) begin // @[src/main/scala/fpga/Memory.scala 326:25]
-        i_reg_valid_rdata <= io_icache_valid_rdata; // @[src/main/scala/fpga/Memory.scala 351:25]
-      end else if (!(3'h2 == icache_state)) begin // @[src/main/scala/fpga/Memory.scala 326:25]
-        i_reg_valid_rdata <= _GEN_287;
-      end
-    end
-    if (reset) begin // @[src/main/scala/fpga/Memory.scala 297:36]
-      i_reg_cur_tag_index <= 23'h7fffff; // @[src/main/scala/fpga/Memory.scala 297:36]
-    end else if (!(3'h0 == icache_state)) begin // @[src/main/scala/fpga/Memory.scala 326:25]
-      if (3'h1 == icache_state) begin // @[src/main/scala/fpga/Memory.scala 326:25]
-        if (_T_32[0] & i_reg_tag_0 == i_reg_req_addr_tag) begin // @[src/main/scala/fpga/Memory.scala 356:145]
-          i_reg_cur_tag_index <= _dram_i_addr_T_1; // @[src/main/scala/fpga/Memory.scala 359:29]
-        end
-      end else if (!(3'h2 == icache_state)) begin // @[src/main/scala/fpga/Memory.scala 326:25]
-        i_reg_cur_tag_index <= _GEN_286;
-      end
-    end
-    if (reset) begin // @[src/main/scala/fpga/Memory.scala 298:33]
-      i_reg_addr_match <= 1'h0; // @[src/main/scala/fpga/Memory.scala 298:33]
-    end else begin
-      i_reg_addr_match <= _GEN_417;
-    end
-    if (reset) begin // @[src/main/scala/fpga/Memory.scala 511:29]
-      reg_req_addr_line_off <= 5'h0; // @[src/main/scala/fpga/Memory.scala 511:29]
-    end else if (3'h0 == dcache_state) begin // @[src/main/scala/fpga/Memory.scala 571:25]
-      if (dcache_snoop_en) begin // @[src/main/scala/fpga/Memory.scala 573:30]
-        reg_req_addr_line_off <= dcache_snoop_addr_line_off; // @[src/main/scala/fpga/Memory.scala 575:22]
+    if (reset) begin // @[src/main/scala/fpga/Memory.scala 496:29]
+      reg_req_addr_line_off <= 5'h0; // @[src/main/scala/fpga/Memory.scala 496:29]
+    end else if (3'h0 == dcache_state) begin // @[src/main/scala/fpga/Memory.scala 556:25]
+      if (dcache_snoop_en) begin // @[src/main/scala/fpga/Memory.scala 558:30]
+        reg_req_addr_line_off <= dcache_snoop_addr_line_off; // @[src/main/scala/fpga/Memory.scala 560:22]
       end else begin
-        reg_req_addr_line_off <= req_addr_3_line_off; // @[src/main/scala/fpga/Memory.scala 586:22]
+        reg_req_addr_line_off <= req_addr_2_line_off; // @[src/main/scala/fpga/Memory.scala 571:22]
       end
-    end else if (!(3'h1 == dcache_state)) begin // @[src/main/scala/fpga/Memory.scala 571:25]
-      if (3'h2 == dcache_state) begin // @[src/main/scala/fpga/Memory.scala 571:25]
-        reg_req_addr_line_off <= _GEN_500;
+    end else if (!(3'h1 == dcache_state)) begin // @[src/main/scala/fpga/Memory.scala 556:25]
+      if (3'h2 == dcache_state) begin // @[src/main/scala/fpga/Memory.scala 556:25]
+        reg_req_addr_line_off <= _GEN_429;
       end else begin
-        reg_req_addr_line_off <= _GEN_927;
+        reg_req_addr_line_off <= _GEN_856;
       end
     end
-    if (reset) begin // @[src/main/scala/fpga/Memory.scala 512:26]
-      reg_wdata <= 32'h0; // @[src/main/scala/fpga/Memory.scala 512:26]
-    end else if (3'h0 == dcache_state) begin // @[src/main/scala/fpga/Memory.scala 571:25]
-      if (!(dcache_snoop_en)) begin // @[src/main/scala/fpga/Memory.scala 573:30]
-        reg_wdata <= io_cache_wdata; // @[src/main/scala/fpga/Memory.scala 587:19]
+    if (reset) begin // @[src/main/scala/fpga/Memory.scala 497:26]
+      reg_wdata <= 32'h0; // @[src/main/scala/fpga/Memory.scala 497:26]
+    end else if (3'h0 == dcache_state) begin // @[src/main/scala/fpga/Memory.scala 556:25]
+      if (!(dcache_snoop_en)) begin // @[src/main/scala/fpga/Memory.scala 558:30]
+        reg_wdata <= io_cache_wdata; // @[src/main/scala/fpga/Memory.scala 572:19]
       end
-    end else if (!(3'h1 == dcache_state)) begin // @[src/main/scala/fpga/Memory.scala 571:25]
-      if (3'h2 == dcache_state) begin // @[src/main/scala/fpga/Memory.scala 571:25]
-        reg_wdata <= _GEN_510;
+    end else if (!(3'h1 == dcache_state)) begin // @[src/main/scala/fpga/Memory.scala 556:25]
+      if (3'h2 == dcache_state) begin // @[src/main/scala/fpga/Memory.scala 556:25]
+        reg_wdata <= _GEN_439;
       end else begin
-        reg_wdata <= _GEN_936;
+        reg_wdata <= _GEN_865;
       end
     end
-    if (reset) begin // @[src/main/scala/fpga/Memory.scala 513:26]
-      reg_wstrb <= 4'h0; // @[src/main/scala/fpga/Memory.scala 513:26]
-    end else if (3'h0 == dcache_state) begin // @[src/main/scala/fpga/Memory.scala 571:25]
-      if (!(dcache_snoop_en)) begin // @[src/main/scala/fpga/Memory.scala 573:30]
-        reg_wstrb <= io_cache_wstrb; // @[src/main/scala/fpga/Memory.scala 588:19]
+    if (reset) begin // @[src/main/scala/fpga/Memory.scala 498:26]
+      reg_wstrb <= 4'h0; // @[src/main/scala/fpga/Memory.scala 498:26]
+    end else if (3'h0 == dcache_state) begin // @[src/main/scala/fpga/Memory.scala 556:25]
+      if (!(dcache_snoop_en)) begin // @[src/main/scala/fpga/Memory.scala 558:30]
+        reg_wstrb <= io_cache_wstrb; // @[src/main/scala/fpga/Memory.scala 573:19]
       end
-    end else if (!(3'h1 == dcache_state)) begin // @[src/main/scala/fpga/Memory.scala 571:25]
-      if (3'h2 == dcache_state) begin // @[src/main/scala/fpga/Memory.scala 571:25]
-        reg_wstrb <= _GEN_511;
+    end else if (!(3'h1 == dcache_state)) begin // @[src/main/scala/fpga/Memory.scala 556:25]
+      if (3'h2 == dcache_state) begin // @[src/main/scala/fpga/Memory.scala 556:25]
+        reg_wstrb <= _GEN_440;
       end else begin
-        reg_wstrb <= _GEN_937;
+        reg_wstrb <= _GEN_866;
       end
     end
-    reg_ren <= reset | _GEN_1181; // @[src/main/scala/fpga/Memory.scala 514:{24,24}]
+    reg_ren <= reset | _GEN_1110; // @[src/main/scala/fpga/Memory.scala 499:{24,24}]
     `ifndef SYNTHESIS
     `ifdef PRINTF_COND
       if (`PRINTF_COND) begin
     `endif
         if (~reset) begin
-          $fwrite(32'h80000002,"icache_state    : %d\n",icache_state); // @[src/main/scala/fpga/Memory.scala 887:9]
+          $fwrite(32'h80000002,"icache_state    : %d\n",icache_state); // @[src/main/scala/fpga/Memory.scala 874:9]
         end
     `ifdef PRINTF_COND
       end
@@ -9546,8 +9500,8 @@ module Memory(
     `ifdef PRINTF_COND
       if (`PRINTF_COND) begin
     `endif
-        if (_T_163) begin
-          $fwrite(32'h80000002,"dcache_state    : %d\n",dcache_state); // @[src/main/scala/fpga/Memory.scala 888:9]
+        if (_T_148) begin
+          $fwrite(32'h80000002,"dcache_state    : %d\n",dcache_state); // @[src/main/scala/fpga/Memory.scala 875:9]
         end
     `ifdef PRINTF_COND
       end
@@ -9557,8 +9511,8 @@ module Memory(
     `ifdef PRINTF_COND
       if (`PRINTF_COND) begin
     `endif
-        if (_T_163) begin
-          $fwrite(32'h80000002,"reg_dram_state  : %d\n",reg_dram_state); // @[src/main/scala/fpga/Memory.scala 889:9]
+        if (_T_148) begin
+          $fwrite(32'h80000002,"reg_dram_state  : %d\n",reg_dram_state); // @[src/main/scala/fpga/Memory.scala 876:9]
         end
     `ifdef PRINTF_COND
       end
@@ -9634,17 +9588,17 @@ initial begin
   _RAND_11 = {1{`RANDOM}};
   icache_state = _RAND_11[2:0];
   _RAND_12 = {1{`RANDOM}};
-  dcache_state = _RAND_12[2:0];
+  i_reg_req_addr_tag = _RAND_12[15:0];
   _RAND_13 = {1{`RANDOM}};
-  reg_tag_0 = _RAND_13[15:0];
+  i_reg_req_addr_index = _RAND_13[6:0];
   _RAND_14 = {1{`RANDOM}};
-  reg_req_addr_tag = _RAND_14[15:0];
+  dcache_state = _RAND_14[2:0];
   _RAND_15 = {1{`RANDOM}};
-  reg_tag_1 = _RAND_15[15:0];
+  reg_tag_0 = _RAND_15[15:0];
   _RAND_16 = {1{`RANDOM}};
-  i_reg_req_addr_tag = _RAND_16[15:0];
+  reg_req_addr_tag = _RAND_16[15:0];
   _RAND_17 = {1{`RANDOM}};
-  i_reg_req_addr_index = _RAND_17[6:0];
+  reg_tag_1 = _RAND_17[15:0];
   _RAND_18 = {1{`RANDOM}};
   reg_lru_way_hot = _RAND_18[0:0];
   _RAND_19 = {1{`RANDOM}};
@@ -9657,30 +9611,28 @@ initial begin
   reg_line = _RAND_22[255:0];
   _RAND_23 = {1{`RANDOM}};
   i_reg_tag_0 = _RAND_23[15:0];
-  _RAND_24 = {8{`RANDOM}};
-  i_reg_line = _RAND_24[255:0];
+  _RAND_24 = {1{`RANDOM}};
+  i_reg_req_addr_line_off = _RAND_24[4:0];
   _RAND_25 = {1{`RANDOM}};
-  i_reg_req_addr_line_off = _RAND_25[4:0];
+  i_reg_next_addr_line_off = _RAND_25[4:0];
   _RAND_26 = {1{`RANDOM}};
-  i_reg_next_addr_tag = _RAND_26[15:0];
+  i_reg_valid_rdata = _RAND_26[1:0];
   _RAND_27 = {1{`RANDOM}};
-  i_reg_next_addr_index = _RAND_27[6:0];
+  i_reg_cur_tag_index = _RAND_27[22:0];
   _RAND_28 = {1{`RANDOM}};
-  i_reg_next_addr_line_off = _RAND_28[4:0];
+  i_reg_addr_match = _RAND_28[0:0];
   _RAND_29 = {1{`RANDOM}};
-  i_reg_valid_rdata = _RAND_29[1:0];
+  i_reg_next_inst = _RAND_29[31:0];
   _RAND_30 = {1{`RANDOM}};
-  i_reg_cur_tag_index = _RAND_30[22:0];
+  i_reg_sel_next_inst = _RAND_30[0:0];
   _RAND_31 = {1{`RANDOM}};
-  i_reg_addr_match = _RAND_31[0:0];
+  reg_req_addr_line_off = _RAND_31[4:0];
   _RAND_32 = {1{`RANDOM}};
-  reg_req_addr_line_off = _RAND_32[4:0];
+  reg_wdata = _RAND_32[31:0];
   _RAND_33 = {1{`RANDOM}};
-  reg_wdata = _RAND_33[31:0];
+  reg_wstrb = _RAND_33[3:0];
   _RAND_34 = {1{`RANDOM}};
-  reg_wstrb = _RAND_34[3:0];
-  _RAND_35 = {1{`RANDOM}};
-  reg_ren = _RAND_35[0:0];
+  reg_ren = _RAND_34[0:0];
 `endif // RANDOMIZE_REG_INIT
   `endif // RANDOMIZE
 end // initial
