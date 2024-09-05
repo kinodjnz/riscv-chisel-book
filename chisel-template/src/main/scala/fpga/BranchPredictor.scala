@@ -36,22 +36,26 @@ class ZeroBranchTargetBuffer extends Bundle {
 }
 
 class BTBLookup extends Bundle {
-  val pc        = Output(UInt(PC_LEN.W))
-  val matches0  = Input(Bool())
-  val taken_pc0 = Input(UInt(PC_LEN.W))
-  val matches1  = Input(Bool())
-  val taken_pc1 = Input(UInt(PC_LEN.W))
+  val pc       = Output(UInt(PC_LEN.W))
+  val matches0 = Input(Bool())
+  val attr0    = Input(UInt(BTB_ATTR_LEN.W))
+  val target0  = Input(UInt(PC_LEN.W))
+  val matches1 = Input(Bool())
+  val attr1    = Input(UInt(BTB_ATTR_LEN.W))
+  val target1  = Input(UInt(PC_LEN.W))
 }
 
 class BTBUpdate extends Bundle {
-  val en       = Output(Bool())
-  val pc       = Output(UInt(PC_LEN.W))
-  val taken_pc = Output(UInt(PC_LEN.W))
+  val en     = Output(Bool())
+  val pc     = Output(UInt(PC_LEN.W))
+  val attr   = Output(UInt(BTB_ATTR_LEN.W))
+  val target = Output(UInt(PC_LEN.W))
 }
 
 class BTBBundle extends Bundle {
-  val tag      = UInt(BTB_TAG_LEN.W)
-  val taken_pc = UInt(PC_LEN.W)
+  val tag    = UInt(BTB_TAG_LEN.W)
+  val attr   = UInt(BTB_ATTR_LEN.W)
+  val target = UInt(PC_LEN.W)
 }
 
 class BTBPC extends Bundle {
@@ -78,6 +82,27 @@ class PHTUpdate extends Bundle {
   val en  = Output(Bool())
   val pc  = Output(UInt(PC_LEN.W))
   val cnt = Output(UInt(2.W))
+}
+
+class RASTop extends Bundle {
+  val ret_pc = Input(UInt(PC_LEN.W))
+  val index  = Input(UInt(RAS_INDEX_BITS.W))
+}
+
+class RASRet extends Bundle {
+  val en    = Output(Bool())
+  val index = Output(UInt(RAS_INDEX_BITS.W))
+}
+
+class RASCall extends Bundle {
+  val en     = Output(Bool())
+  val index  = Output(UInt(RAS_INDEX_BITS.W))
+  val ret_pc = Output(UInt(PC_LEN.W))
+}
+
+class RASUpdate extends Bundle {
+  val en    = Output(Bool())
+  val index = Output(UInt(RAS_INDEX_BITS.W))
 }
 
 class ZBTB(zbtb_entries: Int) extends Module {
@@ -133,11 +158,11 @@ class BTB(btb_len: Int) extends Module {
     val up = Flipped(new BTBUpdate)
   })
 
-  val btb0 = Mem(btb_len / 2, new BTBBundle())
-  val btb1 = Mem(btb_len / 2, new BTBBundle())
+  val btb0 = Mem(btb_len / 2, UInt(BTB_BUNDLE_LEN.W))
+  val btb1 = Mem(btb_len / 2, UInt(BTB_BUNDLE_LEN.W))
 
-  val reg_entry0 = RegInit(0.U.asTypeOf(new BTBBundle()))
-  val reg_entry1 = RegInit(0.U.asTypeOf(new BTBBundle()))
+  val reg_entry0 = RegInit(0.U(BTB_BUNDLE_LEN.W))
+  val reg_entry1 = RegInit(0.U(BTB_BUNDLE_LEN.W))
 
   val lu_pc = (io.lu.pc(PC_LEN-1-BTB_TAG_IGNORE, 1)).asTypeOf(new BTBPC())
   val reg_lu_pc_tag = RegNext(lu_pc.tag, 0.U(BTB_TAG_LEN.W))
@@ -145,17 +170,24 @@ class BTB(btb_len: Int) extends Module {
   reg_entry0 := btb0.read(lu_pc.index)
   reg_entry1 := btb1.read(lu_pc.index)
 
-  io.lu.matches0  := (reg_entry0.tag === reg_lu_pc_tag)
-  io.lu.taken_pc0 := reg_entry0.taken_pc
-  io.lu.matches1  := (reg_entry1.tag === reg_lu_pc_tag)
-  io.lu.taken_pc1 := reg_entry1.taken_pc
+  val entry0 = reg_entry0.asTypeOf(new BTBBundle())
+  val entry1 = reg_entry1.asTypeOf(new BTBBundle())
+
+  val tag_match0 = (entry0.tag === reg_lu_pc_tag)
+  io.lu.matches0 := tag_match0 && (entry0.attr === BTB_ATTR_DJBR || entry0.attr === BTB_ATTR_DCALL)
+  io.lu.attr0    := Mux(tag_match0, entry0.attr, BTB_ATTR_INVAL)
+  io.lu.target0  := entry0.target
+  val tag_match1 = (entry1.tag === reg_lu_pc_tag)
+  io.lu.matches1 := tag_match1 && (entry1.attr === BTB_ATTR_DJBR || entry1.attr === BTB_ATTR_DCALL)
+  io.lu.attr1    := Mux(tag_match1, entry1.attr, BTB_ATTR_INVAL)
+  io.lu.target1  := entry1.target
 
   val up_pc = (io.up.pc(PC_LEN-1-BTB_TAG_IGNORE, 1)).asTypeOf(new BTBPC())
   when (io.up.en && !io.up.pc(0)) {
-    btb0.write(up_pc.index, Cat(up_pc.tag, io.up.taken_pc).asTypeOf(new BTBBundle()))
+    btb0.write(up_pc.index, Cat(up_pc.tag, io.up.attr, io.up.target))
   }
   when (io.up.en && io.up.pc(0)) {
-    btb1.write(up_pc.index, Cat(up_pc.tag, io.up.taken_pc).asTypeOf(new BTBBundle()))
+    btb1.write(up_pc.index, Cat(up_pc.tag, io.up.attr, io.up.target))
   }
 }
 
@@ -182,4 +214,52 @@ class PHT(pht_len: Int) extends Module {
   // printf(cf"io.up.en         : ${io.up.en}\n")
   // printf(cf"io.up.pc         : 0x${Cat(io.up.pc, 0.U(1.W))}%x\n")
   // printf(cf"io.up.cnt        : 0x${io.up.cnt}%x\n")
+}
+
+class RAS extends Module {
+  val io = IO(new Bundle {
+    val top   = Flipped(new RASTop)
+    val ret1  = Flipped(new RASRet)
+    val call1 = Flipped(new RASCall)
+    val up    = Flipped(new RASUpdate)
+    val ret2  = Flipped(new RASRet)
+    val call2 = Flipped(new RASCall)
+  })
+
+  val ras = Mem(RAS_ENTRIES, UInt(PC_LEN.W))
+  val index  = RegInit(0.U(RAS_INDEX_BITS.W))
+
+  val ret_pc    = RegInit(0.U(PC_LEN.W))
+  val ret_index = RegNext(index, 0.U(RAS_INDEX_BITS.W))
+
+  ret_pc := ras(index)
+  io.top.ret_pc := ret_pc
+  io.top.index  := ret_index
+
+  when (io.ret1.en) {
+    index := io.ret1.index
+    printf(cf"RAS ret1 index=${io.ret1.index} pc=0x${Cat(ras(index), 0.U(1.W))}%x\n")
+  }
+
+  when (io.call1.en) {
+    index := io.call1.index
+    ras(io.call1.index) := io.call1.ret_pc
+    printf(cf"RAS call index=${io.call1.index} pc=0x${Cat(io.call1.ret_pc, 0.U(1.W))}%x\n")
+  }
+
+  when (io.up.en) {
+    index := io.up.index
+    printf(cf"RAS reset index=${io.up.index}\n")
+  }
+
+  when (io.ret2.en) {
+    index := io.ret2.index
+    printf(cf"RAS ret index=${io.ret2.index} pc=0x${Cat(ras(index), 0.U(1.W))}%x\n")
+  }
+
+  when (io.call2.en) {
+    index := io.call2.index
+    ras(io.call2.index) := io.call2.ret_pc
+    printf(cf"RAS call index=${io.call2.index} pc=0x${Cat(io.call2.ret_pc, 0.U(1.W))}%x\n")
+  }
 }

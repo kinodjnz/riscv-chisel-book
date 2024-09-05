@@ -8,6 +8,14 @@ import common.OptionExtension._
 import chisel3.util.experimental.loadMemoryFromFileInline
 import chisel3.ChiselEnum
 
+class BranchPrediction extends Bundle {
+  val taken    = Bool()
+  val attr     = UInt(BTB_ATTR_LEN.W)
+  val rasindex = UInt(RAS_INDEX_BITS.W)
+  val target   = UInt(PC_LEN.W)
+  val cnt      = UInt(2.W)
+}
+
 class InstructionDecoderOutput(val enable_pipeline_probe: Boolean) extends Bundle {
   val pc            = UInt(PC_LEN.W)
   val wb_addr       = UInt(ADDR_LEN.W)
@@ -32,9 +40,8 @@ class InstructionDecoderOutput(val enable_pipeline_probe: Boolean) extends Bundl
   val is_bflen      = Bool()
   val is_br         = Bool()
   val is_j          = Bool()
-  val bp_taken      = Bool()
-  val bp_taken_pc   = UInt(PC_LEN.W)
-  val bp_cnt        = UInt(2.W)
+  val bp            = new BranchPrediction()
+  val actual_attr   = UInt(BTB_ATTR_LEN.W)
   val is_half       = Bool()
   val is_valid_inst = Bool()
   val is_trap       = Bool()
@@ -51,10 +58,8 @@ class PipelineStageIO[+T <: Data](gen: T) extends Bundle {
 class InstructionFetcherOutput(val enable_pipeline_probe: Boolean) extends Bundle {
   val is_valid_inst = Bool()
   val inst          = UInt(WORD_LEN.W)
-  val bp_taken      = Bool()
   val pc            = UInt(PC_LEN.W)
-  val bp_taken_pc   = UInt(PC_LEN.W)
-  val bp_cnt        = UInt(2.W)
+  val bp            = new BranchPrediction()
   val inst_id       = Option.when(enable_pipeline_probe)(UInt(INST_ID_LEN.W))
 }
 
@@ -94,32 +99,29 @@ class InstructionDecoder(
 
   val id_reg_is_valid_inst = RegInit(false.B)
   val id_reg_inst          = RegInit(BUBBLE)
-  val id_reg_bp_taken      = RegInit(false.B)
   val id_reg_pc            = RegInit(0.U(PC_LEN.W))
-  val id_reg_bp_taken_pc   = RegInit(0.U(PC_LEN.W))
-  val id_reg_bp_cnt        = RegInit(0.U(2.W))
+  val id_reg_bp            = RegInit(0.U.asTypeOf(new BranchPrediction()))
   val id_reg_is_bp_fail    = RegInit(false.B)
 
   val id_output_queue = Module(new Queue(new InstructionDecoderOutput(enable_pipeline_probe), 1, pipe = false, flow = true))
 
   val id_in_ready = id_output_queue.io.enq.ready
 
+  when (id_in_ready) {
+    id_reg_pc := io.in.bits.pc
+    id_reg_bp := io.in.bits.bp
+  }
   when (io.in.flush || id_in_ready) {
     // 優先順位重要！ジャンプ成立とストールが同時発生した場合、ジャンプ処理を優先
     // ストールとBP同時の場合、BP発生源の命令を生かすためストール優先
     id_reg_is_valid_inst := io.in.bits.is_valid_inst
     id_reg_inst          := io.in.bits.inst
-    id_reg_bp_taken      := io.in.bits.bp_taken
-  }
-  when (id_in_ready) {
-    id_reg_pc          := io.in.bits.pc
-    id_reg_bp_taken_pc := io.in.bits.bp_taken_pc
-    id_reg_bp_cnt      := io.in.bits.bp_cnt
+    id_reg_bp.taken      := io.in.bits.bp.taken
   }
   val id_inst_id = io.in.bits.inst_id
 
   io.in.ready := id_in_ready
-  io.in.flush := io.out.flush /*|| id_reg_is_bp_fail*/
+  io.in.flush := io.out.flush
 
   io.debug_signals.id_pc   := Cat(id_reg_pc, 0.U((WORD_LEN-PC_LEN).W))
   io.debug_signals.id_inst := id_reg_inst
@@ -489,6 +491,18 @@ class InstructionDecoder(
 
   val id_is_br = (id_mem_w === MW_BR)
   val id_is_j = (id_wb_sel === WB_PC)
+  val id_is_dj = (id_wb_sel === WB_PC) && (id_op1_sel === OP1_PC)
+  val id_is_ret = (id_wb_sel === WB_PC) && (
+    ((id_op1_sel === OP1_RS1)   && (id_rs1_addr === 1.U(ADDR_LEN.W))) ||
+    ((id_op1_sel === OP1_C_RS1) && (id_c_rs1_addr === 1.U(ADDR_LEN.W)))
+  )
+  val id_is_dcall = id_is_dj && ((id_wba === WBA_RA) || ((id_wba === WBA_RD) && (id_w_wb_addr === 1.U(ADDR_LEN.W))))
+  val id_actual_attr = MuxCase(BTB_ATTR_INVAL, Seq(
+    (id_is_ret)            -> BTB_ATTR_RET,
+    (id_is_dcall)          -> BTB_ATTR_DCALL,
+    (id_is_dj || id_is_br) -> BTB_ATTR_DJBR,
+  ))
+
   val id_is_trap = (id_exe_fun === CMD_ECALL && id_mem_w === MW_CSR)
   val id_mcause_code = CSR_MCAUSE_CODE_ECALL_M
   // val id_mtval = 0.U(WORD_LEN.W)
@@ -513,8 +527,8 @@ class InstructionDecoder(
   id_output_queue.io.enq.bits.op2op         := id_op2op
   id_output_queue.io.enq.bits.is_bflen      := id_is_bflen
   id_output_queue.io.enq.bits.csr_addr      := id_csr_addr
-  id_output_queue.io.enq.bits.bp_taken_pc   := id_reg_bp_taken_pc
-  id_output_queue.io.enq.bits.bp_cnt        := id_reg_bp_cnt
+  id_output_queue.io.enq.bits.bp            := id_reg_bp
+  id_output_queue.io.enq.bits.actual_attr   := id_actual_attr
   id_output_queue.io.enq.bits.is_half       := id_is_half
   id_output_queue.io.enq.bits.mcause_code   := id_mcause_code
   id_output_queue.io.enq.bits.rf_wen        := id_rf_wen
@@ -524,7 +538,6 @@ class InstructionDecoder(
   id_output_queue.io.enq.bits.mem_w         := id_mem_w
   id_output_queue.io.enq.bits.is_br         := id_is_br
   id_output_queue.io.enq.bits.is_j          := id_is_j
-  id_output_queue.io.enq.bits.bp_taken      := id_reg_bp_taken
   id_output_queue.io.enq.bits.is_valid_inst := id_reg_is_valid_inst
   id_output_queue.io.enq.bits.is_trap       := id_is_trap
   map2(id_output_queue.io.enq.bits.inst_id, id_inst_id)(_ := _)
@@ -547,10 +560,19 @@ class InstructionDecoder(
   io.out.bits.op2op         := id_output_queue.io.deq.bits.op2op
   io.out.bits.is_bflen      := id_output_queue.io.deq.bits.is_bflen
   io.out.bits.csr_addr      := id_output_queue.io.deq.bits.csr_addr
-  io.out.bits.bp_taken_pc   := id_output_queue.io.deq.bits.bp_taken_pc
-  io.out.bits.bp_cnt        := id_output_queue.io.deq.bits.bp_cnt
+  io.out.bits.bp            := id_output_queue.io.deq.bits.bp
+  io.out.bits.actual_attr   := id_output_queue.io.deq.bits.actual_attr
   io.out.bits.is_half       := id_output_queue.io.deq.bits.is_half
   io.out.bits.mcause_code   := id_output_queue.io.deq.bits.mcause_code
+  io.out.bits.rf_wen        := id_output_queue.io.deq.bits.rf_wen
+  io.out.bits.exe_fun       := id_output_queue.io.deq.bits.exe_fun
+  io.out.bits.wb_sel        := id_output_queue.io.deq.bits.wb_sel
+  io.out.bits.csr_cmd       := id_output_queue.io.deq.bits.csr_cmd
+  io.out.bits.mem_w         := id_output_queue.io.deq.bits.mem_w
+  io.out.bits.is_br         := id_output_queue.io.deq.bits.is_br
+  io.out.bits.is_j          := id_output_queue.io.deq.bits.is_j
+  io.out.bits.is_valid_inst := id_output_queue.io.deq.bits.is_valid_inst
+  io.out.bits.is_trap       := id_output_queue.io.deq.bits.is_trap
   when (io.out.flush || !id_output_queue.io.deq.valid) {
     io.out.bits.rf_wen        := REN_X
     io.out.bits.exe_fun       := ALU_ADD
@@ -559,20 +581,9 @@ class InstructionDecoder(
     io.out.bits.mem_w         := MW_X
     io.out.bits.is_br         := false.B
     io.out.bits.is_j          := false.B
-    io.out.bits.bp_taken      := false.B
+    io.out.bits.bp.taken      := false.B
     io.out.bits.is_valid_inst := false.B
     io.out.bits.is_trap       := false.B
-  }.otherwise {
-    io.out.bits.rf_wen        := id_output_queue.io.deq.bits.rf_wen
-    io.out.bits.exe_fun       := id_output_queue.io.deq.bits.exe_fun
-    io.out.bits.wb_sel        := id_output_queue.io.deq.bits.wb_sel
-    io.out.bits.csr_cmd       := id_output_queue.io.deq.bits.csr_cmd
-    io.out.bits.mem_w         := id_output_queue.io.deq.bits.mem_w
-    io.out.bits.is_br         := id_output_queue.io.deq.bits.is_br
-    io.out.bits.is_j          := id_output_queue.io.deq.bits.is_j
-    io.out.bits.bp_taken      := id_output_queue.io.deq.bits.bp_taken
-    io.out.bits.is_valid_inst := id_output_queue.io.deq.bits.is_valid_inst
-    io.out.bits.is_trap       := id_output_queue.io.deq.bits.is_trap
   }
   map2(io.out.bits.inst_id, id_output_queue.io.deq.bits.inst_id)(_ := _)
 }

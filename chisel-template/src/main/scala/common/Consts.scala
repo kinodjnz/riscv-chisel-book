@@ -217,12 +217,20 @@ object Consts {
   val BP_BRANCH_LEN = WORD_LEN
   val BP_CACHE_LEN  = 256
 
-  val PC_LEN           = WORD_LEN - 1
-  val ZBTB_ENTRIES     = 16
-  val BTB_INDEX_BITS   = 9
-  val BTB_INDEX_LEN    = 1 << BTB_INDEX_BITS
-  val BTB_TAG_IGNORE   = 4 // ignore leading 4 bits of pc
-  val BTB_TAG_LEN      = PC_LEN - BTB_TAG_IGNORE - BTB_INDEX_BITS
-  val PHT_INDEX_BITS   = 13
-  val PHT_INDEX_LEN    = 1 << PHT_INDEX_BITS
+  val PC_LEN         = WORD_LEN - 1
+  val ZBTB_ENTRIES   = 16
+  val BTB_INDEX_BITS = 10
+  val BTB_INDEX_LEN  = 1 << BTB_INDEX_BITS
+  val BTB_TAG_IGNORE = 4 // ignore leading 4 bits of pc
+  val BTB_TAG_LEN    = PC_LEN - BTB_TAG_IGNORE - BTB_INDEX_BITS
+  val BTB_ATTR_LEN   = 2
+  val BTB_ATTR_INVAL = 0.U(BTB_ATTR_LEN.W)
+  val BTB_ATTR_RET   = 1.U(BTB_ATTR_LEN.W)
+  val BTB_ATTR_DJBR  = 2.U(BTB_ATTR_LEN.W)
+  val BTB_ATTR_DCALL = 3.U(BTB_ATTR_LEN.W)
+  val BTB_BUNDLE_LEN = BTB_TAG_LEN + BTB_ATTR_LEN + PC_LEN
+  val PHT_INDEX_BITS = 13
+  val PHT_INDEX_LEN  = 1 << PHT_INDEX_BITS
+  val RAS_INDEX_BITS = 3
+  val RAS_ENTRIES    = (1 << RAS_INDEX_BITS)
 }
