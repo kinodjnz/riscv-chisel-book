@@ -37,11 +37,15 @@ class ZeroBranchTargetBuffer extends Bundle {
 
 class BTBLookup extends Bundle {
   val pc       = Output(UInt(PC_LEN.W))
-  val matches0 = Input(Bool())
+  val jump0    = Input(Bool())
+  val br0      = Input(Bool())
   val attr0    = Input(UInt(BTB_ATTR_LEN.W))
+  val is_ret0  = Input(Bool())
   val target0  = Input(UInt(PC_LEN.W))
-  val matches1 = Input(Bool())
+  val jump1    = Input(Bool())
+  val br1      = Input(Bool())
   val attr1    = Input(UInt(BTB_ATTR_LEN.W))
+  val is_ret1  = Input(Bool())
   val target1  = Input(UInt(PC_LEN.W))
 }
 
@@ -49,13 +53,15 @@ class BTBUpdate extends Bundle {
   val en     = Output(Bool())
   val pc     = Output(UInt(PC_LEN.W))
   val attr   = Output(UInt(BTB_ATTR_LEN.W))
+  val is_ret = Output(Bool())
   val target = Output(UInt(PC_LEN.W))
 }
 
 class BTBBundle extends Bundle {
   val tag    = UInt(BTB_TAG_LEN.W)
   val attr   = UInt(BTB_ATTR_LEN.W)
-  val target = UInt(PC_LEN.W)
+  val shared = UInt(1.W)
+  val target = UInt((PC_LEN - 1).W)
 }
 
 class BTBPC extends Bundle {
@@ -174,20 +180,28 @@ class BTB(btb_len: Int) extends Module {
   val entry1 = reg_entry1.asTypeOf(new BTBBundle())
 
   val tag_match0 = (entry0.tag === reg_lu_pc_tag)
-  io.lu.matches0 := tag_match0 && (entry0.attr === BTB_ATTR_DJBR || entry0.attr === BTB_ATTR_DCALL)
-  io.lu.attr0    := Mux(tag_match0, entry0.attr, BTB_ATTR_INVAL)
-  io.lu.target0  := entry0.target
+  io.lu.jump0   := tag_match0 && (entry0.attr === BTB_ATTR_DJUMP || entry0.attr === BTB_ATTR_DCALL)
+  io.lu.br0     := tag_match0 && (entry0.attr === BTB_ATTR_BR)
+  io.lu.attr0   := Mux(tag_match0, entry0.attr, BTB_ATTR_INVAL)
+  io.lu.is_ret0 := entry0.shared.asBool && (entry0.attr === BTB_ATTR_INVAL)
+  io.lu.target0 := Cat(entry0.shared, entry0.target)
   val tag_match1 = (entry1.tag === reg_lu_pc_tag)
-  io.lu.matches1 := tag_match1 && (entry1.attr === BTB_ATTR_DJBR || entry1.attr === BTB_ATTR_DCALL)
-  io.lu.attr1    := Mux(tag_match1, entry1.attr, BTB_ATTR_INVAL)
-  io.lu.target1  := entry1.target
+  io.lu.jump1   := tag_match1 && (entry1.attr === BTB_ATTR_DJUMP || entry1.attr === BTB_ATTR_DCALL)
+  io.lu.br1     := tag_match1 && (entry1.attr === BTB_ATTR_BR)
+  io.lu.attr1   := Mux(tag_match1, entry1.attr, BTB_ATTR_INVAL)
+  io.lu.is_ret1 := entry1.shared.asBool && (entry1.attr === BTB_ATTR_INVAL)
+  io.lu.target1 := Cat(entry1.shared, entry1.target)
 
   val up_pc = (io.up.pc(PC_LEN-1-BTB_TAG_IGNORE, 1)).asTypeOf(new BTBPC())
+  val target = Cat(
+    Mux(io.up.attr === BTB_ATTR_INVAL, io.up.is_ret, io.up.target(PC_LEN - 1)),
+    io.up.target(PC_LEN - 2, 0)
+  )
   when (io.up.en && !io.up.pc(0)) {
-    btb0.write(up_pc.index, Cat(up_pc.tag, io.up.attr, io.up.target))
+    btb0.write(up_pc.index, Cat(up_pc.tag, io.up.attr, target))
   }
   when (io.up.en && io.up.pc(0)) {
-    btb1.write(up_pc.index, Cat(up_pc.tag, io.up.attr, io.up.target))
+    btb1.write(up_pc.index, Cat(up_pc.tag, io.up.attr, target))
   }
 }
 
@@ -226,8 +240,8 @@ class RAS extends Module {
     val call2 = Flipped(new RASCall)
   })
 
-  val ras = Mem(RAS_ENTRIES, UInt(PC_LEN.W))
-  val index  = RegInit(0.U(RAS_INDEX_BITS.W))
+  val ras   = Mem(RAS_ENTRIES, UInt(PC_LEN.W))
+  val index = RegInit(0.U(RAS_INDEX_BITS.W))
 
   val ret_pc    = RegInit(0.U(PC_LEN.W))
   val ret_index = RegNext(index, 0.U(RAS_INDEX_BITS.W))

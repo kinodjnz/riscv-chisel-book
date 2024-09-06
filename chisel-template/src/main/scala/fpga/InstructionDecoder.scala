@@ -11,6 +11,7 @@ import chisel3.ChiselEnum
 class BranchPrediction extends Bundle {
   val taken    = Bool()
   val attr     = UInt(BTB_ATTR_LEN.W)
+  val is_ret   = Bool()
   val rasindex = UInt(RAS_INDEX_BITS.W)
   val target   = UInt(PC_LEN.W)
   val cnt      = UInt(2.W)
@@ -42,6 +43,7 @@ class InstructionDecoderOutput(val enable_pipeline_probe: Boolean) extends Bundl
   val is_j          = Bool()
   val bp            = new BranchPrediction()
   val actual_attr   = UInt(BTB_ATTR_LEN.W)
+  val actual_is_ret = Bool()
   val is_half       = Bool()
   val is_valid_inst = Bool()
   val is_trap       = Bool()
@@ -498,10 +500,11 @@ class InstructionDecoder(
   )
   val id_is_dcall = id_is_dj && ((id_wba === WBA_RA) || ((id_wba === WBA_RD) && (id_w_wb_addr === 1.U(ADDR_LEN.W))))
   val id_actual_attr = MuxCase(BTB_ATTR_INVAL, Seq(
-    (id_is_ret)            -> BTB_ATTR_RET,
-    (id_is_dcall)          -> BTB_ATTR_DCALL,
-    (id_is_dj || id_is_br) -> BTB_ATTR_DJBR,
+    (id_is_dcall) -> BTB_ATTR_DCALL,
+    (id_is_dj)    -> BTB_ATTR_DJUMP,
+    (id_is_br)    -> BTB_ATTR_BR,
   ))
+  val id_actual_is_ret = id_is_ret
 
   val id_is_trap = (id_exe_fun === CMD_ECALL && id_mem_w === MW_CSR)
   val id_mcause_code = CSR_MCAUSE_CODE_ECALL_M
@@ -529,6 +532,7 @@ class InstructionDecoder(
   id_output_queue.io.enq.bits.csr_addr      := id_csr_addr
   id_output_queue.io.enq.bits.bp            := id_reg_bp
   id_output_queue.io.enq.bits.actual_attr   := id_actual_attr
+  id_output_queue.io.enq.bits.actual_is_ret := id_actual_is_ret
   id_output_queue.io.enq.bits.is_half       := id_is_half
   id_output_queue.io.enq.bits.mcause_code   := id_mcause_code
   id_output_queue.io.enq.bits.rf_wen        := id_rf_wen
@@ -562,6 +566,7 @@ class InstructionDecoder(
   io.out.bits.csr_addr      := id_output_queue.io.deq.bits.csr_addr
   io.out.bits.bp            := id_output_queue.io.deq.bits.bp
   io.out.bits.actual_attr   := id_output_queue.io.deq.bits.actual_attr
+  io.out.bits.actual_is_ret := id_output_queue.io.deq.bits.actual_is_ret
   io.out.bits.is_half       := id_output_queue.io.deq.bits.is_half
   io.out.bits.mcause_code   := id_output_queue.io.deq.bits.mcause_code
   io.out.bits.rf_wen        := id_output_queue.io.deq.bits.rf_wen
