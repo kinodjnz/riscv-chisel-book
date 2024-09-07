@@ -79,9 +79,13 @@ class PHTMemIo extends Bundle {
 }
 
 class PHTLookup extends Bundle {
-  val pc   = Output(UInt(PC_LEN.W))
-  val cnt0 = Input(UInt(2.W))
-  val cnt1 = Input(UInt(2.W))
+  val pc     = Output(UInt(PC_LEN.W))
+  val taken0 = Input(Bool())
+  val taken1 = Input(Bool())
+  val cnt0   = Input(UInt(2.W))
+  val cnt1   = Input(UInt(2.W))
+  val gcnt0  = Input(UInt(2.W))
+  val gcnt1  = Input(UInt(2.W))
 }
 
 class PHTUpdate extends Bundle {
@@ -89,6 +93,7 @@ class PHTUpdate extends Bundle {
   val history = Output(UInt(PHT_HISTORY_BITS.W))
   val pc      = Output(UInt(PC_LEN.W))
   val cnt     = Output(UInt(2.W))
+  val gcnt    = Output(UInt(2.W))
 }
 
 class PHTBranch extends Bundle {
@@ -228,7 +233,8 @@ class PHT(pht_len: Int) extends Module {
   val io = IO(new Bundle {
     val lu = Flipped(new PHTLookup)
     val up = Flipped(new PHTUpdate)
-    val mem = Flipped(new PHTMemIo)
+    val lmem = Flipped(new PHTMemIo)
+    val gmem = Flipped(new PHTMemIo)
     val br = Flipped(new PHTBranch)
     val br2 = Flipped(new PHTBranch2)
     val history = Output(UInt(PHT_HISTORY_BITS.W))
@@ -245,11 +251,18 @@ class PHT(pht_len: Int) extends Module {
     ((history << PHT_HISTORY_SHIFT) ^ pc)(PHT_HISTORY_BITS-1, 0)
   }
 
-  io.mem.ren   := true.B
-  io.mem.raddr := merge(history, io.lu.pc)(PHT_INDEX_BITS-1, 1)
-  val cnt = io.mem.rdata
+  io.lmem.ren   := true.B
+  io.lmem.raddr := io.lu.pc(PHT_INDEX_BITS-1, 1)
+  val cnt = io.lmem.rdata
   io.lu.cnt0 := cnt(1, 0)
   io.lu.cnt1 := cnt(3, 2)
+  io.gmem.ren   := true.B
+  io.gmem.raddr := merge(history, io.lu.pc)(PHT_INDEX_BITS-1, 1)
+  val gcnt = io.gmem.rdata
+  io.lu.gcnt0 := gcnt(1, 0)
+  io.lu.gcnt1 := gcnt(3, 2)
+  io.lu.taken0 := Mux(gcnt(1), gcnt(0), cnt(0))
+  io.lu.taken1 := Mux(gcnt(3), gcnt(2), cnt(2))
 
   io.history := RegNext(history, 0.U(PHT_HISTORY_BITS.W))
 
@@ -268,11 +281,13 @@ class PHT(pht_len: Int) extends Module {
     printf(cf"PHT br2 0x${hash(io.br2.history, io.br2.pc)(PHT_HISTORY_BITS-1, 0)}%x\n")
   }
 
-  // history := 0.U
+  io.lmem.wen   := io.up.en
+  io.lmem.waddr := io.up.pc(PHT_INDEX_BITS-1, 0)
+  io.lmem.wdata := io.up.cnt
 
-  io.mem.wen   := io.up.en
-  io.mem.waddr := merge(io.up.history, io.up.pc)(PHT_INDEX_BITS-1, 0)
-  io.mem.wdata := io.up.cnt
+  io.gmem.wen   := io.up.en
+  io.gmem.waddr := merge(io.up.history, io.up.pc)(PHT_INDEX_BITS-1, 0)
+  io.gmem.wdata := io.up.gcnt
 
   // printf(cf"io.lu.pc         : 0x${Cat(io.lu.pc, 0.U(1.W))}%x\n")
   // printf(cf"io.lu.cnt0       : 0x${io.lu.cnt0}%x\n")

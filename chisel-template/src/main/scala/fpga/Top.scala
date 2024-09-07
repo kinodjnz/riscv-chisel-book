@@ -83,7 +83,8 @@ class RiscV(clockHz: Int) extends Module {
   val dcache2 = Module(new DCache)
   val icache = Module(new ICache(log2Ceil(WORD_LEN), ICACHE_INDEX_BITS+(log2Ceil(CACHE_LINE_LEN)-log2Ceil(WORD_LEN)), log2Ceil(CACHE_LINE_LEN), ICACHE_INDEX_BITS))
   val icache_valid = Module(new ICacheValid(ICACHE_VALID_DATA_BITS, ICACHE_VALID_ADDR_BITS, ICACHE_INVALIDATE_DATA_BITS, ICACHE_INVALIDATE_ADDR_BITS))
-  val pht_mem = Module(new PHTMem(2, PHT_INDEX_BITS-1, 1, PHT_INDEX_BITS))
+  val pht_lmem = Module(new PHTMem(2, PHT_INDEX_BITS-1, 1, PHT_INDEX_BITS))
+  val pht_gmem = Module(new PHTMem(2, PHT_INDEX_BITS-1, 1, PHT_INDEX_BITS))
   val gpio = Module(new Gpio)
   val uart = Module(new Uart(clockHz))
   val sdc = Module(new Sdc)
@@ -161,13 +162,21 @@ class RiscV(clockHz: Int) extends Module {
   icache_valid.io.idata := memory.io.icache_valid.idata
   icache_valid.io.ien := memory.io.icache_valid.invalidate
 
-  pht_mem.io.clock := clock
-  pht_mem.io.ren   := core.io.pht_mem.ren
-  pht_mem.io.wen   := core.io.pht_mem.wen
-  pht_mem.io.raddr := core.io.pht_mem.raddr
-  core.io.pht_mem.rdata := pht_mem.io.rdata
-  pht_mem.io.waddr := core.io.pht_mem.waddr
-  pht_mem.io.wdata := core.io.pht_mem.wdata
+  pht_lmem.io.clock := clock
+  pht_lmem.io.ren   := core.io.pht_lmem.ren
+  pht_lmem.io.wen   := core.io.pht_lmem.wen
+  pht_lmem.io.raddr := core.io.pht_lmem.raddr
+  core.io.pht_lmem.rdata := pht_lmem.io.rdata
+  pht_lmem.io.waddr := core.io.pht_lmem.waddr
+  pht_lmem.io.wdata := core.io.pht_lmem.wdata
+
+  pht_gmem.io.clock := clock
+  pht_gmem.io.ren   := core.io.pht_gmem.ren
+  pht_gmem.io.wen   := core.io.pht_gmem.wen
+  pht_gmem.io.raddr := core.io.pht_gmem.raddr
+  core.io.pht_gmem.rdata := pht_gmem.io.rdata
+  pht_gmem.io.waddr := core.io.pht_gmem.waddr
+  pht_gmem.io.wdata := core.io.pht_gmem.wdata
 
   // Debug signals
   io.debugSignals.core <> core.io.debug_signal

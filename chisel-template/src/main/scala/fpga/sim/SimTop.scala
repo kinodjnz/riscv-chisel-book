@@ -71,8 +71,10 @@ class SimTop(memoryPath: String, with_sdc: Boolean, enable_pipeline_probe: Boole
   val icache_valid = Module(new MockICacheValid)
   memory.io.icache_valid <> icache_valid.io.icache_valid
 
-  val pht_mem = Module(new MockPHTMem)
-  core.io.pht_mem <> pht_mem.io.pht_mem
+  val pht_lmem = Module(new MockPHTMem)
+  core.io.pht_lmem <> pht_lmem.io.pht_mem
+  val pht_gmem = Module(new MockPHTMem)
+  core.io.pht_gmem <> pht_gmem.io.pht_mem
 
   core.io.intr := 0.U
   core.io.sim_probe.foreach(io.sim_probe <> _)

@@ -234,7 +234,7 @@ object Consts {
   val PHT_INDEX_BITS    = 13
   // val PHT_HISTORY_BITS  = 36
   // val PHT_HISTORY_SHIFT = 12
-  // val PHT_INDEX_BITS    = 36+7
+  // val PHT_INDEX_BITS    = 36+6
   val PHT_INDEX_LEN     = 1 << PHT_INDEX_BITS
   val RAS_INDEX_BITS    = 3
   val RAS_ENTRIES       = (1 << RAS_INDEX_BITS)

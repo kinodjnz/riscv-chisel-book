@@ -16,6 +16,7 @@ class BranchPrediction extends Bundle {
   val target   = UInt(PC_LEN.W)
   val history  = UInt(PHT_HISTORY_BITS.W)
   val cnt      = UInt(2.W)
+  val gcnt     = UInt(2.W)
 }
 
 class InstructionDecoderOutput(val enable_pipeline_probe: Boolean) extends Bundle {

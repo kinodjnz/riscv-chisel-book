@@ -115,7 +115,8 @@ class Core(
       val imem = Flipped(new ImemPortIo())
       val dmem = Flipped(new DmemPortIo())
       val cache = Flipped(new CachePort())
-      val pht_mem = Flipped(new PHTMemIo())
+      val pht_lmem = Flipped(new PHTMemIo())
+      val pht_gmem = Flipped(new PHTMemIo())
       val mtimer_mem = new DmemPortIo()
       val intr = Input(Bool())
       val debug_signal = new CoreDebugSignals()
@@ -389,7 +390,8 @@ class Core(
   ic_zbtb.io.lu.pc := ic_imem_addr
   ic_zbp_taken     := DontCare
   ic_zbp_target    := DontCare
-  ic_pht.io.mem <> io.pht_mem
+  ic_pht.io.lmem <> io.pht_lmem
+  ic_pht.io.gmem <> io.pht_gmem
 
   switch (ic_state) {
     is (IcState.Empty) {
@@ -397,24 +399,27 @@ class Core(
       ic_reg_inst             := io.imem.inst
       ic_reg_inst_addr        := ic_reg_imem_addr
       ic_data_out             := io.imem.inst
-      ic_bp.taken             := ic_btb.io.lu.jump0 || (ic_btb.io.lu.br0 && ic_pht.io.lu.cnt0(0))
+      ic_bp.taken             := ic_btb.io.lu.jump0 || (ic_btb.io.lu.br0 && ic_pht.io.lu.taken0)
       ic_bp.attr              := ic_btb.io.lu.attr0
       ic_bp.is_ret            := ic_btb.io.lu.is_ret0
       ic_bp.target            := ic_btb.io.lu.target0
       ic_bp.history           := ic_pht.io.history
       ic_bp.cnt               := ic_pht.io.lu.cnt0
-      ic_reg_bp_next0.taken   := ic_btb.io.lu.jump0 || (ic_btb.io.lu.br0 && ic_pht.io.lu.cnt0(0))
+      ic_bp.gcnt              := ic_pht.io.lu.gcnt0
+      ic_reg_bp_next0.taken   := ic_btb.io.lu.jump0 || (ic_btb.io.lu.br0 && ic_pht.io.lu.taken0)
       ic_reg_bp_next0.attr    := ic_btb.io.lu.attr0
       ic_reg_bp_next0.is_ret  := ic_btb.io.lu.is_ret0
       ic_reg_bp_next0.target  := ic_btb.io.lu.target0
       ic_reg_bp_next0.history := ic_pht.io.history
       ic_reg_bp_next0.cnt     := ic_pht.io.lu.cnt0
-      ic_reg_bp_next1.taken   := ic_btb.io.lu.jump1 || (ic_btb.io.lu.br1 && ic_pht.io.lu.cnt1(0))
+      ic_reg_bp_next0.gcnt    := ic_pht.io.lu.gcnt0
+      ic_reg_bp_next1.taken   := ic_btb.io.lu.jump1 || (ic_btb.io.lu.br1 && ic_pht.io.lu.taken1)
       ic_reg_bp_next1.attr    := ic_btb.io.lu.attr1
       ic_reg_bp_next1.is_ret  := ic_btb.io.lu.is_ret1
       ic_reg_bp_next1.target  := ic_btb.io.lu.target1
       ic_reg_bp_next1.history := ic_pht.io.history
       ic_reg_bp_next1.cnt     := ic_pht.io.lu.cnt1
+      ic_reg_bp_next1.gcnt    := ic_pht.io.lu.gcnt1
       ic_zbp_taken            := ic_zbtb.io.lu.matches0
       ic_zbp_target           := ic_zbtb.io.lu.target0
       ic_reg_zbp_next_taken0  := ic_zbtb.io.lu.matches0
@@ -436,23 +441,26 @@ class Core(
       ic_reg_inst_addr        := ic_reg_imem_addr
       ic_data_out             := Cat(Fill(WORD_LEN/2-1, 0.U), io.imem.inst(WORD_LEN-1, WORD_LEN/2))
       ic_addr_out             := ic_imem_addr_2
-      ic_bp.taken             := ic_btb.io.lu.jump1 || (ic_btb.io.lu.br1 && ic_pht.io.lu.cnt1(0))
+      ic_bp.taken             := ic_btb.io.lu.jump1 || (ic_btb.io.lu.br1 && ic_pht.io.lu.taken1)
       ic_bp.target            := ic_btb.io.lu.target1
       ic_bp.is_ret            := ic_btb.io.lu.is_ret1
       ic_bp.history           := ic_pht.io.history
       ic_bp.cnt               := ic_pht.io.lu.cnt1
-      ic_reg_bp_next0.taken   := ic_btb.io.lu.jump0 || (ic_btb.io.lu.br0 && ic_pht.io.lu.cnt0(0))
+      ic_bp.gcnt              := ic_pht.io.lu.gcnt1
+      ic_reg_bp_next0.taken   := ic_btb.io.lu.jump0 || (ic_btb.io.lu.br0 && ic_pht.io.lu.taken0)
       ic_reg_bp_next0.attr    := ic_btb.io.lu.attr0
       ic_reg_bp_next0.is_ret  := ic_btb.io.lu.is_ret0
       ic_reg_bp_next0.target  := ic_btb.io.lu.target0
       ic_reg_bp_next0.history := ic_pht.io.history
       ic_reg_bp_next0.cnt     := ic_pht.io.lu.cnt0
-      ic_reg_bp_next1.taken   := ic_btb.io.lu.jump1 || (ic_btb.io.lu.br1 && ic_pht.io.lu.cnt1(0))
+      ic_reg_bp_next0.gcnt    := ic_pht.io.lu.gcnt0
+      ic_reg_bp_next1.taken   := ic_btb.io.lu.jump1 || (ic_btb.io.lu.br1 && ic_pht.io.lu.taken1)
       ic_reg_bp_next1.attr    := ic_btb.io.lu.attr1
       ic_reg_bp_next1.is_ret  := ic_btb.io.lu.is_ret1
       ic_reg_bp_next1.target  := ic_btb.io.lu.target1
       ic_reg_bp_next1.history := ic_pht.io.history
       ic_reg_bp_next1.cnt     := ic_pht.io.lu.cnt1
+      ic_reg_bp_next1.gcnt    := ic_pht.io.lu.gcnt1
       ic_zbp_taken            := ic_zbtb.io.lu.matches1
       ic_zbp_target           := ic_zbtb.io.lu.target1
       ic_reg_zbp_next_taken0  := ic_zbtb.io.lu.matches0
@@ -469,8 +477,8 @@ class Core(
       ic_imem_addr  := ic_reg_imem_addr
       ic_data_out   := ic_reg_inst
       ic_bp         := ic_reg_bp_next0
-      ic_zbp_taken  := ic_reg_zbp_next_taken0 // ic_zbtb.io.lu.matches0
-      ic_zbp_target := ic_reg_zbp_next_target0 // ic_zbtb.io.lu.target0
+      ic_zbp_taken  := ic_reg_zbp_next_taken0
+      ic_zbp_target := ic_reg_zbp_next_target0
       when (ic_read_en2) {
         ic_addr_out := ic_inst_addr_2
         ic_state := IcState.FullHalf
@@ -487,23 +495,25 @@ class Core(
       ic_reg_inst2            := ic_reg_inst
       ic_reg_inst2_addr       := ic_reg_inst_addr
       ic_bp                   := ic_reg_bp_next1
-      ic_reg_bp_next0.taken   := ic_btb.io.lu.jump0 || (ic_btb.io.lu.br0 && ic_pht.io.lu.cnt0(0))
+      ic_reg_bp_next0.taken   := ic_btb.io.lu.jump0 || (ic_btb.io.lu.br0 && ic_pht.io.lu.taken0)
       ic_reg_bp_next0.attr    := ic_btb.io.lu.attr0
       ic_reg_bp_next0.is_ret  := ic_btb.io.lu.is_ret0
       ic_reg_bp_next0.target  := ic_btb.io.lu.target0
       ic_reg_bp_next0.history := ic_pht.io.history
       ic_reg_bp_next0.cnt     := ic_pht.io.lu.cnt0
-      ic_zbp_taken            := ic_reg_zbp_next_taken1 // ic_reg_zbp_next_taken1
-      ic_zbp_target           := ic_reg_zbp_next_target1 // ic_reg_zbp_next_target1
+      ic_reg_bp_next0.gcnt    := ic_pht.io.lu.gcnt0
+      ic_zbp_taken            := ic_reg_zbp_next_taken1
+      ic_zbp_target           := ic_reg_zbp_next_target1
       ic_reg_zbp_next_taken0  := ic_zbtb.io.lu.matches0
       ic_reg_zbp_next_target0 := ic_zbtb.io.lu.target0
       when (io.imem.valid) {
-        ic_reg_bp_next1.taken   := ic_btb.io.lu.jump1 || (ic_btb.io.lu.br1 && ic_pht.io.lu.cnt1(0))
+        ic_reg_bp_next1.taken   := ic_btb.io.lu.jump1 || (ic_btb.io.lu.br1 && ic_pht.io.lu.taken1)
         ic_reg_bp_next1.attr    := ic_btb.io.lu.attr1
         ic_reg_bp_next1.is_ret  := ic_btb.io.lu.is_ret1
         ic_reg_bp_next1.target  := ic_btb.io.lu.target1
         ic_reg_bp_next1.history := ic_pht.io.history
         ic_reg_bp_next1.cnt     := ic_pht.io.lu.cnt1
+        ic_reg_bp_next1.gcnt    := ic_pht.io.lu.gcnt1
         ic_reg_zbp_next_taken1  := ic_zbtb.io.lu.matches1
         ic_reg_zbp_next_target1 := ic_zbtb.io.lu.target1
       }
@@ -630,7 +640,7 @@ class Core(
   ic_pht.io.br.pc := if2_pc
 
   when ((ic_bp.attr === BTB_ATTR_BR) && if2_is_valid_inst && !id_reg_stall) {
-    printf(cf"PHT history: ${Cat(ic_bp.history, 0.U(1.W))(PHT_HISTORY_BITS-1, 0)}%x taken: ${ic_bp.taken}\n")
+    printf(cf"PHT history: ${Cat(ic_bp.history, 0.U(1.W))(PHT_HISTORY_BITS-1, 0)}%x taken: ${ic_bp.taken} gcnt: ${ic_bp.gcnt}\n")
   }
 
   //**********************************
@@ -648,6 +658,7 @@ class Core(
   id_stage.io.in.bits.bp.target     := id_bp_target
   id_stage.io.in.bits.bp.history    := ic_bp.history
   id_stage.io.in.bits.bp.cnt        := ic_bp.cnt
+  id_stage.io.in.bits.bp.gcnt       := ic_bp.gcnt
   map2(id_stage.io.in.bits.inst_id, if2_reg_inst_id)(_ := _)
 
   id_reg_stall := !id_stage.io.in.ready
@@ -963,6 +974,21 @@ class Core(
 
   ex1_fetch_pc_en := ex1_bp_failure && !ex2_reg_is_br
 
+  when (ex1_en && ex1_is_br) {
+    when (ex1_reg_bp.cnt(0) && (ex1_reg_bp.gcnt === 2.U(2.W))) {
+      when (ex1_is_br_taken) {
+        printf(cf"PHT local correct\n")
+      }.otherwise {
+        printf(cf"PHT global correct\n")
+      }
+    }.elsewhen (!ex1_reg_bp.cnt(0) && (ex1_reg_bp.gcnt === 3.U(2.W))) {
+      when (ex1_is_br_taken) {
+        printf(cf"PHT global correct\n")
+      }.otherwise {
+        printf(cf"PHT local correct\n")
+      }
+    }
+  }
   // if taken:
   //  (strongly not-taken) 10 => 00
   //  (weakly not-taken)   00 => 01
@@ -977,12 +1003,27 @@ class Core(
   //  (strongly taken)     11 => 01
   val ex1_cnt_if_not_taken = Cat(!ex1_reg_bp.cnt(0, 0), (ex1_reg_bp.cnt(1) & ex1_reg_bp.cnt(0)).asUInt)
 
+  val updated_cnt = Mux(ex1_is_br_taken, ex1_cnt_if_taken, ex1_cnt_if_not_taken)
+
+  // if taken:
+  //  (not-taken) 10 => 00
+  //  (neutral)   00 => 11
+  //  (taken)     11 => 11
+  val ex1_gcnt_if_taken = Cat(ex1_reg_bp.gcnt(0) ^ !ex1_reg_bp.gcnt(1), ex1_reg_bp.gcnt(0) ^ !ex1_reg_bp.gcnt(1))
+
+  // if not-taken:
+  //  (not-taken) 10 => 10
+  //  (neutral)   00 => 10
+  //  (taken)     11 => 00
+  val ex1_gcnt_if_not_taken = Cat(!ex1_reg_bp.gcnt(0), 0.U(1.W))
+
+  val updated_gcnt = Mux(ex1_is_br_taken, ex1_gcnt_if_taken, ex1_gcnt_if_not_taken)
+
   // actual_attr === inval && attr =/= inval  => new attr <- inval
   // actual_attr === br    && taken           => new attr <- br
   // actual_attr === djump                    => new attr <- djump
   // actual_attr === dcall                    => new attr <- dcall
   // actual_attr === ret                      => new attr <- ret
-  val updated_cnt = Mux(ex1_is_br_taken, ex1_cnt_if_taken, ex1_cnt_if_not_taken)
   ic_btb.io.up.en := ex1_en && (
     ((ex1_reg_actual_attr === BTB_ATTR_INVAL) && (ex1_reg_bp.attr =/= BTB_ATTR_INVAL)) ||
     (ex1_is_br_taken) ||
@@ -1002,6 +1043,7 @@ class Core(
   ic_pht.io.up.history := ex1_reg_bp.history
   ic_pht.io.up.pc      := ex1_reg_pc
   ic_pht.io.up.cnt     := updated_cnt
+  ic_pht.io.up.gcnt    := updated_gcnt
 
   ic_pht.io.br2.en      := ex1_en && ex1_is_br_taken && (!ex1_reg_bp.taken || ex1_reg_bp.attr =/= BTB_ATTR_BR)
   ic_pht.io.br2.history := ex1_reg_bp.history
@@ -1583,6 +1625,7 @@ class Core(
   printf(cf"ic_bp_rasindex   : 0x${ic_ras.io.top.index}%x\n")
   printf(cf"ic_bp_target     : 0x${Cat(ic_bp.target, 0.U(1.W))}%x\n")
   printf(cf"ic_bp_cnt        : 0x${ic_bp.cnt}%x\n")
+  printf(cf"ic_bp_gcnt       : 0x${ic_bp.gcnt}%x\n")
   printf(cf"id_reg_pc        : 0x${id_stage.io.debug_signals.id_pc}%x\n")
   printf(cf"id_reg_inst      : 0x${id_stage.io.debug_signals.id_inst}%x\n")
   printf(cf"id_reg_bp_taken  : ${id_reg_bp_taken}%d\n")
@@ -1622,6 +1665,7 @@ class Core(
   printf(cf"ex1_reg_bp_target: 0x${Cat(ex1_reg_bp.target, 0.U(1.W))}%x\n")
   printf(cf"ex1_fetch_pc_en  : ${ex1_fetch_pc_en}%d\n")
   printf(cf"ex1_reg_bp_cnt   : 0x${ex1_reg_bp.cnt}%x\n")
+  printf(cf"ex1_reg_bp_gcnt  : 0x${ex1_reg_bp.gcnt}%x\n")
   printf(cf"ex1_reg_bp_rasind: 0x${ex1_reg_bp.rasindex}%x\n")
   printf(cf"ex1_reg_actual_at: 0x${ex1_reg_actual_attr}%x\n")
   printf(cf"ex2_reg_is_br    : ${ex2_reg_is_br}%d\n")
