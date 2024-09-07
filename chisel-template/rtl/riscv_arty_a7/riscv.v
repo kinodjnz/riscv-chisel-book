@@ -189,22 +189,22 @@ endmodule
 module BTB(
   input         clock,
   input         reset,
-  input  [30:0] io_lu_pc, // @[src/main/scala/fpga/BranchPredictor.scala 162:14]
-  output        io_lu_jump0, // @[src/main/scala/fpga/BranchPredictor.scala 162:14]
-  output        io_lu_br0, // @[src/main/scala/fpga/BranchPredictor.scala 162:14]
-  output [1:0]  io_lu_attr0, // @[src/main/scala/fpga/BranchPredictor.scala 162:14]
-  output        io_lu_is_ret0, // @[src/main/scala/fpga/BranchPredictor.scala 162:14]
-  output [30:0] io_lu_target0, // @[src/main/scala/fpga/BranchPredictor.scala 162:14]
-  output        io_lu_jump1, // @[src/main/scala/fpga/BranchPredictor.scala 162:14]
-  output        io_lu_br1, // @[src/main/scala/fpga/BranchPredictor.scala 162:14]
-  output [1:0]  io_lu_attr1, // @[src/main/scala/fpga/BranchPredictor.scala 162:14]
-  output        io_lu_is_ret1, // @[src/main/scala/fpga/BranchPredictor.scala 162:14]
-  output [30:0] io_lu_target1, // @[src/main/scala/fpga/BranchPredictor.scala 162:14]
-  input         io_up_en, // @[src/main/scala/fpga/BranchPredictor.scala 162:14]
-  input  [30:0] io_up_pc, // @[src/main/scala/fpga/BranchPredictor.scala 162:14]
-  input  [1:0]  io_up_attr, // @[src/main/scala/fpga/BranchPredictor.scala 162:14]
-  input         io_up_is_ret, // @[src/main/scala/fpga/BranchPredictor.scala 162:14]
-  input  [30:0] io_up_target // @[src/main/scala/fpga/BranchPredictor.scala 162:14]
+  input  [30:0] io_lu_pc, // @[src/main/scala/fpga/BranchPredictor.scala 186:14]
+  output        io_lu_jump0, // @[src/main/scala/fpga/BranchPredictor.scala 186:14]
+  output        io_lu_br0, // @[src/main/scala/fpga/BranchPredictor.scala 186:14]
+  output [1:0]  io_lu_attr0, // @[src/main/scala/fpga/BranchPredictor.scala 186:14]
+  output        io_lu_is_ret0, // @[src/main/scala/fpga/BranchPredictor.scala 186:14]
+  output [30:0] io_lu_target0, // @[src/main/scala/fpga/BranchPredictor.scala 186:14]
+  output        io_lu_jump1, // @[src/main/scala/fpga/BranchPredictor.scala 186:14]
+  output        io_lu_br1, // @[src/main/scala/fpga/BranchPredictor.scala 186:14]
+  output [1:0]  io_lu_attr1, // @[src/main/scala/fpga/BranchPredictor.scala 186:14]
+  output        io_lu_is_ret1, // @[src/main/scala/fpga/BranchPredictor.scala 186:14]
+  output [30:0] io_lu_target1, // @[src/main/scala/fpga/BranchPredictor.scala 186:14]
+  input         io_up_en, // @[src/main/scala/fpga/BranchPredictor.scala 186:14]
+  input  [30:0] io_up_pc, // @[src/main/scala/fpga/BranchPredictor.scala 186:14]
+  input  [1:0]  io_up_attr, // @[src/main/scala/fpga/BranchPredictor.scala 186:14]
+  input         io_up_is_ret, // @[src/main/scala/fpga/BranchPredictor.scala 186:14]
+  input  [30:0] io_up_target // @[src/main/scala/fpga/BranchPredictor.scala 186:14]
 );
 `ifdef RANDOMIZE_MEM_INIT
   reg [63:0] _RAND_0;
@@ -215,86 +215,86 @@ module BTB(
   reg [63:0] _RAND_3;
   reg [31:0] _RAND_4;
 `endif // RANDOMIZE_REG_INIT
-  reg [49:0] btb0 [0:511]; // @[src/main/scala/fpga/BranchPredictor.scala 167:17]
-  wire  btb0_reg_entry0_MPORT_en; // @[src/main/scala/fpga/BranchPredictor.scala 167:17]
-  wire [8:0] btb0_reg_entry0_MPORT_addr; // @[src/main/scala/fpga/BranchPredictor.scala 167:17]
-  wire [49:0] btb0_reg_entry0_MPORT_data; // @[src/main/scala/fpga/BranchPredictor.scala 167:17]
-  wire [49:0] btb0_MPORT_data; // @[src/main/scala/fpga/BranchPredictor.scala 167:17]
-  wire [8:0] btb0_MPORT_addr; // @[src/main/scala/fpga/BranchPredictor.scala 167:17]
-  wire  btb0_MPORT_mask; // @[src/main/scala/fpga/BranchPredictor.scala 167:17]
-  wire  btb0_MPORT_en; // @[src/main/scala/fpga/BranchPredictor.scala 167:17]
-  reg [49:0] btb1 [0:511]; // @[src/main/scala/fpga/BranchPredictor.scala 168:17]
-  wire  btb1_reg_entry1_MPORT_en; // @[src/main/scala/fpga/BranchPredictor.scala 168:17]
-  wire [8:0] btb1_reg_entry1_MPORT_addr; // @[src/main/scala/fpga/BranchPredictor.scala 168:17]
-  wire [49:0] btb1_reg_entry1_MPORT_data; // @[src/main/scala/fpga/BranchPredictor.scala 168:17]
-  wire [49:0] btb1_MPORT_1_data; // @[src/main/scala/fpga/BranchPredictor.scala 168:17]
-  wire [8:0] btb1_MPORT_1_addr; // @[src/main/scala/fpga/BranchPredictor.scala 168:17]
-  wire  btb1_MPORT_1_mask; // @[src/main/scala/fpga/BranchPredictor.scala 168:17]
-  wire  btb1_MPORT_1_en; // @[src/main/scala/fpga/BranchPredictor.scala 168:17]
-  reg [49:0] reg_entry0; // @[src/main/scala/fpga/BranchPredictor.scala 170:27]
-  reg [49:0] reg_entry1; // @[src/main/scala/fpga/BranchPredictor.scala 171:27]
-  wire [16:0] lu_pc_tag = io_lu_pc[26:10]; // @[src/main/scala/fpga/BranchPredictor.scala 173:62]
-  reg [16:0] reg_lu_pc_tag; // @[src/main/scala/fpga/BranchPredictor.scala 174:30]
-  wire [29:0] entry0_target = reg_entry0[29:0]; // @[src/main/scala/fpga/BranchPredictor.scala 179:35]
-  wire  entry0_shared = reg_entry0[30]; // @[src/main/scala/fpga/BranchPredictor.scala 179:35]
-  wire [1:0] entry0_attr = reg_entry0[32:31]; // @[src/main/scala/fpga/BranchPredictor.scala 179:35]
-  wire [16:0] entry0_tag = reg_entry0[49:33]; // @[src/main/scala/fpga/BranchPredictor.scala 179:35]
-  wire [29:0] entry1_target = reg_entry1[29:0]; // @[src/main/scala/fpga/BranchPredictor.scala 180:35]
-  wire  entry1_shared = reg_entry1[30]; // @[src/main/scala/fpga/BranchPredictor.scala 180:35]
-  wire [1:0] entry1_attr = reg_entry1[32:31]; // @[src/main/scala/fpga/BranchPredictor.scala 180:35]
-  wire [16:0] entry1_tag = reg_entry1[49:33]; // @[src/main/scala/fpga/BranchPredictor.scala 180:35]
-  wire  tag_match0 = entry0_tag == reg_lu_pc_tag; // @[src/main/scala/fpga/BranchPredictor.scala 182:32]
-  wire  tag_match1 = entry1_tag == reg_lu_pc_tag; // @[src/main/scala/fpga/BranchPredictor.scala 188:32]
-  wire [16:0] up_pc_tag = io_up_pc[26:10]; // @[src/main/scala/fpga/BranchPredictor.scala 195:62]
-  wire  _target_T_2 = io_up_attr == 2'h0 ? io_up_is_ret : io_up_target[30]; // @[src/main/scala/fpga/BranchPredictor.scala 197:8]
-  wire [30:0] target = {_target_T_2,io_up_target[29:0]}; // @[src/main/scala/fpga/BranchPredictor.scala 196:19]
-  wire  _T_1 = ~io_up_pc[0]; // @[src/main/scala/fpga/BranchPredictor.scala 200:21]
-  wire [18:0] hi = {up_pc_tag,io_up_attr}; // @[src/main/scala/fpga/BranchPredictor.scala 201:32]
+  reg [49:0] btb0 [0:511]; // @[src/main/scala/fpga/BranchPredictor.scala 191:17]
+  wire  btb0_reg_entry0_MPORT_en; // @[src/main/scala/fpga/BranchPredictor.scala 191:17]
+  wire [8:0] btb0_reg_entry0_MPORT_addr; // @[src/main/scala/fpga/BranchPredictor.scala 191:17]
+  wire [49:0] btb0_reg_entry0_MPORT_data; // @[src/main/scala/fpga/BranchPredictor.scala 191:17]
+  wire [49:0] btb0_MPORT_data; // @[src/main/scala/fpga/BranchPredictor.scala 191:17]
+  wire [8:0] btb0_MPORT_addr; // @[src/main/scala/fpga/BranchPredictor.scala 191:17]
+  wire  btb0_MPORT_mask; // @[src/main/scala/fpga/BranchPredictor.scala 191:17]
+  wire  btb0_MPORT_en; // @[src/main/scala/fpga/BranchPredictor.scala 191:17]
+  reg [49:0] btb1 [0:511]; // @[src/main/scala/fpga/BranchPredictor.scala 192:17]
+  wire  btb1_reg_entry1_MPORT_en; // @[src/main/scala/fpga/BranchPredictor.scala 192:17]
+  wire [8:0] btb1_reg_entry1_MPORT_addr; // @[src/main/scala/fpga/BranchPredictor.scala 192:17]
+  wire [49:0] btb1_reg_entry1_MPORT_data; // @[src/main/scala/fpga/BranchPredictor.scala 192:17]
+  wire [49:0] btb1_MPORT_1_data; // @[src/main/scala/fpga/BranchPredictor.scala 192:17]
+  wire [8:0] btb1_MPORT_1_addr; // @[src/main/scala/fpga/BranchPredictor.scala 192:17]
+  wire  btb1_MPORT_1_mask; // @[src/main/scala/fpga/BranchPredictor.scala 192:17]
+  wire  btb1_MPORT_1_en; // @[src/main/scala/fpga/BranchPredictor.scala 192:17]
+  reg [49:0] reg_entry0; // @[src/main/scala/fpga/BranchPredictor.scala 194:27]
+  reg [49:0] reg_entry1; // @[src/main/scala/fpga/BranchPredictor.scala 195:27]
+  wire [16:0] lu_pc_tag = io_lu_pc[26:10]; // @[src/main/scala/fpga/BranchPredictor.scala 197:62]
+  reg [16:0] reg_lu_pc_tag; // @[src/main/scala/fpga/BranchPredictor.scala 198:30]
+  wire [29:0] entry0_target = reg_entry0[29:0]; // @[src/main/scala/fpga/BranchPredictor.scala 203:35]
+  wire  entry0_shared = reg_entry0[30]; // @[src/main/scala/fpga/BranchPredictor.scala 203:35]
+  wire [1:0] entry0_attr = reg_entry0[32:31]; // @[src/main/scala/fpga/BranchPredictor.scala 203:35]
+  wire [16:0] entry0_tag = reg_entry0[49:33]; // @[src/main/scala/fpga/BranchPredictor.scala 203:35]
+  wire [29:0] entry1_target = reg_entry1[29:0]; // @[src/main/scala/fpga/BranchPredictor.scala 204:35]
+  wire  entry1_shared = reg_entry1[30]; // @[src/main/scala/fpga/BranchPredictor.scala 204:35]
+  wire [1:0] entry1_attr = reg_entry1[32:31]; // @[src/main/scala/fpga/BranchPredictor.scala 204:35]
+  wire [16:0] entry1_tag = reg_entry1[49:33]; // @[src/main/scala/fpga/BranchPredictor.scala 204:35]
+  wire  tag_match0 = entry0_tag == reg_lu_pc_tag; // @[src/main/scala/fpga/BranchPredictor.scala 206:32]
+  wire  tag_match1 = entry1_tag == reg_lu_pc_tag; // @[src/main/scala/fpga/BranchPredictor.scala 212:32]
+  wire [16:0] up_pc_tag = io_up_pc[26:10]; // @[src/main/scala/fpga/BranchPredictor.scala 219:62]
+  wire  _target_T_2 = io_up_attr == 2'h0 ? io_up_is_ret : io_up_target[30]; // @[src/main/scala/fpga/BranchPredictor.scala 221:8]
+  wire [30:0] target = {_target_T_2,io_up_target[29:0]}; // @[src/main/scala/fpga/BranchPredictor.scala 220:19]
+  wire  _T_1 = ~io_up_pc[0]; // @[src/main/scala/fpga/BranchPredictor.scala 224:21]
+  wire [18:0] hi = {up_pc_tag,io_up_attr}; // @[src/main/scala/fpga/BranchPredictor.scala 225:32]
   assign btb0_reg_entry0_MPORT_en = 1'h1;
   assign btb0_reg_entry0_MPORT_addr = io_lu_pc[9:1];
-  assign btb0_reg_entry0_MPORT_data = btb0[btb0_reg_entry0_MPORT_addr]; // @[src/main/scala/fpga/BranchPredictor.scala 167:17]
+  assign btb0_reg_entry0_MPORT_data = btb0[btb0_reg_entry0_MPORT_addr]; // @[src/main/scala/fpga/BranchPredictor.scala 191:17]
   assign btb0_MPORT_data = {hi,target};
   assign btb0_MPORT_addr = io_up_pc[9:1];
   assign btb0_MPORT_mask = 1'h1;
   assign btb0_MPORT_en = io_up_en & _T_1;
   assign btb1_reg_entry1_MPORT_en = 1'h1;
   assign btb1_reg_entry1_MPORT_addr = io_lu_pc[9:1];
-  assign btb1_reg_entry1_MPORT_data = btb1[btb1_reg_entry1_MPORT_addr]; // @[src/main/scala/fpga/BranchPredictor.scala 168:17]
+  assign btb1_reg_entry1_MPORT_data = btb1[btb1_reg_entry1_MPORT_addr]; // @[src/main/scala/fpga/BranchPredictor.scala 192:17]
   assign btb1_MPORT_1_data = {hi,target};
   assign btb1_MPORT_1_addr = io_up_pc[9:1];
   assign btb1_MPORT_1_mask = 1'h1;
   assign btb1_MPORT_1_en = io_up_en & io_up_pc[0];
-  assign io_lu_jump0 = tag_match0 & (entry0_attr == 2'h2 | entry0_attr == 2'h3); // @[src/main/scala/fpga/BranchPredictor.scala 183:31]
-  assign io_lu_br0 = tag_match0 & entry0_attr == 2'h1; // @[src/main/scala/fpga/BranchPredictor.scala 184:31]
-  assign io_lu_attr0 = tag_match0 ? entry0_attr : 2'h0; // @[src/main/scala/fpga/BranchPredictor.scala 185:23]
-  assign io_lu_is_ret0 = entry0_shared & entry0_attr == 2'h0; // @[src/main/scala/fpga/BranchPredictor.scala 186:41]
-  assign io_lu_target0 = {entry0_shared,entry0_target}; // @[src/main/scala/fpga/BranchPredictor.scala 187:23]
-  assign io_lu_jump1 = tag_match1 & (entry1_attr == 2'h2 | entry1_attr == 2'h3); // @[src/main/scala/fpga/BranchPredictor.scala 189:31]
-  assign io_lu_br1 = tag_match1 & entry1_attr == 2'h1; // @[src/main/scala/fpga/BranchPredictor.scala 190:31]
-  assign io_lu_attr1 = tag_match1 ? entry1_attr : 2'h0; // @[src/main/scala/fpga/BranchPredictor.scala 191:23]
-  assign io_lu_is_ret1 = entry1_shared & entry1_attr == 2'h0; // @[src/main/scala/fpga/BranchPredictor.scala 192:41]
-  assign io_lu_target1 = {entry1_shared,entry1_target}; // @[src/main/scala/fpga/BranchPredictor.scala 193:23]
+  assign io_lu_jump0 = tag_match0 & (entry0_attr == 2'h2 | entry0_attr == 2'h3); // @[src/main/scala/fpga/BranchPredictor.scala 207:31]
+  assign io_lu_br0 = tag_match0 & entry0_attr == 2'h1; // @[src/main/scala/fpga/BranchPredictor.scala 208:31]
+  assign io_lu_attr0 = tag_match0 ? entry0_attr : 2'h0; // @[src/main/scala/fpga/BranchPredictor.scala 209:23]
+  assign io_lu_is_ret0 = entry0_shared & entry0_attr == 2'h0; // @[src/main/scala/fpga/BranchPredictor.scala 210:41]
+  assign io_lu_target0 = {entry0_shared,entry0_target}; // @[src/main/scala/fpga/BranchPredictor.scala 211:23]
+  assign io_lu_jump1 = tag_match1 & (entry1_attr == 2'h2 | entry1_attr == 2'h3); // @[src/main/scala/fpga/BranchPredictor.scala 213:31]
+  assign io_lu_br1 = tag_match1 & entry1_attr == 2'h1; // @[src/main/scala/fpga/BranchPredictor.scala 214:31]
+  assign io_lu_attr1 = tag_match1 ? entry1_attr : 2'h0; // @[src/main/scala/fpga/BranchPredictor.scala 215:23]
+  assign io_lu_is_ret1 = entry1_shared & entry1_attr == 2'h0; // @[src/main/scala/fpga/BranchPredictor.scala 216:41]
+  assign io_lu_target1 = {entry1_shared,entry1_target}; // @[src/main/scala/fpga/BranchPredictor.scala 217:23]
   always @(posedge clock) begin
     if (btb0_MPORT_en & btb0_MPORT_mask) begin
-      btb0[btb0_MPORT_addr] <= btb0_MPORT_data; // @[src/main/scala/fpga/BranchPredictor.scala 167:17]
+      btb0[btb0_MPORT_addr] <= btb0_MPORT_data; // @[src/main/scala/fpga/BranchPredictor.scala 191:17]
     end
     if (btb1_MPORT_1_en & btb1_MPORT_1_mask) begin
-      btb1[btb1_MPORT_1_addr] <= btb1_MPORT_1_data; // @[src/main/scala/fpga/BranchPredictor.scala 168:17]
+      btb1[btb1_MPORT_1_addr] <= btb1_MPORT_1_data; // @[src/main/scala/fpga/BranchPredictor.scala 192:17]
     end
-    if (reset) begin // @[src/main/scala/fpga/BranchPredictor.scala 170:27]
-      reg_entry0 <= 50'h0; // @[src/main/scala/fpga/BranchPredictor.scala 170:27]
+    if (reset) begin // @[src/main/scala/fpga/BranchPredictor.scala 194:27]
+      reg_entry0 <= 50'h0; // @[src/main/scala/fpga/BranchPredictor.scala 194:27]
     end else begin
-      reg_entry0 <= btb0_reg_entry0_MPORT_data; // @[src/main/scala/fpga/BranchPredictor.scala 176:14]
+      reg_entry0 <= btb0_reg_entry0_MPORT_data; // @[src/main/scala/fpga/BranchPredictor.scala 200:14]
     end
-    if (reset) begin // @[src/main/scala/fpga/BranchPredictor.scala 171:27]
-      reg_entry1 <= 50'h0; // @[src/main/scala/fpga/BranchPredictor.scala 171:27]
+    if (reset) begin // @[src/main/scala/fpga/BranchPredictor.scala 195:27]
+      reg_entry1 <= 50'h0; // @[src/main/scala/fpga/BranchPredictor.scala 195:27]
     end else begin
-      reg_entry1 <= btb1_reg_entry1_MPORT_data; // @[src/main/scala/fpga/BranchPredictor.scala 177:14]
+      reg_entry1 <= btb1_reg_entry1_MPORT_data; // @[src/main/scala/fpga/BranchPredictor.scala 201:14]
     end
-    if (reset) begin // @[src/main/scala/fpga/BranchPredictor.scala 174:30]
-      reg_lu_pc_tag <= 17'h0; // @[src/main/scala/fpga/BranchPredictor.scala 174:30]
+    if (reset) begin // @[src/main/scala/fpga/BranchPredictor.scala 198:30]
+      reg_lu_pc_tag <= 17'h0; // @[src/main/scala/fpga/BranchPredictor.scala 198:30]
     end else begin
-      reg_lu_pc_tag <= lu_pc_tag; // @[src/main/scala/fpga/BranchPredictor.scala 174:30]
+      reg_lu_pc_tag <= lu_pc_tag; // @[src/main/scala/fpga/BranchPredictor.scala 198:30]
     end
   end
 // Register and memory initialization
@@ -356,38 +356,186 @@ end // initial
 `endif // SYNTHESIS
 endmodule
 module PHT(
-  input  [30:0] io_lu_pc, // @[src/main/scala/fpga/BranchPredictor.scala 209:14]
-  output [1:0]  io_lu_cnt0, // @[src/main/scala/fpga/BranchPredictor.scala 209:14]
-  output [1:0]  io_lu_cnt1, // @[src/main/scala/fpga/BranchPredictor.scala 209:14]
-  input         io_up_en, // @[src/main/scala/fpga/BranchPredictor.scala 209:14]
-  input  [30:0] io_up_pc, // @[src/main/scala/fpga/BranchPredictor.scala 209:14]
-  input  [1:0]  io_up_cnt, // @[src/main/scala/fpga/BranchPredictor.scala 209:14]
-  output        io_mem_wen, // @[src/main/scala/fpga/BranchPredictor.scala 209:14]
-  output [11:0] io_mem_raddr, // @[src/main/scala/fpga/BranchPredictor.scala 209:14]
-  input  [3:0]  io_mem_rdata, // @[src/main/scala/fpga/BranchPredictor.scala 209:14]
-  output [12:0] io_mem_waddr, // @[src/main/scala/fpga/BranchPredictor.scala 209:14]
-  output [1:0]  io_mem_wdata // @[src/main/scala/fpga/BranchPredictor.scala 209:14]
+  input         clock,
+  input         reset,
+  input  [30:0] io_lu_pc, // @[src/main/scala/fpga/BranchPredictor.scala 233:14]
+  output        io_lu_taken0, // @[src/main/scala/fpga/BranchPredictor.scala 233:14]
+  output        io_lu_taken1, // @[src/main/scala/fpga/BranchPredictor.scala 233:14]
+  output [1:0]  io_lu_cnt0, // @[src/main/scala/fpga/BranchPredictor.scala 233:14]
+  output [1:0]  io_lu_cnt1, // @[src/main/scala/fpga/BranchPredictor.scala 233:14]
+  output [1:0]  io_lu_gcnt0, // @[src/main/scala/fpga/BranchPredictor.scala 233:14]
+  output [1:0]  io_lu_gcnt1, // @[src/main/scala/fpga/BranchPredictor.scala 233:14]
+  input         io_up_en, // @[src/main/scala/fpga/BranchPredictor.scala 233:14]
+  input  [5:0]  io_up_history, // @[src/main/scala/fpga/BranchPredictor.scala 233:14]
+  input  [30:0] io_up_pc, // @[src/main/scala/fpga/BranchPredictor.scala 233:14]
+  input  [1:0]  io_up_cnt, // @[src/main/scala/fpga/BranchPredictor.scala 233:14]
+  input  [1:0]  io_up_gcnt, // @[src/main/scala/fpga/BranchPredictor.scala 233:14]
+  output        io_lmem_wen, // @[src/main/scala/fpga/BranchPredictor.scala 233:14]
+  output [11:0] io_lmem_raddr, // @[src/main/scala/fpga/BranchPredictor.scala 233:14]
+  input  [3:0]  io_lmem_rdata, // @[src/main/scala/fpga/BranchPredictor.scala 233:14]
+  output [12:0] io_lmem_waddr, // @[src/main/scala/fpga/BranchPredictor.scala 233:14]
+  output [1:0]  io_lmem_wdata, // @[src/main/scala/fpga/BranchPredictor.scala 233:14]
+  output        io_gmem_wen, // @[src/main/scala/fpga/BranchPredictor.scala 233:14]
+  output [11:0] io_gmem_raddr, // @[src/main/scala/fpga/BranchPredictor.scala 233:14]
+  input  [3:0]  io_gmem_rdata, // @[src/main/scala/fpga/BranchPredictor.scala 233:14]
+  output [12:0] io_gmem_waddr, // @[src/main/scala/fpga/BranchPredictor.scala 233:14]
+  output [1:0]  io_gmem_wdata, // @[src/main/scala/fpga/BranchPredictor.scala 233:14]
+  input         io_br_en, // @[src/main/scala/fpga/BranchPredictor.scala 233:14]
+  input  [30:0] io_br_pc, // @[src/main/scala/fpga/BranchPredictor.scala 233:14]
+  input         io_br2_en, // @[src/main/scala/fpga/BranchPredictor.scala 233:14]
+  input  [5:0]  io_br2_history, // @[src/main/scala/fpga/BranchPredictor.scala 233:14]
+  input  [30:0] io_br2_pc, // @[src/main/scala/fpga/BranchPredictor.scala 233:14]
+  output [5:0]  io_history, // @[src/main/scala/fpga/BranchPredictor.scala 233:14]
+  input         io_res_en, // @[src/main/scala/fpga/BranchPredictor.scala 233:14]
+  input  [5:0]  io_res_history // @[src/main/scala/fpga/BranchPredictor.scala 233:14]
 );
-  assign io_lu_cnt0 = io_mem_rdata[1:0]; // @[src/main/scala/fpga/BranchPredictor.scala 218:20]
-  assign io_lu_cnt1 = io_mem_rdata[3:2]; // @[src/main/scala/fpga/BranchPredictor.scala 219:20]
-  assign io_mem_wen = io_up_en; // @[src/main/scala/fpga/BranchPredictor.scala 221:16]
-  assign io_mem_raddr = io_lu_pc[12:1]; // @[src/main/scala/fpga/BranchPredictor.scala 216:27]
-  assign io_mem_waddr = io_up_pc[12:0]; // @[src/main/scala/fpga/BranchPredictor.scala 222:27]
-  assign io_mem_wdata = io_up_cnt; // @[src/main/scala/fpga/BranchPredictor.scala 223:16]
+`ifdef RANDOMIZE_REG_INIT
+  reg [31:0] _RAND_0;
+  reg [31:0] _RAND_1;
+`endif // RANDOMIZE_REG_INIT
+  reg [5:0] history; // @[src/main/scala/fpga/BranchPredictor.scala 244:24]
+  wire [5:0] _io_gmem_raddr_T_14 = {history[0],history[1],history[2],history[3],history[4],history[5]}; // @[src/main/scala/fpga/BranchPredictor.scala 247:14]
+  wire [12:0] _io_gmem_raddr_T_15 = {_io_gmem_raddr_T_14, 7'h0}; // @[src/main/scala/fpga/BranchPredictor.scala 247:24]
+  wire [30:0] _GEN_3 = {{18'd0}, _io_gmem_raddr_T_15}; // @[src/main/scala/fpga/BranchPredictor.scala 247:64]
+  wire [30:0] _io_gmem_raddr_T_16 = _GEN_3 ^ io_lu_pc; // @[src/main/scala/fpga/BranchPredictor.scala 247:64]
+  reg [5:0] io_history_REG; // @[src/main/scala/fpga/BranchPredictor.scala 267:24]
+  wire [7:0] _history_T = {history, 2'h0}; // @[src/main/scala/fpga/BranchPredictor.scala 251:15]
+  wire [30:0] _GEN_4 = {{23'd0}, _history_T}; // @[src/main/scala/fpga/BranchPredictor.scala 251:37]
+  wire [30:0] _history_T_1 = _GEN_4 ^ io_br_pc; // @[src/main/scala/fpga/BranchPredictor.scala 251:37]
+  wire  _T_5 = ~reset; // @[src/main/scala/fpga/BranchPredictor.scala 271:11]
+  wire [7:0] _history_T_4 = {io_br2_history, 2'h0}; // @[src/main/scala/fpga/BranchPredictor.scala 251:15]
+  wire [30:0] _GEN_6 = {{23'd0}, _history_T_4}; // @[src/main/scala/fpga/BranchPredictor.scala 251:37]
+  wire [30:0] _history_T_5 = _GEN_6 ^ io_br2_pc; // @[src/main/scala/fpga/BranchPredictor.scala 251:37]
+  wire [5:0] _io_gmem_waddr_T_14 = {io_up_history[0],io_up_history[1],io_up_history[2],io_up_history[3],io_up_history[4]
+    ,io_up_history[5]}; // @[src/main/scala/fpga/BranchPredictor.scala 247:14]
+  wire [12:0] _io_gmem_waddr_T_15 = {_io_gmem_waddr_T_14, 7'h0}; // @[src/main/scala/fpga/BranchPredictor.scala 247:24]
+  wire [30:0] _GEN_8 = {{18'd0}, _io_gmem_waddr_T_15}; // @[src/main/scala/fpga/BranchPredictor.scala 247:64]
+  wire [30:0] _io_gmem_waddr_T_16 = _GEN_8 ^ io_up_pc; // @[src/main/scala/fpga/BranchPredictor.scala 247:64]
+  assign io_lu_taken0 = io_gmem_rdata[1] ? io_gmem_rdata[0] : io_lmem_rdata[0]; // @[src/main/scala/fpga/BranchPredictor.scala 264:22]
+  assign io_lu_taken1 = io_gmem_rdata[3] ? io_gmem_rdata[2] : io_lmem_rdata[2]; // @[src/main/scala/fpga/BranchPredictor.scala 265:22]
+  assign io_lu_cnt0 = io_lmem_rdata[1:0]; // @[src/main/scala/fpga/BranchPredictor.scala 257:20]
+  assign io_lu_cnt1 = io_lmem_rdata[3:2]; // @[src/main/scala/fpga/BranchPredictor.scala 258:20]
+  assign io_lu_gcnt0 = io_gmem_rdata[1:0]; // @[src/main/scala/fpga/BranchPredictor.scala 262:22]
+  assign io_lu_gcnt1 = io_gmem_rdata[3:2]; // @[src/main/scala/fpga/BranchPredictor.scala 263:22]
+  assign io_lmem_wen = io_up_en; // @[src/main/scala/fpga/BranchPredictor.scala 284:17]
+  assign io_lmem_raddr = io_lu_pc[12:1]; // @[src/main/scala/fpga/BranchPredictor.scala 255:28]
+  assign io_lmem_waddr = io_up_pc[12:0]; // @[src/main/scala/fpga/BranchPredictor.scala 285:28]
+  assign io_lmem_wdata = io_up_cnt; // @[src/main/scala/fpga/BranchPredictor.scala 286:17]
+  assign io_gmem_wen = io_up_en; // @[src/main/scala/fpga/BranchPredictor.scala 288:17]
+  assign io_gmem_raddr = _io_gmem_raddr_T_16[12:1]; // @[src/main/scala/fpga/BranchPredictor.scala 260:44]
+  assign io_gmem_waddr = _io_gmem_waddr_T_16[12:0]; // @[src/main/scala/fpga/BranchPredictor.scala 247:69]
+  assign io_gmem_wdata = io_up_gcnt; // @[src/main/scala/fpga/BranchPredictor.scala 290:17]
+  assign io_history = io_history_REG; // @[src/main/scala/fpga/BranchPredictor.scala 267:14]
+  always @(posedge clock) begin
+    if (reset) begin // @[src/main/scala/fpga/BranchPredictor.scala 244:24]
+      history <= 6'h0; // @[src/main/scala/fpga/BranchPredictor.scala 244:24]
+    end else if (io_br2_en) begin // @[src/main/scala/fpga/BranchPredictor.scala 279:20]
+      history <= _history_T_5[5:0]; // @[src/main/scala/fpga/BranchPredictor.scala 280:13]
+    end else if (io_res_en) begin // @[src/main/scala/fpga/BranchPredictor.scala 274:20]
+      history <= io_res_history; // @[src/main/scala/fpga/BranchPredictor.scala 275:13]
+    end else if (io_br_en) begin // @[src/main/scala/fpga/BranchPredictor.scala 269:19]
+      history <= _history_T_1[5:0]; // @[src/main/scala/fpga/BranchPredictor.scala 270:13]
+    end
+    if (reset) begin // @[src/main/scala/fpga/BranchPredictor.scala 267:24]
+      io_history_REG <= 6'h0; // @[src/main/scala/fpga/BranchPredictor.scala 267:24]
+    end else begin
+      io_history_REG <= history; // @[src/main/scala/fpga/BranchPredictor.scala 267:24]
+    end
+    `ifndef SYNTHESIS
+    `ifdef PRINTF_COND
+      if (`PRINTF_COND) begin
+    `endif
+        if (io_br_en & ~reset) begin
+          $fwrite(32'h80000002,"PHT br 0x%x\n",_history_T_1[5:0]); // @[src/main/scala/fpga/BranchPredictor.scala 271:11]
+        end
+    `ifdef PRINTF_COND
+      end
+    `endif
+    `endif // SYNTHESIS
+    `ifndef SYNTHESIS
+    `ifdef PRINTF_COND
+      if (`PRINTF_COND) begin
+    `endif
+        if (io_res_en & _T_5) begin
+          $fwrite(32'h80000002,"PHT reset 0x%x\n",io_res_history); // @[src/main/scala/fpga/BranchPredictor.scala 276:11]
+        end
+    `ifdef PRINTF_COND
+      end
+    `endif
+    `endif // SYNTHESIS
+    `ifndef SYNTHESIS
+    `ifdef PRINTF_COND
+      if (`PRINTF_COND) begin
+    `endif
+        if (io_br2_en & _T_5) begin
+          $fwrite(32'h80000002,"PHT br2 0x%x\n",_history_T_5[5:0]); // @[src/main/scala/fpga/BranchPredictor.scala 281:11]
+        end
+    `ifdef PRINTF_COND
+      end
+    `endif
+    `endif // SYNTHESIS
+  end
+// Register and memory initialization
+`ifdef RANDOMIZE_GARBAGE_ASSIGN
+`define RANDOMIZE
+`endif
+`ifdef RANDOMIZE_INVALID_ASSIGN
+`define RANDOMIZE
+`endif
+`ifdef RANDOMIZE_REG_INIT
+`define RANDOMIZE
+`endif
+`ifdef RANDOMIZE_MEM_INIT
+`define RANDOMIZE
+`endif
+`ifndef RANDOM
+`define RANDOM $random
+`endif
+`ifdef RANDOMIZE_MEM_INIT
+  integer initvar;
+`endif
+`ifndef SYNTHESIS
+`ifdef FIRRTL_BEFORE_INITIAL
+`FIRRTL_BEFORE_INITIAL
+`endif
+initial begin
+  `ifdef RANDOMIZE
+    `ifdef INIT_RANDOM
+      `INIT_RANDOM
+    `endif
+    `ifndef VERILATOR
+      `ifdef RANDOMIZE_DELAY
+        #`RANDOMIZE_DELAY begin end
+      `else
+        #0.002 begin end
+      `endif
+    `endif
+`ifdef RANDOMIZE_REG_INIT
+  _RAND_0 = {1{`RANDOM}};
+  history = _RAND_0[5:0];
+  _RAND_1 = {1{`RANDOM}};
+  io_history_REG = _RAND_1[5:0];
+`endif // RANDOMIZE_REG_INIT
+  `endif // RANDOMIZE
+end // initial
+`ifdef FIRRTL_AFTER_INITIAL
+`FIRRTL_AFTER_INITIAL
+`endif
+`endif // SYNTHESIS
 endmodule
 module ZBTB(
   input         clock,
   input         reset,
-  input  [30:0] io_lu_pc, // @[src/main/scala/fpga/BranchPredictor.scala 118:14]
-  output        io_lu_matches0, // @[src/main/scala/fpga/BranchPredictor.scala 118:14]
-  output [30:0] io_lu_target0, // @[src/main/scala/fpga/BranchPredictor.scala 118:14]
-  output        io_lu_matches1, // @[src/main/scala/fpga/BranchPredictor.scala 118:14]
-  output [30:0] io_lu_target1, // @[src/main/scala/fpga/BranchPredictor.scala 118:14]
-  input         io_up_en, // @[src/main/scala/fpga/BranchPredictor.scala 118:14]
-  input  [30:0] io_up_pc, // @[src/main/scala/fpga/BranchPredictor.scala 118:14]
-  input  [30:0] io_up_target, // @[src/main/scala/fpga/BranchPredictor.scala 118:14]
-  input         io_inv_en, // @[src/main/scala/fpga/BranchPredictor.scala 118:14]
-  input  [30:0] io_inv_pc // @[src/main/scala/fpga/BranchPredictor.scala 118:14]
+  input  [30:0] io_lu_pc, // @[src/main/scala/fpga/BranchPredictor.scala 140:14]
+  output        io_lu_matches0, // @[src/main/scala/fpga/BranchPredictor.scala 140:14]
+  output [30:0] io_lu_target0, // @[src/main/scala/fpga/BranchPredictor.scala 140:14]
+  output        io_lu_matches1, // @[src/main/scala/fpga/BranchPredictor.scala 140:14]
+  output [30:0] io_lu_target1, // @[src/main/scala/fpga/BranchPredictor.scala 140:14]
+  input         io_up_en, // @[src/main/scala/fpga/BranchPredictor.scala 140:14]
+  input  [30:0] io_up_pc, // @[src/main/scala/fpga/BranchPredictor.scala 140:14]
+  input  [30:0] io_up_target, // @[src/main/scala/fpga/BranchPredictor.scala 140:14]
+  input         io_inv_en, // @[src/main/scala/fpga/BranchPredictor.scala 140:14]
+  input  [30:0] io_inv_pc // @[src/main/scala/fpga/BranchPredictor.scala 140:14]
 );
 `ifdef RANDOMIZE_MEM_INIT
   reg [31:0] _RAND_0;
@@ -403,94 +551,95 @@ module ZBTB(
   reg [31:0] _RAND_8;
   reg [31:0] _RAND_9;
 `endif // RANDOMIZE_REG_INIT
-  reg  zbtb0_en [0:7]; // @[src/main/scala/fpga/BranchPredictor.scala 124:18]
-  wire  zbtb0_en_zbtb_entry0_en; // @[src/main/scala/fpga/BranchPredictor.scala 124:18]
-  wire [2:0] zbtb0_en_zbtb_entry0_addr; // @[src/main/scala/fpga/BranchPredictor.scala 124:18]
-  wire  zbtb0_en_zbtb_entry0_data; // @[src/main/scala/fpga/BranchPredictor.scala 124:18]
-  wire  zbtb0_en_MPORT_data; // @[src/main/scala/fpga/BranchPredictor.scala 124:18]
-  wire [2:0] zbtb0_en_MPORT_addr; // @[src/main/scala/fpga/BranchPredictor.scala 124:18]
-  wire  zbtb0_en_MPORT_mask; // @[src/main/scala/fpga/BranchPredictor.scala 124:18]
-  wire  zbtb0_en_MPORT_en; // @[src/main/scala/fpga/BranchPredictor.scala 124:18]
-  wire  zbtb0_en_MPORT_2_data; // @[src/main/scala/fpga/BranchPredictor.scala 124:18]
-  wire [2:0] zbtb0_en_MPORT_2_addr; // @[src/main/scala/fpga/BranchPredictor.scala 124:18]
-  wire  zbtb0_en_MPORT_2_mask; // @[src/main/scala/fpga/BranchPredictor.scala 124:18]
-  wire  zbtb0_en_MPORT_2_en; // @[src/main/scala/fpga/BranchPredictor.scala 124:18]
-  reg [7:0] zbtb0_tag [0:7]; // @[src/main/scala/fpga/BranchPredictor.scala 124:18]
-  wire  zbtb0_tag_zbtb_entry0_en; // @[src/main/scala/fpga/BranchPredictor.scala 124:18]
-  wire [2:0] zbtb0_tag_zbtb_entry0_addr; // @[src/main/scala/fpga/BranchPredictor.scala 124:18]
-  wire [7:0] zbtb0_tag_zbtb_entry0_data; // @[src/main/scala/fpga/BranchPredictor.scala 124:18]
-  wire [7:0] zbtb0_tag_MPORT_data; // @[src/main/scala/fpga/BranchPredictor.scala 124:18]
-  wire [2:0] zbtb0_tag_MPORT_addr; // @[src/main/scala/fpga/BranchPredictor.scala 124:18]
-  wire  zbtb0_tag_MPORT_mask; // @[src/main/scala/fpga/BranchPredictor.scala 124:18]
-  wire  zbtb0_tag_MPORT_en; // @[src/main/scala/fpga/BranchPredictor.scala 124:18]
-  wire [7:0] zbtb0_tag_MPORT_2_data; // @[src/main/scala/fpga/BranchPredictor.scala 124:18]
-  wire [2:0] zbtb0_tag_MPORT_2_addr; // @[src/main/scala/fpga/BranchPredictor.scala 124:18]
-  wire  zbtb0_tag_MPORT_2_mask; // @[src/main/scala/fpga/BranchPredictor.scala 124:18]
-  wire  zbtb0_tag_MPORT_2_en; // @[src/main/scala/fpga/BranchPredictor.scala 124:18]
-  reg [30:0] zbtb0_target [0:7]; // @[src/main/scala/fpga/BranchPredictor.scala 124:18]
-  wire  zbtb0_target_zbtb_entry0_en; // @[src/main/scala/fpga/BranchPredictor.scala 124:18]
-  wire [2:0] zbtb0_target_zbtb_entry0_addr; // @[src/main/scala/fpga/BranchPredictor.scala 124:18]
-  wire [30:0] zbtb0_target_zbtb_entry0_data; // @[src/main/scala/fpga/BranchPredictor.scala 124:18]
-  wire [30:0] zbtb0_target_MPORT_data; // @[src/main/scala/fpga/BranchPredictor.scala 124:18]
-  wire [2:0] zbtb0_target_MPORT_addr; // @[src/main/scala/fpga/BranchPredictor.scala 124:18]
-  wire  zbtb0_target_MPORT_mask; // @[src/main/scala/fpga/BranchPredictor.scala 124:18]
-  wire  zbtb0_target_MPORT_en; // @[src/main/scala/fpga/BranchPredictor.scala 124:18]
-  wire [30:0] zbtb0_target_MPORT_2_data; // @[src/main/scala/fpga/BranchPredictor.scala 124:18]
-  wire [2:0] zbtb0_target_MPORT_2_addr; // @[src/main/scala/fpga/BranchPredictor.scala 124:18]
-  wire  zbtb0_target_MPORT_2_mask; // @[src/main/scala/fpga/BranchPredictor.scala 124:18]
-  wire  zbtb0_target_MPORT_2_en; // @[src/main/scala/fpga/BranchPredictor.scala 124:18]
-  reg  zbtb1_en [0:7]; // @[src/main/scala/fpga/BranchPredictor.scala 125:18]
-  wire  zbtb1_en_zbtb_entry1_en; // @[src/main/scala/fpga/BranchPredictor.scala 125:18]
-  wire [2:0] zbtb1_en_zbtb_entry1_addr; // @[src/main/scala/fpga/BranchPredictor.scala 125:18]
-  wire  zbtb1_en_zbtb_entry1_data; // @[src/main/scala/fpga/BranchPredictor.scala 125:18]
-  wire  zbtb1_en_MPORT_1_data; // @[src/main/scala/fpga/BranchPredictor.scala 125:18]
-  wire [2:0] zbtb1_en_MPORT_1_addr; // @[src/main/scala/fpga/BranchPredictor.scala 125:18]
-  wire  zbtb1_en_MPORT_1_mask; // @[src/main/scala/fpga/BranchPredictor.scala 125:18]
-  wire  zbtb1_en_MPORT_1_en; // @[src/main/scala/fpga/BranchPredictor.scala 125:18]
-  wire  zbtb1_en_MPORT_3_data; // @[src/main/scala/fpga/BranchPredictor.scala 125:18]
-  wire [2:0] zbtb1_en_MPORT_3_addr; // @[src/main/scala/fpga/BranchPredictor.scala 125:18]
-  wire  zbtb1_en_MPORT_3_mask; // @[src/main/scala/fpga/BranchPredictor.scala 125:18]
-  wire  zbtb1_en_MPORT_3_en; // @[src/main/scala/fpga/BranchPredictor.scala 125:18]
-  reg [7:0] zbtb1_tag [0:7]; // @[src/main/scala/fpga/BranchPredictor.scala 125:18]
-  wire  zbtb1_tag_zbtb_entry1_en; // @[src/main/scala/fpga/BranchPredictor.scala 125:18]
-  wire [2:0] zbtb1_tag_zbtb_entry1_addr; // @[src/main/scala/fpga/BranchPredictor.scala 125:18]
-  wire [7:0] zbtb1_tag_zbtb_entry1_data; // @[src/main/scala/fpga/BranchPredictor.scala 125:18]
-  wire [7:0] zbtb1_tag_MPORT_1_data; // @[src/main/scala/fpga/BranchPredictor.scala 125:18]
-  wire [2:0] zbtb1_tag_MPORT_1_addr; // @[src/main/scala/fpga/BranchPredictor.scala 125:18]
-  wire  zbtb1_tag_MPORT_1_mask; // @[src/main/scala/fpga/BranchPredictor.scala 125:18]
-  wire  zbtb1_tag_MPORT_1_en; // @[src/main/scala/fpga/BranchPredictor.scala 125:18]
-  wire [7:0] zbtb1_tag_MPORT_3_data; // @[src/main/scala/fpga/BranchPredictor.scala 125:18]
-  wire [2:0] zbtb1_tag_MPORT_3_addr; // @[src/main/scala/fpga/BranchPredictor.scala 125:18]
-  wire  zbtb1_tag_MPORT_3_mask; // @[src/main/scala/fpga/BranchPredictor.scala 125:18]
-  wire  zbtb1_tag_MPORT_3_en; // @[src/main/scala/fpga/BranchPredictor.scala 125:18]
-  reg [30:0] zbtb1_target [0:7]; // @[src/main/scala/fpga/BranchPredictor.scala 125:18]
-  wire  zbtb1_target_zbtb_entry1_en; // @[src/main/scala/fpga/BranchPredictor.scala 125:18]
-  wire [2:0] zbtb1_target_zbtb_entry1_addr; // @[src/main/scala/fpga/BranchPredictor.scala 125:18]
-  wire [30:0] zbtb1_target_zbtb_entry1_data; // @[src/main/scala/fpga/BranchPredictor.scala 125:18]
-  wire [30:0] zbtb1_target_MPORT_1_data; // @[src/main/scala/fpga/BranchPredictor.scala 125:18]
-  wire [2:0] zbtb1_target_MPORT_1_addr; // @[src/main/scala/fpga/BranchPredictor.scala 125:18]
-  wire  zbtb1_target_MPORT_1_mask; // @[src/main/scala/fpga/BranchPredictor.scala 125:18]
-  wire  zbtb1_target_MPORT_1_en; // @[src/main/scala/fpga/BranchPredictor.scala 125:18]
-  wire [30:0] zbtb1_target_MPORT_3_data; // @[src/main/scala/fpga/BranchPredictor.scala 125:18]
-  wire [2:0] zbtb1_target_MPORT_3_addr; // @[src/main/scala/fpga/BranchPredictor.scala 125:18]
-  wire  zbtb1_target_MPORT_3_mask; // @[src/main/scala/fpga/BranchPredictor.scala 125:18]
-  wire  zbtb1_target_MPORT_3_en; // @[src/main/scala/fpga/BranchPredictor.scala 125:18]
-  wire  matches0 = zbtb0_en_zbtb_entry0_data & zbtb0_tag_zbtb_entry0_data == io_lu_pc[11:4]; // @[src/main/scala/fpga/BranchPredictor.scala 130:33]
-  wire  matches1 = zbtb1_en_zbtb_entry1_data & zbtb1_tag_zbtb_entry1_data == io_lu_pc[11:4]; // @[src/main/scala/fpga/BranchPredictor.scala 132:33]
-  reg  io_lu_matches0_REG; // @[src/main/scala/fpga/BranchPredictor.scala 135:28]
-  reg [30:0] io_lu_target0_REG; // @[src/main/scala/fpga/BranchPredictor.scala 136:28]
-  reg  io_lu_matches1_REG; // @[src/main/scala/fpga/BranchPredictor.scala 137:28]
-  reg [30:0] io_lu_target1_REG; // @[src/main/scala/fpga/BranchPredictor.scala 138:28]
-  wire  _T_1 = ~io_inv_pc[0]; // @[src/main/scala/fpga/BranchPredictor.scala 140:22]
-  wire  _T_8 = ~io_up_pc[0]; // @[src/main/scala/fpga/BranchPredictor.scala 151:21]
-  wire  _T_9 = io_up_en & ~io_up_pc[0]; // @[src/main/scala/fpga/BranchPredictor.scala 151:18]
-  wire [31:0] _T_11 = {io_up_pc,1'h0}; // @[src/main/scala/fpga/BranchPredictor.scala 153:28]
-  wire [31:0] _T_12 = {io_up_target,1'h0}; // @[src/main/scala/fpga/BranchPredictor.scala 153:63]
-  wire  _T_14 = ~reset; // @[src/main/scala/fpga/BranchPredictor.scala 153:11]
-  wire  _T_16 = io_up_en & io_up_pc[0]; // @[src/main/scala/fpga/BranchPredictor.scala 155:18]
+  reg  zbtb0_en [0:7]; // @[src/main/scala/fpga/BranchPredictor.scala 146:18]
+  wire  zbtb0_en_zbtb_entry0_en; // @[src/main/scala/fpga/BranchPredictor.scala 146:18]
+  wire [2:0] zbtb0_en_zbtb_entry0_addr; // @[src/main/scala/fpga/BranchPredictor.scala 146:18]
+  wire  zbtb0_en_zbtb_entry0_data; // @[src/main/scala/fpga/BranchPredictor.scala 146:18]
+  wire  zbtb0_en_MPORT_data; // @[src/main/scala/fpga/BranchPredictor.scala 146:18]
+  wire [2:0] zbtb0_en_MPORT_addr; // @[src/main/scala/fpga/BranchPredictor.scala 146:18]
+  wire  zbtb0_en_MPORT_mask; // @[src/main/scala/fpga/BranchPredictor.scala 146:18]
+  wire  zbtb0_en_MPORT_en; // @[src/main/scala/fpga/BranchPredictor.scala 146:18]
+  wire  zbtb0_en_MPORT_2_data; // @[src/main/scala/fpga/BranchPredictor.scala 146:18]
+  wire [2:0] zbtb0_en_MPORT_2_addr; // @[src/main/scala/fpga/BranchPredictor.scala 146:18]
+  wire  zbtb0_en_MPORT_2_mask; // @[src/main/scala/fpga/BranchPredictor.scala 146:18]
+  wire  zbtb0_en_MPORT_2_en; // @[src/main/scala/fpga/BranchPredictor.scala 146:18]
+  reg [7:0] zbtb0_tag [0:7]; // @[src/main/scala/fpga/BranchPredictor.scala 146:18]
+  wire  zbtb0_tag_zbtb_entry0_en; // @[src/main/scala/fpga/BranchPredictor.scala 146:18]
+  wire [2:0] zbtb0_tag_zbtb_entry0_addr; // @[src/main/scala/fpga/BranchPredictor.scala 146:18]
+  wire [7:0] zbtb0_tag_zbtb_entry0_data; // @[src/main/scala/fpga/BranchPredictor.scala 146:18]
+  wire [7:0] zbtb0_tag_MPORT_data; // @[src/main/scala/fpga/BranchPredictor.scala 146:18]
+  wire [2:0] zbtb0_tag_MPORT_addr; // @[src/main/scala/fpga/BranchPredictor.scala 146:18]
+  wire  zbtb0_tag_MPORT_mask; // @[src/main/scala/fpga/BranchPredictor.scala 146:18]
+  wire  zbtb0_tag_MPORT_en; // @[src/main/scala/fpga/BranchPredictor.scala 146:18]
+  wire [7:0] zbtb0_tag_MPORT_2_data; // @[src/main/scala/fpga/BranchPredictor.scala 146:18]
+  wire [2:0] zbtb0_tag_MPORT_2_addr; // @[src/main/scala/fpga/BranchPredictor.scala 146:18]
+  wire  zbtb0_tag_MPORT_2_mask; // @[src/main/scala/fpga/BranchPredictor.scala 146:18]
+  wire  zbtb0_tag_MPORT_2_en; // @[src/main/scala/fpga/BranchPredictor.scala 146:18]
+  reg [30:0] zbtb0_target [0:7]; // @[src/main/scala/fpga/BranchPredictor.scala 146:18]
+  wire  zbtb0_target_zbtb_entry0_en; // @[src/main/scala/fpga/BranchPredictor.scala 146:18]
+  wire [2:0] zbtb0_target_zbtb_entry0_addr; // @[src/main/scala/fpga/BranchPredictor.scala 146:18]
+  wire [30:0] zbtb0_target_zbtb_entry0_data; // @[src/main/scala/fpga/BranchPredictor.scala 146:18]
+  wire [30:0] zbtb0_target_MPORT_data; // @[src/main/scala/fpga/BranchPredictor.scala 146:18]
+  wire [2:0] zbtb0_target_MPORT_addr; // @[src/main/scala/fpga/BranchPredictor.scala 146:18]
+  wire  zbtb0_target_MPORT_mask; // @[src/main/scala/fpga/BranchPredictor.scala 146:18]
+  wire  zbtb0_target_MPORT_en; // @[src/main/scala/fpga/BranchPredictor.scala 146:18]
+  wire [30:0] zbtb0_target_MPORT_2_data; // @[src/main/scala/fpga/BranchPredictor.scala 146:18]
+  wire [2:0] zbtb0_target_MPORT_2_addr; // @[src/main/scala/fpga/BranchPredictor.scala 146:18]
+  wire  zbtb0_target_MPORT_2_mask; // @[src/main/scala/fpga/BranchPredictor.scala 146:18]
+  wire  zbtb0_target_MPORT_2_en; // @[src/main/scala/fpga/BranchPredictor.scala 146:18]
+  reg  zbtb1_en [0:7]; // @[src/main/scala/fpga/BranchPredictor.scala 147:18]
+  wire  zbtb1_en_zbtb_entry1_en; // @[src/main/scala/fpga/BranchPredictor.scala 147:18]
+  wire [2:0] zbtb1_en_zbtb_entry1_addr; // @[src/main/scala/fpga/BranchPredictor.scala 147:18]
+  wire  zbtb1_en_zbtb_entry1_data; // @[src/main/scala/fpga/BranchPredictor.scala 147:18]
+  wire  zbtb1_en_MPORT_1_data; // @[src/main/scala/fpga/BranchPredictor.scala 147:18]
+  wire [2:0] zbtb1_en_MPORT_1_addr; // @[src/main/scala/fpga/BranchPredictor.scala 147:18]
+  wire  zbtb1_en_MPORT_1_mask; // @[src/main/scala/fpga/BranchPredictor.scala 147:18]
+  wire  zbtb1_en_MPORT_1_en; // @[src/main/scala/fpga/BranchPredictor.scala 147:18]
+  wire  zbtb1_en_MPORT_3_data; // @[src/main/scala/fpga/BranchPredictor.scala 147:18]
+  wire [2:0] zbtb1_en_MPORT_3_addr; // @[src/main/scala/fpga/BranchPredictor.scala 147:18]
+  wire  zbtb1_en_MPORT_3_mask; // @[src/main/scala/fpga/BranchPredictor.scala 147:18]
+  wire  zbtb1_en_MPORT_3_en; // @[src/main/scala/fpga/BranchPredictor.scala 147:18]
+  reg [7:0] zbtb1_tag [0:7]; // @[src/main/scala/fpga/BranchPredictor.scala 147:18]
+  wire  zbtb1_tag_zbtb_entry1_en; // @[src/main/scala/fpga/BranchPredictor.scala 147:18]
+  wire [2:0] zbtb1_tag_zbtb_entry1_addr; // @[src/main/scala/fpga/BranchPredictor.scala 147:18]
+  wire [7:0] zbtb1_tag_zbtb_entry1_data; // @[src/main/scala/fpga/BranchPredictor.scala 147:18]
+  wire [7:0] zbtb1_tag_MPORT_1_data; // @[src/main/scala/fpga/BranchPredictor.scala 147:18]
+  wire [2:0] zbtb1_tag_MPORT_1_addr; // @[src/main/scala/fpga/BranchPredictor.scala 147:18]
+  wire  zbtb1_tag_MPORT_1_mask; // @[src/main/scala/fpga/BranchPredictor.scala 147:18]
+  wire  zbtb1_tag_MPORT_1_en; // @[src/main/scala/fpga/BranchPredictor.scala 147:18]
+  wire [7:0] zbtb1_tag_MPORT_3_data; // @[src/main/scala/fpga/BranchPredictor.scala 147:18]
+  wire [2:0] zbtb1_tag_MPORT_3_addr; // @[src/main/scala/fpga/BranchPredictor.scala 147:18]
+  wire  zbtb1_tag_MPORT_3_mask; // @[src/main/scala/fpga/BranchPredictor.scala 147:18]
+  wire  zbtb1_tag_MPORT_3_en; // @[src/main/scala/fpga/BranchPredictor.scala 147:18]
+  reg [30:0] zbtb1_target [0:7]; // @[src/main/scala/fpga/BranchPredictor.scala 147:18]
+  wire  zbtb1_target_zbtb_entry1_en; // @[src/main/scala/fpga/BranchPredictor.scala 147:18]
+  wire [2:0] zbtb1_target_zbtb_entry1_addr; // @[src/main/scala/fpga/BranchPredictor.scala 147:18]
+  wire [30:0] zbtb1_target_zbtb_entry1_data; // @[src/main/scala/fpga/BranchPredictor.scala 147:18]
+  wire [30:0] zbtb1_target_MPORT_1_data; // @[src/main/scala/fpga/BranchPredictor.scala 147:18]
+  wire [2:0] zbtb1_target_MPORT_1_addr; // @[src/main/scala/fpga/BranchPredictor.scala 147:18]
+  wire  zbtb1_target_MPORT_1_mask; // @[src/main/scala/fpga/BranchPredictor.scala 147:18]
+  wire  zbtb1_target_MPORT_1_en; // @[src/main/scala/fpga/BranchPredictor.scala 147:18]
+  wire [30:0] zbtb1_target_MPORT_3_data; // @[src/main/scala/fpga/BranchPredictor.scala 147:18]
+  wire [2:0] zbtb1_target_MPORT_3_addr; // @[src/main/scala/fpga/BranchPredictor.scala 147:18]
+  wire  zbtb1_target_MPORT_3_mask; // @[src/main/scala/fpga/BranchPredictor.scala 147:18]
+  wire  zbtb1_target_MPORT_3_en; // @[src/main/scala/fpga/BranchPredictor.scala 147:18]
+  wire  matches0 = zbtb0_en_zbtb_entry0_data & zbtb0_tag_zbtb_entry0_data == io_lu_pc[11:4]; // @[src/main/scala/fpga/BranchPredictor.scala 152:33]
+  wire  matches1 = zbtb1_en_zbtb_entry1_data & zbtb1_tag_zbtb_entry1_data == io_lu_pc[11:4]; // @[src/main/scala/fpga/BranchPredictor.scala 154:33]
+  reg  io_lu_matches0_REG; // @[src/main/scala/fpga/BranchPredictor.scala 157:28]
+  reg [30:0] io_lu_target0_REG; // @[src/main/scala/fpga/BranchPredictor.scala 158:28]
+  reg  io_lu_matches1_REG; // @[src/main/scala/fpga/BranchPredictor.scala 159:28]
+  reg [30:0] io_lu_target1_REG; // @[src/main/scala/fpga/BranchPredictor.scala 160:28]
+  wire  _T_1 = ~io_inv_pc[0]; // @[src/main/scala/fpga/BranchPredictor.scala 162:22]
+  wire  _T_2 = io_inv_en & ~io_inv_pc[0]; // @[src/main/scala/fpga/BranchPredictor.scala 162:19]
+  wire  _T_6 = ~reset; // @[src/main/scala/fpga/BranchPredictor.scala 164:11]
+  wire  _T_8 = io_inv_en & io_inv_pc[0]; // @[src/main/scala/fpga/BranchPredictor.scala 166:19]
+  wire  _T_14 = ~io_up_pc[0]; // @[src/main/scala/fpga/BranchPredictor.scala 175:21]
+  wire  _T_15 = io_up_en & ~io_up_pc[0]; // @[src/main/scala/fpga/BranchPredictor.scala 175:18]
+  wire [31:0] _T_18 = {io_up_target,1'h0}; // @[src/main/scala/fpga/BranchPredictor.scala 177:63]
+  wire  _T_22 = io_up_en & io_up_pc[0]; // @[src/main/scala/fpga/BranchPredictor.scala 179:18]
   assign zbtb0_en_zbtb_entry0_en = 1'h1;
   assign zbtb0_en_zbtb_entry0_addr = io_lu_pc[3:1];
-  assign zbtb0_en_zbtb_entry0_data = zbtb0_en[zbtb0_en_zbtb_entry0_addr]; // @[src/main/scala/fpga/BranchPredictor.scala 124:18]
+  assign zbtb0_en_zbtb_entry0_data = zbtb0_en[zbtb0_en_zbtb_entry0_addr]; // @[src/main/scala/fpga/BranchPredictor.scala 146:18]
   assign zbtb0_en_MPORT_data = 1'h0;
   assign zbtb0_en_MPORT_addr = io_inv_pc[3:1];
   assign zbtb0_en_MPORT_mask = 1'h1;
@@ -498,10 +647,10 @@ module ZBTB(
   assign zbtb0_en_MPORT_2_data = 1'h1;
   assign zbtb0_en_MPORT_2_addr = io_up_pc[3:1];
   assign zbtb0_en_MPORT_2_mask = 1'h1;
-  assign zbtb0_en_MPORT_2_en = io_up_en & _T_8;
+  assign zbtb0_en_MPORT_2_en = io_up_en & _T_14;
   assign zbtb0_tag_zbtb_entry0_en = 1'h1;
   assign zbtb0_tag_zbtb_entry0_addr = io_lu_pc[3:1];
-  assign zbtb0_tag_zbtb_entry0_data = zbtb0_tag[zbtb0_tag_zbtb_entry0_addr]; // @[src/main/scala/fpga/BranchPredictor.scala 124:18]
+  assign zbtb0_tag_zbtb_entry0_data = zbtb0_tag[zbtb0_tag_zbtb_entry0_addr]; // @[src/main/scala/fpga/BranchPredictor.scala 146:18]
   assign zbtb0_tag_MPORT_data = 8'h0;
   assign zbtb0_tag_MPORT_addr = io_inv_pc[3:1];
   assign zbtb0_tag_MPORT_mask = 1'h0;
@@ -509,10 +658,10 @@ module ZBTB(
   assign zbtb0_tag_MPORT_2_data = io_up_pc[11:4];
   assign zbtb0_tag_MPORT_2_addr = io_up_pc[3:1];
   assign zbtb0_tag_MPORT_2_mask = 1'h1;
-  assign zbtb0_tag_MPORT_2_en = io_up_en & _T_8;
+  assign zbtb0_tag_MPORT_2_en = io_up_en & _T_14;
   assign zbtb0_target_zbtb_entry0_en = 1'h1;
   assign zbtb0_target_zbtb_entry0_addr = io_lu_pc[3:1];
-  assign zbtb0_target_zbtb_entry0_data = zbtb0_target[zbtb0_target_zbtb_entry0_addr]; // @[src/main/scala/fpga/BranchPredictor.scala 124:18]
+  assign zbtb0_target_zbtb_entry0_data = zbtb0_target[zbtb0_target_zbtb_entry0_addr]; // @[src/main/scala/fpga/BranchPredictor.scala 146:18]
   assign zbtb0_target_MPORT_data = 31'h0;
   assign zbtb0_target_MPORT_addr = io_inv_pc[3:1];
   assign zbtb0_target_MPORT_mask = 1'h0;
@@ -520,10 +669,10 @@ module ZBTB(
   assign zbtb0_target_MPORT_2_data = io_up_target;
   assign zbtb0_target_MPORT_2_addr = io_up_pc[3:1];
   assign zbtb0_target_MPORT_2_mask = 1'h1;
-  assign zbtb0_target_MPORT_2_en = io_up_en & _T_8;
+  assign zbtb0_target_MPORT_2_en = io_up_en & _T_14;
   assign zbtb1_en_zbtb_entry1_en = 1'h1;
   assign zbtb1_en_zbtb_entry1_addr = io_lu_pc[3:1];
-  assign zbtb1_en_zbtb_entry1_data = zbtb1_en[zbtb1_en_zbtb_entry1_addr]; // @[src/main/scala/fpga/BranchPredictor.scala 125:18]
+  assign zbtb1_en_zbtb_entry1_data = zbtb1_en[zbtb1_en_zbtb_entry1_addr]; // @[src/main/scala/fpga/BranchPredictor.scala 147:18]
   assign zbtb1_en_MPORT_1_data = 1'h0;
   assign zbtb1_en_MPORT_1_addr = io_inv_pc[3:1];
   assign zbtb1_en_MPORT_1_mask = 1'h1;
@@ -534,7 +683,7 @@ module ZBTB(
   assign zbtb1_en_MPORT_3_en = io_up_en & io_up_pc[0];
   assign zbtb1_tag_zbtb_entry1_en = 1'h1;
   assign zbtb1_tag_zbtb_entry1_addr = io_lu_pc[3:1];
-  assign zbtb1_tag_zbtb_entry1_data = zbtb1_tag[zbtb1_tag_zbtb_entry1_addr]; // @[src/main/scala/fpga/BranchPredictor.scala 125:18]
+  assign zbtb1_tag_zbtb_entry1_data = zbtb1_tag[zbtb1_tag_zbtb_entry1_addr]; // @[src/main/scala/fpga/BranchPredictor.scala 147:18]
   assign zbtb1_tag_MPORT_1_data = 8'h0;
   assign zbtb1_tag_MPORT_1_addr = io_inv_pc[3:1];
   assign zbtb1_tag_MPORT_1_mask = 1'h0;
@@ -545,7 +694,7 @@ module ZBTB(
   assign zbtb1_tag_MPORT_3_en = io_up_en & io_up_pc[0];
   assign zbtb1_target_zbtb_entry1_en = 1'h1;
   assign zbtb1_target_zbtb_entry1_addr = io_lu_pc[3:1];
-  assign zbtb1_target_zbtb_entry1_data = zbtb1_target[zbtb1_target_zbtb_entry1_addr]; // @[src/main/scala/fpga/BranchPredictor.scala 125:18]
+  assign zbtb1_target_zbtb_entry1_data = zbtb1_target[zbtb1_target_zbtb_entry1_addr]; // @[src/main/scala/fpga/BranchPredictor.scala 147:18]
   assign zbtb1_target_MPORT_1_data = 31'h0;
   assign zbtb1_target_MPORT_1_addr = io_inv_pc[3:1];
   assign zbtb1_target_MPORT_1_mask = 1'h0;
@@ -554,73 +703,73 @@ module ZBTB(
   assign zbtb1_target_MPORT_3_addr = io_up_pc[3:1];
   assign zbtb1_target_MPORT_3_mask = 1'h1;
   assign zbtb1_target_MPORT_3_en = io_up_en & io_up_pc[0];
-  assign io_lu_matches0 = io_lu_matches0_REG; // @[src/main/scala/fpga/BranchPredictor.scala 135:18]
-  assign io_lu_target0 = io_lu_target0_REG; // @[src/main/scala/fpga/BranchPredictor.scala 136:18]
-  assign io_lu_matches1 = io_lu_matches1_REG; // @[src/main/scala/fpga/BranchPredictor.scala 137:18]
-  assign io_lu_target1 = io_lu_target1_REG; // @[src/main/scala/fpga/BranchPredictor.scala 138:18]
+  assign io_lu_matches0 = io_lu_matches0_REG; // @[src/main/scala/fpga/BranchPredictor.scala 157:18]
+  assign io_lu_target0 = io_lu_target0_REG; // @[src/main/scala/fpga/BranchPredictor.scala 158:18]
+  assign io_lu_matches1 = io_lu_matches1_REG; // @[src/main/scala/fpga/BranchPredictor.scala 159:18]
+  assign io_lu_target1 = io_lu_target1_REG; // @[src/main/scala/fpga/BranchPredictor.scala 160:18]
   always @(posedge clock) begin
     if (zbtb0_en_MPORT_en & zbtb0_en_MPORT_mask) begin
-      zbtb0_en[zbtb0_en_MPORT_addr] <= zbtb0_en_MPORT_data; // @[src/main/scala/fpga/BranchPredictor.scala 124:18]
+      zbtb0_en[zbtb0_en_MPORT_addr] <= zbtb0_en_MPORT_data; // @[src/main/scala/fpga/BranchPredictor.scala 146:18]
     end
     if (zbtb0_en_MPORT_2_en & zbtb0_en_MPORT_2_mask) begin
-      zbtb0_en[zbtb0_en_MPORT_2_addr] <= zbtb0_en_MPORT_2_data; // @[src/main/scala/fpga/BranchPredictor.scala 124:18]
+      zbtb0_en[zbtb0_en_MPORT_2_addr] <= zbtb0_en_MPORT_2_data; // @[src/main/scala/fpga/BranchPredictor.scala 146:18]
     end
     if (zbtb0_tag_MPORT_en & zbtb0_tag_MPORT_mask) begin
-      zbtb0_tag[zbtb0_tag_MPORT_addr] <= zbtb0_tag_MPORT_data; // @[src/main/scala/fpga/BranchPredictor.scala 124:18]
+      zbtb0_tag[zbtb0_tag_MPORT_addr] <= zbtb0_tag_MPORT_data; // @[src/main/scala/fpga/BranchPredictor.scala 146:18]
     end
     if (zbtb0_tag_MPORT_2_en & zbtb0_tag_MPORT_2_mask) begin
-      zbtb0_tag[zbtb0_tag_MPORT_2_addr] <= zbtb0_tag_MPORT_2_data; // @[src/main/scala/fpga/BranchPredictor.scala 124:18]
+      zbtb0_tag[zbtb0_tag_MPORT_2_addr] <= zbtb0_tag_MPORT_2_data; // @[src/main/scala/fpga/BranchPredictor.scala 146:18]
     end
     if (zbtb0_target_MPORT_en & zbtb0_target_MPORT_mask) begin
-      zbtb0_target[zbtb0_target_MPORT_addr] <= zbtb0_target_MPORT_data; // @[src/main/scala/fpga/BranchPredictor.scala 124:18]
+      zbtb0_target[zbtb0_target_MPORT_addr] <= zbtb0_target_MPORT_data; // @[src/main/scala/fpga/BranchPredictor.scala 146:18]
     end
     if (zbtb0_target_MPORT_2_en & zbtb0_target_MPORT_2_mask) begin
-      zbtb0_target[zbtb0_target_MPORT_2_addr] <= zbtb0_target_MPORT_2_data; // @[src/main/scala/fpga/BranchPredictor.scala 124:18]
+      zbtb0_target[zbtb0_target_MPORT_2_addr] <= zbtb0_target_MPORT_2_data; // @[src/main/scala/fpga/BranchPredictor.scala 146:18]
     end
     if (zbtb1_en_MPORT_1_en & zbtb1_en_MPORT_1_mask) begin
-      zbtb1_en[zbtb1_en_MPORT_1_addr] <= zbtb1_en_MPORT_1_data; // @[src/main/scala/fpga/BranchPredictor.scala 125:18]
+      zbtb1_en[zbtb1_en_MPORT_1_addr] <= zbtb1_en_MPORT_1_data; // @[src/main/scala/fpga/BranchPredictor.scala 147:18]
     end
     if (zbtb1_en_MPORT_3_en & zbtb1_en_MPORT_3_mask) begin
-      zbtb1_en[zbtb1_en_MPORT_3_addr] <= zbtb1_en_MPORT_3_data; // @[src/main/scala/fpga/BranchPredictor.scala 125:18]
+      zbtb1_en[zbtb1_en_MPORT_3_addr] <= zbtb1_en_MPORT_3_data; // @[src/main/scala/fpga/BranchPredictor.scala 147:18]
     end
     if (zbtb1_tag_MPORT_1_en & zbtb1_tag_MPORT_1_mask) begin
-      zbtb1_tag[zbtb1_tag_MPORT_1_addr] <= zbtb1_tag_MPORT_1_data; // @[src/main/scala/fpga/BranchPredictor.scala 125:18]
+      zbtb1_tag[zbtb1_tag_MPORT_1_addr] <= zbtb1_tag_MPORT_1_data; // @[src/main/scala/fpga/BranchPredictor.scala 147:18]
     end
     if (zbtb1_tag_MPORT_3_en & zbtb1_tag_MPORT_3_mask) begin
-      zbtb1_tag[zbtb1_tag_MPORT_3_addr] <= zbtb1_tag_MPORT_3_data; // @[src/main/scala/fpga/BranchPredictor.scala 125:18]
+      zbtb1_tag[zbtb1_tag_MPORT_3_addr] <= zbtb1_tag_MPORT_3_data; // @[src/main/scala/fpga/BranchPredictor.scala 147:18]
     end
     if (zbtb1_target_MPORT_1_en & zbtb1_target_MPORT_1_mask) begin
-      zbtb1_target[zbtb1_target_MPORT_1_addr] <= zbtb1_target_MPORT_1_data; // @[src/main/scala/fpga/BranchPredictor.scala 125:18]
+      zbtb1_target[zbtb1_target_MPORT_1_addr] <= zbtb1_target_MPORT_1_data; // @[src/main/scala/fpga/BranchPredictor.scala 147:18]
     end
     if (zbtb1_target_MPORT_3_en & zbtb1_target_MPORT_3_mask) begin
-      zbtb1_target[zbtb1_target_MPORT_3_addr] <= zbtb1_target_MPORT_3_data; // @[src/main/scala/fpga/BranchPredictor.scala 125:18]
+      zbtb1_target[zbtb1_target_MPORT_3_addr] <= zbtb1_target_MPORT_3_data; // @[src/main/scala/fpga/BranchPredictor.scala 147:18]
     end
-    if (reset) begin // @[src/main/scala/fpga/BranchPredictor.scala 135:28]
-      io_lu_matches0_REG <= 1'h0; // @[src/main/scala/fpga/BranchPredictor.scala 135:28]
+    if (reset) begin // @[src/main/scala/fpga/BranchPredictor.scala 157:28]
+      io_lu_matches0_REG <= 1'h0; // @[src/main/scala/fpga/BranchPredictor.scala 157:28]
     end else begin
-      io_lu_matches0_REG <= matches0; // @[src/main/scala/fpga/BranchPredictor.scala 135:28]
+      io_lu_matches0_REG <= matches0; // @[src/main/scala/fpga/BranchPredictor.scala 157:28]
     end
-    if (reset) begin // @[src/main/scala/fpga/BranchPredictor.scala 136:28]
-      io_lu_target0_REG <= 31'h0; // @[src/main/scala/fpga/BranchPredictor.scala 136:28]
+    if (reset) begin // @[src/main/scala/fpga/BranchPredictor.scala 158:28]
+      io_lu_target0_REG <= 31'h0; // @[src/main/scala/fpga/BranchPredictor.scala 158:28]
     end else begin
-      io_lu_target0_REG <= zbtb0_target_zbtb_entry0_data; // @[src/main/scala/fpga/BranchPredictor.scala 136:28]
+      io_lu_target0_REG <= zbtb0_target_zbtb_entry0_data; // @[src/main/scala/fpga/BranchPredictor.scala 158:28]
     end
-    if (reset) begin // @[src/main/scala/fpga/BranchPredictor.scala 137:28]
-      io_lu_matches1_REG <= 1'h0; // @[src/main/scala/fpga/BranchPredictor.scala 137:28]
+    if (reset) begin // @[src/main/scala/fpga/BranchPredictor.scala 159:28]
+      io_lu_matches1_REG <= 1'h0; // @[src/main/scala/fpga/BranchPredictor.scala 159:28]
     end else begin
-      io_lu_matches1_REG <= matches1; // @[src/main/scala/fpga/BranchPredictor.scala 137:28]
+      io_lu_matches1_REG <= matches1; // @[src/main/scala/fpga/BranchPredictor.scala 159:28]
     end
-    if (reset) begin // @[src/main/scala/fpga/BranchPredictor.scala 138:28]
-      io_lu_target1_REG <= 31'h0; // @[src/main/scala/fpga/BranchPredictor.scala 138:28]
+    if (reset) begin // @[src/main/scala/fpga/BranchPredictor.scala 160:28]
+      io_lu_target1_REG <= 31'h0; // @[src/main/scala/fpga/BranchPredictor.scala 160:28]
     end else begin
-      io_lu_target1_REG <= zbtb1_target_zbtb_entry1_data; // @[src/main/scala/fpga/BranchPredictor.scala 138:28]
+      io_lu_target1_REG <= zbtb1_target_zbtb_entry1_data; // @[src/main/scala/fpga/BranchPredictor.scala 160:28]
     end
     `ifndef SYNTHESIS
     `ifdef PRINTF_COND
       if (`PRINTF_COND) begin
     `endif
-        if (_T_9 & ~reset) begin
-          $fwrite(32'h80000002,"zbtb0(0x%x) := 0x%x\n",{io_up_pc,1'h0},{io_up_target,1'h0}); // @[src/main/scala/fpga/BranchPredictor.scala 153:11]
+        if (_T_2 & ~reset) begin
+          $fwrite(32'h80000002,"zbtb0(0x%x) inv\n",{io_inv_pc,1'h0}); // @[src/main/scala/fpga/BranchPredictor.scala 164:11]
         end
     `ifdef PRINTF_COND
       end
@@ -630,8 +779,30 @@ module ZBTB(
     `ifdef PRINTF_COND
       if (`PRINTF_COND) begin
     `endif
-        if (_T_16 & _T_14) begin
-          $fwrite(32'h80000002,"zbtb1(0x%x) := 0x%x\n",_T_11,_T_12); // @[src/main/scala/fpga/BranchPredictor.scala 157:11]
+        if (_T_8 & _T_6) begin
+          $fwrite(32'h80000002,"zbtb1(0x%x) inv\n",{io_inv_pc,1'h1}); // @[src/main/scala/fpga/BranchPredictor.scala 168:11]
+        end
+    `ifdef PRINTF_COND
+      end
+    `endif
+    `endif // SYNTHESIS
+    `ifndef SYNTHESIS
+    `ifdef PRINTF_COND
+      if (`PRINTF_COND) begin
+    `endif
+        if (_T_15 & _T_6) begin
+          $fwrite(32'h80000002,"zbtb0(0x%x) := 0x%x\n",{io_up_pc,1'h0},{io_up_target,1'h0}); // @[src/main/scala/fpga/BranchPredictor.scala 177:11]
+        end
+    `ifdef PRINTF_COND
+      end
+    `endif
+    `endif // SYNTHESIS
+    `ifndef SYNTHESIS
+    `ifdef PRINTF_COND
+      if (`PRINTF_COND) begin
+    `endif
+        if (_T_22 & _T_6) begin
+          $fwrite(32'h80000002,"zbtb1(0x%x) := 0x%x\n",{io_up_pc,1'h1},_T_18); // @[src/main/scala/fpga/BranchPredictor.scala 181:11]
         end
     `ifdef PRINTF_COND
       end
@@ -713,20 +884,20 @@ endmodule
 module RAS(
   input         clock,
   input         reset,
-  output [30:0] io_top_ret_pc, // @[src/main/scala/fpga/BranchPredictor.scala 234:14]
-  output [2:0]  io_top_index, // @[src/main/scala/fpga/BranchPredictor.scala 234:14]
-  input         io_ret1_en, // @[src/main/scala/fpga/BranchPredictor.scala 234:14]
-  input  [2:0]  io_ret1_index, // @[src/main/scala/fpga/BranchPredictor.scala 234:14]
-  input         io_call1_en, // @[src/main/scala/fpga/BranchPredictor.scala 234:14]
-  input  [2:0]  io_call1_index, // @[src/main/scala/fpga/BranchPredictor.scala 234:14]
-  input  [30:0] io_call1_ret_pc, // @[src/main/scala/fpga/BranchPredictor.scala 234:14]
-  input         io_up_en, // @[src/main/scala/fpga/BranchPredictor.scala 234:14]
-  input  [2:0]  io_up_index, // @[src/main/scala/fpga/BranchPredictor.scala 234:14]
-  input         io_ret2_en, // @[src/main/scala/fpga/BranchPredictor.scala 234:14]
-  input  [2:0]  io_ret2_index, // @[src/main/scala/fpga/BranchPredictor.scala 234:14]
-  input         io_call2_en, // @[src/main/scala/fpga/BranchPredictor.scala 234:14]
-  input  [2:0]  io_call2_index, // @[src/main/scala/fpga/BranchPredictor.scala 234:14]
-  input  [30:0] io_call2_ret_pc // @[src/main/scala/fpga/BranchPredictor.scala 234:14]
+  output [30:0] io_top_ret_pc, // @[src/main/scala/fpga/BranchPredictor.scala 301:14]
+  output [2:0]  io_top_index, // @[src/main/scala/fpga/BranchPredictor.scala 301:14]
+  input         io_ret1_en, // @[src/main/scala/fpga/BranchPredictor.scala 301:14]
+  input  [2:0]  io_ret1_index, // @[src/main/scala/fpga/BranchPredictor.scala 301:14]
+  input         io_call1_en, // @[src/main/scala/fpga/BranchPredictor.scala 301:14]
+  input  [2:0]  io_call1_index, // @[src/main/scala/fpga/BranchPredictor.scala 301:14]
+  input  [30:0] io_call1_ret_pc, // @[src/main/scala/fpga/BranchPredictor.scala 301:14]
+  input         io_up_en, // @[src/main/scala/fpga/BranchPredictor.scala 301:14]
+  input  [2:0]  io_up_index, // @[src/main/scala/fpga/BranchPredictor.scala 301:14]
+  input         io_ret2_en, // @[src/main/scala/fpga/BranchPredictor.scala 301:14]
+  input  [2:0]  io_ret2_index, // @[src/main/scala/fpga/BranchPredictor.scala 301:14]
+  input         io_call2_en, // @[src/main/scala/fpga/BranchPredictor.scala 301:14]
+  input  [2:0]  io_call2_index, // @[src/main/scala/fpga/BranchPredictor.scala 301:14]
+  input  [30:0] io_call2_ret_pc // @[src/main/scala/fpga/BranchPredictor.scala 301:14]
 );
 `ifdef RANDOMIZE_MEM_INIT
   reg [31:0] _RAND_0;
@@ -736,39 +907,39 @@ module RAS(
   reg [31:0] _RAND_2;
   reg [31:0] _RAND_3;
 `endif // RANDOMIZE_REG_INIT
-  reg [30:0] ras [0:7]; // @[src/main/scala/fpga/BranchPredictor.scala 243:18]
-  wire  ras_ret_pc_MPORT_en; // @[src/main/scala/fpga/BranchPredictor.scala 243:18]
-  wire [2:0] ras_ret_pc_MPORT_addr; // @[src/main/scala/fpga/BranchPredictor.scala 243:18]
-  wire [30:0] ras_ret_pc_MPORT_data; // @[src/main/scala/fpga/BranchPredictor.scala 243:18]
-  wire  ras_MPORT_en; // @[src/main/scala/fpga/BranchPredictor.scala 243:18]
-  wire [2:0] ras_MPORT_addr; // @[src/main/scala/fpga/BranchPredictor.scala 243:18]
-  wire [30:0] ras_MPORT_data; // @[src/main/scala/fpga/BranchPredictor.scala 243:18]
-  wire  ras_MPORT_2_en; // @[src/main/scala/fpga/BranchPredictor.scala 243:18]
-  wire [2:0] ras_MPORT_2_addr; // @[src/main/scala/fpga/BranchPredictor.scala 243:18]
-  wire [30:0] ras_MPORT_2_data; // @[src/main/scala/fpga/BranchPredictor.scala 243:18]
-  wire [30:0] ras_MPORT_1_data; // @[src/main/scala/fpga/BranchPredictor.scala 243:18]
-  wire [2:0] ras_MPORT_1_addr; // @[src/main/scala/fpga/BranchPredictor.scala 243:18]
-  wire  ras_MPORT_1_mask; // @[src/main/scala/fpga/BranchPredictor.scala 243:18]
-  wire  ras_MPORT_1_en; // @[src/main/scala/fpga/BranchPredictor.scala 243:18]
-  wire [30:0] ras_MPORT_3_data; // @[src/main/scala/fpga/BranchPredictor.scala 243:18]
-  wire [2:0] ras_MPORT_3_addr; // @[src/main/scala/fpga/BranchPredictor.scala 243:18]
-  wire  ras_MPORT_3_mask; // @[src/main/scala/fpga/BranchPredictor.scala 243:18]
-  wire  ras_MPORT_3_en; // @[src/main/scala/fpga/BranchPredictor.scala 243:18]
-  reg [2:0] index; // @[src/main/scala/fpga/BranchPredictor.scala 244:22]
-  reg [30:0] ret_pc; // @[src/main/scala/fpga/BranchPredictor.scala 246:26]
-  reg [2:0] ret_index; // @[src/main/scala/fpga/BranchPredictor.scala 247:26]
-  wire  _T_2 = ~reset; // @[src/main/scala/fpga/BranchPredictor.scala 255:11]
-  wire [2:0] _GEN_0 = io_ret1_en ? io_ret1_index : index; // @[src/main/scala/fpga/BranchPredictor.scala 253:21 254:11 244:22]
-  wire [2:0] _GEN_4 = io_call1_en ? io_call1_index : _GEN_0; // @[src/main/scala/fpga/BranchPredictor.scala 258:22 259:11]
+  reg [30:0] ras [0:7]; // @[src/main/scala/fpga/BranchPredictor.scala 310:18]
+  wire  ras_ret_pc_MPORT_en; // @[src/main/scala/fpga/BranchPredictor.scala 310:18]
+  wire [2:0] ras_ret_pc_MPORT_addr; // @[src/main/scala/fpga/BranchPredictor.scala 310:18]
+  wire [30:0] ras_ret_pc_MPORT_data; // @[src/main/scala/fpga/BranchPredictor.scala 310:18]
+  wire  ras_MPORT_en; // @[src/main/scala/fpga/BranchPredictor.scala 310:18]
+  wire [2:0] ras_MPORT_addr; // @[src/main/scala/fpga/BranchPredictor.scala 310:18]
+  wire [30:0] ras_MPORT_data; // @[src/main/scala/fpga/BranchPredictor.scala 310:18]
+  wire  ras_MPORT_2_en; // @[src/main/scala/fpga/BranchPredictor.scala 310:18]
+  wire [2:0] ras_MPORT_2_addr; // @[src/main/scala/fpga/BranchPredictor.scala 310:18]
+  wire [30:0] ras_MPORT_2_data; // @[src/main/scala/fpga/BranchPredictor.scala 310:18]
+  wire [30:0] ras_MPORT_1_data; // @[src/main/scala/fpga/BranchPredictor.scala 310:18]
+  wire [2:0] ras_MPORT_1_addr; // @[src/main/scala/fpga/BranchPredictor.scala 310:18]
+  wire  ras_MPORT_1_mask; // @[src/main/scala/fpga/BranchPredictor.scala 310:18]
+  wire  ras_MPORT_1_en; // @[src/main/scala/fpga/BranchPredictor.scala 310:18]
+  wire [30:0] ras_MPORT_3_data; // @[src/main/scala/fpga/BranchPredictor.scala 310:18]
+  wire [2:0] ras_MPORT_3_addr; // @[src/main/scala/fpga/BranchPredictor.scala 310:18]
+  wire  ras_MPORT_3_mask; // @[src/main/scala/fpga/BranchPredictor.scala 310:18]
+  wire  ras_MPORT_3_en; // @[src/main/scala/fpga/BranchPredictor.scala 310:18]
+  reg [2:0] index; // @[src/main/scala/fpga/BranchPredictor.scala 311:22]
+  reg [30:0] ret_pc; // @[src/main/scala/fpga/BranchPredictor.scala 313:26]
+  reg [2:0] ret_index; // @[src/main/scala/fpga/BranchPredictor.scala 314:26]
+  wire  _T_2 = ~reset; // @[src/main/scala/fpga/BranchPredictor.scala 322:11]
+  wire [2:0] _GEN_0 = io_ret1_en ? io_ret1_index : index; // @[src/main/scala/fpga/BranchPredictor.scala 320:21 321:11 311:22]
+  wire [2:0] _GEN_4 = io_call1_en ? io_call1_index : _GEN_0; // @[src/main/scala/fpga/BranchPredictor.scala 325:22 326:11]
   assign ras_ret_pc_MPORT_en = 1'h1;
   assign ras_ret_pc_MPORT_addr = index;
-  assign ras_ret_pc_MPORT_data = ras[ras_ret_pc_MPORT_addr]; // @[src/main/scala/fpga/BranchPredictor.scala 243:18]
+  assign ras_ret_pc_MPORT_data = ras[ras_ret_pc_MPORT_addr]; // @[src/main/scala/fpga/BranchPredictor.scala 310:18]
   assign ras_MPORT_en = io_ret1_en;
   assign ras_MPORT_addr = index;
-  assign ras_MPORT_data = ras[ras_MPORT_addr]; // @[src/main/scala/fpga/BranchPredictor.scala 243:18]
+  assign ras_MPORT_data = ras[ras_MPORT_addr]; // @[src/main/scala/fpga/BranchPredictor.scala 310:18]
   assign ras_MPORT_2_en = io_ret2_en;
   assign ras_MPORT_2_addr = index;
-  assign ras_MPORT_2_data = ras[ras_MPORT_2_addr]; // @[src/main/scala/fpga/BranchPredictor.scala 243:18]
+  assign ras_MPORT_2_data = ras[ras_MPORT_2_addr]; // @[src/main/scala/fpga/BranchPredictor.scala 310:18]
   assign ras_MPORT_1_data = io_call1_ret_pc;
   assign ras_MPORT_1_addr = io_call1_index;
   assign ras_MPORT_1_mask = 1'h1;
@@ -777,42 +948,42 @@ module RAS(
   assign ras_MPORT_3_addr = io_call2_index;
   assign ras_MPORT_3_mask = 1'h1;
   assign ras_MPORT_3_en = io_call2_en;
-  assign io_top_ret_pc = ret_pc; // @[src/main/scala/fpga/BranchPredictor.scala 250:17]
-  assign io_top_index = ret_index; // @[src/main/scala/fpga/BranchPredictor.scala 251:17]
+  assign io_top_ret_pc = ret_pc; // @[src/main/scala/fpga/BranchPredictor.scala 317:17]
+  assign io_top_index = ret_index; // @[src/main/scala/fpga/BranchPredictor.scala 318:17]
   always @(posedge clock) begin
     if (ras_MPORT_1_en & ras_MPORT_1_mask) begin
-      ras[ras_MPORT_1_addr] <= ras_MPORT_1_data; // @[src/main/scala/fpga/BranchPredictor.scala 243:18]
+      ras[ras_MPORT_1_addr] <= ras_MPORT_1_data; // @[src/main/scala/fpga/BranchPredictor.scala 310:18]
     end
     if (ras_MPORT_3_en & ras_MPORT_3_mask) begin
-      ras[ras_MPORT_3_addr] <= ras_MPORT_3_data; // @[src/main/scala/fpga/BranchPredictor.scala 243:18]
+      ras[ras_MPORT_3_addr] <= ras_MPORT_3_data; // @[src/main/scala/fpga/BranchPredictor.scala 310:18]
     end
-    if (reset) begin // @[src/main/scala/fpga/BranchPredictor.scala 244:22]
-      index <= 3'h0; // @[src/main/scala/fpga/BranchPredictor.scala 244:22]
-    end else if (io_call2_en) begin // @[src/main/scala/fpga/BranchPredictor.scala 274:22]
-      index <= io_call2_index; // @[src/main/scala/fpga/BranchPredictor.scala 275:11]
-    end else if (io_ret2_en) begin // @[src/main/scala/fpga/BranchPredictor.scala 269:21]
-      index <= io_ret2_index; // @[src/main/scala/fpga/BranchPredictor.scala 270:11]
-    end else if (io_up_en) begin // @[src/main/scala/fpga/BranchPredictor.scala 264:19]
-      index <= io_up_index; // @[src/main/scala/fpga/BranchPredictor.scala 265:11]
+    if (reset) begin // @[src/main/scala/fpga/BranchPredictor.scala 311:22]
+      index <= 3'h0; // @[src/main/scala/fpga/BranchPredictor.scala 311:22]
+    end else if (io_call2_en) begin // @[src/main/scala/fpga/BranchPredictor.scala 341:22]
+      index <= io_call2_index; // @[src/main/scala/fpga/BranchPredictor.scala 342:11]
+    end else if (io_ret2_en) begin // @[src/main/scala/fpga/BranchPredictor.scala 336:21]
+      index <= io_ret2_index; // @[src/main/scala/fpga/BranchPredictor.scala 337:11]
+    end else if (io_up_en) begin // @[src/main/scala/fpga/BranchPredictor.scala 331:19]
+      index <= io_up_index; // @[src/main/scala/fpga/BranchPredictor.scala 332:11]
     end else begin
       index <= _GEN_4;
     end
-    if (reset) begin // @[src/main/scala/fpga/BranchPredictor.scala 246:26]
-      ret_pc <= 31'h0; // @[src/main/scala/fpga/BranchPredictor.scala 246:26]
+    if (reset) begin // @[src/main/scala/fpga/BranchPredictor.scala 313:26]
+      ret_pc <= 31'h0; // @[src/main/scala/fpga/BranchPredictor.scala 313:26]
     end else begin
-      ret_pc <= ras_ret_pc_MPORT_data; // @[src/main/scala/fpga/BranchPredictor.scala 249:10]
+      ret_pc <= ras_ret_pc_MPORT_data; // @[src/main/scala/fpga/BranchPredictor.scala 316:10]
     end
-    if (reset) begin // @[src/main/scala/fpga/BranchPredictor.scala 247:26]
-      ret_index <= 3'h0; // @[src/main/scala/fpga/BranchPredictor.scala 247:26]
+    if (reset) begin // @[src/main/scala/fpga/BranchPredictor.scala 314:26]
+      ret_index <= 3'h0; // @[src/main/scala/fpga/BranchPredictor.scala 314:26]
     end else begin
-      ret_index <= index; // @[src/main/scala/fpga/BranchPredictor.scala 247:26]
+      ret_index <= index; // @[src/main/scala/fpga/BranchPredictor.scala 314:26]
     end
     `ifndef SYNTHESIS
     `ifdef PRINTF_COND
       if (`PRINTF_COND) begin
     `endif
         if (io_ret1_en & ~reset) begin
-          $fwrite(32'h80000002,"RAS ret1 index=%d pc=0x%x\n",io_ret1_index,{ras_MPORT_data,1'h0}); // @[src/main/scala/fpga/BranchPredictor.scala 255:11]
+          $fwrite(32'h80000002,"RAS ret1 index=%d pc=0x%x\n",io_ret1_index,{ras_MPORT_data,1'h0}); // @[src/main/scala/fpga/BranchPredictor.scala 322:11]
         end
     `ifdef PRINTF_COND
       end
@@ -823,7 +994,7 @@ module RAS(
       if (`PRINTF_COND) begin
     `endif
         if (io_call1_en & _T_2) begin
-          $fwrite(32'h80000002,"RAS call index=%d pc=0x%x\n",io_call1_index,{io_call1_ret_pc,1'h0}); // @[src/main/scala/fpga/BranchPredictor.scala 261:11]
+          $fwrite(32'h80000002,"RAS call index=%d pc=0x%x\n",io_call1_index,{io_call1_ret_pc,1'h0}); // @[src/main/scala/fpga/BranchPredictor.scala 328:11]
         end
     `ifdef PRINTF_COND
       end
@@ -834,7 +1005,7 @@ module RAS(
       if (`PRINTF_COND) begin
     `endif
         if (io_up_en & _T_2) begin
-          $fwrite(32'h80000002,"RAS reset index=%d\n",io_up_index); // @[src/main/scala/fpga/BranchPredictor.scala 266:11]
+          $fwrite(32'h80000002,"RAS reset index=%d\n",io_up_index); // @[src/main/scala/fpga/BranchPredictor.scala 333:11]
         end
     `ifdef PRINTF_COND
       end
@@ -845,7 +1016,7 @@ module RAS(
       if (`PRINTF_COND) begin
     `endif
         if (io_ret2_en & _T_2) begin
-          $fwrite(32'h80000002,"RAS ret index=%d pc=0x%x\n",io_ret2_index,{ras_MPORT_2_data,1'h0}); // @[src/main/scala/fpga/BranchPredictor.scala 271:11]
+          $fwrite(32'h80000002,"RAS ret index=%d pc=0x%x\n",io_ret2_index,{ras_MPORT_2_data,1'h0}); // @[src/main/scala/fpga/BranchPredictor.scala 338:11]
         end
     `ifdef PRINTF_COND
       end
@@ -856,7 +1027,7 @@ module RAS(
       if (`PRINTF_COND) begin
     `endif
         if (io_call2_en & _T_2) begin
-          $fwrite(32'h80000002,"RAS call index=%d pc=0x%x\n",io_call2_index,{io_call2_ret_pc,1'h0}); // @[src/main/scala/fpga/BranchPredictor.scala 277:11]
+          $fwrite(32'h80000002,"RAS call index=%d pc=0x%x\n",io_call2_index,{io_call2_ret_pc,1'h0}); // @[src/main/scala/fpga/BranchPredictor.scala 344:11]
         end
     `ifdef PRINTF_COND
       end
@@ -951,7 +1122,9 @@ module Queue(
   input         io_enq_bits_bp_is_ret, // @[src/main/scala/chisel3/util/Decoupled.scala 273:14]
   input  [2:0]  io_enq_bits_bp_rasindex, // @[src/main/scala/chisel3/util/Decoupled.scala 273:14]
   input  [30:0] io_enq_bits_bp_target, // @[src/main/scala/chisel3/util/Decoupled.scala 273:14]
+  input  [5:0]  io_enq_bits_bp_history, // @[src/main/scala/chisel3/util/Decoupled.scala 273:14]
   input  [1:0]  io_enq_bits_bp_cnt, // @[src/main/scala/chisel3/util/Decoupled.scala 273:14]
+  input  [1:0]  io_enq_bits_bp_gcnt, // @[src/main/scala/chisel3/util/Decoupled.scala 273:14]
   input  [1:0]  io_enq_bits_actual_attr, // @[src/main/scala/chisel3/util/Decoupled.scala 273:14]
   input         io_enq_bits_actual_is_ret, // @[src/main/scala/chisel3/util/Decoupled.scala 273:14]
   input         io_enq_bits_is_half, // @[src/main/scala/chisel3/util/Decoupled.scala 273:14]
@@ -987,7 +1160,9 @@ module Queue(
   output        io_deq_bits_bp_is_ret, // @[src/main/scala/chisel3/util/Decoupled.scala 273:14]
   output [2:0]  io_deq_bits_bp_rasindex, // @[src/main/scala/chisel3/util/Decoupled.scala 273:14]
   output [30:0] io_deq_bits_bp_target, // @[src/main/scala/chisel3/util/Decoupled.scala 273:14]
+  output [5:0]  io_deq_bits_bp_history, // @[src/main/scala/chisel3/util/Decoupled.scala 273:14]
   output [1:0]  io_deq_bits_bp_cnt, // @[src/main/scala/chisel3/util/Decoupled.scala 273:14]
+  output [1:0]  io_deq_bits_bp_gcnt, // @[src/main/scala/chisel3/util/Decoupled.scala 273:14]
   output [1:0]  io_deq_bits_actual_attr, // @[src/main/scala/chisel3/util/Decoupled.scala 273:14]
   output        io_deq_bits_actual_is_ret, // @[src/main/scala/chisel3/util/Decoupled.scala 273:14]
   output        io_deq_bits_is_half, // @[src/main/scala/chisel3/util/Decoupled.scala 273:14]
@@ -1029,9 +1204,11 @@ module Queue(
   reg [31:0] _RAND_31;
   reg [31:0] _RAND_32;
   reg [31:0] _RAND_33;
+  reg [31:0] _RAND_34;
+  reg [31:0] _RAND_35;
 `endif // RANDOMIZE_MEM_INIT
 `ifdef RANDOMIZE_REG_INIT
-  reg [31:0] _RAND_34;
+  reg [31:0] _RAND_36;
 `endif // RANDOMIZE_REG_INIT
   reg [30:0] ram_pc [0:0]; // @[src/main/scala/chisel3/util/Decoupled.scala 274:95]
   wire  ram_pc_io_deq_bits_MPORT_en; // @[src/main/scala/chisel3/util/Decoupled.scala 274:95]
@@ -1257,6 +1434,14 @@ module Queue(
   wire  ram_bp_target_MPORT_addr; // @[src/main/scala/chisel3/util/Decoupled.scala 274:95]
   wire  ram_bp_target_MPORT_mask; // @[src/main/scala/chisel3/util/Decoupled.scala 274:95]
   wire  ram_bp_target_MPORT_en; // @[src/main/scala/chisel3/util/Decoupled.scala 274:95]
+  reg [5:0] ram_bp_history [0:0]; // @[src/main/scala/chisel3/util/Decoupled.scala 274:95]
+  wire  ram_bp_history_io_deq_bits_MPORT_en; // @[src/main/scala/chisel3/util/Decoupled.scala 274:95]
+  wire  ram_bp_history_io_deq_bits_MPORT_addr; // @[src/main/scala/chisel3/util/Decoupled.scala 274:95]
+  wire [5:0] ram_bp_history_io_deq_bits_MPORT_data; // @[src/main/scala/chisel3/util/Decoupled.scala 274:95]
+  wire [5:0] ram_bp_history_MPORT_data; // @[src/main/scala/chisel3/util/Decoupled.scala 274:95]
+  wire  ram_bp_history_MPORT_addr; // @[src/main/scala/chisel3/util/Decoupled.scala 274:95]
+  wire  ram_bp_history_MPORT_mask; // @[src/main/scala/chisel3/util/Decoupled.scala 274:95]
+  wire  ram_bp_history_MPORT_en; // @[src/main/scala/chisel3/util/Decoupled.scala 274:95]
   reg [1:0] ram_bp_cnt [0:0]; // @[src/main/scala/chisel3/util/Decoupled.scala 274:95]
   wire  ram_bp_cnt_io_deq_bits_MPORT_en; // @[src/main/scala/chisel3/util/Decoupled.scala 274:95]
   wire  ram_bp_cnt_io_deq_bits_MPORT_addr; // @[src/main/scala/chisel3/util/Decoupled.scala 274:95]
@@ -1265,6 +1450,14 @@ module Queue(
   wire  ram_bp_cnt_MPORT_addr; // @[src/main/scala/chisel3/util/Decoupled.scala 274:95]
   wire  ram_bp_cnt_MPORT_mask; // @[src/main/scala/chisel3/util/Decoupled.scala 274:95]
   wire  ram_bp_cnt_MPORT_en; // @[src/main/scala/chisel3/util/Decoupled.scala 274:95]
+  reg [1:0] ram_bp_gcnt [0:0]; // @[src/main/scala/chisel3/util/Decoupled.scala 274:95]
+  wire  ram_bp_gcnt_io_deq_bits_MPORT_en; // @[src/main/scala/chisel3/util/Decoupled.scala 274:95]
+  wire  ram_bp_gcnt_io_deq_bits_MPORT_addr; // @[src/main/scala/chisel3/util/Decoupled.scala 274:95]
+  wire [1:0] ram_bp_gcnt_io_deq_bits_MPORT_data; // @[src/main/scala/chisel3/util/Decoupled.scala 274:95]
+  wire [1:0] ram_bp_gcnt_MPORT_data; // @[src/main/scala/chisel3/util/Decoupled.scala 274:95]
+  wire  ram_bp_gcnt_MPORT_addr; // @[src/main/scala/chisel3/util/Decoupled.scala 274:95]
+  wire  ram_bp_gcnt_MPORT_mask; // @[src/main/scala/chisel3/util/Decoupled.scala 274:95]
+  wire  ram_bp_gcnt_MPORT_en; // @[src/main/scala/chisel3/util/Decoupled.scala 274:95]
   reg [1:0] ram_actual_attr [0:0]; // @[src/main/scala/chisel3/util/Decoupled.scala 274:95]
   wire  ram_actual_attr_io_deq_bits_MPORT_en; // @[src/main/scala/chisel3/util/Decoupled.scala 274:95]
   wire  ram_actual_attr_io_deq_bits_MPORT_addr; // @[src/main/scala/chisel3/util/Decoupled.scala 274:95]
@@ -1309,8 +1502,8 @@ module Queue(
   wire  empty = ~maybe_full; // @[src/main/scala/chisel3/util/Decoupled.scala 279:28]
   wire  _do_enq_T = io_enq_ready & io_enq_valid; // @[src/main/scala/chisel3/util/Decoupled.scala 52:35]
   wire  _do_deq_T = io_deq_ready & io_deq_valid; // @[src/main/scala/chisel3/util/Decoupled.scala 52:35]
-  wire  _GEN_43 = io_deq_ready ? 1'h0 : _do_enq_T; // @[src/main/scala/chisel3/util/Decoupled.scala 319:26 281:27 319:35]
-  wire  do_enq = empty ? _GEN_43 : _do_enq_T; // @[src/main/scala/chisel3/util/Decoupled.scala 316:17 281:27]
+  wire  _GEN_45 = io_deq_ready ? 1'h0 : _do_enq_T; // @[src/main/scala/chisel3/util/Decoupled.scala 319:26 281:27 319:35]
+  wire  do_enq = empty ? _GEN_45 : _do_enq_T; // @[src/main/scala/chisel3/util/Decoupled.scala 316:17 281:27]
   wire  do_deq = empty ? 1'h0 : _do_deq_T; // @[src/main/scala/chisel3/util/Decoupled.scala 316:17 318:14 282:27]
   assign ram_pc_io_deq_bits_MPORT_en = 1'h1;
   assign ram_pc_io_deq_bits_MPORT_addr = 1'h0;
@@ -1318,238 +1511,252 @@ module Queue(
   assign ram_pc_MPORT_data = io_enq_bits_pc;
   assign ram_pc_MPORT_addr = 1'h0;
   assign ram_pc_MPORT_mask = 1'h1;
-  assign ram_pc_MPORT_en = empty ? _GEN_43 : _do_enq_T;
+  assign ram_pc_MPORT_en = empty ? _GEN_45 : _do_enq_T;
   assign ram_wb_addr_io_deq_bits_MPORT_en = 1'h1;
   assign ram_wb_addr_io_deq_bits_MPORT_addr = 1'h0;
   assign ram_wb_addr_io_deq_bits_MPORT_data = ram_wb_addr[ram_wb_addr_io_deq_bits_MPORT_addr]; // @[src/main/scala/chisel3/util/Decoupled.scala 274:95]
   assign ram_wb_addr_MPORT_data = io_enq_bits_wb_addr;
   assign ram_wb_addr_MPORT_addr = 1'h0;
   assign ram_wb_addr_MPORT_mask = 1'h1;
-  assign ram_wb_addr_MPORT_en = empty ? _GEN_43 : _do_enq_T;
+  assign ram_wb_addr_MPORT_en = empty ? _GEN_45 : _do_enq_T;
   assign ram_op1_sel_io_deq_bits_MPORT_en = 1'h1;
   assign ram_op1_sel_io_deq_bits_MPORT_addr = 1'h0;
   assign ram_op1_sel_io_deq_bits_MPORT_data = ram_op1_sel[ram_op1_sel_io_deq_bits_MPORT_addr]; // @[src/main/scala/chisel3/util/Decoupled.scala 274:95]
   assign ram_op1_sel_MPORT_data = io_enq_bits_op1_sel;
   assign ram_op1_sel_MPORT_addr = 1'h0;
   assign ram_op1_sel_MPORT_mask = 1'h1;
-  assign ram_op1_sel_MPORT_en = empty ? _GEN_43 : _do_enq_T;
+  assign ram_op1_sel_MPORT_en = empty ? _GEN_45 : _do_enq_T;
   assign ram_op2_sel_io_deq_bits_MPORT_en = 1'h1;
   assign ram_op2_sel_io_deq_bits_MPORT_addr = 1'h0;
   assign ram_op2_sel_io_deq_bits_MPORT_data = ram_op2_sel[ram_op2_sel_io_deq_bits_MPORT_addr]; // @[src/main/scala/chisel3/util/Decoupled.scala 274:95]
   assign ram_op2_sel_MPORT_data = io_enq_bits_op2_sel;
   assign ram_op2_sel_MPORT_addr = 1'h0;
   assign ram_op2_sel_MPORT_mask = 1'h1;
-  assign ram_op2_sel_MPORT_en = empty ? _GEN_43 : _do_enq_T;
+  assign ram_op2_sel_MPORT_en = empty ? _GEN_45 : _do_enq_T;
   assign ram_op3_sel_io_deq_bits_MPORT_en = 1'h1;
   assign ram_op3_sel_io_deq_bits_MPORT_addr = 1'h0;
   assign ram_op3_sel_io_deq_bits_MPORT_data = ram_op3_sel[ram_op3_sel_io_deq_bits_MPORT_addr]; // @[src/main/scala/chisel3/util/Decoupled.scala 274:95]
   assign ram_op3_sel_MPORT_data = io_enq_bits_op3_sel;
   assign ram_op3_sel_MPORT_addr = 1'h0;
   assign ram_op3_sel_MPORT_mask = 1'h1;
-  assign ram_op3_sel_MPORT_en = empty ? _GEN_43 : _do_enq_T;
+  assign ram_op3_sel_MPORT_en = empty ? _GEN_45 : _do_enq_T;
   assign ram_rs1_addr_io_deq_bits_MPORT_en = 1'h1;
   assign ram_rs1_addr_io_deq_bits_MPORT_addr = 1'h0;
   assign ram_rs1_addr_io_deq_bits_MPORT_data = ram_rs1_addr[ram_rs1_addr_io_deq_bits_MPORT_addr]; // @[src/main/scala/chisel3/util/Decoupled.scala 274:95]
   assign ram_rs1_addr_MPORT_data = io_enq_bits_rs1_addr;
   assign ram_rs1_addr_MPORT_addr = 1'h0;
   assign ram_rs1_addr_MPORT_mask = 1'h1;
-  assign ram_rs1_addr_MPORT_en = empty ? _GEN_43 : _do_enq_T;
+  assign ram_rs1_addr_MPORT_en = empty ? _GEN_45 : _do_enq_T;
   assign ram_rs2_addr_io_deq_bits_MPORT_en = 1'h1;
   assign ram_rs2_addr_io_deq_bits_MPORT_addr = 1'h0;
   assign ram_rs2_addr_io_deq_bits_MPORT_data = ram_rs2_addr[ram_rs2_addr_io_deq_bits_MPORT_addr]; // @[src/main/scala/chisel3/util/Decoupled.scala 274:95]
   assign ram_rs2_addr_MPORT_data = io_enq_bits_rs2_addr;
   assign ram_rs2_addr_MPORT_addr = 1'h0;
   assign ram_rs2_addr_MPORT_mask = 1'h1;
-  assign ram_rs2_addr_MPORT_en = empty ? _GEN_43 : _do_enq_T;
+  assign ram_rs2_addr_MPORT_en = empty ? _GEN_45 : _do_enq_T;
   assign ram_rs3_addr_io_deq_bits_MPORT_en = 1'h1;
   assign ram_rs3_addr_io_deq_bits_MPORT_addr = 1'h0;
   assign ram_rs3_addr_io_deq_bits_MPORT_data = ram_rs3_addr[ram_rs3_addr_io_deq_bits_MPORT_addr]; // @[src/main/scala/chisel3/util/Decoupled.scala 274:95]
   assign ram_rs3_addr_MPORT_data = io_enq_bits_rs3_addr;
   assign ram_rs3_addr_MPORT_addr = 1'h0;
   assign ram_rs3_addr_MPORT_mask = 1'h1;
-  assign ram_rs3_addr_MPORT_en = empty ? _GEN_43 : _do_enq_T;
+  assign ram_rs3_addr_MPORT_en = empty ? _GEN_45 : _do_enq_T;
   assign ram_op1_data_io_deq_bits_MPORT_en = 1'h1;
   assign ram_op1_data_io_deq_bits_MPORT_addr = 1'h0;
   assign ram_op1_data_io_deq_bits_MPORT_data = ram_op1_data[ram_op1_data_io_deq_bits_MPORT_addr]; // @[src/main/scala/chisel3/util/Decoupled.scala 274:95]
   assign ram_op1_data_MPORT_data = io_enq_bits_op1_data;
   assign ram_op1_data_MPORT_addr = 1'h0;
   assign ram_op1_data_MPORT_mask = 1'h1;
-  assign ram_op1_data_MPORT_en = empty ? _GEN_43 : _do_enq_T;
+  assign ram_op1_data_MPORT_en = empty ? _GEN_45 : _do_enq_T;
   assign ram_op2_data_im1_io_deq_bits_MPORT_en = 1'h1;
   assign ram_op2_data_im1_io_deq_bits_MPORT_addr = 1'h0;
   assign ram_op2_data_im1_io_deq_bits_MPORT_data = ram_op2_data_im1[ram_op2_data_im1_io_deq_bits_MPORT_addr]; // @[src/main/scala/chisel3/util/Decoupled.scala 274:95]
   assign ram_op2_data_im1_MPORT_data = io_enq_bits_op2_data_im1;
   assign ram_op2_data_im1_MPORT_addr = 1'h0;
   assign ram_op2_data_im1_MPORT_mask = 1'h1;
-  assign ram_op2_data_im1_MPORT_en = empty ? _GEN_43 : _do_enq_T;
+  assign ram_op2_data_im1_MPORT_en = empty ? _GEN_45 : _do_enq_T;
   assign ram_op2_data_im0_io_deq_bits_MPORT_en = 1'h1;
   assign ram_op2_data_im0_io_deq_bits_MPORT_addr = 1'h0;
   assign ram_op2_data_im0_io_deq_bits_MPORT_data = ram_op2_data_im0[ram_op2_data_im0_io_deq_bits_MPORT_addr]; // @[src/main/scala/chisel3/util/Decoupled.scala 274:95]
   assign ram_op2_data_im0_MPORT_data = io_enq_bits_op2_data_im0;
   assign ram_op2_data_im0_MPORT_addr = 1'h0;
   assign ram_op2_data_im0_MPORT_mask = 1'h1;
-  assign ram_op2_data_im0_MPORT_en = empty ? _GEN_43 : _do_enq_T;
+  assign ram_op2_data_im0_MPORT_en = empty ? _GEN_45 : _do_enq_T;
   assign ram_exe_fun_io_deq_bits_MPORT_en = 1'h1;
   assign ram_exe_fun_io_deq_bits_MPORT_addr = 1'h0;
   assign ram_exe_fun_io_deq_bits_MPORT_data = ram_exe_fun[ram_exe_fun_io_deq_bits_MPORT_addr]; // @[src/main/scala/chisel3/util/Decoupled.scala 274:95]
   assign ram_exe_fun_MPORT_data = io_enq_bits_exe_fun;
   assign ram_exe_fun_MPORT_addr = 1'h0;
   assign ram_exe_fun_MPORT_mask = 1'h1;
-  assign ram_exe_fun_MPORT_en = empty ? _GEN_43 : _do_enq_T;
+  assign ram_exe_fun_MPORT_en = empty ? _GEN_45 : _do_enq_T;
   assign ram_rf_wen_io_deq_bits_MPORT_en = 1'h1;
   assign ram_rf_wen_io_deq_bits_MPORT_addr = 1'h0;
   assign ram_rf_wen_io_deq_bits_MPORT_data = ram_rf_wen[ram_rf_wen_io_deq_bits_MPORT_addr]; // @[src/main/scala/chisel3/util/Decoupled.scala 274:95]
   assign ram_rf_wen_MPORT_data = io_enq_bits_rf_wen;
   assign ram_rf_wen_MPORT_addr = 1'h0;
   assign ram_rf_wen_MPORT_mask = 1'h1;
-  assign ram_rf_wen_MPORT_en = empty ? _GEN_43 : _do_enq_T;
+  assign ram_rf_wen_MPORT_en = empty ? _GEN_45 : _do_enq_T;
   assign ram_wb_sel_io_deq_bits_MPORT_en = 1'h1;
   assign ram_wb_sel_io_deq_bits_MPORT_addr = 1'h0;
   assign ram_wb_sel_io_deq_bits_MPORT_data = ram_wb_sel[ram_wb_sel_io_deq_bits_MPORT_addr]; // @[src/main/scala/chisel3/util/Decoupled.scala 274:95]
   assign ram_wb_sel_MPORT_data = io_enq_bits_wb_sel;
   assign ram_wb_sel_MPORT_addr = 1'h0;
   assign ram_wb_sel_MPORT_mask = 1'h1;
-  assign ram_wb_sel_MPORT_en = empty ? _GEN_43 : _do_enq_T;
+  assign ram_wb_sel_MPORT_en = empty ? _GEN_45 : _do_enq_T;
   assign ram_csr_addr_io_deq_bits_MPORT_en = 1'h1;
   assign ram_csr_addr_io_deq_bits_MPORT_addr = 1'h0;
   assign ram_csr_addr_io_deq_bits_MPORT_data = ram_csr_addr[ram_csr_addr_io_deq_bits_MPORT_addr]; // @[src/main/scala/chisel3/util/Decoupled.scala 274:95]
   assign ram_csr_addr_MPORT_data = io_enq_bits_csr_addr;
   assign ram_csr_addr_MPORT_addr = 1'h0;
   assign ram_csr_addr_MPORT_mask = 1'h1;
-  assign ram_csr_addr_MPORT_en = empty ? _GEN_43 : _do_enq_T;
+  assign ram_csr_addr_MPORT_en = empty ? _GEN_45 : _do_enq_T;
   assign ram_csr_cmd_io_deq_bits_MPORT_en = 1'h1;
   assign ram_csr_cmd_io_deq_bits_MPORT_addr = 1'h0;
   assign ram_csr_cmd_io_deq_bits_MPORT_data = ram_csr_cmd[ram_csr_cmd_io_deq_bits_MPORT_addr]; // @[src/main/scala/chisel3/util/Decoupled.scala 274:95]
   assign ram_csr_cmd_MPORT_data = io_enq_bits_csr_cmd;
   assign ram_csr_cmd_MPORT_addr = 1'h0;
   assign ram_csr_cmd_MPORT_mask = 1'h1;
-  assign ram_csr_cmd_MPORT_en = empty ? _GEN_43 : _do_enq_T;
+  assign ram_csr_cmd_MPORT_en = empty ? _GEN_45 : _do_enq_T;
   assign ram_imm_b_sext_io_deq_bits_MPORT_en = 1'h1;
   assign ram_imm_b_sext_io_deq_bits_MPORT_addr = 1'h0;
   assign ram_imm_b_sext_io_deq_bits_MPORT_data = ram_imm_b_sext[ram_imm_b_sext_io_deq_bits_MPORT_addr]; // @[src/main/scala/chisel3/util/Decoupled.scala 274:95]
   assign ram_imm_b_sext_MPORT_data = io_enq_bits_imm_b_sext;
   assign ram_imm_b_sext_MPORT_addr = 1'h0;
   assign ram_imm_b_sext_MPORT_mask = 1'h1;
-  assign ram_imm_b_sext_MPORT_en = empty ? _GEN_43 : _do_enq_T;
+  assign ram_imm_b_sext_MPORT_en = empty ? _GEN_45 : _do_enq_T;
   assign ram_shamt_io_deq_bits_MPORT_en = 1'h1;
   assign ram_shamt_io_deq_bits_MPORT_addr = 1'h0;
   assign ram_shamt_io_deq_bits_MPORT_data = ram_shamt[ram_shamt_io_deq_bits_MPORT_addr]; // @[src/main/scala/chisel3/util/Decoupled.scala 274:95]
   assign ram_shamt_MPORT_data = io_enq_bits_shamt;
   assign ram_shamt_MPORT_addr = 1'h0;
   assign ram_shamt_MPORT_mask = 1'h1;
-  assign ram_shamt_MPORT_en = empty ? _GEN_43 : _do_enq_T;
+  assign ram_shamt_MPORT_en = empty ? _GEN_45 : _do_enq_T;
   assign ram_op2op_io_deq_bits_MPORT_en = 1'h1;
   assign ram_op2op_io_deq_bits_MPORT_addr = 1'h0;
   assign ram_op2op_io_deq_bits_MPORT_data = ram_op2op[ram_op2op_io_deq_bits_MPORT_addr]; // @[src/main/scala/chisel3/util/Decoupled.scala 274:95]
   assign ram_op2op_MPORT_data = io_enq_bits_op2op;
   assign ram_op2op_MPORT_addr = 1'h0;
   assign ram_op2op_MPORT_mask = 1'h1;
-  assign ram_op2op_MPORT_en = empty ? _GEN_43 : _do_enq_T;
+  assign ram_op2op_MPORT_en = empty ? _GEN_45 : _do_enq_T;
   assign ram_mem_w_io_deq_bits_MPORT_en = 1'h1;
   assign ram_mem_w_io_deq_bits_MPORT_addr = 1'h0;
   assign ram_mem_w_io_deq_bits_MPORT_data = ram_mem_w[ram_mem_w_io_deq_bits_MPORT_addr]; // @[src/main/scala/chisel3/util/Decoupled.scala 274:95]
   assign ram_mem_w_MPORT_data = io_enq_bits_mem_w;
   assign ram_mem_w_MPORT_addr = 1'h0;
   assign ram_mem_w_MPORT_mask = 1'h1;
-  assign ram_mem_w_MPORT_en = empty ? _GEN_43 : _do_enq_T;
+  assign ram_mem_w_MPORT_en = empty ? _GEN_45 : _do_enq_T;
   assign ram_is_bflen_io_deq_bits_MPORT_en = 1'h1;
   assign ram_is_bflen_io_deq_bits_MPORT_addr = 1'h0;
   assign ram_is_bflen_io_deq_bits_MPORT_data = ram_is_bflen[ram_is_bflen_io_deq_bits_MPORT_addr]; // @[src/main/scala/chisel3/util/Decoupled.scala 274:95]
   assign ram_is_bflen_MPORT_data = io_enq_bits_is_bflen;
   assign ram_is_bflen_MPORT_addr = 1'h0;
   assign ram_is_bflen_MPORT_mask = 1'h1;
-  assign ram_is_bflen_MPORT_en = empty ? _GEN_43 : _do_enq_T;
+  assign ram_is_bflen_MPORT_en = empty ? _GEN_45 : _do_enq_T;
   assign ram_is_br_io_deq_bits_MPORT_en = 1'h1;
   assign ram_is_br_io_deq_bits_MPORT_addr = 1'h0;
   assign ram_is_br_io_deq_bits_MPORT_data = ram_is_br[ram_is_br_io_deq_bits_MPORT_addr]; // @[src/main/scala/chisel3/util/Decoupled.scala 274:95]
   assign ram_is_br_MPORT_data = io_enq_bits_is_br;
   assign ram_is_br_MPORT_addr = 1'h0;
   assign ram_is_br_MPORT_mask = 1'h1;
-  assign ram_is_br_MPORT_en = empty ? _GEN_43 : _do_enq_T;
+  assign ram_is_br_MPORT_en = empty ? _GEN_45 : _do_enq_T;
   assign ram_is_j_io_deq_bits_MPORT_en = 1'h1;
   assign ram_is_j_io_deq_bits_MPORT_addr = 1'h0;
   assign ram_is_j_io_deq_bits_MPORT_data = ram_is_j[ram_is_j_io_deq_bits_MPORT_addr]; // @[src/main/scala/chisel3/util/Decoupled.scala 274:95]
   assign ram_is_j_MPORT_data = io_enq_bits_is_j;
   assign ram_is_j_MPORT_addr = 1'h0;
   assign ram_is_j_MPORT_mask = 1'h1;
-  assign ram_is_j_MPORT_en = empty ? _GEN_43 : _do_enq_T;
+  assign ram_is_j_MPORT_en = empty ? _GEN_45 : _do_enq_T;
   assign ram_bp_taken_io_deq_bits_MPORT_en = 1'h1;
   assign ram_bp_taken_io_deq_bits_MPORT_addr = 1'h0;
   assign ram_bp_taken_io_deq_bits_MPORT_data = ram_bp_taken[ram_bp_taken_io_deq_bits_MPORT_addr]; // @[src/main/scala/chisel3/util/Decoupled.scala 274:95]
   assign ram_bp_taken_MPORT_data = io_enq_bits_bp_taken;
   assign ram_bp_taken_MPORT_addr = 1'h0;
   assign ram_bp_taken_MPORT_mask = 1'h1;
-  assign ram_bp_taken_MPORT_en = empty ? _GEN_43 : _do_enq_T;
+  assign ram_bp_taken_MPORT_en = empty ? _GEN_45 : _do_enq_T;
   assign ram_bp_attr_io_deq_bits_MPORT_en = 1'h1;
   assign ram_bp_attr_io_deq_bits_MPORT_addr = 1'h0;
   assign ram_bp_attr_io_deq_bits_MPORT_data = ram_bp_attr[ram_bp_attr_io_deq_bits_MPORT_addr]; // @[src/main/scala/chisel3/util/Decoupled.scala 274:95]
   assign ram_bp_attr_MPORT_data = io_enq_bits_bp_attr;
   assign ram_bp_attr_MPORT_addr = 1'h0;
   assign ram_bp_attr_MPORT_mask = 1'h1;
-  assign ram_bp_attr_MPORT_en = empty ? _GEN_43 : _do_enq_T;
+  assign ram_bp_attr_MPORT_en = empty ? _GEN_45 : _do_enq_T;
   assign ram_bp_is_ret_io_deq_bits_MPORT_en = 1'h1;
   assign ram_bp_is_ret_io_deq_bits_MPORT_addr = 1'h0;
   assign ram_bp_is_ret_io_deq_bits_MPORT_data = ram_bp_is_ret[ram_bp_is_ret_io_deq_bits_MPORT_addr]; // @[src/main/scala/chisel3/util/Decoupled.scala 274:95]
   assign ram_bp_is_ret_MPORT_data = io_enq_bits_bp_is_ret;
   assign ram_bp_is_ret_MPORT_addr = 1'h0;
   assign ram_bp_is_ret_MPORT_mask = 1'h1;
-  assign ram_bp_is_ret_MPORT_en = empty ? _GEN_43 : _do_enq_T;
+  assign ram_bp_is_ret_MPORT_en = empty ? _GEN_45 : _do_enq_T;
   assign ram_bp_rasindex_io_deq_bits_MPORT_en = 1'h1;
   assign ram_bp_rasindex_io_deq_bits_MPORT_addr = 1'h0;
   assign ram_bp_rasindex_io_deq_bits_MPORT_data = ram_bp_rasindex[ram_bp_rasindex_io_deq_bits_MPORT_addr]; // @[src/main/scala/chisel3/util/Decoupled.scala 274:95]
   assign ram_bp_rasindex_MPORT_data = io_enq_bits_bp_rasindex;
   assign ram_bp_rasindex_MPORT_addr = 1'h0;
   assign ram_bp_rasindex_MPORT_mask = 1'h1;
-  assign ram_bp_rasindex_MPORT_en = empty ? _GEN_43 : _do_enq_T;
+  assign ram_bp_rasindex_MPORT_en = empty ? _GEN_45 : _do_enq_T;
   assign ram_bp_target_io_deq_bits_MPORT_en = 1'h1;
   assign ram_bp_target_io_deq_bits_MPORT_addr = 1'h0;
   assign ram_bp_target_io_deq_bits_MPORT_data = ram_bp_target[ram_bp_target_io_deq_bits_MPORT_addr]; // @[src/main/scala/chisel3/util/Decoupled.scala 274:95]
   assign ram_bp_target_MPORT_data = io_enq_bits_bp_target;
   assign ram_bp_target_MPORT_addr = 1'h0;
   assign ram_bp_target_MPORT_mask = 1'h1;
-  assign ram_bp_target_MPORT_en = empty ? _GEN_43 : _do_enq_T;
+  assign ram_bp_target_MPORT_en = empty ? _GEN_45 : _do_enq_T;
+  assign ram_bp_history_io_deq_bits_MPORT_en = 1'h1;
+  assign ram_bp_history_io_deq_bits_MPORT_addr = 1'h0;
+  assign ram_bp_history_io_deq_bits_MPORT_data = ram_bp_history[ram_bp_history_io_deq_bits_MPORT_addr]; // @[src/main/scala/chisel3/util/Decoupled.scala 274:95]
+  assign ram_bp_history_MPORT_data = io_enq_bits_bp_history;
+  assign ram_bp_history_MPORT_addr = 1'h0;
+  assign ram_bp_history_MPORT_mask = 1'h1;
+  assign ram_bp_history_MPORT_en = empty ? _GEN_45 : _do_enq_T;
   assign ram_bp_cnt_io_deq_bits_MPORT_en = 1'h1;
   assign ram_bp_cnt_io_deq_bits_MPORT_addr = 1'h0;
   assign ram_bp_cnt_io_deq_bits_MPORT_data = ram_bp_cnt[ram_bp_cnt_io_deq_bits_MPORT_addr]; // @[src/main/scala/chisel3/util/Decoupled.scala 274:95]
   assign ram_bp_cnt_MPORT_data = io_enq_bits_bp_cnt;
   assign ram_bp_cnt_MPORT_addr = 1'h0;
   assign ram_bp_cnt_MPORT_mask = 1'h1;
-  assign ram_bp_cnt_MPORT_en = empty ? _GEN_43 : _do_enq_T;
+  assign ram_bp_cnt_MPORT_en = empty ? _GEN_45 : _do_enq_T;
+  assign ram_bp_gcnt_io_deq_bits_MPORT_en = 1'h1;
+  assign ram_bp_gcnt_io_deq_bits_MPORT_addr = 1'h0;
+  assign ram_bp_gcnt_io_deq_bits_MPORT_data = ram_bp_gcnt[ram_bp_gcnt_io_deq_bits_MPORT_addr]; // @[src/main/scala/chisel3/util/Decoupled.scala 274:95]
+  assign ram_bp_gcnt_MPORT_data = io_enq_bits_bp_gcnt;
+  assign ram_bp_gcnt_MPORT_addr = 1'h0;
+  assign ram_bp_gcnt_MPORT_mask = 1'h1;
+  assign ram_bp_gcnt_MPORT_en = empty ? _GEN_45 : _do_enq_T;
   assign ram_actual_attr_io_deq_bits_MPORT_en = 1'h1;
   assign ram_actual_attr_io_deq_bits_MPORT_addr = 1'h0;
   assign ram_actual_attr_io_deq_bits_MPORT_data = ram_actual_attr[ram_actual_attr_io_deq_bits_MPORT_addr]; // @[src/main/scala/chisel3/util/Decoupled.scala 274:95]
   assign ram_actual_attr_MPORT_data = io_enq_bits_actual_attr;
   assign ram_actual_attr_MPORT_addr = 1'h0;
   assign ram_actual_attr_MPORT_mask = 1'h1;
-  assign ram_actual_attr_MPORT_en = empty ? _GEN_43 : _do_enq_T;
+  assign ram_actual_attr_MPORT_en = empty ? _GEN_45 : _do_enq_T;
   assign ram_actual_is_ret_io_deq_bits_MPORT_en = 1'h1;
   assign ram_actual_is_ret_io_deq_bits_MPORT_addr = 1'h0;
   assign ram_actual_is_ret_io_deq_bits_MPORT_data = ram_actual_is_ret[ram_actual_is_ret_io_deq_bits_MPORT_addr]; // @[src/main/scala/chisel3/util/Decoupled.scala 274:95]
   assign ram_actual_is_ret_MPORT_data = io_enq_bits_actual_is_ret;
   assign ram_actual_is_ret_MPORT_addr = 1'h0;
   assign ram_actual_is_ret_MPORT_mask = 1'h1;
-  assign ram_actual_is_ret_MPORT_en = empty ? _GEN_43 : _do_enq_T;
+  assign ram_actual_is_ret_MPORT_en = empty ? _GEN_45 : _do_enq_T;
   assign ram_is_half_io_deq_bits_MPORT_en = 1'h1;
   assign ram_is_half_io_deq_bits_MPORT_addr = 1'h0;
   assign ram_is_half_io_deq_bits_MPORT_data = ram_is_half[ram_is_half_io_deq_bits_MPORT_addr]; // @[src/main/scala/chisel3/util/Decoupled.scala 274:95]
   assign ram_is_half_MPORT_data = io_enq_bits_is_half;
   assign ram_is_half_MPORT_addr = 1'h0;
   assign ram_is_half_MPORT_mask = 1'h1;
-  assign ram_is_half_MPORT_en = empty ? _GEN_43 : _do_enq_T;
+  assign ram_is_half_MPORT_en = empty ? _GEN_45 : _do_enq_T;
   assign ram_is_valid_inst_io_deq_bits_MPORT_en = 1'h1;
   assign ram_is_valid_inst_io_deq_bits_MPORT_addr = 1'h0;
   assign ram_is_valid_inst_io_deq_bits_MPORT_data = ram_is_valid_inst[ram_is_valid_inst_io_deq_bits_MPORT_addr]; // @[src/main/scala/chisel3/util/Decoupled.scala 274:95]
   assign ram_is_valid_inst_MPORT_data = io_enq_bits_is_valid_inst;
   assign ram_is_valid_inst_MPORT_addr = 1'h0;
   assign ram_is_valid_inst_MPORT_mask = 1'h1;
-  assign ram_is_valid_inst_MPORT_en = empty ? _GEN_43 : _do_enq_T;
+  assign ram_is_valid_inst_MPORT_en = empty ? _GEN_45 : _do_enq_T;
   assign ram_is_trap_io_deq_bits_MPORT_en = 1'h1;
   assign ram_is_trap_io_deq_bits_MPORT_addr = 1'h0;
   assign ram_is_trap_io_deq_bits_MPORT_data = ram_is_trap[ram_is_trap_io_deq_bits_MPORT_addr]; // @[src/main/scala/chisel3/util/Decoupled.scala 274:95]
   assign ram_is_trap_MPORT_data = io_enq_bits_is_trap;
   assign ram_is_trap_MPORT_addr = 1'h0;
   assign ram_is_trap_MPORT_mask = 1'h1;
-  assign ram_is_trap_MPORT_en = empty ? _GEN_43 : _do_enq_T;
+  assign ram_is_trap_MPORT_en = empty ? _GEN_45 : _do_enq_T;
   assign io_enq_ready = ~maybe_full; // @[src/main/scala/chisel3/util/Decoupled.scala 304:19]
   assign io_deq_valid = io_enq_valid | ~empty; // @[src/main/scala/chisel3/util/Decoupled.scala 303:16 315:{24,39}]
   assign io_deq_bits_pc = empty ? io_enq_bits_pc : ram_pc_io_deq_bits_MPORT_data; // @[src/main/scala/chisel3/util/Decoupled.scala 311:17 316:17 317:19]
@@ -1580,7 +1787,9 @@ module Queue(
   assign io_deq_bits_bp_is_ret = empty ? io_enq_bits_bp_is_ret : ram_bp_is_ret_io_deq_bits_MPORT_data; // @[src/main/scala/chisel3/util/Decoupled.scala 311:17 316:17 317:19]
   assign io_deq_bits_bp_rasindex = empty ? io_enq_bits_bp_rasindex : ram_bp_rasindex_io_deq_bits_MPORT_data; // @[src/main/scala/chisel3/util/Decoupled.scala 311:17 316:17 317:19]
   assign io_deq_bits_bp_target = empty ? io_enq_bits_bp_target : ram_bp_target_io_deq_bits_MPORT_data; // @[src/main/scala/chisel3/util/Decoupled.scala 311:17 316:17 317:19]
+  assign io_deq_bits_bp_history = empty ? io_enq_bits_bp_history : ram_bp_history_io_deq_bits_MPORT_data; // @[src/main/scala/chisel3/util/Decoupled.scala 311:17 316:17 317:19]
   assign io_deq_bits_bp_cnt = empty ? io_enq_bits_bp_cnt : ram_bp_cnt_io_deq_bits_MPORT_data; // @[src/main/scala/chisel3/util/Decoupled.scala 311:17 316:17 317:19]
+  assign io_deq_bits_bp_gcnt = empty ? io_enq_bits_bp_gcnt : ram_bp_gcnt_io_deq_bits_MPORT_data; // @[src/main/scala/chisel3/util/Decoupled.scala 311:17 316:17 317:19]
   assign io_deq_bits_actual_attr = empty ? io_enq_bits_actual_attr : ram_actual_attr_io_deq_bits_MPORT_data; // @[src/main/scala/chisel3/util/Decoupled.scala 311:17 316:17 317:19]
   assign io_deq_bits_actual_is_ret = empty ? io_enq_bits_actual_is_ret : ram_actual_is_ret_io_deq_bits_MPORT_data; // @[src/main/scala/chisel3/util/Decoupled.scala 311:17 316:17 317:19]
   assign io_deq_bits_is_half = empty ? io_enq_bits_is_half : ram_is_half_io_deq_bits_MPORT_data; // @[src/main/scala/chisel3/util/Decoupled.scala 311:17 316:17 317:19]
@@ -1671,8 +1880,14 @@ module Queue(
     if (ram_bp_target_MPORT_en & ram_bp_target_MPORT_mask) begin
       ram_bp_target[ram_bp_target_MPORT_addr] <= ram_bp_target_MPORT_data; // @[src/main/scala/chisel3/util/Decoupled.scala 274:95]
     end
+    if (ram_bp_history_MPORT_en & ram_bp_history_MPORT_mask) begin
+      ram_bp_history[ram_bp_history_MPORT_addr] <= ram_bp_history_MPORT_data; // @[src/main/scala/chisel3/util/Decoupled.scala 274:95]
+    end
     if (ram_bp_cnt_MPORT_en & ram_bp_cnt_MPORT_mask) begin
       ram_bp_cnt[ram_bp_cnt_MPORT_addr] <= ram_bp_cnt_MPORT_data; // @[src/main/scala/chisel3/util/Decoupled.scala 274:95]
+    end
+    if (ram_bp_gcnt_MPORT_en & ram_bp_gcnt_MPORT_mask) begin
+      ram_bp_gcnt[ram_bp_gcnt_MPORT_addr] <= ram_bp_gcnt_MPORT_data; // @[src/main/scala/chisel3/util/Decoupled.scala 274:95]
     end
     if (ram_actual_attr_MPORT_en & ram_actual_attr_MPORT_mask) begin
       ram_actual_attr[ram_actual_attr_MPORT_addr] <= ram_actual_attr_MPORT_data; // @[src/main/scala/chisel3/util/Decoupled.scala 274:95]
@@ -1825,26 +2040,32 @@ initial begin
     ram_bp_target[initvar] = _RAND_27[30:0];
   _RAND_28 = {1{`RANDOM}};
   for (initvar = 0; initvar < 1; initvar = initvar+1)
-    ram_bp_cnt[initvar] = _RAND_28[1:0];
+    ram_bp_history[initvar] = _RAND_28[5:0];
   _RAND_29 = {1{`RANDOM}};
   for (initvar = 0; initvar < 1; initvar = initvar+1)
-    ram_actual_attr[initvar] = _RAND_29[1:0];
+    ram_bp_cnt[initvar] = _RAND_29[1:0];
   _RAND_30 = {1{`RANDOM}};
   for (initvar = 0; initvar < 1; initvar = initvar+1)
-    ram_actual_is_ret[initvar] = _RAND_30[0:0];
+    ram_bp_gcnt[initvar] = _RAND_30[1:0];
   _RAND_31 = {1{`RANDOM}};
   for (initvar = 0; initvar < 1; initvar = initvar+1)
-    ram_is_half[initvar] = _RAND_31[0:0];
+    ram_actual_attr[initvar] = _RAND_31[1:0];
   _RAND_32 = {1{`RANDOM}};
   for (initvar = 0; initvar < 1; initvar = initvar+1)
-    ram_is_valid_inst[initvar] = _RAND_32[0:0];
+    ram_actual_is_ret[initvar] = _RAND_32[0:0];
   _RAND_33 = {1{`RANDOM}};
   for (initvar = 0; initvar < 1; initvar = initvar+1)
-    ram_is_trap[initvar] = _RAND_33[0:0];
+    ram_is_half[initvar] = _RAND_33[0:0];
+  _RAND_34 = {1{`RANDOM}};
+  for (initvar = 0; initvar < 1; initvar = initvar+1)
+    ram_is_valid_inst[initvar] = _RAND_34[0:0];
+  _RAND_35 = {1{`RANDOM}};
+  for (initvar = 0; initvar < 1; initvar = initvar+1)
+    ram_is_trap[initvar] = _RAND_35[0:0];
 `endif // RANDOMIZE_MEM_INIT
 `ifdef RANDOMIZE_REG_INIT
-  _RAND_34 = {1{`RANDOM}};
-  maybe_full = _RAND_34[0:0];
+  _RAND_36 = {1{`RANDOM}};
+  maybe_full = _RAND_36[0:0];
 `endif // RANDOMIZE_REG_INIT
   `endif // RANDOMIZE
 end // initial
@@ -1856,55 +2077,59 @@ endmodule
 module InstructionDecoder(
   input         clock,
   input         reset,
-  output        io_in_ready, // @[src/main/scala/fpga/InstructionDecoder.scala 100:14]
-  output        io_in_flush, // @[src/main/scala/fpga/InstructionDecoder.scala 100:14]
-  input         io_in_bits_is_valid_inst, // @[src/main/scala/fpga/InstructionDecoder.scala 100:14]
-  input  [31:0] io_in_bits_inst, // @[src/main/scala/fpga/InstructionDecoder.scala 100:14]
-  input  [30:0] io_in_bits_pc, // @[src/main/scala/fpga/InstructionDecoder.scala 100:14]
-  input         io_in_bits_bp_taken, // @[src/main/scala/fpga/InstructionDecoder.scala 100:14]
-  input  [1:0]  io_in_bits_bp_attr, // @[src/main/scala/fpga/InstructionDecoder.scala 100:14]
-  input         io_in_bits_bp_is_ret, // @[src/main/scala/fpga/InstructionDecoder.scala 100:14]
-  input  [2:0]  io_in_bits_bp_rasindex, // @[src/main/scala/fpga/InstructionDecoder.scala 100:14]
-  input  [30:0] io_in_bits_bp_target, // @[src/main/scala/fpga/InstructionDecoder.scala 100:14]
-  input  [1:0]  io_in_bits_bp_cnt, // @[src/main/scala/fpga/InstructionDecoder.scala 100:14]
-  input         io_out_ready, // @[src/main/scala/fpga/InstructionDecoder.scala 100:14]
-  input         io_out_flush, // @[src/main/scala/fpga/InstructionDecoder.scala 100:14]
-  output [30:0] io_out_bits_pc, // @[src/main/scala/fpga/InstructionDecoder.scala 100:14]
-  output [4:0]  io_out_bits_wb_addr, // @[src/main/scala/fpga/InstructionDecoder.scala 100:14]
-  output        io_out_bits_op1_sel, // @[src/main/scala/fpga/InstructionDecoder.scala 100:14]
-  output        io_out_bits_op2_sel, // @[src/main/scala/fpga/InstructionDecoder.scala 100:14]
-  output [1:0]  io_out_bits_op3_sel, // @[src/main/scala/fpga/InstructionDecoder.scala 100:14]
-  output [4:0]  io_out_bits_rs1_addr, // @[src/main/scala/fpga/InstructionDecoder.scala 100:14]
-  output [4:0]  io_out_bits_rs2_addr, // @[src/main/scala/fpga/InstructionDecoder.scala 100:14]
-  output [4:0]  io_out_bits_rs3_addr, // @[src/main/scala/fpga/InstructionDecoder.scala 100:14]
-  output [31:0] io_out_bits_op1_data, // @[src/main/scala/fpga/InstructionDecoder.scala 100:14]
-  output [31:0] io_out_bits_op2_data_im1, // @[src/main/scala/fpga/InstructionDecoder.scala 100:14]
-  output [11:0] io_out_bits_op2_data_im0, // @[src/main/scala/fpga/InstructionDecoder.scala 100:14]
-  output [3:0]  io_out_bits_exe_fun, // @[src/main/scala/fpga/InstructionDecoder.scala 100:14]
-  output        io_out_bits_rf_wen, // @[src/main/scala/fpga/InstructionDecoder.scala 100:14]
-  output [2:0]  io_out_bits_wb_sel, // @[src/main/scala/fpga/InstructionDecoder.scala 100:14]
-  output [11:0] io_out_bits_csr_addr, // @[src/main/scala/fpga/InstructionDecoder.scala 100:14]
-  output [1:0]  io_out_bits_csr_cmd, // @[src/main/scala/fpga/InstructionDecoder.scala 100:14]
-  output [31:0] io_out_bits_imm_b_sext, // @[src/main/scala/fpga/InstructionDecoder.scala 100:14]
-  output [1:0]  io_out_bits_shamt, // @[src/main/scala/fpga/InstructionDecoder.scala 100:14]
-  output        io_out_bits_op2op, // @[src/main/scala/fpga/InstructionDecoder.scala 100:14]
-  output [2:0]  io_out_bits_mem_w, // @[src/main/scala/fpga/InstructionDecoder.scala 100:14]
-  output        io_out_bits_is_bflen, // @[src/main/scala/fpga/InstructionDecoder.scala 100:14]
-  output        io_out_bits_is_br, // @[src/main/scala/fpga/InstructionDecoder.scala 100:14]
-  output        io_out_bits_is_j, // @[src/main/scala/fpga/InstructionDecoder.scala 100:14]
-  output        io_out_bits_bp_taken, // @[src/main/scala/fpga/InstructionDecoder.scala 100:14]
-  output [1:0]  io_out_bits_bp_attr, // @[src/main/scala/fpga/InstructionDecoder.scala 100:14]
-  output        io_out_bits_bp_is_ret, // @[src/main/scala/fpga/InstructionDecoder.scala 100:14]
-  output [2:0]  io_out_bits_bp_rasindex, // @[src/main/scala/fpga/InstructionDecoder.scala 100:14]
-  output [30:0] io_out_bits_bp_target, // @[src/main/scala/fpga/InstructionDecoder.scala 100:14]
-  output [1:0]  io_out_bits_bp_cnt, // @[src/main/scala/fpga/InstructionDecoder.scala 100:14]
-  output [1:0]  io_out_bits_actual_attr, // @[src/main/scala/fpga/InstructionDecoder.scala 100:14]
-  output        io_out_bits_actual_is_ret, // @[src/main/scala/fpga/InstructionDecoder.scala 100:14]
-  output        io_out_bits_is_half, // @[src/main/scala/fpga/InstructionDecoder.scala 100:14]
-  output        io_out_bits_is_valid_inst, // @[src/main/scala/fpga/InstructionDecoder.scala 100:14]
-  output        io_out_bits_is_trap, // @[src/main/scala/fpga/InstructionDecoder.scala 100:14]
-  output [31:0] io_debug_signals_id_pc, // @[src/main/scala/fpga/InstructionDecoder.scala 100:14]
-  output [31:0] io_debug_signals_id_inst // @[src/main/scala/fpga/InstructionDecoder.scala 100:14]
+  output        io_in_ready, // @[src/main/scala/fpga/InstructionDecoder.scala 102:14]
+  output        io_in_flush, // @[src/main/scala/fpga/InstructionDecoder.scala 102:14]
+  input         io_in_bits_is_valid_inst, // @[src/main/scala/fpga/InstructionDecoder.scala 102:14]
+  input  [31:0] io_in_bits_inst, // @[src/main/scala/fpga/InstructionDecoder.scala 102:14]
+  input  [30:0] io_in_bits_pc, // @[src/main/scala/fpga/InstructionDecoder.scala 102:14]
+  input         io_in_bits_bp_taken, // @[src/main/scala/fpga/InstructionDecoder.scala 102:14]
+  input  [1:0]  io_in_bits_bp_attr, // @[src/main/scala/fpga/InstructionDecoder.scala 102:14]
+  input         io_in_bits_bp_is_ret, // @[src/main/scala/fpga/InstructionDecoder.scala 102:14]
+  input  [2:0]  io_in_bits_bp_rasindex, // @[src/main/scala/fpga/InstructionDecoder.scala 102:14]
+  input  [30:0] io_in_bits_bp_target, // @[src/main/scala/fpga/InstructionDecoder.scala 102:14]
+  input  [5:0]  io_in_bits_bp_history, // @[src/main/scala/fpga/InstructionDecoder.scala 102:14]
+  input  [1:0]  io_in_bits_bp_cnt, // @[src/main/scala/fpga/InstructionDecoder.scala 102:14]
+  input  [1:0]  io_in_bits_bp_gcnt, // @[src/main/scala/fpga/InstructionDecoder.scala 102:14]
+  input         io_out_ready, // @[src/main/scala/fpga/InstructionDecoder.scala 102:14]
+  input         io_out_flush, // @[src/main/scala/fpga/InstructionDecoder.scala 102:14]
+  output [30:0] io_out_bits_pc, // @[src/main/scala/fpga/InstructionDecoder.scala 102:14]
+  output [4:0]  io_out_bits_wb_addr, // @[src/main/scala/fpga/InstructionDecoder.scala 102:14]
+  output        io_out_bits_op1_sel, // @[src/main/scala/fpga/InstructionDecoder.scala 102:14]
+  output        io_out_bits_op2_sel, // @[src/main/scala/fpga/InstructionDecoder.scala 102:14]
+  output [1:0]  io_out_bits_op3_sel, // @[src/main/scala/fpga/InstructionDecoder.scala 102:14]
+  output [4:0]  io_out_bits_rs1_addr, // @[src/main/scala/fpga/InstructionDecoder.scala 102:14]
+  output [4:0]  io_out_bits_rs2_addr, // @[src/main/scala/fpga/InstructionDecoder.scala 102:14]
+  output [4:0]  io_out_bits_rs3_addr, // @[src/main/scala/fpga/InstructionDecoder.scala 102:14]
+  output [31:0] io_out_bits_op1_data, // @[src/main/scala/fpga/InstructionDecoder.scala 102:14]
+  output [31:0] io_out_bits_op2_data_im1, // @[src/main/scala/fpga/InstructionDecoder.scala 102:14]
+  output [11:0] io_out_bits_op2_data_im0, // @[src/main/scala/fpga/InstructionDecoder.scala 102:14]
+  output [3:0]  io_out_bits_exe_fun, // @[src/main/scala/fpga/InstructionDecoder.scala 102:14]
+  output        io_out_bits_rf_wen, // @[src/main/scala/fpga/InstructionDecoder.scala 102:14]
+  output [2:0]  io_out_bits_wb_sel, // @[src/main/scala/fpga/InstructionDecoder.scala 102:14]
+  output [11:0] io_out_bits_csr_addr, // @[src/main/scala/fpga/InstructionDecoder.scala 102:14]
+  output [1:0]  io_out_bits_csr_cmd, // @[src/main/scala/fpga/InstructionDecoder.scala 102:14]
+  output [31:0] io_out_bits_imm_b_sext, // @[src/main/scala/fpga/InstructionDecoder.scala 102:14]
+  output [1:0]  io_out_bits_shamt, // @[src/main/scala/fpga/InstructionDecoder.scala 102:14]
+  output        io_out_bits_op2op, // @[src/main/scala/fpga/InstructionDecoder.scala 102:14]
+  output [2:0]  io_out_bits_mem_w, // @[src/main/scala/fpga/InstructionDecoder.scala 102:14]
+  output        io_out_bits_is_bflen, // @[src/main/scala/fpga/InstructionDecoder.scala 102:14]
+  output        io_out_bits_is_br, // @[src/main/scala/fpga/InstructionDecoder.scala 102:14]
+  output        io_out_bits_is_j, // @[src/main/scala/fpga/InstructionDecoder.scala 102:14]
+  output        io_out_bits_bp_taken, // @[src/main/scala/fpga/InstructionDecoder.scala 102:14]
+  output [1:0]  io_out_bits_bp_attr, // @[src/main/scala/fpga/InstructionDecoder.scala 102:14]
+  output        io_out_bits_bp_is_ret, // @[src/main/scala/fpga/InstructionDecoder.scala 102:14]
+  output [2:0]  io_out_bits_bp_rasindex, // @[src/main/scala/fpga/InstructionDecoder.scala 102:14]
+  output [30:0] io_out_bits_bp_target, // @[src/main/scala/fpga/InstructionDecoder.scala 102:14]
+  output [5:0]  io_out_bits_bp_history, // @[src/main/scala/fpga/InstructionDecoder.scala 102:14]
+  output [1:0]  io_out_bits_bp_cnt, // @[src/main/scala/fpga/InstructionDecoder.scala 102:14]
+  output [1:0]  io_out_bits_bp_gcnt, // @[src/main/scala/fpga/InstructionDecoder.scala 102:14]
+  output [1:0]  io_out_bits_actual_attr, // @[src/main/scala/fpga/InstructionDecoder.scala 102:14]
+  output        io_out_bits_actual_is_ret, // @[src/main/scala/fpga/InstructionDecoder.scala 102:14]
+  output        io_out_bits_is_half, // @[src/main/scala/fpga/InstructionDecoder.scala 102:14]
+  output        io_out_bits_is_valid_inst, // @[src/main/scala/fpga/InstructionDecoder.scala 102:14]
+  output        io_out_bits_is_trap, // @[src/main/scala/fpga/InstructionDecoder.scala 102:14]
+  output [31:0] io_debug_signals_id_pc, // @[src/main/scala/fpga/InstructionDecoder.scala 102:14]
+  output [31:0] io_debug_signals_id_inst // @[src/main/scala/fpga/InstructionDecoder.scala 102:14]
 );
 `ifdef RANDOMIZE_REG_INIT
   reg [31:0] _RAND_0;
@@ -1916,151 +2141,159 @@ module InstructionDecoder(
   reg [31:0] _RAND_6;
   reg [31:0] _RAND_7;
   reg [31:0] _RAND_8;
+  reg [31:0] _RAND_9;
+  reg [31:0] _RAND_10;
 `endif // RANDOMIZE_REG_INIT
-  wire  id_output_queue_clock; // @[src/main/scala/fpga/InstructionDecoder.scala 108:31]
-  wire  id_output_queue_reset; // @[src/main/scala/fpga/InstructionDecoder.scala 108:31]
-  wire  id_output_queue_io_enq_ready; // @[src/main/scala/fpga/InstructionDecoder.scala 108:31]
-  wire  id_output_queue_io_enq_valid; // @[src/main/scala/fpga/InstructionDecoder.scala 108:31]
-  wire [30:0] id_output_queue_io_enq_bits_pc; // @[src/main/scala/fpga/InstructionDecoder.scala 108:31]
-  wire [4:0] id_output_queue_io_enq_bits_wb_addr; // @[src/main/scala/fpga/InstructionDecoder.scala 108:31]
-  wire  id_output_queue_io_enq_bits_op1_sel; // @[src/main/scala/fpga/InstructionDecoder.scala 108:31]
-  wire  id_output_queue_io_enq_bits_op2_sel; // @[src/main/scala/fpga/InstructionDecoder.scala 108:31]
-  wire [1:0] id_output_queue_io_enq_bits_op3_sel; // @[src/main/scala/fpga/InstructionDecoder.scala 108:31]
-  wire [4:0] id_output_queue_io_enq_bits_rs1_addr; // @[src/main/scala/fpga/InstructionDecoder.scala 108:31]
-  wire [4:0] id_output_queue_io_enq_bits_rs2_addr; // @[src/main/scala/fpga/InstructionDecoder.scala 108:31]
-  wire [4:0] id_output_queue_io_enq_bits_rs3_addr; // @[src/main/scala/fpga/InstructionDecoder.scala 108:31]
-  wire [31:0] id_output_queue_io_enq_bits_op1_data; // @[src/main/scala/fpga/InstructionDecoder.scala 108:31]
-  wire [31:0] id_output_queue_io_enq_bits_op2_data_im1; // @[src/main/scala/fpga/InstructionDecoder.scala 108:31]
-  wire [11:0] id_output_queue_io_enq_bits_op2_data_im0; // @[src/main/scala/fpga/InstructionDecoder.scala 108:31]
-  wire [3:0] id_output_queue_io_enq_bits_exe_fun; // @[src/main/scala/fpga/InstructionDecoder.scala 108:31]
-  wire  id_output_queue_io_enq_bits_rf_wen; // @[src/main/scala/fpga/InstructionDecoder.scala 108:31]
-  wire [2:0] id_output_queue_io_enq_bits_wb_sel; // @[src/main/scala/fpga/InstructionDecoder.scala 108:31]
-  wire [11:0] id_output_queue_io_enq_bits_csr_addr; // @[src/main/scala/fpga/InstructionDecoder.scala 108:31]
-  wire [1:0] id_output_queue_io_enq_bits_csr_cmd; // @[src/main/scala/fpga/InstructionDecoder.scala 108:31]
-  wire [31:0] id_output_queue_io_enq_bits_imm_b_sext; // @[src/main/scala/fpga/InstructionDecoder.scala 108:31]
-  wire [1:0] id_output_queue_io_enq_bits_shamt; // @[src/main/scala/fpga/InstructionDecoder.scala 108:31]
-  wire  id_output_queue_io_enq_bits_op2op; // @[src/main/scala/fpga/InstructionDecoder.scala 108:31]
-  wire [2:0] id_output_queue_io_enq_bits_mem_w; // @[src/main/scala/fpga/InstructionDecoder.scala 108:31]
-  wire  id_output_queue_io_enq_bits_is_bflen; // @[src/main/scala/fpga/InstructionDecoder.scala 108:31]
-  wire  id_output_queue_io_enq_bits_is_br; // @[src/main/scala/fpga/InstructionDecoder.scala 108:31]
-  wire  id_output_queue_io_enq_bits_is_j; // @[src/main/scala/fpga/InstructionDecoder.scala 108:31]
-  wire  id_output_queue_io_enq_bits_bp_taken; // @[src/main/scala/fpga/InstructionDecoder.scala 108:31]
-  wire [1:0] id_output_queue_io_enq_bits_bp_attr; // @[src/main/scala/fpga/InstructionDecoder.scala 108:31]
-  wire  id_output_queue_io_enq_bits_bp_is_ret; // @[src/main/scala/fpga/InstructionDecoder.scala 108:31]
-  wire [2:0] id_output_queue_io_enq_bits_bp_rasindex; // @[src/main/scala/fpga/InstructionDecoder.scala 108:31]
-  wire [30:0] id_output_queue_io_enq_bits_bp_target; // @[src/main/scala/fpga/InstructionDecoder.scala 108:31]
-  wire [1:0] id_output_queue_io_enq_bits_bp_cnt; // @[src/main/scala/fpga/InstructionDecoder.scala 108:31]
-  wire [1:0] id_output_queue_io_enq_bits_actual_attr; // @[src/main/scala/fpga/InstructionDecoder.scala 108:31]
-  wire  id_output_queue_io_enq_bits_actual_is_ret; // @[src/main/scala/fpga/InstructionDecoder.scala 108:31]
-  wire  id_output_queue_io_enq_bits_is_half; // @[src/main/scala/fpga/InstructionDecoder.scala 108:31]
-  wire  id_output_queue_io_enq_bits_is_valid_inst; // @[src/main/scala/fpga/InstructionDecoder.scala 108:31]
-  wire  id_output_queue_io_enq_bits_is_trap; // @[src/main/scala/fpga/InstructionDecoder.scala 108:31]
-  wire  id_output_queue_io_deq_ready; // @[src/main/scala/fpga/InstructionDecoder.scala 108:31]
-  wire  id_output_queue_io_deq_valid; // @[src/main/scala/fpga/InstructionDecoder.scala 108:31]
-  wire [30:0] id_output_queue_io_deq_bits_pc; // @[src/main/scala/fpga/InstructionDecoder.scala 108:31]
-  wire [4:0] id_output_queue_io_deq_bits_wb_addr; // @[src/main/scala/fpga/InstructionDecoder.scala 108:31]
-  wire  id_output_queue_io_deq_bits_op1_sel; // @[src/main/scala/fpga/InstructionDecoder.scala 108:31]
-  wire  id_output_queue_io_deq_bits_op2_sel; // @[src/main/scala/fpga/InstructionDecoder.scala 108:31]
-  wire [1:0] id_output_queue_io_deq_bits_op3_sel; // @[src/main/scala/fpga/InstructionDecoder.scala 108:31]
-  wire [4:0] id_output_queue_io_deq_bits_rs1_addr; // @[src/main/scala/fpga/InstructionDecoder.scala 108:31]
-  wire [4:0] id_output_queue_io_deq_bits_rs2_addr; // @[src/main/scala/fpga/InstructionDecoder.scala 108:31]
-  wire [4:0] id_output_queue_io_deq_bits_rs3_addr; // @[src/main/scala/fpga/InstructionDecoder.scala 108:31]
-  wire [31:0] id_output_queue_io_deq_bits_op1_data; // @[src/main/scala/fpga/InstructionDecoder.scala 108:31]
-  wire [31:0] id_output_queue_io_deq_bits_op2_data_im1; // @[src/main/scala/fpga/InstructionDecoder.scala 108:31]
-  wire [11:0] id_output_queue_io_deq_bits_op2_data_im0; // @[src/main/scala/fpga/InstructionDecoder.scala 108:31]
-  wire [3:0] id_output_queue_io_deq_bits_exe_fun; // @[src/main/scala/fpga/InstructionDecoder.scala 108:31]
-  wire  id_output_queue_io_deq_bits_rf_wen; // @[src/main/scala/fpga/InstructionDecoder.scala 108:31]
-  wire [2:0] id_output_queue_io_deq_bits_wb_sel; // @[src/main/scala/fpga/InstructionDecoder.scala 108:31]
-  wire [11:0] id_output_queue_io_deq_bits_csr_addr; // @[src/main/scala/fpga/InstructionDecoder.scala 108:31]
-  wire [1:0] id_output_queue_io_deq_bits_csr_cmd; // @[src/main/scala/fpga/InstructionDecoder.scala 108:31]
-  wire [31:0] id_output_queue_io_deq_bits_imm_b_sext; // @[src/main/scala/fpga/InstructionDecoder.scala 108:31]
-  wire [1:0] id_output_queue_io_deq_bits_shamt; // @[src/main/scala/fpga/InstructionDecoder.scala 108:31]
-  wire  id_output_queue_io_deq_bits_op2op; // @[src/main/scala/fpga/InstructionDecoder.scala 108:31]
-  wire [2:0] id_output_queue_io_deq_bits_mem_w; // @[src/main/scala/fpga/InstructionDecoder.scala 108:31]
-  wire  id_output_queue_io_deq_bits_is_bflen; // @[src/main/scala/fpga/InstructionDecoder.scala 108:31]
-  wire  id_output_queue_io_deq_bits_is_br; // @[src/main/scala/fpga/InstructionDecoder.scala 108:31]
-  wire  id_output_queue_io_deq_bits_is_j; // @[src/main/scala/fpga/InstructionDecoder.scala 108:31]
-  wire  id_output_queue_io_deq_bits_bp_taken; // @[src/main/scala/fpga/InstructionDecoder.scala 108:31]
-  wire [1:0] id_output_queue_io_deq_bits_bp_attr; // @[src/main/scala/fpga/InstructionDecoder.scala 108:31]
-  wire  id_output_queue_io_deq_bits_bp_is_ret; // @[src/main/scala/fpga/InstructionDecoder.scala 108:31]
-  wire [2:0] id_output_queue_io_deq_bits_bp_rasindex; // @[src/main/scala/fpga/InstructionDecoder.scala 108:31]
-  wire [30:0] id_output_queue_io_deq_bits_bp_target; // @[src/main/scala/fpga/InstructionDecoder.scala 108:31]
-  wire [1:0] id_output_queue_io_deq_bits_bp_cnt; // @[src/main/scala/fpga/InstructionDecoder.scala 108:31]
-  wire [1:0] id_output_queue_io_deq_bits_actual_attr; // @[src/main/scala/fpga/InstructionDecoder.scala 108:31]
-  wire  id_output_queue_io_deq_bits_actual_is_ret; // @[src/main/scala/fpga/InstructionDecoder.scala 108:31]
-  wire  id_output_queue_io_deq_bits_is_half; // @[src/main/scala/fpga/InstructionDecoder.scala 108:31]
-  wire  id_output_queue_io_deq_bits_is_valid_inst; // @[src/main/scala/fpga/InstructionDecoder.scala 108:31]
-  wire  id_output_queue_io_deq_bits_is_trap; // @[src/main/scala/fpga/InstructionDecoder.scala 108:31]
-  reg  id_reg_is_valid_inst; // @[src/main/scala/fpga/InstructionDecoder.scala 102:37]
-  reg [31:0] id_reg_inst; // @[src/main/scala/fpga/InstructionDecoder.scala 103:37]
-  reg [30:0] id_reg_pc; // @[src/main/scala/fpga/InstructionDecoder.scala 104:37]
-  reg  id_reg_bp_taken; // @[src/main/scala/fpga/InstructionDecoder.scala 105:37]
-  reg [1:0] id_reg_bp_attr; // @[src/main/scala/fpga/InstructionDecoder.scala 105:37]
-  reg  id_reg_bp_is_ret; // @[src/main/scala/fpga/InstructionDecoder.scala 105:37]
-  reg [2:0] id_reg_bp_rasindex; // @[src/main/scala/fpga/InstructionDecoder.scala 105:37]
-  reg [30:0] id_reg_bp_target; // @[src/main/scala/fpga/InstructionDecoder.scala 105:37]
-  reg [1:0] id_reg_bp_cnt; // @[src/main/scala/fpga/InstructionDecoder.scala 105:37]
-  wire [31:0] _io_debug_signals_id_pc_T = {id_reg_pc,1'h0}; // @[src/main/scala/fpga/InstructionDecoder.scala 128:34]
-  wire [4:0] id_rs1_addr = id_reg_inst[19:15]; // @[src/main/scala/fpga/InstructionDecoder.scala 135:28]
-  wire [4:0] id_rs2_addr = id_reg_inst[24:20]; // @[src/main/scala/fpga/InstructionDecoder.scala 136:28]
-  wire [4:0] id_rs3_addr = id_reg_inst[31:27]; // @[src/main/scala/fpga/InstructionDecoder.scala 137:28]
-  wire [4:0] id_w_wb_addr = id_reg_inst[11:7]; // @[src/main/scala/fpga/InstructionDecoder.scala 138:30]
-  wire [4:0] id_c_rs2_addr = id_reg_inst[6:2]; // @[src/main/scala/fpga/InstructionDecoder.scala 141:31]
-  wire [4:0] id_c_rs1p_addr = {2'h1,id_reg_inst[9:7]}; // @[src/main/scala/fpga/InstructionDecoder.scala 143:27]
-  wire [4:0] id_c_rs2p_addr = {2'h1,id_reg_inst[4:2]}; // @[src/main/scala/fpga/InstructionDecoder.scala 144:27]
-  wire [4:0] id_c_rs3p_addr = {2'h1,id_reg_inst[12:10]}; // @[src/main/scala/fpga/InstructionDecoder.scala 145:27]
-  wire [11:0] id_imm_i = id_reg_inst[31:20]; // @[src/main/scala/fpga/InstructionDecoder.scala 149:25]
-  wire [19:0] _id_imm_i_sext_T_2 = id_imm_i[11] ? 20'hfffff : 20'h0; // @[src/main/scala/fpga/InstructionDecoder.scala 150:31]
-  wire [31:0] id_imm_i_sext = {_id_imm_i_sext_T_2,id_imm_i}; // @[src/main/scala/fpga/InstructionDecoder.scala 150:26]
-  wire [11:0] id_imm_s = {id_reg_inst[31:25],id_w_wb_addr}; // @[src/main/scala/fpga/InstructionDecoder.scala 151:21]
-  wire [19:0] _id_imm_s_sext_T_2 = id_imm_s[11] ? 20'hfffff : 20'h0; // @[src/main/scala/fpga/InstructionDecoder.scala 152:31]
-  wire [31:0] id_imm_s_sext = {_id_imm_s_sext_T_2,id_reg_inst[31:25],id_w_wb_addr}; // @[src/main/scala/fpga/InstructionDecoder.scala 152:26]
-  wire [11:0] id_imm_b = {id_reg_inst[31],id_reg_inst[7],id_reg_inst[30:25],id_reg_inst[11:8]}; // @[src/main/scala/fpga/InstructionDecoder.scala 153:21]
-  wire [18:0] _id_imm_b_sext_T_2 = id_imm_b[11] ? 19'h7ffff : 19'h0; // @[src/main/scala/fpga/InstructionDecoder.scala 154:31]
+  wire  id_output_queue_clock; // @[src/main/scala/fpga/InstructionDecoder.scala 110:31]
+  wire  id_output_queue_reset; // @[src/main/scala/fpga/InstructionDecoder.scala 110:31]
+  wire  id_output_queue_io_enq_ready; // @[src/main/scala/fpga/InstructionDecoder.scala 110:31]
+  wire  id_output_queue_io_enq_valid; // @[src/main/scala/fpga/InstructionDecoder.scala 110:31]
+  wire [30:0] id_output_queue_io_enq_bits_pc; // @[src/main/scala/fpga/InstructionDecoder.scala 110:31]
+  wire [4:0] id_output_queue_io_enq_bits_wb_addr; // @[src/main/scala/fpga/InstructionDecoder.scala 110:31]
+  wire  id_output_queue_io_enq_bits_op1_sel; // @[src/main/scala/fpga/InstructionDecoder.scala 110:31]
+  wire  id_output_queue_io_enq_bits_op2_sel; // @[src/main/scala/fpga/InstructionDecoder.scala 110:31]
+  wire [1:0] id_output_queue_io_enq_bits_op3_sel; // @[src/main/scala/fpga/InstructionDecoder.scala 110:31]
+  wire [4:0] id_output_queue_io_enq_bits_rs1_addr; // @[src/main/scala/fpga/InstructionDecoder.scala 110:31]
+  wire [4:0] id_output_queue_io_enq_bits_rs2_addr; // @[src/main/scala/fpga/InstructionDecoder.scala 110:31]
+  wire [4:0] id_output_queue_io_enq_bits_rs3_addr; // @[src/main/scala/fpga/InstructionDecoder.scala 110:31]
+  wire [31:0] id_output_queue_io_enq_bits_op1_data; // @[src/main/scala/fpga/InstructionDecoder.scala 110:31]
+  wire [31:0] id_output_queue_io_enq_bits_op2_data_im1; // @[src/main/scala/fpga/InstructionDecoder.scala 110:31]
+  wire [11:0] id_output_queue_io_enq_bits_op2_data_im0; // @[src/main/scala/fpga/InstructionDecoder.scala 110:31]
+  wire [3:0] id_output_queue_io_enq_bits_exe_fun; // @[src/main/scala/fpga/InstructionDecoder.scala 110:31]
+  wire  id_output_queue_io_enq_bits_rf_wen; // @[src/main/scala/fpga/InstructionDecoder.scala 110:31]
+  wire [2:0] id_output_queue_io_enq_bits_wb_sel; // @[src/main/scala/fpga/InstructionDecoder.scala 110:31]
+  wire [11:0] id_output_queue_io_enq_bits_csr_addr; // @[src/main/scala/fpga/InstructionDecoder.scala 110:31]
+  wire [1:0] id_output_queue_io_enq_bits_csr_cmd; // @[src/main/scala/fpga/InstructionDecoder.scala 110:31]
+  wire [31:0] id_output_queue_io_enq_bits_imm_b_sext; // @[src/main/scala/fpga/InstructionDecoder.scala 110:31]
+  wire [1:0] id_output_queue_io_enq_bits_shamt; // @[src/main/scala/fpga/InstructionDecoder.scala 110:31]
+  wire  id_output_queue_io_enq_bits_op2op; // @[src/main/scala/fpga/InstructionDecoder.scala 110:31]
+  wire [2:0] id_output_queue_io_enq_bits_mem_w; // @[src/main/scala/fpga/InstructionDecoder.scala 110:31]
+  wire  id_output_queue_io_enq_bits_is_bflen; // @[src/main/scala/fpga/InstructionDecoder.scala 110:31]
+  wire  id_output_queue_io_enq_bits_is_br; // @[src/main/scala/fpga/InstructionDecoder.scala 110:31]
+  wire  id_output_queue_io_enq_bits_is_j; // @[src/main/scala/fpga/InstructionDecoder.scala 110:31]
+  wire  id_output_queue_io_enq_bits_bp_taken; // @[src/main/scala/fpga/InstructionDecoder.scala 110:31]
+  wire [1:0] id_output_queue_io_enq_bits_bp_attr; // @[src/main/scala/fpga/InstructionDecoder.scala 110:31]
+  wire  id_output_queue_io_enq_bits_bp_is_ret; // @[src/main/scala/fpga/InstructionDecoder.scala 110:31]
+  wire [2:0] id_output_queue_io_enq_bits_bp_rasindex; // @[src/main/scala/fpga/InstructionDecoder.scala 110:31]
+  wire [30:0] id_output_queue_io_enq_bits_bp_target; // @[src/main/scala/fpga/InstructionDecoder.scala 110:31]
+  wire [5:0] id_output_queue_io_enq_bits_bp_history; // @[src/main/scala/fpga/InstructionDecoder.scala 110:31]
+  wire [1:0] id_output_queue_io_enq_bits_bp_cnt; // @[src/main/scala/fpga/InstructionDecoder.scala 110:31]
+  wire [1:0] id_output_queue_io_enq_bits_bp_gcnt; // @[src/main/scala/fpga/InstructionDecoder.scala 110:31]
+  wire [1:0] id_output_queue_io_enq_bits_actual_attr; // @[src/main/scala/fpga/InstructionDecoder.scala 110:31]
+  wire  id_output_queue_io_enq_bits_actual_is_ret; // @[src/main/scala/fpga/InstructionDecoder.scala 110:31]
+  wire  id_output_queue_io_enq_bits_is_half; // @[src/main/scala/fpga/InstructionDecoder.scala 110:31]
+  wire  id_output_queue_io_enq_bits_is_valid_inst; // @[src/main/scala/fpga/InstructionDecoder.scala 110:31]
+  wire  id_output_queue_io_enq_bits_is_trap; // @[src/main/scala/fpga/InstructionDecoder.scala 110:31]
+  wire  id_output_queue_io_deq_ready; // @[src/main/scala/fpga/InstructionDecoder.scala 110:31]
+  wire  id_output_queue_io_deq_valid; // @[src/main/scala/fpga/InstructionDecoder.scala 110:31]
+  wire [30:0] id_output_queue_io_deq_bits_pc; // @[src/main/scala/fpga/InstructionDecoder.scala 110:31]
+  wire [4:0] id_output_queue_io_deq_bits_wb_addr; // @[src/main/scala/fpga/InstructionDecoder.scala 110:31]
+  wire  id_output_queue_io_deq_bits_op1_sel; // @[src/main/scala/fpga/InstructionDecoder.scala 110:31]
+  wire  id_output_queue_io_deq_bits_op2_sel; // @[src/main/scala/fpga/InstructionDecoder.scala 110:31]
+  wire [1:0] id_output_queue_io_deq_bits_op3_sel; // @[src/main/scala/fpga/InstructionDecoder.scala 110:31]
+  wire [4:0] id_output_queue_io_deq_bits_rs1_addr; // @[src/main/scala/fpga/InstructionDecoder.scala 110:31]
+  wire [4:0] id_output_queue_io_deq_bits_rs2_addr; // @[src/main/scala/fpga/InstructionDecoder.scala 110:31]
+  wire [4:0] id_output_queue_io_deq_bits_rs3_addr; // @[src/main/scala/fpga/InstructionDecoder.scala 110:31]
+  wire [31:0] id_output_queue_io_deq_bits_op1_data; // @[src/main/scala/fpga/InstructionDecoder.scala 110:31]
+  wire [31:0] id_output_queue_io_deq_bits_op2_data_im1; // @[src/main/scala/fpga/InstructionDecoder.scala 110:31]
+  wire [11:0] id_output_queue_io_deq_bits_op2_data_im0; // @[src/main/scala/fpga/InstructionDecoder.scala 110:31]
+  wire [3:0] id_output_queue_io_deq_bits_exe_fun; // @[src/main/scala/fpga/InstructionDecoder.scala 110:31]
+  wire  id_output_queue_io_deq_bits_rf_wen; // @[src/main/scala/fpga/InstructionDecoder.scala 110:31]
+  wire [2:0] id_output_queue_io_deq_bits_wb_sel; // @[src/main/scala/fpga/InstructionDecoder.scala 110:31]
+  wire [11:0] id_output_queue_io_deq_bits_csr_addr; // @[src/main/scala/fpga/InstructionDecoder.scala 110:31]
+  wire [1:0] id_output_queue_io_deq_bits_csr_cmd; // @[src/main/scala/fpga/InstructionDecoder.scala 110:31]
+  wire [31:0] id_output_queue_io_deq_bits_imm_b_sext; // @[src/main/scala/fpga/InstructionDecoder.scala 110:31]
+  wire [1:0] id_output_queue_io_deq_bits_shamt; // @[src/main/scala/fpga/InstructionDecoder.scala 110:31]
+  wire  id_output_queue_io_deq_bits_op2op; // @[src/main/scala/fpga/InstructionDecoder.scala 110:31]
+  wire [2:0] id_output_queue_io_deq_bits_mem_w; // @[src/main/scala/fpga/InstructionDecoder.scala 110:31]
+  wire  id_output_queue_io_deq_bits_is_bflen; // @[src/main/scala/fpga/InstructionDecoder.scala 110:31]
+  wire  id_output_queue_io_deq_bits_is_br; // @[src/main/scala/fpga/InstructionDecoder.scala 110:31]
+  wire  id_output_queue_io_deq_bits_is_j; // @[src/main/scala/fpga/InstructionDecoder.scala 110:31]
+  wire  id_output_queue_io_deq_bits_bp_taken; // @[src/main/scala/fpga/InstructionDecoder.scala 110:31]
+  wire [1:0] id_output_queue_io_deq_bits_bp_attr; // @[src/main/scala/fpga/InstructionDecoder.scala 110:31]
+  wire  id_output_queue_io_deq_bits_bp_is_ret; // @[src/main/scala/fpga/InstructionDecoder.scala 110:31]
+  wire [2:0] id_output_queue_io_deq_bits_bp_rasindex; // @[src/main/scala/fpga/InstructionDecoder.scala 110:31]
+  wire [30:0] id_output_queue_io_deq_bits_bp_target; // @[src/main/scala/fpga/InstructionDecoder.scala 110:31]
+  wire [5:0] id_output_queue_io_deq_bits_bp_history; // @[src/main/scala/fpga/InstructionDecoder.scala 110:31]
+  wire [1:0] id_output_queue_io_deq_bits_bp_cnt; // @[src/main/scala/fpga/InstructionDecoder.scala 110:31]
+  wire [1:0] id_output_queue_io_deq_bits_bp_gcnt; // @[src/main/scala/fpga/InstructionDecoder.scala 110:31]
+  wire [1:0] id_output_queue_io_deq_bits_actual_attr; // @[src/main/scala/fpga/InstructionDecoder.scala 110:31]
+  wire  id_output_queue_io_deq_bits_actual_is_ret; // @[src/main/scala/fpga/InstructionDecoder.scala 110:31]
+  wire  id_output_queue_io_deq_bits_is_half; // @[src/main/scala/fpga/InstructionDecoder.scala 110:31]
+  wire  id_output_queue_io_deq_bits_is_valid_inst; // @[src/main/scala/fpga/InstructionDecoder.scala 110:31]
+  wire  id_output_queue_io_deq_bits_is_trap; // @[src/main/scala/fpga/InstructionDecoder.scala 110:31]
+  reg  id_reg_is_valid_inst; // @[src/main/scala/fpga/InstructionDecoder.scala 104:37]
+  reg [31:0] id_reg_inst; // @[src/main/scala/fpga/InstructionDecoder.scala 105:37]
+  reg [30:0] id_reg_pc; // @[src/main/scala/fpga/InstructionDecoder.scala 106:37]
+  reg  id_reg_bp_taken; // @[src/main/scala/fpga/InstructionDecoder.scala 107:37]
+  reg [1:0] id_reg_bp_attr; // @[src/main/scala/fpga/InstructionDecoder.scala 107:37]
+  reg  id_reg_bp_is_ret; // @[src/main/scala/fpga/InstructionDecoder.scala 107:37]
+  reg [2:0] id_reg_bp_rasindex; // @[src/main/scala/fpga/InstructionDecoder.scala 107:37]
+  reg [30:0] id_reg_bp_target; // @[src/main/scala/fpga/InstructionDecoder.scala 107:37]
+  reg [5:0] id_reg_bp_history; // @[src/main/scala/fpga/InstructionDecoder.scala 107:37]
+  reg [1:0] id_reg_bp_cnt; // @[src/main/scala/fpga/InstructionDecoder.scala 107:37]
+  reg [1:0] id_reg_bp_gcnt; // @[src/main/scala/fpga/InstructionDecoder.scala 107:37]
+  wire [31:0] _io_debug_signals_id_pc_T = {id_reg_pc,1'h0}; // @[src/main/scala/fpga/InstructionDecoder.scala 130:34]
+  wire [4:0] id_rs1_addr = id_reg_inst[19:15]; // @[src/main/scala/fpga/InstructionDecoder.scala 137:28]
+  wire [4:0] id_rs2_addr = id_reg_inst[24:20]; // @[src/main/scala/fpga/InstructionDecoder.scala 138:28]
+  wire [4:0] id_rs3_addr = id_reg_inst[31:27]; // @[src/main/scala/fpga/InstructionDecoder.scala 139:28]
+  wire [4:0] id_w_wb_addr = id_reg_inst[11:7]; // @[src/main/scala/fpga/InstructionDecoder.scala 140:30]
+  wire [4:0] id_c_rs2_addr = id_reg_inst[6:2]; // @[src/main/scala/fpga/InstructionDecoder.scala 143:31]
+  wire [4:0] id_c_rs1p_addr = {2'h1,id_reg_inst[9:7]}; // @[src/main/scala/fpga/InstructionDecoder.scala 145:27]
+  wire [4:0] id_c_rs2p_addr = {2'h1,id_reg_inst[4:2]}; // @[src/main/scala/fpga/InstructionDecoder.scala 146:27]
+  wire [4:0] id_c_rs3p_addr = {2'h1,id_reg_inst[12:10]}; // @[src/main/scala/fpga/InstructionDecoder.scala 147:27]
+  wire [11:0] id_imm_i = id_reg_inst[31:20]; // @[src/main/scala/fpga/InstructionDecoder.scala 151:25]
+  wire [19:0] _id_imm_i_sext_T_2 = id_imm_i[11] ? 20'hfffff : 20'h0; // @[src/main/scala/fpga/InstructionDecoder.scala 152:31]
+  wire [31:0] id_imm_i_sext = {_id_imm_i_sext_T_2,id_imm_i}; // @[src/main/scala/fpga/InstructionDecoder.scala 152:26]
+  wire [11:0] id_imm_s = {id_reg_inst[31:25],id_w_wb_addr}; // @[src/main/scala/fpga/InstructionDecoder.scala 153:21]
+  wire [19:0] _id_imm_s_sext_T_2 = id_imm_s[11] ? 20'hfffff : 20'h0; // @[src/main/scala/fpga/InstructionDecoder.scala 154:31]
+  wire [31:0] id_imm_s_sext = {_id_imm_s_sext_T_2,id_reg_inst[31:25],id_w_wb_addr}; // @[src/main/scala/fpga/InstructionDecoder.scala 154:26]
+  wire [11:0] id_imm_b = {id_reg_inst[31],id_reg_inst[7],id_reg_inst[30:25],id_reg_inst[11:8]}; // @[src/main/scala/fpga/InstructionDecoder.scala 155:21]
+  wire [18:0] _id_imm_b_sext_T_2 = id_imm_b[11] ? 19'h7ffff : 19'h0; // @[src/main/scala/fpga/InstructionDecoder.scala 156:31]
   wire [31:0] id_imm_b_sext = {_id_imm_b_sext_T_2,id_reg_inst[31],id_reg_inst[7],id_reg_inst[30:25],id_reg_inst[11:8],1'h0
-    }; // @[src/main/scala/fpga/InstructionDecoder.scala 154:26]
-  wire [19:0] id_imm_j = {id_reg_inst[31],id_reg_inst[19:12],id_reg_inst[20],id_reg_inst[30:21]}; // @[src/main/scala/fpga/InstructionDecoder.scala 155:21]
-  wire [10:0] _id_imm_j_sext_T_2 = id_imm_j[19] ? 11'h7ff : 11'h0; // @[src/main/scala/fpga/InstructionDecoder.scala 156:31]
-  wire [31:0] id_imm_j_sext = {_id_imm_j_sext_T_2,id_reg_inst[31],id_reg_inst[19:12],id_reg_inst[20],id_reg_inst[30:21],1'h0
     }; // @[src/main/scala/fpga/InstructionDecoder.scala 156:26]
-  wire [19:0] id_imm_u = id_reg_inst[31:12]; // @[src/main/scala/fpga/InstructionDecoder.scala 157:25]
-  wire [31:0] id_imm_u_shifted = {id_imm_u,12'h0}; // @[src/main/scala/fpga/InstructionDecoder.scala 158:29]
-  wire [31:0] id_imm_z_uext = {27'h0,id_rs1_addr}; // @[src/main/scala/fpga/InstructionDecoder.scala 160:26]
-  wire [26:0] _id_c_imm_i_T_2 = id_reg_inst[12] ? 27'h7ffffff : 27'h0; // @[src/main/scala/fpga/InstructionDecoder.scala 162:28]
-  wire [31:0] id_c_imm_i = {_id_c_imm_i_T_2,id_c_rs2_addr}; // @[src/main/scala/fpga/InstructionDecoder.scala 162:23]
-  wire [14:0] _id_c_imm_iu_T_2 = id_reg_inst[12] ? 15'h7fff : 15'h0; // @[src/main/scala/fpga/InstructionDecoder.scala 163:29]
-  wire [31:0] id_c_imm_iu = {_id_c_imm_iu_T_2,id_c_rs2_addr,12'h0}; // @[src/main/scala/fpga/InstructionDecoder.scala 163:24]
-  wire [22:0] _id_c_imm_i16_T_2 = id_reg_inst[12] ? 23'h7fffff : 23'h0; // @[src/main/scala/fpga/InstructionDecoder.scala 164:30]
-  wire [31:0] id_c_imm_i16 = {_id_c_imm_i16_T_2,id_reg_inst[4:3],id_reg_inst[5],id_reg_inst[2],id_reg_inst[6],4'h0}; // @[src/main/scala/fpga/InstructionDecoder.scala 164:25]
-  wire [11:0] id_c_imm_sl = {4'h0,id_reg_inst[3:2],id_reg_inst[12],id_reg_inst[6:4],2'h0}; // @[src/main/scala/fpga/InstructionDecoder.scala 165:24]
-  wire [11:0] id_c_imm_ss = {4'h0,id_reg_inst[8:7],id_reg_inst[12:9],2'h0}; // @[src/main/scala/fpga/InstructionDecoder.scala 166:24]
-  wire [11:0] id_c_imm_iw = {2'h0,id_reg_inst[10:7],id_reg_inst[12:11],id_reg_inst[5],id_reg_inst[6],2'h0}; // @[src/main/scala/fpga/InstructionDecoder.scala 167:24]
-  wire [11:0] id_c_imm_ls = {5'h0,id_reg_inst[5],id_reg_inst[12:10],id_reg_inst[6],2'h0}; // @[src/main/scala/fpga/InstructionDecoder.scala 168:24]
-  wire [23:0] _id_c_imm_b_T_2 = id_reg_inst[12] ? 24'hffffff : 24'h0; // @[src/main/scala/fpga/InstructionDecoder.scala 169:28]
-  wire [31:0] id_c_imm_b = {_id_c_imm_b_T_2,id_reg_inst[6:5],id_reg_inst[2],id_reg_inst[11:10],id_reg_inst[4:3],1'h0}; // @[src/main/scala/fpga/InstructionDecoder.scala 169:23]
-  wire [20:0] _id_c_imm_j_T_2 = id_reg_inst[12] ? 21'h1fffff : 21'h0; // @[src/main/scala/fpga/InstructionDecoder.scala 170:28]
+  wire [19:0] id_imm_j = {id_reg_inst[31],id_reg_inst[19:12],id_reg_inst[20],id_reg_inst[30:21]}; // @[src/main/scala/fpga/InstructionDecoder.scala 157:21]
+  wire [10:0] _id_imm_j_sext_T_2 = id_imm_j[19] ? 11'h7ff : 11'h0; // @[src/main/scala/fpga/InstructionDecoder.scala 158:31]
+  wire [31:0] id_imm_j_sext = {_id_imm_j_sext_T_2,id_reg_inst[31],id_reg_inst[19:12],id_reg_inst[20],id_reg_inst[30:21],1'h0
+    }; // @[src/main/scala/fpga/InstructionDecoder.scala 158:26]
+  wire [19:0] id_imm_u = id_reg_inst[31:12]; // @[src/main/scala/fpga/InstructionDecoder.scala 159:25]
+  wire [31:0] id_imm_u_shifted = {id_imm_u,12'h0}; // @[src/main/scala/fpga/InstructionDecoder.scala 160:29]
+  wire [31:0] id_imm_z_uext = {27'h0,id_rs1_addr}; // @[src/main/scala/fpga/InstructionDecoder.scala 162:26]
+  wire [26:0] _id_c_imm_i_T_2 = id_reg_inst[12] ? 27'h7ffffff : 27'h0; // @[src/main/scala/fpga/InstructionDecoder.scala 164:28]
+  wire [31:0] id_c_imm_i = {_id_c_imm_i_T_2,id_c_rs2_addr}; // @[src/main/scala/fpga/InstructionDecoder.scala 164:23]
+  wire [14:0] _id_c_imm_iu_T_2 = id_reg_inst[12] ? 15'h7fff : 15'h0; // @[src/main/scala/fpga/InstructionDecoder.scala 165:29]
+  wire [31:0] id_c_imm_iu = {_id_c_imm_iu_T_2,id_c_rs2_addr,12'h0}; // @[src/main/scala/fpga/InstructionDecoder.scala 165:24]
+  wire [22:0] _id_c_imm_i16_T_2 = id_reg_inst[12] ? 23'h7fffff : 23'h0; // @[src/main/scala/fpga/InstructionDecoder.scala 166:30]
+  wire [31:0] id_c_imm_i16 = {_id_c_imm_i16_T_2,id_reg_inst[4:3],id_reg_inst[5],id_reg_inst[2],id_reg_inst[6],4'h0}; // @[src/main/scala/fpga/InstructionDecoder.scala 166:25]
+  wire [11:0] id_c_imm_sl = {4'h0,id_reg_inst[3:2],id_reg_inst[12],id_reg_inst[6:4],2'h0}; // @[src/main/scala/fpga/InstructionDecoder.scala 167:24]
+  wire [11:0] id_c_imm_ss = {4'h0,id_reg_inst[8:7],id_reg_inst[12:9],2'h0}; // @[src/main/scala/fpga/InstructionDecoder.scala 168:24]
+  wire [11:0] id_c_imm_iw = {2'h0,id_reg_inst[10:7],id_reg_inst[12:11],id_reg_inst[5],id_reg_inst[6],2'h0}; // @[src/main/scala/fpga/InstructionDecoder.scala 169:24]
+  wire [11:0] id_c_imm_ls = {5'h0,id_reg_inst[5],id_reg_inst[12:10],id_reg_inst[6],2'h0}; // @[src/main/scala/fpga/InstructionDecoder.scala 170:24]
+  wire [23:0] _id_c_imm_b_T_2 = id_reg_inst[12] ? 24'hffffff : 24'h0; // @[src/main/scala/fpga/InstructionDecoder.scala 171:28]
+  wire [31:0] id_c_imm_b = {_id_c_imm_b_T_2,id_reg_inst[6:5],id_reg_inst[2],id_reg_inst[11:10],id_reg_inst[4:3],1'h0}; // @[src/main/scala/fpga/InstructionDecoder.scala 171:23]
+  wire [20:0] _id_c_imm_j_T_2 = id_reg_inst[12] ? 21'h1fffff : 21'h0; // @[src/main/scala/fpga/InstructionDecoder.scala 172:28]
   wire [31:0] id_c_imm_j = {_id_c_imm_j_T_2,id_reg_inst[8],id_reg_inst[10:9],id_reg_inst[6],id_reg_inst[7],id_reg_inst[2
-    ],id_reg_inst[11],id_reg_inst[5:3],1'h0}; // @[src/main/scala/fpga/InstructionDecoder.scala 170:23]
-  wire [31:0] id_c_imm_b2 = {_id_c_imm_i_T_2,id_reg_inst[11:10],id_reg_inst[6:5],1'h0}; // @[src/main/scala/fpga/InstructionDecoder.scala 172:24]
-  wire [31:0] id_c_imm_u = {12'h0,id_reg_inst[12:5],12'h0}; // @[src/main/scala/fpga/InstructionDecoder.scala 173:23]
-  wire [11:0] id_c_imm_lsb = {7'h0,id_reg_inst[11:10],id_reg_inst[6:5],id_reg_inst[12]}; // @[src/main/scala/fpga/InstructionDecoder.scala 174:25]
-  wire [11:0] id_c_imm_lsh = {8'h0,id_reg_inst[10],id_reg_inst[6:5],1'h0}; // @[src/main/scala/fpga/InstructionDecoder.scala 175:25]
-  wire [11:0] id_c_imm_sw0 = {5'h0,id_reg_inst[5:3],id_reg_inst[10],id_reg_inst[6],2'h0}; // @[src/main/scala/fpga/InstructionDecoder.scala 176:25]
-  wire [11:0] id_c_imm_sb0 = {8'h0,id_reg_inst[10],id_reg_inst[6:4]}; // @[src/main/scala/fpga/InstructionDecoder.scala 177:25]
-  wire [12:0] id_c_imm_sh0 = {8'h0,id_reg_inst[4],id_reg_inst[10],id_reg_inst[6:5],1'h0}; // @[src/main/scala/fpga/InstructionDecoder.scala 178:25]
-  wire [25:0] _id_c_imm_a2w_T_2 = id_reg_inst[12] ? 26'h3ffffff : 26'h0; // @[src/main/scala/fpga/InstructionDecoder.scala 179:30]
-  wire [31:0] id_c_imm_a2w = {_id_c_imm_a2w_T_2,id_reg_inst[5],id_reg_inst[11:10],id_reg_inst[6],2'h0}; // @[src/main/scala/fpga/InstructionDecoder.scala 179:25]
-  wire [29:0] _id_c_imm_a2b_T_2 = id_reg_inst[12] ? 30'h3fffffff : 30'h0; // @[src/main/scala/fpga/InstructionDecoder.scala 180:30]
-  wire [31:0] id_c_imm_a2b = {_id_c_imm_a2b_T_2,id_reg_inst[11:10]}; // @[src/main/scala/fpga/InstructionDecoder.scala 180:25]
-  wire [2:0] _id_imm_bfi_len_T_2 = {id_reg_inst[26:25],id_reg_inst[14]}; // @[src/main/scala/fpga/InstructionDecoder.scala 184:37]
-  wire [4:0] _id_imm_bfi_len_T_4 = 3'h1 == _id_imm_bfi_len_T_2 ? 5'h1 : 5'h0; // @[src/main/scala/fpga/InstructionDecoder.scala 184:78]
-  wire [4:0] _id_imm_bfi_len_T_6 = 3'h2 == _id_imm_bfi_len_T_2 ? 5'h2 : _id_imm_bfi_len_T_4; // @[src/main/scala/fpga/InstructionDecoder.scala 184:78]
-  wire [4:0] _id_imm_bfi_len_T_8 = 3'h3 == _id_imm_bfi_len_T_2 ? 5'h3 : _id_imm_bfi_len_T_6; // @[src/main/scala/fpga/InstructionDecoder.scala 184:78]
-  wire [4:0] _id_imm_bfi_len_T_10 = 3'h4 == _id_imm_bfi_len_T_2 ? 5'h4 : _id_imm_bfi_len_T_8; // @[src/main/scala/fpga/InstructionDecoder.scala 184:78]
-  wire [4:0] _id_imm_bfi_len_T_12 = 3'h5 == _id_imm_bfi_len_T_2 ? 5'h5 : _id_imm_bfi_len_T_10; // @[src/main/scala/fpga/InstructionDecoder.scala 184:78]
-  wire [4:0] _id_imm_bfi_len_T_14 = 3'h6 == _id_imm_bfi_len_T_2 ? 5'h6 : _id_imm_bfi_len_T_12; // @[src/main/scala/fpga/InstructionDecoder.scala 184:78]
-  wire [4:0] id_imm_bfi_len = 3'h7 == _id_imm_bfi_len_T_2 ? 5'h8 : _id_imm_bfi_len_T_14; // @[src/main/scala/fpga/InstructionDecoder.scala 184:78]
-  wire [11:0] id_imm_bfi = {1'h0,id_imm_bfi_len,1'h0,id_rs2_addr}; // @[src/main/scala/fpga/InstructionDecoder.scala 196:23]
+    ],id_reg_inst[11],id_reg_inst[5:3],1'h0}; // @[src/main/scala/fpga/InstructionDecoder.scala 172:23]
+  wire [31:0] id_c_imm_b2 = {_id_c_imm_i_T_2,id_reg_inst[11:10],id_reg_inst[6:5],1'h0}; // @[src/main/scala/fpga/InstructionDecoder.scala 174:24]
+  wire [31:0] id_c_imm_u = {12'h0,id_reg_inst[12:5],12'h0}; // @[src/main/scala/fpga/InstructionDecoder.scala 175:23]
+  wire [11:0] id_c_imm_lsb = {7'h0,id_reg_inst[11:10],id_reg_inst[6:5],id_reg_inst[12]}; // @[src/main/scala/fpga/InstructionDecoder.scala 176:25]
+  wire [11:0] id_c_imm_lsh = {8'h0,id_reg_inst[10],id_reg_inst[6:5],1'h0}; // @[src/main/scala/fpga/InstructionDecoder.scala 177:25]
+  wire [11:0] id_c_imm_sw0 = {5'h0,id_reg_inst[5:3],id_reg_inst[10],id_reg_inst[6],2'h0}; // @[src/main/scala/fpga/InstructionDecoder.scala 178:25]
+  wire [11:0] id_c_imm_sb0 = {8'h0,id_reg_inst[10],id_reg_inst[6:4]}; // @[src/main/scala/fpga/InstructionDecoder.scala 179:25]
+  wire [12:0] id_c_imm_sh0 = {8'h0,id_reg_inst[4],id_reg_inst[10],id_reg_inst[6:5],1'h0}; // @[src/main/scala/fpga/InstructionDecoder.scala 180:25]
+  wire [25:0] _id_c_imm_a2w_T_2 = id_reg_inst[12] ? 26'h3ffffff : 26'h0; // @[src/main/scala/fpga/InstructionDecoder.scala 181:30]
+  wire [31:0] id_c_imm_a2w = {_id_c_imm_a2w_T_2,id_reg_inst[5],id_reg_inst[11:10],id_reg_inst[6],2'h0}; // @[src/main/scala/fpga/InstructionDecoder.scala 181:25]
+  wire [29:0] _id_c_imm_a2b_T_2 = id_reg_inst[12] ? 30'h3fffffff : 30'h0; // @[src/main/scala/fpga/InstructionDecoder.scala 182:30]
+  wire [31:0] id_c_imm_a2b = {_id_c_imm_a2b_T_2,id_reg_inst[11:10]}; // @[src/main/scala/fpga/InstructionDecoder.scala 182:25]
+  wire [2:0] _id_imm_bfi_len_T_2 = {id_reg_inst[26:25],id_reg_inst[14]}; // @[src/main/scala/fpga/InstructionDecoder.scala 186:37]
+  wire [4:0] _id_imm_bfi_len_T_4 = 3'h1 == _id_imm_bfi_len_T_2 ? 5'h1 : 5'h0; // @[src/main/scala/fpga/InstructionDecoder.scala 186:78]
+  wire [4:0] _id_imm_bfi_len_T_6 = 3'h2 == _id_imm_bfi_len_T_2 ? 5'h2 : _id_imm_bfi_len_T_4; // @[src/main/scala/fpga/InstructionDecoder.scala 186:78]
+  wire [4:0] _id_imm_bfi_len_T_8 = 3'h3 == _id_imm_bfi_len_T_2 ? 5'h3 : _id_imm_bfi_len_T_6; // @[src/main/scala/fpga/InstructionDecoder.scala 186:78]
+  wire [4:0] _id_imm_bfi_len_T_10 = 3'h4 == _id_imm_bfi_len_T_2 ? 5'h4 : _id_imm_bfi_len_T_8; // @[src/main/scala/fpga/InstructionDecoder.scala 186:78]
+  wire [4:0] _id_imm_bfi_len_T_12 = 3'h5 == _id_imm_bfi_len_T_2 ? 5'h5 : _id_imm_bfi_len_T_10; // @[src/main/scala/fpga/InstructionDecoder.scala 186:78]
+  wire [4:0] _id_imm_bfi_len_T_14 = 3'h6 == _id_imm_bfi_len_T_2 ? 5'h6 : _id_imm_bfi_len_T_12; // @[src/main/scala/fpga/InstructionDecoder.scala 186:78]
+  wire [4:0] id_imm_bfi_len = 3'h7 == _id_imm_bfi_len_T_2 ? 5'h8 : _id_imm_bfi_len_T_14; // @[src/main/scala/fpga/InstructionDecoder.scala 186:78]
+  wire [11:0] id_imm_bfi = {1'h0,id_imm_bfi_len,1'h0,id_rs2_addr}; // @[src/main/scala/fpga/InstructionDecoder.scala 198:23]
   wire [31:0] _csignals_T = id_reg_inst & 32'h707f; // @[src/main/scala/chisel3/util/Lookup.scala 31:38]
   wire  _csignals_T_1 = 32'h3 == _csignals_T; // @[src/main/scala/chisel3/util/Lookup.scala 31:38]
   wire  _csignals_T_3 = 32'h4003 == _csignals_T; // @[src/main/scala/chisel3/util/Lookup.scala 31:38]
@@ -3409,44 +3642,44 @@ module InstructionDecoder(
   wire  _csignals_T_1715 = _csignals_T_7 ? 1'h0 : _csignals_T_1714; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
   wire  _csignals_T_1716 = _csignals_T_5 ? 1'h0 : _csignals_T_1715; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
   wire  _csignals_T_1717 = _csignals_T_3 ? 1'h0 : _csignals_T_1716; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  wire  _id_wb_addr_T = csignals_6 == 3'h1; // @[src/main/scala/fpga/InstructionDecoder.scala 351:13]
-  wire  _id_wb_addr_T_1 = csignals_6 == 3'h2; // @[src/main/scala/fpga/InstructionDecoder.scala 352:13]
-  wire  _id_wb_addr_T_2 = csignals_6 == 3'h3; // @[src/main/scala/fpga/InstructionDecoder.scala 353:13]
-  wire  _id_wb_addr_T_3 = csignals_6 == 3'h4; // @[src/main/scala/fpga/InstructionDecoder.scala 354:13]
+  wire  _id_wb_addr_T = csignals_6 == 3'h1; // @[src/main/scala/fpga/InstructionDecoder.scala 353:13]
+  wire  _id_wb_addr_T_1 = csignals_6 == 3'h2; // @[src/main/scala/fpga/InstructionDecoder.scala 354:13]
+  wire  _id_wb_addr_T_2 = csignals_6 == 3'h3; // @[src/main/scala/fpga/InstructionDecoder.scala 355:13]
+  wire  _id_wb_addr_T_3 = csignals_6 == 3'h4; // @[src/main/scala/fpga/InstructionDecoder.scala 356:13]
   wire [4:0] _id_wb_addr_T_4 = _id_wb_addr_T_3 ? 5'h1 : id_w_wb_addr; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
   wire [4:0] _id_wb_addr_T_5 = _id_wb_addr_T_2 ? id_c_rs2p_addr : _id_wb_addr_T_4; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
   wire [4:0] _id_wb_addr_T_6 = _id_wb_addr_T_1 ? id_c_rs1p_addr : _id_wb_addr_T_5; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
-  wire  _id_op1_data_T = csignals_1 == 3'h1; // @[src/main/scala/fpga/InstructionDecoder.scala 359:17]
-  wire  _id_op1_data_T_2 = csignals_1 == 3'h2; // @[src/main/scala/fpga/InstructionDecoder.scala 360:17]
+  wire  _id_op1_data_T = csignals_1 == 3'h1; // @[src/main/scala/fpga/InstructionDecoder.scala 361:17]
+  wire  _id_op1_data_T_2 = csignals_1 == 3'h2; // @[src/main/scala/fpga/InstructionDecoder.scala 362:17]
   wire [31:0] _id_op1_data_T_5 = _id_op1_data_T_2 ? id_imm_z_uext : 32'h0; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
-  wire  _id_op2_data_im1_T = csignals_2 == 6'h0; // @[src/main/scala/fpga/InstructionDecoder.scala 365:17]
-  wire  _id_op2_data_im1_T_1 = csignals_2 == 6'h10; // @[src/main/scala/fpga/InstructionDecoder.scala 366:17]
-  wire  _id_op2_data_im1_T_2 = csignals_2 == 6'h11; // @[src/main/scala/fpga/InstructionDecoder.scala 367:17]
-  wire  _id_op2_data_im1_T_3 = csignals_2 == 6'h12; // @[src/main/scala/fpga/InstructionDecoder.scala 368:17]
-  wire  _id_op2_data_im1_T_4 = csignals_2 == 6'h13; // @[src/main/scala/fpga/InstructionDecoder.scala 369:17]
-  wire  _id_op2_data_im1_T_5 = csignals_2 == 6'h14; // @[src/main/scala/fpga/InstructionDecoder.scala 370:17]
-  wire  _id_op2_data_im1_T_6 = csignals_2 == 6'h15; // @[src/main/scala/fpga/InstructionDecoder.scala 371:17]
-  wire  _id_op2_data_im1_T_7 = csignals_2 == 6'h16; // @[src/main/scala/fpga/InstructionDecoder.scala 372:17]
-  wire  _id_op2_data_im1_T_8 = csignals_2 == 6'h17; // @[src/main/scala/fpga/InstructionDecoder.scala 373:17]
-  wire  _id_op2_data_im1_T_9 = csignals_2 == 6'h18; // @[src/main/scala/fpga/InstructionDecoder.scala 374:17]
-  wire  _id_op2_data_im1_T_11 = csignals_2 == 6'h19; // @[src/main/scala/fpga/InstructionDecoder.scala 375:17]
-  wire  _id_op2_data_im1_T_12 = csignals_2 == 6'h1a; // @[src/main/scala/fpga/InstructionDecoder.scala 376:17]
-  wire  _id_op2_data_im1_T_13 = csignals_2 == 6'h1b; // @[src/main/scala/fpga/InstructionDecoder.scala 377:17]
-  wire  _id_op2_data_im1_T_14 = csignals_2 == 6'h1; // @[src/main/scala/fpga/InstructionDecoder.scala 379:17]
-  wire  _id_op2_data_im1_T_15 = csignals_2 == 6'h2; // @[src/main/scala/fpga/InstructionDecoder.scala 380:17]
-  wire  _id_op2_data_im1_T_16 = csignals_2 == 6'h3; // @[src/main/scala/fpga/InstructionDecoder.scala 381:17]
-  wire  _id_op2_data_im1_T_17 = csignals_2 == 6'h4; // @[src/main/scala/fpga/InstructionDecoder.scala 382:17]
-  wire  _id_op2_data_im1_T_18 = csignals_2 == 6'h5; // @[src/main/scala/fpga/InstructionDecoder.scala 383:17]
-  wire  _id_op2_data_im1_T_19 = csignals_2 == 6'h6; // @[src/main/scala/fpga/InstructionDecoder.scala 384:17]
-  wire  _id_op2_data_im1_T_20 = csignals_2 == 6'h7; // @[src/main/scala/fpga/InstructionDecoder.scala 385:17]
-  wire  _id_op2_data_im1_T_21 = csignals_2 == 6'h8; // @[src/main/scala/fpga/InstructionDecoder.scala 386:17]
-  wire  _id_op2_data_im1_T_22 = csignals_2 == 6'h9; // @[src/main/scala/fpga/InstructionDecoder.scala 387:17]
-  wire  _id_op2_data_im1_T_23 = csignals_2 == 6'ha; // @[src/main/scala/fpga/InstructionDecoder.scala 388:17]
-  wire  _id_op2_data_im1_T_24 = csignals_2 == 6'hb; // @[src/main/scala/fpga/InstructionDecoder.scala 389:17]
-  wire  _id_op2_data_im1_T_25 = csignals_2 == 6'hc; // @[src/main/scala/fpga/InstructionDecoder.scala 390:17]
-  wire  _id_op2_data_im1_T_26 = csignals_2 == 6'h22; // @[src/main/scala/fpga/InstructionDecoder.scala 391:17]
-  wire  _id_op2_data_im1_T_27 = csignals_2 == 6'h1c; // @[src/main/scala/fpga/InstructionDecoder.scala 392:17]
-  wire  _id_op2_data_im1_T_28 = csignals_2 == 6'h20; // @[src/main/scala/fpga/InstructionDecoder.scala 394:17]
+  wire  _id_op2_data_im1_T = csignals_2 == 6'h0; // @[src/main/scala/fpga/InstructionDecoder.scala 367:17]
+  wire  _id_op2_data_im1_T_1 = csignals_2 == 6'h10; // @[src/main/scala/fpga/InstructionDecoder.scala 368:17]
+  wire  _id_op2_data_im1_T_2 = csignals_2 == 6'h11; // @[src/main/scala/fpga/InstructionDecoder.scala 369:17]
+  wire  _id_op2_data_im1_T_3 = csignals_2 == 6'h12; // @[src/main/scala/fpga/InstructionDecoder.scala 370:17]
+  wire  _id_op2_data_im1_T_4 = csignals_2 == 6'h13; // @[src/main/scala/fpga/InstructionDecoder.scala 371:17]
+  wire  _id_op2_data_im1_T_5 = csignals_2 == 6'h14; // @[src/main/scala/fpga/InstructionDecoder.scala 372:17]
+  wire  _id_op2_data_im1_T_6 = csignals_2 == 6'h15; // @[src/main/scala/fpga/InstructionDecoder.scala 373:17]
+  wire  _id_op2_data_im1_T_7 = csignals_2 == 6'h16; // @[src/main/scala/fpga/InstructionDecoder.scala 374:17]
+  wire  _id_op2_data_im1_T_8 = csignals_2 == 6'h17; // @[src/main/scala/fpga/InstructionDecoder.scala 375:17]
+  wire  _id_op2_data_im1_T_9 = csignals_2 == 6'h18; // @[src/main/scala/fpga/InstructionDecoder.scala 376:17]
+  wire  _id_op2_data_im1_T_11 = csignals_2 == 6'h19; // @[src/main/scala/fpga/InstructionDecoder.scala 377:17]
+  wire  _id_op2_data_im1_T_12 = csignals_2 == 6'h1a; // @[src/main/scala/fpga/InstructionDecoder.scala 378:17]
+  wire  _id_op2_data_im1_T_13 = csignals_2 == 6'h1b; // @[src/main/scala/fpga/InstructionDecoder.scala 379:17]
+  wire  _id_op2_data_im1_T_14 = csignals_2 == 6'h1; // @[src/main/scala/fpga/InstructionDecoder.scala 381:17]
+  wire  _id_op2_data_im1_T_15 = csignals_2 == 6'h2; // @[src/main/scala/fpga/InstructionDecoder.scala 382:17]
+  wire  _id_op2_data_im1_T_16 = csignals_2 == 6'h3; // @[src/main/scala/fpga/InstructionDecoder.scala 383:17]
+  wire  _id_op2_data_im1_T_17 = csignals_2 == 6'h4; // @[src/main/scala/fpga/InstructionDecoder.scala 384:17]
+  wire  _id_op2_data_im1_T_18 = csignals_2 == 6'h5; // @[src/main/scala/fpga/InstructionDecoder.scala 385:17]
+  wire  _id_op2_data_im1_T_19 = csignals_2 == 6'h6; // @[src/main/scala/fpga/InstructionDecoder.scala 386:17]
+  wire  _id_op2_data_im1_T_20 = csignals_2 == 6'h7; // @[src/main/scala/fpga/InstructionDecoder.scala 387:17]
+  wire  _id_op2_data_im1_T_21 = csignals_2 == 6'h8; // @[src/main/scala/fpga/InstructionDecoder.scala 388:17]
+  wire  _id_op2_data_im1_T_22 = csignals_2 == 6'h9; // @[src/main/scala/fpga/InstructionDecoder.scala 389:17]
+  wire  _id_op2_data_im1_T_23 = csignals_2 == 6'ha; // @[src/main/scala/fpga/InstructionDecoder.scala 390:17]
+  wire  _id_op2_data_im1_T_24 = csignals_2 == 6'hb; // @[src/main/scala/fpga/InstructionDecoder.scala 391:17]
+  wire  _id_op2_data_im1_T_25 = csignals_2 == 6'hc; // @[src/main/scala/fpga/InstructionDecoder.scala 392:17]
+  wire  _id_op2_data_im1_T_26 = csignals_2 == 6'h22; // @[src/main/scala/fpga/InstructionDecoder.scala 393:17]
+  wire  _id_op2_data_im1_T_27 = csignals_2 == 6'h1c; // @[src/main/scala/fpga/InstructionDecoder.scala 394:17]
+  wire  _id_op2_data_im1_T_28 = csignals_2 == 6'h20; // @[src/main/scala/fpga/InstructionDecoder.scala 396:17]
   wire [31:0] _id_op2_data_im1_T_44 = _id_op2_data_im1_T_13 ? id_c_imm_u : 32'h0; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
   wire [31:0] _id_op2_data_im1_T_45 = _id_op2_data_im1_T_12 ? id_c_imm_a2b : _id_op2_data_im1_T_44; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
   wire [31:0] _id_op2_data_im1_T_46 = _id_op2_data_im1_T_11 ? id_c_imm_a2w : _id_op2_data_im1_T_45; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
@@ -3486,27 +3719,27 @@ module InstructionDecoder(
   wire [12:0] _id_op2_data_im0_T_53 = _id_op2_data_im1_T_2 ? 13'h0 : _id_op2_data_im0_T_52; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
   wire [12:0] _id_op2_data_im0_T_54 = _id_op2_data_im1_T_1 ? 13'h0 : _id_op2_data_im0_T_53; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
   wire [12:0] _id_op2_data_im0_T_55 = _id_op2_data_im1_T ? 13'h0 : _id_op2_data_im0_T_54; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
-  wire  _id_csr_addr_T = csignals_0 == 4'he; // @[src/main/scala/fpga/InstructionDecoder.scala 440:36]
-  wire  _id_csr_addr_T_1 = csignals_8 == 3'h3; // @[src/main/scala/fpga/InstructionDecoder.scala 440:62]
-  wire  _id_m_op1_sel_T = csignals_1 == 3'h4; // @[src/main/scala/fpga/InstructionDecoder.scala 443:17]
-  wire  _id_m_op1_sel_T_2 = csignals_1 == 3'h4 & id_rs1_addr != 5'h0; // @[src/main/scala/fpga/InstructionDecoder.scala 443:29]
-  wire  _id_m_op1_sel_T_3 = csignals_1 == 3'h5; // @[src/main/scala/fpga/InstructionDecoder.scala 445:17]
-  wire  _id_m_op1_sel_T_4 = csignals_1 == 3'h6; // @[src/main/scala/fpga/InstructionDecoder.scala 446:17]
-  wire  _id_m_op1_sel_T_5 = csignals_1 == 3'h7; // @[src/main/scala/fpga/InstructionDecoder.scala 447:17]
+  wire  _id_csr_addr_T = csignals_0 == 4'he; // @[src/main/scala/fpga/InstructionDecoder.scala 442:36]
+  wire  _id_csr_addr_T_1 = csignals_8 == 3'h3; // @[src/main/scala/fpga/InstructionDecoder.scala 442:62]
+  wire  _id_m_op1_sel_T = csignals_1 == 3'h4; // @[src/main/scala/fpga/InstructionDecoder.scala 445:17]
+  wire  _id_m_op1_sel_T_2 = csignals_1 == 3'h4 & id_rs1_addr != 5'h0; // @[src/main/scala/fpga/InstructionDecoder.scala 445:29]
+  wire  _id_m_op1_sel_T_3 = csignals_1 == 3'h5; // @[src/main/scala/fpga/InstructionDecoder.scala 447:17]
+  wire  _id_m_op1_sel_T_4 = csignals_1 == 3'h6; // @[src/main/scala/fpga/InstructionDecoder.scala 448:17]
+  wire  _id_m_op1_sel_T_5 = csignals_1 == 3'h7; // @[src/main/scala/fpga/InstructionDecoder.scala 449:17]
   wire  _id_m_op1_sel_T_6 = _id_m_op1_sel_T_5 ? 1'h0 : 1'h1; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
   wire  _id_m_op1_sel_T_7 = _id_m_op1_sel_T_4 ? 1'h0 : _id_m_op1_sel_T_6; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
   wire  _id_m_op1_sel_T_8 = _id_m_op1_sel_T_3 ? 1'h0 : _id_m_op1_sel_T_7; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
-  wire  _id_m_op2_sel_T_2 = id_rs2_addr == 5'h0; // @[src/main/scala/fpga/InstructionDecoder.scala 457:89]
-  wire  _id_m_op3_sel_T = csignals_3 == 3'h0; // @[src/main/scala/fpga/InstructionDecoder.scala 459:17]
-  wire  _id_m_op3_sel_T_1 = csignals_3 == 3'h1; // @[src/main/scala/fpga/InstructionDecoder.scala 460:17]
-  wire  _id_m_op3_sel_T_2 = csignals_3 == 3'h3; // @[src/main/scala/fpga/InstructionDecoder.scala 461:17]
-  wire  _id_m_op3_sel_T_3 = csignals_3 == 3'h4; // @[src/main/scala/fpga/InstructionDecoder.scala 462:17]
-  wire  _id_m_op3_sel_T_5 = csignals_3 == 3'h4 & _id_m_op2_sel_T_2; // @[src/main/scala/fpga/InstructionDecoder.scala 462:29]
-  wire  _id_m_op3_sel_T_7 = csignals_3 == 3'h6; // @[src/main/scala/fpga/InstructionDecoder.scala 465:17]
-  wire  _id_m_op3_sel_T_8 = csignals_3 == 3'h5; // @[src/main/scala/fpga/InstructionDecoder.scala 466:17]
-  wire  _id_m_op3_sel_T_9 = csignals_3 == 3'h7; // @[src/main/scala/fpga/InstructionDecoder.scala 467:17]
-  wire  _id_m_op3_sel_T_11 = csignals_3 == 3'h7 & id_rs3_addr == 5'h0; // @[src/main/scala/fpga/InstructionDecoder.scala 467:29]
-  wire  _id_m_op3_sel_T_13 = csignals_3 == 3'h2; // @[src/main/scala/fpga/InstructionDecoder.scala 470:17]
+  wire  _id_m_op2_sel_T_2 = id_rs2_addr == 5'h0; // @[src/main/scala/fpga/InstructionDecoder.scala 459:89]
+  wire  _id_m_op3_sel_T = csignals_3 == 3'h0; // @[src/main/scala/fpga/InstructionDecoder.scala 461:17]
+  wire  _id_m_op3_sel_T_1 = csignals_3 == 3'h1; // @[src/main/scala/fpga/InstructionDecoder.scala 462:17]
+  wire  _id_m_op3_sel_T_2 = csignals_3 == 3'h3; // @[src/main/scala/fpga/InstructionDecoder.scala 463:17]
+  wire  _id_m_op3_sel_T_3 = csignals_3 == 3'h4; // @[src/main/scala/fpga/InstructionDecoder.scala 464:17]
+  wire  _id_m_op3_sel_T_5 = csignals_3 == 3'h4 & _id_m_op2_sel_T_2; // @[src/main/scala/fpga/InstructionDecoder.scala 464:29]
+  wire  _id_m_op3_sel_T_7 = csignals_3 == 3'h6; // @[src/main/scala/fpga/InstructionDecoder.scala 467:17]
+  wire  _id_m_op3_sel_T_8 = csignals_3 == 3'h5; // @[src/main/scala/fpga/InstructionDecoder.scala 468:17]
+  wire  _id_m_op3_sel_T_9 = csignals_3 == 3'h7; // @[src/main/scala/fpga/InstructionDecoder.scala 469:17]
+  wire  _id_m_op3_sel_T_11 = csignals_3 == 3'h7 & id_rs3_addr == 5'h0; // @[src/main/scala/fpga/InstructionDecoder.scala 469:29]
+  wire  _id_m_op3_sel_T_13 = csignals_3 == 3'h2; // @[src/main/scala/fpga/InstructionDecoder.scala 472:17]
   wire [1:0] _id_m_op3_sel_T_14 = _id_m_op3_sel_T_13 ? 2'h2 : 2'h0; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
   wire [1:0] _id_m_op3_sel_T_15 = _id_m_op3_sel_T_9 ? 2'h2 : _id_m_op3_sel_T_14; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
   wire [1:0] _id_m_op3_sel_T_16 = _id_m_op3_sel_T_11 ? 2'h0 : _id_m_op3_sel_T_15; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
@@ -3518,29 +3751,29 @@ module InstructionDecoder(
   wire [1:0] _id_m_op3_sel_T_22 = _id_m_op3_sel_T_1 ? 2'h1 : _id_m_op3_sel_T_21; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
   wire [4:0] _id_m_rs1_addr_T_3 = _id_m_op1_sel_T_5 ? id_c_rs1p_addr : id_rs1_addr; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
   wire [4:0] _id_m_rs1_addr_T_4 = _id_m_op1_sel_T_4 ? 5'h2 : _id_m_rs1_addr_T_3; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
-  wire  _id_m_rs2_addr_T = csignals_2 == 6'h21; // @[src/main/scala/fpga/InstructionDecoder.scala 478:17]
-  wire  _id_m_rs2_addr_T_1 = csignals_2 == 6'h26; // @[src/main/scala/fpga/InstructionDecoder.scala 479:17]
-  wire  _id_m_rs2_addr_T_2 = csignals_2 == 6'h25; // @[src/main/scala/fpga/InstructionDecoder.scala 480:17]
-  wire  _id_m_rs2_addr_T_3 = csignals_2 == 6'h24; // @[src/main/scala/fpga/InstructionDecoder.scala 481:17]
+  wire  _id_m_rs2_addr_T = csignals_2 == 6'h21; // @[src/main/scala/fpga/InstructionDecoder.scala 480:17]
+  wire  _id_m_rs2_addr_T_1 = csignals_2 == 6'h26; // @[src/main/scala/fpga/InstructionDecoder.scala 481:17]
+  wire  _id_m_rs2_addr_T_2 = csignals_2 == 6'h25; // @[src/main/scala/fpga/InstructionDecoder.scala 482:17]
+  wire  _id_m_rs2_addr_T_3 = csignals_2 == 6'h24; // @[src/main/scala/fpga/InstructionDecoder.scala 483:17]
   wire [4:0] _id_m_rs2_addr_T_4 = _id_m_rs2_addr_T_3 ? id_c_rs3p_addr : id_rs2_addr; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
   wire [4:0] _id_m_rs2_addr_T_5 = _id_m_rs2_addr_T_2 ? id_c_rs2p_addr : _id_m_rs2_addr_T_4; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
   wire [4:0] _id_m_rs2_addr_T_6 = _id_m_rs2_addr_T_1 ? id_c_rs1p_addr : _id_m_rs2_addr_T_5; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
   wire [4:0] _id_m_rs3_addr_T_4 = _id_m_op3_sel_T_13 ? id_w_wb_addr : id_rs2_addr; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
   wire [4:0] _id_m_rs3_addr_T_5 = _id_m_op3_sel_T_9 ? id_rs3_addr : _id_m_rs3_addr_T_4; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
   wire [4:0] _id_m_rs3_addr_T_6 = _id_m_op3_sel_T_8 ? id_c_rs2p_addr : _id_m_rs3_addr_T_5; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
-  wire  _id_m_imm_b_sext_T = csignals_6 == 3'h6; // @[src/main/scala/fpga/InstructionDecoder.scala 490:13]
-  wire  _id_m_imm_b_sext_T_1 = csignals_6 == 3'h7; // @[src/main/scala/fpga/InstructionDecoder.scala 491:13]
+  wire  _id_m_imm_b_sext_T = csignals_6 == 3'h6; // @[src/main/scala/fpga/InstructionDecoder.scala 492:13]
+  wire  _id_m_imm_b_sext_T_1 = csignals_6 == 3'h7; // @[src/main/scala/fpga/InstructionDecoder.scala 493:13]
   wire [31:0] _id_m_imm_b_sext_T_2 = _id_m_imm_b_sext_T_1 ? id_c_imm_b2 : id_imm_b_sext; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
-  wire  id_is_br = csignals_8 == 3'h1; // @[src/main/scala/fpga/InstructionDecoder.scala 494:28]
-  wire  id_is_j = csignals_5 == 3'h2; // @[src/main/scala/fpga/InstructionDecoder.scala 495:28]
-  wire  id_is_dj = id_is_j & _id_op1_data_T; // @[src/main/scala/fpga/InstructionDecoder.scala 496:40]
-  wire  _id_is_ret_T_5 = id_w_wb_addr == 5'h1; // @[src/main/scala/fpga/InstructionDecoder.scala 499:51]
-  wire  _id_is_ret_T_6 = _id_m_op1_sel_T_3 & id_w_wb_addr == 5'h1; // @[src/main/scala/fpga/InstructionDecoder.scala 499:33]
-  wire  _id_is_ret_T_7 = _id_m_op1_sel_T & id_rs1_addr == 5'h1 | _id_is_ret_T_6; // @[src/main/scala/fpga/InstructionDecoder.scala 498:71]
-  wire  id_is_dcall = id_is_dj & (_id_wb_addr_T_3 | csignals_6 == 3'h0 & _id_is_ret_T_5); // @[src/main/scala/fpga/InstructionDecoder.scala 501:30]
+  wire  id_is_br = csignals_8 == 3'h1; // @[src/main/scala/fpga/InstructionDecoder.scala 496:28]
+  wire  id_is_j = csignals_5 == 3'h2; // @[src/main/scala/fpga/InstructionDecoder.scala 497:28]
+  wire  id_is_dj = id_is_j & _id_op1_data_T; // @[src/main/scala/fpga/InstructionDecoder.scala 498:40]
+  wire  _id_is_ret_T_5 = id_w_wb_addr == 5'h1; // @[src/main/scala/fpga/InstructionDecoder.scala 501:51]
+  wire  _id_is_ret_T_6 = _id_m_op1_sel_T_3 & id_w_wb_addr == 5'h1; // @[src/main/scala/fpga/InstructionDecoder.scala 501:33]
+  wire  _id_is_ret_T_7 = _id_m_op1_sel_T & id_rs1_addr == 5'h1 | _id_is_ret_T_6; // @[src/main/scala/fpga/InstructionDecoder.scala 500:71]
+  wire  id_is_dcall = id_is_dj & (_id_wb_addr_T_3 | csignals_6 == 3'h0 & _id_is_ret_T_5); // @[src/main/scala/fpga/InstructionDecoder.scala 503:30]
   wire [1:0] _id_actual_attr_T = id_is_br ? 2'h1 : 2'h0; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
   wire [1:0] _id_actual_attr_T_1 = id_is_dj ? 2'h2 : _id_actual_attr_T; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
-  Queue id_output_queue ( // @[src/main/scala/fpga/InstructionDecoder.scala 108:31]
+  Queue id_output_queue ( // @[src/main/scala/fpga/InstructionDecoder.scala 110:31]
     .clock(id_output_queue_clock),
     .reset(id_output_queue_reset),
     .io_enq_ready(id_output_queue_io_enq_ready),
@@ -3573,7 +3806,9 @@ module InstructionDecoder(
     .io_enq_bits_bp_is_ret(id_output_queue_io_enq_bits_bp_is_ret),
     .io_enq_bits_bp_rasindex(id_output_queue_io_enq_bits_bp_rasindex),
     .io_enq_bits_bp_target(id_output_queue_io_enq_bits_bp_target),
+    .io_enq_bits_bp_history(id_output_queue_io_enq_bits_bp_history),
     .io_enq_bits_bp_cnt(id_output_queue_io_enq_bits_bp_cnt),
+    .io_enq_bits_bp_gcnt(id_output_queue_io_enq_bits_bp_gcnt),
     .io_enq_bits_actual_attr(id_output_queue_io_enq_bits_actual_attr),
     .io_enq_bits_actual_is_ret(id_output_queue_io_enq_bits_actual_is_ret),
     .io_enq_bits_is_half(id_output_queue_io_enq_bits_is_half),
@@ -3609,141 +3844,157 @@ module InstructionDecoder(
     .io_deq_bits_bp_is_ret(id_output_queue_io_deq_bits_bp_is_ret),
     .io_deq_bits_bp_rasindex(id_output_queue_io_deq_bits_bp_rasindex),
     .io_deq_bits_bp_target(id_output_queue_io_deq_bits_bp_target),
+    .io_deq_bits_bp_history(id_output_queue_io_deq_bits_bp_history),
     .io_deq_bits_bp_cnt(id_output_queue_io_deq_bits_bp_cnt),
+    .io_deq_bits_bp_gcnt(id_output_queue_io_deq_bits_bp_gcnt),
     .io_deq_bits_actual_attr(id_output_queue_io_deq_bits_actual_attr),
     .io_deq_bits_actual_is_ret(id_output_queue_io_deq_bits_actual_is_ret),
     .io_deq_bits_is_half(id_output_queue_io_deq_bits_is_half),
     .io_deq_bits_is_valid_inst(id_output_queue_io_deq_bits_is_valid_inst),
     .io_deq_bits_is_trap(id_output_queue_io_deq_bits_is_trap)
   );
-  assign io_in_ready = id_output_queue_io_enq_ready; // @[src/main/scala/fpga/InstructionDecoder.scala 125:15]
-  assign io_in_flush = io_out_flush; // @[src/main/scala/fpga/InstructionDecoder.scala 126:15]
-  assign io_out_bits_pc = id_output_queue_io_deq_bits_pc; // @[src/main/scala/fpga/InstructionDecoder.scala 551:29]
-  assign io_out_bits_wb_addr = id_output_queue_io_deq_bits_wb_addr; // @[src/main/scala/fpga/InstructionDecoder.scala 561:29]
-  assign io_out_bits_op1_sel = id_output_queue_io_deq_bits_op1_sel; // @[src/main/scala/fpga/InstructionDecoder.scala 552:29]
-  assign io_out_bits_op2_sel = id_output_queue_io_deq_bits_op2_sel; // @[src/main/scala/fpga/InstructionDecoder.scala 553:29]
-  assign io_out_bits_op3_sel = id_output_queue_io_deq_bits_op3_sel; // @[src/main/scala/fpga/InstructionDecoder.scala 554:29]
-  assign io_out_bits_rs1_addr = id_output_queue_io_deq_bits_rs1_addr; // @[src/main/scala/fpga/InstructionDecoder.scala 555:29]
-  assign io_out_bits_rs2_addr = id_output_queue_io_deq_bits_rs2_addr; // @[src/main/scala/fpga/InstructionDecoder.scala 556:29]
-  assign io_out_bits_rs3_addr = id_output_queue_io_deq_bits_rs3_addr; // @[src/main/scala/fpga/InstructionDecoder.scala 557:29]
-  assign io_out_bits_op1_data = id_output_queue_io_deq_bits_op1_data; // @[src/main/scala/fpga/InstructionDecoder.scala 558:29]
-  assign io_out_bits_op2_data_im1 = id_output_queue_io_deq_bits_op2_data_im1; // @[src/main/scala/fpga/InstructionDecoder.scala 559:29]
-  assign io_out_bits_op2_data_im0 = id_output_queue_io_deq_bits_op2_data_im0; // @[src/main/scala/fpga/InstructionDecoder.scala 560:29]
+  assign io_in_ready = id_output_queue_io_enq_ready; // @[src/main/scala/fpga/InstructionDecoder.scala 127:15]
+  assign io_in_flush = io_out_flush; // @[src/main/scala/fpga/InstructionDecoder.scala 128:15]
+  assign io_out_bits_pc = id_output_queue_io_deq_bits_pc; // @[src/main/scala/fpga/InstructionDecoder.scala 553:29]
+  assign io_out_bits_wb_addr = id_output_queue_io_deq_bits_wb_addr; // @[src/main/scala/fpga/InstructionDecoder.scala 563:29]
+  assign io_out_bits_op1_sel = id_output_queue_io_deq_bits_op1_sel; // @[src/main/scala/fpga/InstructionDecoder.scala 554:29]
+  assign io_out_bits_op2_sel = id_output_queue_io_deq_bits_op2_sel; // @[src/main/scala/fpga/InstructionDecoder.scala 555:29]
+  assign io_out_bits_op3_sel = id_output_queue_io_deq_bits_op3_sel; // @[src/main/scala/fpga/InstructionDecoder.scala 556:29]
+  assign io_out_bits_rs1_addr = id_output_queue_io_deq_bits_rs1_addr; // @[src/main/scala/fpga/InstructionDecoder.scala 557:29]
+  assign io_out_bits_rs2_addr = id_output_queue_io_deq_bits_rs2_addr; // @[src/main/scala/fpga/InstructionDecoder.scala 558:29]
+  assign io_out_bits_rs3_addr = id_output_queue_io_deq_bits_rs3_addr; // @[src/main/scala/fpga/InstructionDecoder.scala 559:29]
+  assign io_out_bits_op1_data = id_output_queue_io_deq_bits_op1_data; // @[src/main/scala/fpga/InstructionDecoder.scala 560:29]
+  assign io_out_bits_op2_data_im1 = id_output_queue_io_deq_bits_op2_data_im1; // @[src/main/scala/fpga/InstructionDecoder.scala 561:29]
+  assign io_out_bits_op2_data_im0 = id_output_queue_io_deq_bits_op2_data_im0; // @[src/main/scala/fpga/InstructionDecoder.scala 562:29]
   assign io_out_bits_exe_fun = io_out_flush | ~id_output_queue_io_deq_valid ? 4'h0 : id_output_queue_io_deq_bits_exe_fun
-    ; // @[src/main/scala/fpga/InstructionDecoder.scala 573:29 581:56 583:31]
-  assign io_out_bits_rf_wen = io_out_flush | ~id_output_queue_io_deq_valid ? 1'h0 : id_output_queue_io_deq_bits_rf_wen; // @[src/main/scala/fpga/InstructionDecoder.scala 572:29 581:56 582:31]
-  assign io_out_bits_wb_sel = io_out_flush | ~id_output_queue_io_deq_valid ? 3'h0 : id_output_queue_io_deq_bits_wb_sel; // @[src/main/scala/fpga/InstructionDecoder.scala 574:29 581:56 584:31]
-  assign io_out_bits_csr_addr = id_output_queue_io_deq_bits_csr_addr; // @[src/main/scala/fpga/InstructionDecoder.scala 566:29]
+    ; // @[src/main/scala/fpga/InstructionDecoder.scala 575:29 583:56 585:31]
+  assign io_out_bits_rf_wen = io_out_flush | ~id_output_queue_io_deq_valid ? 1'h0 : id_output_queue_io_deq_bits_rf_wen; // @[src/main/scala/fpga/InstructionDecoder.scala 574:29 583:56 584:31]
+  assign io_out_bits_wb_sel = io_out_flush | ~id_output_queue_io_deq_valid ? 3'h0 : id_output_queue_io_deq_bits_wb_sel; // @[src/main/scala/fpga/InstructionDecoder.scala 576:29 583:56 586:31]
+  assign io_out_bits_csr_addr = id_output_queue_io_deq_bits_csr_addr; // @[src/main/scala/fpga/InstructionDecoder.scala 568:29]
   assign io_out_bits_csr_cmd = io_out_flush | ~id_output_queue_io_deq_valid ? 2'h0 : id_output_queue_io_deq_bits_csr_cmd
-    ; // @[src/main/scala/fpga/InstructionDecoder.scala 575:29 581:56 585:31]
-  assign io_out_bits_imm_b_sext = id_output_queue_io_deq_bits_imm_b_sext; // @[src/main/scala/fpga/InstructionDecoder.scala 562:29]
-  assign io_out_bits_shamt = id_output_queue_io_deq_bits_shamt; // @[src/main/scala/fpga/InstructionDecoder.scala 563:29]
-  assign io_out_bits_op2op = id_output_queue_io_deq_bits_op2op; // @[src/main/scala/fpga/InstructionDecoder.scala 564:29]
-  assign io_out_bits_mem_w = io_out_flush | ~id_output_queue_io_deq_valid ? 3'h0 : id_output_queue_io_deq_bits_mem_w; // @[src/main/scala/fpga/InstructionDecoder.scala 576:29 581:56 586:31]
-  assign io_out_bits_is_bflen = id_output_queue_io_deq_bits_is_bflen; // @[src/main/scala/fpga/InstructionDecoder.scala 565:29]
-  assign io_out_bits_is_br = io_out_flush | ~id_output_queue_io_deq_valid ? 1'h0 : id_output_queue_io_deq_bits_is_br; // @[src/main/scala/fpga/InstructionDecoder.scala 577:29 581:56 587:31]
-  assign io_out_bits_is_j = io_out_flush | ~id_output_queue_io_deq_valid ? 1'h0 : id_output_queue_io_deq_bits_is_j; // @[src/main/scala/fpga/InstructionDecoder.scala 578:29 581:56 588:31]
+    ; // @[src/main/scala/fpga/InstructionDecoder.scala 577:29 583:56 587:31]
+  assign io_out_bits_imm_b_sext = id_output_queue_io_deq_bits_imm_b_sext; // @[src/main/scala/fpga/InstructionDecoder.scala 564:29]
+  assign io_out_bits_shamt = id_output_queue_io_deq_bits_shamt; // @[src/main/scala/fpga/InstructionDecoder.scala 565:29]
+  assign io_out_bits_op2op = id_output_queue_io_deq_bits_op2op; // @[src/main/scala/fpga/InstructionDecoder.scala 566:29]
+  assign io_out_bits_mem_w = io_out_flush | ~id_output_queue_io_deq_valid ? 3'h0 : id_output_queue_io_deq_bits_mem_w; // @[src/main/scala/fpga/InstructionDecoder.scala 578:29 583:56 588:31]
+  assign io_out_bits_is_bflen = id_output_queue_io_deq_bits_is_bflen; // @[src/main/scala/fpga/InstructionDecoder.scala 567:29]
+  assign io_out_bits_is_br = io_out_flush | ~id_output_queue_io_deq_valid ? 1'h0 : id_output_queue_io_deq_bits_is_br; // @[src/main/scala/fpga/InstructionDecoder.scala 579:29 583:56 589:31]
+  assign io_out_bits_is_j = io_out_flush | ~id_output_queue_io_deq_valid ? 1'h0 : id_output_queue_io_deq_bits_is_j; // @[src/main/scala/fpga/InstructionDecoder.scala 580:29 583:56 590:31]
   assign io_out_bits_bp_taken = io_out_flush | ~id_output_queue_io_deq_valid ? 1'h0 :
-    id_output_queue_io_deq_bits_bp_taken; // @[src/main/scala/fpga/InstructionDecoder.scala 567:29 581:56 589:31]
-  assign io_out_bits_bp_attr = id_output_queue_io_deq_bits_bp_attr; // @[src/main/scala/fpga/InstructionDecoder.scala 567:29]
-  assign io_out_bits_bp_is_ret = id_output_queue_io_deq_bits_bp_is_ret; // @[src/main/scala/fpga/InstructionDecoder.scala 567:29]
-  assign io_out_bits_bp_rasindex = id_output_queue_io_deq_bits_bp_rasindex; // @[src/main/scala/fpga/InstructionDecoder.scala 567:29]
-  assign io_out_bits_bp_target = id_output_queue_io_deq_bits_bp_target; // @[src/main/scala/fpga/InstructionDecoder.scala 567:29]
-  assign io_out_bits_bp_cnt = id_output_queue_io_deq_bits_bp_cnt; // @[src/main/scala/fpga/InstructionDecoder.scala 567:29]
-  assign io_out_bits_actual_attr = id_output_queue_io_deq_bits_actual_attr; // @[src/main/scala/fpga/InstructionDecoder.scala 568:29]
-  assign io_out_bits_actual_is_ret = id_output_queue_io_deq_bits_actual_is_ret; // @[src/main/scala/fpga/InstructionDecoder.scala 569:29]
-  assign io_out_bits_is_half = id_output_queue_io_deq_bits_is_half; // @[src/main/scala/fpga/InstructionDecoder.scala 570:29]
+    id_output_queue_io_deq_bits_bp_taken; // @[src/main/scala/fpga/InstructionDecoder.scala 569:29 583:56 591:31]
+  assign io_out_bits_bp_attr = id_output_queue_io_deq_bits_bp_attr; // @[src/main/scala/fpga/InstructionDecoder.scala 569:29]
+  assign io_out_bits_bp_is_ret = id_output_queue_io_deq_bits_bp_is_ret; // @[src/main/scala/fpga/InstructionDecoder.scala 569:29]
+  assign io_out_bits_bp_rasindex = id_output_queue_io_deq_bits_bp_rasindex; // @[src/main/scala/fpga/InstructionDecoder.scala 569:29]
+  assign io_out_bits_bp_target = id_output_queue_io_deq_bits_bp_target; // @[src/main/scala/fpga/InstructionDecoder.scala 569:29]
+  assign io_out_bits_bp_history = id_output_queue_io_deq_bits_bp_history; // @[src/main/scala/fpga/InstructionDecoder.scala 569:29]
+  assign io_out_bits_bp_cnt = id_output_queue_io_deq_bits_bp_cnt; // @[src/main/scala/fpga/InstructionDecoder.scala 569:29]
+  assign io_out_bits_bp_gcnt = id_output_queue_io_deq_bits_bp_gcnt; // @[src/main/scala/fpga/InstructionDecoder.scala 569:29]
+  assign io_out_bits_actual_attr = id_output_queue_io_deq_bits_actual_attr; // @[src/main/scala/fpga/InstructionDecoder.scala 570:29]
+  assign io_out_bits_actual_is_ret = id_output_queue_io_deq_bits_actual_is_ret; // @[src/main/scala/fpga/InstructionDecoder.scala 571:29]
+  assign io_out_bits_is_half = id_output_queue_io_deq_bits_is_half; // @[src/main/scala/fpga/InstructionDecoder.scala 572:29]
   assign io_out_bits_is_valid_inst = io_out_flush | ~id_output_queue_io_deq_valid ? 1'h0 :
-    id_output_queue_io_deq_bits_is_valid_inst; // @[src/main/scala/fpga/InstructionDecoder.scala 579:29 581:56 590:31]
+    id_output_queue_io_deq_bits_is_valid_inst; // @[src/main/scala/fpga/InstructionDecoder.scala 581:29 583:56 592:31]
   assign io_out_bits_is_trap = io_out_flush | ~id_output_queue_io_deq_valid ? 1'h0 : id_output_queue_io_deq_bits_is_trap
-    ; // @[src/main/scala/fpga/InstructionDecoder.scala 580:29 581:56 591:31]
-  assign io_debug_signals_id_pc = {id_reg_pc,1'h0}; // @[src/main/scala/fpga/InstructionDecoder.scala 128:34]
-  assign io_debug_signals_id_inst = id_reg_inst; // @[src/main/scala/fpga/InstructionDecoder.scala 129:28]
+    ; // @[src/main/scala/fpga/InstructionDecoder.scala 582:29 583:56 593:31]
+  assign io_debug_signals_id_pc = {id_reg_pc,1'h0}; // @[src/main/scala/fpga/InstructionDecoder.scala 130:34]
+  assign io_debug_signals_id_inst = id_reg_inst; // @[src/main/scala/fpga/InstructionDecoder.scala 131:28]
   assign id_output_queue_clock = clock;
   assign id_output_queue_reset = reset;
-  assign id_output_queue_io_enq_valid = ~io_out_flush; // @[src/main/scala/fpga/InstructionDecoder.scala 516:48]
-  assign id_output_queue_io_enq_bits_pc = id_reg_pc; // @[src/main/scala/fpga/InstructionDecoder.scala 517:45]
+  assign id_output_queue_io_enq_valid = ~io_out_flush; // @[src/main/scala/fpga/InstructionDecoder.scala 518:48]
+  assign id_output_queue_io_enq_bits_pc = id_reg_pc; // @[src/main/scala/fpga/InstructionDecoder.scala 519:45]
   assign id_output_queue_io_enq_bits_wb_addr = _id_wb_addr_T ? id_w_wb_addr : _id_wb_addr_T_6; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
   assign id_output_queue_io_enq_bits_op1_sel = _id_m_op1_sel_T_2 ? 1'h0 : _id_m_op1_sel_T_8; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
-  assign id_output_queue_io_enq_bits_op2_sel = csignals_2[5] & ~(_id_op2_data_im1_T_28 & id_rs2_addr == 5'h0); // @[src/main/scala/fpga/InstructionDecoder.scala 457:46]
+  assign id_output_queue_io_enq_bits_op2_sel = csignals_2[5] & ~(_id_op2_data_im1_T_28 & id_rs2_addr == 5'h0); // @[src/main/scala/fpga/InstructionDecoder.scala 459:46]
   assign id_output_queue_io_enq_bits_op3_sel = _id_m_op3_sel_T ? 2'h0 : _id_m_op3_sel_T_22; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
   assign id_output_queue_io_enq_bits_rs1_addr = _id_m_op1_sel_T_3 ? id_w_wb_addr : _id_m_rs1_addr_T_4; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
   assign id_output_queue_io_enq_bits_rs2_addr = _id_m_rs2_addr_T ? id_c_rs2_addr : _id_m_rs2_addr_T_6; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
   assign id_output_queue_io_enq_bits_rs3_addr = _id_m_op3_sel_T_7 ? id_c_rs2_addr : _id_m_rs3_addr_T_6; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
   assign id_output_queue_io_enq_bits_op1_data = _id_op1_data_T ? _io_debug_signals_id_pc_T : _id_op1_data_T_5; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
   assign id_output_queue_io_enq_bits_op2_data_im1 = _id_op2_data_im1_T ? 32'h0 : _id_op2_data_im1_T_55; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
-  assign id_output_queue_io_enq_bits_op2_data_im0 = _id_op2_data_im0_T_55[11:0]; // @[src/main/scala/fpga/InstructionDecoder.scala 400:29 401:19]
+  assign id_output_queue_io_enq_bits_op2_data_im0 = _id_op2_data_im0_T_55[11:0]; // @[src/main/scala/fpga/InstructionDecoder.scala 402:29 403:19]
   assign id_output_queue_io_enq_bits_exe_fun = _csignals_T_1 ? 4'h0 : _csignals_T_430; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
   assign id_output_queue_io_enq_bits_rf_wen = _csignals_T_1 | (_csignals_T_3 | _csignals_T_1001); // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
   assign id_output_queue_io_enq_bits_wb_sel = _csignals_T_1 ? 3'h5 : _csignals_T_1145; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  assign id_output_queue_io_enq_bits_csr_addr = csignals_0 == 4'he & csignals_8 == 3'h3 ? 12'h342 : id_imm_i; // @[src/main/scala/fpga/InstructionDecoder.scala 440:24]
+  assign id_output_queue_io_enq_bits_csr_addr = csignals_0 == 4'he & csignals_8 == 3'h3 ? 12'h342 : id_imm_i; // @[src/main/scala/fpga/InstructionDecoder.scala 442:24]
   assign id_output_queue_io_enq_bits_csr_cmd = _csignals_T_1 ? 2'h0 : _csignals_T_1431; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
   assign id_output_queue_io_enq_bits_imm_b_sext = _id_m_imm_b_sext_T ? id_c_imm_b : _id_m_imm_b_sext_T_2; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
-  assign id_output_queue_io_enq_bits_shamt = id_reg_inst[14:13]; // @[src/main/scala/fpga/InstructionDecoder.scala 182:25]
+  assign id_output_queue_io_enq_bits_shamt = id_reg_inst[14:13]; // @[src/main/scala/fpga/InstructionDecoder.scala 184:25]
   assign id_output_queue_io_enq_bits_op2op = _csignals_T_1 ? 1'h0 : _csignals_T_1717; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
   assign id_output_queue_io_enq_bits_mem_w = _csignals_T_1 ? 3'h5 : _csignals_T_1574; // @[src/main/scala/chisel3/util/Lookup.scala 34:39]
-  assign id_output_queue_io_enq_bits_is_bflen = csignals_2 == 6'h22; // @[src/main/scala/fpga/InstructionDecoder.scala 438:33]
-  assign id_output_queue_io_enq_bits_is_br = csignals_8 == 3'h1; // @[src/main/scala/fpga/InstructionDecoder.scala 494:28]
-  assign id_output_queue_io_enq_bits_is_j = csignals_5 == 3'h2; // @[src/main/scala/fpga/InstructionDecoder.scala 495:28]
-  assign id_output_queue_io_enq_bits_bp_taken = id_reg_bp_taken; // @[src/main/scala/fpga/InstructionDecoder.scala 533:45]
-  assign id_output_queue_io_enq_bits_bp_attr = id_reg_bp_attr; // @[src/main/scala/fpga/InstructionDecoder.scala 533:45]
-  assign id_output_queue_io_enq_bits_bp_is_ret = id_reg_bp_is_ret; // @[src/main/scala/fpga/InstructionDecoder.scala 533:45]
-  assign id_output_queue_io_enq_bits_bp_rasindex = id_reg_bp_rasindex; // @[src/main/scala/fpga/InstructionDecoder.scala 533:45]
-  assign id_output_queue_io_enq_bits_bp_target = id_reg_bp_target; // @[src/main/scala/fpga/InstructionDecoder.scala 533:45]
-  assign id_output_queue_io_enq_bits_bp_cnt = id_reg_bp_cnt; // @[src/main/scala/fpga/InstructionDecoder.scala 533:45]
+  assign id_output_queue_io_enq_bits_is_bflen = csignals_2 == 6'h22; // @[src/main/scala/fpga/InstructionDecoder.scala 440:33]
+  assign id_output_queue_io_enq_bits_is_br = csignals_8 == 3'h1; // @[src/main/scala/fpga/InstructionDecoder.scala 496:28]
+  assign id_output_queue_io_enq_bits_is_j = csignals_5 == 3'h2; // @[src/main/scala/fpga/InstructionDecoder.scala 497:28]
+  assign id_output_queue_io_enq_bits_bp_taken = id_reg_bp_taken; // @[src/main/scala/fpga/InstructionDecoder.scala 535:45]
+  assign id_output_queue_io_enq_bits_bp_attr = id_reg_bp_attr; // @[src/main/scala/fpga/InstructionDecoder.scala 535:45]
+  assign id_output_queue_io_enq_bits_bp_is_ret = id_reg_bp_is_ret; // @[src/main/scala/fpga/InstructionDecoder.scala 535:45]
+  assign id_output_queue_io_enq_bits_bp_rasindex = id_reg_bp_rasindex; // @[src/main/scala/fpga/InstructionDecoder.scala 535:45]
+  assign id_output_queue_io_enq_bits_bp_target = id_reg_bp_target; // @[src/main/scala/fpga/InstructionDecoder.scala 535:45]
+  assign id_output_queue_io_enq_bits_bp_history = id_reg_bp_history; // @[src/main/scala/fpga/InstructionDecoder.scala 535:45]
+  assign id_output_queue_io_enq_bits_bp_cnt = id_reg_bp_cnt; // @[src/main/scala/fpga/InstructionDecoder.scala 535:45]
+  assign id_output_queue_io_enq_bits_bp_gcnt = id_reg_bp_gcnt; // @[src/main/scala/fpga/InstructionDecoder.scala 535:45]
   assign id_output_queue_io_enq_bits_actual_attr = id_is_dcall ? 2'h3 : _id_actual_attr_T_1; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
-  assign id_output_queue_io_enq_bits_actual_is_ret = id_is_j & _id_is_ret_T_7; // @[src/main/scala/fpga/InstructionDecoder.scala 497:41]
-  assign id_output_queue_io_enq_bits_is_half = id_reg_inst[1:0] != 2'h3; // @[src/main/scala/fpga/InstructionDecoder.scala 133:35]
-  assign id_output_queue_io_enq_bits_is_valid_inst = id_reg_is_valid_inst; // @[src/main/scala/fpga/InstructionDecoder.scala 545:45]
-  assign id_output_queue_io_enq_bits_is_trap = _id_csr_addr_T & _id_csr_addr_T_1; // @[src/main/scala/fpga/InstructionDecoder.scala 509:46]
-  assign id_output_queue_io_deq_ready = io_out_flush | io_out_ready; // @[src/main/scala/fpga/InstructionDecoder.scala 549:48]
+  assign id_output_queue_io_enq_bits_actual_is_ret = id_is_j & _id_is_ret_T_7; // @[src/main/scala/fpga/InstructionDecoder.scala 499:41]
+  assign id_output_queue_io_enq_bits_is_half = id_reg_inst[1:0] != 2'h3; // @[src/main/scala/fpga/InstructionDecoder.scala 135:35]
+  assign id_output_queue_io_enq_bits_is_valid_inst = id_reg_is_valid_inst; // @[src/main/scala/fpga/InstructionDecoder.scala 547:45]
+  assign id_output_queue_io_enq_bits_is_trap = _id_csr_addr_T & _id_csr_addr_T_1; // @[src/main/scala/fpga/InstructionDecoder.scala 511:46]
+  assign id_output_queue_io_deq_ready = io_out_flush | io_out_ready; // @[src/main/scala/fpga/InstructionDecoder.scala 551:48]
   always @(posedge clock) begin
-    if (reset) begin // @[src/main/scala/fpga/InstructionDecoder.scala 102:37]
-      id_reg_is_valid_inst <= 1'h0; // @[src/main/scala/fpga/InstructionDecoder.scala 102:37]
-    end else if (io_in_flush | id_output_queue_io_enq_ready) begin // @[src/main/scala/fpga/InstructionDecoder.scala 116:37]
-      id_reg_is_valid_inst <= io_in_bits_is_valid_inst; // @[src/main/scala/fpga/InstructionDecoder.scala 119:26]
-    end
-    if (reset) begin // @[src/main/scala/fpga/InstructionDecoder.scala 103:37]
-      id_reg_inst <= 32'h13; // @[src/main/scala/fpga/InstructionDecoder.scala 103:37]
-    end else if (io_in_flush | id_output_queue_io_enq_ready) begin // @[src/main/scala/fpga/InstructionDecoder.scala 116:37]
-      id_reg_inst <= io_in_bits_inst; // @[src/main/scala/fpga/InstructionDecoder.scala 120:26]
-    end
     if (reset) begin // @[src/main/scala/fpga/InstructionDecoder.scala 104:37]
-      id_reg_pc <= 31'h0; // @[src/main/scala/fpga/InstructionDecoder.scala 104:37]
-    end else if (id_output_queue_io_enq_ready) begin // @[src/main/scala/fpga/InstructionDecoder.scala 112:22]
-      id_reg_pc <= io_in_bits_pc; // @[src/main/scala/fpga/InstructionDecoder.scala 113:15]
+      id_reg_is_valid_inst <= 1'h0; // @[src/main/scala/fpga/InstructionDecoder.scala 104:37]
+    end else if (io_in_flush | id_output_queue_io_enq_ready) begin // @[src/main/scala/fpga/InstructionDecoder.scala 118:37]
+      id_reg_is_valid_inst <= io_in_bits_is_valid_inst; // @[src/main/scala/fpga/InstructionDecoder.scala 121:26]
     end
     if (reset) begin // @[src/main/scala/fpga/InstructionDecoder.scala 105:37]
-      id_reg_bp_taken <= 1'h0; // @[src/main/scala/fpga/InstructionDecoder.scala 105:37]
-    end else if (io_in_flush | id_output_queue_io_enq_ready) begin // @[src/main/scala/fpga/InstructionDecoder.scala 116:37]
-      id_reg_bp_taken <= io_in_bits_bp_taken; // @[src/main/scala/fpga/InstructionDecoder.scala 121:26]
-    end else if (id_output_queue_io_enq_ready) begin // @[src/main/scala/fpga/InstructionDecoder.scala 112:22]
-      id_reg_bp_taken <= io_in_bits_bp_taken; // @[src/main/scala/fpga/InstructionDecoder.scala 114:15]
+      id_reg_inst <= 32'h13; // @[src/main/scala/fpga/InstructionDecoder.scala 105:37]
+    end else if (io_in_flush | id_output_queue_io_enq_ready) begin // @[src/main/scala/fpga/InstructionDecoder.scala 118:37]
+      id_reg_inst <= io_in_bits_inst; // @[src/main/scala/fpga/InstructionDecoder.scala 122:26]
     end
-    if (reset) begin // @[src/main/scala/fpga/InstructionDecoder.scala 105:37]
-      id_reg_bp_attr <= 2'h0; // @[src/main/scala/fpga/InstructionDecoder.scala 105:37]
-    end else if (id_output_queue_io_enq_ready) begin // @[src/main/scala/fpga/InstructionDecoder.scala 112:22]
-      id_reg_bp_attr <= io_in_bits_bp_attr; // @[src/main/scala/fpga/InstructionDecoder.scala 114:15]
+    if (reset) begin // @[src/main/scala/fpga/InstructionDecoder.scala 106:37]
+      id_reg_pc <= 31'h0; // @[src/main/scala/fpga/InstructionDecoder.scala 106:37]
+    end else if (id_output_queue_io_enq_ready) begin // @[src/main/scala/fpga/InstructionDecoder.scala 114:22]
+      id_reg_pc <= io_in_bits_pc; // @[src/main/scala/fpga/InstructionDecoder.scala 115:15]
     end
-    if (reset) begin // @[src/main/scala/fpga/InstructionDecoder.scala 105:37]
-      id_reg_bp_is_ret <= 1'h0; // @[src/main/scala/fpga/InstructionDecoder.scala 105:37]
-    end else if (id_output_queue_io_enq_ready) begin // @[src/main/scala/fpga/InstructionDecoder.scala 112:22]
-      id_reg_bp_is_ret <= io_in_bits_bp_is_ret; // @[src/main/scala/fpga/InstructionDecoder.scala 114:15]
+    if (reset) begin // @[src/main/scala/fpga/InstructionDecoder.scala 107:37]
+      id_reg_bp_taken <= 1'h0; // @[src/main/scala/fpga/InstructionDecoder.scala 107:37]
+    end else if (io_in_flush | id_output_queue_io_enq_ready) begin // @[src/main/scala/fpga/InstructionDecoder.scala 118:37]
+      id_reg_bp_taken <= io_in_bits_bp_taken; // @[src/main/scala/fpga/InstructionDecoder.scala 123:26]
+    end else if (id_output_queue_io_enq_ready) begin // @[src/main/scala/fpga/InstructionDecoder.scala 114:22]
+      id_reg_bp_taken <= io_in_bits_bp_taken; // @[src/main/scala/fpga/InstructionDecoder.scala 116:15]
     end
-    if (reset) begin // @[src/main/scala/fpga/InstructionDecoder.scala 105:37]
-      id_reg_bp_rasindex <= 3'h0; // @[src/main/scala/fpga/InstructionDecoder.scala 105:37]
-    end else if (id_output_queue_io_enq_ready) begin // @[src/main/scala/fpga/InstructionDecoder.scala 112:22]
-      id_reg_bp_rasindex <= io_in_bits_bp_rasindex; // @[src/main/scala/fpga/InstructionDecoder.scala 114:15]
+    if (reset) begin // @[src/main/scala/fpga/InstructionDecoder.scala 107:37]
+      id_reg_bp_attr <= 2'h0; // @[src/main/scala/fpga/InstructionDecoder.scala 107:37]
+    end else if (id_output_queue_io_enq_ready) begin // @[src/main/scala/fpga/InstructionDecoder.scala 114:22]
+      id_reg_bp_attr <= io_in_bits_bp_attr; // @[src/main/scala/fpga/InstructionDecoder.scala 116:15]
     end
-    if (reset) begin // @[src/main/scala/fpga/InstructionDecoder.scala 105:37]
-      id_reg_bp_target <= 31'h0; // @[src/main/scala/fpga/InstructionDecoder.scala 105:37]
-    end else if (id_output_queue_io_enq_ready) begin // @[src/main/scala/fpga/InstructionDecoder.scala 112:22]
-      id_reg_bp_target <= io_in_bits_bp_target; // @[src/main/scala/fpga/InstructionDecoder.scala 114:15]
+    if (reset) begin // @[src/main/scala/fpga/InstructionDecoder.scala 107:37]
+      id_reg_bp_is_ret <= 1'h0; // @[src/main/scala/fpga/InstructionDecoder.scala 107:37]
+    end else if (id_output_queue_io_enq_ready) begin // @[src/main/scala/fpga/InstructionDecoder.scala 114:22]
+      id_reg_bp_is_ret <= io_in_bits_bp_is_ret; // @[src/main/scala/fpga/InstructionDecoder.scala 116:15]
     end
-    if (reset) begin // @[src/main/scala/fpga/InstructionDecoder.scala 105:37]
-      id_reg_bp_cnt <= 2'h0; // @[src/main/scala/fpga/InstructionDecoder.scala 105:37]
-    end else if (id_output_queue_io_enq_ready) begin // @[src/main/scala/fpga/InstructionDecoder.scala 112:22]
-      id_reg_bp_cnt <= io_in_bits_bp_cnt; // @[src/main/scala/fpga/InstructionDecoder.scala 114:15]
+    if (reset) begin // @[src/main/scala/fpga/InstructionDecoder.scala 107:37]
+      id_reg_bp_rasindex <= 3'h0; // @[src/main/scala/fpga/InstructionDecoder.scala 107:37]
+    end else if (id_output_queue_io_enq_ready) begin // @[src/main/scala/fpga/InstructionDecoder.scala 114:22]
+      id_reg_bp_rasindex <= io_in_bits_bp_rasindex; // @[src/main/scala/fpga/InstructionDecoder.scala 116:15]
+    end
+    if (reset) begin // @[src/main/scala/fpga/InstructionDecoder.scala 107:37]
+      id_reg_bp_target <= 31'h0; // @[src/main/scala/fpga/InstructionDecoder.scala 107:37]
+    end else if (id_output_queue_io_enq_ready) begin // @[src/main/scala/fpga/InstructionDecoder.scala 114:22]
+      id_reg_bp_target <= io_in_bits_bp_target; // @[src/main/scala/fpga/InstructionDecoder.scala 116:15]
+    end
+    if (reset) begin // @[src/main/scala/fpga/InstructionDecoder.scala 107:37]
+      id_reg_bp_history <= 6'h0; // @[src/main/scala/fpga/InstructionDecoder.scala 107:37]
+    end else if (id_output_queue_io_enq_ready) begin // @[src/main/scala/fpga/InstructionDecoder.scala 114:22]
+      id_reg_bp_history <= io_in_bits_bp_history; // @[src/main/scala/fpga/InstructionDecoder.scala 116:15]
+    end
+    if (reset) begin // @[src/main/scala/fpga/InstructionDecoder.scala 107:37]
+      id_reg_bp_cnt <= 2'h0; // @[src/main/scala/fpga/InstructionDecoder.scala 107:37]
+    end else if (id_output_queue_io_enq_ready) begin // @[src/main/scala/fpga/InstructionDecoder.scala 114:22]
+      id_reg_bp_cnt <= io_in_bits_bp_cnt; // @[src/main/scala/fpga/InstructionDecoder.scala 116:15]
+    end
+    if (reset) begin // @[src/main/scala/fpga/InstructionDecoder.scala 107:37]
+      id_reg_bp_gcnt <= 2'h0; // @[src/main/scala/fpga/InstructionDecoder.scala 107:37]
+    end else if (id_output_queue_io_enq_ready) begin // @[src/main/scala/fpga/InstructionDecoder.scala 114:22]
+      id_reg_bp_gcnt <= io_in_bits_bp_gcnt; // @[src/main/scala/fpga/InstructionDecoder.scala 116:15]
     end
   end
 // Register and memory initialization
@@ -3799,7 +4050,11 @@ initial begin
   _RAND_7 = {1{`RANDOM}};
   id_reg_bp_target = _RAND_7[30:0];
   _RAND_8 = {1{`RANDOM}};
-  id_reg_bp_cnt = _RAND_8[1:0];
+  id_reg_bp_history = _RAND_8[5:0];
+  _RAND_9 = {1{`RANDOM}};
+  id_reg_bp_cnt = _RAND_9[1:0];
+  _RAND_10 = {1{`RANDOM}};
+  id_reg_bp_gcnt = _RAND_10[1:0];
 `endif // RANDOMIZE_REG_INIT
   `endif // RANDOMIZE
 end // initial
@@ -3834,11 +4089,16 @@ module Core(
   input         io_cache_wready, // @[src/main/scala/fpga/Core.scala 113:14]
   output [3:0]  io_cache_wstrb, // @[src/main/scala/fpga/Core.scala 113:14]
   output [31:0] io_cache_wdata, // @[src/main/scala/fpga/Core.scala 113:14]
-  output        io_pht_mem_wen, // @[src/main/scala/fpga/Core.scala 113:14]
-  output [11:0] io_pht_mem_raddr, // @[src/main/scala/fpga/Core.scala 113:14]
-  input  [3:0]  io_pht_mem_rdata, // @[src/main/scala/fpga/Core.scala 113:14]
-  output [12:0] io_pht_mem_waddr, // @[src/main/scala/fpga/Core.scala 113:14]
-  output [1:0]  io_pht_mem_wdata, // @[src/main/scala/fpga/Core.scala 113:14]
+  output        io_pht_lmem_wen, // @[src/main/scala/fpga/Core.scala 113:14]
+  output [11:0] io_pht_lmem_raddr, // @[src/main/scala/fpga/Core.scala 113:14]
+  input  [3:0]  io_pht_lmem_rdata, // @[src/main/scala/fpga/Core.scala 113:14]
+  output [12:0] io_pht_lmem_waddr, // @[src/main/scala/fpga/Core.scala 113:14]
+  output [1:0]  io_pht_lmem_wdata, // @[src/main/scala/fpga/Core.scala 113:14]
+  output        io_pht_gmem_wen, // @[src/main/scala/fpga/Core.scala 113:14]
+  output [11:0] io_pht_gmem_raddr, // @[src/main/scala/fpga/Core.scala 113:14]
+  input  [3:0]  io_pht_gmem_rdata, // @[src/main/scala/fpga/Core.scala 113:14]
+  output [12:0] io_pht_gmem_waddr, // @[src/main/scala/fpga/Core.scala 113:14]
+  output [1:0]  io_pht_gmem_wdata, // @[src/main/scala/fpga/Core.scala 113:14]
   input  [31:0] io_mtimer_mem_raddr, // @[src/main/scala/fpga/Core.scala 113:14]
   output [31:0] io_mtimer_mem_rdata, // @[src/main/scala/fpga/Core.scala 113:14]
   input  [31:0] io_mtimer_mem_waddr, // @[src/main/scala/fpga/Core.scala 113:14]
@@ -3948,15 +4208,15 @@ module Core(
   reg [31:0] _RAND_81;
   reg [31:0] _RAND_82;
   reg [31:0] _RAND_83;
-  reg [63:0] _RAND_84;
+  reg [31:0] _RAND_84;
   reg [31:0] _RAND_85;
-  reg [63:0] _RAND_86;
-  reg [63:0] _RAND_87;
+  reg [31:0] _RAND_86;
+  reg [31:0] _RAND_87;
   reg [63:0] _RAND_88;
   reg [31:0] _RAND_89;
-  reg [31:0] _RAND_90;
-  reg [31:0] _RAND_91;
-  reg [31:0] _RAND_92;
+  reg [63:0] _RAND_90;
+  reg [63:0] _RAND_91;
+  reg [63:0] _RAND_92;
   reg [31:0] _RAND_93;
   reg [31:0] _RAND_94;
   reg [31:0] _RAND_95;
@@ -3964,11 +4224,11 @@ module Core(
   reg [31:0] _RAND_97;
   reg [31:0] _RAND_98;
   reg [31:0] _RAND_99;
-  reg [63:0] _RAND_100;
+  reg [31:0] _RAND_100;
   reg [31:0] _RAND_101;
   reg [31:0] _RAND_102;
   reg [31:0] _RAND_103;
-  reg [31:0] _RAND_104;
+  reg [63:0] _RAND_104;
   reg [31:0] _RAND_105;
   reg [31:0] _RAND_106;
   reg [31:0] _RAND_107;
@@ -4034,701 +4294,769 @@ module Core(
   reg [31:0] _RAND_167;
   reg [31:0] _RAND_168;
   reg [31:0] _RAND_169;
-  reg [63:0] _RAND_170;
-  reg [63:0] _RAND_171;
-  reg [63:0] _RAND_172;
+  reg [31:0] _RAND_170;
+  reg [31:0] _RAND_171;
+  reg [31:0] _RAND_172;
   reg [31:0] _RAND_173;
   reg [31:0] _RAND_174;
   reg [31:0] _RAND_175;
   reg [31:0] _RAND_176;
   reg [31:0] _RAND_177;
   reg [31:0] _RAND_178;
+  reg [31:0] _RAND_179;
+  reg [31:0] _RAND_180;
+  reg [31:0] _RAND_181;
+  reg [63:0] _RAND_182;
+  reg [63:0] _RAND_183;
+  reg [63:0] _RAND_184;
+  reg [31:0] _RAND_185;
+  reg [31:0] _RAND_186;
+  reg [31:0] _RAND_187;
+  reg [31:0] _RAND_188;
+  reg [31:0] _RAND_189;
+  reg [31:0] _RAND_190;
 `endif // RANDOMIZE_REG_INIT
-  reg [31:0] regfile [0:31]; // @[src/main/scala/fpga/Core.scala 127:20]
-  wire  regfile_rrd_op1_data_MPORT_en; // @[src/main/scala/fpga/Core.scala 127:20]
-  wire [4:0] regfile_rrd_op1_data_MPORT_addr; // @[src/main/scala/fpga/Core.scala 127:20]
-  wire [31:0] regfile_rrd_op1_data_MPORT_data; // @[src/main/scala/fpga/Core.scala 127:20]
-  wire  regfile_rrd_op2_data_MPORT_en; // @[src/main/scala/fpga/Core.scala 127:20]
-  wire [4:0] regfile_rrd_op2_data_MPORT_addr; // @[src/main/scala/fpga/Core.scala 127:20]
-  wire [31:0] regfile_rrd_op2_data_MPORT_data; // @[src/main/scala/fpga/Core.scala 127:20]
-  wire  regfile_rrd_op3_data_MPORT_en; // @[src/main/scala/fpga/Core.scala 127:20]
-  wire [4:0] regfile_rrd_op3_data_MPORT_addr; // @[src/main/scala/fpga/Core.scala 127:20]
-  wire [31:0] regfile_rrd_op3_data_MPORT_data; // @[src/main/scala/fpga/Core.scala 127:20]
-  wire [31:0] regfile_MPORT_3_data; // @[src/main/scala/fpga/Core.scala 127:20]
-  wire [4:0] regfile_MPORT_3_addr; // @[src/main/scala/fpga/Core.scala 127:20]
-  wire  regfile_MPORT_3_mask; // @[src/main/scala/fpga/Core.scala 127:20]
-  wire  regfile_MPORT_3_en; // @[src/main/scala/fpga/Core.scala 127:20]
-  wire [31:0] regfile_MPORT_5_data; // @[src/main/scala/fpga/Core.scala 127:20]
-  wire [4:0] regfile_MPORT_5_addr; // @[src/main/scala/fpga/Core.scala 127:20]
-  wire  regfile_MPORT_5_mask; // @[src/main/scala/fpga/Core.scala 127:20]
-  wire  regfile_MPORT_5_en; // @[src/main/scala/fpga/Core.scala 127:20]
-  wire  cycle_counter_clock; // @[src/main/scala/fpga/Core.scala 129:29]
-  wire  cycle_counter_reset; // @[src/main/scala/fpga/Core.scala 129:29]
-  wire [63:0] cycle_counter_io_value; // @[src/main/scala/fpga/Core.scala 129:29]
-  wire  mtimer_clock; // @[src/main/scala/fpga/Core.scala 130:22]
-  wire  mtimer_reset; // @[src/main/scala/fpga/Core.scala 130:22]
-  wire [31:0] mtimer_io_mem_raddr; // @[src/main/scala/fpga/Core.scala 130:22]
-  wire [31:0] mtimer_io_mem_rdata; // @[src/main/scala/fpga/Core.scala 130:22]
-  wire [31:0] mtimer_io_mem_waddr; // @[src/main/scala/fpga/Core.scala 130:22]
-  wire  mtimer_io_mem_wen; // @[src/main/scala/fpga/Core.scala 130:22]
-  wire [31:0] mtimer_io_mem_wdata; // @[src/main/scala/fpga/Core.scala 130:22]
-  wire  mtimer_io_intr; // @[src/main/scala/fpga/Core.scala 130:22]
-  wire [63:0] mtimer_io_mtime; // @[src/main/scala/fpga/Core.scala 130:22]
-  reg  scoreboard [0:31]; // @[src/main/scala/fpga/Core.scala 143:25]
-  wire  scoreboard_rrd_stall_MPORT_en; // @[src/main/scala/fpga/Core.scala 143:25]
-  wire [4:0] scoreboard_rrd_stall_MPORT_addr; // @[src/main/scala/fpga/Core.scala 143:25]
-  wire  scoreboard_rrd_stall_MPORT_data; // @[src/main/scala/fpga/Core.scala 143:25]
-  wire  scoreboard_rrd_stall_MPORT_1_en; // @[src/main/scala/fpga/Core.scala 143:25]
-  wire [4:0] scoreboard_rrd_stall_MPORT_1_addr; // @[src/main/scala/fpga/Core.scala 143:25]
-  wire  scoreboard_rrd_stall_MPORT_1_data; // @[src/main/scala/fpga/Core.scala 143:25]
-  wire  scoreboard_rrd_stall_MPORT_2_en; // @[src/main/scala/fpga/Core.scala 143:25]
-  wire [4:0] scoreboard_rrd_stall_MPORT_2_addr; // @[src/main/scala/fpga/Core.scala 143:25]
-  wire  scoreboard_rrd_stall_MPORT_2_data; // @[src/main/scala/fpga/Core.scala 143:25]
-  wire  scoreboard_rrd_stall_MPORT_3_en; // @[src/main/scala/fpga/Core.scala 143:25]
-  wire [4:0] scoreboard_rrd_stall_MPORT_3_addr; // @[src/main/scala/fpga/Core.scala 143:25]
-  wire  scoreboard_rrd_stall_MPORT_3_data; // @[src/main/scala/fpga/Core.scala 143:25]
-  wire  scoreboard_MPORT_7_en; // @[src/main/scala/fpga/Core.scala 143:25]
-  wire [4:0] scoreboard_MPORT_7_addr; // @[src/main/scala/fpga/Core.scala 143:25]
-  wire  scoreboard_MPORT_7_data; // @[src/main/scala/fpga/Core.scala 143:25]
-  wire  scoreboard_MPORT_8_en; // @[src/main/scala/fpga/Core.scala 143:25]
-  wire [4:0] scoreboard_MPORT_8_addr; // @[src/main/scala/fpga/Core.scala 143:25]
-  wire  scoreboard_MPORT_8_data; // @[src/main/scala/fpga/Core.scala 143:25]
-  wire  scoreboard_MPORT_9_en; // @[src/main/scala/fpga/Core.scala 143:25]
-  wire [4:0] scoreboard_MPORT_9_addr; // @[src/main/scala/fpga/Core.scala 143:25]
-  wire  scoreboard_MPORT_9_data; // @[src/main/scala/fpga/Core.scala 143:25]
-  wire  scoreboard_MPORT_10_en; // @[src/main/scala/fpga/Core.scala 143:25]
-  wire [4:0] scoreboard_MPORT_10_addr; // @[src/main/scala/fpga/Core.scala 143:25]
-  wire  scoreboard_MPORT_10_data; // @[src/main/scala/fpga/Core.scala 143:25]
-  wire  scoreboard_MPORT_11_en; // @[src/main/scala/fpga/Core.scala 143:25]
-  wire [4:0] scoreboard_MPORT_11_addr; // @[src/main/scala/fpga/Core.scala 143:25]
-  wire  scoreboard_MPORT_11_data; // @[src/main/scala/fpga/Core.scala 143:25]
-  wire  scoreboard_MPORT_12_en; // @[src/main/scala/fpga/Core.scala 143:25]
-  wire [4:0] scoreboard_MPORT_12_addr; // @[src/main/scala/fpga/Core.scala 143:25]
-  wire  scoreboard_MPORT_12_data; // @[src/main/scala/fpga/Core.scala 143:25]
-  wire  scoreboard_MPORT_13_en; // @[src/main/scala/fpga/Core.scala 143:25]
-  wire [4:0] scoreboard_MPORT_13_addr; // @[src/main/scala/fpga/Core.scala 143:25]
-  wire  scoreboard_MPORT_13_data; // @[src/main/scala/fpga/Core.scala 143:25]
-  wire  scoreboard_MPORT_14_en; // @[src/main/scala/fpga/Core.scala 143:25]
-  wire [4:0] scoreboard_MPORT_14_addr; // @[src/main/scala/fpga/Core.scala 143:25]
-  wire  scoreboard_MPORT_14_data; // @[src/main/scala/fpga/Core.scala 143:25]
-  wire  scoreboard_MPORT_15_en; // @[src/main/scala/fpga/Core.scala 143:25]
-  wire [4:0] scoreboard_MPORT_15_addr; // @[src/main/scala/fpga/Core.scala 143:25]
-  wire  scoreboard_MPORT_15_data; // @[src/main/scala/fpga/Core.scala 143:25]
-  wire  scoreboard_MPORT_16_en; // @[src/main/scala/fpga/Core.scala 143:25]
-  wire [4:0] scoreboard_MPORT_16_addr; // @[src/main/scala/fpga/Core.scala 143:25]
-  wire  scoreboard_MPORT_16_data; // @[src/main/scala/fpga/Core.scala 143:25]
-  wire  scoreboard_MPORT_17_en; // @[src/main/scala/fpga/Core.scala 143:25]
-  wire [4:0] scoreboard_MPORT_17_addr; // @[src/main/scala/fpga/Core.scala 143:25]
-  wire  scoreboard_MPORT_17_data; // @[src/main/scala/fpga/Core.scala 143:25]
-  wire  scoreboard_MPORT_18_en; // @[src/main/scala/fpga/Core.scala 143:25]
-  wire [4:0] scoreboard_MPORT_18_addr; // @[src/main/scala/fpga/Core.scala 143:25]
-  wire  scoreboard_MPORT_18_data; // @[src/main/scala/fpga/Core.scala 143:25]
-  wire  scoreboard_MPORT_19_en; // @[src/main/scala/fpga/Core.scala 143:25]
-  wire [4:0] scoreboard_MPORT_19_addr; // @[src/main/scala/fpga/Core.scala 143:25]
-  wire  scoreboard_MPORT_19_data; // @[src/main/scala/fpga/Core.scala 143:25]
-  wire  scoreboard_MPORT_20_en; // @[src/main/scala/fpga/Core.scala 143:25]
-  wire [4:0] scoreboard_MPORT_20_addr; // @[src/main/scala/fpga/Core.scala 143:25]
-  wire  scoreboard_MPORT_20_data; // @[src/main/scala/fpga/Core.scala 143:25]
-  wire  scoreboard_MPORT_21_en; // @[src/main/scala/fpga/Core.scala 143:25]
-  wire [4:0] scoreboard_MPORT_21_addr; // @[src/main/scala/fpga/Core.scala 143:25]
-  wire  scoreboard_MPORT_21_data; // @[src/main/scala/fpga/Core.scala 143:25]
-  wire  scoreboard_MPORT_22_en; // @[src/main/scala/fpga/Core.scala 143:25]
-  wire [4:0] scoreboard_MPORT_22_addr; // @[src/main/scala/fpga/Core.scala 143:25]
-  wire  scoreboard_MPORT_22_data; // @[src/main/scala/fpga/Core.scala 143:25]
-  wire  scoreboard_MPORT_23_en; // @[src/main/scala/fpga/Core.scala 143:25]
-  wire [4:0] scoreboard_MPORT_23_addr; // @[src/main/scala/fpga/Core.scala 143:25]
-  wire  scoreboard_MPORT_23_data; // @[src/main/scala/fpga/Core.scala 143:25]
-  wire  scoreboard_MPORT_24_en; // @[src/main/scala/fpga/Core.scala 143:25]
-  wire [4:0] scoreboard_MPORT_24_addr; // @[src/main/scala/fpga/Core.scala 143:25]
-  wire  scoreboard_MPORT_24_data; // @[src/main/scala/fpga/Core.scala 143:25]
-  wire  scoreboard_MPORT_25_en; // @[src/main/scala/fpga/Core.scala 143:25]
-  wire [4:0] scoreboard_MPORT_25_addr; // @[src/main/scala/fpga/Core.scala 143:25]
-  wire  scoreboard_MPORT_25_data; // @[src/main/scala/fpga/Core.scala 143:25]
-  wire  scoreboard_MPORT_26_en; // @[src/main/scala/fpga/Core.scala 143:25]
-  wire [4:0] scoreboard_MPORT_26_addr; // @[src/main/scala/fpga/Core.scala 143:25]
-  wire  scoreboard_MPORT_26_data; // @[src/main/scala/fpga/Core.scala 143:25]
-  wire  scoreboard_MPORT_27_en; // @[src/main/scala/fpga/Core.scala 143:25]
-  wire [4:0] scoreboard_MPORT_27_addr; // @[src/main/scala/fpga/Core.scala 143:25]
-  wire  scoreboard_MPORT_27_data; // @[src/main/scala/fpga/Core.scala 143:25]
-  wire  scoreboard_MPORT_28_en; // @[src/main/scala/fpga/Core.scala 143:25]
-  wire [4:0] scoreboard_MPORT_28_addr; // @[src/main/scala/fpga/Core.scala 143:25]
-  wire  scoreboard_MPORT_28_data; // @[src/main/scala/fpga/Core.scala 143:25]
-  wire  scoreboard_MPORT_29_en; // @[src/main/scala/fpga/Core.scala 143:25]
-  wire [4:0] scoreboard_MPORT_29_addr; // @[src/main/scala/fpga/Core.scala 143:25]
-  wire  scoreboard_MPORT_29_data; // @[src/main/scala/fpga/Core.scala 143:25]
-  wire  scoreboard_MPORT_30_en; // @[src/main/scala/fpga/Core.scala 143:25]
-  wire [4:0] scoreboard_MPORT_30_addr; // @[src/main/scala/fpga/Core.scala 143:25]
-  wire  scoreboard_MPORT_30_data; // @[src/main/scala/fpga/Core.scala 143:25]
-  wire  scoreboard_MPORT_31_en; // @[src/main/scala/fpga/Core.scala 143:25]
-  wire [4:0] scoreboard_MPORT_31_addr; // @[src/main/scala/fpga/Core.scala 143:25]
-  wire  scoreboard_MPORT_31_data; // @[src/main/scala/fpga/Core.scala 143:25]
-  wire  scoreboard_MPORT_32_en; // @[src/main/scala/fpga/Core.scala 143:25]
-  wire [4:0] scoreboard_MPORT_32_addr; // @[src/main/scala/fpga/Core.scala 143:25]
-  wire  scoreboard_MPORT_32_data; // @[src/main/scala/fpga/Core.scala 143:25]
-  wire  scoreboard_MPORT_33_en; // @[src/main/scala/fpga/Core.scala 143:25]
-  wire [4:0] scoreboard_MPORT_33_addr; // @[src/main/scala/fpga/Core.scala 143:25]
-  wire  scoreboard_MPORT_33_data; // @[src/main/scala/fpga/Core.scala 143:25]
-  wire  scoreboard_MPORT_34_en; // @[src/main/scala/fpga/Core.scala 143:25]
-  wire [4:0] scoreboard_MPORT_34_addr; // @[src/main/scala/fpga/Core.scala 143:25]
-  wire  scoreboard_MPORT_34_data; // @[src/main/scala/fpga/Core.scala 143:25]
-  wire  scoreboard_MPORT_35_en; // @[src/main/scala/fpga/Core.scala 143:25]
-  wire [4:0] scoreboard_MPORT_35_addr; // @[src/main/scala/fpga/Core.scala 143:25]
-  wire  scoreboard_MPORT_35_data; // @[src/main/scala/fpga/Core.scala 143:25]
-  wire  scoreboard_MPORT_36_en; // @[src/main/scala/fpga/Core.scala 143:25]
-  wire [4:0] scoreboard_MPORT_36_addr; // @[src/main/scala/fpga/Core.scala 143:25]
-  wire  scoreboard_MPORT_36_data; // @[src/main/scala/fpga/Core.scala 143:25]
-  wire  scoreboard_MPORT_37_en; // @[src/main/scala/fpga/Core.scala 143:25]
-  wire [4:0] scoreboard_MPORT_37_addr; // @[src/main/scala/fpga/Core.scala 143:25]
-  wire  scoreboard_MPORT_37_data; // @[src/main/scala/fpga/Core.scala 143:25]
-  wire  scoreboard_MPORT_38_en; // @[src/main/scala/fpga/Core.scala 143:25]
-  wire [4:0] scoreboard_MPORT_38_addr; // @[src/main/scala/fpga/Core.scala 143:25]
-  wire  scoreboard_MPORT_38_data; // @[src/main/scala/fpga/Core.scala 143:25]
-  wire  scoreboard_MPORT_data; // @[src/main/scala/fpga/Core.scala 143:25]
-  wire [4:0] scoreboard_MPORT_addr; // @[src/main/scala/fpga/Core.scala 143:25]
-  wire  scoreboard_MPORT_mask; // @[src/main/scala/fpga/Core.scala 143:25]
-  wire  scoreboard_MPORT_en; // @[src/main/scala/fpga/Core.scala 143:25]
-  wire  scoreboard_MPORT_1_data; // @[src/main/scala/fpga/Core.scala 143:25]
-  wire [4:0] scoreboard_MPORT_1_addr; // @[src/main/scala/fpga/Core.scala 143:25]
-  wire  scoreboard_MPORT_1_mask; // @[src/main/scala/fpga/Core.scala 143:25]
-  wire  scoreboard_MPORT_1_en; // @[src/main/scala/fpga/Core.scala 143:25]
-  wire  scoreboard_MPORT_2_data; // @[src/main/scala/fpga/Core.scala 143:25]
-  wire [4:0] scoreboard_MPORT_2_addr; // @[src/main/scala/fpga/Core.scala 143:25]
-  wire  scoreboard_MPORT_2_mask; // @[src/main/scala/fpga/Core.scala 143:25]
-  wire  scoreboard_MPORT_2_en; // @[src/main/scala/fpga/Core.scala 143:25]
-  wire  scoreboard_MPORT_4_data; // @[src/main/scala/fpga/Core.scala 143:25]
-  wire [4:0] scoreboard_MPORT_4_addr; // @[src/main/scala/fpga/Core.scala 143:25]
-  wire  scoreboard_MPORT_4_mask; // @[src/main/scala/fpga/Core.scala 143:25]
-  wire  scoreboard_MPORT_4_en; // @[src/main/scala/fpga/Core.scala 143:25]
-  wire  scoreboard_MPORT_6_data; // @[src/main/scala/fpga/Core.scala 143:25]
-  wire [4:0] scoreboard_MPORT_6_addr; // @[src/main/scala/fpga/Core.scala 143:25]
-  wire  scoreboard_MPORT_6_mask; // @[src/main/scala/fpga/Core.scala 143:25]
-  wire  scoreboard_MPORT_6_en; // @[src/main/scala/fpga/Core.scala 143:25]
-  wire  ic_btb_clock; // @[src/main/scala/fpga/Core.scala 353:22]
-  wire  ic_btb_reset; // @[src/main/scala/fpga/Core.scala 353:22]
-  wire [30:0] ic_btb_io_lu_pc; // @[src/main/scala/fpga/Core.scala 353:22]
-  wire  ic_btb_io_lu_jump0; // @[src/main/scala/fpga/Core.scala 353:22]
-  wire  ic_btb_io_lu_br0; // @[src/main/scala/fpga/Core.scala 353:22]
-  wire [1:0] ic_btb_io_lu_attr0; // @[src/main/scala/fpga/Core.scala 353:22]
-  wire  ic_btb_io_lu_is_ret0; // @[src/main/scala/fpga/Core.scala 353:22]
-  wire [30:0] ic_btb_io_lu_target0; // @[src/main/scala/fpga/Core.scala 353:22]
-  wire  ic_btb_io_lu_jump1; // @[src/main/scala/fpga/Core.scala 353:22]
-  wire  ic_btb_io_lu_br1; // @[src/main/scala/fpga/Core.scala 353:22]
-  wire [1:0] ic_btb_io_lu_attr1; // @[src/main/scala/fpga/Core.scala 353:22]
-  wire  ic_btb_io_lu_is_ret1; // @[src/main/scala/fpga/Core.scala 353:22]
-  wire [30:0] ic_btb_io_lu_target1; // @[src/main/scala/fpga/Core.scala 353:22]
-  wire  ic_btb_io_up_en; // @[src/main/scala/fpga/Core.scala 353:22]
-  wire [30:0] ic_btb_io_up_pc; // @[src/main/scala/fpga/Core.scala 353:22]
-  wire [1:0] ic_btb_io_up_attr; // @[src/main/scala/fpga/Core.scala 353:22]
-  wire  ic_btb_io_up_is_ret; // @[src/main/scala/fpga/Core.scala 353:22]
-  wire [30:0] ic_btb_io_up_target; // @[src/main/scala/fpga/Core.scala 353:22]
-  wire [30:0] ic_pht_io_lu_pc; // @[src/main/scala/fpga/Core.scala 354:22]
-  wire [1:0] ic_pht_io_lu_cnt0; // @[src/main/scala/fpga/Core.scala 354:22]
-  wire [1:0] ic_pht_io_lu_cnt1; // @[src/main/scala/fpga/Core.scala 354:22]
-  wire  ic_pht_io_up_en; // @[src/main/scala/fpga/Core.scala 354:22]
-  wire [30:0] ic_pht_io_up_pc; // @[src/main/scala/fpga/Core.scala 354:22]
-  wire [1:0] ic_pht_io_up_cnt; // @[src/main/scala/fpga/Core.scala 354:22]
-  wire  ic_pht_io_mem_wen; // @[src/main/scala/fpga/Core.scala 354:22]
-  wire [11:0] ic_pht_io_mem_raddr; // @[src/main/scala/fpga/Core.scala 354:22]
-  wire [3:0] ic_pht_io_mem_rdata; // @[src/main/scala/fpga/Core.scala 354:22]
-  wire [12:0] ic_pht_io_mem_waddr; // @[src/main/scala/fpga/Core.scala 354:22]
-  wire [1:0] ic_pht_io_mem_wdata; // @[src/main/scala/fpga/Core.scala 354:22]
-  wire  ic_zbtb_clock; // @[src/main/scala/fpga/Core.scala 355:23]
-  wire  ic_zbtb_reset; // @[src/main/scala/fpga/Core.scala 355:23]
-  wire [30:0] ic_zbtb_io_lu_pc; // @[src/main/scala/fpga/Core.scala 355:23]
-  wire  ic_zbtb_io_lu_matches0; // @[src/main/scala/fpga/Core.scala 355:23]
-  wire [30:0] ic_zbtb_io_lu_target0; // @[src/main/scala/fpga/Core.scala 355:23]
-  wire  ic_zbtb_io_lu_matches1; // @[src/main/scala/fpga/Core.scala 355:23]
-  wire [30:0] ic_zbtb_io_lu_target1; // @[src/main/scala/fpga/Core.scala 355:23]
-  wire  ic_zbtb_io_up_en; // @[src/main/scala/fpga/Core.scala 355:23]
-  wire [30:0] ic_zbtb_io_up_pc; // @[src/main/scala/fpga/Core.scala 355:23]
-  wire [30:0] ic_zbtb_io_up_target; // @[src/main/scala/fpga/Core.scala 355:23]
-  wire  ic_zbtb_io_inv_en; // @[src/main/scala/fpga/Core.scala 355:23]
-  wire [30:0] ic_zbtb_io_inv_pc; // @[src/main/scala/fpga/Core.scala 355:23]
-  wire  ic_ras_clock; // @[src/main/scala/fpga/Core.scala 356:22]
-  wire  ic_ras_reset; // @[src/main/scala/fpga/Core.scala 356:22]
-  wire [30:0] ic_ras_io_top_ret_pc; // @[src/main/scala/fpga/Core.scala 356:22]
-  wire [2:0] ic_ras_io_top_index; // @[src/main/scala/fpga/Core.scala 356:22]
-  wire  ic_ras_io_ret1_en; // @[src/main/scala/fpga/Core.scala 356:22]
-  wire [2:0] ic_ras_io_ret1_index; // @[src/main/scala/fpga/Core.scala 356:22]
-  wire  ic_ras_io_call1_en; // @[src/main/scala/fpga/Core.scala 356:22]
-  wire [2:0] ic_ras_io_call1_index; // @[src/main/scala/fpga/Core.scala 356:22]
-  wire [30:0] ic_ras_io_call1_ret_pc; // @[src/main/scala/fpga/Core.scala 356:22]
-  wire  ic_ras_io_up_en; // @[src/main/scala/fpga/Core.scala 356:22]
-  wire [2:0] ic_ras_io_up_index; // @[src/main/scala/fpga/Core.scala 356:22]
-  wire  ic_ras_io_ret2_en; // @[src/main/scala/fpga/Core.scala 356:22]
-  wire [2:0] ic_ras_io_ret2_index; // @[src/main/scala/fpga/Core.scala 356:22]
-  wire  ic_ras_io_call2_en; // @[src/main/scala/fpga/Core.scala 356:22]
-  wire [2:0] ic_ras_io_call2_index; // @[src/main/scala/fpga/Core.scala 356:22]
-  wire [30:0] ic_ras_io_call2_ret_pc; // @[src/main/scala/fpga/Core.scala 356:22]
-  wire  id_stage_clock; // @[src/main/scala/fpga/Core.scala 624:24]
-  wire  id_stage_reset; // @[src/main/scala/fpga/Core.scala 624:24]
-  wire  id_stage_io_in_ready; // @[src/main/scala/fpga/Core.scala 624:24]
-  wire  id_stage_io_in_flush; // @[src/main/scala/fpga/Core.scala 624:24]
-  wire  id_stage_io_in_bits_is_valid_inst; // @[src/main/scala/fpga/Core.scala 624:24]
-  wire [31:0] id_stage_io_in_bits_inst; // @[src/main/scala/fpga/Core.scala 624:24]
-  wire [30:0] id_stage_io_in_bits_pc; // @[src/main/scala/fpga/Core.scala 624:24]
-  wire  id_stage_io_in_bits_bp_taken; // @[src/main/scala/fpga/Core.scala 624:24]
-  wire [1:0] id_stage_io_in_bits_bp_attr; // @[src/main/scala/fpga/Core.scala 624:24]
-  wire  id_stage_io_in_bits_bp_is_ret; // @[src/main/scala/fpga/Core.scala 624:24]
-  wire [2:0] id_stage_io_in_bits_bp_rasindex; // @[src/main/scala/fpga/Core.scala 624:24]
-  wire [30:0] id_stage_io_in_bits_bp_target; // @[src/main/scala/fpga/Core.scala 624:24]
-  wire [1:0] id_stage_io_in_bits_bp_cnt; // @[src/main/scala/fpga/Core.scala 624:24]
-  wire  id_stage_io_out_ready; // @[src/main/scala/fpga/Core.scala 624:24]
-  wire  id_stage_io_out_flush; // @[src/main/scala/fpga/Core.scala 624:24]
-  wire [30:0] id_stage_io_out_bits_pc; // @[src/main/scala/fpga/Core.scala 624:24]
-  wire [4:0] id_stage_io_out_bits_wb_addr; // @[src/main/scala/fpga/Core.scala 624:24]
-  wire  id_stage_io_out_bits_op1_sel; // @[src/main/scala/fpga/Core.scala 624:24]
-  wire  id_stage_io_out_bits_op2_sel; // @[src/main/scala/fpga/Core.scala 624:24]
-  wire [1:0] id_stage_io_out_bits_op3_sel; // @[src/main/scala/fpga/Core.scala 624:24]
-  wire [4:0] id_stage_io_out_bits_rs1_addr; // @[src/main/scala/fpga/Core.scala 624:24]
-  wire [4:0] id_stage_io_out_bits_rs2_addr; // @[src/main/scala/fpga/Core.scala 624:24]
-  wire [4:0] id_stage_io_out_bits_rs3_addr; // @[src/main/scala/fpga/Core.scala 624:24]
-  wire [31:0] id_stage_io_out_bits_op1_data; // @[src/main/scala/fpga/Core.scala 624:24]
-  wire [31:0] id_stage_io_out_bits_op2_data_im1; // @[src/main/scala/fpga/Core.scala 624:24]
-  wire [11:0] id_stage_io_out_bits_op2_data_im0; // @[src/main/scala/fpga/Core.scala 624:24]
-  wire [3:0] id_stage_io_out_bits_exe_fun; // @[src/main/scala/fpga/Core.scala 624:24]
-  wire  id_stage_io_out_bits_rf_wen; // @[src/main/scala/fpga/Core.scala 624:24]
-  wire [2:0] id_stage_io_out_bits_wb_sel; // @[src/main/scala/fpga/Core.scala 624:24]
-  wire [11:0] id_stage_io_out_bits_csr_addr; // @[src/main/scala/fpga/Core.scala 624:24]
-  wire [1:0] id_stage_io_out_bits_csr_cmd; // @[src/main/scala/fpga/Core.scala 624:24]
-  wire [31:0] id_stage_io_out_bits_imm_b_sext; // @[src/main/scala/fpga/Core.scala 624:24]
-  wire [1:0] id_stage_io_out_bits_shamt; // @[src/main/scala/fpga/Core.scala 624:24]
-  wire  id_stage_io_out_bits_op2op; // @[src/main/scala/fpga/Core.scala 624:24]
-  wire [2:0] id_stage_io_out_bits_mem_w; // @[src/main/scala/fpga/Core.scala 624:24]
-  wire  id_stage_io_out_bits_is_bflen; // @[src/main/scala/fpga/Core.scala 624:24]
-  wire  id_stage_io_out_bits_is_br; // @[src/main/scala/fpga/Core.scala 624:24]
-  wire  id_stage_io_out_bits_is_j; // @[src/main/scala/fpga/Core.scala 624:24]
-  wire  id_stage_io_out_bits_bp_taken; // @[src/main/scala/fpga/Core.scala 624:24]
-  wire [1:0] id_stage_io_out_bits_bp_attr; // @[src/main/scala/fpga/Core.scala 624:24]
-  wire  id_stage_io_out_bits_bp_is_ret; // @[src/main/scala/fpga/Core.scala 624:24]
-  wire [2:0] id_stage_io_out_bits_bp_rasindex; // @[src/main/scala/fpga/Core.scala 624:24]
-  wire [30:0] id_stage_io_out_bits_bp_target; // @[src/main/scala/fpga/Core.scala 624:24]
-  wire [1:0] id_stage_io_out_bits_bp_cnt; // @[src/main/scala/fpga/Core.scala 624:24]
-  wire [1:0] id_stage_io_out_bits_actual_attr; // @[src/main/scala/fpga/Core.scala 624:24]
-  wire  id_stage_io_out_bits_actual_is_ret; // @[src/main/scala/fpga/Core.scala 624:24]
-  wire  id_stage_io_out_bits_is_half; // @[src/main/scala/fpga/Core.scala 624:24]
-  wire  id_stage_io_out_bits_is_valid_inst; // @[src/main/scala/fpga/Core.scala 624:24]
-  wire  id_stage_io_out_bits_is_trap; // @[src/main/scala/fpga/Core.scala 624:24]
-  wire [31:0] id_stage_io_debug_signals_id_pc; // @[src/main/scala/fpga/Core.scala 624:24]
-  wire [31:0] id_stage_io_debug_signals_id_inst; // @[src/main/scala/fpga/Core.scala 624:24]
-  reg [63:0] instret; // @[src/main/scala/fpga/Core.scala 132:24]
-  reg [30:0] csr_reg_trap_vector; // @[src/main/scala/fpga/Core.scala 133:37]
-  reg [31:0] csr_reg_mcause; // @[src/main/scala/fpga/Core.scala 134:37]
-  reg [30:0] csr_reg_mepc; // @[src/main/scala/fpga/Core.scala 136:37]
-  reg  csr_reg_mstatus_mie; // @[src/main/scala/fpga/Core.scala 137:37]
-  reg  csr_reg_mstatus_mpie; // @[src/main/scala/fpga/Core.scala 138:37]
-  reg [31:0] csr_reg_mscratch; // @[src/main/scala/fpga/Core.scala 139:37]
-  reg  csr_reg_mie_meie; // @[src/main/scala/fpga/Core.scala 140:37]
-  reg  csr_reg_mie_mtie; // @[src/main/scala/fpga/Core.scala 141:37]
-  reg  id_reg_bp_taken; // @[src/main/scala/fpga/Core.scala 153:36]
-  reg [30:0] id_reg_bp_target; // @[src/main/scala/fpga/Core.scala 154:36]
-  reg  id_reg_bp_not_taken; // @[src/main/scala/fpga/Core.scala 155:36]
-  reg [30:0] id_reg_bp_pc; // @[src/main/scala/fpga/Core.scala 156:36]
-  reg [30:0] rrd_reg_pc; // @[src/main/scala/fpga/Core.scala 159:38]
-  reg [4:0] rrd_reg_wb_addr; // @[src/main/scala/fpga/Core.scala 160:38]
-  reg  rrd_reg_op1_sel; // @[src/main/scala/fpga/Core.scala 161:38]
-  reg  rrd_reg_op2_sel; // @[src/main/scala/fpga/Core.scala 162:38]
-  reg [1:0] rrd_reg_op3_sel; // @[src/main/scala/fpga/Core.scala 163:38]
-  reg [4:0] rrd_reg_rs1_addr; // @[src/main/scala/fpga/Core.scala 164:38]
-  reg [4:0] rrd_reg_rs2_addr; // @[src/main/scala/fpga/Core.scala 165:38]
-  reg [4:0] rrd_reg_rs3_addr; // @[src/main/scala/fpga/Core.scala 166:38]
-  reg [31:0] rrd_reg_op1_data; // @[src/main/scala/fpga/Core.scala 167:38]
-  reg [31:0] rrd_reg_op2_data_im1; // @[src/main/scala/fpga/Core.scala 168:38]
-  reg [11:0] rrd_reg_op2_data_im0; // @[src/main/scala/fpga/Core.scala 169:38]
-  reg [3:0] rrd_reg_exe_fun; // @[src/main/scala/fpga/Core.scala 170:38]
-  reg  rrd_reg_rf_wen; // @[src/main/scala/fpga/Core.scala 171:38]
-  reg [2:0] rrd_reg_wb_sel; // @[src/main/scala/fpga/Core.scala 172:38]
-  reg [11:0] rrd_reg_csr_addr; // @[src/main/scala/fpga/Core.scala 173:38]
-  reg [1:0] rrd_reg_csr_cmd; // @[src/main/scala/fpga/Core.scala 174:38]
-  reg [31:0] rrd_reg_imm_b_sext; // @[src/main/scala/fpga/Core.scala 175:38]
-  reg [1:0] rrd_reg_shamt; // @[src/main/scala/fpga/Core.scala 176:38]
-  reg  rrd_reg_op2op; // @[src/main/scala/fpga/Core.scala 177:38]
-  reg [2:0] rrd_reg_mem_w; // @[src/main/scala/fpga/Core.scala 178:38]
-  reg  rrd_reg_is_bflen; // @[src/main/scala/fpga/Core.scala 179:38]
-  reg  rrd_reg_is_br; // @[src/main/scala/fpga/Core.scala 180:38]
-  reg  rrd_reg_is_j; // @[src/main/scala/fpga/Core.scala 181:38]
-  reg  rrd_reg_bp_taken; // @[src/main/scala/fpga/Core.scala 182:38]
-  reg [1:0] rrd_reg_bp_attr; // @[src/main/scala/fpga/Core.scala 182:38]
-  reg  rrd_reg_bp_is_ret; // @[src/main/scala/fpga/Core.scala 182:38]
-  reg [2:0] rrd_reg_bp_rasindex; // @[src/main/scala/fpga/Core.scala 182:38]
-  reg [30:0] rrd_reg_bp_target; // @[src/main/scala/fpga/Core.scala 182:38]
-  reg [1:0] rrd_reg_bp_cnt; // @[src/main/scala/fpga/Core.scala 182:38]
-  reg [1:0] rrd_reg_actual_attr; // @[src/main/scala/fpga/Core.scala 183:38]
-  reg  rrd_reg_actual_is_ret; // @[src/main/scala/fpga/Core.scala 184:38]
-  reg  rrd_reg_is_half; // @[src/main/scala/fpga/Core.scala 185:38]
-  reg  rrd_reg_is_valid_inst; // @[src/main/scala/fpga/Core.scala 186:38]
-  reg  rrd_reg_is_trap; // @[src/main/scala/fpga/Core.scala 187:38]
-  reg [30:0] ex1_reg_pc; // @[src/main/scala/fpga/Core.scala 192:38]
-  reg [4:0] ex1_reg_wb_addr; // @[src/main/scala/fpga/Core.scala 193:38]
-  reg [31:0] ex1_reg_op1_data; // @[src/main/scala/fpga/Core.scala 194:38]
-  reg [31:0] ex1_reg_op2_data; // @[src/main/scala/fpga/Core.scala 195:38]
-  reg [31:0] ex1_reg_op3_data; // @[src/main/scala/fpga/Core.scala 196:38]
-  reg [3:0] ex1_reg_exe_fun; // @[src/main/scala/fpga/Core.scala 197:38]
-  reg  ex1_reg_rf_wen; // @[src/main/scala/fpga/Core.scala 198:38]
-  reg [2:0] ex1_reg_wb_sel; // @[src/main/scala/fpga/Core.scala 199:38]
-  reg [11:0] ex1_reg_csr_addr; // @[src/main/scala/fpga/Core.scala 200:38]
-  reg [1:0] ex1_reg_csr_cmd; // @[src/main/scala/fpga/Core.scala 201:38]
-  reg [1:0] ex1_reg_shamt; // @[src/main/scala/fpga/Core.scala 202:38]
-  reg  ex1_reg_op2op; // @[src/main/scala/fpga/Core.scala 203:38]
-  reg [2:0] ex1_reg_mem_w; // @[src/main/scala/fpga/Core.scala 204:38]
-  reg  ex1_reg_is_bflen; // @[src/main/scala/fpga/Core.scala 205:38]
-  reg [4:0] ex1_reg_imm_len; // @[src/main/scala/fpga/Core.scala 206:38]
-  reg  ex1_reg_is_j; // @[src/main/scala/fpga/Core.scala 207:38]
-  reg  ex1_reg_bp_taken; // @[src/main/scala/fpga/Core.scala 208:38]
-  reg [1:0] ex1_reg_bp_attr; // @[src/main/scala/fpga/Core.scala 208:38]
-  reg  ex1_reg_bp_is_ret; // @[src/main/scala/fpga/Core.scala 208:38]
-  reg [2:0] ex1_reg_bp_rasindex; // @[src/main/scala/fpga/Core.scala 208:38]
-  reg [30:0] ex1_reg_bp_target; // @[src/main/scala/fpga/Core.scala 208:38]
-  reg [1:0] ex1_reg_bp_cnt; // @[src/main/scala/fpga/Core.scala 208:38]
-  reg [1:0] ex1_reg_actual_attr; // @[src/main/scala/fpga/Core.scala 209:38]
-  reg  ex1_reg_actual_is_ret; // @[src/main/scala/fpga/Core.scala 210:38]
-  reg  ex1_reg_is_half; // @[src/main/scala/fpga/Core.scala 211:38]
-  reg  ex1_reg_is_valid_inst; // @[src/main/scala/fpga/Core.scala 212:38]
-  reg  ex1_reg_is_trap; // @[src/main/scala/fpga/Core.scala 213:38]
-  reg  ex1_reg_is_mret; // @[src/main/scala/fpga/Core.scala 214:38]
-  reg  ex1_reg_mem_use_reg; // @[src/main/scala/fpga/Core.scala 217:38]
-  reg  ex1_reg_inst2_use_reg; // @[src/main/scala/fpga/Core.scala 218:38]
-  reg  ex1_reg_inst3_use_reg; // @[src/main/scala/fpga/Core.scala 219:38]
-  reg  ex1_reg_is_br; // @[src/main/scala/fpga/Core.scala 220:38]
-  reg [30:0] ex1_reg_direct_jbr_pc; // @[src/main/scala/fpga/Core.scala 221:38]
-  reg [30:0] ex2_reg_pc; // @[src/main/scala/fpga/Core.scala 224:38]
-  reg [4:0] ex2_reg_wb_addr; // @[src/main/scala/fpga/Core.scala 225:38]
-  reg [47:0] ex2_reg_mullu; // @[src/main/scala/fpga/Core.scala 226:38]
-  reg [31:0] ex2_reg_mulls; // @[src/main/scala/fpga/Core.scala 227:38]
-  reg [47:0] ex2_reg_mulhuu; // @[src/main/scala/fpga/Core.scala 228:38]
-  reg [47:0] ex2_reg_mulhss; // @[src/main/scala/fpga/Core.scala 229:38]
-  reg [47:0] ex2_reg_mulhsu; // @[src/main/scala/fpga/Core.scala 230:38]
-  reg [3:0] ex2_reg_exe_fun; // @[src/main/scala/fpga/Core.scala 231:38]
-  reg  ex2_reg_rf_wen; // @[src/main/scala/fpga/Core.scala 232:38]
-  reg [2:0] ex2_reg_fun_sel; // @[src/main/scala/fpga/Core.scala 233:38]
-  reg [31:0] ex2_reg_alu_out; // @[src/main/scala/fpga/Core.scala 234:38]
-  reg [31:0] ex2_reg_pc_bit_out; // @[src/main/scala/fpga/Core.scala 235:38]
-  reg [31:0] ex2_reg_op3_data; // @[src/main/scala/fpga/Core.scala 236:38]
-  reg  ex2_reg_is_valid_inst; // @[src/main/scala/fpga/Core.scala 237:38]
-  reg  ex2_reg_divrem; // @[src/main/scala/fpga/Core.scala 240:38]
-  reg  ex2_reg_sign_op1; // @[src/main/scala/fpga/Core.scala 241:38]
-  reg  ex2_reg_sign_op12; // @[src/main/scala/fpga/Core.scala 242:38]
-  reg  ex2_reg_zero_op2; // @[src/main/scala/fpga/Core.scala 243:38]
-  reg [36:0] ex2_reg_init_dividend; // @[src/main/scala/fpga/Core.scala 244:38]
-  reg [31:0] ex2_reg_init_divisor; // @[src/main/scala/fpga/Core.scala 245:38]
-  reg [31:0] ex2_reg_orig_dividend; // @[src/main/scala/fpga/Core.scala 246:38]
-  reg  ex2_reg_inst3_use_reg; // @[src/main/scala/fpga/Core.scala 247:38]
-  reg  ex2_reg_no_mem; // @[src/main/scala/fpga/Core.scala 248:38]
-  reg [6:0] mem1_reg_mem_wstrb; // @[src/main/scala/fpga/Core.scala 251:39]
-  reg [31:0] mem1_reg_wdata; // @[src/main/scala/fpga/Core.scala 252:39]
-  reg [2:0] mem1_reg_mem_w; // @[src/main/scala/fpga/Core.scala 253:39]
-  reg  mem1_reg_is_mem_load; // @[src/main/scala/fpga/Core.scala 256:39]
-  reg  mem1_reg_is_mem_store; // @[src/main/scala/fpga/Core.scala 257:39]
-  reg  mem1_reg_is_dram_load; // @[src/main/scala/fpga/Core.scala 258:39]
-  reg  mem1_reg_is_dram_store; // @[src/main/scala/fpga/Core.scala 259:39]
-  reg  mem1_reg_is_dram_fence; // @[src/main/scala/fpga/Core.scala 260:39]
-  reg  mem1_reg_is_valid_inst; // @[src/main/scala/fpga/Core.scala 261:39]
-  reg  mem1_reg_unaligned; // @[src/main/scala/fpga/Core.scala 262:39]
-  reg [1:0] mem2_reg_wb_byte_offset; // @[src/main/scala/fpga/Core.scala 265:40]
-  reg [2:0] mem2_reg_mem_w; // @[src/main/scala/fpga/Core.scala 266:40]
-  reg [4:0] mem2_reg_wb_addr; // @[src/main/scala/fpga/Core.scala 268:40]
-  reg  mem2_reg_is_valid_load; // @[src/main/scala/fpga/Core.scala 269:40]
-  reg  mem2_reg_is_valid_inst; // @[src/main/scala/fpga/Core.scala 271:40]
-  reg  mem2_reg_is_mem_load; // @[src/main/scala/fpga/Core.scala 272:40]
-  reg  mem2_reg_is_dram_load; // @[src/main/scala/fpga/Core.scala 273:40]
-  reg  mem2_reg_unaligned; // @[src/main/scala/fpga/Core.scala 274:40]
-  reg [1:0] mem3_reg_wb_byte_offset; // @[src/main/scala/fpga/Core.scala 277:40]
-  reg [2:0] mem3_reg_mem_w; // @[src/main/scala/fpga/Core.scala 278:40]
-  reg [31:0] mem3_reg_dmem_rdata; // @[src/main/scala/fpga/Core.scala 279:40]
-  reg [23:0] mem3_reg_rdata_high; // @[src/main/scala/fpga/Core.scala 280:40]
-  reg [4:0] mem3_reg_wb_addr; // @[src/main/scala/fpga/Core.scala 281:40]
-  reg  mem3_reg_is_valid_load; // @[src/main/scala/fpga/Core.scala 282:40]
-  reg  mem3_reg_is_valid_inst; // @[src/main/scala/fpga/Core.scala 283:40]
-  reg  mem3_reg_unaligned; // @[src/main/scala/fpga/Core.scala 285:40]
-  reg  mem3_reg_is_aligned_lw; // @[src/main/scala/fpga/Core.scala 286:40]
-  reg  ex1_reg_fw_en; // @[src/main/scala/fpga/Core.scala 298:37]
-  reg  ex2_reg_fw_en; // @[src/main/scala/fpga/Core.scala 300:37]
-  reg  mem3_reg_fw_en; // @[src/main/scala/fpga/Core.scala 302:37]
-  reg  ex2_reg_div_stall; // @[src/main/scala/fpga/Core.scala 305:37]
-  reg [2:0] ex2_reg_divrem_state; // @[src/main/scala/fpga/Core.scala 307:37]
-  reg  ex2_reg_is_br; // @[src/main/scala/fpga/Core.scala 308:37]
-  reg [30:0] ex2_reg_br_pc; // @[src/main/scala/fpga/Core.scala 309:37]
-  reg  ex2_reg_is_retired; // @[src/main/scala/fpga/Core.scala 314:37]
-  reg  mem3_reg_is_retired; // @[src/main/scala/fpga/Core.scala 315:37]
-  reg  ic_reg_read_rdy; // @[src/main/scala/fpga/Core.scala 336:33]
-  reg  ic_reg_half_rdy; // @[src/main/scala/fpga/Core.scala 337:33]
-  reg [30:0] ic_reg_imem_addr; // @[src/main/scala/fpga/Core.scala 341:33]
-  reg [30:0] ic_reg_addr_out; // @[src/main/scala/fpga/Core.scala 342:33]
-  reg [31:0] ic_reg_inst; // @[src/main/scala/fpga/Core.scala 346:34]
-  reg [30:0] ic_reg_inst_addr; // @[src/main/scala/fpga/Core.scala 347:34]
-  reg [31:0] ic_reg_inst2; // @[src/main/scala/fpga/Core.scala 348:34]
-  reg [2:0] ic_state; // @[src/main/scala/fpga/Core.scala 351:25]
-  reg  ic_reg_bp_next0_taken; // @[src/main/scala/fpga/Core.scala 359:32]
-  reg [1:0] ic_reg_bp_next0_attr; // @[src/main/scala/fpga/Core.scala 359:32]
-  reg  ic_reg_bp_next0_is_ret; // @[src/main/scala/fpga/Core.scala 359:32]
-  reg [30:0] ic_reg_bp_next0_target; // @[src/main/scala/fpga/Core.scala 359:32]
-  reg [1:0] ic_reg_bp_next0_cnt; // @[src/main/scala/fpga/Core.scala 359:32]
-  reg  ic_reg_bp_next1_taken; // @[src/main/scala/fpga/Core.scala 360:32]
-  reg [1:0] ic_reg_bp_next1_attr; // @[src/main/scala/fpga/Core.scala 360:32]
-  reg  ic_reg_bp_next1_is_ret; // @[src/main/scala/fpga/Core.scala 360:32]
-  reg [30:0] ic_reg_bp_next1_target; // @[src/main/scala/fpga/Core.scala 360:32]
-  reg [1:0] ic_reg_bp_next1_cnt; // @[src/main/scala/fpga/Core.scala 360:32]
-  reg  ic_reg_bp_next2_taken; // @[src/main/scala/fpga/Core.scala 361:32]
-  reg [1:0] ic_reg_bp_next2_attr; // @[src/main/scala/fpga/Core.scala 361:32]
-  reg  ic_reg_bp_next2_is_ret; // @[src/main/scala/fpga/Core.scala 361:32]
-  reg [30:0] ic_reg_bp_next2_target; // @[src/main/scala/fpga/Core.scala 361:32]
-  reg [1:0] ic_reg_bp_next2_cnt; // @[src/main/scala/fpga/Core.scala 361:32]
-  reg  ic_reg_zbp_next_taken1; // @[src/main/scala/fpga/Core.scala 367:40]
-  reg [30:0] ic_reg_zbp_next_target1; // @[src/main/scala/fpga/Core.scala 368:40]
-  reg  ic_reg_zbp_next_taken2; // @[src/main/scala/fpga/Core.scala 369:40]
-  reg [30:0] ic_reg_zbp_next_target2; // @[src/main/scala/fpga/Core.scala 370:40]
-  wire [30:0] ic_imem_addr_2 = {ic_reg_imem_addr[30:1],1'h1}; // @[src/main/scala/fpga/Core.scala 372:27]
-  wire [30:0] ic_imem_addr_4 = ic_reg_imem_addr + 31'h2; // @[src/main/scala/fpga/Core.scala 373:41]
-  wire [30:0] ic_inst_addr_2 = {ic_reg_inst_addr[30:1],1'h1}; // @[src/main/scala/fpga/Core.scala 374:27]
-  wire  id_reg_stall = ~id_stage_io_in_ready; // @[src/main/scala/fpga/Core.scala 637:19]
-  wire  _if2_zbp_taken_T = ~id_reg_stall; // @[src/main/scala/fpga/Core.scala 571:20]
-  wire  id_flush = id_stage_io_in_flush; // @[src/main/scala/fpga/Core.scala 290:34 638:16]
-  wire  _if2_zbp_taken_T_1 = ~id_flush; // @[src/main/scala/fpga/Core.scala 571:37]
-  wire  _if2_zbp_taken_T_3 = ~id_reg_bp_taken; // @[src/main/scala/fpga/Core.scala 571:50]
-  wire  ic_read_rdy = ~io_imem_valid ? 1'h0 : ic_reg_read_rdy; // @[src/main/scala/fpga/Core.scala 383:20 530:92 536:22]
-  wire  _GEN_54 = 3'h3 == ic_state | 3'h7 == ic_state ? ic_reg_zbp_next_taken1 : ic_reg_zbp_next_taken2; // @[src/main/scala/fpga/Core.scala 394:21 489:31]
-  wire  _GEN_83 = 3'h1 == ic_state | 3'h5 == ic_state ? ic_zbtb_io_lu_matches0 : _GEN_54; // @[src/main/scala/fpga/Core.scala 394:21 466:21]
-  wire  _GEN_132 = 3'h4 == ic_state ? ic_zbtb_io_lu_matches1 : _GEN_83; // @[src/main/scala/fpga/Core.scala 394:21 450:31]
-  wire  ic_zbp_taken = 3'h0 == ic_state ? ic_zbtb_io_lu_matches0 : _GEN_132; // @[src/main/scala/fpga/Core.scala 394:21 415:31]
-  wire  if2_zbp_taken = ~id_reg_stall & ~id_flush & ~id_reg_bp_taken & ic_read_rdy & ic_zbp_taken; // @[src/main/scala/fpga/Core.scala 571:82]
-  wire  if1_is_jump = ex2_reg_is_br | id_reg_bp_taken | if2_zbp_taken; // @[src/main/scala/fpga/Core.scala 554:54]
-  wire [30:0] _GEN_55 = 3'h3 == ic_state | 3'h7 == ic_state ? ic_reg_zbp_next_target1 : ic_reg_zbp_next_target2; // @[src/main/scala/fpga/Core.scala 394:21 490:31]
-  wire [30:0] _GEN_84 = 3'h1 == ic_state | 3'h5 == ic_state ? ic_zbtb_io_lu_target0 : _GEN_55; // @[src/main/scala/fpga/Core.scala 394:21 467:21]
-  wire [30:0] _GEN_133 = 3'h4 == ic_state ? ic_zbtb_io_lu_target1 : _GEN_84; // @[src/main/scala/fpga/Core.scala 394:21 451:31]
-  wire [30:0] ic_zbp_target = 3'h0 == ic_state ? ic_zbtb_io_lu_target0 : _GEN_133; // @[src/main/scala/fpga/Core.scala 394:21 416:31]
+  reg [31:0] regfile [0:31]; // @[src/main/scala/fpga/Core.scala 128:20]
+  wire  regfile_rrd_op1_data_MPORT_en; // @[src/main/scala/fpga/Core.scala 128:20]
+  wire [4:0] regfile_rrd_op1_data_MPORT_addr; // @[src/main/scala/fpga/Core.scala 128:20]
+  wire [31:0] regfile_rrd_op1_data_MPORT_data; // @[src/main/scala/fpga/Core.scala 128:20]
+  wire  regfile_rrd_op2_data_MPORT_en; // @[src/main/scala/fpga/Core.scala 128:20]
+  wire [4:0] regfile_rrd_op2_data_MPORT_addr; // @[src/main/scala/fpga/Core.scala 128:20]
+  wire [31:0] regfile_rrd_op2_data_MPORT_data; // @[src/main/scala/fpga/Core.scala 128:20]
+  wire  regfile_rrd_op3_data_MPORT_en; // @[src/main/scala/fpga/Core.scala 128:20]
+  wire [4:0] regfile_rrd_op3_data_MPORT_addr; // @[src/main/scala/fpga/Core.scala 128:20]
+  wire [31:0] regfile_rrd_op3_data_MPORT_data; // @[src/main/scala/fpga/Core.scala 128:20]
+  wire [31:0] regfile_MPORT_3_data; // @[src/main/scala/fpga/Core.scala 128:20]
+  wire [4:0] regfile_MPORT_3_addr; // @[src/main/scala/fpga/Core.scala 128:20]
+  wire  regfile_MPORT_3_mask; // @[src/main/scala/fpga/Core.scala 128:20]
+  wire  regfile_MPORT_3_en; // @[src/main/scala/fpga/Core.scala 128:20]
+  wire [31:0] regfile_MPORT_5_data; // @[src/main/scala/fpga/Core.scala 128:20]
+  wire [4:0] regfile_MPORT_5_addr; // @[src/main/scala/fpga/Core.scala 128:20]
+  wire  regfile_MPORT_5_mask; // @[src/main/scala/fpga/Core.scala 128:20]
+  wire  regfile_MPORT_5_en; // @[src/main/scala/fpga/Core.scala 128:20]
+  wire  cycle_counter_clock; // @[src/main/scala/fpga/Core.scala 130:29]
+  wire  cycle_counter_reset; // @[src/main/scala/fpga/Core.scala 130:29]
+  wire [63:0] cycle_counter_io_value; // @[src/main/scala/fpga/Core.scala 130:29]
+  wire  mtimer_clock; // @[src/main/scala/fpga/Core.scala 131:22]
+  wire  mtimer_reset; // @[src/main/scala/fpga/Core.scala 131:22]
+  wire [31:0] mtimer_io_mem_raddr; // @[src/main/scala/fpga/Core.scala 131:22]
+  wire [31:0] mtimer_io_mem_rdata; // @[src/main/scala/fpga/Core.scala 131:22]
+  wire [31:0] mtimer_io_mem_waddr; // @[src/main/scala/fpga/Core.scala 131:22]
+  wire  mtimer_io_mem_wen; // @[src/main/scala/fpga/Core.scala 131:22]
+  wire [31:0] mtimer_io_mem_wdata; // @[src/main/scala/fpga/Core.scala 131:22]
+  wire  mtimer_io_intr; // @[src/main/scala/fpga/Core.scala 131:22]
+  wire [63:0] mtimer_io_mtime; // @[src/main/scala/fpga/Core.scala 131:22]
+  reg  scoreboard [0:31]; // @[src/main/scala/fpga/Core.scala 144:25]
+  wire  scoreboard_rrd_stall_MPORT_en; // @[src/main/scala/fpga/Core.scala 144:25]
+  wire [4:0] scoreboard_rrd_stall_MPORT_addr; // @[src/main/scala/fpga/Core.scala 144:25]
+  wire  scoreboard_rrd_stall_MPORT_data; // @[src/main/scala/fpga/Core.scala 144:25]
+  wire  scoreboard_rrd_stall_MPORT_1_en; // @[src/main/scala/fpga/Core.scala 144:25]
+  wire [4:0] scoreboard_rrd_stall_MPORT_1_addr; // @[src/main/scala/fpga/Core.scala 144:25]
+  wire  scoreboard_rrd_stall_MPORT_1_data; // @[src/main/scala/fpga/Core.scala 144:25]
+  wire  scoreboard_rrd_stall_MPORT_2_en; // @[src/main/scala/fpga/Core.scala 144:25]
+  wire [4:0] scoreboard_rrd_stall_MPORT_2_addr; // @[src/main/scala/fpga/Core.scala 144:25]
+  wire  scoreboard_rrd_stall_MPORT_2_data; // @[src/main/scala/fpga/Core.scala 144:25]
+  wire  scoreboard_rrd_stall_MPORT_3_en; // @[src/main/scala/fpga/Core.scala 144:25]
+  wire [4:0] scoreboard_rrd_stall_MPORT_3_addr; // @[src/main/scala/fpga/Core.scala 144:25]
+  wire  scoreboard_rrd_stall_MPORT_3_data; // @[src/main/scala/fpga/Core.scala 144:25]
+  wire  scoreboard_MPORT_7_en; // @[src/main/scala/fpga/Core.scala 144:25]
+  wire [4:0] scoreboard_MPORT_7_addr; // @[src/main/scala/fpga/Core.scala 144:25]
+  wire  scoreboard_MPORT_7_data; // @[src/main/scala/fpga/Core.scala 144:25]
+  wire  scoreboard_MPORT_8_en; // @[src/main/scala/fpga/Core.scala 144:25]
+  wire [4:0] scoreboard_MPORT_8_addr; // @[src/main/scala/fpga/Core.scala 144:25]
+  wire  scoreboard_MPORT_8_data; // @[src/main/scala/fpga/Core.scala 144:25]
+  wire  scoreboard_MPORT_9_en; // @[src/main/scala/fpga/Core.scala 144:25]
+  wire [4:0] scoreboard_MPORT_9_addr; // @[src/main/scala/fpga/Core.scala 144:25]
+  wire  scoreboard_MPORT_9_data; // @[src/main/scala/fpga/Core.scala 144:25]
+  wire  scoreboard_MPORT_10_en; // @[src/main/scala/fpga/Core.scala 144:25]
+  wire [4:0] scoreboard_MPORT_10_addr; // @[src/main/scala/fpga/Core.scala 144:25]
+  wire  scoreboard_MPORT_10_data; // @[src/main/scala/fpga/Core.scala 144:25]
+  wire  scoreboard_MPORT_11_en; // @[src/main/scala/fpga/Core.scala 144:25]
+  wire [4:0] scoreboard_MPORT_11_addr; // @[src/main/scala/fpga/Core.scala 144:25]
+  wire  scoreboard_MPORT_11_data; // @[src/main/scala/fpga/Core.scala 144:25]
+  wire  scoreboard_MPORT_12_en; // @[src/main/scala/fpga/Core.scala 144:25]
+  wire [4:0] scoreboard_MPORT_12_addr; // @[src/main/scala/fpga/Core.scala 144:25]
+  wire  scoreboard_MPORT_12_data; // @[src/main/scala/fpga/Core.scala 144:25]
+  wire  scoreboard_MPORT_13_en; // @[src/main/scala/fpga/Core.scala 144:25]
+  wire [4:0] scoreboard_MPORT_13_addr; // @[src/main/scala/fpga/Core.scala 144:25]
+  wire  scoreboard_MPORT_13_data; // @[src/main/scala/fpga/Core.scala 144:25]
+  wire  scoreboard_MPORT_14_en; // @[src/main/scala/fpga/Core.scala 144:25]
+  wire [4:0] scoreboard_MPORT_14_addr; // @[src/main/scala/fpga/Core.scala 144:25]
+  wire  scoreboard_MPORT_14_data; // @[src/main/scala/fpga/Core.scala 144:25]
+  wire  scoreboard_MPORT_15_en; // @[src/main/scala/fpga/Core.scala 144:25]
+  wire [4:0] scoreboard_MPORT_15_addr; // @[src/main/scala/fpga/Core.scala 144:25]
+  wire  scoreboard_MPORT_15_data; // @[src/main/scala/fpga/Core.scala 144:25]
+  wire  scoreboard_MPORT_16_en; // @[src/main/scala/fpga/Core.scala 144:25]
+  wire [4:0] scoreboard_MPORT_16_addr; // @[src/main/scala/fpga/Core.scala 144:25]
+  wire  scoreboard_MPORT_16_data; // @[src/main/scala/fpga/Core.scala 144:25]
+  wire  scoreboard_MPORT_17_en; // @[src/main/scala/fpga/Core.scala 144:25]
+  wire [4:0] scoreboard_MPORT_17_addr; // @[src/main/scala/fpga/Core.scala 144:25]
+  wire  scoreboard_MPORT_17_data; // @[src/main/scala/fpga/Core.scala 144:25]
+  wire  scoreboard_MPORT_18_en; // @[src/main/scala/fpga/Core.scala 144:25]
+  wire [4:0] scoreboard_MPORT_18_addr; // @[src/main/scala/fpga/Core.scala 144:25]
+  wire  scoreboard_MPORT_18_data; // @[src/main/scala/fpga/Core.scala 144:25]
+  wire  scoreboard_MPORT_19_en; // @[src/main/scala/fpga/Core.scala 144:25]
+  wire [4:0] scoreboard_MPORT_19_addr; // @[src/main/scala/fpga/Core.scala 144:25]
+  wire  scoreboard_MPORT_19_data; // @[src/main/scala/fpga/Core.scala 144:25]
+  wire  scoreboard_MPORT_20_en; // @[src/main/scala/fpga/Core.scala 144:25]
+  wire [4:0] scoreboard_MPORT_20_addr; // @[src/main/scala/fpga/Core.scala 144:25]
+  wire  scoreboard_MPORT_20_data; // @[src/main/scala/fpga/Core.scala 144:25]
+  wire  scoreboard_MPORT_21_en; // @[src/main/scala/fpga/Core.scala 144:25]
+  wire [4:0] scoreboard_MPORT_21_addr; // @[src/main/scala/fpga/Core.scala 144:25]
+  wire  scoreboard_MPORT_21_data; // @[src/main/scala/fpga/Core.scala 144:25]
+  wire  scoreboard_MPORT_22_en; // @[src/main/scala/fpga/Core.scala 144:25]
+  wire [4:0] scoreboard_MPORT_22_addr; // @[src/main/scala/fpga/Core.scala 144:25]
+  wire  scoreboard_MPORT_22_data; // @[src/main/scala/fpga/Core.scala 144:25]
+  wire  scoreboard_MPORT_23_en; // @[src/main/scala/fpga/Core.scala 144:25]
+  wire [4:0] scoreboard_MPORT_23_addr; // @[src/main/scala/fpga/Core.scala 144:25]
+  wire  scoreboard_MPORT_23_data; // @[src/main/scala/fpga/Core.scala 144:25]
+  wire  scoreboard_MPORT_24_en; // @[src/main/scala/fpga/Core.scala 144:25]
+  wire [4:0] scoreboard_MPORT_24_addr; // @[src/main/scala/fpga/Core.scala 144:25]
+  wire  scoreboard_MPORT_24_data; // @[src/main/scala/fpga/Core.scala 144:25]
+  wire  scoreboard_MPORT_25_en; // @[src/main/scala/fpga/Core.scala 144:25]
+  wire [4:0] scoreboard_MPORT_25_addr; // @[src/main/scala/fpga/Core.scala 144:25]
+  wire  scoreboard_MPORT_25_data; // @[src/main/scala/fpga/Core.scala 144:25]
+  wire  scoreboard_MPORT_26_en; // @[src/main/scala/fpga/Core.scala 144:25]
+  wire [4:0] scoreboard_MPORT_26_addr; // @[src/main/scala/fpga/Core.scala 144:25]
+  wire  scoreboard_MPORT_26_data; // @[src/main/scala/fpga/Core.scala 144:25]
+  wire  scoreboard_MPORT_27_en; // @[src/main/scala/fpga/Core.scala 144:25]
+  wire [4:0] scoreboard_MPORT_27_addr; // @[src/main/scala/fpga/Core.scala 144:25]
+  wire  scoreboard_MPORT_27_data; // @[src/main/scala/fpga/Core.scala 144:25]
+  wire  scoreboard_MPORT_28_en; // @[src/main/scala/fpga/Core.scala 144:25]
+  wire [4:0] scoreboard_MPORT_28_addr; // @[src/main/scala/fpga/Core.scala 144:25]
+  wire  scoreboard_MPORT_28_data; // @[src/main/scala/fpga/Core.scala 144:25]
+  wire  scoreboard_MPORT_29_en; // @[src/main/scala/fpga/Core.scala 144:25]
+  wire [4:0] scoreboard_MPORT_29_addr; // @[src/main/scala/fpga/Core.scala 144:25]
+  wire  scoreboard_MPORT_29_data; // @[src/main/scala/fpga/Core.scala 144:25]
+  wire  scoreboard_MPORT_30_en; // @[src/main/scala/fpga/Core.scala 144:25]
+  wire [4:0] scoreboard_MPORT_30_addr; // @[src/main/scala/fpga/Core.scala 144:25]
+  wire  scoreboard_MPORT_30_data; // @[src/main/scala/fpga/Core.scala 144:25]
+  wire  scoreboard_MPORT_31_en; // @[src/main/scala/fpga/Core.scala 144:25]
+  wire [4:0] scoreboard_MPORT_31_addr; // @[src/main/scala/fpga/Core.scala 144:25]
+  wire  scoreboard_MPORT_31_data; // @[src/main/scala/fpga/Core.scala 144:25]
+  wire  scoreboard_MPORT_32_en; // @[src/main/scala/fpga/Core.scala 144:25]
+  wire [4:0] scoreboard_MPORT_32_addr; // @[src/main/scala/fpga/Core.scala 144:25]
+  wire  scoreboard_MPORT_32_data; // @[src/main/scala/fpga/Core.scala 144:25]
+  wire  scoreboard_MPORT_33_en; // @[src/main/scala/fpga/Core.scala 144:25]
+  wire [4:0] scoreboard_MPORT_33_addr; // @[src/main/scala/fpga/Core.scala 144:25]
+  wire  scoreboard_MPORT_33_data; // @[src/main/scala/fpga/Core.scala 144:25]
+  wire  scoreboard_MPORT_34_en; // @[src/main/scala/fpga/Core.scala 144:25]
+  wire [4:0] scoreboard_MPORT_34_addr; // @[src/main/scala/fpga/Core.scala 144:25]
+  wire  scoreboard_MPORT_34_data; // @[src/main/scala/fpga/Core.scala 144:25]
+  wire  scoreboard_MPORT_35_en; // @[src/main/scala/fpga/Core.scala 144:25]
+  wire [4:0] scoreboard_MPORT_35_addr; // @[src/main/scala/fpga/Core.scala 144:25]
+  wire  scoreboard_MPORT_35_data; // @[src/main/scala/fpga/Core.scala 144:25]
+  wire  scoreboard_MPORT_36_en; // @[src/main/scala/fpga/Core.scala 144:25]
+  wire [4:0] scoreboard_MPORT_36_addr; // @[src/main/scala/fpga/Core.scala 144:25]
+  wire  scoreboard_MPORT_36_data; // @[src/main/scala/fpga/Core.scala 144:25]
+  wire  scoreboard_MPORT_37_en; // @[src/main/scala/fpga/Core.scala 144:25]
+  wire [4:0] scoreboard_MPORT_37_addr; // @[src/main/scala/fpga/Core.scala 144:25]
+  wire  scoreboard_MPORT_37_data; // @[src/main/scala/fpga/Core.scala 144:25]
+  wire  scoreboard_MPORT_38_en; // @[src/main/scala/fpga/Core.scala 144:25]
+  wire [4:0] scoreboard_MPORT_38_addr; // @[src/main/scala/fpga/Core.scala 144:25]
+  wire  scoreboard_MPORT_38_data; // @[src/main/scala/fpga/Core.scala 144:25]
+  wire  scoreboard_MPORT_data; // @[src/main/scala/fpga/Core.scala 144:25]
+  wire [4:0] scoreboard_MPORT_addr; // @[src/main/scala/fpga/Core.scala 144:25]
+  wire  scoreboard_MPORT_mask; // @[src/main/scala/fpga/Core.scala 144:25]
+  wire  scoreboard_MPORT_en; // @[src/main/scala/fpga/Core.scala 144:25]
+  wire  scoreboard_MPORT_1_data; // @[src/main/scala/fpga/Core.scala 144:25]
+  wire [4:0] scoreboard_MPORT_1_addr; // @[src/main/scala/fpga/Core.scala 144:25]
+  wire  scoreboard_MPORT_1_mask; // @[src/main/scala/fpga/Core.scala 144:25]
+  wire  scoreboard_MPORT_1_en; // @[src/main/scala/fpga/Core.scala 144:25]
+  wire  scoreboard_MPORT_2_data; // @[src/main/scala/fpga/Core.scala 144:25]
+  wire [4:0] scoreboard_MPORT_2_addr; // @[src/main/scala/fpga/Core.scala 144:25]
+  wire  scoreboard_MPORT_2_mask; // @[src/main/scala/fpga/Core.scala 144:25]
+  wire  scoreboard_MPORT_2_en; // @[src/main/scala/fpga/Core.scala 144:25]
+  wire  scoreboard_MPORT_4_data; // @[src/main/scala/fpga/Core.scala 144:25]
+  wire [4:0] scoreboard_MPORT_4_addr; // @[src/main/scala/fpga/Core.scala 144:25]
+  wire  scoreboard_MPORT_4_mask; // @[src/main/scala/fpga/Core.scala 144:25]
+  wire  scoreboard_MPORT_4_en; // @[src/main/scala/fpga/Core.scala 144:25]
+  wire  scoreboard_MPORT_6_data; // @[src/main/scala/fpga/Core.scala 144:25]
+  wire [4:0] scoreboard_MPORT_6_addr; // @[src/main/scala/fpga/Core.scala 144:25]
+  wire  scoreboard_MPORT_6_mask; // @[src/main/scala/fpga/Core.scala 144:25]
+  wire  scoreboard_MPORT_6_en; // @[src/main/scala/fpga/Core.scala 144:25]
+  wire  ic_btb_clock; // @[src/main/scala/fpga/Core.scala 354:22]
+  wire  ic_btb_reset; // @[src/main/scala/fpga/Core.scala 354:22]
+  wire [30:0] ic_btb_io_lu_pc; // @[src/main/scala/fpga/Core.scala 354:22]
+  wire  ic_btb_io_lu_jump0; // @[src/main/scala/fpga/Core.scala 354:22]
+  wire  ic_btb_io_lu_br0; // @[src/main/scala/fpga/Core.scala 354:22]
+  wire [1:0] ic_btb_io_lu_attr0; // @[src/main/scala/fpga/Core.scala 354:22]
+  wire  ic_btb_io_lu_is_ret0; // @[src/main/scala/fpga/Core.scala 354:22]
+  wire [30:0] ic_btb_io_lu_target0; // @[src/main/scala/fpga/Core.scala 354:22]
+  wire  ic_btb_io_lu_jump1; // @[src/main/scala/fpga/Core.scala 354:22]
+  wire  ic_btb_io_lu_br1; // @[src/main/scala/fpga/Core.scala 354:22]
+  wire [1:0] ic_btb_io_lu_attr1; // @[src/main/scala/fpga/Core.scala 354:22]
+  wire  ic_btb_io_lu_is_ret1; // @[src/main/scala/fpga/Core.scala 354:22]
+  wire [30:0] ic_btb_io_lu_target1; // @[src/main/scala/fpga/Core.scala 354:22]
+  wire  ic_btb_io_up_en; // @[src/main/scala/fpga/Core.scala 354:22]
+  wire [30:0] ic_btb_io_up_pc; // @[src/main/scala/fpga/Core.scala 354:22]
+  wire [1:0] ic_btb_io_up_attr; // @[src/main/scala/fpga/Core.scala 354:22]
+  wire  ic_btb_io_up_is_ret; // @[src/main/scala/fpga/Core.scala 354:22]
+  wire [30:0] ic_btb_io_up_target; // @[src/main/scala/fpga/Core.scala 354:22]
+  wire  ic_pht_clock; // @[src/main/scala/fpga/Core.scala 355:22]
+  wire  ic_pht_reset; // @[src/main/scala/fpga/Core.scala 355:22]
+  wire [30:0] ic_pht_io_lu_pc; // @[src/main/scala/fpga/Core.scala 355:22]
+  wire  ic_pht_io_lu_taken0; // @[src/main/scala/fpga/Core.scala 355:22]
+  wire  ic_pht_io_lu_taken1; // @[src/main/scala/fpga/Core.scala 355:22]
+  wire [1:0] ic_pht_io_lu_cnt0; // @[src/main/scala/fpga/Core.scala 355:22]
+  wire [1:0] ic_pht_io_lu_cnt1; // @[src/main/scala/fpga/Core.scala 355:22]
+  wire [1:0] ic_pht_io_lu_gcnt0; // @[src/main/scala/fpga/Core.scala 355:22]
+  wire [1:0] ic_pht_io_lu_gcnt1; // @[src/main/scala/fpga/Core.scala 355:22]
+  wire  ic_pht_io_up_en; // @[src/main/scala/fpga/Core.scala 355:22]
+  wire [5:0] ic_pht_io_up_history; // @[src/main/scala/fpga/Core.scala 355:22]
+  wire [30:0] ic_pht_io_up_pc; // @[src/main/scala/fpga/Core.scala 355:22]
+  wire [1:0] ic_pht_io_up_cnt; // @[src/main/scala/fpga/Core.scala 355:22]
+  wire [1:0] ic_pht_io_up_gcnt; // @[src/main/scala/fpga/Core.scala 355:22]
+  wire  ic_pht_io_lmem_wen; // @[src/main/scala/fpga/Core.scala 355:22]
+  wire [11:0] ic_pht_io_lmem_raddr; // @[src/main/scala/fpga/Core.scala 355:22]
+  wire [3:0] ic_pht_io_lmem_rdata; // @[src/main/scala/fpga/Core.scala 355:22]
+  wire [12:0] ic_pht_io_lmem_waddr; // @[src/main/scala/fpga/Core.scala 355:22]
+  wire [1:0] ic_pht_io_lmem_wdata; // @[src/main/scala/fpga/Core.scala 355:22]
+  wire  ic_pht_io_gmem_wen; // @[src/main/scala/fpga/Core.scala 355:22]
+  wire [11:0] ic_pht_io_gmem_raddr; // @[src/main/scala/fpga/Core.scala 355:22]
+  wire [3:0] ic_pht_io_gmem_rdata; // @[src/main/scala/fpga/Core.scala 355:22]
+  wire [12:0] ic_pht_io_gmem_waddr; // @[src/main/scala/fpga/Core.scala 355:22]
+  wire [1:0] ic_pht_io_gmem_wdata; // @[src/main/scala/fpga/Core.scala 355:22]
+  wire  ic_pht_io_br_en; // @[src/main/scala/fpga/Core.scala 355:22]
+  wire [30:0] ic_pht_io_br_pc; // @[src/main/scala/fpga/Core.scala 355:22]
+  wire  ic_pht_io_br2_en; // @[src/main/scala/fpga/Core.scala 355:22]
+  wire [5:0] ic_pht_io_br2_history; // @[src/main/scala/fpga/Core.scala 355:22]
+  wire [30:0] ic_pht_io_br2_pc; // @[src/main/scala/fpga/Core.scala 355:22]
+  wire [5:0] ic_pht_io_history; // @[src/main/scala/fpga/Core.scala 355:22]
+  wire  ic_pht_io_res_en; // @[src/main/scala/fpga/Core.scala 355:22]
+  wire [5:0] ic_pht_io_res_history; // @[src/main/scala/fpga/Core.scala 355:22]
+  wire  ic_zbtb_clock; // @[src/main/scala/fpga/Core.scala 356:23]
+  wire  ic_zbtb_reset; // @[src/main/scala/fpga/Core.scala 356:23]
+  wire [30:0] ic_zbtb_io_lu_pc; // @[src/main/scala/fpga/Core.scala 356:23]
+  wire  ic_zbtb_io_lu_matches0; // @[src/main/scala/fpga/Core.scala 356:23]
+  wire [30:0] ic_zbtb_io_lu_target0; // @[src/main/scala/fpga/Core.scala 356:23]
+  wire  ic_zbtb_io_lu_matches1; // @[src/main/scala/fpga/Core.scala 356:23]
+  wire [30:0] ic_zbtb_io_lu_target1; // @[src/main/scala/fpga/Core.scala 356:23]
+  wire  ic_zbtb_io_up_en; // @[src/main/scala/fpga/Core.scala 356:23]
+  wire [30:0] ic_zbtb_io_up_pc; // @[src/main/scala/fpga/Core.scala 356:23]
+  wire [30:0] ic_zbtb_io_up_target; // @[src/main/scala/fpga/Core.scala 356:23]
+  wire  ic_zbtb_io_inv_en; // @[src/main/scala/fpga/Core.scala 356:23]
+  wire [30:0] ic_zbtb_io_inv_pc; // @[src/main/scala/fpga/Core.scala 356:23]
+  wire  ic_ras_clock; // @[src/main/scala/fpga/Core.scala 357:22]
+  wire  ic_ras_reset; // @[src/main/scala/fpga/Core.scala 357:22]
+  wire [30:0] ic_ras_io_top_ret_pc; // @[src/main/scala/fpga/Core.scala 357:22]
+  wire [2:0] ic_ras_io_top_index; // @[src/main/scala/fpga/Core.scala 357:22]
+  wire  ic_ras_io_ret1_en; // @[src/main/scala/fpga/Core.scala 357:22]
+  wire [2:0] ic_ras_io_ret1_index; // @[src/main/scala/fpga/Core.scala 357:22]
+  wire  ic_ras_io_call1_en; // @[src/main/scala/fpga/Core.scala 357:22]
+  wire [2:0] ic_ras_io_call1_index; // @[src/main/scala/fpga/Core.scala 357:22]
+  wire [30:0] ic_ras_io_call1_ret_pc; // @[src/main/scala/fpga/Core.scala 357:22]
+  wire  ic_ras_io_up_en; // @[src/main/scala/fpga/Core.scala 357:22]
+  wire [2:0] ic_ras_io_up_index; // @[src/main/scala/fpga/Core.scala 357:22]
+  wire  ic_ras_io_ret2_en; // @[src/main/scala/fpga/Core.scala 357:22]
+  wire [2:0] ic_ras_io_ret2_index; // @[src/main/scala/fpga/Core.scala 357:22]
+  wire  ic_ras_io_call2_en; // @[src/main/scala/fpga/Core.scala 357:22]
+  wire [2:0] ic_ras_io_call2_index; // @[src/main/scala/fpga/Core.scala 357:22]
+  wire [30:0] ic_ras_io_call2_ret_pc; // @[src/main/scala/fpga/Core.scala 357:22]
+  wire  id_stage_clock; // @[src/main/scala/fpga/Core.scala 649:24]
+  wire  id_stage_reset; // @[src/main/scala/fpga/Core.scala 649:24]
+  wire  id_stage_io_in_ready; // @[src/main/scala/fpga/Core.scala 649:24]
+  wire  id_stage_io_in_flush; // @[src/main/scala/fpga/Core.scala 649:24]
+  wire  id_stage_io_in_bits_is_valid_inst; // @[src/main/scala/fpga/Core.scala 649:24]
+  wire [31:0] id_stage_io_in_bits_inst; // @[src/main/scala/fpga/Core.scala 649:24]
+  wire [30:0] id_stage_io_in_bits_pc; // @[src/main/scala/fpga/Core.scala 649:24]
+  wire  id_stage_io_in_bits_bp_taken; // @[src/main/scala/fpga/Core.scala 649:24]
+  wire [1:0] id_stage_io_in_bits_bp_attr; // @[src/main/scala/fpga/Core.scala 649:24]
+  wire  id_stage_io_in_bits_bp_is_ret; // @[src/main/scala/fpga/Core.scala 649:24]
+  wire [2:0] id_stage_io_in_bits_bp_rasindex; // @[src/main/scala/fpga/Core.scala 649:24]
+  wire [30:0] id_stage_io_in_bits_bp_target; // @[src/main/scala/fpga/Core.scala 649:24]
+  wire [5:0] id_stage_io_in_bits_bp_history; // @[src/main/scala/fpga/Core.scala 649:24]
+  wire [1:0] id_stage_io_in_bits_bp_cnt; // @[src/main/scala/fpga/Core.scala 649:24]
+  wire [1:0] id_stage_io_in_bits_bp_gcnt; // @[src/main/scala/fpga/Core.scala 649:24]
+  wire  id_stage_io_out_ready; // @[src/main/scala/fpga/Core.scala 649:24]
+  wire  id_stage_io_out_flush; // @[src/main/scala/fpga/Core.scala 649:24]
+  wire [30:0] id_stage_io_out_bits_pc; // @[src/main/scala/fpga/Core.scala 649:24]
+  wire [4:0] id_stage_io_out_bits_wb_addr; // @[src/main/scala/fpga/Core.scala 649:24]
+  wire  id_stage_io_out_bits_op1_sel; // @[src/main/scala/fpga/Core.scala 649:24]
+  wire  id_stage_io_out_bits_op2_sel; // @[src/main/scala/fpga/Core.scala 649:24]
+  wire [1:0] id_stage_io_out_bits_op3_sel; // @[src/main/scala/fpga/Core.scala 649:24]
+  wire [4:0] id_stage_io_out_bits_rs1_addr; // @[src/main/scala/fpga/Core.scala 649:24]
+  wire [4:0] id_stage_io_out_bits_rs2_addr; // @[src/main/scala/fpga/Core.scala 649:24]
+  wire [4:0] id_stage_io_out_bits_rs3_addr; // @[src/main/scala/fpga/Core.scala 649:24]
+  wire [31:0] id_stage_io_out_bits_op1_data; // @[src/main/scala/fpga/Core.scala 649:24]
+  wire [31:0] id_stage_io_out_bits_op2_data_im1; // @[src/main/scala/fpga/Core.scala 649:24]
+  wire [11:0] id_stage_io_out_bits_op2_data_im0; // @[src/main/scala/fpga/Core.scala 649:24]
+  wire [3:0] id_stage_io_out_bits_exe_fun; // @[src/main/scala/fpga/Core.scala 649:24]
+  wire  id_stage_io_out_bits_rf_wen; // @[src/main/scala/fpga/Core.scala 649:24]
+  wire [2:0] id_stage_io_out_bits_wb_sel; // @[src/main/scala/fpga/Core.scala 649:24]
+  wire [11:0] id_stage_io_out_bits_csr_addr; // @[src/main/scala/fpga/Core.scala 649:24]
+  wire [1:0] id_stage_io_out_bits_csr_cmd; // @[src/main/scala/fpga/Core.scala 649:24]
+  wire [31:0] id_stage_io_out_bits_imm_b_sext; // @[src/main/scala/fpga/Core.scala 649:24]
+  wire [1:0] id_stage_io_out_bits_shamt; // @[src/main/scala/fpga/Core.scala 649:24]
+  wire  id_stage_io_out_bits_op2op; // @[src/main/scala/fpga/Core.scala 649:24]
+  wire [2:0] id_stage_io_out_bits_mem_w; // @[src/main/scala/fpga/Core.scala 649:24]
+  wire  id_stage_io_out_bits_is_bflen; // @[src/main/scala/fpga/Core.scala 649:24]
+  wire  id_stage_io_out_bits_is_br; // @[src/main/scala/fpga/Core.scala 649:24]
+  wire  id_stage_io_out_bits_is_j; // @[src/main/scala/fpga/Core.scala 649:24]
+  wire  id_stage_io_out_bits_bp_taken; // @[src/main/scala/fpga/Core.scala 649:24]
+  wire [1:0] id_stage_io_out_bits_bp_attr; // @[src/main/scala/fpga/Core.scala 649:24]
+  wire  id_stage_io_out_bits_bp_is_ret; // @[src/main/scala/fpga/Core.scala 649:24]
+  wire [2:0] id_stage_io_out_bits_bp_rasindex; // @[src/main/scala/fpga/Core.scala 649:24]
+  wire [30:0] id_stage_io_out_bits_bp_target; // @[src/main/scala/fpga/Core.scala 649:24]
+  wire [5:0] id_stage_io_out_bits_bp_history; // @[src/main/scala/fpga/Core.scala 649:24]
+  wire [1:0] id_stage_io_out_bits_bp_cnt; // @[src/main/scala/fpga/Core.scala 649:24]
+  wire [1:0] id_stage_io_out_bits_bp_gcnt; // @[src/main/scala/fpga/Core.scala 649:24]
+  wire [1:0] id_stage_io_out_bits_actual_attr; // @[src/main/scala/fpga/Core.scala 649:24]
+  wire  id_stage_io_out_bits_actual_is_ret; // @[src/main/scala/fpga/Core.scala 649:24]
+  wire  id_stage_io_out_bits_is_half; // @[src/main/scala/fpga/Core.scala 649:24]
+  wire  id_stage_io_out_bits_is_valid_inst; // @[src/main/scala/fpga/Core.scala 649:24]
+  wire  id_stage_io_out_bits_is_trap; // @[src/main/scala/fpga/Core.scala 649:24]
+  wire [31:0] id_stage_io_debug_signals_id_pc; // @[src/main/scala/fpga/Core.scala 649:24]
+  wire [31:0] id_stage_io_debug_signals_id_inst; // @[src/main/scala/fpga/Core.scala 649:24]
+  reg [63:0] instret; // @[src/main/scala/fpga/Core.scala 133:24]
+  reg [30:0] csr_reg_trap_vector; // @[src/main/scala/fpga/Core.scala 134:37]
+  reg [31:0] csr_reg_mcause; // @[src/main/scala/fpga/Core.scala 135:37]
+  reg [30:0] csr_reg_mepc; // @[src/main/scala/fpga/Core.scala 137:37]
+  reg  csr_reg_mstatus_mie; // @[src/main/scala/fpga/Core.scala 138:37]
+  reg  csr_reg_mstatus_mpie; // @[src/main/scala/fpga/Core.scala 139:37]
+  reg [31:0] csr_reg_mscratch; // @[src/main/scala/fpga/Core.scala 140:37]
+  reg  csr_reg_mie_meie; // @[src/main/scala/fpga/Core.scala 141:37]
+  reg  csr_reg_mie_mtie; // @[src/main/scala/fpga/Core.scala 142:37]
+  reg  id_reg_bp_taken; // @[src/main/scala/fpga/Core.scala 154:36]
+  reg [30:0] id_reg_bp_target; // @[src/main/scala/fpga/Core.scala 155:36]
+  reg  id_reg_bp_not_taken; // @[src/main/scala/fpga/Core.scala 156:36]
+  reg [30:0] id_reg_bp_pc; // @[src/main/scala/fpga/Core.scala 157:36]
+  reg [30:0] rrd_reg_pc; // @[src/main/scala/fpga/Core.scala 160:38]
+  reg [4:0] rrd_reg_wb_addr; // @[src/main/scala/fpga/Core.scala 161:38]
+  reg  rrd_reg_op1_sel; // @[src/main/scala/fpga/Core.scala 162:38]
+  reg  rrd_reg_op2_sel; // @[src/main/scala/fpga/Core.scala 163:38]
+  reg [1:0] rrd_reg_op3_sel; // @[src/main/scala/fpga/Core.scala 164:38]
+  reg [4:0] rrd_reg_rs1_addr; // @[src/main/scala/fpga/Core.scala 165:38]
+  reg [4:0] rrd_reg_rs2_addr; // @[src/main/scala/fpga/Core.scala 166:38]
+  reg [4:0] rrd_reg_rs3_addr; // @[src/main/scala/fpga/Core.scala 167:38]
+  reg [31:0] rrd_reg_op1_data; // @[src/main/scala/fpga/Core.scala 168:38]
+  reg [31:0] rrd_reg_op2_data_im1; // @[src/main/scala/fpga/Core.scala 169:38]
+  reg [11:0] rrd_reg_op2_data_im0; // @[src/main/scala/fpga/Core.scala 170:38]
+  reg [3:0] rrd_reg_exe_fun; // @[src/main/scala/fpga/Core.scala 171:38]
+  reg  rrd_reg_rf_wen; // @[src/main/scala/fpga/Core.scala 172:38]
+  reg [2:0] rrd_reg_wb_sel; // @[src/main/scala/fpga/Core.scala 173:38]
+  reg [11:0] rrd_reg_csr_addr; // @[src/main/scala/fpga/Core.scala 174:38]
+  reg [1:0] rrd_reg_csr_cmd; // @[src/main/scala/fpga/Core.scala 175:38]
+  reg [31:0] rrd_reg_imm_b_sext; // @[src/main/scala/fpga/Core.scala 176:38]
+  reg [1:0] rrd_reg_shamt; // @[src/main/scala/fpga/Core.scala 177:38]
+  reg  rrd_reg_op2op; // @[src/main/scala/fpga/Core.scala 178:38]
+  reg [2:0] rrd_reg_mem_w; // @[src/main/scala/fpga/Core.scala 179:38]
+  reg  rrd_reg_is_bflen; // @[src/main/scala/fpga/Core.scala 180:38]
+  reg  rrd_reg_is_br; // @[src/main/scala/fpga/Core.scala 181:38]
+  reg  rrd_reg_is_j; // @[src/main/scala/fpga/Core.scala 182:38]
+  reg  rrd_reg_bp_taken; // @[src/main/scala/fpga/Core.scala 183:38]
+  reg [1:0] rrd_reg_bp_attr; // @[src/main/scala/fpga/Core.scala 183:38]
+  reg  rrd_reg_bp_is_ret; // @[src/main/scala/fpga/Core.scala 183:38]
+  reg [2:0] rrd_reg_bp_rasindex; // @[src/main/scala/fpga/Core.scala 183:38]
+  reg [30:0] rrd_reg_bp_target; // @[src/main/scala/fpga/Core.scala 183:38]
+  reg [5:0] rrd_reg_bp_history; // @[src/main/scala/fpga/Core.scala 183:38]
+  reg [1:0] rrd_reg_bp_cnt; // @[src/main/scala/fpga/Core.scala 183:38]
+  reg [1:0] rrd_reg_bp_gcnt; // @[src/main/scala/fpga/Core.scala 183:38]
+  reg [1:0] rrd_reg_actual_attr; // @[src/main/scala/fpga/Core.scala 184:38]
+  reg  rrd_reg_actual_is_ret; // @[src/main/scala/fpga/Core.scala 185:38]
+  reg  rrd_reg_is_half; // @[src/main/scala/fpga/Core.scala 186:38]
+  reg  rrd_reg_is_valid_inst; // @[src/main/scala/fpga/Core.scala 187:38]
+  reg  rrd_reg_is_trap; // @[src/main/scala/fpga/Core.scala 188:38]
+  reg [30:0] ex1_reg_pc; // @[src/main/scala/fpga/Core.scala 193:38]
+  reg [4:0] ex1_reg_wb_addr; // @[src/main/scala/fpga/Core.scala 194:38]
+  reg [31:0] ex1_reg_op1_data; // @[src/main/scala/fpga/Core.scala 195:38]
+  reg [31:0] ex1_reg_op2_data; // @[src/main/scala/fpga/Core.scala 196:38]
+  reg [31:0] ex1_reg_op3_data; // @[src/main/scala/fpga/Core.scala 197:38]
+  reg [3:0] ex1_reg_exe_fun; // @[src/main/scala/fpga/Core.scala 198:38]
+  reg  ex1_reg_rf_wen; // @[src/main/scala/fpga/Core.scala 199:38]
+  reg [2:0] ex1_reg_wb_sel; // @[src/main/scala/fpga/Core.scala 200:38]
+  reg [11:0] ex1_reg_csr_addr; // @[src/main/scala/fpga/Core.scala 201:38]
+  reg [1:0] ex1_reg_csr_cmd; // @[src/main/scala/fpga/Core.scala 202:38]
+  reg [1:0] ex1_reg_shamt; // @[src/main/scala/fpga/Core.scala 203:38]
+  reg  ex1_reg_op2op; // @[src/main/scala/fpga/Core.scala 204:38]
+  reg [2:0] ex1_reg_mem_w; // @[src/main/scala/fpga/Core.scala 205:38]
+  reg  ex1_reg_is_bflen; // @[src/main/scala/fpga/Core.scala 206:38]
+  reg [4:0] ex1_reg_imm_len; // @[src/main/scala/fpga/Core.scala 207:38]
+  reg  ex1_reg_is_j; // @[src/main/scala/fpga/Core.scala 208:38]
+  reg  ex1_reg_bp_taken; // @[src/main/scala/fpga/Core.scala 209:38]
+  reg [1:0] ex1_reg_bp_attr; // @[src/main/scala/fpga/Core.scala 209:38]
+  reg  ex1_reg_bp_is_ret; // @[src/main/scala/fpga/Core.scala 209:38]
+  reg [2:0] ex1_reg_bp_rasindex; // @[src/main/scala/fpga/Core.scala 209:38]
+  reg [30:0] ex1_reg_bp_target; // @[src/main/scala/fpga/Core.scala 209:38]
+  reg [5:0] ex1_reg_bp_history; // @[src/main/scala/fpga/Core.scala 209:38]
+  reg [1:0] ex1_reg_bp_cnt; // @[src/main/scala/fpga/Core.scala 209:38]
+  reg [1:0] ex1_reg_bp_gcnt; // @[src/main/scala/fpga/Core.scala 209:38]
+  reg [1:0] ex1_reg_actual_attr; // @[src/main/scala/fpga/Core.scala 210:38]
+  reg  ex1_reg_actual_is_ret; // @[src/main/scala/fpga/Core.scala 211:38]
+  reg  ex1_reg_is_half; // @[src/main/scala/fpga/Core.scala 212:38]
+  reg  ex1_reg_is_valid_inst; // @[src/main/scala/fpga/Core.scala 213:38]
+  reg  ex1_reg_is_trap; // @[src/main/scala/fpga/Core.scala 214:38]
+  reg  ex1_reg_is_mret; // @[src/main/scala/fpga/Core.scala 215:38]
+  reg  ex1_reg_mem_use_reg; // @[src/main/scala/fpga/Core.scala 218:38]
+  reg  ex1_reg_inst2_use_reg; // @[src/main/scala/fpga/Core.scala 219:38]
+  reg  ex1_reg_inst3_use_reg; // @[src/main/scala/fpga/Core.scala 220:38]
+  reg  ex1_reg_is_br; // @[src/main/scala/fpga/Core.scala 221:38]
+  reg [30:0] ex1_reg_direct_jbr_pc; // @[src/main/scala/fpga/Core.scala 222:38]
+  reg [30:0] ex2_reg_pc; // @[src/main/scala/fpga/Core.scala 225:38]
+  reg [4:0] ex2_reg_wb_addr; // @[src/main/scala/fpga/Core.scala 226:38]
+  reg [47:0] ex2_reg_mullu; // @[src/main/scala/fpga/Core.scala 227:38]
+  reg [31:0] ex2_reg_mulls; // @[src/main/scala/fpga/Core.scala 228:38]
+  reg [47:0] ex2_reg_mulhuu; // @[src/main/scala/fpga/Core.scala 229:38]
+  reg [47:0] ex2_reg_mulhss; // @[src/main/scala/fpga/Core.scala 230:38]
+  reg [47:0] ex2_reg_mulhsu; // @[src/main/scala/fpga/Core.scala 231:38]
+  reg [3:0] ex2_reg_exe_fun; // @[src/main/scala/fpga/Core.scala 232:38]
+  reg  ex2_reg_rf_wen; // @[src/main/scala/fpga/Core.scala 233:38]
+  reg [2:0] ex2_reg_fun_sel; // @[src/main/scala/fpga/Core.scala 234:38]
+  reg [31:0] ex2_reg_alu_out; // @[src/main/scala/fpga/Core.scala 235:38]
+  reg [31:0] ex2_reg_pc_bit_out; // @[src/main/scala/fpga/Core.scala 236:38]
+  reg [31:0] ex2_reg_op3_data; // @[src/main/scala/fpga/Core.scala 237:38]
+  reg  ex2_reg_is_valid_inst; // @[src/main/scala/fpga/Core.scala 238:38]
+  reg  ex2_reg_divrem; // @[src/main/scala/fpga/Core.scala 241:38]
+  reg  ex2_reg_sign_op1; // @[src/main/scala/fpga/Core.scala 242:38]
+  reg  ex2_reg_sign_op12; // @[src/main/scala/fpga/Core.scala 243:38]
+  reg  ex2_reg_zero_op2; // @[src/main/scala/fpga/Core.scala 244:38]
+  reg [36:0] ex2_reg_init_dividend; // @[src/main/scala/fpga/Core.scala 245:38]
+  reg [31:0] ex2_reg_init_divisor; // @[src/main/scala/fpga/Core.scala 246:38]
+  reg [31:0] ex2_reg_orig_dividend; // @[src/main/scala/fpga/Core.scala 247:38]
+  reg  ex2_reg_inst3_use_reg; // @[src/main/scala/fpga/Core.scala 248:38]
+  reg  ex2_reg_no_mem; // @[src/main/scala/fpga/Core.scala 249:38]
+  reg [6:0] mem1_reg_mem_wstrb; // @[src/main/scala/fpga/Core.scala 252:39]
+  reg [31:0] mem1_reg_wdata; // @[src/main/scala/fpga/Core.scala 253:39]
+  reg [2:0] mem1_reg_mem_w; // @[src/main/scala/fpga/Core.scala 254:39]
+  reg  mem1_reg_is_mem_load; // @[src/main/scala/fpga/Core.scala 257:39]
+  reg  mem1_reg_is_mem_store; // @[src/main/scala/fpga/Core.scala 258:39]
+  reg  mem1_reg_is_dram_load; // @[src/main/scala/fpga/Core.scala 259:39]
+  reg  mem1_reg_is_dram_store; // @[src/main/scala/fpga/Core.scala 260:39]
+  reg  mem1_reg_is_dram_fence; // @[src/main/scala/fpga/Core.scala 261:39]
+  reg  mem1_reg_is_valid_inst; // @[src/main/scala/fpga/Core.scala 262:39]
+  reg  mem1_reg_unaligned; // @[src/main/scala/fpga/Core.scala 263:39]
+  reg [1:0] mem2_reg_wb_byte_offset; // @[src/main/scala/fpga/Core.scala 266:40]
+  reg [2:0] mem2_reg_mem_w; // @[src/main/scala/fpga/Core.scala 267:40]
+  reg [4:0] mem2_reg_wb_addr; // @[src/main/scala/fpga/Core.scala 269:40]
+  reg  mem2_reg_is_valid_load; // @[src/main/scala/fpga/Core.scala 270:40]
+  reg  mem2_reg_is_valid_inst; // @[src/main/scala/fpga/Core.scala 272:40]
+  reg  mem2_reg_is_mem_load; // @[src/main/scala/fpga/Core.scala 273:40]
+  reg  mem2_reg_is_dram_load; // @[src/main/scala/fpga/Core.scala 274:40]
+  reg  mem2_reg_unaligned; // @[src/main/scala/fpga/Core.scala 275:40]
+  reg [1:0] mem3_reg_wb_byte_offset; // @[src/main/scala/fpga/Core.scala 278:40]
+  reg [2:0] mem3_reg_mem_w; // @[src/main/scala/fpga/Core.scala 279:40]
+  reg [31:0] mem3_reg_dmem_rdata; // @[src/main/scala/fpga/Core.scala 280:40]
+  reg [23:0] mem3_reg_rdata_high; // @[src/main/scala/fpga/Core.scala 281:40]
+  reg [4:0] mem3_reg_wb_addr; // @[src/main/scala/fpga/Core.scala 282:40]
+  reg  mem3_reg_is_valid_load; // @[src/main/scala/fpga/Core.scala 283:40]
+  reg  mem3_reg_is_valid_inst; // @[src/main/scala/fpga/Core.scala 284:40]
+  reg  mem3_reg_unaligned; // @[src/main/scala/fpga/Core.scala 286:40]
+  reg  mem3_reg_is_aligned_lw; // @[src/main/scala/fpga/Core.scala 287:40]
+  reg  ex1_reg_fw_en; // @[src/main/scala/fpga/Core.scala 299:37]
+  reg  ex2_reg_fw_en; // @[src/main/scala/fpga/Core.scala 301:37]
+  reg  mem3_reg_fw_en; // @[src/main/scala/fpga/Core.scala 303:37]
+  reg  ex2_reg_div_stall; // @[src/main/scala/fpga/Core.scala 306:37]
+  reg [2:0] ex2_reg_divrem_state; // @[src/main/scala/fpga/Core.scala 308:37]
+  reg  ex2_reg_is_br; // @[src/main/scala/fpga/Core.scala 309:37]
+  reg [30:0] ex2_reg_br_pc; // @[src/main/scala/fpga/Core.scala 310:37]
+  reg  ex2_reg_is_retired; // @[src/main/scala/fpga/Core.scala 315:37]
+  reg  mem3_reg_is_retired; // @[src/main/scala/fpga/Core.scala 316:37]
+  reg  ic_reg_read_rdy; // @[src/main/scala/fpga/Core.scala 337:33]
+  reg  ic_reg_half_rdy; // @[src/main/scala/fpga/Core.scala 338:33]
+  reg [30:0] ic_reg_imem_addr; // @[src/main/scala/fpga/Core.scala 342:33]
+  reg [30:0] ic_reg_addr_out; // @[src/main/scala/fpga/Core.scala 343:33]
+  reg [31:0] ic_reg_inst; // @[src/main/scala/fpga/Core.scala 347:34]
+  reg [30:0] ic_reg_inst_addr; // @[src/main/scala/fpga/Core.scala 348:34]
+  reg [31:0] ic_reg_inst2; // @[src/main/scala/fpga/Core.scala 349:34]
+  reg [2:0] ic_state; // @[src/main/scala/fpga/Core.scala 352:25]
+  reg  ic_reg_bp_next0_taken; // @[src/main/scala/fpga/Core.scala 360:32]
+  reg [1:0] ic_reg_bp_next0_attr; // @[src/main/scala/fpga/Core.scala 360:32]
+  reg  ic_reg_bp_next0_is_ret; // @[src/main/scala/fpga/Core.scala 360:32]
+  reg [30:0] ic_reg_bp_next0_target; // @[src/main/scala/fpga/Core.scala 360:32]
+  reg [5:0] ic_reg_bp_next0_history; // @[src/main/scala/fpga/Core.scala 360:32]
+  reg [1:0] ic_reg_bp_next0_cnt; // @[src/main/scala/fpga/Core.scala 360:32]
+  reg [1:0] ic_reg_bp_next0_gcnt; // @[src/main/scala/fpga/Core.scala 360:32]
+  reg  ic_reg_bp_next1_taken; // @[src/main/scala/fpga/Core.scala 361:32]
+  reg [1:0] ic_reg_bp_next1_attr; // @[src/main/scala/fpga/Core.scala 361:32]
+  reg  ic_reg_bp_next1_is_ret; // @[src/main/scala/fpga/Core.scala 361:32]
+  reg [30:0] ic_reg_bp_next1_target; // @[src/main/scala/fpga/Core.scala 361:32]
+  reg [5:0] ic_reg_bp_next1_history; // @[src/main/scala/fpga/Core.scala 361:32]
+  reg [1:0] ic_reg_bp_next1_cnt; // @[src/main/scala/fpga/Core.scala 361:32]
+  reg [1:0] ic_reg_bp_next1_gcnt; // @[src/main/scala/fpga/Core.scala 361:32]
+  reg  ic_reg_bp_next2_taken; // @[src/main/scala/fpga/Core.scala 362:32]
+  reg [1:0] ic_reg_bp_next2_attr; // @[src/main/scala/fpga/Core.scala 362:32]
+  reg  ic_reg_bp_next2_is_ret; // @[src/main/scala/fpga/Core.scala 362:32]
+  reg [30:0] ic_reg_bp_next2_target; // @[src/main/scala/fpga/Core.scala 362:32]
+  reg [5:0] ic_reg_bp_next2_history; // @[src/main/scala/fpga/Core.scala 362:32]
+  reg [1:0] ic_reg_bp_next2_cnt; // @[src/main/scala/fpga/Core.scala 362:32]
+  reg [1:0] ic_reg_bp_next2_gcnt; // @[src/main/scala/fpga/Core.scala 362:32]
+  reg  ic_reg_zbp_next_taken0; // @[src/main/scala/fpga/Core.scala 366:40]
+  reg [30:0] ic_reg_zbp_next_target0; // @[src/main/scala/fpga/Core.scala 367:40]
+  reg  ic_reg_zbp_next_taken1; // @[src/main/scala/fpga/Core.scala 368:40]
+  reg [30:0] ic_reg_zbp_next_target1; // @[src/main/scala/fpga/Core.scala 369:40]
+  reg  ic_reg_zbp_next_taken2; // @[src/main/scala/fpga/Core.scala 370:40]
+  reg [30:0] ic_reg_zbp_next_target2; // @[src/main/scala/fpga/Core.scala 371:40]
+  wire [30:0] ic_imem_addr_2 = {ic_reg_imem_addr[30:1],1'h1}; // @[src/main/scala/fpga/Core.scala 373:27]
+  wire [30:0] ic_imem_addr_4 = ic_reg_imem_addr + 31'h2; // @[src/main/scala/fpga/Core.scala 374:41]
+  wire [30:0] ic_inst_addr_2 = {ic_reg_inst_addr[30:1],1'h1}; // @[src/main/scala/fpga/Core.scala 375:27]
+  wire  id_reg_stall = ~id_stage_io_in_ready; // @[src/main/scala/fpga/Core.scala 664:19]
+  wire  _if2_zbp_taken_T = ~id_reg_stall; // @[src/main/scala/fpga/Core.scala 589:20]
+  wire  id_flush = id_stage_io_in_flush; // @[src/main/scala/fpga/Core.scala 291:34 665:16]
+  wire  _if2_zbp_taken_T_1 = ~id_flush; // @[src/main/scala/fpga/Core.scala 589:37]
+  wire  _if2_zbp_taken_T_3 = ~id_reg_bp_taken; // @[src/main/scala/fpga/Core.scala 589:50]
+  wire  ic_read_rdy = ~io_imem_valid ? 1'h0 : ic_reg_read_rdy; // @[src/main/scala/fpga/Core.scala 384:20 548:92 554:22]
+  wire  _GEN_62 = 3'h3 == ic_state | 3'h7 == ic_state ? ic_reg_zbp_next_taken1 : ic_reg_zbp_next_taken2; // @[src/main/scala/fpga/Core.scala 396:21 505:31]
+  wire  _GEN_97 = 3'h1 == ic_state | 3'h5 == ic_state ? ic_reg_zbp_next_taken0 : _GEN_62; // @[src/main/scala/fpga/Core.scala 396:21 480:21]
+  wire  _GEN_158 = 3'h4 == ic_state ? ic_zbtb_io_lu_matches1 : _GEN_97; // @[src/main/scala/fpga/Core.scala 396:21 464:31]
+  wire  ic_zbp_taken = 3'h0 == ic_state ? ic_zbtb_io_lu_matches0 : _GEN_158; // @[src/main/scala/fpga/Core.scala 396:21 423:31]
+  wire  if2_zbp_taken = ~id_reg_stall & ~id_flush & ~id_reg_bp_taken & ic_read_rdy & ic_zbp_taken; // @[src/main/scala/fpga/Core.scala 589:82]
+  wire  if1_is_jump = ex2_reg_is_br | id_reg_bp_taken | if2_zbp_taken; // @[src/main/scala/fpga/Core.scala 572:54]
+  wire [30:0] _GEN_63 = 3'h3 == ic_state | 3'h7 == ic_state ? ic_reg_zbp_next_target1 : ic_reg_zbp_next_target2; // @[src/main/scala/fpga/Core.scala 396:21 506:31]
+  wire [30:0] _GEN_98 = 3'h1 == ic_state | 3'h5 == ic_state ? ic_reg_zbp_next_target0 : _GEN_63; // @[src/main/scala/fpga/Core.scala 396:21 481:21]
+  wire [30:0] _GEN_159 = 3'h4 == ic_state ? ic_zbtb_io_lu_target1 : _GEN_98; // @[src/main/scala/fpga/Core.scala 396:21 465:31]
+  wire [30:0] ic_zbp_target = 3'h0 == ic_state ? ic_zbtb_io_lu_target0 : _GEN_159; // @[src/main/scala/fpga/Core.scala 396:21 424:31]
   wire [30:0] _if1_jump_addr_T = id_reg_bp_taken ? id_reg_bp_target : ic_zbp_target; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
   wire [30:0] if1_jump_addr = ex2_reg_is_br ? ex2_reg_br_pc : _if1_jump_addr_T; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
-  wire [30:0] ic_next_imem_addr = {if1_jump_addr[30:1],1'h0}; // @[src/main/scala/fpga/Core.scala 540:32]
-  wire [30:0] _GEN_37 = 3'h3 == ic_state | 3'h7 == ic_state ? ic_imem_addr_4 : ic_reg_imem_addr; // @[src/main/scala/fpga/Core.scala 394:21 477:31]
-  wire [30:0] _GEN_75 = 3'h1 == ic_state | 3'h5 == ic_state ? ic_reg_imem_addr : _GEN_37; // @[src/main/scala/fpga/Core.scala 394:21 463:21]
-  wire [30:0] _GEN_113 = 3'h4 == ic_state ? ic_imem_addr_4 : _GEN_75; // @[src/main/scala/fpga/Core.scala 394:21 431:31]
-  wire [30:0] _GEN_151 = 3'h0 == ic_state ? ic_imem_addr_4 : _GEN_113; // @[src/main/scala/fpga/Core.scala 394:21 396:31]
-  wire [30:0] _GEN_189 = ~io_imem_valid ? ic_reg_imem_addr : _GEN_151; // @[src/main/scala/fpga/Core.scala 530:92 531:22]
-  wire [30:0] ic_imem_addr = if1_is_jump ? ic_next_imem_addr : _GEN_189; // @[src/main/scala/fpga/Core.scala 539:21 541:22]
-  wire  _ic_bp_taken_T_2 = ic_btb_io_lu_jump0 | ic_btb_io_lu_br0 & ic_pht_io_lu_cnt0[0]; // @[src/main/scala/fpga/Core.scala 400:53]
-  wire  _ic_reg_bp_next1_taken_T_2 = ic_btb_io_lu_jump1 | ic_btb_io_lu_br1 & ic_pht_io_lu_cnt1[0]; // @[src/main/scala/fpga/Core.scala 410:53]
-  wire [30:0] _ic_data_out_T_2 = {15'h0,io_imem_inst[31:16]}; // @[src/main/scala/fpga/Core.scala 434:37]
-  wire [31:0] _ic_data_out_T_5 = {io_imem_inst[15:0],ic_reg_inst[31:16]}; // @[src/main/scala/fpga/Core.scala 478:37]
-  wire [31:0] _ic_data_out_T_8 = {ic_reg_inst[15:0],ic_reg_inst2[31:16]}; // @[src/main/scala/fpga/Core.scala 516:27]
-  wire [31:0] _GEN_38 = 3'h3 == ic_state | 3'h7 == ic_state ? _ic_data_out_T_5 : _ic_data_out_T_8; // @[src/main/scala/fpga/Core.scala 394:21 478:31]
-  wire [31:0] _GEN_76 = 3'h1 == ic_state | 3'h5 == ic_state ? ic_reg_inst : _GEN_38; // @[src/main/scala/fpga/Core.scala 394:21 464:21]
-  wire [31:0] _GEN_116 = 3'h4 == ic_state ? {{1'd0}, _ic_data_out_T_2} : _GEN_76; // @[src/main/scala/fpga/Core.scala 394:21 434:31]
-  wire [31:0] ic_data_out = 3'h0 == ic_state ? io_imem_inst : _GEN_116; // @[src/main/scala/fpga/Core.scala 394:21 399:31]
-  wire  if2_is_half_inst = ic_data_out[1:0] != 2'h3; // @[src/main/scala/fpga/Core.scala 562:45]
-  wire  ic_read_en4 = _if2_zbp_taken_T & ~if2_is_half_inst; // @[src/main/scala/fpga/Core.scala 564:32]
-  wire [30:0] _GEN_0 = ic_read_en4 ? ic_imem_addr_4 : ic_reg_addr_out; // @[src/main/scala/fpga/Core.scala 386:20 425:32 426:21]
-  wire  _GEN_1 = ic_read_en4 ? 1'h0 : 1'h1; // @[src/main/scala/fpga/Core.scala 421:16 425:32 427:18]
-  wire  ic_read_en2 = _if2_zbp_taken_T & if2_is_half_inst; // @[src/main/scala/fpga/Core.scala 563:32]
-  wire [30:0] _GEN_2 = ic_read_en2 ? ic_imem_addr_2 : _GEN_0; // @[src/main/scala/fpga/Core.scala 422:26 423:21]
-  wire [1:0] _GEN_3 = ic_read_en2 ? 2'h3 : {{1'd0}, _GEN_1}; // @[src/main/scala/fpga/Core.scala 422:26 424:18]
-  wire [30:0] _GEN_4 = ic_read_en2 ? ic_imem_addr_4 : ic_imem_addr_2; // @[src/main/scala/fpga/Core.scala 457:26 458:21 435:31]
-  wire [1:0] _GEN_5 = ic_read_en2 ? 2'h0 : 2'h3; // @[src/main/scala/fpga/Core.scala 456:16 457:26 459:18]
-  wire [30:0] _GEN_6 = ic_read_en4 ? ic_reg_imem_addr : ic_reg_addr_out; // @[src/main/scala/fpga/Core.scala 386:20 471:31 472:21]
-  wire [2:0] _GEN_7 = ic_read_en4 ? 3'h0 : ic_state; // @[src/main/scala/fpga/Core.scala 471:31 473:18 351:25]
-  wire [30:0] _GEN_8 = ic_read_en2 ? ic_inst_addr_2 : _GEN_6; // @[src/main/scala/fpga/Core.scala 468:26 469:21]
-  wire [2:0] _GEN_9 = ic_read_en2 ? 3'h3 : _GEN_7; // @[src/main/scala/fpga/Core.scala 468:26 470:18]
-  wire  _GEN_10 = io_imem_valid ? _ic_reg_bp_next1_taken_T_2 : ic_reg_bp_next1_taken; // @[src/main/scala/fpga/Core.scala 493:28 360:32 494:33]
-  wire [1:0] _GEN_11 = io_imem_valid ? ic_btb_io_lu_attr1 : ic_reg_bp_next1_attr; // @[src/main/scala/fpga/Core.scala 493:28 360:32 495:33]
-  wire  _GEN_12 = io_imem_valid ? ic_btb_io_lu_is_ret1 : ic_reg_bp_next1_is_ret; // @[src/main/scala/fpga/Core.scala 493:28 360:32 496:33]
-  wire [30:0] _GEN_13 = io_imem_valid ? ic_btb_io_lu_target1 : ic_reg_bp_next1_target; // @[src/main/scala/fpga/Core.scala 493:28 360:32 497:33]
-  wire [1:0] _GEN_14 = io_imem_valid ? ic_pht_io_lu_cnt1 : ic_reg_bp_next1_cnt; // @[src/main/scala/fpga/Core.scala 493:28 360:32 498:33]
-  wire  _GEN_15 = io_imem_valid ? ic_zbtb_io_lu_matches1 : ic_reg_zbp_next_taken1; // @[src/main/scala/fpga/Core.scala 493:28 499:33 367:40]
-  wire [30:0] _GEN_16 = io_imem_valid ? ic_zbtb_io_lu_target1 : ic_reg_zbp_next_target1; // @[src/main/scala/fpga/Core.scala 493:28 500:33 368:40]
-  wire [30:0] _GEN_17 = ic_read_en4 ? ic_imem_addr_2 : ic_reg_addr_out; // @[src/main/scala/fpga/Core.scala 386:20 509:31 510:21]
-  wire [1:0] _GEN_18 = ic_read_en4 ? 2'h3 : 2'h2; // @[src/main/scala/fpga/Core.scala 505:16 509:31 511:18]
-  wire [30:0] _GEN_19 = ic_read_en2 ? ic_reg_imem_addr : _GEN_17; // @[src/main/scala/fpga/Core.scala 506:26 507:21]
-  wire [1:0] _GEN_20 = ic_read_en2 ? 2'h1 : _GEN_18; // @[src/main/scala/fpga/Core.scala 506:26 508:18]
-  wire [30:0] _GEN_21 = ic_read_en4 ? ic_inst_addr_2 : ic_reg_addr_out; // @[src/main/scala/fpga/Core.scala 386:20 523:31 524:21]
-  wire [2:0] _GEN_22 = ic_read_en4 ? 3'h3 : ic_state; // @[src/main/scala/fpga/Core.scala 523:31 525:18 351:25]
-  wire [30:0] _GEN_23 = ic_read_en2 ? ic_reg_inst_addr : _GEN_21; // @[src/main/scala/fpga/Core.scala 520:26 521:21]
-  wire [2:0] _GEN_24 = ic_read_en2 ? 3'h1 : _GEN_22; // @[src/main/scala/fpga/Core.scala 520:26 522:18]
-  wire [30:0] _GEN_35 = 3'h2 == ic_state | 3'h6 == ic_state ? _GEN_23 : ic_reg_addr_out; // @[src/main/scala/fpga/Core.scala 386:20 394:21]
-  wire [2:0] _GEN_36 = 3'h2 == ic_state | 3'h6 == ic_state ? _GEN_24 : ic_state; // @[src/main/scala/fpga/Core.scala 394:21 351:25]
-  wire [31:0] _GEN_39 = 3'h3 == ic_state | 3'h7 == ic_state ? io_imem_inst : ic_reg_inst; // @[src/main/scala/fpga/Core.scala 394:21 479:31 346:34]
-  wire [30:0] _GEN_40 = 3'h3 == ic_state | 3'h7 == ic_state ? ic_reg_imem_addr : ic_reg_inst_addr; // @[src/main/scala/fpga/Core.scala 394:21 480:31 347:34]
-  wire [31:0] _GEN_41 = 3'h3 == ic_state | 3'h7 == ic_state ? ic_reg_inst : ic_reg_inst2; // @[src/main/scala/fpga/Core.scala 394:21 481:31 348:34]
-  wire  _GEN_43 = 3'h3 == ic_state | 3'h7 == ic_state ? ic_reg_bp_next1_taken : ic_reg_bp_next2_taken; // @[src/main/scala/fpga/Core.scala 394:21 483:31]
-  wire [1:0] _GEN_44 = 3'h3 == ic_state | 3'h7 == ic_state ? ic_reg_bp_next1_attr : ic_reg_bp_next2_attr; // @[src/main/scala/fpga/Core.scala 394:21 483:31]
-  wire  _GEN_45 = 3'h3 == ic_state | 3'h7 == ic_state ? ic_reg_bp_next1_is_ret : ic_reg_bp_next2_is_ret; // @[src/main/scala/fpga/Core.scala 394:21 483:31]
-  wire [30:0] _GEN_47 = 3'h3 == ic_state | 3'h7 == ic_state ? ic_reg_bp_next1_target : ic_reg_bp_next2_target; // @[src/main/scala/fpga/Core.scala 394:21 483:31]
-  wire [1:0] _GEN_48 = 3'h3 == ic_state | 3'h7 == ic_state ? ic_reg_bp_next1_cnt : ic_reg_bp_next2_cnt; // @[src/main/scala/fpga/Core.scala 394:21 483:31]
-  wire  _GEN_49 = 3'h3 == ic_state | 3'h7 == ic_state ? _ic_bp_taken_T_2 : ic_reg_bp_next0_taken; // @[src/main/scala/fpga/Core.scala 394:21 484:31 359:32]
-  wire [1:0] _GEN_50 = 3'h3 == ic_state | 3'h7 == ic_state ? ic_btb_io_lu_attr0 : ic_reg_bp_next0_attr; // @[src/main/scala/fpga/Core.scala 394:21 485:31 359:32]
-  wire  _GEN_51 = 3'h3 == ic_state | 3'h7 == ic_state ? ic_btb_io_lu_is_ret0 : ic_reg_bp_next0_is_ret; // @[src/main/scala/fpga/Core.scala 394:21 486:31 359:32]
-  wire [30:0] _GEN_52 = 3'h3 == ic_state | 3'h7 == ic_state ? ic_btb_io_lu_target0 : ic_reg_bp_next0_target; // @[src/main/scala/fpga/Core.scala 394:21 487:31 359:32]
-  wire [1:0] _GEN_53 = 3'h3 == ic_state | 3'h7 == ic_state ? ic_pht_io_lu_cnt0 : ic_reg_bp_next0_cnt; // @[src/main/scala/fpga/Core.scala 394:21 488:31 359:32]
-  wire  _GEN_58 = 3'h3 == ic_state | 3'h7 == ic_state ? _GEN_10 : ic_reg_bp_next1_taken; // @[src/main/scala/fpga/Core.scala 394:21 360:32]
-  wire [1:0] _GEN_59 = 3'h3 == ic_state | 3'h7 == ic_state ? _GEN_11 : ic_reg_bp_next1_attr; // @[src/main/scala/fpga/Core.scala 394:21 360:32]
-  wire  _GEN_60 = 3'h3 == ic_state | 3'h7 == ic_state ? _GEN_12 : ic_reg_bp_next1_is_ret; // @[src/main/scala/fpga/Core.scala 394:21 360:32]
-  wire [30:0] _GEN_61 = 3'h3 == ic_state | 3'h7 == ic_state ? _GEN_13 : ic_reg_bp_next1_target; // @[src/main/scala/fpga/Core.scala 394:21 360:32]
-  wire [1:0] _GEN_62 = 3'h3 == ic_state | 3'h7 == ic_state ? _GEN_14 : ic_reg_bp_next1_cnt; // @[src/main/scala/fpga/Core.scala 394:21 360:32]
-  wire  _GEN_63 = 3'h3 == ic_state | 3'h7 == ic_state ? _GEN_15 : ic_reg_zbp_next_taken1; // @[src/main/scala/fpga/Core.scala 394:21 367:40]
-  wire [30:0] _GEN_64 = 3'h3 == ic_state | 3'h7 == ic_state ? _GEN_16 : ic_reg_zbp_next_target1; // @[src/main/scala/fpga/Core.scala 394:21 368:40]
-  wire [2:0] _GEN_73 = 3'h3 == ic_state | 3'h7 == ic_state ? {{1'd0}, _GEN_20} : _GEN_36; // @[src/main/scala/fpga/Core.scala 394:21]
-  wire [30:0] _GEN_74 = 3'h3 == ic_state | 3'h7 == ic_state ? _GEN_19 : _GEN_35; // @[src/main/scala/fpga/Core.scala 394:21]
-  wire  _GEN_77 = 3'h1 == ic_state | 3'h5 == ic_state ? ic_reg_bp_next0_taken : _GEN_43; // @[src/main/scala/fpga/Core.scala 394:21 465:21]
-  wire [1:0] _GEN_78 = 3'h1 == ic_state | 3'h5 == ic_state ? ic_reg_bp_next0_attr : _GEN_44; // @[src/main/scala/fpga/Core.scala 394:21 465:21]
-  wire  _GEN_79 = 3'h1 == ic_state | 3'h5 == ic_state ? ic_reg_bp_next0_is_ret : _GEN_45; // @[src/main/scala/fpga/Core.scala 394:21 465:21]
-  wire [30:0] _GEN_81 = 3'h1 == ic_state | 3'h5 == ic_state ? ic_reg_bp_next0_target : _GEN_47; // @[src/main/scala/fpga/Core.scala 394:21 465:21]
-  wire [1:0] _GEN_82 = 3'h1 == ic_state | 3'h5 == ic_state ? ic_reg_bp_next0_cnt : _GEN_48; // @[src/main/scala/fpga/Core.scala 394:21 465:21]
-  wire [30:0] _GEN_85 = 3'h1 == ic_state | 3'h5 == ic_state ? _GEN_8 : _GEN_74; // @[src/main/scala/fpga/Core.scala 394:21]
-  wire [2:0] _GEN_86 = 3'h1 == ic_state | 3'h5 == ic_state ? _GEN_9 : _GEN_73; // @[src/main/scala/fpga/Core.scala 394:21]
-  wire [30:0] _GEN_117 = 3'h4 == ic_state ? _GEN_4 : _GEN_85; // @[src/main/scala/fpga/Core.scala 394:21]
-  wire  _GEN_118 = 3'h4 == ic_state ? _ic_reg_bp_next1_taken_T_2 : _GEN_77; // @[src/main/scala/fpga/Core.scala 394:21 436:31]
-  wire [30:0] _GEN_119 = 3'h4 == ic_state ? ic_btb_io_lu_target1 : _GEN_81; // @[src/main/scala/fpga/Core.scala 394:21 437:31]
-  wire  _GEN_120 = 3'h4 == ic_state ? ic_btb_io_lu_is_ret1 : _GEN_79; // @[src/main/scala/fpga/Core.scala 394:21 438:31]
-  wire [1:0] _GEN_121 = 3'h4 == ic_state ? ic_pht_io_lu_cnt1 : _GEN_82; // @[src/main/scala/fpga/Core.scala 394:21 439:31]
-  wire [2:0] _GEN_138 = 3'h4 == ic_state ? {{1'd0}, _GEN_5} : _GEN_86; // @[src/main/scala/fpga/Core.scala 394:21]
-  wire  ic_bp_taken = 3'h0 == ic_state ? ic_btb_io_lu_jump0 | ic_btb_io_lu_br0 & ic_pht_io_lu_cnt0[0] : _GEN_118; // @[src/main/scala/fpga/Core.scala 394:21 400:31]
-  wire [1:0] ic_bp_attr = 3'h0 == ic_state ? ic_btb_io_lu_attr0 : _GEN_78; // @[src/main/scala/fpga/Core.scala 394:21 401:31]
-  wire  ic_bp_is_ret = 3'h0 == ic_state ? ic_btb_io_lu_is_ret0 : _GEN_120; // @[src/main/scala/fpga/Core.scala 394:21 402:31]
-  wire [30:0] ic_bp_target = 3'h0 == ic_state ? ic_btb_io_lu_target0 : _GEN_119; // @[src/main/scala/fpga/Core.scala 394:21 403:31]
-  wire [1:0] ic_bp_cnt = 3'h0 == ic_state ? ic_pht_io_lu_cnt0 : _GEN_121; // @[src/main/scala/fpga/Core.scala 394:21 404:31]
-  wire [30:0] _GEN_177 = 3'h0 == ic_state ? _GEN_2 : _GEN_117; // @[src/main/scala/fpga/Core.scala 394:21]
-  wire [30:0] _GEN_190 = ~io_imem_valid ? ic_reg_addr_out : _GEN_177; // @[src/main/scala/fpga/Core.scala 530:92 532:22]
-  wire  ic_half_rdy = ~io_imem_valid ? 1'h0 : ic_reg_half_rdy; // @[src/main/scala/fpga/Core.scala 384:20 530:92 537:22]
-  wire [30:0] ic_addr_out = if1_is_jump ? if1_jump_addr : _GEN_190; // @[src/main/scala/fpga/Core.scala 539:21 542:22]
-  wire  if2_is_inst_read = ic_read_rdy | ic_half_rdy & if2_is_half_inst; // @[src/main/scala/fpga/Core.scala 565:38]
-  wire  if2_is_valid_inst = _if2_zbp_taken_T_1 & _if2_zbp_taken_T_3 & if2_is_inst_read; // @[src/main/scala/fpga/Core.scala 567:57]
-  wire [31:0] if2_inst = if2_is_valid_inst ? ic_data_out : 32'h13; // @[src/main/scala/fpga/Core.scala 568:21]
-  wire  if2_bp_taken = if2_is_valid_inst & ic_bp_taken; // @[src/main/scala/fpga/Core.scala 569:40]
-  wire  _T_30 = ~reset; // @[src/main/scala/fpga/Core.scala 581:9]
-  wire [31:0] _T_31 = {ic_reg_addr_out,1'h0}; // @[src/main/scala/fpga/Core.scala 582:37]
-  wire [30:0] _if2_next_pc_T_1 = ic_reg_addr_out + 31'h1; // @[src/main/scala/fpga/Core.scala 588:50]
-  wire [30:0] _if2_next_pc_T_3 = ic_reg_addr_out + 31'h2; // @[src/main/scala/fpga/Core.scala 588:74]
-  wire [30:0] if2_next_pc = if2_is_half_inst ? _if2_next_pc_T_1 : _if2_next_pc_T_3; // @[src/main/scala/fpga/Core.scala 588:24]
-  wire  _id_reg_bp_taken_T_1 = if2_is_valid_inst & _if2_zbp_taken_T; // @[src/main/scala/fpga/Core.scala 590:43]
-  wire  _id_reg_bp_taken_T_4 = ~ic_bp_taken; // @[src/main/scala/fpga/Core.scala 592:6]
-  wire  _id_reg_bp_taken_T_5 = ~ic_bp_taken & if2_zbp_taken; // @[src/main/scala/fpga/Core.scala 592:19]
-  wire  _id_reg_bp_taken_T_6 = ic_bp_taken & ~if2_zbp_taken | _id_reg_bp_taken_T_5; // @[src/main/scala/fpga/Core.scala 591:37]
-  wire  _id_reg_bp_taken_T_7 = _id_reg_bp_taken_T_6 | ic_bp_is_ret; // @[src/main/scala/fpga/Core.scala 592:37]
+  wire [30:0] ic_next_imem_addr = {if1_jump_addr[30:1],1'h0}; // @[src/main/scala/fpga/Core.scala 558:32]
+  wire [30:0] _GEN_41 = 3'h3 == ic_state | 3'h7 == ic_state ? ic_imem_addr_4 : ic_reg_imem_addr; // @[src/main/scala/fpga/Core.scala 396:21 491:31]
+  wire [30:0] _GEN_87 = 3'h1 == ic_state | 3'h5 == ic_state ? ic_reg_imem_addr : _GEN_41; // @[src/main/scala/fpga/Core.scala 396:21 477:21]
+  wire [30:0] _GEN_133 = 3'h4 == ic_state ? ic_imem_addr_4 : _GEN_87; // @[src/main/scala/fpga/Core.scala 396:21 439:31]
+  wire [30:0] _GEN_179 = 3'h0 == ic_state ? ic_imem_addr_4 : _GEN_133; // @[src/main/scala/fpga/Core.scala 396:21 398:31]
+  wire [30:0] _GEN_225 = ~io_imem_valid ? ic_reg_imem_addr : _GEN_179; // @[src/main/scala/fpga/Core.scala 548:92 549:22]
+  wire [30:0] ic_imem_addr = if1_is_jump ? ic_next_imem_addr : _GEN_225; // @[src/main/scala/fpga/Core.scala 557:21 559:22]
+  wire  _ic_bp_taken_T_1 = ic_btb_io_lu_jump0 | ic_btb_io_lu_br0 & ic_pht_io_lu_taken0; // @[src/main/scala/fpga/Core.scala 402:53]
+  wire  _ic_reg_bp_next1_taken_T_1 = ic_btb_io_lu_jump1 | ic_btb_io_lu_br1 & ic_pht_io_lu_taken1; // @[src/main/scala/fpga/Core.scala 416:53]
+  wire [30:0] _ic_data_out_T_2 = {15'h0,io_imem_inst[31:16]}; // @[src/main/scala/fpga/Core.scala 442:37]
+  wire [31:0] _ic_data_out_T_5 = {io_imem_inst[15:0],ic_reg_inst[31:16]}; // @[src/main/scala/fpga/Core.scala 492:37]
+  wire [31:0] _ic_data_out_T_8 = {ic_reg_inst[15:0],ic_reg_inst2[31:16]}; // @[src/main/scala/fpga/Core.scala 534:27]
+  wire [31:0] _GEN_42 = 3'h3 == ic_state | 3'h7 == ic_state ? _ic_data_out_T_5 : _ic_data_out_T_8; // @[src/main/scala/fpga/Core.scala 396:21 492:31]
+  wire [31:0] _GEN_88 = 3'h1 == ic_state | 3'h5 == ic_state ? ic_reg_inst : _GEN_42; // @[src/main/scala/fpga/Core.scala 396:21 478:21]
+  wire [31:0] _GEN_136 = 3'h4 == ic_state ? {{1'd0}, _ic_data_out_T_2} : _GEN_88; // @[src/main/scala/fpga/Core.scala 396:21 442:31]
+  wire [31:0] ic_data_out = 3'h0 == ic_state ? io_imem_inst : _GEN_136; // @[src/main/scala/fpga/Core.scala 396:21 401:31]
+  wire  if2_is_half_inst = ic_data_out[1:0] != 2'h3; // @[src/main/scala/fpga/Core.scala 580:45]
+  wire  ic_read_en4 = _if2_zbp_taken_T & ~if2_is_half_inst; // @[src/main/scala/fpga/Core.scala 582:32]
+  wire [30:0] _GEN_0 = ic_read_en4 ? ic_imem_addr_4 : ic_reg_addr_out; // @[src/main/scala/fpga/Core.scala 387:20 433:32 434:21]
+  wire  _GEN_1 = ic_read_en4 ? 1'h0 : 1'h1; // @[src/main/scala/fpga/Core.scala 429:16 433:32 435:18]
+  wire  ic_read_en2 = _if2_zbp_taken_T & if2_is_half_inst; // @[src/main/scala/fpga/Core.scala 581:32]
+  wire [30:0] _GEN_2 = ic_read_en2 ? ic_imem_addr_2 : _GEN_0; // @[src/main/scala/fpga/Core.scala 430:26 431:21]
+  wire [1:0] _GEN_3 = ic_read_en2 ? 2'h3 : {{1'd0}, _GEN_1}; // @[src/main/scala/fpga/Core.scala 430:26 432:18]
+  wire [30:0] _GEN_4 = ic_read_en2 ? ic_imem_addr_4 : ic_imem_addr_2; // @[src/main/scala/fpga/Core.scala 471:26 472:21 443:31]
+  wire [1:0] _GEN_5 = ic_read_en2 ? 2'h0 : 2'h3; // @[src/main/scala/fpga/Core.scala 470:16 471:26 473:18]
+  wire [30:0] _GEN_6 = ic_read_en4 ? ic_reg_imem_addr : ic_reg_addr_out; // @[src/main/scala/fpga/Core.scala 387:20 485:31 486:21]
+  wire [2:0] _GEN_7 = ic_read_en4 ? 3'h0 : ic_state; // @[src/main/scala/fpga/Core.scala 485:31 487:18 352:25]
+  wire [30:0] _GEN_8 = ic_read_en2 ? ic_inst_addr_2 : _GEN_6; // @[src/main/scala/fpga/Core.scala 482:26 483:21]
+  wire [2:0] _GEN_9 = ic_read_en2 ? 3'h3 : _GEN_7; // @[src/main/scala/fpga/Core.scala 482:26 484:18]
+  wire  _GEN_10 = io_imem_valid ? _ic_reg_bp_next1_taken_T_1 : ic_reg_bp_next1_taken; // @[src/main/scala/fpga/Core.scala 509:28 361:32 510:33]
+  wire [1:0] _GEN_11 = io_imem_valid ? ic_btb_io_lu_attr1 : ic_reg_bp_next1_attr; // @[src/main/scala/fpga/Core.scala 509:28 361:32 511:33]
+  wire  _GEN_12 = io_imem_valid ? ic_btb_io_lu_is_ret1 : ic_reg_bp_next1_is_ret; // @[src/main/scala/fpga/Core.scala 509:28 361:32 512:33]
+  wire [30:0] _GEN_13 = io_imem_valid ? ic_btb_io_lu_target1 : ic_reg_bp_next1_target; // @[src/main/scala/fpga/Core.scala 509:28 361:32 513:33]
+  wire [5:0] _GEN_14 = io_imem_valid ? ic_pht_io_history : ic_reg_bp_next1_history; // @[src/main/scala/fpga/Core.scala 509:28 361:32 514:33]
+  wire [1:0] _GEN_15 = io_imem_valid ? ic_pht_io_lu_cnt1 : ic_reg_bp_next1_cnt; // @[src/main/scala/fpga/Core.scala 509:28 361:32 515:33]
+  wire [1:0] _GEN_16 = io_imem_valid ? ic_pht_io_lu_gcnt1 : ic_reg_bp_next1_gcnt; // @[src/main/scala/fpga/Core.scala 509:28 361:32 516:33]
+  wire  _GEN_17 = io_imem_valid ? ic_zbtb_io_lu_matches1 : ic_reg_zbp_next_taken1; // @[src/main/scala/fpga/Core.scala 509:28 517:33 368:40]
+  wire [30:0] _GEN_18 = io_imem_valid ? ic_zbtb_io_lu_target1 : ic_reg_zbp_next_target1; // @[src/main/scala/fpga/Core.scala 509:28 518:33 369:40]
+  wire [30:0] _GEN_19 = ic_read_en4 ? ic_imem_addr_2 : ic_reg_addr_out; // @[src/main/scala/fpga/Core.scala 387:20 527:31 528:21]
+  wire [1:0] _GEN_20 = ic_read_en4 ? 2'h3 : 2'h2; // @[src/main/scala/fpga/Core.scala 523:16 527:31 529:18]
+  wire [30:0] _GEN_21 = ic_read_en2 ? ic_reg_imem_addr : _GEN_19; // @[src/main/scala/fpga/Core.scala 524:26 525:21]
+  wire [1:0] _GEN_22 = ic_read_en2 ? 2'h1 : _GEN_20; // @[src/main/scala/fpga/Core.scala 524:26 526:18]
+  wire [30:0] _GEN_23 = ic_read_en4 ? ic_inst_addr_2 : ic_reg_addr_out; // @[src/main/scala/fpga/Core.scala 387:20 541:31 542:21]
+  wire [2:0] _GEN_24 = ic_read_en4 ? 3'h3 : ic_state; // @[src/main/scala/fpga/Core.scala 541:31 543:18 352:25]
+  wire [30:0] _GEN_25 = ic_read_en2 ? ic_reg_inst_addr : _GEN_23; // @[src/main/scala/fpga/Core.scala 538:26 539:21]
+  wire [2:0] _GEN_26 = ic_read_en2 ? 3'h1 : _GEN_24; // @[src/main/scala/fpga/Core.scala 538:26 540:18]
+  wire [30:0] _GEN_39 = 3'h2 == ic_state | 3'h6 == ic_state ? _GEN_25 : ic_reg_addr_out; // @[src/main/scala/fpga/Core.scala 387:20 396:21]
+  wire [2:0] _GEN_40 = 3'h2 == ic_state | 3'h6 == ic_state ? _GEN_26 : ic_state; // @[src/main/scala/fpga/Core.scala 396:21 352:25]
+  wire [31:0] _GEN_43 = 3'h3 == ic_state | 3'h7 == ic_state ? io_imem_inst : ic_reg_inst; // @[src/main/scala/fpga/Core.scala 396:21 493:31 347:34]
+  wire [30:0] _GEN_44 = 3'h3 == ic_state | 3'h7 == ic_state ? ic_reg_imem_addr : ic_reg_inst_addr; // @[src/main/scala/fpga/Core.scala 396:21 494:31 348:34]
+  wire [31:0] _GEN_45 = 3'h3 == ic_state | 3'h7 == ic_state ? ic_reg_inst : ic_reg_inst2; // @[src/main/scala/fpga/Core.scala 396:21 495:31 349:34]
+  wire  _GEN_47 = 3'h3 == ic_state | 3'h7 == ic_state ? ic_reg_bp_next1_taken : ic_reg_bp_next2_taken; // @[src/main/scala/fpga/Core.scala 396:21 497:31]
+  wire [1:0] _GEN_48 = 3'h3 == ic_state | 3'h7 == ic_state ? ic_reg_bp_next1_attr : ic_reg_bp_next2_attr; // @[src/main/scala/fpga/Core.scala 396:21 497:31]
+  wire  _GEN_49 = 3'h3 == ic_state | 3'h7 == ic_state ? ic_reg_bp_next1_is_ret : ic_reg_bp_next2_is_ret; // @[src/main/scala/fpga/Core.scala 396:21 497:31]
+  wire [30:0] _GEN_51 = 3'h3 == ic_state | 3'h7 == ic_state ? ic_reg_bp_next1_target : ic_reg_bp_next2_target; // @[src/main/scala/fpga/Core.scala 396:21 497:31]
+  wire [5:0] _GEN_52 = 3'h3 == ic_state | 3'h7 == ic_state ? ic_reg_bp_next1_history : ic_reg_bp_next2_history; // @[src/main/scala/fpga/Core.scala 396:21 497:31]
+  wire [1:0] _GEN_53 = 3'h3 == ic_state | 3'h7 == ic_state ? ic_reg_bp_next1_cnt : ic_reg_bp_next2_cnt; // @[src/main/scala/fpga/Core.scala 396:21 497:31]
+  wire [1:0] _GEN_54 = 3'h3 == ic_state | 3'h7 == ic_state ? ic_reg_bp_next1_gcnt : ic_reg_bp_next2_gcnt; // @[src/main/scala/fpga/Core.scala 396:21 497:31]
+  wire  _GEN_55 = 3'h3 == ic_state | 3'h7 == ic_state ? _ic_bp_taken_T_1 : ic_reg_bp_next0_taken; // @[src/main/scala/fpga/Core.scala 396:21 498:31 360:32]
+  wire [1:0] _GEN_56 = 3'h3 == ic_state | 3'h7 == ic_state ? ic_btb_io_lu_attr0 : ic_reg_bp_next0_attr; // @[src/main/scala/fpga/Core.scala 396:21 499:31 360:32]
+  wire  _GEN_57 = 3'h3 == ic_state | 3'h7 == ic_state ? ic_btb_io_lu_is_ret0 : ic_reg_bp_next0_is_ret; // @[src/main/scala/fpga/Core.scala 396:21 500:31 360:32]
+  wire [30:0] _GEN_58 = 3'h3 == ic_state | 3'h7 == ic_state ? ic_btb_io_lu_target0 : ic_reg_bp_next0_target; // @[src/main/scala/fpga/Core.scala 396:21 501:31 360:32]
+  wire [5:0] _GEN_59 = 3'h3 == ic_state | 3'h7 == ic_state ? ic_pht_io_history : ic_reg_bp_next0_history; // @[src/main/scala/fpga/Core.scala 396:21 502:31 360:32]
+  wire [1:0] _GEN_60 = 3'h3 == ic_state | 3'h7 == ic_state ? ic_pht_io_lu_cnt0 : ic_reg_bp_next0_cnt; // @[src/main/scala/fpga/Core.scala 396:21 503:31 360:32]
+  wire [1:0] _GEN_61 = 3'h3 == ic_state | 3'h7 == ic_state ? ic_pht_io_lu_gcnt0 : ic_reg_bp_next0_gcnt; // @[src/main/scala/fpga/Core.scala 396:21 504:31 360:32]
+  wire  _GEN_64 = 3'h3 == ic_state | 3'h7 == ic_state ? ic_zbtb_io_lu_matches0 : ic_reg_zbp_next_taken0; // @[src/main/scala/fpga/Core.scala 396:21 507:31 366:40]
+  wire [30:0] _GEN_65 = 3'h3 == ic_state | 3'h7 == ic_state ? ic_zbtb_io_lu_target0 : ic_reg_zbp_next_target0; // @[src/main/scala/fpga/Core.scala 396:21 508:31 367:40]
+  wire  _GEN_66 = 3'h3 == ic_state | 3'h7 == ic_state ? _GEN_10 : ic_reg_bp_next1_taken; // @[src/main/scala/fpga/Core.scala 396:21 361:32]
+  wire [1:0] _GEN_67 = 3'h3 == ic_state | 3'h7 == ic_state ? _GEN_11 : ic_reg_bp_next1_attr; // @[src/main/scala/fpga/Core.scala 396:21 361:32]
+  wire  _GEN_68 = 3'h3 == ic_state | 3'h7 == ic_state ? _GEN_12 : ic_reg_bp_next1_is_ret; // @[src/main/scala/fpga/Core.scala 396:21 361:32]
+  wire [30:0] _GEN_69 = 3'h3 == ic_state | 3'h7 == ic_state ? _GEN_13 : ic_reg_bp_next1_target; // @[src/main/scala/fpga/Core.scala 396:21 361:32]
+  wire [5:0] _GEN_70 = 3'h3 == ic_state | 3'h7 == ic_state ? _GEN_14 : ic_reg_bp_next1_history; // @[src/main/scala/fpga/Core.scala 396:21 361:32]
+  wire [1:0] _GEN_71 = 3'h3 == ic_state | 3'h7 == ic_state ? _GEN_15 : ic_reg_bp_next1_cnt; // @[src/main/scala/fpga/Core.scala 396:21 361:32]
+  wire [1:0] _GEN_72 = 3'h3 == ic_state | 3'h7 == ic_state ? _GEN_16 : ic_reg_bp_next1_gcnt; // @[src/main/scala/fpga/Core.scala 396:21 361:32]
+  wire  _GEN_73 = 3'h3 == ic_state | 3'h7 == ic_state ? _GEN_17 : ic_reg_zbp_next_taken1; // @[src/main/scala/fpga/Core.scala 396:21 368:40]
+  wire [30:0] _GEN_74 = 3'h3 == ic_state | 3'h7 == ic_state ? _GEN_18 : ic_reg_zbp_next_target1; // @[src/main/scala/fpga/Core.scala 396:21 369:40]
+  wire [2:0] _GEN_85 = 3'h3 == ic_state | 3'h7 == ic_state ? {{1'd0}, _GEN_22} : _GEN_40; // @[src/main/scala/fpga/Core.scala 396:21]
+  wire [30:0] _GEN_86 = 3'h3 == ic_state | 3'h7 == ic_state ? _GEN_21 : _GEN_39; // @[src/main/scala/fpga/Core.scala 396:21]
+  wire  _GEN_89 = 3'h1 == ic_state | 3'h5 == ic_state ? ic_reg_bp_next0_taken : _GEN_47; // @[src/main/scala/fpga/Core.scala 396:21 479:21]
+  wire [1:0] _GEN_90 = 3'h1 == ic_state | 3'h5 == ic_state ? ic_reg_bp_next0_attr : _GEN_48; // @[src/main/scala/fpga/Core.scala 396:21 479:21]
+  wire  _GEN_91 = 3'h1 == ic_state | 3'h5 == ic_state ? ic_reg_bp_next0_is_ret : _GEN_49; // @[src/main/scala/fpga/Core.scala 396:21 479:21]
+  wire [30:0] _GEN_93 = 3'h1 == ic_state | 3'h5 == ic_state ? ic_reg_bp_next0_target : _GEN_51; // @[src/main/scala/fpga/Core.scala 396:21 479:21]
+  wire [5:0] _GEN_94 = 3'h1 == ic_state | 3'h5 == ic_state ? ic_reg_bp_next0_history : _GEN_52; // @[src/main/scala/fpga/Core.scala 396:21 479:21]
+  wire [1:0] _GEN_95 = 3'h1 == ic_state | 3'h5 == ic_state ? ic_reg_bp_next0_cnt : _GEN_53; // @[src/main/scala/fpga/Core.scala 396:21 479:21]
+  wire [1:0] _GEN_96 = 3'h1 == ic_state | 3'h5 == ic_state ? ic_reg_bp_next0_gcnt : _GEN_54; // @[src/main/scala/fpga/Core.scala 396:21 479:21]
+  wire [30:0] _GEN_99 = 3'h1 == ic_state | 3'h5 == ic_state ? _GEN_8 : _GEN_86; // @[src/main/scala/fpga/Core.scala 396:21]
+  wire [2:0] _GEN_100 = 3'h1 == ic_state | 3'h5 == ic_state ? _GEN_9 : _GEN_85; // @[src/main/scala/fpga/Core.scala 396:21]
+  wire [30:0] _GEN_137 = 3'h4 == ic_state ? _GEN_4 : _GEN_99; // @[src/main/scala/fpga/Core.scala 396:21]
+  wire  _GEN_138 = 3'h4 == ic_state ? _ic_reg_bp_next1_taken_T_1 : _GEN_89; // @[src/main/scala/fpga/Core.scala 396:21 444:31]
+  wire [30:0] _GEN_139 = 3'h4 == ic_state ? ic_btb_io_lu_target1 : _GEN_93; // @[src/main/scala/fpga/Core.scala 396:21 445:31]
+  wire  _GEN_140 = 3'h4 == ic_state ? ic_btb_io_lu_is_ret1 : _GEN_91; // @[src/main/scala/fpga/Core.scala 396:21 446:31]
+  wire [5:0] _GEN_141 = 3'h4 == ic_state ? ic_pht_io_history : _GEN_94; // @[src/main/scala/fpga/Core.scala 396:21 447:31]
+  wire [1:0] _GEN_142 = 3'h4 == ic_state ? ic_pht_io_lu_cnt1 : _GEN_95; // @[src/main/scala/fpga/Core.scala 396:21 448:31]
+  wire [1:0] _GEN_143 = 3'h4 == ic_state ? ic_pht_io_lu_gcnt1 : _GEN_96; // @[src/main/scala/fpga/Core.scala 396:21 449:31]
+  wire [2:0] _GEN_164 = 3'h4 == ic_state ? {{1'd0}, _GEN_5} : _GEN_100; // @[src/main/scala/fpga/Core.scala 396:21]
+  wire  ic_bp_taken = 3'h0 == ic_state ? ic_btb_io_lu_jump0 | ic_btb_io_lu_br0 & ic_pht_io_lu_taken0 : _GEN_138; // @[src/main/scala/fpga/Core.scala 396:21 402:31]
+  wire [1:0] ic_bp_attr = 3'h0 == ic_state ? ic_btb_io_lu_attr0 : _GEN_90; // @[src/main/scala/fpga/Core.scala 396:21 403:31]
+  wire  ic_bp_is_ret = 3'h0 == ic_state ? ic_btb_io_lu_is_ret0 : _GEN_140; // @[src/main/scala/fpga/Core.scala 396:21 404:31]
+  wire [30:0] ic_bp_target = 3'h0 == ic_state ? ic_btb_io_lu_target0 : _GEN_139; // @[src/main/scala/fpga/Core.scala 396:21 405:31]
+  wire [5:0] ic_bp_history = 3'h0 == ic_state ? ic_pht_io_history : _GEN_141; // @[src/main/scala/fpga/Core.scala 396:21 406:31]
+  wire [1:0] ic_bp_cnt = 3'h0 == ic_state ? ic_pht_io_lu_cnt0 : _GEN_142; // @[src/main/scala/fpga/Core.scala 396:21 407:31]
+  wire [1:0] ic_bp_gcnt = 3'h0 == ic_state ? ic_pht_io_lu_gcnt0 : _GEN_143; // @[src/main/scala/fpga/Core.scala 396:21 408:31]
+  wire [30:0] _GEN_211 = 3'h0 == ic_state ? _GEN_2 : _GEN_137; // @[src/main/scala/fpga/Core.scala 396:21]
+  wire [30:0] _GEN_226 = ~io_imem_valid ? ic_reg_addr_out : _GEN_211; // @[src/main/scala/fpga/Core.scala 548:92 550:22]
+  wire  ic_half_rdy = ~io_imem_valid ? 1'h0 : ic_reg_half_rdy; // @[src/main/scala/fpga/Core.scala 385:20 548:92 555:22]
+  wire [30:0] ic_addr_out = if1_is_jump ? if1_jump_addr : _GEN_226; // @[src/main/scala/fpga/Core.scala 557:21 560:22]
+  wire  if2_is_inst_read = ic_read_rdy | ic_half_rdy & if2_is_half_inst; // @[src/main/scala/fpga/Core.scala 583:38]
+  wire  if2_is_valid_inst = _if2_zbp_taken_T_1 & _if2_zbp_taken_T_3 & if2_is_inst_read; // @[src/main/scala/fpga/Core.scala 585:57]
+  wire [31:0] if2_inst = if2_is_valid_inst ? ic_data_out : 32'h13; // @[src/main/scala/fpga/Core.scala 586:21]
+  wire  if2_bp_taken = if2_is_valid_inst & ic_bp_taken; // @[src/main/scala/fpga/Core.scala 587:40]
+  wire  _T_30 = ~reset; // @[src/main/scala/fpga/Core.scala 599:9]
+  wire [31:0] _T_31 = {ic_reg_addr_out,1'h0}; // @[src/main/scala/fpga/Core.scala 600:37]
+  wire [30:0] _if2_next_pc_T_1 = ic_reg_addr_out + 31'h1; // @[src/main/scala/fpga/Core.scala 606:50]
+  wire [30:0] _if2_next_pc_T_3 = ic_reg_addr_out + 31'h2; // @[src/main/scala/fpga/Core.scala 606:74]
+  wire [30:0] if2_next_pc = if2_is_half_inst ? _if2_next_pc_T_1 : _if2_next_pc_T_3; // @[src/main/scala/fpga/Core.scala 606:24]
+  wire  _id_reg_bp_taken_T_1 = if2_is_valid_inst & _if2_zbp_taken_T; // @[src/main/scala/fpga/Core.scala 608:43]
+  wire  _id_reg_bp_taken_T_4 = ~ic_bp_taken; // @[src/main/scala/fpga/Core.scala 610:6]
+  wire  _id_reg_bp_taken_T_5 = ~ic_bp_taken & if2_zbp_taken; // @[src/main/scala/fpga/Core.scala 610:19]
+  wire  _id_reg_bp_taken_T_6 = ic_bp_taken & ~if2_zbp_taken | _id_reg_bp_taken_T_5; // @[src/main/scala/fpga/Core.scala 609:37]
+  wire  _id_reg_bp_taken_T_7 = _id_reg_bp_taken_T_6 | ic_bp_is_ret; // @[src/main/scala/fpga/Core.scala 610:37]
   wire [30:0] _id_bp_target_T = ic_bp_is_ret ? ic_ras_io_top_ret_pc : if2_next_pc; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
-  wire  _rrd_stall_T = ~ex2_reg_is_br; // @[src/main/scala/fpga/Core.scala 690:5]
-  wire  _rrd_stall_T_1 = ~rrd_reg_op1_sel; // @[src/main/scala/fpga/Core.scala 691:25]
-  wire  _rrd_stall_T_4 = rrd_reg_op2_sel & scoreboard_rrd_stall_MPORT_1_data; // @[src/main/scala/fpga/Core.scala 692:39]
-  wire  _rrd_stall_T_5 = ~rrd_reg_op1_sel & scoreboard_rrd_stall_MPORT_data | _rrd_stall_T_4; // @[src/main/scala/fpga/Core.scala 691:72]
-  wire  _rrd_stall_T_7 = rrd_reg_op3_sel == 2'h2 & scoreboard_rrd_stall_MPORT_2_data; // @[src/main/scala/fpga/Core.scala 693:39]
-  wire  _rrd_stall_T_8 = _rrd_stall_T_5 | _rrd_stall_T_7; // @[src/main/scala/fpga/Core.scala 692:72]
-  wire  _rrd_stall_T_10 = rrd_reg_rf_wen & scoreboard_rrd_stall_MPORT_3_data; // @[src/main/scala/fpga/Core.scala 694:35]
-  wire  _rrd_stall_T_11 = _rrd_stall_T_8 | _rrd_stall_T_10; // @[src/main/scala/fpga/Core.scala 693:72]
-  wire  rrd_stall = ~ex2_reg_is_br & _rrd_stall_T_11; // @[src/main/scala/fpga/Core.scala 690:20]
-  wire  _id_rrd_ready_T = ~rrd_stall; // @[src/main/scala/fpga/Core.scala 645:22]
-  wire  mem1_mem_stall = mem1_reg_is_mem_store & ~io_dmem_wready; // @[src/main/scala/fpga/Core.scala 1422:89]
-  wire  _mem1_dram_stall_T_3 = mem1_reg_is_dram_store & ~io_cache_wready; // @[src/main/scala/fpga/Core.scala 1425:29]
-  wire  _mem1_dram_stall_T_4 = mem1_reg_is_dram_load & ~io_cache_rready | _mem1_dram_stall_T_3; // @[src/main/scala/fpga/Core.scala 1424:49]
-  wire  _mem1_dram_stall_T_5 = mem1_reg_is_dram_fence & io_cache_ibusy; // @[src/main/scala/fpga/Core.scala 1426:29]
-  wire  mem1_dram_stall = _mem1_dram_stall_T_4 | _mem1_dram_stall_T_5; // @[src/main/scala/fpga/Core.scala 1425:50]
-  wire  mem2_dram_stall = mem2_reg_is_dram_load & ~io_cache_rvalid; // @[src/main/scala/fpga/Core.scala 1452:48]
-  wire  mem_stall = mem1_mem_stall | mem1_dram_stall | mem1_reg_unaligned | mem2_dram_stall; // @[src/main/scala/fpga/Core.scala 1428:72]
-  wire  ex2_stall = mem_stall | ex2_reg_div_stall; // @[src/main/scala/fpga/Core.scala 1171:26]
-  wire  _id_rrd_ready_T_1 = ~ex2_stall; // @[src/main/scala/fpga/Core.scala 645:36]
-  wire  id_rrd_ready = ~rrd_stall & ~ex2_stall; // @[src/main/scala/fpga/Core.scala 645:33]
-  wire  _id_stage_io_out_ready_T = ex2_reg_is_br | id_rrd_ready; // @[src/main/scala/fpga/Core.scala 647:41]
-  wire  _rrd_op1_data_T_1 = ex1_reg_fw_en & _rrd_stall_T_1; // @[src/main/scala/fpga/Core.scala 699:20]
-  wire  _rrd_op1_data_T_2 = rrd_reg_rs1_addr == ex1_reg_wb_addr; // @[src/main/scala/fpga/Core.scala 701:24]
-  wire  _rrd_op1_data_T_3 = _rrd_op1_data_T_1 & _rrd_op1_data_T_2; // @[src/main/scala/fpga/Core.scala 700:37]
-  wire  _rrd_op1_data_T_5 = ex2_reg_fw_en & _rrd_stall_T_1; // @[src/main/scala/fpga/Core.scala 702:20]
-  wire  _rrd_op1_data_T_6 = rrd_reg_rs1_addr == ex2_reg_wb_addr; // @[src/main/scala/fpga/Core.scala 704:24]
-  wire  _rrd_op1_data_T_7 = _rrd_op1_data_T_5 & _rrd_op1_data_T_6; // @[src/main/scala/fpga/Core.scala 703:37]
-  wire  _rrd_op1_data_T_9 = mem3_reg_fw_en & _rrd_stall_T_1; // @[src/main/scala/fpga/Core.scala 705:21]
-  wire  _rrd_op1_data_T_10 = rrd_reg_rs1_addr == mem3_reg_wb_addr; // @[src/main/scala/fpga/Core.scala 707:24]
-  wire  _rrd_op1_data_T_11 = _rrd_op1_data_T_9 & _rrd_op1_data_T_10; // @[src/main/scala/fpga/Core.scala 706:37]
+  wire  _ic_pht_io_br_en_T = ic_bp_attr == 2'h1; // @[src/main/scala/fpga/Core.scala 639:49]
+  wire  _T_40 = _ic_pht_io_br_en_T & if2_is_valid_inst & _if2_zbp_taken_T; // @[src/main/scala/fpga/Core.scala 642:59]
+  wire [6:0] _T_41 = {ic_bp_history,1'h0}; // @[src/main/scala/fpga/Core.scala 643:33]
+  wire  _rrd_stall_T = ~ex2_reg_is_br; // @[src/main/scala/fpga/Core.scala 717:5]
+  wire  _rrd_stall_T_1 = ~rrd_reg_op1_sel; // @[src/main/scala/fpga/Core.scala 718:25]
+  wire  _rrd_stall_T_4 = rrd_reg_op2_sel & scoreboard_rrd_stall_MPORT_1_data; // @[src/main/scala/fpga/Core.scala 719:39]
+  wire  _rrd_stall_T_5 = ~rrd_reg_op1_sel & scoreboard_rrd_stall_MPORT_data | _rrd_stall_T_4; // @[src/main/scala/fpga/Core.scala 718:72]
+  wire  _rrd_stall_T_7 = rrd_reg_op3_sel == 2'h2 & scoreboard_rrd_stall_MPORT_2_data; // @[src/main/scala/fpga/Core.scala 720:39]
+  wire  _rrd_stall_T_8 = _rrd_stall_T_5 | _rrd_stall_T_7; // @[src/main/scala/fpga/Core.scala 719:72]
+  wire  _rrd_stall_T_10 = rrd_reg_rf_wen & scoreboard_rrd_stall_MPORT_3_data; // @[src/main/scala/fpga/Core.scala 721:35]
+  wire  _rrd_stall_T_11 = _rrd_stall_T_8 | _rrd_stall_T_10; // @[src/main/scala/fpga/Core.scala 720:72]
+  wire  rrd_stall = ~ex2_reg_is_br & _rrd_stall_T_11; // @[src/main/scala/fpga/Core.scala 717:20]
+  wire  _id_rrd_ready_T = ~rrd_stall; // @[src/main/scala/fpga/Core.scala 672:22]
+  wire  mem1_mem_stall = mem1_reg_is_mem_store & ~io_dmem_wready; // @[src/main/scala/fpga/Core.scala 1489:89]
+  wire  _mem1_dram_stall_T_3 = mem1_reg_is_dram_store & ~io_cache_wready; // @[src/main/scala/fpga/Core.scala 1492:29]
+  wire  _mem1_dram_stall_T_4 = mem1_reg_is_dram_load & ~io_cache_rready | _mem1_dram_stall_T_3; // @[src/main/scala/fpga/Core.scala 1491:49]
+  wire  _mem1_dram_stall_T_5 = mem1_reg_is_dram_fence & io_cache_ibusy; // @[src/main/scala/fpga/Core.scala 1493:29]
+  wire  mem1_dram_stall = _mem1_dram_stall_T_4 | _mem1_dram_stall_T_5; // @[src/main/scala/fpga/Core.scala 1492:50]
+  wire  mem2_dram_stall = mem2_reg_is_dram_load & ~io_cache_rvalid; // @[src/main/scala/fpga/Core.scala 1519:48]
+  wire  mem_stall = mem1_mem_stall | mem1_dram_stall | mem1_reg_unaligned | mem2_dram_stall; // @[src/main/scala/fpga/Core.scala 1495:72]
+  wire  ex2_stall = mem_stall | ex2_reg_div_stall; // @[src/main/scala/fpga/Core.scala 1238:26]
+  wire  _id_rrd_ready_T_1 = ~ex2_stall; // @[src/main/scala/fpga/Core.scala 672:36]
+  wire  id_rrd_ready = ~rrd_stall & ~ex2_stall; // @[src/main/scala/fpga/Core.scala 672:33]
+  wire  _id_stage_io_out_ready_T = ex2_reg_is_br | id_rrd_ready; // @[src/main/scala/fpga/Core.scala 674:41]
+  wire  _rrd_op1_data_T_1 = ex1_reg_fw_en & _rrd_stall_T_1; // @[src/main/scala/fpga/Core.scala 726:20]
+  wire  _rrd_op1_data_T_2 = rrd_reg_rs1_addr == ex1_reg_wb_addr; // @[src/main/scala/fpga/Core.scala 728:24]
+  wire  _rrd_op1_data_T_3 = _rrd_op1_data_T_1 & _rrd_op1_data_T_2; // @[src/main/scala/fpga/Core.scala 727:37]
+  wire  _rrd_op1_data_T_5 = ex2_reg_fw_en & _rrd_stall_T_1; // @[src/main/scala/fpga/Core.scala 729:20]
+  wire  _rrd_op1_data_T_6 = rrd_reg_rs1_addr == ex2_reg_wb_addr; // @[src/main/scala/fpga/Core.scala 731:24]
+  wire  _rrd_op1_data_T_7 = _rrd_op1_data_T_5 & _rrd_op1_data_T_6; // @[src/main/scala/fpga/Core.scala 730:37]
+  wire  _rrd_op1_data_T_9 = mem3_reg_fw_en & _rrd_stall_T_1; // @[src/main/scala/fpga/Core.scala 732:21]
+  wire  _rrd_op1_data_T_10 = rrd_reg_rs1_addr == mem3_reg_wb_addr; // @[src/main/scala/fpga/Core.scala 734:24]
+  wire  _rrd_op1_data_T_11 = _rrd_op1_data_T_9 & _rrd_op1_data_T_10; // @[src/main/scala/fpga/Core.scala 733:37]
   wire [31:0] _rrd_op1_data_T_13 = _rrd_stall_T_1 ? regfile_rrd_op1_data_MPORT_data : rrd_reg_op1_data; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
   wire [31:0] _rrd_op1_data_T_14 = _rrd_op1_data_T_11 ? mem3_reg_dmem_rdata : _rrd_op1_data_T_13; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
-  wire  _ex2_fw_data_T = ex2_reg_fun_sel == 3'h2; // @[src/main/scala/fpga/Core.scala 1354:22]
-  wire  _ex2_fw_data_T_1 = ex2_reg_fun_sel == 3'h3; // @[src/main/scala/fpga/Core.scala 1354:54]
-  wire  _ex2_fw_data_T_2 = ex2_reg_fun_sel == 3'h2 | ex2_reg_fun_sel == 3'h3; // @[src/main/scala/fpga/Core.scala 1354:35]
-  wire  _ex2_mask_out_T_3 = ex2_reg_pc_bit_out[31] ? ex2_reg_alu_out[31] : ex2_reg_op3_data[31]; // @[src/main/scala/fpga/Core.scala 1344:67]
-  wire  _ex2_mask_out_T_7 = ex2_reg_pc_bit_out[30] ? ex2_reg_alu_out[30] : ex2_reg_op3_data[30]; // @[src/main/scala/fpga/Core.scala 1344:67]
-  wire  _ex2_mask_out_T_11 = ex2_reg_pc_bit_out[29] ? ex2_reg_alu_out[29] : ex2_reg_op3_data[29]; // @[src/main/scala/fpga/Core.scala 1344:67]
-  wire  _ex2_mask_out_T_15 = ex2_reg_pc_bit_out[28] ? ex2_reg_alu_out[28] : ex2_reg_op3_data[28]; // @[src/main/scala/fpga/Core.scala 1344:67]
-  wire  _ex2_mask_out_T_19 = ex2_reg_pc_bit_out[27] ? ex2_reg_alu_out[27] : ex2_reg_op3_data[27]; // @[src/main/scala/fpga/Core.scala 1344:67]
-  wire  _ex2_mask_out_T_23 = ex2_reg_pc_bit_out[26] ? ex2_reg_alu_out[26] : ex2_reg_op3_data[26]; // @[src/main/scala/fpga/Core.scala 1344:67]
-  wire  _ex2_mask_out_T_27 = ex2_reg_pc_bit_out[25] ? ex2_reg_alu_out[25] : ex2_reg_op3_data[25]; // @[src/main/scala/fpga/Core.scala 1344:67]
-  wire  _ex2_mask_out_T_31 = ex2_reg_pc_bit_out[24] ? ex2_reg_alu_out[24] : ex2_reg_op3_data[24]; // @[src/main/scala/fpga/Core.scala 1344:67]
-  wire  _ex2_mask_out_T_35 = ex2_reg_pc_bit_out[23] ? ex2_reg_alu_out[23] : ex2_reg_op3_data[23]; // @[src/main/scala/fpga/Core.scala 1344:67]
-  wire  _ex2_mask_out_T_39 = ex2_reg_pc_bit_out[22] ? ex2_reg_alu_out[22] : ex2_reg_op3_data[22]; // @[src/main/scala/fpga/Core.scala 1344:67]
-  wire  _ex2_mask_out_T_43 = ex2_reg_pc_bit_out[21] ? ex2_reg_alu_out[21] : ex2_reg_op3_data[21]; // @[src/main/scala/fpga/Core.scala 1344:67]
-  wire  _ex2_mask_out_T_47 = ex2_reg_pc_bit_out[20] ? ex2_reg_alu_out[20] : ex2_reg_op3_data[20]; // @[src/main/scala/fpga/Core.scala 1344:67]
-  wire  _ex2_mask_out_T_51 = ex2_reg_pc_bit_out[19] ? ex2_reg_alu_out[19] : ex2_reg_op3_data[19]; // @[src/main/scala/fpga/Core.scala 1344:67]
-  wire  _ex2_mask_out_T_55 = ex2_reg_pc_bit_out[18] ? ex2_reg_alu_out[18] : ex2_reg_op3_data[18]; // @[src/main/scala/fpga/Core.scala 1344:67]
-  wire  _ex2_mask_out_T_59 = ex2_reg_pc_bit_out[17] ? ex2_reg_alu_out[17] : ex2_reg_op3_data[17]; // @[src/main/scala/fpga/Core.scala 1344:67]
-  wire  _ex2_mask_out_T_63 = ex2_reg_pc_bit_out[16] ? ex2_reg_alu_out[16] : ex2_reg_op3_data[16]; // @[src/main/scala/fpga/Core.scala 1344:67]
+  wire  _ex2_fw_data_T = ex2_reg_fun_sel == 3'h2; // @[src/main/scala/fpga/Core.scala 1421:22]
+  wire  _ex2_fw_data_T_1 = ex2_reg_fun_sel == 3'h3; // @[src/main/scala/fpga/Core.scala 1421:54]
+  wire  _ex2_fw_data_T_2 = ex2_reg_fun_sel == 3'h2 | ex2_reg_fun_sel == 3'h3; // @[src/main/scala/fpga/Core.scala 1421:35]
+  wire  _ex2_mask_out_T_3 = ex2_reg_pc_bit_out[31] ? ex2_reg_alu_out[31] : ex2_reg_op3_data[31]; // @[src/main/scala/fpga/Core.scala 1411:67]
+  wire  _ex2_mask_out_T_7 = ex2_reg_pc_bit_out[30] ? ex2_reg_alu_out[30] : ex2_reg_op3_data[30]; // @[src/main/scala/fpga/Core.scala 1411:67]
+  wire  _ex2_mask_out_T_11 = ex2_reg_pc_bit_out[29] ? ex2_reg_alu_out[29] : ex2_reg_op3_data[29]; // @[src/main/scala/fpga/Core.scala 1411:67]
+  wire  _ex2_mask_out_T_15 = ex2_reg_pc_bit_out[28] ? ex2_reg_alu_out[28] : ex2_reg_op3_data[28]; // @[src/main/scala/fpga/Core.scala 1411:67]
+  wire  _ex2_mask_out_T_19 = ex2_reg_pc_bit_out[27] ? ex2_reg_alu_out[27] : ex2_reg_op3_data[27]; // @[src/main/scala/fpga/Core.scala 1411:67]
+  wire  _ex2_mask_out_T_23 = ex2_reg_pc_bit_out[26] ? ex2_reg_alu_out[26] : ex2_reg_op3_data[26]; // @[src/main/scala/fpga/Core.scala 1411:67]
+  wire  _ex2_mask_out_T_27 = ex2_reg_pc_bit_out[25] ? ex2_reg_alu_out[25] : ex2_reg_op3_data[25]; // @[src/main/scala/fpga/Core.scala 1411:67]
+  wire  _ex2_mask_out_T_31 = ex2_reg_pc_bit_out[24] ? ex2_reg_alu_out[24] : ex2_reg_op3_data[24]; // @[src/main/scala/fpga/Core.scala 1411:67]
+  wire  _ex2_mask_out_T_35 = ex2_reg_pc_bit_out[23] ? ex2_reg_alu_out[23] : ex2_reg_op3_data[23]; // @[src/main/scala/fpga/Core.scala 1411:67]
+  wire  _ex2_mask_out_T_39 = ex2_reg_pc_bit_out[22] ? ex2_reg_alu_out[22] : ex2_reg_op3_data[22]; // @[src/main/scala/fpga/Core.scala 1411:67]
+  wire  _ex2_mask_out_T_43 = ex2_reg_pc_bit_out[21] ? ex2_reg_alu_out[21] : ex2_reg_op3_data[21]; // @[src/main/scala/fpga/Core.scala 1411:67]
+  wire  _ex2_mask_out_T_47 = ex2_reg_pc_bit_out[20] ? ex2_reg_alu_out[20] : ex2_reg_op3_data[20]; // @[src/main/scala/fpga/Core.scala 1411:67]
+  wire  _ex2_mask_out_T_51 = ex2_reg_pc_bit_out[19] ? ex2_reg_alu_out[19] : ex2_reg_op3_data[19]; // @[src/main/scala/fpga/Core.scala 1411:67]
+  wire  _ex2_mask_out_T_55 = ex2_reg_pc_bit_out[18] ? ex2_reg_alu_out[18] : ex2_reg_op3_data[18]; // @[src/main/scala/fpga/Core.scala 1411:67]
+  wire  _ex2_mask_out_T_59 = ex2_reg_pc_bit_out[17] ? ex2_reg_alu_out[17] : ex2_reg_op3_data[17]; // @[src/main/scala/fpga/Core.scala 1411:67]
+  wire  _ex2_mask_out_T_63 = ex2_reg_pc_bit_out[16] ? ex2_reg_alu_out[16] : ex2_reg_op3_data[16]; // @[src/main/scala/fpga/Core.scala 1411:67]
   wire [7:0] ex2_mask_out_hi_lo = {_ex2_mask_out_T_35,_ex2_mask_out_T_39,_ex2_mask_out_T_43,_ex2_mask_out_T_47,
-    _ex2_mask_out_T_51,_ex2_mask_out_T_55,_ex2_mask_out_T_59,_ex2_mask_out_T_63}; // @[src/main/scala/fpga/Core.scala 1344:25]
-  wire  _ex2_mask_out_T_67 = ex2_reg_pc_bit_out[15] ? ex2_reg_alu_out[15] : ex2_reg_op3_data[15]; // @[src/main/scala/fpga/Core.scala 1344:67]
-  wire  _ex2_mask_out_T_71 = ex2_reg_pc_bit_out[14] ? ex2_reg_alu_out[14] : ex2_reg_op3_data[14]; // @[src/main/scala/fpga/Core.scala 1344:67]
-  wire  _ex2_mask_out_T_75 = ex2_reg_pc_bit_out[13] ? ex2_reg_alu_out[13] : ex2_reg_op3_data[13]; // @[src/main/scala/fpga/Core.scala 1344:67]
-  wire  _ex2_mask_out_T_79 = ex2_reg_pc_bit_out[12] ? ex2_reg_alu_out[12] : ex2_reg_op3_data[12]; // @[src/main/scala/fpga/Core.scala 1344:67]
-  wire  _ex2_mask_out_T_83 = ex2_reg_pc_bit_out[11] ? ex2_reg_alu_out[11] : ex2_reg_op3_data[11]; // @[src/main/scala/fpga/Core.scala 1344:67]
-  wire  _ex2_mask_out_T_87 = ex2_reg_pc_bit_out[10] ? ex2_reg_alu_out[10] : ex2_reg_op3_data[10]; // @[src/main/scala/fpga/Core.scala 1344:67]
-  wire  _ex2_mask_out_T_91 = ex2_reg_pc_bit_out[9] ? ex2_reg_alu_out[9] : ex2_reg_op3_data[9]; // @[src/main/scala/fpga/Core.scala 1344:67]
-  wire  _ex2_mask_out_T_95 = ex2_reg_pc_bit_out[8] ? ex2_reg_alu_out[8] : ex2_reg_op3_data[8]; // @[src/main/scala/fpga/Core.scala 1344:67]
-  wire  _ex2_mask_out_T_99 = ex2_reg_pc_bit_out[7] ? ex2_reg_alu_out[7] : ex2_reg_op3_data[7]; // @[src/main/scala/fpga/Core.scala 1344:67]
-  wire  _ex2_mask_out_T_103 = ex2_reg_pc_bit_out[6] ? ex2_reg_alu_out[6] : ex2_reg_op3_data[6]; // @[src/main/scala/fpga/Core.scala 1344:67]
-  wire  _ex2_mask_out_T_107 = ex2_reg_pc_bit_out[5] ? ex2_reg_alu_out[5] : ex2_reg_op3_data[5]; // @[src/main/scala/fpga/Core.scala 1344:67]
-  wire  _ex2_mask_out_T_111 = ex2_reg_pc_bit_out[4] ? ex2_reg_alu_out[4] : ex2_reg_op3_data[4]; // @[src/main/scala/fpga/Core.scala 1344:67]
-  wire  _ex2_mask_out_T_115 = ex2_reg_pc_bit_out[3] ? ex2_reg_alu_out[3] : ex2_reg_op3_data[3]; // @[src/main/scala/fpga/Core.scala 1344:67]
-  wire  _ex2_mask_out_T_119 = ex2_reg_pc_bit_out[2] ? ex2_reg_alu_out[2] : ex2_reg_op3_data[2]; // @[src/main/scala/fpga/Core.scala 1344:67]
-  wire  _ex2_mask_out_T_123 = ex2_reg_pc_bit_out[1] ? ex2_reg_alu_out[1] : ex2_reg_op3_data[1]; // @[src/main/scala/fpga/Core.scala 1344:67]
-  wire  _ex2_mask_out_T_127 = ex2_reg_pc_bit_out[0] ? ex2_reg_alu_out[0] : ex2_reg_op3_data[0]; // @[src/main/scala/fpga/Core.scala 1344:67]
+    _ex2_mask_out_T_51,_ex2_mask_out_T_55,_ex2_mask_out_T_59,_ex2_mask_out_T_63}; // @[src/main/scala/fpga/Core.scala 1411:25]
+  wire  _ex2_mask_out_T_67 = ex2_reg_pc_bit_out[15] ? ex2_reg_alu_out[15] : ex2_reg_op3_data[15]; // @[src/main/scala/fpga/Core.scala 1411:67]
+  wire  _ex2_mask_out_T_71 = ex2_reg_pc_bit_out[14] ? ex2_reg_alu_out[14] : ex2_reg_op3_data[14]; // @[src/main/scala/fpga/Core.scala 1411:67]
+  wire  _ex2_mask_out_T_75 = ex2_reg_pc_bit_out[13] ? ex2_reg_alu_out[13] : ex2_reg_op3_data[13]; // @[src/main/scala/fpga/Core.scala 1411:67]
+  wire  _ex2_mask_out_T_79 = ex2_reg_pc_bit_out[12] ? ex2_reg_alu_out[12] : ex2_reg_op3_data[12]; // @[src/main/scala/fpga/Core.scala 1411:67]
+  wire  _ex2_mask_out_T_83 = ex2_reg_pc_bit_out[11] ? ex2_reg_alu_out[11] : ex2_reg_op3_data[11]; // @[src/main/scala/fpga/Core.scala 1411:67]
+  wire  _ex2_mask_out_T_87 = ex2_reg_pc_bit_out[10] ? ex2_reg_alu_out[10] : ex2_reg_op3_data[10]; // @[src/main/scala/fpga/Core.scala 1411:67]
+  wire  _ex2_mask_out_T_91 = ex2_reg_pc_bit_out[9] ? ex2_reg_alu_out[9] : ex2_reg_op3_data[9]; // @[src/main/scala/fpga/Core.scala 1411:67]
+  wire  _ex2_mask_out_T_95 = ex2_reg_pc_bit_out[8] ? ex2_reg_alu_out[8] : ex2_reg_op3_data[8]; // @[src/main/scala/fpga/Core.scala 1411:67]
+  wire  _ex2_mask_out_T_99 = ex2_reg_pc_bit_out[7] ? ex2_reg_alu_out[7] : ex2_reg_op3_data[7]; // @[src/main/scala/fpga/Core.scala 1411:67]
+  wire  _ex2_mask_out_T_103 = ex2_reg_pc_bit_out[6] ? ex2_reg_alu_out[6] : ex2_reg_op3_data[6]; // @[src/main/scala/fpga/Core.scala 1411:67]
+  wire  _ex2_mask_out_T_107 = ex2_reg_pc_bit_out[5] ? ex2_reg_alu_out[5] : ex2_reg_op3_data[5]; // @[src/main/scala/fpga/Core.scala 1411:67]
+  wire  _ex2_mask_out_T_111 = ex2_reg_pc_bit_out[4] ? ex2_reg_alu_out[4] : ex2_reg_op3_data[4]; // @[src/main/scala/fpga/Core.scala 1411:67]
+  wire  _ex2_mask_out_T_115 = ex2_reg_pc_bit_out[3] ? ex2_reg_alu_out[3] : ex2_reg_op3_data[3]; // @[src/main/scala/fpga/Core.scala 1411:67]
+  wire  _ex2_mask_out_T_119 = ex2_reg_pc_bit_out[2] ? ex2_reg_alu_out[2] : ex2_reg_op3_data[2]; // @[src/main/scala/fpga/Core.scala 1411:67]
+  wire  _ex2_mask_out_T_123 = ex2_reg_pc_bit_out[1] ? ex2_reg_alu_out[1] : ex2_reg_op3_data[1]; // @[src/main/scala/fpga/Core.scala 1411:67]
+  wire  _ex2_mask_out_T_127 = ex2_reg_pc_bit_out[0] ? ex2_reg_alu_out[0] : ex2_reg_op3_data[0]; // @[src/main/scala/fpga/Core.scala 1411:67]
   wire [7:0] ex2_mask_out_lo_lo = {_ex2_mask_out_T_99,_ex2_mask_out_T_103,_ex2_mask_out_T_107,_ex2_mask_out_T_111,
-    _ex2_mask_out_T_115,_ex2_mask_out_T_119,_ex2_mask_out_T_123,_ex2_mask_out_T_127}; // @[src/main/scala/fpga/Core.scala 1344:25]
+    _ex2_mask_out_T_115,_ex2_mask_out_T_119,_ex2_mask_out_T_123,_ex2_mask_out_T_127}; // @[src/main/scala/fpga/Core.scala 1411:25]
   wire [15:0] ex2_mask_out_lo = {_ex2_mask_out_T_67,_ex2_mask_out_T_71,_ex2_mask_out_T_75,_ex2_mask_out_T_79,
-    _ex2_mask_out_T_83,_ex2_mask_out_T_87,_ex2_mask_out_T_91,_ex2_mask_out_T_95,ex2_mask_out_lo_lo}; // @[src/main/scala/fpga/Core.scala 1344:25]
+    _ex2_mask_out_T_83,_ex2_mask_out_T_87,_ex2_mask_out_T_91,_ex2_mask_out_T_95,ex2_mask_out_lo_lo}; // @[src/main/scala/fpga/Core.scala 1411:25]
   wire [31:0] ex2_mask_out = {_ex2_mask_out_T_3,_ex2_mask_out_T_7,_ex2_mask_out_T_11,_ex2_mask_out_T_15,
-    _ex2_mask_out_T_19,_ex2_mask_out_T_23,_ex2_mask_out_T_27,_ex2_mask_out_T_31,ex2_mask_out_hi_lo,ex2_mask_out_lo}; // @[src/main/scala/fpga/Core.scala 1344:25]
-  wire  _ex2_fw_data_T_3 = ex2_reg_fun_sel == 3'h6; // @[src/main/scala/fpga/Core.scala 1355:22]
-  wire  _ex2_fw_data_T_4 = ex2_reg_fun_sel == 3'h7; // @[src/main/scala/fpga/Core.scala 1355:53]
-  wire  _ex2_fw_data_T_5 = ex2_reg_fun_sel == 3'h6 | ex2_reg_fun_sel == 3'h7; // @[src/main/scala/fpga/Core.scala 1355:34]
+    _ex2_mask_out_T_19,_ex2_mask_out_T_23,_ex2_mask_out_T_27,_ex2_mask_out_T_31,ex2_mask_out_hi_lo,ex2_mask_out_lo}; // @[src/main/scala/fpga/Core.scala 1411:25]
+  wire  _ex2_fw_data_T_3 = ex2_reg_fun_sel == 3'h6; // @[src/main/scala/fpga/Core.scala 1422:22]
+  wire  _ex2_fw_data_T_4 = ex2_reg_fun_sel == 3'h7; // @[src/main/scala/fpga/Core.scala 1422:53]
+  wire  _ex2_fw_data_T_5 = ex2_reg_fun_sel == 3'h6 | ex2_reg_fun_sel == 3'h7; // @[src/main/scala/fpga/Core.scala 1422:34]
   wire [31:0] _ex2_fw_data_T_6 = _ex2_fw_data_T_5 ? ex2_reg_pc_bit_out : ex2_reg_alu_out; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
   wire [31:0] ex2_fw_data = _ex2_fw_data_T_2 ? ex2_mask_out : _ex2_fw_data_T_6; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
   wire [31:0] _rrd_op1_data_T_15 = _rrd_op1_data_T_7 ? ex2_fw_data : _rrd_op1_data_T_14; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
-  wire  _ex1_alu_out_T = ex1_reg_exe_fun == 4'h0; // @[src/main/scala/fpga/Core.scala 811:22]
-  wire [34:0] _GEN_25 = {{3'd0}, ex1_reg_op1_data}; // @[src/main/scala/fpga/Core.scala 811:61]
-  wire [34:0] _ex1_alu_out_T_1 = _GEN_25 << ex1_reg_shamt; // @[src/main/scala/fpga/Core.scala 811:61]
-  wire [31:0] _ex1_alu_out_T_4 = _ex1_alu_out_T_1[31:0] + ex1_reg_op2_data; // @[src/main/scala/fpga/Core.scala 811:94]
-  wire  _ex1_alu_out_T_5 = ex1_reg_exe_fun == 4'h6; // @[src/main/scala/fpga/Core.scala 812:22]
-  wire  _ex1_alu_out_T_6 = ~ex1_reg_op2op; // @[src/main/scala/fpga/Core.scala 812:80]
-  wire [31:0] _ex1_alu_out_T_7 = ~ex1_reg_op2op ? ex1_reg_op2_data : 32'h0; // @[src/main/scala/fpga/Core.scala 812:65]
-  wire [31:0] _ex1_alu_out_T_9 = ex1_reg_op1_data - _ex1_alu_out_T_7; // @[src/main/scala/fpga/Core.scala 812:60]
-  wire  _ex1_alu_out_T_10 = ex1_reg_exe_fun == 4'h1; // @[src/main/scala/fpga/Core.scala 813:22]
-  wire [31:0] _ex1_alu_out_T_12 = ~ex1_reg_op2_data; // @[src/main/scala/fpga/Core.scala 813:113]
-  wire [31:0] _ex1_alu_out_T_13 = _ex1_alu_out_T_6 ? ex1_reg_op2_data : _ex1_alu_out_T_12; // @[src/main/scala/fpga/Core.scala 813:65]
-  wire [31:0] _ex1_alu_out_T_14 = ex1_reg_op1_data ^ _ex1_alu_out_T_13; // @[src/main/scala/fpga/Core.scala 813:60]
-  wire  _ex1_alu_out_T_15 = ex1_reg_exe_fun == 4'h2; // @[src/main/scala/fpga/Core.scala 814:22]
-  wire [31:0] _ex1_alu_out_T_19 = ex1_reg_op1_data & _ex1_alu_out_T_13; // @[src/main/scala/fpga/Core.scala 814:60]
-  wire  _ex1_alu_out_T_20 = ex1_reg_exe_fun == 4'h3; // @[src/main/scala/fpga/Core.scala 815:22]
-  wire [31:0] _ex1_alu_out_T_24 = ex1_reg_op1_data | _ex1_alu_out_T_13; // @[src/main/scala/fpga/Core.scala 815:60]
-  wire  _ex1_alu_out_T_25 = ex1_reg_exe_fun == 4'h4; // @[src/main/scala/fpga/Core.scala 816:22]
-  wire [62:0] _ex1_alu_out_T_27 = {ex1_reg_op1_data,ex1_reg_op3_data[31:1]}; // @[src/main/scala/fpga/Core.scala 816:46]
-  wire [62:0] _ex1_alu_out_T_30 = _ex1_alu_out_T_27 >> _ex1_alu_out_T_12[4:0]; // @[src/main/scala/fpga/Core.scala 816:98]
-  wire  _ex1_alu_out_T_32 = ex1_reg_exe_fun == 4'h5; // @[src/main/scala/fpga/Core.scala 817:22]
-  wire [62:0] _ex1_alu_out_T_34 = {ex1_reg_op3_data[30:0],ex1_reg_op1_data}; // @[src/main/scala/fpga/Core.scala 817:46]
-  wire [62:0] _ex1_alu_out_T_36 = _ex1_alu_out_T_34 >> ex1_reg_op2_data[4:0]; // @[src/main/scala/fpga/Core.scala 817:98]
-  wire  _ex1_alu_out_T_38 = ex1_reg_exe_fun == 4'h8; // @[src/main/scala/fpga/Core.scala 818:22]
-  wire  _ex1_alu_out_T_41 = $signed(ex1_reg_op1_data) < $signed(ex1_reg_op2_data); // @[src/main/scala/fpga/Core.scala 818:67]
-  wire  _ex1_alu_out_T_42 = ex1_reg_exe_fun == 4'h9; // @[src/main/scala/fpga/Core.scala 819:22]
-  wire  _ex1_alu_out_T_43 = ex1_reg_op1_data < ex1_reg_op2_data; // @[src/main/scala/fpga/Core.scala 819:60]
-  wire  _ex1_alu_out_T_44 = ex1_reg_exe_fun == 4'h7; // @[src/main/scala/fpga/Core.scala 820:22]
-  wire [31:0] _ex1_alu_out_T_46 = 32'h0 < ex1_reg_op2_data ? ex1_reg_op1_data : ex1_reg_op3_data; // @[src/main/scala/fpga/Core.scala 820:45]
-  wire  _ex1_alu_out_T_47 = ex1_reg_exe_fun == 4'ha; // @[src/main/scala/fpga/Core.scala 821:22]
-  wire [31:0] _ex1_alu_out_T_52 = _ex1_alu_out_T_6 ? ex1_reg_op1_data : ex1_reg_op2_data; // @[src/main/scala/fpga/Core.scala 823:10]
-  wire [31:0] _ex1_alu_out_T_54 = _ex1_alu_out_T_6 ? ex1_reg_op2_data : ex1_reg_op1_data; // @[src/main/scala/fpga/Core.scala 824:10]
-  wire [31:0] _ex1_alu_out_T_55 = _ex1_alu_out_T_41 ? _ex1_alu_out_T_52 : _ex1_alu_out_T_54; // @[src/main/scala/fpga/Core.scala 821:45]
-  wire  _ex1_alu_out_T_56 = ex1_reg_exe_fun == 4'hb; // @[src/main/scala/fpga/Core.scala 826:22]
-  wire [31:0] _ex1_alu_out_T_62 = _ex1_alu_out_T_43 ? _ex1_alu_out_T_52 : _ex1_alu_out_T_54; // @[src/main/scala/fpga/Core.scala 826:45]
-  wire  _ex1_alu_out_T_63 = ex1_reg_exe_fun == 4'he; // @[src/main/scala/fpga/Core.scala 831:22]
-  wire [62:0] _ex1_alu_out_T_65 = 63'h1 << ex1_reg_op2_data[4:0]; // @[src/main/scala/fpga/Core.scala 831:81]
-  wire [31:0] _ex1_alu_out_T_67 = ~_ex1_alu_out_T_65[31:0]; // @[src/main/scala/fpga/Core.scala 831:62]
-  wire [31:0] _ex1_alu_out_T_68 = ex1_reg_op1_data & _ex1_alu_out_T_67; // @[src/main/scala/fpga/Core.scala 831:60]
-  wire  _ex1_alu_out_T_69 = ex1_reg_exe_fun == 4'hf; // @[src/main/scala/fpga/Core.scala 832:22]
-  wire [31:0] _ex1_alu_out_T_73 = ex1_reg_op1_data | _ex1_alu_out_T_65[31:0]; // @[src/main/scala/fpga/Core.scala 832:60]
-  wire  _ex1_alu_out_T_74 = ex1_reg_exe_fun == 4'hd; // @[src/main/scala/fpga/Core.scala 833:22]
-  wire [31:0] _ex1_alu_out_T_78 = ex1_reg_op1_data ^ _ex1_alu_out_T_65[31:0]; // @[src/main/scala/fpga/Core.scala 833:60]
-  wire  _ex1_alu_out_T_79 = ex1_reg_exe_fun == 4'hc; // @[src/main/scala/fpga/Core.scala 834:22]
-  wire [31:0] _ex1_alu_out_T_82 = ex1_reg_op1_data >> ex1_reg_op2_data[4:0]; // @[src/main/scala/fpga/Core.scala 834:92]
-  wire [31:0] _ex1_alu_out_T_84 = {31'h0,_ex1_alu_out_T_82[0]}; // @[src/main/scala/fpga/Core.scala 834:45]
+  wire  _ex1_alu_out_T = ex1_reg_exe_fun == 4'h0; // @[src/main/scala/fpga/Core.scala 838:22]
+  wire [34:0] _GEN_27 = {{3'd0}, ex1_reg_op1_data}; // @[src/main/scala/fpga/Core.scala 838:61]
+  wire [34:0] _ex1_alu_out_T_1 = _GEN_27 << ex1_reg_shamt; // @[src/main/scala/fpga/Core.scala 838:61]
+  wire [31:0] _ex1_alu_out_T_4 = _ex1_alu_out_T_1[31:0] + ex1_reg_op2_data; // @[src/main/scala/fpga/Core.scala 838:94]
+  wire  _ex1_alu_out_T_5 = ex1_reg_exe_fun == 4'h6; // @[src/main/scala/fpga/Core.scala 839:22]
+  wire  _ex1_alu_out_T_6 = ~ex1_reg_op2op; // @[src/main/scala/fpga/Core.scala 839:80]
+  wire [31:0] _ex1_alu_out_T_7 = ~ex1_reg_op2op ? ex1_reg_op2_data : 32'h0; // @[src/main/scala/fpga/Core.scala 839:65]
+  wire [31:0] _ex1_alu_out_T_9 = ex1_reg_op1_data - _ex1_alu_out_T_7; // @[src/main/scala/fpga/Core.scala 839:60]
+  wire  _ex1_alu_out_T_10 = ex1_reg_exe_fun == 4'h1; // @[src/main/scala/fpga/Core.scala 840:22]
+  wire [31:0] _ex1_alu_out_T_12 = ~ex1_reg_op2_data; // @[src/main/scala/fpga/Core.scala 840:113]
+  wire [31:0] _ex1_alu_out_T_13 = _ex1_alu_out_T_6 ? ex1_reg_op2_data : _ex1_alu_out_T_12; // @[src/main/scala/fpga/Core.scala 840:65]
+  wire [31:0] _ex1_alu_out_T_14 = ex1_reg_op1_data ^ _ex1_alu_out_T_13; // @[src/main/scala/fpga/Core.scala 840:60]
+  wire  _ex1_alu_out_T_15 = ex1_reg_exe_fun == 4'h2; // @[src/main/scala/fpga/Core.scala 841:22]
+  wire [31:0] _ex1_alu_out_T_19 = ex1_reg_op1_data & _ex1_alu_out_T_13; // @[src/main/scala/fpga/Core.scala 841:60]
+  wire  _ex1_alu_out_T_20 = ex1_reg_exe_fun == 4'h3; // @[src/main/scala/fpga/Core.scala 842:22]
+  wire [31:0] _ex1_alu_out_T_24 = ex1_reg_op1_data | _ex1_alu_out_T_13; // @[src/main/scala/fpga/Core.scala 842:60]
+  wire  _ex1_alu_out_T_25 = ex1_reg_exe_fun == 4'h4; // @[src/main/scala/fpga/Core.scala 843:22]
+  wire [62:0] _ex1_alu_out_T_27 = {ex1_reg_op1_data,ex1_reg_op3_data[31:1]}; // @[src/main/scala/fpga/Core.scala 843:46]
+  wire [62:0] _ex1_alu_out_T_30 = _ex1_alu_out_T_27 >> _ex1_alu_out_T_12[4:0]; // @[src/main/scala/fpga/Core.scala 843:98]
+  wire  _ex1_alu_out_T_32 = ex1_reg_exe_fun == 4'h5; // @[src/main/scala/fpga/Core.scala 844:22]
+  wire [62:0] _ex1_alu_out_T_34 = {ex1_reg_op3_data[30:0],ex1_reg_op1_data}; // @[src/main/scala/fpga/Core.scala 844:46]
+  wire [62:0] _ex1_alu_out_T_36 = _ex1_alu_out_T_34 >> ex1_reg_op2_data[4:0]; // @[src/main/scala/fpga/Core.scala 844:98]
+  wire  _ex1_alu_out_T_38 = ex1_reg_exe_fun == 4'h8; // @[src/main/scala/fpga/Core.scala 845:22]
+  wire  _ex1_alu_out_T_41 = $signed(ex1_reg_op1_data) < $signed(ex1_reg_op2_data); // @[src/main/scala/fpga/Core.scala 845:67]
+  wire  _ex1_alu_out_T_42 = ex1_reg_exe_fun == 4'h9; // @[src/main/scala/fpga/Core.scala 846:22]
+  wire  _ex1_alu_out_T_43 = ex1_reg_op1_data < ex1_reg_op2_data; // @[src/main/scala/fpga/Core.scala 846:60]
+  wire  _ex1_alu_out_T_44 = ex1_reg_exe_fun == 4'h7; // @[src/main/scala/fpga/Core.scala 847:22]
+  wire [31:0] _ex1_alu_out_T_46 = 32'h0 < ex1_reg_op2_data ? ex1_reg_op1_data : ex1_reg_op3_data; // @[src/main/scala/fpga/Core.scala 847:45]
+  wire  _ex1_alu_out_T_47 = ex1_reg_exe_fun == 4'ha; // @[src/main/scala/fpga/Core.scala 848:22]
+  wire [31:0] _ex1_alu_out_T_52 = _ex1_alu_out_T_6 ? ex1_reg_op1_data : ex1_reg_op2_data; // @[src/main/scala/fpga/Core.scala 850:10]
+  wire [31:0] _ex1_alu_out_T_54 = _ex1_alu_out_T_6 ? ex1_reg_op2_data : ex1_reg_op1_data; // @[src/main/scala/fpga/Core.scala 851:10]
+  wire [31:0] _ex1_alu_out_T_55 = _ex1_alu_out_T_41 ? _ex1_alu_out_T_52 : _ex1_alu_out_T_54; // @[src/main/scala/fpga/Core.scala 848:45]
+  wire  _ex1_alu_out_T_56 = ex1_reg_exe_fun == 4'hb; // @[src/main/scala/fpga/Core.scala 853:22]
+  wire [31:0] _ex1_alu_out_T_62 = _ex1_alu_out_T_43 ? _ex1_alu_out_T_52 : _ex1_alu_out_T_54; // @[src/main/scala/fpga/Core.scala 853:45]
+  wire  _ex1_alu_out_T_63 = ex1_reg_exe_fun == 4'he; // @[src/main/scala/fpga/Core.scala 858:22]
+  wire [62:0] _ex1_alu_out_T_65 = 63'h1 << ex1_reg_op2_data[4:0]; // @[src/main/scala/fpga/Core.scala 858:81]
+  wire [31:0] _ex1_alu_out_T_67 = ~_ex1_alu_out_T_65[31:0]; // @[src/main/scala/fpga/Core.scala 858:62]
+  wire [31:0] _ex1_alu_out_T_68 = ex1_reg_op1_data & _ex1_alu_out_T_67; // @[src/main/scala/fpga/Core.scala 858:60]
+  wire  _ex1_alu_out_T_69 = ex1_reg_exe_fun == 4'hf; // @[src/main/scala/fpga/Core.scala 859:22]
+  wire [31:0] _ex1_alu_out_T_73 = ex1_reg_op1_data | _ex1_alu_out_T_65[31:0]; // @[src/main/scala/fpga/Core.scala 859:60]
+  wire  _ex1_alu_out_T_74 = ex1_reg_exe_fun == 4'hd; // @[src/main/scala/fpga/Core.scala 860:22]
+  wire [31:0] _ex1_alu_out_T_78 = ex1_reg_op1_data ^ _ex1_alu_out_T_65[31:0]; // @[src/main/scala/fpga/Core.scala 860:60]
+  wire  _ex1_alu_out_T_79 = ex1_reg_exe_fun == 4'hc; // @[src/main/scala/fpga/Core.scala 861:22]
+  wire [31:0] _ex1_alu_out_T_82 = ex1_reg_op1_data >> ex1_reg_op2_data[4:0]; // @[src/main/scala/fpga/Core.scala 861:92]
+  wire [31:0] _ex1_alu_out_T_84 = {31'h0,_ex1_alu_out_T_82[0]}; // @[src/main/scala/fpga/Core.scala 861:45]
   wire [31:0] _ex1_alu_out_T_85 = _ex1_alu_out_T_79 ? _ex1_alu_out_T_84 : 32'h0; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
   wire [31:0] _ex1_alu_out_T_86 = _ex1_alu_out_T_74 ? _ex1_alu_out_T_78 : _ex1_alu_out_T_85; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
   wire [31:0] _ex1_alu_out_T_87 = _ex1_alu_out_T_69 ? _ex1_alu_out_T_73 : _ex1_alu_out_T_86; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
@@ -4746,130 +5074,130 @@ module Core(
   wire [31:0] _ex1_alu_out_T_99 = _ex1_alu_out_T_5 ? _ex1_alu_out_T_9 : _ex1_alu_out_T_98; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
   wire [31:0] ex1_alu_out = _ex1_alu_out_T ? _ex1_alu_out_T_4 : _ex1_alu_out_T_99; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
   wire [31:0] rrd_op1_data = _rrd_op1_data_T_3 ? ex1_alu_out : _rrd_op1_data_T_15; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
-  wire [31:0] _rrd_op2_data_T = {20'h0,rrd_reg_op2_data_im0}; // @[src/main/scala/fpga/Core.scala 710:56]
-  wire [31:0] _rrd_op2_data_T_1 = rrd_reg_op2_data_im1 | _rrd_op2_data_T; // @[src/main/scala/fpga/Core.scala 710:51]
-  wire  _rrd_op2_data_T_3 = ex1_reg_fw_en & rrd_reg_op2_sel; // @[src/main/scala/fpga/Core.scala 712:20]
-  wire  _rrd_op2_data_T_4 = rrd_reg_rs2_addr == ex1_reg_wb_addr; // @[src/main/scala/fpga/Core.scala 714:24]
-  wire  _rrd_op2_data_T_5 = _rrd_op2_data_T_3 & _rrd_op2_data_T_4; // @[src/main/scala/fpga/Core.scala 713:37]
-  wire  _rrd_op2_data_T_7 = ex2_reg_fw_en & rrd_reg_op2_sel; // @[src/main/scala/fpga/Core.scala 715:20]
-  wire  _rrd_op2_data_T_8 = rrd_reg_rs2_addr == ex2_reg_wb_addr; // @[src/main/scala/fpga/Core.scala 717:24]
-  wire  _rrd_op2_data_T_9 = _rrd_op2_data_T_7 & _rrd_op2_data_T_8; // @[src/main/scala/fpga/Core.scala 716:37]
-  wire  _rrd_op2_data_T_11 = mem3_reg_fw_en & rrd_reg_op2_sel; // @[src/main/scala/fpga/Core.scala 718:21]
-  wire  _rrd_op2_data_T_12 = rrd_reg_rs2_addr == mem3_reg_wb_addr; // @[src/main/scala/fpga/Core.scala 720:24]
-  wire  _rrd_op2_data_T_13 = _rrd_op2_data_T_11 & _rrd_op2_data_T_12; // @[src/main/scala/fpga/Core.scala 719:37]
+  wire [31:0] _rrd_op2_data_T = {20'h0,rrd_reg_op2_data_im0}; // @[src/main/scala/fpga/Core.scala 737:56]
+  wire [31:0] _rrd_op2_data_T_1 = rrd_reg_op2_data_im1 | _rrd_op2_data_T; // @[src/main/scala/fpga/Core.scala 737:51]
+  wire  _rrd_op2_data_T_3 = ex1_reg_fw_en & rrd_reg_op2_sel; // @[src/main/scala/fpga/Core.scala 739:20]
+  wire  _rrd_op2_data_T_4 = rrd_reg_rs2_addr == ex1_reg_wb_addr; // @[src/main/scala/fpga/Core.scala 741:24]
+  wire  _rrd_op2_data_T_5 = _rrd_op2_data_T_3 & _rrd_op2_data_T_4; // @[src/main/scala/fpga/Core.scala 740:37]
+  wire  _rrd_op2_data_T_7 = ex2_reg_fw_en & rrd_reg_op2_sel; // @[src/main/scala/fpga/Core.scala 742:20]
+  wire  _rrd_op2_data_T_8 = rrd_reg_rs2_addr == ex2_reg_wb_addr; // @[src/main/scala/fpga/Core.scala 744:24]
+  wire  _rrd_op2_data_T_9 = _rrd_op2_data_T_7 & _rrd_op2_data_T_8; // @[src/main/scala/fpga/Core.scala 743:37]
+  wire  _rrd_op2_data_T_11 = mem3_reg_fw_en & rrd_reg_op2_sel; // @[src/main/scala/fpga/Core.scala 745:21]
+  wire  _rrd_op2_data_T_12 = rrd_reg_rs2_addr == mem3_reg_wb_addr; // @[src/main/scala/fpga/Core.scala 747:24]
+  wire  _rrd_op2_data_T_13 = _rrd_op2_data_T_11 & _rrd_op2_data_T_12; // @[src/main/scala/fpga/Core.scala 746:37]
   wire [31:0] _rrd_op2_data_T_15 = rrd_reg_op2_sel ? regfile_rrd_op2_data_MPORT_data : _rrd_op2_data_T_1; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
   wire [31:0] _rrd_op2_data_T_16 = _rrd_op2_data_T_13 ? mem3_reg_dmem_rdata : _rrd_op2_data_T_15; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
   wire [31:0] _rrd_op2_data_T_17 = _rrd_op2_data_T_9 ? ex2_fw_data : _rrd_op2_data_T_16; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
   wire [31:0] rrd_op2_data = _rrd_op2_data_T_5 ? ex1_alu_out : _rrd_op2_data_T_17; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
-  wire  _rrd_op3_data_T = rrd_reg_op3_sel == 2'h0; // @[src/main/scala/fpga/Core.scala 724:22]
-  wire  _rrd_op3_data_T_1 = rrd_reg_op3_sel == 2'h1; // @[src/main/scala/fpga/Core.scala 725:22]
-  wire [31:0] _rrd_op3_data_T_4 = rrd_op1_data[31] ? 32'hffffffff : 32'h0; // @[src/main/scala/fpga/Core.scala 725:44]
-  wire  _rrd_op3_data_T_5 = rrd_reg_op3_sel == 2'h3; // @[src/main/scala/fpga/Core.scala 726:22]
-  wire  _rrd_op3_data_T_6 = rrd_reg_rs3_addr == ex1_reg_wb_addr; // @[src/main/scala/fpga/Core.scala 729:24]
-  wire  _rrd_op3_data_T_7 = ex1_reg_fw_en & _rrd_op3_data_T_6; // @[src/main/scala/fpga/Core.scala 728:20]
-  wire  _rrd_op3_data_T_8 = rrd_reg_rs3_addr == ex2_reg_wb_addr; // @[src/main/scala/fpga/Core.scala 731:24]
-  wire  _rrd_op3_data_T_9 = ex2_reg_fw_en & _rrd_op3_data_T_8; // @[src/main/scala/fpga/Core.scala 730:20]
-  wire  _rrd_op3_data_T_10 = rrd_reg_rs3_addr == mem3_reg_wb_addr; // @[src/main/scala/fpga/Core.scala 733:24]
-  wire  _rrd_op3_data_T_11 = mem3_reg_fw_en & _rrd_op3_data_T_10; // @[src/main/scala/fpga/Core.scala 732:21]
+  wire  _rrd_op3_data_T = rrd_reg_op3_sel == 2'h0; // @[src/main/scala/fpga/Core.scala 751:22]
+  wire  _rrd_op3_data_T_1 = rrd_reg_op3_sel == 2'h1; // @[src/main/scala/fpga/Core.scala 752:22]
+  wire [31:0] _rrd_op3_data_T_4 = rrd_op1_data[31] ? 32'hffffffff : 32'h0; // @[src/main/scala/fpga/Core.scala 752:44]
+  wire  _rrd_op3_data_T_5 = rrd_reg_op3_sel == 2'h3; // @[src/main/scala/fpga/Core.scala 753:22]
+  wire  _rrd_op3_data_T_6 = rrd_reg_rs3_addr == ex1_reg_wb_addr; // @[src/main/scala/fpga/Core.scala 756:24]
+  wire  _rrd_op3_data_T_7 = ex1_reg_fw_en & _rrd_op3_data_T_6; // @[src/main/scala/fpga/Core.scala 755:20]
+  wire  _rrd_op3_data_T_8 = rrd_reg_rs3_addr == ex2_reg_wb_addr; // @[src/main/scala/fpga/Core.scala 758:24]
+  wire  _rrd_op3_data_T_9 = ex2_reg_fw_en & _rrd_op3_data_T_8; // @[src/main/scala/fpga/Core.scala 757:20]
+  wire  _rrd_op3_data_T_10 = rrd_reg_rs3_addr == mem3_reg_wb_addr; // @[src/main/scala/fpga/Core.scala 760:24]
+  wire  _rrd_op3_data_T_11 = mem3_reg_fw_en & _rrd_op3_data_T_10; // @[src/main/scala/fpga/Core.scala 759:21]
   wire [31:0] _rrd_op3_data_T_12 = _rrd_op3_data_T_11 ? mem3_reg_dmem_rdata : regfile_rrd_op3_data_MPORT_data; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
   wire [31:0] _rrd_op3_data_T_13 = _rrd_op3_data_T_9 ? ex2_fw_data : _rrd_op3_data_T_12; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
   wire [31:0] _rrd_op3_data_T_14 = _rrd_op3_data_T_7 ? ex1_alu_out : _rrd_op3_data_T_13; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
   wire [31:0] _rrd_op3_data_T_15 = _rrd_op3_data_T_5 ? rrd_op1_data : _rrd_op3_data_T_14; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
   wire [31:0] _rrd_op3_data_T_16 = _rrd_op3_data_T_1 ? _rrd_op3_data_T_4 : _rrd_op3_data_T_15; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
   wire [31:0] rrd_op3_data = _rrd_op3_data_T ? 32'h0 : _rrd_op3_data_T_16; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
-  wire [30:0] rrd_direct_jbr_pc = rrd_reg_pc + rrd_reg_imm_b_sext[31:1]; // @[src/main/scala/fpga/Core.scala 736:38]
-  wire  _rrd_hazard_T_1 = rrd_reg_wb_addr != 5'h0; // @[src/main/scala/fpga/Core.scala 738:67]
-  wire  rrd_hazard = rrd_reg_rf_wen & rrd_reg_wb_addr != 5'h0 & _id_rrd_ready_T & _rrd_stall_T; // @[src/main/scala/fpga/Core.scala 738:90]
-  wire  rrd_fw_en_next = rrd_hazard & rrd_reg_wb_sel == 3'h0; // @[src/main/scala/fpga/Core.scala 739:35]
-  wire  _T_44 = _id_rrd_ready_T_1 & _id_rrd_ready_T & _rrd_stall_T & rrd_reg_rf_wen; // @[src/main/scala/fpga/Core.scala 746:48]
-  wire  _T_46 = _T_44 & _rrd_hazard_T_1; // @[src/main/scala/fpga/Core.scala 747:30]
-  wire  rrd_mem_use_reg = _T_46 & rrd_reg_wb_sel == 3'h5; // @[src/main/scala/fpga/Core.scala 748:5 750:25 741:38]
-  wire  rrd_inst2_use_reg = _T_46 & (rrd_reg_wb_sel == 3'h6 | rrd_reg_wb_sel == 3'h2); // @[src/main/scala/fpga/Core.scala 748:5 751:25 742:38]
-  wire  rrd_inst3_use_reg = _T_46 & (rrd_reg_wb_sel == 3'h1 | rrd_reg_wb_sel == 3'h3); // @[src/main/scala/fpga/Core.scala 748:5 752:25 743:38]
-  wire [31:0] ex1_add_out = ex1_reg_op1_data + ex1_reg_op2_data; // @[src/main/scala/fpga/Core.scala 809:38]
-  wire [47:0] ex1_mullu = ex1_reg_op1_data * ex1_reg_op2_data[15:0]; // @[src/main/scala/fpga/Core.scala 837:38]
-  wire [16:0] _ex1_mulls_T_2 = {1'b0,$signed(ex1_reg_op2_data[15:0])}; // @[src/main/scala/fpga/Core.scala 838:45]
-  wire [48:0] _ex1_mulls_T_3 = $signed(ex1_reg_op1_data) * $signed(_ex1_mulls_T_2); // @[src/main/scala/fpga/Core.scala 838:45]
-  wire [47:0] _ex1_mulls_T_5 = _ex1_mulls_T_3[47:0]; // @[src/main/scala/fpga/Core.scala 838:45]
-  wire [31:0] ex1_mulls = _ex1_mulls_T_5[47:16]; // @[src/main/scala/fpga/Core.scala 838:81]
-  wire [47:0] ex1_mulhuu = ex1_reg_op1_data * ex1_reg_op2_data[31:16]; // @[src/main/scala/fpga/Core.scala 839:38]
-  wire [15:0] _ex1_mulhss_T_2 = ex1_reg_op2_data[31:16]; // @[src/main/scala/fpga/Core.scala 840:88]
-  wire [47:0] ex1_mulhss = $signed(ex1_reg_op1_data) * $signed(_ex1_mulhss_T_2); // @[src/main/scala/fpga/Core.scala 840:45]
-  wire [16:0] _ex1_mulhsu_T_2 = {1'b0,$signed(ex1_reg_op2_data[31:16])}; // @[src/main/scala/fpga/Core.scala 841:45]
-  wire [48:0] _ex1_mulhsu_T_3 = $signed(ex1_reg_op1_data) * $signed(_ex1_mulhsu_T_2); // @[src/main/scala/fpga/Core.scala 841:45]
-  wire [47:0] ex1_mulhsu = _ex1_mulhsu_T_3[47:0]; // @[src/main/scala/fpga/Core.scala 841:45]
-  wire [4:0] ex1_mask_len = ex1_reg_is_bflen ? ex1_reg_imm_len : ex1_reg_op2_data[10:6]; // @[src/main/scala/fpga/Core.scala 863:25]
+  wire [30:0] rrd_direct_jbr_pc = rrd_reg_pc + rrd_reg_imm_b_sext[31:1]; // @[src/main/scala/fpga/Core.scala 763:38]
+  wire  _rrd_hazard_T_1 = rrd_reg_wb_addr != 5'h0; // @[src/main/scala/fpga/Core.scala 765:67]
+  wire  rrd_hazard = rrd_reg_rf_wen & rrd_reg_wb_addr != 5'h0 & _id_rrd_ready_T & _rrd_stall_T; // @[src/main/scala/fpga/Core.scala 765:90]
+  wire  rrd_fw_en_next = rrd_hazard & rrd_reg_wb_sel == 3'h0; // @[src/main/scala/fpga/Core.scala 766:35]
+  wire  _T_52 = _id_rrd_ready_T_1 & _id_rrd_ready_T & _rrd_stall_T & rrd_reg_rf_wen; // @[src/main/scala/fpga/Core.scala 773:48]
+  wire  _T_54 = _T_52 & _rrd_hazard_T_1; // @[src/main/scala/fpga/Core.scala 774:30]
+  wire  rrd_mem_use_reg = _T_54 & rrd_reg_wb_sel == 3'h5; // @[src/main/scala/fpga/Core.scala 775:5 777:25 768:38]
+  wire  rrd_inst2_use_reg = _T_54 & (rrd_reg_wb_sel == 3'h6 | rrd_reg_wb_sel == 3'h2); // @[src/main/scala/fpga/Core.scala 775:5 778:25 769:38]
+  wire  rrd_inst3_use_reg = _T_54 & (rrd_reg_wb_sel == 3'h1 | rrd_reg_wb_sel == 3'h3); // @[src/main/scala/fpga/Core.scala 775:5 779:25 770:38]
+  wire [31:0] ex1_add_out = ex1_reg_op1_data + ex1_reg_op2_data; // @[src/main/scala/fpga/Core.scala 836:38]
+  wire [47:0] ex1_mullu = ex1_reg_op1_data * ex1_reg_op2_data[15:0]; // @[src/main/scala/fpga/Core.scala 864:38]
+  wire [16:0] _ex1_mulls_T_2 = {1'b0,$signed(ex1_reg_op2_data[15:0])}; // @[src/main/scala/fpga/Core.scala 865:45]
+  wire [48:0] _ex1_mulls_T_3 = $signed(ex1_reg_op1_data) * $signed(_ex1_mulls_T_2); // @[src/main/scala/fpga/Core.scala 865:45]
+  wire [47:0] _ex1_mulls_T_5 = _ex1_mulls_T_3[47:0]; // @[src/main/scala/fpga/Core.scala 865:45]
+  wire [31:0] ex1_mulls = _ex1_mulls_T_5[47:16]; // @[src/main/scala/fpga/Core.scala 865:81]
+  wire [47:0] ex1_mulhuu = ex1_reg_op1_data * ex1_reg_op2_data[31:16]; // @[src/main/scala/fpga/Core.scala 866:38]
+  wire [15:0] _ex1_mulhss_T_2 = ex1_reg_op2_data[31:16]; // @[src/main/scala/fpga/Core.scala 867:88]
+  wire [47:0] ex1_mulhss = $signed(ex1_reg_op1_data) * $signed(_ex1_mulhss_T_2); // @[src/main/scala/fpga/Core.scala 867:45]
+  wire [16:0] _ex1_mulhsu_T_2 = {1'b0,$signed(ex1_reg_op2_data[31:16])}; // @[src/main/scala/fpga/Core.scala 868:45]
+  wire [48:0] _ex1_mulhsu_T_3 = $signed(ex1_reg_op1_data) * $signed(_ex1_mulhsu_T_2); // @[src/main/scala/fpga/Core.scala 868:45]
+  wire [47:0] ex1_mulhsu = _ex1_mulhsu_T_3[47:0]; // @[src/main/scala/fpga/Core.scala 868:45]
+  wire [4:0] ex1_mask_len = ex1_reg_is_bflen ? ex1_reg_imm_len : ex1_reg_op2_data[10:6]; // @[src/main/scala/fpga/Core.scala 890:25]
   wire [7:0] ex1_imm_mask_lo_lo = {5'h7 < ex1_mask_len,5'h6 < ex1_mask_len,5'h5 < ex1_mask_len,5'h4 < ex1_mask_len,5'h3
-     < ex1_mask_len,5'h2 < ex1_mask_len,5'h1 < ex1_mask_len,5'h0 < ex1_mask_len}; // @[src/main/scala/fpga/Core.scala 866:8]
+     < ex1_mask_len,5'h2 < ex1_mask_len,5'h1 < ex1_mask_len,5'h0 < ex1_mask_len}; // @[src/main/scala/fpga/Core.scala 893:8]
   wire [15:0] ex1_imm_mask_lo = {5'hf < ex1_mask_len,5'he < ex1_mask_len,5'hd < ex1_mask_len,5'hc < ex1_mask_len,5'hb <
-    ex1_mask_len,5'ha < ex1_mask_len,5'h9 < ex1_mask_len,5'h8 < ex1_mask_len,ex1_imm_mask_lo_lo}; // @[src/main/scala/fpga/Core.scala 866:8]
+    ex1_mask_len,5'ha < ex1_mask_len,5'h9 < ex1_mask_len,5'h8 < ex1_mask_len,ex1_imm_mask_lo_lo}; // @[src/main/scala/fpga/Core.scala 893:8]
   wire [7:0] ex1_imm_mask_hi_lo = {5'h17 < ex1_mask_len,5'h16 < ex1_mask_len,5'h15 < ex1_mask_len,5'h14 < ex1_mask_len,5'h13
-     < ex1_mask_len,5'h12 < ex1_mask_len,5'h11 < ex1_mask_len,5'h10 < ex1_mask_len}; // @[src/main/scala/fpga/Core.scala 866:8]
+     < ex1_mask_len,5'h12 < ex1_mask_len,5'h11 < ex1_mask_len,5'h10 < ex1_mask_len}; // @[src/main/scala/fpga/Core.scala 893:8]
   wire [31:0] _ex1_imm_mask_T_34 = {1'h0,5'h1e < ex1_mask_len,5'h1d < ex1_mask_len,5'h1c < ex1_mask_len,5'h1b <
-    ex1_mask_len,5'h1a < ex1_mask_len,5'h19 < ex1_mask_len,5'h18 < ex1_mask_len,ex1_imm_mask_hi_lo,ex1_imm_mask_lo}; // @[src/main/scala/fpga/Core.scala 866:8]
-  wire [31:0] ex1_imm_mask = ex1_mask_len == 5'h0 ? 32'hffffffff : _ex1_imm_mask_T_34; // @[src/main/scala/fpga/Core.scala 864:25]
-  wire [30:0] _ex1_next_pc_T_1 = ex1_reg_pc + 31'h1; // @[src/main/scala/fpga/Core.scala 869:53]
-  wire [30:0] _ex1_next_pc_T_3 = ex1_reg_pc + 31'h2; // @[src/main/scala/fpga/Core.scala 869:81]
-  wire [30:0] ex1_next_pc = ex1_reg_is_half ? _ex1_next_pc_T_1 : _ex1_next_pc_T_3; // @[src/main/scala/fpga/Core.scala 869:24]
-  wire  _ex1_pc_bit_out_T = ex1_reg_wb_sel == 3'h2; // @[src/main/scala/fpga/Core.scala 871:21]
-  wire [31:0] _ex1_pc_bit_out_T_1 = {ex1_next_pc,1'h0}; // @[src/main/scala/fpga/Core.scala 871:43]
-  wire [1:0] _ex1_pc_bit_out_T_35 = ex1_reg_op1_data[0] + ex1_reg_op1_data[1]; // @[src/main/scala/fpga/Core.scala 872:48]
-  wire [1:0] _ex1_pc_bit_out_T_37 = ex1_reg_op1_data[2] + ex1_reg_op1_data[3]; // @[src/main/scala/fpga/Core.scala 872:48]
-  wire [2:0] _ex1_pc_bit_out_T_39 = _ex1_pc_bit_out_T_35 + _ex1_pc_bit_out_T_37; // @[src/main/scala/fpga/Core.scala 872:48]
-  wire [1:0] _ex1_pc_bit_out_T_41 = ex1_reg_op1_data[4] + ex1_reg_op1_data[5]; // @[src/main/scala/fpga/Core.scala 872:48]
-  wire [1:0] _ex1_pc_bit_out_T_43 = ex1_reg_op1_data[6] + ex1_reg_op1_data[7]; // @[src/main/scala/fpga/Core.scala 872:48]
-  wire [2:0] _ex1_pc_bit_out_T_45 = _ex1_pc_bit_out_T_41 + _ex1_pc_bit_out_T_43; // @[src/main/scala/fpga/Core.scala 872:48]
-  wire [3:0] _ex1_pc_bit_out_T_47 = _ex1_pc_bit_out_T_39 + _ex1_pc_bit_out_T_45; // @[src/main/scala/fpga/Core.scala 872:48]
-  wire [1:0] _ex1_pc_bit_out_T_49 = ex1_reg_op1_data[8] + ex1_reg_op1_data[9]; // @[src/main/scala/fpga/Core.scala 872:48]
-  wire [1:0] _ex1_pc_bit_out_T_51 = ex1_reg_op1_data[10] + ex1_reg_op1_data[11]; // @[src/main/scala/fpga/Core.scala 872:48]
-  wire [2:0] _ex1_pc_bit_out_T_53 = _ex1_pc_bit_out_T_49 + _ex1_pc_bit_out_T_51; // @[src/main/scala/fpga/Core.scala 872:48]
-  wire [1:0] _ex1_pc_bit_out_T_55 = ex1_reg_op1_data[12] + ex1_reg_op1_data[13]; // @[src/main/scala/fpga/Core.scala 872:48]
-  wire [1:0] _ex1_pc_bit_out_T_57 = ex1_reg_op1_data[14] + ex1_reg_op1_data[15]; // @[src/main/scala/fpga/Core.scala 872:48]
-  wire [2:0] _ex1_pc_bit_out_T_59 = _ex1_pc_bit_out_T_55 + _ex1_pc_bit_out_T_57; // @[src/main/scala/fpga/Core.scala 872:48]
-  wire [3:0] _ex1_pc_bit_out_T_61 = _ex1_pc_bit_out_T_53 + _ex1_pc_bit_out_T_59; // @[src/main/scala/fpga/Core.scala 872:48]
-  wire [4:0] _ex1_pc_bit_out_T_63 = _ex1_pc_bit_out_T_47 + _ex1_pc_bit_out_T_61; // @[src/main/scala/fpga/Core.scala 872:48]
-  wire [1:0] _ex1_pc_bit_out_T_65 = ex1_reg_op1_data[16] + ex1_reg_op1_data[17]; // @[src/main/scala/fpga/Core.scala 872:48]
-  wire [1:0] _ex1_pc_bit_out_T_67 = ex1_reg_op1_data[18] + ex1_reg_op1_data[19]; // @[src/main/scala/fpga/Core.scala 872:48]
-  wire [2:0] _ex1_pc_bit_out_T_69 = _ex1_pc_bit_out_T_65 + _ex1_pc_bit_out_T_67; // @[src/main/scala/fpga/Core.scala 872:48]
-  wire [1:0] _ex1_pc_bit_out_T_71 = ex1_reg_op1_data[20] + ex1_reg_op1_data[21]; // @[src/main/scala/fpga/Core.scala 872:48]
-  wire [1:0] _ex1_pc_bit_out_T_73 = ex1_reg_op1_data[22] + ex1_reg_op1_data[23]; // @[src/main/scala/fpga/Core.scala 872:48]
-  wire [2:0] _ex1_pc_bit_out_T_75 = _ex1_pc_bit_out_T_71 + _ex1_pc_bit_out_T_73; // @[src/main/scala/fpga/Core.scala 872:48]
-  wire [3:0] _ex1_pc_bit_out_T_77 = _ex1_pc_bit_out_T_69 + _ex1_pc_bit_out_T_75; // @[src/main/scala/fpga/Core.scala 872:48]
-  wire [1:0] _ex1_pc_bit_out_T_79 = ex1_reg_op1_data[24] + ex1_reg_op1_data[25]; // @[src/main/scala/fpga/Core.scala 872:48]
-  wire [1:0] _ex1_pc_bit_out_T_81 = ex1_reg_op1_data[26] + ex1_reg_op1_data[27]; // @[src/main/scala/fpga/Core.scala 872:48]
-  wire [2:0] _ex1_pc_bit_out_T_83 = _ex1_pc_bit_out_T_79 + _ex1_pc_bit_out_T_81; // @[src/main/scala/fpga/Core.scala 872:48]
-  wire [1:0] _ex1_pc_bit_out_T_85 = ex1_reg_op1_data[28] + ex1_reg_op1_data[29]; // @[src/main/scala/fpga/Core.scala 872:48]
-  wire [1:0] _ex1_pc_bit_out_T_87 = ex1_reg_op1_data[30] + ex1_reg_op1_data[31]; // @[src/main/scala/fpga/Core.scala 872:48]
-  wire [2:0] _ex1_pc_bit_out_T_89 = _ex1_pc_bit_out_T_85 + _ex1_pc_bit_out_T_87; // @[src/main/scala/fpga/Core.scala 872:48]
-  wire [3:0] _ex1_pc_bit_out_T_91 = _ex1_pc_bit_out_T_83 + _ex1_pc_bit_out_T_89; // @[src/main/scala/fpga/Core.scala 872:48]
-  wire [4:0] _ex1_pc_bit_out_T_93 = _ex1_pc_bit_out_T_77 + _ex1_pc_bit_out_T_91; // @[src/main/scala/fpga/Core.scala 872:48]
-  wire [5:0] _ex1_pc_bit_out_T_95 = _ex1_pc_bit_out_T_63 + _ex1_pc_bit_out_T_93; // @[src/main/scala/fpga/Core.scala 872:48]
-  wire [31:0] _GEN_516 = {{16'd0}, ex1_reg_op1_data[31:16]}; // @[src/main/scala/fpga/Core.scala 873:77]
-  wire [31:0] _ex1_pc_bit_out_T_101 = _GEN_516 & 32'hffff; // @[src/main/scala/fpga/Core.scala 873:77]
-  wire [31:0] _ex1_pc_bit_out_T_103 = {ex1_reg_op1_data[15:0], 16'h0}; // @[src/main/scala/fpga/Core.scala 873:77]
-  wire [31:0] _ex1_pc_bit_out_T_105 = _ex1_pc_bit_out_T_103 & 32'hffff0000; // @[src/main/scala/fpga/Core.scala 873:77]
-  wire [31:0] _ex1_pc_bit_out_T_106 = _ex1_pc_bit_out_T_101 | _ex1_pc_bit_out_T_105; // @[src/main/scala/fpga/Core.scala 873:77]
-  wire [31:0] _GEN_517 = {{8'd0}, _ex1_pc_bit_out_T_106[31:8]}; // @[src/main/scala/fpga/Core.scala 873:77]
-  wire [31:0] _ex1_pc_bit_out_T_111 = _GEN_517 & 32'hff00ff; // @[src/main/scala/fpga/Core.scala 873:77]
-  wire [31:0] _ex1_pc_bit_out_T_113 = {_ex1_pc_bit_out_T_106[23:0], 8'h0}; // @[src/main/scala/fpga/Core.scala 873:77]
-  wire [31:0] _ex1_pc_bit_out_T_115 = _ex1_pc_bit_out_T_113 & 32'hff00ff00; // @[src/main/scala/fpga/Core.scala 873:77]
-  wire [31:0] _ex1_pc_bit_out_T_116 = _ex1_pc_bit_out_T_111 | _ex1_pc_bit_out_T_115; // @[src/main/scala/fpga/Core.scala 873:77]
-  wire [31:0] _GEN_518 = {{4'd0}, _ex1_pc_bit_out_T_116[31:4]}; // @[src/main/scala/fpga/Core.scala 873:77]
-  wire [31:0] _ex1_pc_bit_out_T_121 = _GEN_518 & 32'hf0f0f0f; // @[src/main/scala/fpga/Core.scala 873:77]
-  wire [31:0] _ex1_pc_bit_out_T_123 = {_ex1_pc_bit_out_T_116[27:0], 4'h0}; // @[src/main/scala/fpga/Core.scala 873:77]
-  wire [31:0] _ex1_pc_bit_out_T_125 = _ex1_pc_bit_out_T_123 & 32'hf0f0f0f0; // @[src/main/scala/fpga/Core.scala 873:77]
-  wire [31:0] _ex1_pc_bit_out_T_126 = _ex1_pc_bit_out_T_121 | _ex1_pc_bit_out_T_125; // @[src/main/scala/fpga/Core.scala 873:77]
-  wire [31:0] _GEN_519 = {{2'd0}, _ex1_pc_bit_out_T_126[31:2]}; // @[src/main/scala/fpga/Core.scala 873:77]
-  wire [31:0] _ex1_pc_bit_out_T_131 = _GEN_519 & 32'h33333333; // @[src/main/scala/fpga/Core.scala 873:77]
-  wire [31:0] _ex1_pc_bit_out_T_133 = {_ex1_pc_bit_out_T_126[29:0], 2'h0}; // @[src/main/scala/fpga/Core.scala 873:77]
-  wire [31:0] _ex1_pc_bit_out_T_135 = _ex1_pc_bit_out_T_133 & 32'hcccccccc; // @[src/main/scala/fpga/Core.scala 873:77]
-  wire [31:0] _ex1_pc_bit_out_T_136 = _ex1_pc_bit_out_T_131 | _ex1_pc_bit_out_T_135; // @[src/main/scala/fpga/Core.scala 873:77]
-  wire [31:0] _GEN_520 = {{1'd0}, _ex1_pc_bit_out_T_136[31:1]}; // @[src/main/scala/fpga/Core.scala 873:77]
-  wire [31:0] _ex1_pc_bit_out_T_141 = _GEN_520 & 32'h55555555; // @[src/main/scala/fpga/Core.scala 873:77]
-  wire [31:0] _ex1_pc_bit_out_T_143 = {_ex1_pc_bit_out_T_136[30:0], 1'h0}; // @[src/main/scala/fpga/Core.scala 873:77]
-  wire [31:0] _ex1_pc_bit_out_T_145 = _ex1_pc_bit_out_T_143 & 32'haaaaaaaa; // @[src/main/scala/fpga/Core.scala 873:77]
-  wire [31:0] _ex1_pc_bit_out_T_146 = _ex1_pc_bit_out_T_141 | _ex1_pc_bit_out_T_145; // @[src/main/scala/fpga/Core.scala 873:77]
-  wire [32:0] _ex1_pc_bit_out_T_147 = {1'h1,_ex1_pc_bit_out_T_146}; // @[src/main/scala/fpga/Core.scala 873:59]
+    ex1_mask_len,5'h1a < ex1_mask_len,5'h19 < ex1_mask_len,5'h18 < ex1_mask_len,ex1_imm_mask_hi_lo,ex1_imm_mask_lo}; // @[src/main/scala/fpga/Core.scala 893:8]
+  wire [31:0] ex1_imm_mask = ex1_mask_len == 5'h0 ? 32'hffffffff : _ex1_imm_mask_T_34; // @[src/main/scala/fpga/Core.scala 891:25]
+  wire [30:0] _ex1_next_pc_T_1 = ex1_reg_pc + 31'h1; // @[src/main/scala/fpga/Core.scala 896:53]
+  wire [30:0] _ex1_next_pc_T_3 = ex1_reg_pc + 31'h2; // @[src/main/scala/fpga/Core.scala 896:81]
+  wire [30:0] ex1_next_pc = ex1_reg_is_half ? _ex1_next_pc_T_1 : _ex1_next_pc_T_3; // @[src/main/scala/fpga/Core.scala 896:24]
+  wire  _ex1_pc_bit_out_T = ex1_reg_wb_sel == 3'h2; // @[src/main/scala/fpga/Core.scala 898:21]
+  wire [31:0] _ex1_pc_bit_out_T_1 = {ex1_next_pc,1'h0}; // @[src/main/scala/fpga/Core.scala 898:43]
+  wire [1:0] _ex1_pc_bit_out_T_35 = ex1_reg_op1_data[0] + ex1_reg_op1_data[1]; // @[src/main/scala/fpga/Core.scala 899:48]
+  wire [1:0] _ex1_pc_bit_out_T_37 = ex1_reg_op1_data[2] + ex1_reg_op1_data[3]; // @[src/main/scala/fpga/Core.scala 899:48]
+  wire [2:0] _ex1_pc_bit_out_T_39 = _ex1_pc_bit_out_T_35 + _ex1_pc_bit_out_T_37; // @[src/main/scala/fpga/Core.scala 899:48]
+  wire [1:0] _ex1_pc_bit_out_T_41 = ex1_reg_op1_data[4] + ex1_reg_op1_data[5]; // @[src/main/scala/fpga/Core.scala 899:48]
+  wire [1:0] _ex1_pc_bit_out_T_43 = ex1_reg_op1_data[6] + ex1_reg_op1_data[7]; // @[src/main/scala/fpga/Core.scala 899:48]
+  wire [2:0] _ex1_pc_bit_out_T_45 = _ex1_pc_bit_out_T_41 + _ex1_pc_bit_out_T_43; // @[src/main/scala/fpga/Core.scala 899:48]
+  wire [3:0] _ex1_pc_bit_out_T_47 = _ex1_pc_bit_out_T_39 + _ex1_pc_bit_out_T_45; // @[src/main/scala/fpga/Core.scala 899:48]
+  wire [1:0] _ex1_pc_bit_out_T_49 = ex1_reg_op1_data[8] + ex1_reg_op1_data[9]; // @[src/main/scala/fpga/Core.scala 899:48]
+  wire [1:0] _ex1_pc_bit_out_T_51 = ex1_reg_op1_data[10] + ex1_reg_op1_data[11]; // @[src/main/scala/fpga/Core.scala 899:48]
+  wire [2:0] _ex1_pc_bit_out_T_53 = _ex1_pc_bit_out_T_49 + _ex1_pc_bit_out_T_51; // @[src/main/scala/fpga/Core.scala 899:48]
+  wire [1:0] _ex1_pc_bit_out_T_55 = ex1_reg_op1_data[12] + ex1_reg_op1_data[13]; // @[src/main/scala/fpga/Core.scala 899:48]
+  wire [1:0] _ex1_pc_bit_out_T_57 = ex1_reg_op1_data[14] + ex1_reg_op1_data[15]; // @[src/main/scala/fpga/Core.scala 899:48]
+  wire [2:0] _ex1_pc_bit_out_T_59 = _ex1_pc_bit_out_T_55 + _ex1_pc_bit_out_T_57; // @[src/main/scala/fpga/Core.scala 899:48]
+  wire [3:0] _ex1_pc_bit_out_T_61 = _ex1_pc_bit_out_T_53 + _ex1_pc_bit_out_T_59; // @[src/main/scala/fpga/Core.scala 899:48]
+  wire [4:0] _ex1_pc_bit_out_T_63 = _ex1_pc_bit_out_T_47 + _ex1_pc_bit_out_T_61; // @[src/main/scala/fpga/Core.scala 899:48]
+  wire [1:0] _ex1_pc_bit_out_T_65 = ex1_reg_op1_data[16] + ex1_reg_op1_data[17]; // @[src/main/scala/fpga/Core.scala 899:48]
+  wire [1:0] _ex1_pc_bit_out_T_67 = ex1_reg_op1_data[18] + ex1_reg_op1_data[19]; // @[src/main/scala/fpga/Core.scala 899:48]
+  wire [2:0] _ex1_pc_bit_out_T_69 = _ex1_pc_bit_out_T_65 + _ex1_pc_bit_out_T_67; // @[src/main/scala/fpga/Core.scala 899:48]
+  wire [1:0] _ex1_pc_bit_out_T_71 = ex1_reg_op1_data[20] + ex1_reg_op1_data[21]; // @[src/main/scala/fpga/Core.scala 899:48]
+  wire [1:0] _ex1_pc_bit_out_T_73 = ex1_reg_op1_data[22] + ex1_reg_op1_data[23]; // @[src/main/scala/fpga/Core.scala 899:48]
+  wire [2:0] _ex1_pc_bit_out_T_75 = _ex1_pc_bit_out_T_71 + _ex1_pc_bit_out_T_73; // @[src/main/scala/fpga/Core.scala 899:48]
+  wire [3:0] _ex1_pc_bit_out_T_77 = _ex1_pc_bit_out_T_69 + _ex1_pc_bit_out_T_75; // @[src/main/scala/fpga/Core.scala 899:48]
+  wire [1:0] _ex1_pc_bit_out_T_79 = ex1_reg_op1_data[24] + ex1_reg_op1_data[25]; // @[src/main/scala/fpga/Core.scala 899:48]
+  wire [1:0] _ex1_pc_bit_out_T_81 = ex1_reg_op1_data[26] + ex1_reg_op1_data[27]; // @[src/main/scala/fpga/Core.scala 899:48]
+  wire [2:0] _ex1_pc_bit_out_T_83 = _ex1_pc_bit_out_T_79 + _ex1_pc_bit_out_T_81; // @[src/main/scala/fpga/Core.scala 899:48]
+  wire [1:0] _ex1_pc_bit_out_T_85 = ex1_reg_op1_data[28] + ex1_reg_op1_data[29]; // @[src/main/scala/fpga/Core.scala 899:48]
+  wire [1:0] _ex1_pc_bit_out_T_87 = ex1_reg_op1_data[30] + ex1_reg_op1_data[31]; // @[src/main/scala/fpga/Core.scala 899:48]
+  wire [2:0] _ex1_pc_bit_out_T_89 = _ex1_pc_bit_out_T_85 + _ex1_pc_bit_out_T_87; // @[src/main/scala/fpga/Core.scala 899:48]
+  wire [3:0] _ex1_pc_bit_out_T_91 = _ex1_pc_bit_out_T_83 + _ex1_pc_bit_out_T_89; // @[src/main/scala/fpga/Core.scala 899:48]
+  wire [4:0] _ex1_pc_bit_out_T_93 = _ex1_pc_bit_out_T_77 + _ex1_pc_bit_out_T_91; // @[src/main/scala/fpga/Core.scala 899:48]
+  wire [5:0] _ex1_pc_bit_out_T_95 = _ex1_pc_bit_out_T_63 + _ex1_pc_bit_out_T_93; // @[src/main/scala/fpga/Core.scala 899:48]
+  wire [31:0] _GEN_556 = {{16'd0}, ex1_reg_op1_data[31:16]}; // @[src/main/scala/fpga/Core.scala 900:77]
+  wire [31:0] _ex1_pc_bit_out_T_101 = _GEN_556 & 32'hffff; // @[src/main/scala/fpga/Core.scala 900:77]
+  wire [31:0] _ex1_pc_bit_out_T_103 = {ex1_reg_op1_data[15:0], 16'h0}; // @[src/main/scala/fpga/Core.scala 900:77]
+  wire [31:0] _ex1_pc_bit_out_T_105 = _ex1_pc_bit_out_T_103 & 32'hffff0000; // @[src/main/scala/fpga/Core.scala 900:77]
+  wire [31:0] _ex1_pc_bit_out_T_106 = _ex1_pc_bit_out_T_101 | _ex1_pc_bit_out_T_105; // @[src/main/scala/fpga/Core.scala 900:77]
+  wire [31:0] _GEN_557 = {{8'd0}, _ex1_pc_bit_out_T_106[31:8]}; // @[src/main/scala/fpga/Core.scala 900:77]
+  wire [31:0] _ex1_pc_bit_out_T_111 = _GEN_557 & 32'hff00ff; // @[src/main/scala/fpga/Core.scala 900:77]
+  wire [31:0] _ex1_pc_bit_out_T_113 = {_ex1_pc_bit_out_T_106[23:0], 8'h0}; // @[src/main/scala/fpga/Core.scala 900:77]
+  wire [31:0] _ex1_pc_bit_out_T_115 = _ex1_pc_bit_out_T_113 & 32'hff00ff00; // @[src/main/scala/fpga/Core.scala 900:77]
+  wire [31:0] _ex1_pc_bit_out_T_116 = _ex1_pc_bit_out_T_111 | _ex1_pc_bit_out_T_115; // @[src/main/scala/fpga/Core.scala 900:77]
+  wire [31:0] _GEN_558 = {{4'd0}, _ex1_pc_bit_out_T_116[31:4]}; // @[src/main/scala/fpga/Core.scala 900:77]
+  wire [31:0] _ex1_pc_bit_out_T_121 = _GEN_558 & 32'hf0f0f0f; // @[src/main/scala/fpga/Core.scala 900:77]
+  wire [31:0] _ex1_pc_bit_out_T_123 = {_ex1_pc_bit_out_T_116[27:0], 4'h0}; // @[src/main/scala/fpga/Core.scala 900:77]
+  wire [31:0] _ex1_pc_bit_out_T_125 = _ex1_pc_bit_out_T_123 & 32'hf0f0f0f0; // @[src/main/scala/fpga/Core.scala 900:77]
+  wire [31:0] _ex1_pc_bit_out_T_126 = _ex1_pc_bit_out_T_121 | _ex1_pc_bit_out_T_125; // @[src/main/scala/fpga/Core.scala 900:77]
+  wire [31:0] _GEN_559 = {{2'd0}, _ex1_pc_bit_out_T_126[31:2]}; // @[src/main/scala/fpga/Core.scala 900:77]
+  wire [31:0] _ex1_pc_bit_out_T_131 = _GEN_559 & 32'h33333333; // @[src/main/scala/fpga/Core.scala 900:77]
+  wire [31:0] _ex1_pc_bit_out_T_133 = {_ex1_pc_bit_out_T_126[29:0], 2'h0}; // @[src/main/scala/fpga/Core.scala 900:77]
+  wire [31:0] _ex1_pc_bit_out_T_135 = _ex1_pc_bit_out_T_133 & 32'hcccccccc; // @[src/main/scala/fpga/Core.scala 900:77]
+  wire [31:0] _ex1_pc_bit_out_T_136 = _ex1_pc_bit_out_T_131 | _ex1_pc_bit_out_T_135; // @[src/main/scala/fpga/Core.scala 900:77]
+  wire [31:0] _GEN_560 = {{1'd0}, _ex1_pc_bit_out_T_136[31:1]}; // @[src/main/scala/fpga/Core.scala 900:77]
+  wire [31:0] _ex1_pc_bit_out_T_141 = _GEN_560 & 32'h55555555; // @[src/main/scala/fpga/Core.scala 900:77]
+  wire [31:0] _ex1_pc_bit_out_T_143 = {_ex1_pc_bit_out_T_136[30:0], 1'h0}; // @[src/main/scala/fpga/Core.scala 900:77]
+  wire [31:0] _ex1_pc_bit_out_T_145 = _ex1_pc_bit_out_T_143 & 32'haaaaaaaa; // @[src/main/scala/fpga/Core.scala 900:77]
+  wire [31:0] _ex1_pc_bit_out_T_146 = _ex1_pc_bit_out_T_141 | _ex1_pc_bit_out_T_145; // @[src/main/scala/fpga/Core.scala 900:77]
+  wire [32:0] _ex1_pc_bit_out_T_147 = {1'h1,_ex1_pc_bit_out_T_146}; // @[src/main/scala/fpga/Core.scala 900:59]
   wire [5:0] _ex1_pc_bit_out_T_181 = _ex1_pc_bit_out_T_147[31] ? 6'h1f : 6'h20; // @[src/main/scala/chisel3/util/Mux.scala 50:70]
   wire [5:0] _ex1_pc_bit_out_T_182 = _ex1_pc_bit_out_T_147[30] ? 6'h1e : _ex1_pc_bit_out_T_181; // @[src/main/scala/chisel3/util/Mux.scala 50:70]
   wire [5:0] _ex1_pc_bit_out_T_183 = _ex1_pc_bit_out_T_147[29] ? 6'h1d : _ex1_pc_bit_out_T_182; // @[src/main/scala/chisel3/util/Mux.scala 50:70]
@@ -4902,7 +5230,7 @@ module Core(
   wire [5:0] _ex1_pc_bit_out_T_210 = _ex1_pc_bit_out_T_147[2] ? 6'h2 : _ex1_pc_bit_out_T_209; // @[src/main/scala/chisel3/util/Mux.scala 50:70]
   wire [5:0] _ex1_pc_bit_out_T_211 = _ex1_pc_bit_out_T_147[1] ? 6'h1 : _ex1_pc_bit_out_T_210; // @[src/main/scala/chisel3/util/Mux.scala 50:70]
   wire [5:0] _ex1_pc_bit_out_T_212 = _ex1_pc_bit_out_T_147[0] ? 6'h0 : _ex1_pc_bit_out_T_211; // @[src/main/scala/chisel3/util/Mux.scala 50:70]
-  wire [32:0] _ex1_pc_bit_out_T_214 = {1'h1,ex1_reg_op1_data}; // @[src/main/scala/fpga/Core.scala 874:59]
+  wire [32:0] _ex1_pc_bit_out_T_214 = {1'h1,ex1_reg_op1_data}; // @[src/main/scala/fpga/Core.scala 901:59]
   wire [5:0] _ex1_pc_bit_out_T_248 = _ex1_pc_bit_out_T_214[31] ? 6'h1f : 6'h20; // @[src/main/scala/chisel3/util/Mux.scala 50:70]
   wire [5:0] _ex1_pc_bit_out_T_249 = _ex1_pc_bit_out_T_214[30] ? 6'h1e : _ex1_pc_bit_out_T_248; // @[src/main/scala/chisel3/util/Mux.scala 50:70]
   wire [5:0] _ex1_pc_bit_out_T_250 = _ex1_pc_bit_out_T_214[29] ? 6'h1d : _ex1_pc_bit_out_T_249; // @[src/main/scala/chisel3/util/Mux.scala 50:70]
@@ -4936,548 +5264,548 @@ module Core(
   wire [5:0] _ex1_pc_bit_out_T_278 = _ex1_pc_bit_out_T_214[1] ? 6'h1 : _ex1_pc_bit_out_T_277; // @[src/main/scala/chisel3/util/Mux.scala 50:70]
   wire [5:0] _ex1_pc_bit_out_T_279 = _ex1_pc_bit_out_T_214[0] ? 6'h0 : _ex1_pc_bit_out_T_278; // @[src/main/scala/chisel3/util/Mux.scala 50:70]
   wire [31:0] _ex1_pc_bit_out_T_285 = {ex1_reg_op1_data[7:0],ex1_reg_op1_data[15:8],ex1_reg_op1_data[23:16],
-    ex1_reg_op1_data[31:24]}; // @[src/main/scala/fpga/Core.scala 875:43]
-  wire [23:0] _ex1_pc_bit_out_T_289 = ex1_reg_op1_data[7] ? 24'hffffff : 24'h0; // @[src/main/scala/fpga/Core.scala 876:48]
-  wire [31:0] _ex1_pc_bit_out_T_291 = {_ex1_pc_bit_out_T_289,ex1_reg_op1_data[7:0]}; // @[src/main/scala/fpga/Core.scala 876:43]
-  wire [15:0] _ex1_pc_bit_out_T_295 = ex1_reg_op1_data[15] ? 16'hffff : 16'h0; // @[src/main/scala/fpga/Core.scala 877:48]
-  wire [31:0] _ex1_pc_bit_out_T_297 = {_ex1_pc_bit_out_T_295,ex1_reg_op1_data[15:0]}; // @[src/main/scala/fpga/Core.scala 877:43]
-  wire [1:0] _ex1_pc_bit_out_T_317 = ex1_reg_op2_data[1] + ex1_reg_op2_data[2]; // @[src/main/scala/fpga/Core.scala 847:47]
-  wire [1:0] _GEN_521 = {{1'd0}, ex1_reg_op2_data[0]}; // @[src/main/scala/fpga/Core.scala 847:47]
-  wire [2:0] _ex1_pc_bit_out_T_319 = _GEN_521 + _ex1_pc_bit_out_T_317; // @[src/main/scala/fpga/Core.scala 847:47]
-  wire [1:0] _ex1_pc_bit_out_T_321 = ex1_reg_op2_data[3] + ex1_reg_op2_data[4]; // @[src/main/scala/fpga/Core.scala 847:47]
-  wire [1:0] _ex1_pc_bit_out_T_323 = ex1_reg_op2_data[5] + ex1_reg_op2_data[6]; // @[src/main/scala/fpga/Core.scala 847:47]
-  wire [2:0] _ex1_pc_bit_out_T_325 = _ex1_pc_bit_out_T_321 + _ex1_pc_bit_out_T_323; // @[src/main/scala/fpga/Core.scala 847:47]
-  wire [2:0] _GEN_522 = {{1'd0}, _ex1_pc_bit_out_T_319[1:0]}; // @[src/main/scala/fpga/Core.scala 847:47]
-  wire [3:0] _ex1_pc_bit_out_T_327 = _GEN_522 + _ex1_pc_bit_out_T_325; // @[src/main/scala/fpga/Core.scala 847:47]
-  wire [1:0] _ex1_pc_bit_out_T_329 = ex1_reg_op2_data[7] + ex1_reg_op2_data[8]; // @[src/main/scala/fpga/Core.scala 847:47]
-  wire [1:0] _ex1_pc_bit_out_T_331 = ex1_reg_op2_data[9] + ex1_reg_op2_data[10]; // @[src/main/scala/fpga/Core.scala 847:47]
-  wire [2:0] _ex1_pc_bit_out_T_333 = _ex1_pc_bit_out_T_329 + _ex1_pc_bit_out_T_331; // @[src/main/scala/fpga/Core.scala 847:47]
-  wire [1:0] _ex1_pc_bit_out_T_335 = ex1_reg_op2_data[11] + ex1_reg_op2_data[12]; // @[src/main/scala/fpga/Core.scala 847:47]
-  wire [1:0] _ex1_pc_bit_out_T_337 = ex1_reg_op2_data[13] + ex1_reg_op2_data[14]; // @[src/main/scala/fpga/Core.scala 847:47]
-  wire [2:0] _ex1_pc_bit_out_T_339 = _ex1_pc_bit_out_T_335 + _ex1_pc_bit_out_T_337; // @[src/main/scala/fpga/Core.scala 847:47]
-  wire [3:0] _ex1_pc_bit_out_T_341 = _ex1_pc_bit_out_T_333 + _ex1_pc_bit_out_T_339; // @[src/main/scala/fpga/Core.scala 847:47]
-  wire [3:0] _GEN_523 = {{1'd0}, _ex1_pc_bit_out_T_327[2:0]}; // @[src/main/scala/fpga/Core.scala 847:47]
-  wire [4:0] _ex1_pc_bit_out_T_343 = _GEN_523 + _ex1_pc_bit_out_T_341; // @[src/main/scala/fpga/Core.scala 847:47]
-  wire [31:0] _ex1_pc_bit_out_T_345 = ex1_reg_op1_data >> _ex1_pc_bit_out_T_343[3:0]; // @[src/main/scala/fpga/Core.scala 847:36]
-  wire  _ex1_pc_bit_out_T_347 = ex1_reg_op2_data[15] & _ex1_pc_bit_out_T_345[0]; // @[src/main/scala/fpga/Core.scala 847:10]
-  wire [1:0] _ex1_pc_bit_out_T_365 = ex1_reg_op2_data[1] + ex1_reg_op2_data[2]; // @[src/main/scala/fpga/Core.scala 847:47]
-  wire [1:0] _GEN_524 = {{1'd0}, ex1_reg_op2_data[0]}; // @[src/main/scala/fpga/Core.scala 847:47]
-  wire [2:0] _ex1_pc_bit_out_T_367 = _GEN_524 + _ex1_pc_bit_out_T_365; // @[src/main/scala/fpga/Core.scala 847:47]
-  wire [1:0] _ex1_pc_bit_out_T_369 = ex1_reg_op2_data[3] + ex1_reg_op2_data[4]; // @[src/main/scala/fpga/Core.scala 847:47]
-  wire [1:0] _ex1_pc_bit_out_T_371 = ex1_reg_op2_data[5] + ex1_reg_op2_data[6]; // @[src/main/scala/fpga/Core.scala 847:47]
-  wire [2:0] _ex1_pc_bit_out_T_373 = _ex1_pc_bit_out_T_369 + _ex1_pc_bit_out_T_371; // @[src/main/scala/fpga/Core.scala 847:47]
-  wire [2:0] _GEN_525 = {{1'd0}, _ex1_pc_bit_out_T_367[1:0]}; // @[src/main/scala/fpga/Core.scala 847:47]
-  wire [3:0] _ex1_pc_bit_out_T_375 = _GEN_525 + _ex1_pc_bit_out_T_373; // @[src/main/scala/fpga/Core.scala 847:47]
-  wire [1:0] _ex1_pc_bit_out_T_377 = ex1_reg_op2_data[8] + ex1_reg_op2_data[9]; // @[src/main/scala/fpga/Core.scala 847:47]
-  wire [1:0] _GEN_526 = {{1'd0}, ex1_reg_op2_data[7]}; // @[src/main/scala/fpga/Core.scala 847:47]
-  wire [2:0] _ex1_pc_bit_out_T_379 = _GEN_526 + _ex1_pc_bit_out_T_377; // @[src/main/scala/fpga/Core.scala 847:47]
-  wire [1:0] _ex1_pc_bit_out_T_381 = ex1_reg_op2_data[10] + ex1_reg_op2_data[11]; // @[src/main/scala/fpga/Core.scala 847:47]
-  wire [1:0] _ex1_pc_bit_out_T_383 = ex1_reg_op2_data[12] + ex1_reg_op2_data[13]; // @[src/main/scala/fpga/Core.scala 847:47]
-  wire [2:0] _ex1_pc_bit_out_T_385 = _ex1_pc_bit_out_T_381 + _ex1_pc_bit_out_T_383; // @[src/main/scala/fpga/Core.scala 847:47]
-  wire [2:0] _GEN_527 = {{1'd0}, _ex1_pc_bit_out_T_379[1:0]}; // @[src/main/scala/fpga/Core.scala 847:47]
-  wire [3:0] _ex1_pc_bit_out_T_387 = _GEN_527 + _ex1_pc_bit_out_T_385; // @[src/main/scala/fpga/Core.scala 847:47]
-  wire [3:0] _ex1_pc_bit_out_T_389 = _ex1_pc_bit_out_T_375[2:0] + _ex1_pc_bit_out_T_387[2:0]; // @[src/main/scala/fpga/Core.scala 847:47]
-  wire [31:0] _ex1_pc_bit_out_T_391 = ex1_reg_op1_data >> _ex1_pc_bit_out_T_389; // @[src/main/scala/fpga/Core.scala 847:36]
-  wire  _ex1_pc_bit_out_T_393 = ex1_reg_op2_data[14] & _ex1_pc_bit_out_T_391[0]; // @[src/main/scala/fpga/Core.scala 847:10]
-  wire [1:0] _ex1_pc_bit_out_T_410 = ex1_reg_op2_data[1] + ex1_reg_op2_data[2]; // @[src/main/scala/fpga/Core.scala 847:47]
-  wire [1:0] _GEN_528 = {{1'd0}, ex1_reg_op2_data[0]}; // @[src/main/scala/fpga/Core.scala 847:47]
-  wire [2:0] _ex1_pc_bit_out_T_412 = _GEN_528 + _ex1_pc_bit_out_T_410; // @[src/main/scala/fpga/Core.scala 847:47]
-  wire [1:0] _ex1_pc_bit_out_T_414 = ex1_reg_op2_data[4] + ex1_reg_op2_data[5]; // @[src/main/scala/fpga/Core.scala 847:47]
-  wire [1:0] _GEN_529 = {{1'd0}, ex1_reg_op2_data[3]}; // @[src/main/scala/fpga/Core.scala 847:47]
-  wire [2:0] _ex1_pc_bit_out_T_416 = _GEN_529 + _ex1_pc_bit_out_T_414; // @[src/main/scala/fpga/Core.scala 847:47]
-  wire [2:0] _ex1_pc_bit_out_T_418 = _ex1_pc_bit_out_T_412[1:0] + _ex1_pc_bit_out_T_416[1:0]; // @[src/main/scala/fpga/Core.scala 847:47]
-  wire [1:0] _ex1_pc_bit_out_T_420 = ex1_reg_op2_data[7] + ex1_reg_op2_data[8]; // @[src/main/scala/fpga/Core.scala 847:47]
-  wire [1:0] _GEN_530 = {{1'd0}, ex1_reg_op2_data[6]}; // @[src/main/scala/fpga/Core.scala 847:47]
-  wire [2:0] _ex1_pc_bit_out_T_422 = _GEN_530 + _ex1_pc_bit_out_T_420; // @[src/main/scala/fpga/Core.scala 847:47]
-  wire [1:0] _ex1_pc_bit_out_T_424 = ex1_reg_op2_data[9] + ex1_reg_op2_data[10]; // @[src/main/scala/fpga/Core.scala 847:47]
-  wire [1:0] _ex1_pc_bit_out_T_426 = ex1_reg_op2_data[11] + ex1_reg_op2_data[12]; // @[src/main/scala/fpga/Core.scala 847:47]
-  wire [2:0] _ex1_pc_bit_out_T_428 = _ex1_pc_bit_out_T_424 + _ex1_pc_bit_out_T_426; // @[src/main/scala/fpga/Core.scala 847:47]
-  wire [2:0] _GEN_531 = {{1'd0}, _ex1_pc_bit_out_T_422[1:0]}; // @[src/main/scala/fpga/Core.scala 847:47]
-  wire [3:0] _ex1_pc_bit_out_T_430 = _GEN_531 + _ex1_pc_bit_out_T_428; // @[src/main/scala/fpga/Core.scala 847:47]
-  wire [3:0] _ex1_pc_bit_out_T_432 = _ex1_pc_bit_out_T_418 + _ex1_pc_bit_out_T_430[2:0]; // @[src/main/scala/fpga/Core.scala 847:47]
-  wire [31:0] _ex1_pc_bit_out_T_434 = ex1_reg_op1_data >> _ex1_pc_bit_out_T_432; // @[src/main/scala/fpga/Core.scala 847:36]
-  wire  _ex1_pc_bit_out_T_436 = ex1_reg_op2_data[13] & _ex1_pc_bit_out_T_434[0]; // @[src/main/scala/fpga/Core.scala 847:10]
-  wire [1:0] _ex1_pc_bit_out_T_452 = ex1_reg_op2_data[1] + ex1_reg_op2_data[2]; // @[src/main/scala/fpga/Core.scala 847:47]
-  wire [1:0] _GEN_532 = {{1'd0}, ex1_reg_op2_data[0]}; // @[src/main/scala/fpga/Core.scala 847:47]
-  wire [2:0] _ex1_pc_bit_out_T_454 = _GEN_532 + _ex1_pc_bit_out_T_452; // @[src/main/scala/fpga/Core.scala 847:47]
-  wire [1:0] _ex1_pc_bit_out_T_456 = ex1_reg_op2_data[4] + ex1_reg_op2_data[5]; // @[src/main/scala/fpga/Core.scala 847:47]
-  wire [1:0] _GEN_533 = {{1'd0}, ex1_reg_op2_data[3]}; // @[src/main/scala/fpga/Core.scala 847:47]
-  wire [2:0] _ex1_pc_bit_out_T_458 = _GEN_533 + _ex1_pc_bit_out_T_456; // @[src/main/scala/fpga/Core.scala 847:47]
-  wire [2:0] _ex1_pc_bit_out_T_460 = _ex1_pc_bit_out_T_454[1:0] + _ex1_pc_bit_out_T_458[1:0]; // @[src/main/scala/fpga/Core.scala 847:47]
-  wire [1:0] _ex1_pc_bit_out_T_462 = ex1_reg_op2_data[7] + ex1_reg_op2_data[8]; // @[src/main/scala/fpga/Core.scala 847:47]
-  wire [1:0] _GEN_534 = {{1'd0}, ex1_reg_op2_data[6]}; // @[src/main/scala/fpga/Core.scala 847:47]
-  wire [2:0] _ex1_pc_bit_out_T_464 = _GEN_534 + _ex1_pc_bit_out_T_462; // @[src/main/scala/fpga/Core.scala 847:47]
-  wire [1:0] _ex1_pc_bit_out_T_466 = ex1_reg_op2_data[10] + ex1_reg_op2_data[11]; // @[src/main/scala/fpga/Core.scala 847:47]
-  wire [1:0] _GEN_535 = {{1'd0}, ex1_reg_op2_data[9]}; // @[src/main/scala/fpga/Core.scala 847:47]
-  wire [2:0] _ex1_pc_bit_out_T_468 = _GEN_535 + _ex1_pc_bit_out_T_466; // @[src/main/scala/fpga/Core.scala 847:47]
-  wire [2:0] _ex1_pc_bit_out_T_470 = _ex1_pc_bit_out_T_464[1:0] + _ex1_pc_bit_out_T_468[1:0]; // @[src/main/scala/fpga/Core.scala 847:47]
-  wire [3:0] _ex1_pc_bit_out_T_472 = _ex1_pc_bit_out_T_460 + _ex1_pc_bit_out_T_470; // @[src/main/scala/fpga/Core.scala 847:47]
-  wire [31:0] _ex1_pc_bit_out_T_474 = ex1_reg_op1_data >> _ex1_pc_bit_out_T_472; // @[src/main/scala/fpga/Core.scala 847:36]
-  wire  _ex1_pc_bit_out_T_476 = ex1_reg_op2_data[12] & _ex1_pc_bit_out_T_474[0]; // @[src/main/scala/fpga/Core.scala 847:10]
-  wire [1:0] _ex1_pc_bit_out_T_491 = ex1_reg_op2_data[0] + ex1_reg_op2_data[1]; // @[src/main/scala/fpga/Core.scala 847:47]
-  wire [1:0] _ex1_pc_bit_out_T_493 = ex1_reg_op2_data[3] + ex1_reg_op2_data[4]; // @[src/main/scala/fpga/Core.scala 847:47]
-  wire [1:0] _GEN_536 = {{1'd0}, ex1_reg_op2_data[2]}; // @[src/main/scala/fpga/Core.scala 847:47]
-  wire [2:0] _ex1_pc_bit_out_T_495 = _GEN_536 + _ex1_pc_bit_out_T_493; // @[src/main/scala/fpga/Core.scala 847:47]
-  wire [2:0] _ex1_pc_bit_out_T_497 = _ex1_pc_bit_out_T_491 + _ex1_pc_bit_out_T_495[1:0]; // @[src/main/scala/fpga/Core.scala 847:47]
-  wire [1:0] _ex1_pc_bit_out_T_499 = ex1_reg_op2_data[6] + ex1_reg_op2_data[7]; // @[src/main/scala/fpga/Core.scala 847:47]
-  wire [1:0] _GEN_537 = {{1'd0}, ex1_reg_op2_data[5]}; // @[src/main/scala/fpga/Core.scala 847:47]
-  wire [2:0] _ex1_pc_bit_out_T_501 = _GEN_537 + _ex1_pc_bit_out_T_499; // @[src/main/scala/fpga/Core.scala 847:47]
-  wire [1:0] _ex1_pc_bit_out_T_503 = ex1_reg_op2_data[9] + ex1_reg_op2_data[10]; // @[src/main/scala/fpga/Core.scala 847:47]
-  wire [1:0] _GEN_538 = {{1'd0}, ex1_reg_op2_data[8]}; // @[src/main/scala/fpga/Core.scala 847:47]
-  wire [2:0] _ex1_pc_bit_out_T_505 = _GEN_538 + _ex1_pc_bit_out_T_503; // @[src/main/scala/fpga/Core.scala 847:47]
-  wire [2:0] _ex1_pc_bit_out_T_507 = _ex1_pc_bit_out_T_501[1:0] + _ex1_pc_bit_out_T_505[1:0]; // @[src/main/scala/fpga/Core.scala 847:47]
-  wire [3:0] _ex1_pc_bit_out_T_509 = _ex1_pc_bit_out_T_497 + _ex1_pc_bit_out_T_507; // @[src/main/scala/fpga/Core.scala 847:47]
-  wire [31:0] _ex1_pc_bit_out_T_511 = ex1_reg_op1_data >> _ex1_pc_bit_out_T_509; // @[src/main/scala/fpga/Core.scala 847:36]
-  wire  _ex1_pc_bit_out_T_513 = ex1_reg_op2_data[11] & _ex1_pc_bit_out_T_511[0]; // @[src/main/scala/fpga/Core.scala 847:10]
-  wire [1:0] _ex1_pc_bit_out_T_527 = ex1_reg_op2_data[0] + ex1_reg_op2_data[1]; // @[src/main/scala/fpga/Core.scala 847:47]
-  wire [1:0] _ex1_pc_bit_out_T_529 = ex1_reg_op2_data[3] + ex1_reg_op2_data[4]; // @[src/main/scala/fpga/Core.scala 847:47]
-  wire [1:0] _GEN_539 = {{1'd0}, ex1_reg_op2_data[2]}; // @[src/main/scala/fpga/Core.scala 847:47]
-  wire [2:0] _ex1_pc_bit_out_T_531 = _GEN_539 + _ex1_pc_bit_out_T_529; // @[src/main/scala/fpga/Core.scala 847:47]
-  wire [2:0] _ex1_pc_bit_out_T_533 = _ex1_pc_bit_out_T_527 + _ex1_pc_bit_out_T_531[1:0]; // @[src/main/scala/fpga/Core.scala 847:47]
-  wire [1:0] _ex1_pc_bit_out_T_535 = ex1_reg_op2_data[5] + ex1_reg_op2_data[6]; // @[src/main/scala/fpga/Core.scala 847:47]
-  wire [1:0] _ex1_pc_bit_out_T_537 = ex1_reg_op2_data[8] + ex1_reg_op2_data[9]; // @[src/main/scala/fpga/Core.scala 847:47]
-  wire [1:0] _GEN_540 = {{1'd0}, ex1_reg_op2_data[7]}; // @[src/main/scala/fpga/Core.scala 847:47]
-  wire [2:0] _ex1_pc_bit_out_T_539 = _GEN_540 + _ex1_pc_bit_out_T_537; // @[src/main/scala/fpga/Core.scala 847:47]
-  wire [2:0] _ex1_pc_bit_out_T_541 = _ex1_pc_bit_out_T_535 + _ex1_pc_bit_out_T_539[1:0]; // @[src/main/scala/fpga/Core.scala 847:47]
-  wire [3:0] _ex1_pc_bit_out_T_543 = _ex1_pc_bit_out_T_533 + _ex1_pc_bit_out_T_541; // @[src/main/scala/fpga/Core.scala 847:47]
-  wire [31:0] _ex1_pc_bit_out_T_545 = ex1_reg_op1_data >> _ex1_pc_bit_out_T_543; // @[src/main/scala/fpga/Core.scala 847:36]
-  wire  _ex1_pc_bit_out_T_547 = ex1_reg_op2_data[10] & _ex1_pc_bit_out_T_545[0]; // @[src/main/scala/fpga/Core.scala 847:10]
-  wire [1:0] _ex1_pc_bit_out_T_560 = ex1_reg_op2_data[0] + ex1_reg_op2_data[1]; // @[src/main/scala/fpga/Core.scala 847:47]
-  wire [1:0] _ex1_pc_bit_out_T_562 = ex1_reg_op2_data[2] + ex1_reg_op2_data[3]; // @[src/main/scala/fpga/Core.scala 847:47]
-  wire [2:0] _ex1_pc_bit_out_T_564 = _ex1_pc_bit_out_T_560 + _ex1_pc_bit_out_T_562; // @[src/main/scala/fpga/Core.scala 847:47]
-  wire [1:0] _ex1_pc_bit_out_T_566 = ex1_reg_op2_data[4] + ex1_reg_op2_data[5]; // @[src/main/scala/fpga/Core.scala 847:47]
-  wire [1:0] _ex1_pc_bit_out_T_568 = ex1_reg_op2_data[7] + ex1_reg_op2_data[8]; // @[src/main/scala/fpga/Core.scala 847:47]
-  wire [1:0] _GEN_541 = {{1'd0}, ex1_reg_op2_data[6]}; // @[src/main/scala/fpga/Core.scala 847:47]
-  wire [2:0] _ex1_pc_bit_out_T_570 = _GEN_541 + _ex1_pc_bit_out_T_568; // @[src/main/scala/fpga/Core.scala 847:47]
-  wire [2:0] _ex1_pc_bit_out_T_572 = _ex1_pc_bit_out_T_566 + _ex1_pc_bit_out_T_570[1:0]; // @[src/main/scala/fpga/Core.scala 847:47]
-  wire [3:0] _ex1_pc_bit_out_T_574 = _ex1_pc_bit_out_T_564 + _ex1_pc_bit_out_T_572; // @[src/main/scala/fpga/Core.scala 847:47]
-  wire [31:0] _ex1_pc_bit_out_T_576 = ex1_reg_op1_data >> _ex1_pc_bit_out_T_574; // @[src/main/scala/fpga/Core.scala 847:36]
-  wire  _ex1_pc_bit_out_T_578 = ex1_reg_op2_data[9] & _ex1_pc_bit_out_T_576[0]; // @[src/main/scala/fpga/Core.scala 847:10]
-  wire [1:0] _ex1_pc_bit_out_T_590 = ex1_reg_op2_data[0] + ex1_reg_op2_data[1]; // @[src/main/scala/fpga/Core.scala 847:47]
-  wire [1:0] _ex1_pc_bit_out_T_592 = ex1_reg_op2_data[2] + ex1_reg_op2_data[3]; // @[src/main/scala/fpga/Core.scala 847:47]
-  wire [2:0] _ex1_pc_bit_out_T_594 = _ex1_pc_bit_out_T_590 + _ex1_pc_bit_out_T_592; // @[src/main/scala/fpga/Core.scala 847:47]
-  wire [1:0] _ex1_pc_bit_out_T_596 = ex1_reg_op2_data[4] + ex1_reg_op2_data[5]; // @[src/main/scala/fpga/Core.scala 847:47]
-  wire [1:0] _ex1_pc_bit_out_T_598 = ex1_reg_op2_data[6] + ex1_reg_op2_data[7]; // @[src/main/scala/fpga/Core.scala 847:47]
-  wire [2:0] _ex1_pc_bit_out_T_600 = _ex1_pc_bit_out_T_596 + _ex1_pc_bit_out_T_598; // @[src/main/scala/fpga/Core.scala 847:47]
-  wire [3:0] _ex1_pc_bit_out_T_602 = _ex1_pc_bit_out_T_594 + _ex1_pc_bit_out_T_600; // @[src/main/scala/fpga/Core.scala 847:47]
-  wire [31:0] _ex1_pc_bit_out_T_604 = ex1_reg_op1_data >> _ex1_pc_bit_out_T_602; // @[src/main/scala/fpga/Core.scala 847:36]
-  wire  _ex1_pc_bit_out_T_606 = ex1_reg_op2_data[8] & _ex1_pc_bit_out_T_604[0]; // @[src/main/scala/fpga/Core.scala 847:10]
-  wire [1:0] _ex1_pc_bit_out_T_617 = ex1_reg_op2_data[1] + ex1_reg_op2_data[2]; // @[src/main/scala/fpga/Core.scala 847:47]
-  wire [1:0] _GEN_542 = {{1'd0}, ex1_reg_op2_data[0]}; // @[src/main/scala/fpga/Core.scala 847:47]
-  wire [2:0] _ex1_pc_bit_out_T_619 = _GEN_542 + _ex1_pc_bit_out_T_617; // @[src/main/scala/fpga/Core.scala 847:47]
-  wire [1:0] _ex1_pc_bit_out_T_621 = ex1_reg_op2_data[3] + ex1_reg_op2_data[4]; // @[src/main/scala/fpga/Core.scala 847:47]
-  wire [1:0] _ex1_pc_bit_out_T_623 = ex1_reg_op2_data[5] + ex1_reg_op2_data[6]; // @[src/main/scala/fpga/Core.scala 847:47]
-  wire [2:0] _ex1_pc_bit_out_T_625 = _ex1_pc_bit_out_T_621 + _ex1_pc_bit_out_T_623; // @[src/main/scala/fpga/Core.scala 847:47]
-  wire [2:0] _GEN_543 = {{1'd0}, _ex1_pc_bit_out_T_619[1:0]}; // @[src/main/scala/fpga/Core.scala 847:47]
-  wire [3:0] _ex1_pc_bit_out_T_627 = _GEN_543 + _ex1_pc_bit_out_T_625; // @[src/main/scala/fpga/Core.scala 847:47]
-  wire [31:0] _ex1_pc_bit_out_T_629 = ex1_reg_op1_data >> _ex1_pc_bit_out_T_627[2:0]; // @[src/main/scala/fpga/Core.scala 847:36]
-  wire  _ex1_pc_bit_out_T_631 = ex1_reg_op2_data[7] & _ex1_pc_bit_out_T_629[0]; // @[src/main/scala/fpga/Core.scala 847:10]
-  wire [1:0] _ex1_pc_bit_out_T_641 = ex1_reg_op2_data[1] + ex1_reg_op2_data[2]; // @[src/main/scala/fpga/Core.scala 847:47]
-  wire [1:0] _GEN_544 = {{1'd0}, ex1_reg_op2_data[0]}; // @[src/main/scala/fpga/Core.scala 847:47]
-  wire [2:0] _ex1_pc_bit_out_T_643 = _GEN_544 + _ex1_pc_bit_out_T_641; // @[src/main/scala/fpga/Core.scala 847:47]
-  wire [1:0] _ex1_pc_bit_out_T_645 = ex1_reg_op2_data[4] + ex1_reg_op2_data[5]; // @[src/main/scala/fpga/Core.scala 847:47]
-  wire [1:0] _GEN_545 = {{1'd0}, ex1_reg_op2_data[3]}; // @[src/main/scala/fpga/Core.scala 847:47]
-  wire [2:0] _ex1_pc_bit_out_T_647 = _GEN_545 + _ex1_pc_bit_out_T_645; // @[src/main/scala/fpga/Core.scala 847:47]
-  wire [2:0] _ex1_pc_bit_out_T_649 = _ex1_pc_bit_out_T_643[1:0] + _ex1_pc_bit_out_T_647[1:0]; // @[src/main/scala/fpga/Core.scala 847:47]
-  wire [31:0] _ex1_pc_bit_out_T_651 = ex1_reg_op1_data >> _ex1_pc_bit_out_T_649; // @[src/main/scala/fpga/Core.scala 847:36]
-  wire  _ex1_pc_bit_out_T_653 = ex1_reg_op2_data[6] & _ex1_pc_bit_out_T_651[0]; // @[src/main/scala/fpga/Core.scala 847:10]
-  wire [1:0] _ex1_pc_bit_out_T_662 = ex1_reg_op2_data[0] + ex1_reg_op2_data[1]; // @[src/main/scala/fpga/Core.scala 847:47]
-  wire [1:0] _ex1_pc_bit_out_T_664 = ex1_reg_op2_data[3] + ex1_reg_op2_data[4]; // @[src/main/scala/fpga/Core.scala 847:47]
-  wire [1:0] _GEN_546 = {{1'd0}, ex1_reg_op2_data[2]}; // @[src/main/scala/fpga/Core.scala 847:47]
-  wire [2:0] _ex1_pc_bit_out_T_666 = _GEN_546 + _ex1_pc_bit_out_T_664; // @[src/main/scala/fpga/Core.scala 847:47]
-  wire [2:0] _ex1_pc_bit_out_T_668 = _ex1_pc_bit_out_T_662 + _ex1_pc_bit_out_T_666[1:0]; // @[src/main/scala/fpga/Core.scala 847:47]
-  wire [31:0] _ex1_pc_bit_out_T_670 = ex1_reg_op1_data >> _ex1_pc_bit_out_T_668; // @[src/main/scala/fpga/Core.scala 847:36]
-  wire  _ex1_pc_bit_out_T_672 = ex1_reg_op2_data[5] & _ex1_pc_bit_out_T_670[0]; // @[src/main/scala/fpga/Core.scala 847:10]
-  wire [1:0] _ex1_pc_bit_out_T_680 = ex1_reg_op2_data[0] + ex1_reg_op2_data[1]; // @[src/main/scala/fpga/Core.scala 847:47]
-  wire [1:0] _ex1_pc_bit_out_T_682 = ex1_reg_op2_data[2] + ex1_reg_op2_data[3]; // @[src/main/scala/fpga/Core.scala 847:47]
-  wire [2:0] _ex1_pc_bit_out_T_684 = _ex1_pc_bit_out_T_680 + _ex1_pc_bit_out_T_682; // @[src/main/scala/fpga/Core.scala 847:47]
-  wire [31:0] _ex1_pc_bit_out_T_686 = ex1_reg_op1_data >> _ex1_pc_bit_out_T_684; // @[src/main/scala/fpga/Core.scala 847:36]
-  wire  _ex1_pc_bit_out_T_688 = ex1_reg_op2_data[4] & _ex1_pc_bit_out_T_686[0]; // @[src/main/scala/fpga/Core.scala 847:10]
-  wire [1:0] _ex1_pc_bit_out_T_695 = ex1_reg_op2_data[1] + ex1_reg_op2_data[2]; // @[src/main/scala/fpga/Core.scala 847:47]
-  wire [1:0] _GEN_547 = {{1'd0}, ex1_reg_op2_data[0]}; // @[src/main/scala/fpga/Core.scala 847:47]
-  wire [2:0] _ex1_pc_bit_out_T_697 = _GEN_547 + _ex1_pc_bit_out_T_695; // @[src/main/scala/fpga/Core.scala 847:47]
-  wire [31:0] _ex1_pc_bit_out_T_699 = ex1_reg_op1_data >> _ex1_pc_bit_out_T_697[1:0]; // @[src/main/scala/fpga/Core.scala 847:36]
-  wire  _ex1_pc_bit_out_T_701 = ex1_reg_op2_data[3] & _ex1_pc_bit_out_T_699[0]; // @[src/main/scala/fpga/Core.scala 847:10]
-  wire [1:0] _ex1_pc_bit_out_T_707 = ex1_reg_op2_data[0] + ex1_reg_op2_data[1]; // @[src/main/scala/fpga/Core.scala 847:47]
-  wire [31:0] _ex1_pc_bit_out_T_709 = ex1_reg_op1_data >> _ex1_pc_bit_out_T_707; // @[src/main/scala/fpga/Core.scala 847:36]
-  wire  _ex1_pc_bit_out_T_711 = ex1_reg_op2_data[2] & _ex1_pc_bit_out_T_709[0]; // @[src/main/scala/fpga/Core.scala 847:10]
-  wire [31:0] _ex1_pc_bit_out_T_716 = ex1_reg_op1_data >> ex1_reg_op2_data[0]; // @[src/main/scala/fpga/Core.scala 847:36]
-  wire  _ex1_pc_bit_out_T_718 = ex1_reg_op2_data[1] & _ex1_pc_bit_out_T_716[0]; // @[src/main/scala/fpga/Core.scala 847:10]
-  wire  _ex1_pc_bit_out_T_722 = ex1_reg_op2_data[0] & ex1_reg_op1_data[0]; // @[src/main/scala/fpga/Core.scala 845:10]
+    ex1_reg_op1_data[31:24]}; // @[src/main/scala/fpga/Core.scala 902:43]
+  wire [23:0] _ex1_pc_bit_out_T_289 = ex1_reg_op1_data[7] ? 24'hffffff : 24'h0; // @[src/main/scala/fpga/Core.scala 903:48]
+  wire [31:0] _ex1_pc_bit_out_T_291 = {_ex1_pc_bit_out_T_289,ex1_reg_op1_data[7:0]}; // @[src/main/scala/fpga/Core.scala 903:43]
+  wire [15:0] _ex1_pc_bit_out_T_295 = ex1_reg_op1_data[15] ? 16'hffff : 16'h0; // @[src/main/scala/fpga/Core.scala 904:48]
+  wire [31:0] _ex1_pc_bit_out_T_297 = {_ex1_pc_bit_out_T_295,ex1_reg_op1_data[15:0]}; // @[src/main/scala/fpga/Core.scala 904:43]
+  wire [1:0] _ex1_pc_bit_out_T_317 = ex1_reg_op2_data[1] + ex1_reg_op2_data[2]; // @[src/main/scala/fpga/Core.scala 874:47]
+  wire [1:0] _GEN_561 = {{1'd0}, ex1_reg_op2_data[0]}; // @[src/main/scala/fpga/Core.scala 874:47]
+  wire [2:0] _ex1_pc_bit_out_T_319 = _GEN_561 + _ex1_pc_bit_out_T_317; // @[src/main/scala/fpga/Core.scala 874:47]
+  wire [1:0] _ex1_pc_bit_out_T_321 = ex1_reg_op2_data[3] + ex1_reg_op2_data[4]; // @[src/main/scala/fpga/Core.scala 874:47]
+  wire [1:0] _ex1_pc_bit_out_T_323 = ex1_reg_op2_data[5] + ex1_reg_op2_data[6]; // @[src/main/scala/fpga/Core.scala 874:47]
+  wire [2:0] _ex1_pc_bit_out_T_325 = _ex1_pc_bit_out_T_321 + _ex1_pc_bit_out_T_323; // @[src/main/scala/fpga/Core.scala 874:47]
+  wire [2:0] _GEN_562 = {{1'd0}, _ex1_pc_bit_out_T_319[1:0]}; // @[src/main/scala/fpga/Core.scala 874:47]
+  wire [3:0] _ex1_pc_bit_out_T_327 = _GEN_562 + _ex1_pc_bit_out_T_325; // @[src/main/scala/fpga/Core.scala 874:47]
+  wire [1:0] _ex1_pc_bit_out_T_329 = ex1_reg_op2_data[7] + ex1_reg_op2_data[8]; // @[src/main/scala/fpga/Core.scala 874:47]
+  wire [1:0] _ex1_pc_bit_out_T_331 = ex1_reg_op2_data[9] + ex1_reg_op2_data[10]; // @[src/main/scala/fpga/Core.scala 874:47]
+  wire [2:0] _ex1_pc_bit_out_T_333 = _ex1_pc_bit_out_T_329 + _ex1_pc_bit_out_T_331; // @[src/main/scala/fpga/Core.scala 874:47]
+  wire [1:0] _ex1_pc_bit_out_T_335 = ex1_reg_op2_data[11] + ex1_reg_op2_data[12]; // @[src/main/scala/fpga/Core.scala 874:47]
+  wire [1:0] _ex1_pc_bit_out_T_337 = ex1_reg_op2_data[13] + ex1_reg_op2_data[14]; // @[src/main/scala/fpga/Core.scala 874:47]
+  wire [2:0] _ex1_pc_bit_out_T_339 = _ex1_pc_bit_out_T_335 + _ex1_pc_bit_out_T_337; // @[src/main/scala/fpga/Core.scala 874:47]
+  wire [3:0] _ex1_pc_bit_out_T_341 = _ex1_pc_bit_out_T_333 + _ex1_pc_bit_out_T_339; // @[src/main/scala/fpga/Core.scala 874:47]
+  wire [3:0] _GEN_563 = {{1'd0}, _ex1_pc_bit_out_T_327[2:0]}; // @[src/main/scala/fpga/Core.scala 874:47]
+  wire [4:0] _ex1_pc_bit_out_T_343 = _GEN_563 + _ex1_pc_bit_out_T_341; // @[src/main/scala/fpga/Core.scala 874:47]
+  wire [31:0] _ex1_pc_bit_out_T_345 = ex1_reg_op1_data >> _ex1_pc_bit_out_T_343[3:0]; // @[src/main/scala/fpga/Core.scala 874:36]
+  wire  _ex1_pc_bit_out_T_347 = ex1_reg_op2_data[15] & _ex1_pc_bit_out_T_345[0]; // @[src/main/scala/fpga/Core.scala 874:10]
+  wire [1:0] _ex1_pc_bit_out_T_365 = ex1_reg_op2_data[1] + ex1_reg_op2_data[2]; // @[src/main/scala/fpga/Core.scala 874:47]
+  wire [1:0] _GEN_564 = {{1'd0}, ex1_reg_op2_data[0]}; // @[src/main/scala/fpga/Core.scala 874:47]
+  wire [2:0] _ex1_pc_bit_out_T_367 = _GEN_564 + _ex1_pc_bit_out_T_365; // @[src/main/scala/fpga/Core.scala 874:47]
+  wire [1:0] _ex1_pc_bit_out_T_369 = ex1_reg_op2_data[3] + ex1_reg_op2_data[4]; // @[src/main/scala/fpga/Core.scala 874:47]
+  wire [1:0] _ex1_pc_bit_out_T_371 = ex1_reg_op2_data[5] + ex1_reg_op2_data[6]; // @[src/main/scala/fpga/Core.scala 874:47]
+  wire [2:0] _ex1_pc_bit_out_T_373 = _ex1_pc_bit_out_T_369 + _ex1_pc_bit_out_T_371; // @[src/main/scala/fpga/Core.scala 874:47]
+  wire [2:0] _GEN_565 = {{1'd0}, _ex1_pc_bit_out_T_367[1:0]}; // @[src/main/scala/fpga/Core.scala 874:47]
+  wire [3:0] _ex1_pc_bit_out_T_375 = _GEN_565 + _ex1_pc_bit_out_T_373; // @[src/main/scala/fpga/Core.scala 874:47]
+  wire [1:0] _ex1_pc_bit_out_T_377 = ex1_reg_op2_data[8] + ex1_reg_op2_data[9]; // @[src/main/scala/fpga/Core.scala 874:47]
+  wire [1:0] _GEN_566 = {{1'd0}, ex1_reg_op2_data[7]}; // @[src/main/scala/fpga/Core.scala 874:47]
+  wire [2:0] _ex1_pc_bit_out_T_379 = _GEN_566 + _ex1_pc_bit_out_T_377; // @[src/main/scala/fpga/Core.scala 874:47]
+  wire [1:0] _ex1_pc_bit_out_T_381 = ex1_reg_op2_data[10] + ex1_reg_op2_data[11]; // @[src/main/scala/fpga/Core.scala 874:47]
+  wire [1:0] _ex1_pc_bit_out_T_383 = ex1_reg_op2_data[12] + ex1_reg_op2_data[13]; // @[src/main/scala/fpga/Core.scala 874:47]
+  wire [2:0] _ex1_pc_bit_out_T_385 = _ex1_pc_bit_out_T_381 + _ex1_pc_bit_out_T_383; // @[src/main/scala/fpga/Core.scala 874:47]
+  wire [2:0] _GEN_567 = {{1'd0}, _ex1_pc_bit_out_T_379[1:0]}; // @[src/main/scala/fpga/Core.scala 874:47]
+  wire [3:0] _ex1_pc_bit_out_T_387 = _GEN_567 + _ex1_pc_bit_out_T_385; // @[src/main/scala/fpga/Core.scala 874:47]
+  wire [3:0] _ex1_pc_bit_out_T_389 = _ex1_pc_bit_out_T_375[2:0] + _ex1_pc_bit_out_T_387[2:0]; // @[src/main/scala/fpga/Core.scala 874:47]
+  wire [31:0] _ex1_pc_bit_out_T_391 = ex1_reg_op1_data >> _ex1_pc_bit_out_T_389; // @[src/main/scala/fpga/Core.scala 874:36]
+  wire  _ex1_pc_bit_out_T_393 = ex1_reg_op2_data[14] & _ex1_pc_bit_out_T_391[0]; // @[src/main/scala/fpga/Core.scala 874:10]
+  wire [1:0] _ex1_pc_bit_out_T_410 = ex1_reg_op2_data[1] + ex1_reg_op2_data[2]; // @[src/main/scala/fpga/Core.scala 874:47]
+  wire [1:0] _GEN_568 = {{1'd0}, ex1_reg_op2_data[0]}; // @[src/main/scala/fpga/Core.scala 874:47]
+  wire [2:0] _ex1_pc_bit_out_T_412 = _GEN_568 + _ex1_pc_bit_out_T_410; // @[src/main/scala/fpga/Core.scala 874:47]
+  wire [1:0] _ex1_pc_bit_out_T_414 = ex1_reg_op2_data[4] + ex1_reg_op2_data[5]; // @[src/main/scala/fpga/Core.scala 874:47]
+  wire [1:0] _GEN_569 = {{1'd0}, ex1_reg_op2_data[3]}; // @[src/main/scala/fpga/Core.scala 874:47]
+  wire [2:0] _ex1_pc_bit_out_T_416 = _GEN_569 + _ex1_pc_bit_out_T_414; // @[src/main/scala/fpga/Core.scala 874:47]
+  wire [2:0] _ex1_pc_bit_out_T_418 = _ex1_pc_bit_out_T_412[1:0] + _ex1_pc_bit_out_T_416[1:0]; // @[src/main/scala/fpga/Core.scala 874:47]
+  wire [1:0] _ex1_pc_bit_out_T_420 = ex1_reg_op2_data[7] + ex1_reg_op2_data[8]; // @[src/main/scala/fpga/Core.scala 874:47]
+  wire [1:0] _GEN_570 = {{1'd0}, ex1_reg_op2_data[6]}; // @[src/main/scala/fpga/Core.scala 874:47]
+  wire [2:0] _ex1_pc_bit_out_T_422 = _GEN_570 + _ex1_pc_bit_out_T_420; // @[src/main/scala/fpga/Core.scala 874:47]
+  wire [1:0] _ex1_pc_bit_out_T_424 = ex1_reg_op2_data[9] + ex1_reg_op2_data[10]; // @[src/main/scala/fpga/Core.scala 874:47]
+  wire [1:0] _ex1_pc_bit_out_T_426 = ex1_reg_op2_data[11] + ex1_reg_op2_data[12]; // @[src/main/scala/fpga/Core.scala 874:47]
+  wire [2:0] _ex1_pc_bit_out_T_428 = _ex1_pc_bit_out_T_424 + _ex1_pc_bit_out_T_426; // @[src/main/scala/fpga/Core.scala 874:47]
+  wire [2:0] _GEN_571 = {{1'd0}, _ex1_pc_bit_out_T_422[1:0]}; // @[src/main/scala/fpga/Core.scala 874:47]
+  wire [3:0] _ex1_pc_bit_out_T_430 = _GEN_571 + _ex1_pc_bit_out_T_428; // @[src/main/scala/fpga/Core.scala 874:47]
+  wire [3:0] _ex1_pc_bit_out_T_432 = _ex1_pc_bit_out_T_418 + _ex1_pc_bit_out_T_430[2:0]; // @[src/main/scala/fpga/Core.scala 874:47]
+  wire [31:0] _ex1_pc_bit_out_T_434 = ex1_reg_op1_data >> _ex1_pc_bit_out_T_432; // @[src/main/scala/fpga/Core.scala 874:36]
+  wire  _ex1_pc_bit_out_T_436 = ex1_reg_op2_data[13] & _ex1_pc_bit_out_T_434[0]; // @[src/main/scala/fpga/Core.scala 874:10]
+  wire [1:0] _ex1_pc_bit_out_T_452 = ex1_reg_op2_data[1] + ex1_reg_op2_data[2]; // @[src/main/scala/fpga/Core.scala 874:47]
+  wire [1:0] _GEN_572 = {{1'd0}, ex1_reg_op2_data[0]}; // @[src/main/scala/fpga/Core.scala 874:47]
+  wire [2:0] _ex1_pc_bit_out_T_454 = _GEN_572 + _ex1_pc_bit_out_T_452; // @[src/main/scala/fpga/Core.scala 874:47]
+  wire [1:0] _ex1_pc_bit_out_T_456 = ex1_reg_op2_data[4] + ex1_reg_op2_data[5]; // @[src/main/scala/fpga/Core.scala 874:47]
+  wire [1:0] _GEN_573 = {{1'd0}, ex1_reg_op2_data[3]}; // @[src/main/scala/fpga/Core.scala 874:47]
+  wire [2:0] _ex1_pc_bit_out_T_458 = _GEN_573 + _ex1_pc_bit_out_T_456; // @[src/main/scala/fpga/Core.scala 874:47]
+  wire [2:0] _ex1_pc_bit_out_T_460 = _ex1_pc_bit_out_T_454[1:0] + _ex1_pc_bit_out_T_458[1:0]; // @[src/main/scala/fpga/Core.scala 874:47]
+  wire [1:0] _ex1_pc_bit_out_T_462 = ex1_reg_op2_data[7] + ex1_reg_op2_data[8]; // @[src/main/scala/fpga/Core.scala 874:47]
+  wire [1:0] _GEN_574 = {{1'd0}, ex1_reg_op2_data[6]}; // @[src/main/scala/fpga/Core.scala 874:47]
+  wire [2:0] _ex1_pc_bit_out_T_464 = _GEN_574 + _ex1_pc_bit_out_T_462; // @[src/main/scala/fpga/Core.scala 874:47]
+  wire [1:0] _ex1_pc_bit_out_T_466 = ex1_reg_op2_data[10] + ex1_reg_op2_data[11]; // @[src/main/scala/fpga/Core.scala 874:47]
+  wire [1:0] _GEN_575 = {{1'd0}, ex1_reg_op2_data[9]}; // @[src/main/scala/fpga/Core.scala 874:47]
+  wire [2:0] _ex1_pc_bit_out_T_468 = _GEN_575 + _ex1_pc_bit_out_T_466; // @[src/main/scala/fpga/Core.scala 874:47]
+  wire [2:0] _ex1_pc_bit_out_T_470 = _ex1_pc_bit_out_T_464[1:0] + _ex1_pc_bit_out_T_468[1:0]; // @[src/main/scala/fpga/Core.scala 874:47]
+  wire [3:0] _ex1_pc_bit_out_T_472 = _ex1_pc_bit_out_T_460 + _ex1_pc_bit_out_T_470; // @[src/main/scala/fpga/Core.scala 874:47]
+  wire [31:0] _ex1_pc_bit_out_T_474 = ex1_reg_op1_data >> _ex1_pc_bit_out_T_472; // @[src/main/scala/fpga/Core.scala 874:36]
+  wire  _ex1_pc_bit_out_T_476 = ex1_reg_op2_data[12] & _ex1_pc_bit_out_T_474[0]; // @[src/main/scala/fpga/Core.scala 874:10]
+  wire [1:0] _ex1_pc_bit_out_T_491 = ex1_reg_op2_data[0] + ex1_reg_op2_data[1]; // @[src/main/scala/fpga/Core.scala 874:47]
+  wire [1:0] _ex1_pc_bit_out_T_493 = ex1_reg_op2_data[3] + ex1_reg_op2_data[4]; // @[src/main/scala/fpga/Core.scala 874:47]
+  wire [1:0] _GEN_576 = {{1'd0}, ex1_reg_op2_data[2]}; // @[src/main/scala/fpga/Core.scala 874:47]
+  wire [2:0] _ex1_pc_bit_out_T_495 = _GEN_576 + _ex1_pc_bit_out_T_493; // @[src/main/scala/fpga/Core.scala 874:47]
+  wire [2:0] _ex1_pc_bit_out_T_497 = _ex1_pc_bit_out_T_491 + _ex1_pc_bit_out_T_495[1:0]; // @[src/main/scala/fpga/Core.scala 874:47]
+  wire [1:0] _ex1_pc_bit_out_T_499 = ex1_reg_op2_data[6] + ex1_reg_op2_data[7]; // @[src/main/scala/fpga/Core.scala 874:47]
+  wire [1:0] _GEN_577 = {{1'd0}, ex1_reg_op2_data[5]}; // @[src/main/scala/fpga/Core.scala 874:47]
+  wire [2:0] _ex1_pc_bit_out_T_501 = _GEN_577 + _ex1_pc_bit_out_T_499; // @[src/main/scala/fpga/Core.scala 874:47]
+  wire [1:0] _ex1_pc_bit_out_T_503 = ex1_reg_op2_data[9] + ex1_reg_op2_data[10]; // @[src/main/scala/fpga/Core.scala 874:47]
+  wire [1:0] _GEN_578 = {{1'd0}, ex1_reg_op2_data[8]}; // @[src/main/scala/fpga/Core.scala 874:47]
+  wire [2:0] _ex1_pc_bit_out_T_505 = _GEN_578 + _ex1_pc_bit_out_T_503; // @[src/main/scala/fpga/Core.scala 874:47]
+  wire [2:0] _ex1_pc_bit_out_T_507 = _ex1_pc_bit_out_T_501[1:0] + _ex1_pc_bit_out_T_505[1:0]; // @[src/main/scala/fpga/Core.scala 874:47]
+  wire [3:0] _ex1_pc_bit_out_T_509 = _ex1_pc_bit_out_T_497 + _ex1_pc_bit_out_T_507; // @[src/main/scala/fpga/Core.scala 874:47]
+  wire [31:0] _ex1_pc_bit_out_T_511 = ex1_reg_op1_data >> _ex1_pc_bit_out_T_509; // @[src/main/scala/fpga/Core.scala 874:36]
+  wire  _ex1_pc_bit_out_T_513 = ex1_reg_op2_data[11] & _ex1_pc_bit_out_T_511[0]; // @[src/main/scala/fpga/Core.scala 874:10]
+  wire [1:0] _ex1_pc_bit_out_T_527 = ex1_reg_op2_data[0] + ex1_reg_op2_data[1]; // @[src/main/scala/fpga/Core.scala 874:47]
+  wire [1:0] _ex1_pc_bit_out_T_529 = ex1_reg_op2_data[3] + ex1_reg_op2_data[4]; // @[src/main/scala/fpga/Core.scala 874:47]
+  wire [1:0] _GEN_579 = {{1'd0}, ex1_reg_op2_data[2]}; // @[src/main/scala/fpga/Core.scala 874:47]
+  wire [2:0] _ex1_pc_bit_out_T_531 = _GEN_579 + _ex1_pc_bit_out_T_529; // @[src/main/scala/fpga/Core.scala 874:47]
+  wire [2:0] _ex1_pc_bit_out_T_533 = _ex1_pc_bit_out_T_527 + _ex1_pc_bit_out_T_531[1:0]; // @[src/main/scala/fpga/Core.scala 874:47]
+  wire [1:0] _ex1_pc_bit_out_T_535 = ex1_reg_op2_data[5] + ex1_reg_op2_data[6]; // @[src/main/scala/fpga/Core.scala 874:47]
+  wire [1:0] _ex1_pc_bit_out_T_537 = ex1_reg_op2_data[8] + ex1_reg_op2_data[9]; // @[src/main/scala/fpga/Core.scala 874:47]
+  wire [1:0] _GEN_580 = {{1'd0}, ex1_reg_op2_data[7]}; // @[src/main/scala/fpga/Core.scala 874:47]
+  wire [2:0] _ex1_pc_bit_out_T_539 = _GEN_580 + _ex1_pc_bit_out_T_537; // @[src/main/scala/fpga/Core.scala 874:47]
+  wire [2:0] _ex1_pc_bit_out_T_541 = _ex1_pc_bit_out_T_535 + _ex1_pc_bit_out_T_539[1:0]; // @[src/main/scala/fpga/Core.scala 874:47]
+  wire [3:0] _ex1_pc_bit_out_T_543 = _ex1_pc_bit_out_T_533 + _ex1_pc_bit_out_T_541; // @[src/main/scala/fpga/Core.scala 874:47]
+  wire [31:0] _ex1_pc_bit_out_T_545 = ex1_reg_op1_data >> _ex1_pc_bit_out_T_543; // @[src/main/scala/fpga/Core.scala 874:36]
+  wire  _ex1_pc_bit_out_T_547 = ex1_reg_op2_data[10] & _ex1_pc_bit_out_T_545[0]; // @[src/main/scala/fpga/Core.scala 874:10]
+  wire [1:0] _ex1_pc_bit_out_T_560 = ex1_reg_op2_data[0] + ex1_reg_op2_data[1]; // @[src/main/scala/fpga/Core.scala 874:47]
+  wire [1:0] _ex1_pc_bit_out_T_562 = ex1_reg_op2_data[2] + ex1_reg_op2_data[3]; // @[src/main/scala/fpga/Core.scala 874:47]
+  wire [2:0] _ex1_pc_bit_out_T_564 = _ex1_pc_bit_out_T_560 + _ex1_pc_bit_out_T_562; // @[src/main/scala/fpga/Core.scala 874:47]
+  wire [1:0] _ex1_pc_bit_out_T_566 = ex1_reg_op2_data[4] + ex1_reg_op2_data[5]; // @[src/main/scala/fpga/Core.scala 874:47]
+  wire [1:0] _ex1_pc_bit_out_T_568 = ex1_reg_op2_data[7] + ex1_reg_op2_data[8]; // @[src/main/scala/fpga/Core.scala 874:47]
+  wire [1:0] _GEN_581 = {{1'd0}, ex1_reg_op2_data[6]}; // @[src/main/scala/fpga/Core.scala 874:47]
+  wire [2:0] _ex1_pc_bit_out_T_570 = _GEN_581 + _ex1_pc_bit_out_T_568; // @[src/main/scala/fpga/Core.scala 874:47]
+  wire [2:0] _ex1_pc_bit_out_T_572 = _ex1_pc_bit_out_T_566 + _ex1_pc_bit_out_T_570[1:0]; // @[src/main/scala/fpga/Core.scala 874:47]
+  wire [3:0] _ex1_pc_bit_out_T_574 = _ex1_pc_bit_out_T_564 + _ex1_pc_bit_out_T_572; // @[src/main/scala/fpga/Core.scala 874:47]
+  wire [31:0] _ex1_pc_bit_out_T_576 = ex1_reg_op1_data >> _ex1_pc_bit_out_T_574; // @[src/main/scala/fpga/Core.scala 874:36]
+  wire  _ex1_pc_bit_out_T_578 = ex1_reg_op2_data[9] & _ex1_pc_bit_out_T_576[0]; // @[src/main/scala/fpga/Core.scala 874:10]
+  wire [1:0] _ex1_pc_bit_out_T_590 = ex1_reg_op2_data[0] + ex1_reg_op2_data[1]; // @[src/main/scala/fpga/Core.scala 874:47]
+  wire [1:0] _ex1_pc_bit_out_T_592 = ex1_reg_op2_data[2] + ex1_reg_op2_data[3]; // @[src/main/scala/fpga/Core.scala 874:47]
+  wire [2:0] _ex1_pc_bit_out_T_594 = _ex1_pc_bit_out_T_590 + _ex1_pc_bit_out_T_592; // @[src/main/scala/fpga/Core.scala 874:47]
+  wire [1:0] _ex1_pc_bit_out_T_596 = ex1_reg_op2_data[4] + ex1_reg_op2_data[5]; // @[src/main/scala/fpga/Core.scala 874:47]
+  wire [1:0] _ex1_pc_bit_out_T_598 = ex1_reg_op2_data[6] + ex1_reg_op2_data[7]; // @[src/main/scala/fpga/Core.scala 874:47]
+  wire [2:0] _ex1_pc_bit_out_T_600 = _ex1_pc_bit_out_T_596 + _ex1_pc_bit_out_T_598; // @[src/main/scala/fpga/Core.scala 874:47]
+  wire [3:0] _ex1_pc_bit_out_T_602 = _ex1_pc_bit_out_T_594 + _ex1_pc_bit_out_T_600; // @[src/main/scala/fpga/Core.scala 874:47]
+  wire [31:0] _ex1_pc_bit_out_T_604 = ex1_reg_op1_data >> _ex1_pc_bit_out_T_602; // @[src/main/scala/fpga/Core.scala 874:36]
+  wire  _ex1_pc_bit_out_T_606 = ex1_reg_op2_data[8] & _ex1_pc_bit_out_T_604[0]; // @[src/main/scala/fpga/Core.scala 874:10]
+  wire [1:0] _ex1_pc_bit_out_T_617 = ex1_reg_op2_data[1] + ex1_reg_op2_data[2]; // @[src/main/scala/fpga/Core.scala 874:47]
+  wire [1:0] _GEN_582 = {{1'd0}, ex1_reg_op2_data[0]}; // @[src/main/scala/fpga/Core.scala 874:47]
+  wire [2:0] _ex1_pc_bit_out_T_619 = _GEN_582 + _ex1_pc_bit_out_T_617; // @[src/main/scala/fpga/Core.scala 874:47]
+  wire [1:0] _ex1_pc_bit_out_T_621 = ex1_reg_op2_data[3] + ex1_reg_op2_data[4]; // @[src/main/scala/fpga/Core.scala 874:47]
+  wire [1:0] _ex1_pc_bit_out_T_623 = ex1_reg_op2_data[5] + ex1_reg_op2_data[6]; // @[src/main/scala/fpga/Core.scala 874:47]
+  wire [2:0] _ex1_pc_bit_out_T_625 = _ex1_pc_bit_out_T_621 + _ex1_pc_bit_out_T_623; // @[src/main/scala/fpga/Core.scala 874:47]
+  wire [2:0] _GEN_583 = {{1'd0}, _ex1_pc_bit_out_T_619[1:0]}; // @[src/main/scala/fpga/Core.scala 874:47]
+  wire [3:0] _ex1_pc_bit_out_T_627 = _GEN_583 + _ex1_pc_bit_out_T_625; // @[src/main/scala/fpga/Core.scala 874:47]
+  wire [31:0] _ex1_pc_bit_out_T_629 = ex1_reg_op1_data >> _ex1_pc_bit_out_T_627[2:0]; // @[src/main/scala/fpga/Core.scala 874:36]
+  wire  _ex1_pc_bit_out_T_631 = ex1_reg_op2_data[7] & _ex1_pc_bit_out_T_629[0]; // @[src/main/scala/fpga/Core.scala 874:10]
+  wire [1:0] _ex1_pc_bit_out_T_641 = ex1_reg_op2_data[1] + ex1_reg_op2_data[2]; // @[src/main/scala/fpga/Core.scala 874:47]
+  wire [1:0] _GEN_584 = {{1'd0}, ex1_reg_op2_data[0]}; // @[src/main/scala/fpga/Core.scala 874:47]
+  wire [2:0] _ex1_pc_bit_out_T_643 = _GEN_584 + _ex1_pc_bit_out_T_641; // @[src/main/scala/fpga/Core.scala 874:47]
+  wire [1:0] _ex1_pc_bit_out_T_645 = ex1_reg_op2_data[4] + ex1_reg_op2_data[5]; // @[src/main/scala/fpga/Core.scala 874:47]
+  wire [1:0] _GEN_585 = {{1'd0}, ex1_reg_op2_data[3]}; // @[src/main/scala/fpga/Core.scala 874:47]
+  wire [2:0] _ex1_pc_bit_out_T_647 = _GEN_585 + _ex1_pc_bit_out_T_645; // @[src/main/scala/fpga/Core.scala 874:47]
+  wire [2:0] _ex1_pc_bit_out_T_649 = _ex1_pc_bit_out_T_643[1:0] + _ex1_pc_bit_out_T_647[1:0]; // @[src/main/scala/fpga/Core.scala 874:47]
+  wire [31:0] _ex1_pc_bit_out_T_651 = ex1_reg_op1_data >> _ex1_pc_bit_out_T_649; // @[src/main/scala/fpga/Core.scala 874:36]
+  wire  _ex1_pc_bit_out_T_653 = ex1_reg_op2_data[6] & _ex1_pc_bit_out_T_651[0]; // @[src/main/scala/fpga/Core.scala 874:10]
+  wire [1:0] _ex1_pc_bit_out_T_662 = ex1_reg_op2_data[0] + ex1_reg_op2_data[1]; // @[src/main/scala/fpga/Core.scala 874:47]
+  wire [1:0] _ex1_pc_bit_out_T_664 = ex1_reg_op2_data[3] + ex1_reg_op2_data[4]; // @[src/main/scala/fpga/Core.scala 874:47]
+  wire [1:0] _GEN_586 = {{1'd0}, ex1_reg_op2_data[2]}; // @[src/main/scala/fpga/Core.scala 874:47]
+  wire [2:0] _ex1_pc_bit_out_T_666 = _GEN_586 + _ex1_pc_bit_out_T_664; // @[src/main/scala/fpga/Core.scala 874:47]
+  wire [2:0] _ex1_pc_bit_out_T_668 = _ex1_pc_bit_out_T_662 + _ex1_pc_bit_out_T_666[1:0]; // @[src/main/scala/fpga/Core.scala 874:47]
+  wire [31:0] _ex1_pc_bit_out_T_670 = ex1_reg_op1_data >> _ex1_pc_bit_out_T_668; // @[src/main/scala/fpga/Core.scala 874:36]
+  wire  _ex1_pc_bit_out_T_672 = ex1_reg_op2_data[5] & _ex1_pc_bit_out_T_670[0]; // @[src/main/scala/fpga/Core.scala 874:10]
+  wire [1:0] _ex1_pc_bit_out_T_680 = ex1_reg_op2_data[0] + ex1_reg_op2_data[1]; // @[src/main/scala/fpga/Core.scala 874:47]
+  wire [1:0] _ex1_pc_bit_out_T_682 = ex1_reg_op2_data[2] + ex1_reg_op2_data[3]; // @[src/main/scala/fpga/Core.scala 874:47]
+  wire [2:0] _ex1_pc_bit_out_T_684 = _ex1_pc_bit_out_T_680 + _ex1_pc_bit_out_T_682; // @[src/main/scala/fpga/Core.scala 874:47]
+  wire [31:0] _ex1_pc_bit_out_T_686 = ex1_reg_op1_data >> _ex1_pc_bit_out_T_684; // @[src/main/scala/fpga/Core.scala 874:36]
+  wire  _ex1_pc_bit_out_T_688 = ex1_reg_op2_data[4] & _ex1_pc_bit_out_T_686[0]; // @[src/main/scala/fpga/Core.scala 874:10]
+  wire [1:0] _ex1_pc_bit_out_T_695 = ex1_reg_op2_data[1] + ex1_reg_op2_data[2]; // @[src/main/scala/fpga/Core.scala 874:47]
+  wire [1:0] _GEN_587 = {{1'd0}, ex1_reg_op2_data[0]}; // @[src/main/scala/fpga/Core.scala 874:47]
+  wire [2:0] _ex1_pc_bit_out_T_697 = _GEN_587 + _ex1_pc_bit_out_T_695; // @[src/main/scala/fpga/Core.scala 874:47]
+  wire [31:0] _ex1_pc_bit_out_T_699 = ex1_reg_op1_data >> _ex1_pc_bit_out_T_697[1:0]; // @[src/main/scala/fpga/Core.scala 874:36]
+  wire  _ex1_pc_bit_out_T_701 = ex1_reg_op2_data[3] & _ex1_pc_bit_out_T_699[0]; // @[src/main/scala/fpga/Core.scala 874:10]
+  wire [1:0] _ex1_pc_bit_out_T_707 = ex1_reg_op2_data[0] + ex1_reg_op2_data[1]; // @[src/main/scala/fpga/Core.scala 874:47]
+  wire [31:0] _ex1_pc_bit_out_T_709 = ex1_reg_op1_data >> _ex1_pc_bit_out_T_707; // @[src/main/scala/fpga/Core.scala 874:36]
+  wire  _ex1_pc_bit_out_T_711 = ex1_reg_op2_data[2] & _ex1_pc_bit_out_T_709[0]; // @[src/main/scala/fpga/Core.scala 874:10]
+  wire [31:0] _ex1_pc_bit_out_T_716 = ex1_reg_op1_data >> ex1_reg_op2_data[0]; // @[src/main/scala/fpga/Core.scala 874:36]
+  wire  _ex1_pc_bit_out_T_718 = ex1_reg_op2_data[1] & _ex1_pc_bit_out_T_716[0]; // @[src/main/scala/fpga/Core.scala 874:10]
+  wire  _ex1_pc_bit_out_T_722 = ex1_reg_op2_data[0] & ex1_reg_op1_data[0]; // @[src/main/scala/fpga/Core.scala 872:10]
   wire [7:0] ex1_pc_bit_out_lo_1 = {_ex1_pc_bit_out_T_631,_ex1_pc_bit_out_T_653,_ex1_pc_bit_out_T_672,
-    _ex1_pc_bit_out_T_688,_ex1_pc_bit_out_T_701,_ex1_pc_bit_out_T_711,_ex1_pc_bit_out_T_718,_ex1_pc_bit_out_T_722}; // @[src/main/scala/fpga/Core.scala 878:43]
+    _ex1_pc_bit_out_T_688,_ex1_pc_bit_out_T_701,_ex1_pc_bit_out_T_711,_ex1_pc_bit_out_T_718,_ex1_pc_bit_out_T_722}; // @[src/main/scala/fpga/Core.scala 905:43]
   wire [15:0] _ex1_pc_bit_out_T_723 = {_ex1_pc_bit_out_T_347,_ex1_pc_bit_out_T_393,_ex1_pc_bit_out_T_436,
     _ex1_pc_bit_out_T_476,_ex1_pc_bit_out_T_513,_ex1_pc_bit_out_T_547,_ex1_pc_bit_out_T_578,_ex1_pc_bit_out_T_606,
-    ex1_pc_bit_out_lo_1}; // @[src/main/scala/fpga/Core.scala 878:43]
-  wire  _ex1_pc_bit_out_T_726 = _ex1_alu_out_T_5 | _ex1_alu_out_T_25; // @[src/main/scala/fpga/Core.scala 879:34]
-  wire [62:0] _GEN_26 = {{31'd0}, ex1_imm_mask}; // @[src/main/scala/fpga/Core.scala 880:54]
-  wire [62:0] _ex1_pc_bit_out_T_728 = _GEN_26 << ex1_reg_op2_data[4:0]; // @[src/main/scala/fpga/Core.scala 880:54]
+    ex1_pc_bit_out_lo_1}; // @[src/main/scala/fpga/Core.scala 905:43]
+  wire  _ex1_pc_bit_out_T_726 = _ex1_alu_out_T_5 | _ex1_alu_out_T_25; // @[src/main/scala/fpga/Core.scala 906:34]
+  wire [62:0] _GEN_28 = {{31'd0}, ex1_imm_mask}; // @[src/main/scala/fpga/Core.scala 907:54]
+  wire [62:0] _ex1_pc_bit_out_T_728 = _GEN_28 << ex1_reg_op2_data[4:0]; // @[src/main/scala/fpga/Core.scala 907:54]
   wire  _ex1_pc_bit_out_nested_nested_nested_nested_T_4 = ex1_reg_op1_data[31] | ex1_reg_op2_data[0] & ex1_reg_op1_data[
-    30]; // @[src/main/scala/fpga/Core.scala 852:58]
+    30]; // @[src/main/scala/fpga/Core.scala 879:58]
   wire  _ex1_pc_bit_out_nested_nested_nested_nested_T_8 = ex1_reg_op1_data[30] | ex1_reg_op2_data[0] & ex1_reg_op1_data[
-    31]; // @[src/main/scala/fpga/Core.scala 852:58]
+    31]; // @[src/main/scala/fpga/Core.scala 879:58]
   wire  _ex1_pc_bit_out_nested_nested_nested_nested_T_12 = ex1_reg_op1_data[29] | ex1_reg_op2_data[0] & ex1_reg_op1_data
-    [28]; // @[src/main/scala/fpga/Core.scala 852:58]
+    [28]; // @[src/main/scala/fpga/Core.scala 879:58]
   wire  _ex1_pc_bit_out_nested_nested_nested_nested_T_16 = ex1_reg_op1_data[28] | ex1_reg_op2_data[0] & ex1_reg_op1_data
-    [29]; // @[src/main/scala/fpga/Core.scala 852:58]
+    [29]; // @[src/main/scala/fpga/Core.scala 879:58]
   wire  _ex1_pc_bit_out_nested_nested_nested_nested_T_20 = ex1_reg_op1_data[27] | ex1_reg_op2_data[0] & ex1_reg_op1_data
-    [26]; // @[src/main/scala/fpga/Core.scala 852:58]
+    [26]; // @[src/main/scala/fpga/Core.scala 879:58]
   wire  _ex1_pc_bit_out_nested_nested_nested_nested_T_24 = ex1_reg_op1_data[26] | ex1_reg_op2_data[0] & ex1_reg_op1_data
-    [27]; // @[src/main/scala/fpga/Core.scala 852:58]
+    [27]; // @[src/main/scala/fpga/Core.scala 879:58]
   wire  _ex1_pc_bit_out_nested_nested_nested_nested_T_28 = ex1_reg_op1_data[25] | ex1_reg_op2_data[0] & ex1_reg_op1_data
-    [24]; // @[src/main/scala/fpga/Core.scala 852:58]
+    [24]; // @[src/main/scala/fpga/Core.scala 879:58]
   wire  _ex1_pc_bit_out_nested_nested_nested_nested_T_32 = ex1_reg_op1_data[24] | ex1_reg_op2_data[0] & ex1_reg_op1_data
-    [25]; // @[src/main/scala/fpga/Core.scala 852:58]
+    [25]; // @[src/main/scala/fpga/Core.scala 879:58]
   wire  _ex1_pc_bit_out_nested_nested_nested_nested_T_36 = ex1_reg_op1_data[23] | ex1_reg_op2_data[0] & ex1_reg_op1_data
-    [22]; // @[src/main/scala/fpga/Core.scala 852:58]
+    [22]; // @[src/main/scala/fpga/Core.scala 879:58]
   wire  _ex1_pc_bit_out_nested_nested_nested_nested_T_40 = ex1_reg_op1_data[22] | ex1_reg_op2_data[0] & ex1_reg_op1_data
-    [23]; // @[src/main/scala/fpga/Core.scala 852:58]
+    [23]; // @[src/main/scala/fpga/Core.scala 879:58]
   wire  _ex1_pc_bit_out_nested_nested_nested_nested_T_44 = ex1_reg_op1_data[21] | ex1_reg_op2_data[0] & ex1_reg_op1_data
-    [20]; // @[src/main/scala/fpga/Core.scala 852:58]
+    [20]; // @[src/main/scala/fpga/Core.scala 879:58]
   wire  _ex1_pc_bit_out_nested_nested_nested_nested_T_48 = ex1_reg_op1_data[20] | ex1_reg_op2_data[0] & ex1_reg_op1_data
-    [21]; // @[src/main/scala/fpga/Core.scala 852:58]
+    [21]; // @[src/main/scala/fpga/Core.scala 879:58]
   wire  _ex1_pc_bit_out_nested_nested_nested_nested_T_52 = ex1_reg_op1_data[19] | ex1_reg_op2_data[0] & ex1_reg_op1_data
-    [18]; // @[src/main/scala/fpga/Core.scala 852:58]
+    [18]; // @[src/main/scala/fpga/Core.scala 879:58]
   wire  _ex1_pc_bit_out_nested_nested_nested_nested_T_56 = ex1_reg_op1_data[18] | ex1_reg_op2_data[0] & ex1_reg_op1_data
-    [19]; // @[src/main/scala/fpga/Core.scala 852:58]
+    [19]; // @[src/main/scala/fpga/Core.scala 879:58]
   wire  _ex1_pc_bit_out_nested_nested_nested_nested_T_60 = ex1_reg_op1_data[17] | ex1_reg_op2_data[0] & ex1_reg_op1_data
-    [16]; // @[src/main/scala/fpga/Core.scala 852:58]
+    [16]; // @[src/main/scala/fpga/Core.scala 879:58]
   wire  _ex1_pc_bit_out_nested_nested_nested_nested_T_64 = ex1_reg_op1_data[16] | ex1_reg_op2_data[0] & ex1_reg_op1_data
-    [17]; // @[src/main/scala/fpga/Core.scala 852:58]
+    [17]; // @[src/main/scala/fpga/Core.scala 879:58]
   wire  _ex1_pc_bit_out_nested_nested_nested_nested_T_68 = ex1_reg_op1_data[15] | ex1_reg_op2_data[0] & ex1_reg_op1_data
-    [14]; // @[src/main/scala/fpga/Core.scala 852:58]
+    [14]; // @[src/main/scala/fpga/Core.scala 879:58]
   wire  _ex1_pc_bit_out_nested_nested_nested_nested_T_72 = ex1_reg_op1_data[14] | ex1_reg_op2_data[0] & ex1_reg_op1_data
-    [15]; // @[src/main/scala/fpga/Core.scala 852:58]
+    [15]; // @[src/main/scala/fpga/Core.scala 879:58]
   wire  _ex1_pc_bit_out_nested_nested_nested_nested_T_76 = ex1_reg_op1_data[13] | ex1_reg_op2_data[0] & ex1_reg_op1_data
-    [12]; // @[src/main/scala/fpga/Core.scala 852:58]
+    [12]; // @[src/main/scala/fpga/Core.scala 879:58]
   wire  _ex1_pc_bit_out_nested_nested_nested_nested_T_80 = ex1_reg_op1_data[12] | ex1_reg_op2_data[0] & ex1_reg_op1_data
-    [13]; // @[src/main/scala/fpga/Core.scala 852:58]
+    [13]; // @[src/main/scala/fpga/Core.scala 879:58]
   wire  _ex1_pc_bit_out_nested_nested_nested_nested_T_84 = ex1_reg_op1_data[11] | ex1_reg_op2_data[0] & ex1_reg_op1_data
-    [10]; // @[src/main/scala/fpga/Core.scala 852:58]
+    [10]; // @[src/main/scala/fpga/Core.scala 879:58]
   wire  _ex1_pc_bit_out_nested_nested_nested_nested_T_88 = ex1_reg_op1_data[10] | ex1_reg_op2_data[0] & ex1_reg_op1_data
-    [11]; // @[src/main/scala/fpga/Core.scala 852:58]
+    [11]; // @[src/main/scala/fpga/Core.scala 879:58]
   wire  _ex1_pc_bit_out_nested_nested_nested_nested_T_92 = ex1_reg_op1_data[9] | ex1_reg_op2_data[0] & ex1_reg_op1_data[
-    8]; // @[src/main/scala/fpga/Core.scala 852:58]
+    8]; // @[src/main/scala/fpga/Core.scala 879:58]
   wire  _ex1_pc_bit_out_nested_nested_nested_nested_T_96 = ex1_reg_op1_data[8] | ex1_reg_op2_data[0] & ex1_reg_op1_data[
-    9]; // @[src/main/scala/fpga/Core.scala 852:58]
+    9]; // @[src/main/scala/fpga/Core.scala 879:58]
   wire  _ex1_pc_bit_out_nested_nested_nested_nested_T_100 = ex1_reg_op1_data[7] | ex1_reg_op2_data[0] & ex1_reg_op1_data
-    [6]; // @[src/main/scala/fpga/Core.scala 852:58]
+    [6]; // @[src/main/scala/fpga/Core.scala 879:58]
   wire  _ex1_pc_bit_out_nested_nested_nested_nested_T_104 = ex1_reg_op1_data[6] | ex1_reg_op2_data[0] & ex1_reg_op1_data
-    [7]; // @[src/main/scala/fpga/Core.scala 852:58]
+    [7]; // @[src/main/scala/fpga/Core.scala 879:58]
   wire  _ex1_pc_bit_out_nested_nested_nested_nested_T_108 = ex1_reg_op1_data[5] | ex1_reg_op2_data[0] & ex1_reg_op1_data
-    [4]; // @[src/main/scala/fpga/Core.scala 852:58]
+    [4]; // @[src/main/scala/fpga/Core.scala 879:58]
   wire  _ex1_pc_bit_out_nested_nested_nested_nested_T_112 = ex1_reg_op1_data[4] | ex1_reg_op2_data[0] & ex1_reg_op1_data
-    [5]; // @[src/main/scala/fpga/Core.scala 852:58]
+    [5]; // @[src/main/scala/fpga/Core.scala 879:58]
   wire  _ex1_pc_bit_out_nested_nested_nested_nested_T_116 = ex1_reg_op1_data[3] | ex1_reg_op2_data[0] & ex1_reg_op1_data
-    [2]; // @[src/main/scala/fpga/Core.scala 852:58]
+    [2]; // @[src/main/scala/fpga/Core.scala 879:58]
   wire  _ex1_pc_bit_out_nested_nested_nested_nested_T_120 = ex1_reg_op1_data[2] | ex1_reg_op2_data[0] & ex1_reg_op1_data
-    [3]; // @[src/main/scala/fpga/Core.scala 852:58]
-  wire  _ex1_pc_bit_out_nested_nested_nested_nested_T_124 = ex1_reg_op1_data[1] | _ex1_pc_bit_out_T_722; // @[src/main/scala/fpga/Core.scala 852:58]
+    [3]; // @[src/main/scala/fpga/Core.scala 879:58]
+  wire  _ex1_pc_bit_out_nested_nested_nested_nested_T_124 = ex1_reg_op1_data[1] | _ex1_pc_bit_out_T_722; // @[src/main/scala/fpga/Core.scala 879:58]
   wire  _ex1_pc_bit_out_nested_nested_nested_nested_T_128 = ex1_reg_op1_data[0] | ex1_reg_op2_data[0] & ex1_reg_op1_data
-    [1]; // @[src/main/scala/fpga/Core.scala 852:58]
+    [1]; // @[src/main/scala/fpga/Core.scala 879:58]
   wire [7:0] ex1_pc_bit_out_nested_nested_nested_nested_lo_lo = {_ex1_pc_bit_out_nested_nested_nested_nested_T_100,
     _ex1_pc_bit_out_nested_nested_nested_nested_T_104,_ex1_pc_bit_out_nested_nested_nested_nested_T_108,
     _ex1_pc_bit_out_nested_nested_nested_nested_T_112,_ex1_pc_bit_out_nested_nested_nested_nested_T_116,
     _ex1_pc_bit_out_nested_nested_nested_nested_T_120,_ex1_pc_bit_out_nested_nested_nested_nested_T_124,
-    _ex1_pc_bit_out_nested_nested_nested_nested_T_128}; // @[src/main/scala/fpga/Core.scala 852:8]
+    _ex1_pc_bit_out_nested_nested_nested_nested_T_128}; // @[src/main/scala/fpga/Core.scala 879:8]
   wire [15:0] ex1_pc_bit_out_nested_nested_nested_nested_lo = {_ex1_pc_bit_out_nested_nested_nested_nested_T_68,
     _ex1_pc_bit_out_nested_nested_nested_nested_T_72,_ex1_pc_bit_out_nested_nested_nested_nested_T_76,
     _ex1_pc_bit_out_nested_nested_nested_nested_T_80,_ex1_pc_bit_out_nested_nested_nested_nested_T_84,
     _ex1_pc_bit_out_nested_nested_nested_nested_T_88,_ex1_pc_bit_out_nested_nested_nested_nested_T_92,
-    _ex1_pc_bit_out_nested_nested_nested_nested_T_96,ex1_pc_bit_out_nested_nested_nested_nested_lo_lo}; // @[src/main/scala/fpga/Core.scala 852:8]
+    _ex1_pc_bit_out_nested_nested_nested_nested_T_96,ex1_pc_bit_out_nested_nested_nested_nested_lo_lo}; // @[src/main/scala/fpga/Core.scala 879:8]
   wire [7:0] ex1_pc_bit_out_nested_nested_nested_nested_hi_lo = {_ex1_pc_bit_out_nested_nested_nested_nested_T_36,
     _ex1_pc_bit_out_nested_nested_nested_nested_T_40,_ex1_pc_bit_out_nested_nested_nested_nested_T_44,
     _ex1_pc_bit_out_nested_nested_nested_nested_T_48,_ex1_pc_bit_out_nested_nested_nested_nested_T_52,
     _ex1_pc_bit_out_nested_nested_nested_nested_T_56,_ex1_pc_bit_out_nested_nested_nested_nested_T_60,
-    _ex1_pc_bit_out_nested_nested_nested_nested_T_64}; // @[src/main/scala/fpga/Core.scala 852:8]
+    _ex1_pc_bit_out_nested_nested_nested_nested_T_64}; // @[src/main/scala/fpga/Core.scala 879:8]
   wire [31:0] ex1_pc_bit_out_nested_nested_nested_nested = {_ex1_pc_bit_out_nested_nested_nested_nested_T_4,
     _ex1_pc_bit_out_nested_nested_nested_nested_T_8,_ex1_pc_bit_out_nested_nested_nested_nested_T_12,
     _ex1_pc_bit_out_nested_nested_nested_nested_T_16,_ex1_pc_bit_out_nested_nested_nested_nested_T_20,
     _ex1_pc_bit_out_nested_nested_nested_nested_T_24,_ex1_pc_bit_out_nested_nested_nested_nested_T_28,
     _ex1_pc_bit_out_nested_nested_nested_nested_T_32,ex1_pc_bit_out_nested_nested_nested_nested_hi_lo,
-    ex1_pc_bit_out_nested_nested_nested_nested_lo}; // @[src/main/scala/fpga/Core.scala 852:8]
+    ex1_pc_bit_out_nested_nested_nested_nested_lo}; // @[src/main/scala/fpga/Core.scala 879:8]
   wire  _ex1_pc_bit_out_nested_nested_nested_T_4 = ex1_pc_bit_out_nested_nested_nested_nested[31] | ex1_reg_op2_data[1]
-     & ex1_pc_bit_out_nested_nested_nested_nested[29]; // @[src/main/scala/fpga/Core.scala 852:58]
+     & ex1_pc_bit_out_nested_nested_nested_nested[29]; // @[src/main/scala/fpga/Core.scala 879:58]
   wire  _ex1_pc_bit_out_nested_nested_nested_T_8 = ex1_pc_bit_out_nested_nested_nested_nested[30] | ex1_reg_op2_data[1]
-     & ex1_pc_bit_out_nested_nested_nested_nested[28]; // @[src/main/scala/fpga/Core.scala 852:58]
+     & ex1_pc_bit_out_nested_nested_nested_nested[28]; // @[src/main/scala/fpga/Core.scala 879:58]
   wire  _ex1_pc_bit_out_nested_nested_nested_T_12 = ex1_pc_bit_out_nested_nested_nested_nested[29] | ex1_reg_op2_data[1]
-     & ex1_pc_bit_out_nested_nested_nested_nested[31]; // @[src/main/scala/fpga/Core.scala 852:58]
+     & ex1_pc_bit_out_nested_nested_nested_nested[31]; // @[src/main/scala/fpga/Core.scala 879:58]
   wire  _ex1_pc_bit_out_nested_nested_nested_T_16 = ex1_pc_bit_out_nested_nested_nested_nested[28] | ex1_reg_op2_data[1]
-     & ex1_pc_bit_out_nested_nested_nested_nested[30]; // @[src/main/scala/fpga/Core.scala 852:58]
+     & ex1_pc_bit_out_nested_nested_nested_nested[30]; // @[src/main/scala/fpga/Core.scala 879:58]
   wire  _ex1_pc_bit_out_nested_nested_nested_T_20 = ex1_pc_bit_out_nested_nested_nested_nested[27] | ex1_reg_op2_data[1]
-     & ex1_pc_bit_out_nested_nested_nested_nested[25]; // @[src/main/scala/fpga/Core.scala 852:58]
+     & ex1_pc_bit_out_nested_nested_nested_nested[25]; // @[src/main/scala/fpga/Core.scala 879:58]
   wire  _ex1_pc_bit_out_nested_nested_nested_T_24 = ex1_pc_bit_out_nested_nested_nested_nested[26] | ex1_reg_op2_data[1]
-     & ex1_pc_bit_out_nested_nested_nested_nested[24]; // @[src/main/scala/fpga/Core.scala 852:58]
+     & ex1_pc_bit_out_nested_nested_nested_nested[24]; // @[src/main/scala/fpga/Core.scala 879:58]
   wire  _ex1_pc_bit_out_nested_nested_nested_T_28 = ex1_pc_bit_out_nested_nested_nested_nested[25] | ex1_reg_op2_data[1]
-     & ex1_pc_bit_out_nested_nested_nested_nested[27]; // @[src/main/scala/fpga/Core.scala 852:58]
+     & ex1_pc_bit_out_nested_nested_nested_nested[27]; // @[src/main/scala/fpga/Core.scala 879:58]
   wire  _ex1_pc_bit_out_nested_nested_nested_T_32 = ex1_pc_bit_out_nested_nested_nested_nested[24] | ex1_reg_op2_data[1]
-     & ex1_pc_bit_out_nested_nested_nested_nested[26]; // @[src/main/scala/fpga/Core.scala 852:58]
+     & ex1_pc_bit_out_nested_nested_nested_nested[26]; // @[src/main/scala/fpga/Core.scala 879:58]
   wire  _ex1_pc_bit_out_nested_nested_nested_T_36 = ex1_pc_bit_out_nested_nested_nested_nested[23] | ex1_reg_op2_data[1]
-     & ex1_pc_bit_out_nested_nested_nested_nested[21]; // @[src/main/scala/fpga/Core.scala 852:58]
+     & ex1_pc_bit_out_nested_nested_nested_nested[21]; // @[src/main/scala/fpga/Core.scala 879:58]
   wire  _ex1_pc_bit_out_nested_nested_nested_T_40 = ex1_pc_bit_out_nested_nested_nested_nested[22] | ex1_reg_op2_data[1]
-     & ex1_pc_bit_out_nested_nested_nested_nested[20]; // @[src/main/scala/fpga/Core.scala 852:58]
+     & ex1_pc_bit_out_nested_nested_nested_nested[20]; // @[src/main/scala/fpga/Core.scala 879:58]
   wire  _ex1_pc_bit_out_nested_nested_nested_T_44 = ex1_pc_bit_out_nested_nested_nested_nested[21] | ex1_reg_op2_data[1]
-     & ex1_pc_bit_out_nested_nested_nested_nested[23]; // @[src/main/scala/fpga/Core.scala 852:58]
+     & ex1_pc_bit_out_nested_nested_nested_nested[23]; // @[src/main/scala/fpga/Core.scala 879:58]
   wire  _ex1_pc_bit_out_nested_nested_nested_T_48 = ex1_pc_bit_out_nested_nested_nested_nested[20] | ex1_reg_op2_data[1]
-     & ex1_pc_bit_out_nested_nested_nested_nested[22]; // @[src/main/scala/fpga/Core.scala 852:58]
+     & ex1_pc_bit_out_nested_nested_nested_nested[22]; // @[src/main/scala/fpga/Core.scala 879:58]
   wire  _ex1_pc_bit_out_nested_nested_nested_T_52 = ex1_pc_bit_out_nested_nested_nested_nested[19] | ex1_reg_op2_data[1]
-     & ex1_pc_bit_out_nested_nested_nested_nested[17]; // @[src/main/scala/fpga/Core.scala 852:58]
+     & ex1_pc_bit_out_nested_nested_nested_nested[17]; // @[src/main/scala/fpga/Core.scala 879:58]
   wire  _ex1_pc_bit_out_nested_nested_nested_T_56 = ex1_pc_bit_out_nested_nested_nested_nested[18] | ex1_reg_op2_data[1]
-     & ex1_pc_bit_out_nested_nested_nested_nested[16]; // @[src/main/scala/fpga/Core.scala 852:58]
+     & ex1_pc_bit_out_nested_nested_nested_nested[16]; // @[src/main/scala/fpga/Core.scala 879:58]
   wire  _ex1_pc_bit_out_nested_nested_nested_T_60 = ex1_pc_bit_out_nested_nested_nested_nested[17] | ex1_reg_op2_data[1]
-     & ex1_pc_bit_out_nested_nested_nested_nested[19]; // @[src/main/scala/fpga/Core.scala 852:58]
+     & ex1_pc_bit_out_nested_nested_nested_nested[19]; // @[src/main/scala/fpga/Core.scala 879:58]
   wire  _ex1_pc_bit_out_nested_nested_nested_T_64 = ex1_pc_bit_out_nested_nested_nested_nested[16] | ex1_reg_op2_data[1]
-     & ex1_pc_bit_out_nested_nested_nested_nested[18]; // @[src/main/scala/fpga/Core.scala 852:58]
+     & ex1_pc_bit_out_nested_nested_nested_nested[18]; // @[src/main/scala/fpga/Core.scala 879:58]
   wire  _ex1_pc_bit_out_nested_nested_nested_T_68 = ex1_pc_bit_out_nested_nested_nested_nested[15] | ex1_reg_op2_data[1]
-     & ex1_pc_bit_out_nested_nested_nested_nested[13]; // @[src/main/scala/fpga/Core.scala 852:58]
+     & ex1_pc_bit_out_nested_nested_nested_nested[13]; // @[src/main/scala/fpga/Core.scala 879:58]
   wire  _ex1_pc_bit_out_nested_nested_nested_T_72 = ex1_pc_bit_out_nested_nested_nested_nested[14] | ex1_reg_op2_data[1]
-     & ex1_pc_bit_out_nested_nested_nested_nested[12]; // @[src/main/scala/fpga/Core.scala 852:58]
+     & ex1_pc_bit_out_nested_nested_nested_nested[12]; // @[src/main/scala/fpga/Core.scala 879:58]
   wire  _ex1_pc_bit_out_nested_nested_nested_T_76 = ex1_pc_bit_out_nested_nested_nested_nested[13] | ex1_reg_op2_data[1]
-     & ex1_pc_bit_out_nested_nested_nested_nested[15]; // @[src/main/scala/fpga/Core.scala 852:58]
+     & ex1_pc_bit_out_nested_nested_nested_nested[15]; // @[src/main/scala/fpga/Core.scala 879:58]
   wire  _ex1_pc_bit_out_nested_nested_nested_T_80 = ex1_pc_bit_out_nested_nested_nested_nested[12] | ex1_reg_op2_data[1]
-     & ex1_pc_bit_out_nested_nested_nested_nested[14]; // @[src/main/scala/fpga/Core.scala 852:58]
+     & ex1_pc_bit_out_nested_nested_nested_nested[14]; // @[src/main/scala/fpga/Core.scala 879:58]
   wire  _ex1_pc_bit_out_nested_nested_nested_T_84 = ex1_pc_bit_out_nested_nested_nested_nested[11] | ex1_reg_op2_data[1]
-     & ex1_pc_bit_out_nested_nested_nested_nested[9]; // @[src/main/scala/fpga/Core.scala 852:58]
+     & ex1_pc_bit_out_nested_nested_nested_nested[9]; // @[src/main/scala/fpga/Core.scala 879:58]
   wire  _ex1_pc_bit_out_nested_nested_nested_T_88 = ex1_pc_bit_out_nested_nested_nested_nested[10] | ex1_reg_op2_data[1]
-     & ex1_pc_bit_out_nested_nested_nested_nested[8]; // @[src/main/scala/fpga/Core.scala 852:58]
+     & ex1_pc_bit_out_nested_nested_nested_nested[8]; // @[src/main/scala/fpga/Core.scala 879:58]
   wire  _ex1_pc_bit_out_nested_nested_nested_T_92 = ex1_pc_bit_out_nested_nested_nested_nested[9] | ex1_reg_op2_data[1]
-     & ex1_pc_bit_out_nested_nested_nested_nested[11]; // @[src/main/scala/fpga/Core.scala 852:58]
+     & ex1_pc_bit_out_nested_nested_nested_nested[11]; // @[src/main/scala/fpga/Core.scala 879:58]
   wire  _ex1_pc_bit_out_nested_nested_nested_T_96 = ex1_pc_bit_out_nested_nested_nested_nested[8] | ex1_reg_op2_data[1]
-     & ex1_pc_bit_out_nested_nested_nested_nested[10]; // @[src/main/scala/fpga/Core.scala 852:58]
+     & ex1_pc_bit_out_nested_nested_nested_nested[10]; // @[src/main/scala/fpga/Core.scala 879:58]
   wire  _ex1_pc_bit_out_nested_nested_nested_T_100 = ex1_pc_bit_out_nested_nested_nested_nested[7] | ex1_reg_op2_data[1]
-     & ex1_pc_bit_out_nested_nested_nested_nested[5]; // @[src/main/scala/fpga/Core.scala 852:58]
+     & ex1_pc_bit_out_nested_nested_nested_nested[5]; // @[src/main/scala/fpga/Core.scala 879:58]
   wire  _ex1_pc_bit_out_nested_nested_nested_T_104 = ex1_pc_bit_out_nested_nested_nested_nested[6] | ex1_reg_op2_data[1]
-     & ex1_pc_bit_out_nested_nested_nested_nested[4]; // @[src/main/scala/fpga/Core.scala 852:58]
+     & ex1_pc_bit_out_nested_nested_nested_nested[4]; // @[src/main/scala/fpga/Core.scala 879:58]
   wire  _ex1_pc_bit_out_nested_nested_nested_T_108 = ex1_pc_bit_out_nested_nested_nested_nested[5] | ex1_reg_op2_data[1]
-     & ex1_pc_bit_out_nested_nested_nested_nested[7]; // @[src/main/scala/fpga/Core.scala 852:58]
+     & ex1_pc_bit_out_nested_nested_nested_nested[7]; // @[src/main/scala/fpga/Core.scala 879:58]
   wire  _ex1_pc_bit_out_nested_nested_nested_T_112 = ex1_pc_bit_out_nested_nested_nested_nested[4] | ex1_reg_op2_data[1]
-     & ex1_pc_bit_out_nested_nested_nested_nested[6]; // @[src/main/scala/fpga/Core.scala 852:58]
+     & ex1_pc_bit_out_nested_nested_nested_nested[6]; // @[src/main/scala/fpga/Core.scala 879:58]
   wire  _ex1_pc_bit_out_nested_nested_nested_T_116 = ex1_pc_bit_out_nested_nested_nested_nested[3] | ex1_reg_op2_data[1]
-     & ex1_pc_bit_out_nested_nested_nested_nested[1]; // @[src/main/scala/fpga/Core.scala 852:58]
+     & ex1_pc_bit_out_nested_nested_nested_nested[1]; // @[src/main/scala/fpga/Core.scala 879:58]
   wire  _ex1_pc_bit_out_nested_nested_nested_T_120 = ex1_pc_bit_out_nested_nested_nested_nested[2] | ex1_reg_op2_data[1]
-     & ex1_pc_bit_out_nested_nested_nested_nested[0]; // @[src/main/scala/fpga/Core.scala 852:58]
+     & ex1_pc_bit_out_nested_nested_nested_nested[0]; // @[src/main/scala/fpga/Core.scala 879:58]
   wire  _ex1_pc_bit_out_nested_nested_nested_T_124 = ex1_pc_bit_out_nested_nested_nested_nested[1] | ex1_reg_op2_data[1]
-     & ex1_pc_bit_out_nested_nested_nested_nested[3]; // @[src/main/scala/fpga/Core.scala 852:58]
+     & ex1_pc_bit_out_nested_nested_nested_nested[3]; // @[src/main/scala/fpga/Core.scala 879:58]
   wire  _ex1_pc_bit_out_nested_nested_nested_T_128 = ex1_pc_bit_out_nested_nested_nested_nested[0] | ex1_reg_op2_data[1]
-     & ex1_pc_bit_out_nested_nested_nested_nested[2]; // @[src/main/scala/fpga/Core.scala 852:58]
+     & ex1_pc_bit_out_nested_nested_nested_nested[2]; // @[src/main/scala/fpga/Core.scala 879:58]
   wire [7:0] ex1_pc_bit_out_nested_nested_nested_lo_lo = {_ex1_pc_bit_out_nested_nested_nested_T_100,
     _ex1_pc_bit_out_nested_nested_nested_T_104,_ex1_pc_bit_out_nested_nested_nested_T_108,
     _ex1_pc_bit_out_nested_nested_nested_T_112,_ex1_pc_bit_out_nested_nested_nested_T_116,
     _ex1_pc_bit_out_nested_nested_nested_T_120,_ex1_pc_bit_out_nested_nested_nested_T_124,
-    _ex1_pc_bit_out_nested_nested_nested_T_128}; // @[src/main/scala/fpga/Core.scala 852:8]
+    _ex1_pc_bit_out_nested_nested_nested_T_128}; // @[src/main/scala/fpga/Core.scala 879:8]
   wire [15:0] ex1_pc_bit_out_nested_nested_nested_lo = {_ex1_pc_bit_out_nested_nested_nested_T_68,
     _ex1_pc_bit_out_nested_nested_nested_T_72,_ex1_pc_bit_out_nested_nested_nested_T_76,
     _ex1_pc_bit_out_nested_nested_nested_T_80,_ex1_pc_bit_out_nested_nested_nested_T_84,
     _ex1_pc_bit_out_nested_nested_nested_T_88,_ex1_pc_bit_out_nested_nested_nested_T_92,
-    _ex1_pc_bit_out_nested_nested_nested_T_96,ex1_pc_bit_out_nested_nested_nested_lo_lo}; // @[src/main/scala/fpga/Core.scala 852:8]
+    _ex1_pc_bit_out_nested_nested_nested_T_96,ex1_pc_bit_out_nested_nested_nested_lo_lo}; // @[src/main/scala/fpga/Core.scala 879:8]
   wire [7:0] ex1_pc_bit_out_nested_nested_nested_hi_lo = {_ex1_pc_bit_out_nested_nested_nested_T_36,
     _ex1_pc_bit_out_nested_nested_nested_T_40,_ex1_pc_bit_out_nested_nested_nested_T_44,
     _ex1_pc_bit_out_nested_nested_nested_T_48,_ex1_pc_bit_out_nested_nested_nested_T_52,
     _ex1_pc_bit_out_nested_nested_nested_T_56,_ex1_pc_bit_out_nested_nested_nested_T_60,
-    _ex1_pc_bit_out_nested_nested_nested_T_64}; // @[src/main/scala/fpga/Core.scala 852:8]
+    _ex1_pc_bit_out_nested_nested_nested_T_64}; // @[src/main/scala/fpga/Core.scala 879:8]
   wire [31:0] ex1_pc_bit_out_nested_nested_nested = {_ex1_pc_bit_out_nested_nested_nested_T_4,
     _ex1_pc_bit_out_nested_nested_nested_T_8,_ex1_pc_bit_out_nested_nested_nested_T_12,
     _ex1_pc_bit_out_nested_nested_nested_T_16,_ex1_pc_bit_out_nested_nested_nested_T_20,
     _ex1_pc_bit_out_nested_nested_nested_T_24,_ex1_pc_bit_out_nested_nested_nested_T_28,
     _ex1_pc_bit_out_nested_nested_nested_T_32,ex1_pc_bit_out_nested_nested_nested_hi_lo,
-    ex1_pc_bit_out_nested_nested_nested_lo}; // @[src/main/scala/fpga/Core.scala 852:8]
+    ex1_pc_bit_out_nested_nested_nested_lo}; // @[src/main/scala/fpga/Core.scala 879:8]
   wire  _ex1_pc_bit_out_nested_nested_T_4 = ex1_pc_bit_out_nested_nested_nested[31] | ex1_reg_op2_data[2] &
-    ex1_pc_bit_out_nested_nested_nested[27]; // @[src/main/scala/fpga/Core.scala 852:58]
+    ex1_pc_bit_out_nested_nested_nested[27]; // @[src/main/scala/fpga/Core.scala 879:58]
   wire  _ex1_pc_bit_out_nested_nested_T_8 = ex1_pc_bit_out_nested_nested_nested[30] | ex1_reg_op2_data[2] &
-    ex1_pc_bit_out_nested_nested_nested[26]; // @[src/main/scala/fpga/Core.scala 852:58]
+    ex1_pc_bit_out_nested_nested_nested[26]; // @[src/main/scala/fpga/Core.scala 879:58]
   wire  _ex1_pc_bit_out_nested_nested_T_12 = ex1_pc_bit_out_nested_nested_nested[29] | ex1_reg_op2_data[2] &
-    ex1_pc_bit_out_nested_nested_nested[25]; // @[src/main/scala/fpga/Core.scala 852:58]
+    ex1_pc_bit_out_nested_nested_nested[25]; // @[src/main/scala/fpga/Core.scala 879:58]
   wire  _ex1_pc_bit_out_nested_nested_T_16 = ex1_pc_bit_out_nested_nested_nested[28] | ex1_reg_op2_data[2] &
-    ex1_pc_bit_out_nested_nested_nested[24]; // @[src/main/scala/fpga/Core.scala 852:58]
+    ex1_pc_bit_out_nested_nested_nested[24]; // @[src/main/scala/fpga/Core.scala 879:58]
   wire  _ex1_pc_bit_out_nested_nested_T_20 = ex1_pc_bit_out_nested_nested_nested[27] | ex1_reg_op2_data[2] &
-    ex1_pc_bit_out_nested_nested_nested[31]; // @[src/main/scala/fpga/Core.scala 852:58]
+    ex1_pc_bit_out_nested_nested_nested[31]; // @[src/main/scala/fpga/Core.scala 879:58]
   wire  _ex1_pc_bit_out_nested_nested_T_24 = ex1_pc_bit_out_nested_nested_nested[26] | ex1_reg_op2_data[2] &
-    ex1_pc_bit_out_nested_nested_nested[30]; // @[src/main/scala/fpga/Core.scala 852:58]
+    ex1_pc_bit_out_nested_nested_nested[30]; // @[src/main/scala/fpga/Core.scala 879:58]
   wire  _ex1_pc_bit_out_nested_nested_T_28 = ex1_pc_bit_out_nested_nested_nested[25] | ex1_reg_op2_data[2] &
-    ex1_pc_bit_out_nested_nested_nested[29]; // @[src/main/scala/fpga/Core.scala 852:58]
+    ex1_pc_bit_out_nested_nested_nested[29]; // @[src/main/scala/fpga/Core.scala 879:58]
   wire  _ex1_pc_bit_out_nested_nested_T_32 = ex1_pc_bit_out_nested_nested_nested[24] | ex1_reg_op2_data[2] &
-    ex1_pc_bit_out_nested_nested_nested[28]; // @[src/main/scala/fpga/Core.scala 852:58]
+    ex1_pc_bit_out_nested_nested_nested[28]; // @[src/main/scala/fpga/Core.scala 879:58]
   wire  _ex1_pc_bit_out_nested_nested_T_36 = ex1_pc_bit_out_nested_nested_nested[23] | ex1_reg_op2_data[2] &
-    ex1_pc_bit_out_nested_nested_nested[19]; // @[src/main/scala/fpga/Core.scala 852:58]
+    ex1_pc_bit_out_nested_nested_nested[19]; // @[src/main/scala/fpga/Core.scala 879:58]
   wire  _ex1_pc_bit_out_nested_nested_T_40 = ex1_pc_bit_out_nested_nested_nested[22] | ex1_reg_op2_data[2] &
-    ex1_pc_bit_out_nested_nested_nested[18]; // @[src/main/scala/fpga/Core.scala 852:58]
+    ex1_pc_bit_out_nested_nested_nested[18]; // @[src/main/scala/fpga/Core.scala 879:58]
   wire  _ex1_pc_bit_out_nested_nested_T_44 = ex1_pc_bit_out_nested_nested_nested[21] | ex1_reg_op2_data[2] &
-    ex1_pc_bit_out_nested_nested_nested[17]; // @[src/main/scala/fpga/Core.scala 852:58]
+    ex1_pc_bit_out_nested_nested_nested[17]; // @[src/main/scala/fpga/Core.scala 879:58]
   wire  _ex1_pc_bit_out_nested_nested_T_48 = ex1_pc_bit_out_nested_nested_nested[20] | ex1_reg_op2_data[2] &
-    ex1_pc_bit_out_nested_nested_nested[16]; // @[src/main/scala/fpga/Core.scala 852:58]
+    ex1_pc_bit_out_nested_nested_nested[16]; // @[src/main/scala/fpga/Core.scala 879:58]
   wire  _ex1_pc_bit_out_nested_nested_T_52 = ex1_pc_bit_out_nested_nested_nested[19] | ex1_reg_op2_data[2] &
-    ex1_pc_bit_out_nested_nested_nested[23]; // @[src/main/scala/fpga/Core.scala 852:58]
+    ex1_pc_bit_out_nested_nested_nested[23]; // @[src/main/scala/fpga/Core.scala 879:58]
   wire  _ex1_pc_bit_out_nested_nested_T_56 = ex1_pc_bit_out_nested_nested_nested[18] | ex1_reg_op2_data[2] &
-    ex1_pc_bit_out_nested_nested_nested[22]; // @[src/main/scala/fpga/Core.scala 852:58]
+    ex1_pc_bit_out_nested_nested_nested[22]; // @[src/main/scala/fpga/Core.scala 879:58]
   wire  _ex1_pc_bit_out_nested_nested_T_60 = ex1_pc_bit_out_nested_nested_nested[17] | ex1_reg_op2_data[2] &
-    ex1_pc_bit_out_nested_nested_nested[21]; // @[src/main/scala/fpga/Core.scala 852:58]
+    ex1_pc_bit_out_nested_nested_nested[21]; // @[src/main/scala/fpga/Core.scala 879:58]
   wire  _ex1_pc_bit_out_nested_nested_T_64 = ex1_pc_bit_out_nested_nested_nested[16] | ex1_reg_op2_data[2] &
-    ex1_pc_bit_out_nested_nested_nested[20]; // @[src/main/scala/fpga/Core.scala 852:58]
+    ex1_pc_bit_out_nested_nested_nested[20]; // @[src/main/scala/fpga/Core.scala 879:58]
   wire  _ex1_pc_bit_out_nested_nested_T_68 = ex1_pc_bit_out_nested_nested_nested[15] | ex1_reg_op2_data[2] &
-    ex1_pc_bit_out_nested_nested_nested[11]; // @[src/main/scala/fpga/Core.scala 852:58]
+    ex1_pc_bit_out_nested_nested_nested[11]; // @[src/main/scala/fpga/Core.scala 879:58]
   wire  _ex1_pc_bit_out_nested_nested_T_72 = ex1_pc_bit_out_nested_nested_nested[14] | ex1_reg_op2_data[2] &
-    ex1_pc_bit_out_nested_nested_nested[10]; // @[src/main/scala/fpga/Core.scala 852:58]
+    ex1_pc_bit_out_nested_nested_nested[10]; // @[src/main/scala/fpga/Core.scala 879:58]
   wire  _ex1_pc_bit_out_nested_nested_T_76 = ex1_pc_bit_out_nested_nested_nested[13] | ex1_reg_op2_data[2] &
-    ex1_pc_bit_out_nested_nested_nested[9]; // @[src/main/scala/fpga/Core.scala 852:58]
+    ex1_pc_bit_out_nested_nested_nested[9]; // @[src/main/scala/fpga/Core.scala 879:58]
   wire  _ex1_pc_bit_out_nested_nested_T_80 = ex1_pc_bit_out_nested_nested_nested[12] | ex1_reg_op2_data[2] &
-    ex1_pc_bit_out_nested_nested_nested[8]; // @[src/main/scala/fpga/Core.scala 852:58]
+    ex1_pc_bit_out_nested_nested_nested[8]; // @[src/main/scala/fpga/Core.scala 879:58]
   wire  _ex1_pc_bit_out_nested_nested_T_84 = ex1_pc_bit_out_nested_nested_nested[11] | ex1_reg_op2_data[2] &
-    ex1_pc_bit_out_nested_nested_nested[15]; // @[src/main/scala/fpga/Core.scala 852:58]
+    ex1_pc_bit_out_nested_nested_nested[15]; // @[src/main/scala/fpga/Core.scala 879:58]
   wire  _ex1_pc_bit_out_nested_nested_T_88 = ex1_pc_bit_out_nested_nested_nested[10] | ex1_reg_op2_data[2] &
-    ex1_pc_bit_out_nested_nested_nested[14]; // @[src/main/scala/fpga/Core.scala 852:58]
+    ex1_pc_bit_out_nested_nested_nested[14]; // @[src/main/scala/fpga/Core.scala 879:58]
   wire  _ex1_pc_bit_out_nested_nested_T_92 = ex1_pc_bit_out_nested_nested_nested[9] | ex1_reg_op2_data[2] &
-    ex1_pc_bit_out_nested_nested_nested[13]; // @[src/main/scala/fpga/Core.scala 852:58]
+    ex1_pc_bit_out_nested_nested_nested[13]; // @[src/main/scala/fpga/Core.scala 879:58]
   wire  _ex1_pc_bit_out_nested_nested_T_96 = ex1_pc_bit_out_nested_nested_nested[8] | ex1_reg_op2_data[2] &
-    ex1_pc_bit_out_nested_nested_nested[12]; // @[src/main/scala/fpga/Core.scala 852:58]
+    ex1_pc_bit_out_nested_nested_nested[12]; // @[src/main/scala/fpga/Core.scala 879:58]
   wire  _ex1_pc_bit_out_nested_nested_T_100 = ex1_pc_bit_out_nested_nested_nested[7] | ex1_reg_op2_data[2] &
-    ex1_pc_bit_out_nested_nested_nested[3]; // @[src/main/scala/fpga/Core.scala 852:58]
+    ex1_pc_bit_out_nested_nested_nested[3]; // @[src/main/scala/fpga/Core.scala 879:58]
   wire  _ex1_pc_bit_out_nested_nested_T_104 = ex1_pc_bit_out_nested_nested_nested[6] | ex1_reg_op2_data[2] &
-    ex1_pc_bit_out_nested_nested_nested[2]; // @[src/main/scala/fpga/Core.scala 852:58]
+    ex1_pc_bit_out_nested_nested_nested[2]; // @[src/main/scala/fpga/Core.scala 879:58]
   wire  _ex1_pc_bit_out_nested_nested_T_108 = ex1_pc_bit_out_nested_nested_nested[5] | ex1_reg_op2_data[2] &
-    ex1_pc_bit_out_nested_nested_nested[1]; // @[src/main/scala/fpga/Core.scala 852:58]
+    ex1_pc_bit_out_nested_nested_nested[1]; // @[src/main/scala/fpga/Core.scala 879:58]
   wire  _ex1_pc_bit_out_nested_nested_T_112 = ex1_pc_bit_out_nested_nested_nested[4] | ex1_reg_op2_data[2] &
-    ex1_pc_bit_out_nested_nested_nested[0]; // @[src/main/scala/fpga/Core.scala 852:58]
+    ex1_pc_bit_out_nested_nested_nested[0]; // @[src/main/scala/fpga/Core.scala 879:58]
   wire  _ex1_pc_bit_out_nested_nested_T_116 = ex1_pc_bit_out_nested_nested_nested[3] | ex1_reg_op2_data[2] &
-    ex1_pc_bit_out_nested_nested_nested[7]; // @[src/main/scala/fpga/Core.scala 852:58]
+    ex1_pc_bit_out_nested_nested_nested[7]; // @[src/main/scala/fpga/Core.scala 879:58]
   wire  _ex1_pc_bit_out_nested_nested_T_120 = ex1_pc_bit_out_nested_nested_nested[2] | ex1_reg_op2_data[2] &
-    ex1_pc_bit_out_nested_nested_nested[6]; // @[src/main/scala/fpga/Core.scala 852:58]
+    ex1_pc_bit_out_nested_nested_nested[6]; // @[src/main/scala/fpga/Core.scala 879:58]
   wire  _ex1_pc_bit_out_nested_nested_T_124 = ex1_pc_bit_out_nested_nested_nested[1] | ex1_reg_op2_data[2] &
-    ex1_pc_bit_out_nested_nested_nested[5]; // @[src/main/scala/fpga/Core.scala 852:58]
+    ex1_pc_bit_out_nested_nested_nested[5]; // @[src/main/scala/fpga/Core.scala 879:58]
   wire  _ex1_pc_bit_out_nested_nested_T_128 = ex1_pc_bit_out_nested_nested_nested[0] | ex1_reg_op2_data[2] &
-    ex1_pc_bit_out_nested_nested_nested[4]; // @[src/main/scala/fpga/Core.scala 852:58]
+    ex1_pc_bit_out_nested_nested_nested[4]; // @[src/main/scala/fpga/Core.scala 879:58]
   wire [7:0] ex1_pc_bit_out_nested_nested_lo_lo = {_ex1_pc_bit_out_nested_nested_T_100,
     _ex1_pc_bit_out_nested_nested_T_104,_ex1_pc_bit_out_nested_nested_T_108,_ex1_pc_bit_out_nested_nested_T_112,
     _ex1_pc_bit_out_nested_nested_T_116,_ex1_pc_bit_out_nested_nested_T_120,_ex1_pc_bit_out_nested_nested_T_124,
-    _ex1_pc_bit_out_nested_nested_T_128}; // @[src/main/scala/fpga/Core.scala 852:8]
+    _ex1_pc_bit_out_nested_nested_T_128}; // @[src/main/scala/fpga/Core.scala 879:8]
   wire [15:0] ex1_pc_bit_out_nested_nested_lo = {_ex1_pc_bit_out_nested_nested_T_68,_ex1_pc_bit_out_nested_nested_T_72,
     _ex1_pc_bit_out_nested_nested_T_76,_ex1_pc_bit_out_nested_nested_T_80,_ex1_pc_bit_out_nested_nested_T_84,
     _ex1_pc_bit_out_nested_nested_T_88,_ex1_pc_bit_out_nested_nested_T_92,_ex1_pc_bit_out_nested_nested_T_96,
-    ex1_pc_bit_out_nested_nested_lo_lo}; // @[src/main/scala/fpga/Core.scala 852:8]
+    ex1_pc_bit_out_nested_nested_lo_lo}; // @[src/main/scala/fpga/Core.scala 879:8]
   wire [7:0] ex1_pc_bit_out_nested_nested_hi_lo = {_ex1_pc_bit_out_nested_nested_T_36,_ex1_pc_bit_out_nested_nested_T_40
     ,_ex1_pc_bit_out_nested_nested_T_44,_ex1_pc_bit_out_nested_nested_T_48,_ex1_pc_bit_out_nested_nested_T_52,
-    _ex1_pc_bit_out_nested_nested_T_56,_ex1_pc_bit_out_nested_nested_T_60,_ex1_pc_bit_out_nested_nested_T_64}; // @[src/main/scala/fpga/Core.scala 852:8]
+    _ex1_pc_bit_out_nested_nested_T_56,_ex1_pc_bit_out_nested_nested_T_60,_ex1_pc_bit_out_nested_nested_T_64}; // @[src/main/scala/fpga/Core.scala 879:8]
   wire [31:0] ex1_pc_bit_out_nested_nested = {_ex1_pc_bit_out_nested_nested_T_4,_ex1_pc_bit_out_nested_nested_T_8,
     _ex1_pc_bit_out_nested_nested_T_12,_ex1_pc_bit_out_nested_nested_T_16,_ex1_pc_bit_out_nested_nested_T_20,
     _ex1_pc_bit_out_nested_nested_T_24,_ex1_pc_bit_out_nested_nested_T_28,_ex1_pc_bit_out_nested_nested_T_32,
-    ex1_pc_bit_out_nested_nested_hi_lo,ex1_pc_bit_out_nested_nested_lo}; // @[src/main/scala/fpga/Core.scala 852:8]
+    ex1_pc_bit_out_nested_nested_hi_lo,ex1_pc_bit_out_nested_nested_lo}; // @[src/main/scala/fpga/Core.scala 879:8]
   wire  _ex1_pc_bit_out_nested_T_4 = ex1_pc_bit_out_nested_nested[31] | ex1_reg_op2_data[3] &
-    ex1_pc_bit_out_nested_nested[23]; // @[src/main/scala/fpga/Core.scala 852:58]
+    ex1_pc_bit_out_nested_nested[23]; // @[src/main/scala/fpga/Core.scala 879:58]
   wire  _ex1_pc_bit_out_nested_T_8 = ex1_pc_bit_out_nested_nested[30] | ex1_reg_op2_data[3] &
-    ex1_pc_bit_out_nested_nested[22]; // @[src/main/scala/fpga/Core.scala 852:58]
+    ex1_pc_bit_out_nested_nested[22]; // @[src/main/scala/fpga/Core.scala 879:58]
   wire  _ex1_pc_bit_out_nested_T_12 = ex1_pc_bit_out_nested_nested[29] | ex1_reg_op2_data[3] &
-    ex1_pc_bit_out_nested_nested[21]; // @[src/main/scala/fpga/Core.scala 852:58]
+    ex1_pc_bit_out_nested_nested[21]; // @[src/main/scala/fpga/Core.scala 879:58]
   wire  _ex1_pc_bit_out_nested_T_16 = ex1_pc_bit_out_nested_nested[28] | ex1_reg_op2_data[3] &
-    ex1_pc_bit_out_nested_nested[20]; // @[src/main/scala/fpga/Core.scala 852:58]
+    ex1_pc_bit_out_nested_nested[20]; // @[src/main/scala/fpga/Core.scala 879:58]
   wire  _ex1_pc_bit_out_nested_T_20 = ex1_pc_bit_out_nested_nested[27] | ex1_reg_op2_data[3] &
-    ex1_pc_bit_out_nested_nested[19]; // @[src/main/scala/fpga/Core.scala 852:58]
+    ex1_pc_bit_out_nested_nested[19]; // @[src/main/scala/fpga/Core.scala 879:58]
   wire  _ex1_pc_bit_out_nested_T_24 = ex1_pc_bit_out_nested_nested[26] | ex1_reg_op2_data[3] &
-    ex1_pc_bit_out_nested_nested[18]; // @[src/main/scala/fpga/Core.scala 852:58]
+    ex1_pc_bit_out_nested_nested[18]; // @[src/main/scala/fpga/Core.scala 879:58]
   wire  _ex1_pc_bit_out_nested_T_28 = ex1_pc_bit_out_nested_nested[25] | ex1_reg_op2_data[3] &
-    ex1_pc_bit_out_nested_nested[17]; // @[src/main/scala/fpga/Core.scala 852:58]
+    ex1_pc_bit_out_nested_nested[17]; // @[src/main/scala/fpga/Core.scala 879:58]
   wire  _ex1_pc_bit_out_nested_T_32 = ex1_pc_bit_out_nested_nested[24] | ex1_reg_op2_data[3] &
-    ex1_pc_bit_out_nested_nested[16]; // @[src/main/scala/fpga/Core.scala 852:58]
+    ex1_pc_bit_out_nested_nested[16]; // @[src/main/scala/fpga/Core.scala 879:58]
   wire  _ex1_pc_bit_out_nested_T_36 = ex1_pc_bit_out_nested_nested[23] | ex1_reg_op2_data[3] &
-    ex1_pc_bit_out_nested_nested[31]; // @[src/main/scala/fpga/Core.scala 852:58]
+    ex1_pc_bit_out_nested_nested[31]; // @[src/main/scala/fpga/Core.scala 879:58]
   wire  _ex1_pc_bit_out_nested_T_40 = ex1_pc_bit_out_nested_nested[22] | ex1_reg_op2_data[3] &
-    ex1_pc_bit_out_nested_nested[30]; // @[src/main/scala/fpga/Core.scala 852:58]
+    ex1_pc_bit_out_nested_nested[30]; // @[src/main/scala/fpga/Core.scala 879:58]
   wire  _ex1_pc_bit_out_nested_T_44 = ex1_pc_bit_out_nested_nested[21] | ex1_reg_op2_data[3] &
-    ex1_pc_bit_out_nested_nested[29]; // @[src/main/scala/fpga/Core.scala 852:58]
+    ex1_pc_bit_out_nested_nested[29]; // @[src/main/scala/fpga/Core.scala 879:58]
   wire  _ex1_pc_bit_out_nested_T_48 = ex1_pc_bit_out_nested_nested[20] | ex1_reg_op2_data[3] &
-    ex1_pc_bit_out_nested_nested[28]; // @[src/main/scala/fpga/Core.scala 852:58]
+    ex1_pc_bit_out_nested_nested[28]; // @[src/main/scala/fpga/Core.scala 879:58]
   wire  _ex1_pc_bit_out_nested_T_52 = ex1_pc_bit_out_nested_nested[19] | ex1_reg_op2_data[3] &
-    ex1_pc_bit_out_nested_nested[27]; // @[src/main/scala/fpga/Core.scala 852:58]
+    ex1_pc_bit_out_nested_nested[27]; // @[src/main/scala/fpga/Core.scala 879:58]
   wire  _ex1_pc_bit_out_nested_T_56 = ex1_pc_bit_out_nested_nested[18] | ex1_reg_op2_data[3] &
-    ex1_pc_bit_out_nested_nested[26]; // @[src/main/scala/fpga/Core.scala 852:58]
+    ex1_pc_bit_out_nested_nested[26]; // @[src/main/scala/fpga/Core.scala 879:58]
   wire  _ex1_pc_bit_out_nested_T_60 = ex1_pc_bit_out_nested_nested[17] | ex1_reg_op2_data[3] &
-    ex1_pc_bit_out_nested_nested[25]; // @[src/main/scala/fpga/Core.scala 852:58]
+    ex1_pc_bit_out_nested_nested[25]; // @[src/main/scala/fpga/Core.scala 879:58]
   wire  _ex1_pc_bit_out_nested_T_64 = ex1_pc_bit_out_nested_nested[16] | ex1_reg_op2_data[3] &
-    ex1_pc_bit_out_nested_nested[24]; // @[src/main/scala/fpga/Core.scala 852:58]
+    ex1_pc_bit_out_nested_nested[24]; // @[src/main/scala/fpga/Core.scala 879:58]
   wire  _ex1_pc_bit_out_nested_T_68 = ex1_pc_bit_out_nested_nested[15] | ex1_reg_op2_data[3] &
-    ex1_pc_bit_out_nested_nested[7]; // @[src/main/scala/fpga/Core.scala 852:58]
+    ex1_pc_bit_out_nested_nested[7]; // @[src/main/scala/fpga/Core.scala 879:58]
   wire  _ex1_pc_bit_out_nested_T_72 = ex1_pc_bit_out_nested_nested[14] | ex1_reg_op2_data[3] &
-    ex1_pc_bit_out_nested_nested[6]; // @[src/main/scala/fpga/Core.scala 852:58]
+    ex1_pc_bit_out_nested_nested[6]; // @[src/main/scala/fpga/Core.scala 879:58]
   wire  _ex1_pc_bit_out_nested_T_76 = ex1_pc_bit_out_nested_nested[13] | ex1_reg_op2_data[3] &
-    ex1_pc_bit_out_nested_nested[5]; // @[src/main/scala/fpga/Core.scala 852:58]
+    ex1_pc_bit_out_nested_nested[5]; // @[src/main/scala/fpga/Core.scala 879:58]
   wire  _ex1_pc_bit_out_nested_T_80 = ex1_pc_bit_out_nested_nested[12] | ex1_reg_op2_data[3] &
-    ex1_pc_bit_out_nested_nested[4]; // @[src/main/scala/fpga/Core.scala 852:58]
+    ex1_pc_bit_out_nested_nested[4]; // @[src/main/scala/fpga/Core.scala 879:58]
   wire  _ex1_pc_bit_out_nested_T_84 = ex1_pc_bit_out_nested_nested[11] | ex1_reg_op2_data[3] &
-    ex1_pc_bit_out_nested_nested[3]; // @[src/main/scala/fpga/Core.scala 852:58]
+    ex1_pc_bit_out_nested_nested[3]; // @[src/main/scala/fpga/Core.scala 879:58]
   wire  _ex1_pc_bit_out_nested_T_88 = ex1_pc_bit_out_nested_nested[10] | ex1_reg_op2_data[3] &
-    ex1_pc_bit_out_nested_nested[2]; // @[src/main/scala/fpga/Core.scala 852:58]
+    ex1_pc_bit_out_nested_nested[2]; // @[src/main/scala/fpga/Core.scala 879:58]
   wire  _ex1_pc_bit_out_nested_T_92 = ex1_pc_bit_out_nested_nested[9] | ex1_reg_op2_data[3] &
-    ex1_pc_bit_out_nested_nested[1]; // @[src/main/scala/fpga/Core.scala 852:58]
+    ex1_pc_bit_out_nested_nested[1]; // @[src/main/scala/fpga/Core.scala 879:58]
   wire  _ex1_pc_bit_out_nested_T_96 = ex1_pc_bit_out_nested_nested[8] | ex1_reg_op2_data[3] &
-    ex1_pc_bit_out_nested_nested[0]; // @[src/main/scala/fpga/Core.scala 852:58]
+    ex1_pc_bit_out_nested_nested[0]; // @[src/main/scala/fpga/Core.scala 879:58]
   wire  _ex1_pc_bit_out_nested_T_100 = ex1_pc_bit_out_nested_nested[7] | ex1_reg_op2_data[3] &
-    ex1_pc_bit_out_nested_nested[15]; // @[src/main/scala/fpga/Core.scala 852:58]
+    ex1_pc_bit_out_nested_nested[15]; // @[src/main/scala/fpga/Core.scala 879:58]
   wire  _ex1_pc_bit_out_nested_T_104 = ex1_pc_bit_out_nested_nested[6] | ex1_reg_op2_data[3] &
-    ex1_pc_bit_out_nested_nested[14]; // @[src/main/scala/fpga/Core.scala 852:58]
+    ex1_pc_bit_out_nested_nested[14]; // @[src/main/scala/fpga/Core.scala 879:58]
   wire  _ex1_pc_bit_out_nested_T_108 = ex1_pc_bit_out_nested_nested[5] | ex1_reg_op2_data[3] &
-    ex1_pc_bit_out_nested_nested[13]; // @[src/main/scala/fpga/Core.scala 852:58]
+    ex1_pc_bit_out_nested_nested[13]; // @[src/main/scala/fpga/Core.scala 879:58]
   wire  _ex1_pc_bit_out_nested_T_112 = ex1_pc_bit_out_nested_nested[4] | ex1_reg_op2_data[3] &
-    ex1_pc_bit_out_nested_nested[12]; // @[src/main/scala/fpga/Core.scala 852:58]
+    ex1_pc_bit_out_nested_nested[12]; // @[src/main/scala/fpga/Core.scala 879:58]
   wire  _ex1_pc_bit_out_nested_T_116 = ex1_pc_bit_out_nested_nested[3] | ex1_reg_op2_data[3] &
-    ex1_pc_bit_out_nested_nested[11]; // @[src/main/scala/fpga/Core.scala 852:58]
+    ex1_pc_bit_out_nested_nested[11]; // @[src/main/scala/fpga/Core.scala 879:58]
   wire  _ex1_pc_bit_out_nested_T_120 = ex1_pc_bit_out_nested_nested[2] | ex1_reg_op2_data[3] &
-    ex1_pc_bit_out_nested_nested[10]; // @[src/main/scala/fpga/Core.scala 852:58]
+    ex1_pc_bit_out_nested_nested[10]; // @[src/main/scala/fpga/Core.scala 879:58]
   wire  _ex1_pc_bit_out_nested_T_124 = ex1_pc_bit_out_nested_nested[1] | ex1_reg_op2_data[3] &
-    ex1_pc_bit_out_nested_nested[9]; // @[src/main/scala/fpga/Core.scala 852:58]
+    ex1_pc_bit_out_nested_nested[9]; // @[src/main/scala/fpga/Core.scala 879:58]
   wire  _ex1_pc_bit_out_nested_T_128 = ex1_pc_bit_out_nested_nested[0] | ex1_reg_op2_data[3] &
-    ex1_pc_bit_out_nested_nested[8]; // @[src/main/scala/fpga/Core.scala 852:58]
+    ex1_pc_bit_out_nested_nested[8]; // @[src/main/scala/fpga/Core.scala 879:58]
   wire [7:0] ex1_pc_bit_out_nested_lo_lo = {_ex1_pc_bit_out_nested_T_100,_ex1_pc_bit_out_nested_T_104,
     _ex1_pc_bit_out_nested_T_108,_ex1_pc_bit_out_nested_T_112,_ex1_pc_bit_out_nested_T_116,_ex1_pc_bit_out_nested_T_120,
-    _ex1_pc_bit_out_nested_T_124,_ex1_pc_bit_out_nested_T_128}; // @[src/main/scala/fpga/Core.scala 852:8]
+    _ex1_pc_bit_out_nested_T_124,_ex1_pc_bit_out_nested_T_128}; // @[src/main/scala/fpga/Core.scala 879:8]
   wire [15:0] ex1_pc_bit_out_nested_lo = {_ex1_pc_bit_out_nested_T_68,_ex1_pc_bit_out_nested_T_72,
     _ex1_pc_bit_out_nested_T_76,_ex1_pc_bit_out_nested_T_80,_ex1_pc_bit_out_nested_T_84,_ex1_pc_bit_out_nested_T_88,
-    _ex1_pc_bit_out_nested_T_92,_ex1_pc_bit_out_nested_T_96,ex1_pc_bit_out_nested_lo_lo}; // @[src/main/scala/fpga/Core.scala 852:8]
+    _ex1_pc_bit_out_nested_T_92,_ex1_pc_bit_out_nested_T_96,ex1_pc_bit_out_nested_lo_lo}; // @[src/main/scala/fpga/Core.scala 879:8]
   wire [7:0] ex1_pc_bit_out_nested_hi_lo = {_ex1_pc_bit_out_nested_T_36,_ex1_pc_bit_out_nested_T_40,
     _ex1_pc_bit_out_nested_T_44,_ex1_pc_bit_out_nested_T_48,_ex1_pc_bit_out_nested_T_52,_ex1_pc_bit_out_nested_T_56,
-    _ex1_pc_bit_out_nested_T_60,_ex1_pc_bit_out_nested_T_64}; // @[src/main/scala/fpga/Core.scala 852:8]
+    _ex1_pc_bit_out_nested_T_60,_ex1_pc_bit_out_nested_T_64}; // @[src/main/scala/fpga/Core.scala 879:8]
   wire [31:0] ex1_pc_bit_out_nested = {_ex1_pc_bit_out_nested_T_4,_ex1_pc_bit_out_nested_T_8,_ex1_pc_bit_out_nested_T_12
     ,_ex1_pc_bit_out_nested_T_16,_ex1_pc_bit_out_nested_T_20,_ex1_pc_bit_out_nested_T_24,_ex1_pc_bit_out_nested_T_28,
-    _ex1_pc_bit_out_nested_T_32,ex1_pc_bit_out_nested_hi_lo,ex1_pc_bit_out_nested_lo}; // @[src/main/scala/fpga/Core.scala 852:8]
-  wire  _ex1_pc_bit_out_T_735 = ex1_pc_bit_out_nested[31] | ex1_reg_op2_data[4] & ex1_pc_bit_out_nested[15]; // @[src/main/scala/fpga/Core.scala 852:58]
-  wire  _ex1_pc_bit_out_T_739 = ex1_pc_bit_out_nested[30] | ex1_reg_op2_data[4] & ex1_pc_bit_out_nested[14]; // @[src/main/scala/fpga/Core.scala 852:58]
-  wire  _ex1_pc_bit_out_T_743 = ex1_pc_bit_out_nested[29] | ex1_reg_op2_data[4] & ex1_pc_bit_out_nested[13]; // @[src/main/scala/fpga/Core.scala 852:58]
-  wire  _ex1_pc_bit_out_T_747 = ex1_pc_bit_out_nested[28] | ex1_reg_op2_data[4] & ex1_pc_bit_out_nested[12]; // @[src/main/scala/fpga/Core.scala 852:58]
-  wire  _ex1_pc_bit_out_T_751 = ex1_pc_bit_out_nested[27] | ex1_reg_op2_data[4] & ex1_pc_bit_out_nested[11]; // @[src/main/scala/fpga/Core.scala 852:58]
-  wire  _ex1_pc_bit_out_T_755 = ex1_pc_bit_out_nested[26] | ex1_reg_op2_data[4] & ex1_pc_bit_out_nested[10]; // @[src/main/scala/fpga/Core.scala 852:58]
-  wire  _ex1_pc_bit_out_T_759 = ex1_pc_bit_out_nested[25] | ex1_reg_op2_data[4] & ex1_pc_bit_out_nested[9]; // @[src/main/scala/fpga/Core.scala 852:58]
-  wire  _ex1_pc_bit_out_T_763 = ex1_pc_bit_out_nested[24] | ex1_reg_op2_data[4] & ex1_pc_bit_out_nested[8]; // @[src/main/scala/fpga/Core.scala 852:58]
-  wire  _ex1_pc_bit_out_T_767 = ex1_pc_bit_out_nested[23] | ex1_reg_op2_data[4] & ex1_pc_bit_out_nested[7]; // @[src/main/scala/fpga/Core.scala 852:58]
-  wire  _ex1_pc_bit_out_T_771 = ex1_pc_bit_out_nested[22] | ex1_reg_op2_data[4] & ex1_pc_bit_out_nested[6]; // @[src/main/scala/fpga/Core.scala 852:58]
-  wire  _ex1_pc_bit_out_T_775 = ex1_pc_bit_out_nested[21] | ex1_reg_op2_data[4] & ex1_pc_bit_out_nested[5]; // @[src/main/scala/fpga/Core.scala 852:58]
-  wire  _ex1_pc_bit_out_T_779 = ex1_pc_bit_out_nested[20] | ex1_reg_op2_data[4] & ex1_pc_bit_out_nested[4]; // @[src/main/scala/fpga/Core.scala 852:58]
-  wire  _ex1_pc_bit_out_T_783 = ex1_pc_bit_out_nested[19] | ex1_reg_op2_data[4] & ex1_pc_bit_out_nested[3]; // @[src/main/scala/fpga/Core.scala 852:58]
-  wire  _ex1_pc_bit_out_T_787 = ex1_pc_bit_out_nested[18] | ex1_reg_op2_data[4] & ex1_pc_bit_out_nested[2]; // @[src/main/scala/fpga/Core.scala 852:58]
-  wire  _ex1_pc_bit_out_T_791 = ex1_pc_bit_out_nested[17] | ex1_reg_op2_data[4] & ex1_pc_bit_out_nested[1]; // @[src/main/scala/fpga/Core.scala 852:58]
-  wire  _ex1_pc_bit_out_T_795 = ex1_pc_bit_out_nested[16] | ex1_reg_op2_data[4] & ex1_pc_bit_out_nested[0]; // @[src/main/scala/fpga/Core.scala 852:58]
-  wire  _ex1_pc_bit_out_T_799 = ex1_pc_bit_out_nested[15] | ex1_reg_op2_data[4] & ex1_pc_bit_out_nested[31]; // @[src/main/scala/fpga/Core.scala 852:58]
-  wire  _ex1_pc_bit_out_T_803 = ex1_pc_bit_out_nested[14] | ex1_reg_op2_data[4] & ex1_pc_bit_out_nested[30]; // @[src/main/scala/fpga/Core.scala 852:58]
-  wire  _ex1_pc_bit_out_T_807 = ex1_pc_bit_out_nested[13] | ex1_reg_op2_data[4] & ex1_pc_bit_out_nested[29]; // @[src/main/scala/fpga/Core.scala 852:58]
-  wire  _ex1_pc_bit_out_T_811 = ex1_pc_bit_out_nested[12] | ex1_reg_op2_data[4] & ex1_pc_bit_out_nested[28]; // @[src/main/scala/fpga/Core.scala 852:58]
-  wire  _ex1_pc_bit_out_T_815 = ex1_pc_bit_out_nested[11] | ex1_reg_op2_data[4] & ex1_pc_bit_out_nested[27]; // @[src/main/scala/fpga/Core.scala 852:58]
-  wire  _ex1_pc_bit_out_T_819 = ex1_pc_bit_out_nested[10] | ex1_reg_op2_data[4] & ex1_pc_bit_out_nested[26]; // @[src/main/scala/fpga/Core.scala 852:58]
-  wire  _ex1_pc_bit_out_T_823 = ex1_pc_bit_out_nested[9] | ex1_reg_op2_data[4] & ex1_pc_bit_out_nested[25]; // @[src/main/scala/fpga/Core.scala 852:58]
-  wire  _ex1_pc_bit_out_T_827 = ex1_pc_bit_out_nested[8] | ex1_reg_op2_data[4] & ex1_pc_bit_out_nested[24]; // @[src/main/scala/fpga/Core.scala 852:58]
-  wire  _ex1_pc_bit_out_T_831 = ex1_pc_bit_out_nested[7] | ex1_reg_op2_data[4] & ex1_pc_bit_out_nested[23]; // @[src/main/scala/fpga/Core.scala 852:58]
-  wire  _ex1_pc_bit_out_T_835 = ex1_pc_bit_out_nested[6] | ex1_reg_op2_data[4] & ex1_pc_bit_out_nested[22]; // @[src/main/scala/fpga/Core.scala 852:58]
-  wire  _ex1_pc_bit_out_T_839 = ex1_pc_bit_out_nested[5] | ex1_reg_op2_data[4] & ex1_pc_bit_out_nested[21]; // @[src/main/scala/fpga/Core.scala 852:58]
-  wire  _ex1_pc_bit_out_T_843 = ex1_pc_bit_out_nested[4] | ex1_reg_op2_data[4] & ex1_pc_bit_out_nested[20]; // @[src/main/scala/fpga/Core.scala 852:58]
-  wire  _ex1_pc_bit_out_T_847 = ex1_pc_bit_out_nested[3] | ex1_reg_op2_data[4] & ex1_pc_bit_out_nested[19]; // @[src/main/scala/fpga/Core.scala 852:58]
-  wire  _ex1_pc_bit_out_T_851 = ex1_pc_bit_out_nested[2] | ex1_reg_op2_data[4] & ex1_pc_bit_out_nested[18]; // @[src/main/scala/fpga/Core.scala 852:58]
-  wire  _ex1_pc_bit_out_T_855 = ex1_pc_bit_out_nested[1] | ex1_reg_op2_data[4] & ex1_pc_bit_out_nested[17]; // @[src/main/scala/fpga/Core.scala 852:58]
-  wire  _ex1_pc_bit_out_T_859 = ex1_pc_bit_out_nested[0] | ex1_reg_op2_data[4] & ex1_pc_bit_out_nested[16]; // @[src/main/scala/fpga/Core.scala 852:58]
+    _ex1_pc_bit_out_nested_T_32,ex1_pc_bit_out_nested_hi_lo,ex1_pc_bit_out_nested_lo}; // @[src/main/scala/fpga/Core.scala 879:8]
+  wire  _ex1_pc_bit_out_T_735 = ex1_pc_bit_out_nested[31] | ex1_reg_op2_data[4] & ex1_pc_bit_out_nested[15]; // @[src/main/scala/fpga/Core.scala 879:58]
+  wire  _ex1_pc_bit_out_T_739 = ex1_pc_bit_out_nested[30] | ex1_reg_op2_data[4] & ex1_pc_bit_out_nested[14]; // @[src/main/scala/fpga/Core.scala 879:58]
+  wire  _ex1_pc_bit_out_T_743 = ex1_pc_bit_out_nested[29] | ex1_reg_op2_data[4] & ex1_pc_bit_out_nested[13]; // @[src/main/scala/fpga/Core.scala 879:58]
+  wire  _ex1_pc_bit_out_T_747 = ex1_pc_bit_out_nested[28] | ex1_reg_op2_data[4] & ex1_pc_bit_out_nested[12]; // @[src/main/scala/fpga/Core.scala 879:58]
+  wire  _ex1_pc_bit_out_T_751 = ex1_pc_bit_out_nested[27] | ex1_reg_op2_data[4] & ex1_pc_bit_out_nested[11]; // @[src/main/scala/fpga/Core.scala 879:58]
+  wire  _ex1_pc_bit_out_T_755 = ex1_pc_bit_out_nested[26] | ex1_reg_op2_data[4] & ex1_pc_bit_out_nested[10]; // @[src/main/scala/fpga/Core.scala 879:58]
+  wire  _ex1_pc_bit_out_T_759 = ex1_pc_bit_out_nested[25] | ex1_reg_op2_data[4] & ex1_pc_bit_out_nested[9]; // @[src/main/scala/fpga/Core.scala 879:58]
+  wire  _ex1_pc_bit_out_T_763 = ex1_pc_bit_out_nested[24] | ex1_reg_op2_data[4] & ex1_pc_bit_out_nested[8]; // @[src/main/scala/fpga/Core.scala 879:58]
+  wire  _ex1_pc_bit_out_T_767 = ex1_pc_bit_out_nested[23] | ex1_reg_op2_data[4] & ex1_pc_bit_out_nested[7]; // @[src/main/scala/fpga/Core.scala 879:58]
+  wire  _ex1_pc_bit_out_T_771 = ex1_pc_bit_out_nested[22] | ex1_reg_op2_data[4] & ex1_pc_bit_out_nested[6]; // @[src/main/scala/fpga/Core.scala 879:58]
+  wire  _ex1_pc_bit_out_T_775 = ex1_pc_bit_out_nested[21] | ex1_reg_op2_data[4] & ex1_pc_bit_out_nested[5]; // @[src/main/scala/fpga/Core.scala 879:58]
+  wire  _ex1_pc_bit_out_T_779 = ex1_pc_bit_out_nested[20] | ex1_reg_op2_data[4] & ex1_pc_bit_out_nested[4]; // @[src/main/scala/fpga/Core.scala 879:58]
+  wire  _ex1_pc_bit_out_T_783 = ex1_pc_bit_out_nested[19] | ex1_reg_op2_data[4] & ex1_pc_bit_out_nested[3]; // @[src/main/scala/fpga/Core.scala 879:58]
+  wire  _ex1_pc_bit_out_T_787 = ex1_pc_bit_out_nested[18] | ex1_reg_op2_data[4] & ex1_pc_bit_out_nested[2]; // @[src/main/scala/fpga/Core.scala 879:58]
+  wire  _ex1_pc_bit_out_T_791 = ex1_pc_bit_out_nested[17] | ex1_reg_op2_data[4] & ex1_pc_bit_out_nested[1]; // @[src/main/scala/fpga/Core.scala 879:58]
+  wire  _ex1_pc_bit_out_T_795 = ex1_pc_bit_out_nested[16] | ex1_reg_op2_data[4] & ex1_pc_bit_out_nested[0]; // @[src/main/scala/fpga/Core.scala 879:58]
+  wire  _ex1_pc_bit_out_T_799 = ex1_pc_bit_out_nested[15] | ex1_reg_op2_data[4] & ex1_pc_bit_out_nested[31]; // @[src/main/scala/fpga/Core.scala 879:58]
+  wire  _ex1_pc_bit_out_T_803 = ex1_pc_bit_out_nested[14] | ex1_reg_op2_data[4] & ex1_pc_bit_out_nested[30]; // @[src/main/scala/fpga/Core.scala 879:58]
+  wire  _ex1_pc_bit_out_T_807 = ex1_pc_bit_out_nested[13] | ex1_reg_op2_data[4] & ex1_pc_bit_out_nested[29]; // @[src/main/scala/fpga/Core.scala 879:58]
+  wire  _ex1_pc_bit_out_T_811 = ex1_pc_bit_out_nested[12] | ex1_reg_op2_data[4] & ex1_pc_bit_out_nested[28]; // @[src/main/scala/fpga/Core.scala 879:58]
+  wire  _ex1_pc_bit_out_T_815 = ex1_pc_bit_out_nested[11] | ex1_reg_op2_data[4] & ex1_pc_bit_out_nested[27]; // @[src/main/scala/fpga/Core.scala 879:58]
+  wire  _ex1_pc_bit_out_T_819 = ex1_pc_bit_out_nested[10] | ex1_reg_op2_data[4] & ex1_pc_bit_out_nested[26]; // @[src/main/scala/fpga/Core.scala 879:58]
+  wire  _ex1_pc_bit_out_T_823 = ex1_pc_bit_out_nested[9] | ex1_reg_op2_data[4] & ex1_pc_bit_out_nested[25]; // @[src/main/scala/fpga/Core.scala 879:58]
+  wire  _ex1_pc_bit_out_T_827 = ex1_pc_bit_out_nested[8] | ex1_reg_op2_data[4] & ex1_pc_bit_out_nested[24]; // @[src/main/scala/fpga/Core.scala 879:58]
+  wire  _ex1_pc_bit_out_T_831 = ex1_pc_bit_out_nested[7] | ex1_reg_op2_data[4] & ex1_pc_bit_out_nested[23]; // @[src/main/scala/fpga/Core.scala 879:58]
+  wire  _ex1_pc_bit_out_T_835 = ex1_pc_bit_out_nested[6] | ex1_reg_op2_data[4] & ex1_pc_bit_out_nested[22]; // @[src/main/scala/fpga/Core.scala 879:58]
+  wire  _ex1_pc_bit_out_T_839 = ex1_pc_bit_out_nested[5] | ex1_reg_op2_data[4] & ex1_pc_bit_out_nested[21]; // @[src/main/scala/fpga/Core.scala 879:58]
+  wire  _ex1_pc_bit_out_T_843 = ex1_pc_bit_out_nested[4] | ex1_reg_op2_data[4] & ex1_pc_bit_out_nested[20]; // @[src/main/scala/fpga/Core.scala 879:58]
+  wire  _ex1_pc_bit_out_T_847 = ex1_pc_bit_out_nested[3] | ex1_reg_op2_data[4] & ex1_pc_bit_out_nested[19]; // @[src/main/scala/fpga/Core.scala 879:58]
+  wire  _ex1_pc_bit_out_T_851 = ex1_pc_bit_out_nested[2] | ex1_reg_op2_data[4] & ex1_pc_bit_out_nested[18]; // @[src/main/scala/fpga/Core.scala 879:58]
+  wire  _ex1_pc_bit_out_T_855 = ex1_pc_bit_out_nested[1] | ex1_reg_op2_data[4] & ex1_pc_bit_out_nested[17]; // @[src/main/scala/fpga/Core.scala 879:58]
+  wire  _ex1_pc_bit_out_T_859 = ex1_pc_bit_out_nested[0] | ex1_reg_op2_data[4] & ex1_pc_bit_out_nested[16]; // @[src/main/scala/fpga/Core.scala 879:58]
   wire [7:0] ex1_pc_bit_out_lo_lo_1 = {_ex1_pc_bit_out_T_831,_ex1_pc_bit_out_T_835,_ex1_pc_bit_out_T_839,
-    _ex1_pc_bit_out_T_843,_ex1_pc_bit_out_T_847,_ex1_pc_bit_out_T_851,_ex1_pc_bit_out_T_855,_ex1_pc_bit_out_T_859}; // @[src/main/scala/fpga/Core.scala 852:8]
+    _ex1_pc_bit_out_T_843,_ex1_pc_bit_out_T_847,_ex1_pc_bit_out_T_851,_ex1_pc_bit_out_T_855,_ex1_pc_bit_out_T_859}; // @[src/main/scala/fpga/Core.scala 879:8]
   wire [15:0] ex1_pc_bit_out_lo_2 = {_ex1_pc_bit_out_T_799,_ex1_pc_bit_out_T_803,_ex1_pc_bit_out_T_807,
     _ex1_pc_bit_out_T_811,_ex1_pc_bit_out_T_815,_ex1_pc_bit_out_T_819,_ex1_pc_bit_out_T_823,_ex1_pc_bit_out_T_827,
-    ex1_pc_bit_out_lo_lo_1}; // @[src/main/scala/fpga/Core.scala 852:8]
+    ex1_pc_bit_out_lo_lo_1}; // @[src/main/scala/fpga/Core.scala 879:8]
   wire [7:0] ex1_pc_bit_out_hi_lo_1 = {_ex1_pc_bit_out_T_767,_ex1_pc_bit_out_T_771,_ex1_pc_bit_out_T_775,
-    _ex1_pc_bit_out_T_779,_ex1_pc_bit_out_T_783,_ex1_pc_bit_out_T_787,_ex1_pc_bit_out_T_791,_ex1_pc_bit_out_T_795}; // @[src/main/scala/fpga/Core.scala 852:8]
+    _ex1_pc_bit_out_T_779,_ex1_pc_bit_out_T_783,_ex1_pc_bit_out_T_787,_ex1_pc_bit_out_T_791,_ex1_pc_bit_out_T_795}; // @[src/main/scala/fpga/Core.scala 879:8]
   wire [31:0] _ex1_pc_bit_out_T_860 = {_ex1_pc_bit_out_T_735,_ex1_pc_bit_out_T_739,_ex1_pc_bit_out_T_743,
     _ex1_pc_bit_out_T_747,_ex1_pc_bit_out_T_751,_ex1_pc_bit_out_T_755,_ex1_pc_bit_out_T_759,_ex1_pc_bit_out_T_763,
-    ex1_pc_bit_out_hi_lo_1,ex1_pc_bit_out_lo_2}; // @[src/main/scala/fpga/Core.scala 852:8]
+    ex1_pc_bit_out_hi_lo_1,ex1_pc_bit_out_lo_2}; // @[src/main/scala/fpga/Core.scala 879:8]
   wire [31:0] _ex1_pc_bit_out_T_861 = _ex1_alu_out_T_15 ? _ex1_pc_bit_out_T_860 : 32'h0; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
   wire [31:0] _ex1_pc_bit_out_T_862 = _ex1_pc_bit_out_T_726 ? _ex1_pc_bit_out_T_728[31:0] : _ex1_pc_bit_out_T_861; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
   wire [31:0] _ex1_pc_bit_out_T_863 = _ex1_alu_out_T_20 ? {{16'd0}, _ex1_pc_bit_out_T_723} : _ex1_pc_bit_out_T_862; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
@@ -5488,201 +5816,208 @@ module Core(
   wire [31:0] _ex1_pc_bit_out_T_868 = _ex1_alu_out_T_47 ? {{26'd0}, _ex1_pc_bit_out_T_212} : _ex1_pc_bit_out_T_867; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
   wire [31:0] _ex1_pc_bit_out_T_869 = _ex1_alu_out_T_44 ? {{26'd0}, _ex1_pc_bit_out_T_95} : _ex1_pc_bit_out_T_868; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
   wire [31:0] ex1_pc_bit_out = _ex1_pc_bit_out_T ? _ex1_pc_bit_out_T_1 : _ex1_pc_bit_out_T_869; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
-  wire  _ex1_fun_sel_T_2 = _ex1_pc_bit_out_T | ex1_reg_wb_sel == 3'h6; // @[src/main/scala/fpga/Core.scala 886:33]
-  wire  _ex1_fun_sel_T_6 = (_ex1_pc_bit_out_T | ex1_reg_wb_sel == 3'h6) & _ex1_pc_bit_out_T_726; // @[src/main/scala/fpga/Core.scala 886:63]
-  wire  _ex1_fun_sel_T_10 = ex1_reg_wb_sel == 3'h3; // @[src/main/scala/fpga/Core.scala 890:21]
-  wire  _ex1_fun_sel_T_11 = ex1_reg_wb_sel == 3'h7; // @[src/main/scala/fpga/Core.scala 890:50]
-  wire  _ex1_fun_sel_T_12 = ex1_reg_wb_sel == 3'h3 | ex1_reg_wb_sel == 3'h7; // @[src/main/scala/fpga/Core.scala 890:32]
-  wire  _ex1_fun_sel_T_13 = ex1_reg_wb_sel == 3'h1; // @[src/main/scala/fpga/Core.scala 891:21]
+  wire  _ex1_fun_sel_T_2 = _ex1_pc_bit_out_T | ex1_reg_wb_sel == 3'h6; // @[src/main/scala/fpga/Core.scala 913:33]
+  wire  _ex1_fun_sel_T_6 = (_ex1_pc_bit_out_T | ex1_reg_wb_sel == 3'h6) & _ex1_pc_bit_out_T_726; // @[src/main/scala/fpga/Core.scala 913:63]
+  wire  _ex1_fun_sel_T_10 = ex1_reg_wb_sel == 3'h3; // @[src/main/scala/fpga/Core.scala 917:21]
+  wire  _ex1_fun_sel_T_11 = ex1_reg_wb_sel == 3'h7; // @[src/main/scala/fpga/Core.scala 917:50]
+  wire  _ex1_fun_sel_T_12 = ex1_reg_wb_sel == 3'h3 | ex1_reg_wb_sel == 3'h7; // @[src/main/scala/fpga/Core.scala 917:32]
+  wire  _ex1_fun_sel_T_13 = ex1_reg_wb_sel == 3'h1; // @[src/main/scala/fpga/Core.scala 918:21]
   wire [2:0] _ex1_fun_sel_T_14 = _ex1_fun_sel_T_13 ? 3'h1 : 3'h0; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
   wire [2:0] _ex1_fun_sel_T_15 = _ex1_fun_sel_T_12 ? 3'h3 : _ex1_fun_sel_T_14; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
-  wire [31:0] _ex1_dividend_T_1 = ~ex1_reg_op1_data; // @[src/main/scala/fpga/Core.scala 905:47]
-  wire [31:0] _ex1_dividend_T_3 = _ex1_dividend_T_1 + 32'h1; // @[src/main/scala/fpga/Core.scala 905:65]
-  wire [36:0] _ex1_dividend_T_5 = {5'h0,_ex1_dividend_T_3}; // @[src/main/scala/fpga/Core.scala 905:26]
-  wire [36:0] _ex1_dividend_T_8 = {5'h0,ex1_reg_op1_data}; // @[src/main/scala/fpga/Core.scala 907:26]
-  wire [31:0] _ex1_divisor_T_2 = _ex1_alu_out_T_12 + 32'h1; // @[src/main/scala/fpga/Core.scala 911:41]
-  wire  ex1_sign_op1 = (_ex1_alu_out_T_79 | _ex1_alu_out_T_74) & ex1_reg_op1_data[31]; // @[src/main/scala/fpga/Core.scala 902:69 909:18]
-  wire  _GEN_289 = ex1_reg_op2_data[31] ? ~ex1_sign_op1 : ex1_sign_op1; // @[src/main/scala/fpga/Core.scala 910:49 912:21 915:21]
-  wire  _GEN_290 = (_ex1_alu_out_T_63 | _ex1_alu_out_T_69) & _ex1_fun_sel_T_13; // @[src/main/scala/fpga/Core.scala 917:77 918:16 894:31]
-  wire  ex1_divrem = _ex1_alu_out_T_79 | _ex1_alu_out_T_74 ? _ex1_fun_sel_T_13 : _GEN_290; // @[src/main/scala/fpga/Core.scala 902:69 903:16]
-  wire  ex1_sign_op12 = (_ex1_alu_out_T_79 | _ex1_alu_out_T_74) & _GEN_289; // @[src/main/scala/fpga/Core.scala 902:69]
-  wire  ex1_zero_op2 = ex1_reg_op2_data == 32'h0; // @[src/main/scala/fpga/Core.scala 924:37]
-  wire  _ex1_maybe_br_taken_T_1 = ex1_reg_exe_fun[2:0] == 3'h0; // @[src/main/scala/fpga/Core.scala 932:28]
-  wire  _ex1_maybe_br_taken_T_2 = ex1_reg_op1_data == ex1_reg_op2_data; // @[src/main/scala/fpga/Core.scala 932:69]
-  wire  _ex1_maybe_br_taken_T_4 = ex1_reg_exe_fun[2:0] == 3'h1; // @[src/main/scala/fpga/Core.scala 933:28]
-  wire  _ex1_maybe_br_taken_T_6 = ~_ex1_maybe_br_taken_T_2; // @[src/main/scala/fpga/Core.scala 933:50]
-  wire  _ex1_maybe_br_taken_T_8 = ex1_reg_exe_fun[2:0] == 3'h2; // @[src/main/scala/fpga/Core.scala 934:28]
-  wire  _ex1_maybe_br_taken_T_13 = ex1_reg_exe_fun[2:0] == 3'h3; // @[src/main/scala/fpga/Core.scala 935:28]
-  wire  _ex1_maybe_br_taken_T_17 = ~_ex1_alu_out_T_41; // @[src/main/scala/fpga/Core.scala 935:50]
-  wire  _ex1_maybe_br_taken_T_19 = ex1_reg_exe_fun[2:0] == 3'h4; // @[src/main/scala/fpga/Core.scala 936:28]
-  wire  _ex1_maybe_br_taken_T_22 = ex1_reg_exe_fun[2:0] == 3'h5; // @[src/main/scala/fpga/Core.scala 937:28]
-  wire  _ex1_maybe_br_taken_T_24 = ~_ex1_alu_out_T_43; // @[src/main/scala/fpga/Core.scala 937:50]
+  wire [31:0] _ex1_dividend_T_1 = ~ex1_reg_op1_data; // @[src/main/scala/fpga/Core.scala 932:47]
+  wire [31:0] _ex1_dividend_T_3 = _ex1_dividend_T_1 + 32'h1; // @[src/main/scala/fpga/Core.scala 932:65]
+  wire [36:0] _ex1_dividend_T_5 = {5'h0,_ex1_dividend_T_3}; // @[src/main/scala/fpga/Core.scala 932:26]
+  wire [36:0] _ex1_dividend_T_8 = {5'h0,ex1_reg_op1_data}; // @[src/main/scala/fpga/Core.scala 934:26]
+  wire [31:0] _ex1_divisor_T_2 = _ex1_alu_out_T_12 + 32'h1; // @[src/main/scala/fpga/Core.scala 938:41]
+  wire  ex1_sign_op1 = (_ex1_alu_out_T_79 | _ex1_alu_out_T_74) & ex1_reg_op1_data[31]; // @[src/main/scala/fpga/Core.scala 929:69 936:18]
+  wire  _GEN_329 = ex1_reg_op2_data[31] ? ~ex1_sign_op1 : ex1_sign_op1; // @[src/main/scala/fpga/Core.scala 937:49 939:21 942:21]
+  wire  _GEN_330 = (_ex1_alu_out_T_63 | _ex1_alu_out_T_69) & _ex1_fun_sel_T_13; // @[src/main/scala/fpga/Core.scala 944:77 945:16 921:31]
+  wire  ex1_divrem = _ex1_alu_out_T_79 | _ex1_alu_out_T_74 ? _ex1_fun_sel_T_13 : _GEN_330; // @[src/main/scala/fpga/Core.scala 929:69 930:16]
+  wire  ex1_sign_op12 = (_ex1_alu_out_T_79 | _ex1_alu_out_T_74) & _GEN_329; // @[src/main/scala/fpga/Core.scala 929:69]
+  wire  ex1_zero_op2 = ex1_reg_op2_data == 32'h0; // @[src/main/scala/fpga/Core.scala 951:37]
+  wire  _ex1_maybe_br_taken_T_1 = ex1_reg_exe_fun[2:0] == 3'h0; // @[src/main/scala/fpga/Core.scala 959:28]
+  wire  _ex1_maybe_br_taken_T_2 = ex1_reg_op1_data == ex1_reg_op2_data; // @[src/main/scala/fpga/Core.scala 959:69]
+  wire  _ex1_maybe_br_taken_T_4 = ex1_reg_exe_fun[2:0] == 3'h1; // @[src/main/scala/fpga/Core.scala 960:28]
+  wire  _ex1_maybe_br_taken_T_6 = ~_ex1_maybe_br_taken_T_2; // @[src/main/scala/fpga/Core.scala 960:50]
+  wire  _ex1_maybe_br_taken_T_8 = ex1_reg_exe_fun[2:0] == 3'h2; // @[src/main/scala/fpga/Core.scala 961:28]
+  wire  _ex1_maybe_br_taken_T_13 = ex1_reg_exe_fun[2:0] == 3'h3; // @[src/main/scala/fpga/Core.scala 962:28]
+  wire  _ex1_maybe_br_taken_T_17 = ~_ex1_alu_out_T_41; // @[src/main/scala/fpga/Core.scala 962:50]
+  wire  _ex1_maybe_br_taken_T_19 = ex1_reg_exe_fun[2:0] == 3'h4; // @[src/main/scala/fpga/Core.scala 963:28]
+  wire  _ex1_maybe_br_taken_T_22 = ex1_reg_exe_fun[2:0] == 3'h5; // @[src/main/scala/fpga/Core.scala 964:28]
+  wire  _ex1_maybe_br_taken_T_24 = ~_ex1_alu_out_T_43; // @[src/main/scala/fpga/Core.scala 964:50]
   wire  _ex1_maybe_br_taken_T_26 = _ex1_maybe_br_taken_T_19 ? _ex1_alu_out_T_43 : _ex1_maybe_br_taken_T_22 &
     _ex1_maybe_br_taken_T_24; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
   wire  _ex1_maybe_br_taken_T_27 = _ex1_maybe_br_taken_T_13 ? _ex1_maybe_br_taken_T_17 : _ex1_maybe_br_taken_T_26; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
   wire  _ex1_maybe_br_taken_T_28 = _ex1_maybe_br_taken_T_8 ? _ex1_alu_out_T_41 : _ex1_maybe_br_taken_T_27; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
   wire  _ex1_maybe_br_taken_T_29 = _ex1_maybe_br_taken_T_4 ? _ex1_maybe_br_taken_T_6 : _ex1_maybe_br_taken_T_28; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
   wire  ex1_maybe_br_taken = _ex1_maybe_br_taken_T_1 ? _ex1_maybe_br_taken_T_2 : _ex1_maybe_br_taken_T_29; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
-  wire  ex1_is_br_taken = ex1_maybe_br_taken & ex1_reg_is_br; // @[src/main/scala/fpga/Core.scala 939:44]
-  wire [30:0] ex1_fetch_pc = ex1_reg_is_j ? ex1_add_out[31:1] : ex1_reg_direct_jbr_pc; // @[src/main/scala/fpga/Core.scala 940:25]
-  wire  _ex1_csr_fetch_pc_T = ex1_is_br_taken | ex1_reg_is_j; // @[src/main/scala/fpga/Core.scala 943:22]
+  wire  ex1_is_br_taken = ex1_maybe_br_taken & ex1_reg_is_br; // @[src/main/scala/fpga/Core.scala 966:44]
+  wire [30:0] ex1_fetch_pc = ex1_reg_is_j ? ex1_add_out[31:1] : ex1_reg_direct_jbr_pc; // @[src/main/scala/fpga/Core.scala 967:25]
+  wire  _ex1_csr_fetch_pc_T = ex1_is_br_taken | ex1_reg_is_j; // @[src/main/scala/fpga/Core.scala 970:22]
   wire [30:0] _ex1_csr_fetch_pc_T_1 = _ex1_csr_fetch_pc_T ? ex1_fetch_pc : ex1_next_pc; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
-  reg  csr_reg_is_meintr; // @[src/main/scala/fpga/Core.scala 1018:34]
-  wire  csr_is_valid_inst = ex1_reg_is_valid_inst & _rrd_stall_T; // @[src/main/scala/fpga/Core.scala 1029:49]
-  wire  csr_is_meintr = csr_reg_is_meintr & csr_is_valid_inst; // @[src/main/scala/fpga/Core.scala 1030:41]
-  reg  csr_reg_is_mtintr; // @[src/main/scala/fpga/Core.scala 1023:34]
-  wire  csr_is_mtintr = csr_reg_is_mtintr & csr_is_valid_inst; // @[src/main/scala/fpga/Core.scala 1031:41]
-  wire  ex1_en = csr_is_valid_inst & ~csr_is_meintr & ~csr_is_mtintr; // @[src/main/scala/fpga/Core.scala 1032:49]
-  wire  csr_is_trap = ex1_en & ex1_reg_is_trap; // @[src/main/scala/fpga/Core.scala 1033:28]
-  wire  csr_is_mret = ex1_en & ex1_reg_is_mret; // @[src/main/scala/fpga/Core.scala 1035:28]
-  wire  _GEN_372 = csr_is_trap | csr_is_mret; // @[src/main/scala/fpga/Core.scala 1103:28 1111:26]
-  wire  _GEN_380 = csr_is_mtintr | _GEN_372; // @[src/main/scala/fpga/Core.scala 1093:30 1101:26]
-  wire  csr_is_br = csr_is_meintr | _GEN_380; // @[src/main/scala/fpga/Core.scala 1083:24 1091:26]
-  wire [30:0] _GEN_373 = csr_is_trap ? csr_reg_trap_vector : csr_reg_mepc; // @[src/main/scala/fpga/Core.scala 1103:28 1112:26]
-  wire [30:0] _GEN_381 = csr_is_mtintr ? csr_reg_trap_vector : _GEN_373; // @[src/main/scala/fpga/Core.scala 1093:30 1102:26]
-  wire [30:0] csr_br_pc = csr_is_meintr ? csr_reg_trap_vector : _GEN_381; // @[src/main/scala/fpga/Core.scala 1083:24 1092:26]
+  reg  csr_reg_is_meintr; // @[src/main/scala/fpga/Core.scala 1085:34]
+  wire  csr_is_valid_inst = ex1_reg_is_valid_inst & _rrd_stall_T; // @[src/main/scala/fpga/Core.scala 1096:49]
+  wire  csr_is_meintr = csr_reg_is_meintr & csr_is_valid_inst; // @[src/main/scala/fpga/Core.scala 1097:41]
+  reg  csr_reg_is_mtintr; // @[src/main/scala/fpga/Core.scala 1090:34]
+  wire  csr_is_mtintr = csr_reg_is_mtintr & csr_is_valid_inst; // @[src/main/scala/fpga/Core.scala 1098:41]
+  wire  ex1_en = csr_is_valid_inst & ~csr_is_meintr & ~csr_is_mtintr; // @[src/main/scala/fpga/Core.scala 1099:49]
+  wire  csr_is_trap = ex1_en & ex1_reg_is_trap; // @[src/main/scala/fpga/Core.scala 1100:28]
+  wire  csr_is_mret = ex1_en & ex1_reg_is_mret; // @[src/main/scala/fpga/Core.scala 1102:28]
+  wire  _GEN_412 = csr_is_trap | csr_is_mret; // @[src/main/scala/fpga/Core.scala 1170:28 1178:26]
+  wire  _GEN_420 = csr_is_mtintr | _GEN_412; // @[src/main/scala/fpga/Core.scala 1160:30 1168:26]
+  wire  csr_is_br = csr_is_meintr | _GEN_420; // @[src/main/scala/fpga/Core.scala 1150:24 1158:26]
+  wire [30:0] _GEN_413 = csr_is_trap ? csr_reg_trap_vector : csr_reg_mepc; // @[src/main/scala/fpga/Core.scala 1170:28 1179:26]
+  wire [30:0] _GEN_421 = csr_is_mtintr ? csr_reg_trap_vector : _GEN_413; // @[src/main/scala/fpga/Core.scala 1160:30 1169:26]
+  wire [30:0] csr_br_pc = csr_is_meintr ? csr_reg_trap_vector : _GEN_421; // @[src/main/scala/fpga/Core.scala 1150:24 1159:26]
   wire [30:0] ex1_csr_fetch_pc = csr_is_br ? csr_br_pc : _ex1_csr_fetch_pc_T_1; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
-  wire [30:0] ex1_predict_pc = ex1_reg_bp_taken ? ex1_reg_bp_target : ex1_next_pc; // @[src/main/scala/fpga/Core.scala 945:27]
-  wire  ex1_bp_failure = ex1_csr_fetch_pc != ex1_predict_pc; // @[src/main/scala/fpga/Core.scala 946:41]
-  wire  ex1_fetch_pc_en = ex1_bp_failure & _rrd_stall_T; // @[src/main/scala/fpga/Core.scala 948:37]
-  wire  _ex1_cnt_if_taken_T_4 = ~ex1_reg_bp_cnt[1] | ex1_reg_bp_cnt[0]; // @[src/main/scala/fpga/Core.scala 955:72]
-  wire [1:0] ex1_cnt_if_taken = {ex1_reg_bp_cnt[0],_ex1_cnt_if_taken_T_4}; // @[src/main/scala/fpga/Core.scala 955:29]
-  wire  _ex1_cnt_if_not_taken_T_1 = ~ex1_reg_bp_cnt[0]; // @[src/main/scala/fpga/Core.scala 962:34]
-  wire  _ex1_cnt_if_not_taken_T_4 = ex1_reg_bp_cnt[1] & ex1_reg_bp_cnt[0]; // @[src/main/scala/fpga/Core.scala 962:76]
-  wire [1:0] ex1_cnt_if_not_taken = {_ex1_cnt_if_not_taken_T_1,_ex1_cnt_if_not_taken_T_4}; // @[src/main/scala/fpga/Core.scala 962:33]
-  wire  _ic_btb_io_up_en_T_3 = ex1_reg_actual_attr == 2'h0 & ex1_reg_bp_attr != 2'h0 | ex1_is_br_taken; // @[src/main/scala/fpga/Core.scala 971:88]
-  wire  _ic_btb_io_up_en_T_4 = ex1_reg_actual_attr == 2'h2; // @[src/main/scala/fpga/Core.scala 973:26]
-  wire  _ic_btb_io_up_en_T_5 = _ic_btb_io_up_en_T_3 | _ic_btb_io_up_en_T_4; // @[src/main/scala/fpga/Core.scala 972:23]
-  wire  _ic_btb_io_up_en_T_6 = ex1_reg_actual_attr == 2'h3; // @[src/main/scala/fpga/Core.scala 974:26]
-  wire  _ic_btb_io_up_en_T_7 = _ic_btb_io_up_en_T_5 | _ic_btb_io_up_en_T_6; // @[src/main/scala/fpga/Core.scala 973:46]
-  wire  _ic_btb_io_up_en_T_8 = _ic_btb_io_up_en_T_7 | ex1_reg_actual_is_ret; // @[src/main/scala/fpga/Core.scala 974:46]
-  wire  _T_61 = ~ex1_en & (ex1_reg_mem_use_reg | ex1_reg_inst3_use_reg); // @[src/main/scala/fpga/Core.scala 1000:43]
-  wire  ex1_hazard = ex1_reg_rf_wen & ex1_reg_wb_addr != 5'h0 & ex1_en; // @[src/main/scala/fpga/Core.scala 1004:76]
-  wire  _ex1_fw_en_next_T_2 = ex1_reg_wb_sel != 3'h5; // @[src/main/scala/fpga/Core.scala 1005:84]
-  wire  ex1_fw_en_next = ex1_hazard & ex1_reg_wb_sel != 3'h1 & ex1_reg_wb_sel != 3'h5; // @[src/main/scala/fpga/Core.scala 1005:65]
-  wire  _T_67 = ex1_reg_csr_addr == 12'h300; // @[src/main/scala/fpga/Core.scala 1065:34]
-  wire  _GEN_328 = ex1_reg_csr_addr == 12'h341 ? 1'h0 : _T_67; // @[src/main/scala/fpga/Core.scala 1016:42 1063:53]
-  wire  _GEN_340 = ex1_reg_csr_addr == 12'h305 ? 1'h0 : _GEN_328; // @[src/main/scala/fpga/Core.scala 1016:42 1061:48]
-  wire  _GEN_352 = ex1_en & _ex1_fun_sel_T_10 & _GEN_340; // @[src/main/scala/fpga/Core.scala 1016:42 1060:46]
-  wire  _GEN_362 = csr_is_mret | _GEN_352; // @[src/main/scala/fpga/Core.scala 1113:28 1116:26]
-  wire  _GEN_370 = csr_is_trap | _GEN_362; // @[src/main/scala/fpga/Core.scala 1103:28 1109:26]
-  wire  _GEN_378 = csr_is_mtintr | _GEN_370; // @[src/main/scala/fpga/Core.scala 1093:30 1099:26]
-  wire  csr_mstatus_mie_fw_en = csr_is_meintr | _GEN_378; // @[src/main/scala/fpga/Core.scala 1083:24 1089:26]
-  wire  _csr_wdata_T = ex1_reg_csr_cmd == 2'h1; // @[src/main/scala/fpga/Core.scala 1055:22]
-  wire  _csr_wdata_T_1 = ex1_reg_csr_cmd == 2'h2; // @[src/main/scala/fpga/Core.scala 1056:22]
-  wire [31:0] _csr_rdata_T_10 = {20'h0,io_intr,3'h0,mtimer_io_intr,7'h0}; // @[src/main/scala/fpga/Core.scala 1051:29]
-  wire [31:0] _csr_rdata_T_9 = {20'h0,csr_reg_mie_meie,3'h0,csr_reg_mie_mtie,7'h0}; // @[src/main/scala/fpga/Core.scala 1050:29]
-  wire [31:0] _csr_rdata_T_8 = {24'h0,csr_reg_mstatus_mpie,3'h0,csr_reg_mstatus_mie,3'h0}; // @[src/main/scala/fpga/Core.scala 1048:29]
-  wire [31:0] _csr_rdata_T_7 = {csr_reg_mepc,1'h0}; // @[src/main/scala/fpga/Core.scala 1045:29]
-  wire [31:0] _csr_rdata_T = {csr_reg_trap_vector,1'h0}; // @[src/main/scala/fpga/Core.scala 1038:29]
-  wire [31:0] _csr_rdata_T_12 = 12'h305 == ex1_reg_csr_addr ? _csr_rdata_T : 32'h0; // @[src/main/scala/fpga/Core.scala 1037:63]
-  wire [31:0] _csr_rdata_T_14 = 12'hc01 == ex1_reg_csr_addr ? mtimer_io_mtime[31:0] : _csr_rdata_T_12; // @[src/main/scala/fpga/Core.scala 1037:63]
-  wire [31:0] _csr_rdata_T_16 = 12'hc00 == ex1_reg_csr_addr ? cycle_counter_io_value[31:0] : _csr_rdata_T_14; // @[src/main/scala/fpga/Core.scala 1037:63]
-  wire [31:0] _csr_rdata_T_18 = 12'hc02 == ex1_reg_csr_addr ? instret[31:0] : _csr_rdata_T_16; // @[src/main/scala/fpga/Core.scala 1037:63]
-  wire [31:0] _csr_rdata_T_20 = 12'hc80 == ex1_reg_csr_addr ? cycle_counter_io_value[63:32] : _csr_rdata_T_18; // @[src/main/scala/fpga/Core.scala 1037:63]
-  wire [31:0] _csr_rdata_T_22 = 12'hc81 == ex1_reg_csr_addr ? mtimer_io_mtime[63:32] : _csr_rdata_T_20; // @[src/main/scala/fpga/Core.scala 1037:63]
-  wire [31:0] _csr_rdata_T_24 = 12'hc82 == ex1_reg_csr_addr ? instret[63:32] : _csr_rdata_T_22; // @[src/main/scala/fpga/Core.scala 1037:63]
-  wire [31:0] _csr_rdata_T_26 = 12'h341 == ex1_reg_csr_addr ? _csr_rdata_T_7 : _csr_rdata_T_24; // @[src/main/scala/fpga/Core.scala 1037:63]
-  wire [31:0] _csr_rdata_T_28 = 12'h342 == ex1_reg_csr_addr ? csr_reg_mcause : _csr_rdata_T_26; // @[src/main/scala/fpga/Core.scala 1037:63]
-  wire [31:0] _csr_rdata_T_30 = 12'h300 == ex1_reg_csr_addr ? _csr_rdata_T_8 : _csr_rdata_T_28; // @[src/main/scala/fpga/Core.scala 1037:63]
-  wire [31:0] _csr_rdata_T_32 = 12'h340 == ex1_reg_csr_addr ? csr_reg_mscratch : _csr_rdata_T_30; // @[src/main/scala/fpga/Core.scala 1037:63]
-  wire [31:0] _csr_rdata_T_34 = 12'h304 == ex1_reg_csr_addr ? _csr_rdata_T_9 : _csr_rdata_T_32; // @[src/main/scala/fpga/Core.scala 1037:63]
-  wire [31:0] csr_rdata = 12'h344 == ex1_reg_csr_addr ? _csr_rdata_T_10 : _csr_rdata_T_34; // @[src/main/scala/fpga/Core.scala 1037:63]
-  wire [31:0] _csr_wdata_T_2 = csr_rdata | ex1_reg_op1_data; // @[src/main/scala/fpga/Core.scala 1056:47]
-  wire  _csr_wdata_T_3 = ex1_reg_csr_cmd == 2'h3; // @[src/main/scala/fpga/Core.scala 1057:22]
-  wire [31:0] _csr_wdata_T_5 = csr_rdata & _ex1_dividend_T_1; // @[src/main/scala/fpga/Core.scala 1057:47]
+  wire [30:0] ex1_predict_pc = ex1_reg_bp_taken ? ex1_reg_bp_target : ex1_next_pc; // @[src/main/scala/fpga/Core.scala 972:27]
+  wire  ex1_bp_failure = ex1_csr_fetch_pc != ex1_predict_pc; // @[src/main/scala/fpga/Core.scala 973:41]
+  wire  ex1_fetch_pc_en = ex1_bp_failure & _rrd_stall_T; // @[src/main/scala/fpga/Core.scala 975:37]
+  wire  _T_67 = ex1_en & ex1_reg_is_br; // @[src/main/scala/fpga/Core.scala 977:16]
+  wire  _T_70 = ex1_reg_bp_cnt[0] & ex1_reg_bp_gcnt == 2'h2; // @[src/main/scala/fpga/Core.scala 978:29]
+  wire  _T_76 = ~ex1_reg_bp_cnt[0]; // @[src/main/scala/fpga/Core.scala 984:17]
+  wire  _T_78 = ~ex1_reg_bp_cnt[0] & ex1_reg_bp_gcnt == 2'h3; // @[src/main/scala/fpga/Core.scala 984:36]
+  wire  _ex1_cnt_if_taken_T_4 = ~ex1_reg_bp_cnt[1] | ex1_reg_bp_cnt[0]; // @[src/main/scala/fpga/Core.scala 997:72]
+  wire [1:0] ex1_cnt_if_taken = {ex1_reg_bp_cnt[0],_ex1_cnt_if_taken_T_4}; // @[src/main/scala/fpga/Core.scala 997:29]
+  wire  _ex1_cnt_if_not_taken_T_4 = ex1_reg_bp_cnt[1] & ex1_reg_bp_cnt[0]; // @[src/main/scala/fpga/Core.scala 1004:76]
+  wire [1:0] ex1_cnt_if_not_taken = {_T_76,_ex1_cnt_if_not_taken_T_4}; // @[src/main/scala/fpga/Core.scala 1004:33]
+  wire  _ex1_gcnt_if_taken_T_3 = ex1_reg_bp_gcnt[0] ^ ~ex1_reg_bp_gcnt[1]; // @[src/main/scala/fpga/Core.scala 1012:50]
+  wire [1:0] ex1_gcnt_if_taken = {_ex1_gcnt_if_taken_T_3,_ex1_gcnt_if_taken_T_3}; // @[src/main/scala/fpga/Core.scala 1012:30]
+  wire  _ex1_gcnt_if_not_taken_T_1 = ~ex1_reg_bp_gcnt[0]; // @[src/main/scala/fpga/Core.scala 1018:35]
+  wire [1:0] ex1_gcnt_if_not_taken = {_ex1_gcnt_if_not_taken_T_1,1'h0}; // @[src/main/scala/fpga/Core.scala 1018:34]
+  wire  _ic_btb_io_up_en_T_3 = ex1_reg_actual_attr == 2'h0 & ex1_reg_bp_attr != 2'h0 | ex1_is_br_taken; // @[src/main/scala/fpga/Core.scala 1028:88]
+  wire  _ic_btb_io_up_en_T_4 = ex1_reg_actual_attr == 2'h2; // @[src/main/scala/fpga/Core.scala 1030:26]
+  wire  _ic_btb_io_up_en_T_5 = _ic_btb_io_up_en_T_3 | _ic_btb_io_up_en_T_4; // @[src/main/scala/fpga/Core.scala 1029:23]
+  wire  _ic_btb_io_up_en_T_6 = ex1_reg_actual_attr == 2'h3; // @[src/main/scala/fpga/Core.scala 1031:26]
+  wire  _ic_btb_io_up_en_T_7 = _ic_btb_io_up_en_T_5 | _ic_btb_io_up_en_T_6; // @[src/main/scala/fpga/Core.scala 1030:46]
+  wire  _ic_btb_io_up_en_T_8 = _ic_btb_io_up_en_T_7 | ex1_reg_actual_is_ret; // @[src/main/scala/fpga/Core.scala 1031:46]
+  wire  _T_85 = ~ex1_en & (ex1_reg_mem_use_reg | ex1_reg_inst3_use_reg); // @[src/main/scala/fpga/Core.scala 1067:43]
+  wire  ex1_hazard = ex1_reg_rf_wen & ex1_reg_wb_addr != 5'h0 & ex1_en; // @[src/main/scala/fpga/Core.scala 1071:76]
+  wire  _ex1_fw_en_next_T_2 = ex1_reg_wb_sel != 3'h5; // @[src/main/scala/fpga/Core.scala 1072:84]
+  wire  ex1_fw_en_next = ex1_hazard & ex1_reg_wb_sel != 3'h1 & ex1_reg_wb_sel != 3'h5; // @[src/main/scala/fpga/Core.scala 1072:65]
+  wire  _T_91 = ex1_reg_csr_addr == 12'h300; // @[src/main/scala/fpga/Core.scala 1132:34]
+  wire  _GEN_368 = ex1_reg_csr_addr == 12'h341 ? 1'h0 : _T_91; // @[src/main/scala/fpga/Core.scala 1083:42 1130:53]
+  wire  _GEN_380 = ex1_reg_csr_addr == 12'h305 ? 1'h0 : _GEN_368; // @[src/main/scala/fpga/Core.scala 1083:42 1128:48]
+  wire  _GEN_392 = ex1_en & _ex1_fun_sel_T_10 & _GEN_380; // @[src/main/scala/fpga/Core.scala 1083:42 1127:46]
+  wire  _GEN_402 = csr_is_mret | _GEN_392; // @[src/main/scala/fpga/Core.scala 1180:28 1183:26]
+  wire  _GEN_410 = csr_is_trap | _GEN_402; // @[src/main/scala/fpga/Core.scala 1170:28 1176:26]
+  wire  _GEN_418 = csr_is_mtintr | _GEN_410; // @[src/main/scala/fpga/Core.scala 1160:30 1166:26]
+  wire  csr_mstatus_mie_fw_en = csr_is_meintr | _GEN_418; // @[src/main/scala/fpga/Core.scala 1150:24 1156:26]
+  wire  _csr_wdata_T = ex1_reg_csr_cmd == 2'h1; // @[src/main/scala/fpga/Core.scala 1122:22]
+  wire  _csr_wdata_T_1 = ex1_reg_csr_cmd == 2'h2; // @[src/main/scala/fpga/Core.scala 1123:22]
+  wire [31:0] _csr_rdata_T_10 = {20'h0,io_intr,3'h0,mtimer_io_intr,7'h0}; // @[src/main/scala/fpga/Core.scala 1118:29]
+  wire [31:0] _csr_rdata_T_9 = {20'h0,csr_reg_mie_meie,3'h0,csr_reg_mie_mtie,7'h0}; // @[src/main/scala/fpga/Core.scala 1117:29]
+  wire [31:0] _csr_rdata_T_8 = {24'h0,csr_reg_mstatus_mpie,3'h0,csr_reg_mstatus_mie,3'h0}; // @[src/main/scala/fpga/Core.scala 1115:29]
+  wire [31:0] _csr_rdata_T_7 = {csr_reg_mepc,1'h0}; // @[src/main/scala/fpga/Core.scala 1112:29]
+  wire [31:0] _csr_rdata_T = {csr_reg_trap_vector,1'h0}; // @[src/main/scala/fpga/Core.scala 1105:29]
+  wire [31:0] _csr_rdata_T_12 = 12'h305 == ex1_reg_csr_addr ? _csr_rdata_T : 32'h0; // @[src/main/scala/fpga/Core.scala 1104:63]
+  wire [31:0] _csr_rdata_T_14 = 12'hc01 == ex1_reg_csr_addr ? mtimer_io_mtime[31:0] : _csr_rdata_T_12; // @[src/main/scala/fpga/Core.scala 1104:63]
+  wire [31:0] _csr_rdata_T_16 = 12'hc00 == ex1_reg_csr_addr ? cycle_counter_io_value[31:0] : _csr_rdata_T_14; // @[src/main/scala/fpga/Core.scala 1104:63]
+  wire [31:0] _csr_rdata_T_18 = 12'hc02 == ex1_reg_csr_addr ? instret[31:0] : _csr_rdata_T_16; // @[src/main/scala/fpga/Core.scala 1104:63]
+  wire [31:0] _csr_rdata_T_20 = 12'hc80 == ex1_reg_csr_addr ? cycle_counter_io_value[63:32] : _csr_rdata_T_18; // @[src/main/scala/fpga/Core.scala 1104:63]
+  wire [31:0] _csr_rdata_T_22 = 12'hc81 == ex1_reg_csr_addr ? mtimer_io_mtime[63:32] : _csr_rdata_T_20; // @[src/main/scala/fpga/Core.scala 1104:63]
+  wire [31:0] _csr_rdata_T_24 = 12'hc82 == ex1_reg_csr_addr ? instret[63:32] : _csr_rdata_T_22; // @[src/main/scala/fpga/Core.scala 1104:63]
+  wire [31:0] _csr_rdata_T_26 = 12'h341 == ex1_reg_csr_addr ? _csr_rdata_T_7 : _csr_rdata_T_24; // @[src/main/scala/fpga/Core.scala 1104:63]
+  wire [31:0] _csr_rdata_T_28 = 12'h342 == ex1_reg_csr_addr ? csr_reg_mcause : _csr_rdata_T_26; // @[src/main/scala/fpga/Core.scala 1104:63]
+  wire [31:0] _csr_rdata_T_30 = 12'h300 == ex1_reg_csr_addr ? _csr_rdata_T_8 : _csr_rdata_T_28; // @[src/main/scala/fpga/Core.scala 1104:63]
+  wire [31:0] _csr_rdata_T_32 = 12'h340 == ex1_reg_csr_addr ? csr_reg_mscratch : _csr_rdata_T_30; // @[src/main/scala/fpga/Core.scala 1104:63]
+  wire [31:0] _csr_rdata_T_34 = 12'h304 == ex1_reg_csr_addr ? _csr_rdata_T_9 : _csr_rdata_T_32; // @[src/main/scala/fpga/Core.scala 1104:63]
+  wire [31:0] csr_rdata = 12'h344 == ex1_reg_csr_addr ? _csr_rdata_T_10 : _csr_rdata_T_34; // @[src/main/scala/fpga/Core.scala 1104:63]
+  wire [31:0] _csr_wdata_T_2 = csr_rdata | ex1_reg_op1_data; // @[src/main/scala/fpga/Core.scala 1123:47]
+  wire  _csr_wdata_T_3 = ex1_reg_csr_cmd == 2'h3; // @[src/main/scala/fpga/Core.scala 1124:22]
+  wire [31:0] _csr_wdata_T_5 = csr_rdata & _ex1_dividend_T_1; // @[src/main/scala/fpga/Core.scala 1124:47]
   wire [31:0] _csr_wdata_T_6 = _csr_wdata_T_3 ? _csr_wdata_T_5 : 32'h0; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
   wire [31:0] _csr_wdata_T_7 = _csr_wdata_T_1 ? _csr_wdata_T_2 : _csr_wdata_T_6; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
   wire [31:0] csr_wdata = _csr_wdata_T ? ex1_reg_op1_data : _csr_wdata_T_7; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
-  wire  _GEN_318 = ex1_reg_csr_addr == 12'h300 & csr_wdata[3]; // @[src/main/scala/fpga/Core.scala 1065:56 1069:29 1017:39]
-  wire  _GEN_329 = ex1_reg_csr_addr == 12'h341 ? 1'h0 : _GEN_318; // @[src/main/scala/fpga/Core.scala 1017:39 1063:53]
-  wire  _GEN_341 = ex1_reg_csr_addr == 12'h305 ? 1'h0 : _GEN_329; // @[src/main/scala/fpga/Core.scala 1017:39 1061:48]
-  wire  _GEN_353 = ex1_en & _ex1_fun_sel_T_10 & _GEN_341; // @[src/main/scala/fpga/Core.scala 1017:39 1060:46]
-  wire  _GEN_363 = csr_is_mret ? csr_reg_mstatus_mpie : _GEN_353; // @[src/main/scala/fpga/Core.scala 1113:28 1117:26]
-  wire  _GEN_371 = csr_is_trap ? 1'h0 : _GEN_363; // @[src/main/scala/fpga/Core.scala 1103:28 1110:26]
-  wire  _GEN_379 = csr_is_mtintr ? 1'h0 : _GEN_371; // @[src/main/scala/fpga/Core.scala 1093:30 1100:26]
-  wire  csr_mstatus_mie_fw = csr_is_meintr ? 1'h0 : _GEN_379; // @[src/main/scala/fpga/Core.scala 1083:24 1090:26]
+  wire  _GEN_358 = ex1_reg_csr_addr == 12'h300 & csr_wdata[3]; // @[src/main/scala/fpga/Core.scala 1132:56 1136:29 1084:39]
+  wire  _GEN_369 = ex1_reg_csr_addr == 12'h341 ? 1'h0 : _GEN_358; // @[src/main/scala/fpga/Core.scala 1084:39 1130:53]
+  wire  _GEN_381 = ex1_reg_csr_addr == 12'h305 ? 1'h0 : _GEN_369; // @[src/main/scala/fpga/Core.scala 1084:39 1128:48]
+  wire  _GEN_393 = ex1_en & _ex1_fun_sel_T_10 & _GEN_381; // @[src/main/scala/fpga/Core.scala 1084:39 1127:46]
+  wire  _GEN_403 = csr_is_mret ? csr_reg_mstatus_mpie : _GEN_393; // @[src/main/scala/fpga/Core.scala 1180:28 1184:26]
+  wire  _GEN_411 = csr_is_trap ? 1'h0 : _GEN_403; // @[src/main/scala/fpga/Core.scala 1170:28 1177:26]
+  wire  _GEN_419 = csr_is_mtintr ? 1'h0 : _GEN_411; // @[src/main/scala/fpga/Core.scala 1160:30 1167:26]
+  wire  csr_mstatus_mie_fw = csr_is_meintr ? 1'h0 : _GEN_419; // @[src/main/scala/fpga/Core.scala 1150:24 1157:26]
   wire  _csr_reg_is_meintr_T_3 = csr_mstatus_mie_fw_en & csr_mstatus_mie_fw | ~csr_mstatus_mie_fw_en &
-    csr_reg_mstatus_mie; // @[src/main/scala/fpga/Core.scala 1019:52]
+    csr_reg_mstatus_mie; // @[src/main/scala/fpga/Core.scala 1086:52]
   wire  _csr_reg_is_meintr_T_4 = (csr_mstatus_mie_fw_en & csr_mstatus_mie_fw | ~csr_mstatus_mie_fw_en &
-    csr_reg_mstatus_mie) & io_intr; // @[src/main/scala/fpga/Core.scala 1019:104]
-  wire  _T_69 = ex1_reg_csr_addr == 12'h304; // @[src/main/scala/fpga/Core.scala 1072:34]
-  wire  _GEN_312 = ex1_reg_csr_addr == 12'h340 ? 1'h0 : _T_69; // @[src/main/scala/fpga/Core.scala 1013:34 1070:57]
-  wire  _GEN_322 = ex1_reg_csr_addr == 12'h300 ? 1'h0 : _GEN_312; // @[src/main/scala/fpga/Core.scala 1013:34 1065:56]
-  wire  _GEN_333 = ex1_reg_csr_addr == 12'h341 ? 1'h0 : _GEN_322; // @[src/main/scala/fpga/Core.scala 1013:34 1063:53]
-  wire  _GEN_345 = ex1_reg_csr_addr == 12'h305 ? 1'h0 : _GEN_333; // @[src/main/scala/fpga/Core.scala 1013:34 1061:48]
-  wire  csr_mie_fw_en = ex1_en & _ex1_fun_sel_T_10 & _GEN_345; // @[src/main/scala/fpga/Core.scala 1013:34 1060:46]
-  wire  _GEN_307 = ex1_reg_csr_addr == 12'h304 & csr_wdata[11]; // @[src/main/scala/fpga/Core.scala 1072:52 1076:24 1014:36]
-  wire  _GEN_313 = ex1_reg_csr_addr == 12'h340 ? 1'h0 : _GEN_307; // @[src/main/scala/fpga/Core.scala 1014:36 1070:57]
-  wire  _GEN_323 = ex1_reg_csr_addr == 12'h300 ? 1'h0 : _GEN_313; // @[src/main/scala/fpga/Core.scala 1014:36 1065:56]
-  wire  _GEN_334 = ex1_reg_csr_addr == 12'h341 ? 1'h0 : _GEN_323; // @[src/main/scala/fpga/Core.scala 1014:36 1063:53]
-  wire  _GEN_346 = ex1_reg_csr_addr == 12'h305 ? 1'h0 : _GEN_334; // @[src/main/scala/fpga/Core.scala 1014:36 1061:48]
-  wire  csr_mie_meie_fw = ex1_en & _ex1_fun_sel_T_10 & _GEN_346; // @[src/main/scala/fpga/Core.scala 1014:36 1060:46]
-  wire  _csr_reg_is_meintr_T_6 = ~csr_mie_fw_en; // @[src/main/scala/fpga/Core.scala 1021:47]
-  wire  _csr_reg_is_meintr_T_8 = csr_mie_fw_en & csr_mie_meie_fw | ~csr_mie_fw_en & csr_reg_mie_meie; // @[src/main/scala/fpga/Core.scala 1021:43]
-  wire  _csr_reg_is_mtintr_T_4 = _csr_reg_is_meintr_T_3 & mtimer_io_intr; // @[src/main/scala/fpga/Core.scala 1024:104]
-  wire  _GEN_308 = ex1_reg_csr_addr == 12'h304 & csr_wdata[7]; // @[src/main/scala/fpga/Core.scala 1072:52 1077:24 1015:36]
-  wire  _GEN_314 = ex1_reg_csr_addr == 12'h340 ? 1'h0 : _GEN_308; // @[src/main/scala/fpga/Core.scala 1015:36 1070:57]
-  wire  _GEN_324 = ex1_reg_csr_addr == 12'h300 ? 1'h0 : _GEN_314; // @[src/main/scala/fpga/Core.scala 1015:36 1065:56]
-  wire  _GEN_335 = ex1_reg_csr_addr == 12'h341 ? 1'h0 : _GEN_324; // @[src/main/scala/fpga/Core.scala 1015:36 1063:53]
-  wire  _GEN_347 = ex1_reg_csr_addr == 12'h305 ? 1'h0 : _GEN_335; // @[src/main/scala/fpga/Core.scala 1015:36 1061:48]
-  wire  csr_mie_mtie_fw = ex1_en & _ex1_fun_sel_T_10 & _GEN_347; // @[src/main/scala/fpga/Core.scala 1015:36 1060:46]
-  wire  _csr_reg_is_mtintr_T_8 = csr_mie_fw_en & csr_mie_mtie_fw | _csr_reg_is_meintr_T_6 & csr_reg_mie_mtie; // @[src/main/scala/fpga/Core.scala 1026:43]
-  wire  ex1_is_valid_inst = ex1_en & ~ex1_reg_is_trap; // @[src/main/scala/fpga/Core.scala 1034:34]
-  wire  _GEN_304 = ex1_reg_csr_addr == 12'h304 ? csr_wdata[11] : csr_reg_mie_meie; // @[src/main/scala/fpga/Core.scala 1072:52 1073:24 140:37]
-  wire  _GEN_305 = ex1_reg_csr_addr == 12'h304 ? csr_wdata[7] : csr_reg_mie_mtie; // @[src/main/scala/fpga/Core.scala 1072:52 1074:24 141:37]
-  wire [31:0] _GEN_309 = ex1_reg_csr_addr == 12'h340 ? csr_wdata : csr_reg_mscratch; // @[src/main/scala/fpga/Core.scala 1070:57 1071:24 139:37]
-  wire  _GEN_310 = ex1_reg_csr_addr == 12'h340 ? csr_reg_mie_meie : _GEN_304; // @[src/main/scala/fpga/Core.scala 1070:57 140:37]
-  wire  _GEN_311 = ex1_reg_csr_addr == 12'h340 ? csr_reg_mie_mtie : _GEN_305; // @[src/main/scala/fpga/Core.scala 1070:57 141:37]
-  wire  _GEN_315 = ex1_reg_csr_addr == 12'h300 ? csr_wdata[3] : csr_reg_mstatus_mie; // @[src/main/scala/fpga/Core.scala 1065:56 1066:29 137:37]
-  wire  _GEN_316 = ex1_reg_csr_addr == 12'h300 ? csr_wdata[7] : csr_reg_mstatus_mpie; // @[src/main/scala/fpga/Core.scala 1065:56 1067:29 138:37]
-  wire [31:0] _GEN_319 = ex1_reg_csr_addr == 12'h300 ? csr_reg_mscratch : _GEN_309; // @[src/main/scala/fpga/Core.scala 1065:56 139:37]
-  wire  _GEN_320 = ex1_reg_csr_addr == 12'h300 ? csr_reg_mie_meie : _GEN_310; // @[src/main/scala/fpga/Core.scala 1065:56 140:37]
-  wire  _GEN_321 = ex1_reg_csr_addr == 12'h300 ? csr_reg_mie_mtie : _GEN_311; // @[src/main/scala/fpga/Core.scala 1065:56 141:37]
-  wire [30:0] _GEN_325 = ex1_reg_csr_addr == 12'h341 ? csr_wdata[31:1] : csr_reg_mepc; // @[src/main/scala/fpga/Core.scala 1063:53 1064:20 136:37]
-  wire  _GEN_326 = ex1_reg_csr_addr == 12'h341 ? csr_reg_mstatus_mie : _GEN_315; // @[src/main/scala/fpga/Core.scala 1063:53 137:37]
-  wire  _GEN_327 = ex1_reg_csr_addr == 12'h341 ? csr_reg_mstatus_mpie : _GEN_316; // @[src/main/scala/fpga/Core.scala 1063:53 138:37]
-  wire [30:0] _GEN_337 = ex1_reg_csr_addr == 12'h305 ? csr_reg_mepc : _GEN_325; // @[src/main/scala/fpga/Core.scala 1061:48 136:37]
-  wire  _GEN_338 = ex1_reg_csr_addr == 12'h305 ? csr_reg_mstatus_mie : _GEN_326; // @[src/main/scala/fpga/Core.scala 1061:48 137:37]
-  wire  _GEN_339 = ex1_reg_csr_addr == 12'h305 ? csr_reg_mstatus_mpie : _GEN_327; // @[src/main/scala/fpga/Core.scala 1061:48 138:37]
-  wire [30:0] _GEN_349 = ex1_en & _ex1_fun_sel_T_10 ? _GEN_337 : csr_reg_mepc; // @[src/main/scala/fpga/Core.scala 1060:46 136:37]
-  wire  _GEN_350 = ex1_en & _ex1_fun_sel_T_10 ? _GEN_338 : csr_reg_mstatus_mie; // @[src/main/scala/fpga/Core.scala 1060:46 137:37]
-  wire  _GEN_351 = ex1_en & _ex1_fun_sel_T_10 ? _GEN_339 : csr_reg_mstatus_mpie; // @[src/main/scala/fpga/Core.scala 1060:46 138:37]
-  wire  _GEN_360 = csr_is_mret | _GEN_351; // @[src/main/scala/fpga/Core.scala 1113:28 1114:26]
-  wire  _GEN_361 = csr_is_mret ? csr_reg_mstatus_mpie : _GEN_350; // @[src/main/scala/fpga/Core.scala 1113:28 1115:26]
-  wire  _ex2_reg_divrem_T = ex1_divrem & ex1_en; // @[src/main/scala/fpga/Core.scala 1146:45]
-  wire  _ex2_reg_div_stall_T_3 = ex2_reg_divrem_state == 3'h0 | ex2_reg_divrem_state == 3'h5; // @[src/main/scala/fpga/Core.scala 1148:75]
-  wire  _ex2_reg_div_stall_T_4 = _ex2_reg_divrem_T & (ex2_reg_divrem_state == 3'h0 | ex2_reg_divrem_state == 3'h5); // @[src/main/scala/fpga/Core.scala 1148:29]
-  wire  _GEN_442 = 3'h2 == ex2_reg_divrem_state | 3'h3 == ex2_reg_divrem_state; // @[src/main/scala/fpga/Core.scala 1208:33 1299:26]
-  wire  _GEN_450 = 3'h1 == ex2_reg_divrem_state | _GEN_442; // @[src/main/scala/fpga/Core.scala 1208:33 1246:29]
-  wire  ex2_div_stall_next = 3'h0 == ex2_reg_divrem_state ? 1'h0 : _GEN_450; // @[src/main/scala/fpga/Core.scala 1206:22 1208:33]
-  wire  _ex2_reg_div_stall_T_9 = ex2_reg_divrem & _ex2_reg_div_stall_T_3; // @[src/main/scala/fpga/Core.scala 1160:23]
-  wire  _T_71 = ~ex2_reg_div_stall; // @[src/main/scala/fpga/Core.scala 1163:23]
-  reg [36:0] ex2_reg_dividend; // @[src/main/scala/fpga/Core.scala 1176:37]
-  reg [35:0] ex2_reg_divisor; // @[src/main/scala/fpga/Core.scala 1177:37]
-  reg [63:0] ex2_reg_p_divisor; // @[src/main/scala/fpga/Core.scala 1178:37]
-  reg [4:0] ex2_reg_divrem_count; // @[src/main/scala/fpga/Core.scala 1179:37]
-  reg [4:0] ex2_reg_rem_shift; // @[src/main/scala/fpga/Core.scala 1180:37]
-  reg  ex2_reg_extra_shift; // @[src/main/scala/fpga/Core.scala 1181:37]
-  reg [2:0] ex2_reg_d; // @[src/main/scala/fpga/Core.scala 1182:37]
-  reg [31:0] ex2_reg_reminder; // @[src/main/scala/fpga/Core.scala 1183:37]
-  reg [31:0] ex2_reg_quotient; // @[src/main/scala/fpga/Core.scala 1184:37]
-  wire  _ex2_alu_muldiv_out_T = ex2_reg_exe_fun == 4'h8; // @[src/main/scala/fpga/Core.scala 1194:22]
-  wire [31:0] _ex2_alu_muldiv_out_T_3 = {ex2_reg_mulhuu[15:0], 16'h0}; // @[src/main/scala/fpga/Core.scala 1194:106]
-  wire [31:0] _ex2_alu_muldiv_out_T_5 = ex2_reg_mullu[31:0] + _ex2_alu_muldiv_out_T_3; // @[src/main/scala/fpga/Core.scala 1194:71]
-  wire  _ex2_alu_muldiv_out_T_6 = ex2_reg_exe_fun == 4'h9; // @[src/main/scala/fpga/Core.scala 1195:22]
-  wire [15:0] _ex2_alu_muldiv_out_T_9 = ex2_reg_mulls[31] ? 16'hffff : 16'h0; // @[src/main/scala/fpga/Core.scala 1187:12]
-  wire [47:0] _ex2_alu_muldiv_out_T_12 = {_ex2_alu_muldiv_out_T_9,ex2_reg_mulls}; // @[src/main/scala/fpga/Core.scala 1187:65]
-  wire [47:0] _ex2_alu_muldiv_out_T_15 = $signed(_ex2_alu_muldiv_out_T_12) + $signed(ex2_reg_mulhss); // @[src/main/scala/fpga/Core.scala 1195:80]
-  wire  _ex2_alu_muldiv_out_T_17 = ex2_reg_exe_fun == 4'ha; // @[src/main/scala/fpga/Core.scala 1196:22]
-  wire [47:0] _ex2_alu_muldiv_out_T_21 = {16'h0,ex2_reg_mullu[47:16]}; // @[src/main/scala/fpga/Core.scala 1190:35]
-  wire [47:0] _ex2_alu_muldiv_out_T_23 = _ex2_alu_muldiv_out_T_21 + ex2_reg_mulhuu; // @[src/main/scala/fpga/Core.scala 1196:108]
-  wire  _ex2_alu_muldiv_out_T_25 = ex2_reg_exe_fun == 4'hb; // @[src/main/scala/fpga/Core.scala 1197:22]
-  wire [47:0] _ex2_alu_muldiv_out_T_34 = $signed(_ex2_alu_muldiv_out_T_12) + $signed(ex2_reg_mulhsu); // @[src/main/scala/fpga/Core.scala 1197:80]
-  wire  _ex2_alu_muldiv_out_T_36 = ex2_reg_exe_fun == 4'hc; // @[src/main/scala/fpga/Core.scala 1198:22]
-  wire  _ex2_alu_muldiv_out_T_37 = ex2_reg_exe_fun == 4'he; // @[src/main/scala/fpga/Core.scala 1199:22]
-  wire  _ex2_alu_muldiv_out_T_38 = ex2_reg_exe_fun == 4'hd; // @[src/main/scala/fpga/Core.scala 1200:22]
-  wire  _ex2_alu_muldiv_out_T_39 = ex2_reg_exe_fun == 4'hf; // @[src/main/scala/fpga/Core.scala 1201:22]
+    csr_reg_mstatus_mie) & io_intr; // @[src/main/scala/fpga/Core.scala 1086:104]
+  wire  _T_93 = ex1_reg_csr_addr == 12'h304; // @[src/main/scala/fpga/Core.scala 1139:34]
+  wire  _GEN_352 = ex1_reg_csr_addr == 12'h340 ? 1'h0 : _T_93; // @[src/main/scala/fpga/Core.scala 1080:34 1137:57]
+  wire  _GEN_362 = ex1_reg_csr_addr == 12'h300 ? 1'h0 : _GEN_352; // @[src/main/scala/fpga/Core.scala 1080:34 1132:56]
+  wire  _GEN_373 = ex1_reg_csr_addr == 12'h341 ? 1'h0 : _GEN_362; // @[src/main/scala/fpga/Core.scala 1080:34 1130:53]
+  wire  _GEN_385 = ex1_reg_csr_addr == 12'h305 ? 1'h0 : _GEN_373; // @[src/main/scala/fpga/Core.scala 1080:34 1128:48]
+  wire  csr_mie_fw_en = ex1_en & _ex1_fun_sel_T_10 & _GEN_385; // @[src/main/scala/fpga/Core.scala 1080:34 1127:46]
+  wire  _GEN_347 = ex1_reg_csr_addr == 12'h304 & csr_wdata[11]; // @[src/main/scala/fpga/Core.scala 1139:52 1143:24 1081:36]
+  wire  _GEN_353 = ex1_reg_csr_addr == 12'h340 ? 1'h0 : _GEN_347; // @[src/main/scala/fpga/Core.scala 1081:36 1137:57]
+  wire  _GEN_363 = ex1_reg_csr_addr == 12'h300 ? 1'h0 : _GEN_353; // @[src/main/scala/fpga/Core.scala 1081:36 1132:56]
+  wire  _GEN_374 = ex1_reg_csr_addr == 12'h341 ? 1'h0 : _GEN_363; // @[src/main/scala/fpga/Core.scala 1081:36 1130:53]
+  wire  _GEN_386 = ex1_reg_csr_addr == 12'h305 ? 1'h0 : _GEN_374; // @[src/main/scala/fpga/Core.scala 1081:36 1128:48]
+  wire  csr_mie_meie_fw = ex1_en & _ex1_fun_sel_T_10 & _GEN_386; // @[src/main/scala/fpga/Core.scala 1081:36 1127:46]
+  wire  _csr_reg_is_meintr_T_6 = ~csr_mie_fw_en; // @[src/main/scala/fpga/Core.scala 1088:47]
+  wire  _csr_reg_is_meintr_T_8 = csr_mie_fw_en & csr_mie_meie_fw | ~csr_mie_fw_en & csr_reg_mie_meie; // @[src/main/scala/fpga/Core.scala 1088:43]
+  wire  _csr_reg_is_mtintr_T_4 = _csr_reg_is_meintr_T_3 & mtimer_io_intr; // @[src/main/scala/fpga/Core.scala 1091:104]
+  wire  _GEN_348 = ex1_reg_csr_addr == 12'h304 & csr_wdata[7]; // @[src/main/scala/fpga/Core.scala 1139:52 1144:24 1082:36]
+  wire  _GEN_354 = ex1_reg_csr_addr == 12'h340 ? 1'h0 : _GEN_348; // @[src/main/scala/fpga/Core.scala 1082:36 1137:57]
+  wire  _GEN_364 = ex1_reg_csr_addr == 12'h300 ? 1'h0 : _GEN_354; // @[src/main/scala/fpga/Core.scala 1082:36 1132:56]
+  wire  _GEN_375 = ex1_reg_csr_addr == 12'h341 ? 1'h0 : _GEN_364; // @[src/main/scala/fpga/Core.scala 1082:36 1130:53]
+  wire  _GEN_387 = ex1_reg_csr_addr == 12'h305 ? 1'h0 : _GEN_375; // @[src/main/scala/fpga/Core.scala 1082:36 1128:48]
+  wire  csr_mie_mtie_fw = ex1_en & _ex1_fun_sel_T_10 & _GEN_387; // @[src/main/scala/fpga/Core.scala 1082:36 1127:46]
+  wire  _csr_reg_is_mtintr_T_8 = csr_mie_fw_en & csr_mie_mtie_fw | _csr_reg_is_meintr_T_6 & csr_reg_mie_mtie; // @[src/main/scala/fpga/Core.scala 1093:43]
+  wire  ex1_is_valid_inst = ex1_en & ~ex1_reg_is_trap; // @[src/main/scala/fpga/Core.scala 1101:34]
+  wire  _GEN_344 = ex1_reg_csr_addr == 12'h304 ? csr_wdata[11] : csr_reg_mie_meie; // @[src/main/scala/fpga/Core.scala 1139:52 1140:24 141:37]
+  wire  _GEN_345 = ex1_reg_csr_addr == 12'h304 ? csr_wdata[7] : csr_reg_mie_mtie; // @[src/main/scala/fpga/Core.scala 1139:52 1141:24 142:37]
+  wire [31:0] _GEN_349 = ex1_reg_csr_addr == 12'h340 ? csr_wdata : csr_reg_mscratch; // @[src/main/scala/fpga/Core.scala 1137:57 1138:24 140:37]
+  wire  _GEN_350 = ex1_reg_csr_addr == 12'h340 ? csr_reg_mie_meie : _GEN_344; // @[src/main/scala/fpga/Core.scala 1137:57 141:37]
+  wire  _GEN_351 = ex1_reg_csr_addr == 12'h340 ? csr_reg_mie_mtie : _GEN_345; // @[src/main/scala/fpga/Core.scala 1137:57 142:37]
+  wire  _GEN_355 = ex1_reg_csr_addr == 12'h300 ? csr_wdata[3] : csr_reg_mstatus_mie; // @[src/main/scala/fpga/Core.scala 1132:56 1133:29 138:37]
+  wire  _GEN_356 = ex1_reg_csr_addr == 12'h300 ? csr_wdata[7] : csr_reg_mstatus_mpie; // @[src/main/scala/fpga/Core.scala 1132:56 1134:29 139:37]
+  wire [31:0] _GEN_359 = ex1_reg_csr_addr == 12'h300 ? csr_reg_mscratch : _GEN_349; // @[src/main/scala/fpga/Core.scala 1132:56 140:37]
+  wire  _GEN_360 = ex1_reg_csr_addr == 12'h300 ? csr_reg_mie_meie : _GEN_350; // @[src/main/scala/fpga/Core.scala 1132:56 141:37]
+  wire  _GEN_361 = ex1_reg_csr_addr == 12'h300 ? csr_reg_mie_mtie : _GEN_351; // @[src/main/scala/fpga/Core.scala 1132:56 142:37]
+  wire [30:0] _GEN_365 = ex1_reg_csr_addr == 12'h341 ? csr_wdata[31:1] : csr_reg_mepc; // @[src/main/scala/fpga/Core.scala 1130:53 1131:20 137:37]
+  wire  _GEN_366 = ex1_reg_csr_addr == 12'h341 ? csr_reg_mstatus_mie : _GEN_355; // @[src/main/scala/fpga/Core.scala 1130:53 138:37]
+  wire  _GEN_367 = ex1_reg_csr_addr == 12'h341 ? csr_reg_mstatus_mpie : _GEN_356; // @[src/main/scala/fpga/Core.scala 1130:53 139:37]
+  wire [30:0] _GEN_377 = ex1_reg_csr_addr == 12'h305 ? csr_reg_mepc : _GEN_365; // @[src/main/scala/fpga/Core.scala 1128:48 137:37]
+  wire  _GEN_378 = ex1_reg_csr_addr == 12'h305 ? csr_reg_mstatus_mie : _GEN_366; // @[src/main/scala/fpga/Core.scala 1128:48 138:37]
+  wire  _GEN_379 = ex1_reg_csr_addr == 12'h305 ? csr_reg_mstatus_mpie : _GEN_367; // @[src/main/scala/fpga/Core.scala 1128:48 139:37]
+  wire [30:0] _GEN_389 = ex1_en & _ex1_fun_sel_T_10 ? _GEN_377 : csr_reg_mepc; // @[src/main/scala/fpga/Core.scala 1127:46 137:37]
+  wire  _GEN_390 = ex1_en & _ex1_fun_sel_T_10 ? _GEN_378 : csr_reg_mstatus_mie; // @[src/main/scala/fpga/Core.scala 1127:46 138:37]
+  wire  _GEN_391 = ex1_en & _ex1_fun_sel_T_10 ? _GEN_379 : csr_reg_mstatus_mpie; // @[src/main/scala/fpga/Core.scala 1127:46 139:37]
+  wire  _GEN_400 = csr_is_mret | _GEN_391; // @[src/main/scala/fpga/Core.scala 1180:28 1181:26]
+  wire  _GEN_401 = csr_is_mret ? csr_reg_mstatus_mpie : _GEN_390; // @[src/main/scala/fpga/Core.scala 1180:28 1182:26]
+  wire  _ex2_reg_divrem_T = ex1_divrem & ex1_en; // @[src/main/scala/fpga/Core.scala 1213:45]
+  wire  _ex2_reg_div_stall_T_3 = ex2_reg_divrem_state == 3'h0 | ex2_reg_divrem_state == 3'h5; // @[src/main/scala/fpga/Core.scala 1215:75]
+  wire  _ex2_reg_div_stall_T_4 = _ex2_reg_divrem_T & (ex2_reg_divrem_state == 3'h0 | ex2_reg_divrem_state == 3'h5); // @[src/main/scala/fpga/Core.scala 1215:29]
+  wire  _GEN_482 = 3'h2 == ex2_reg_divrem_state | 3'h3 == ex2_reg_divrem_state; // @[src/main/scala/fpga/Core.scala 1275:33 1366:26]
+  wire  _GEN_490 = 3'h1 == ex2_reg_divrem_state | _GEN_482; // @[src/main/scala/fpga/Core.scala 1275:33 1313:29]
+  wire  ex2_div_stall_next = 3'h0 == ex2_reg_divrem_state ? 1'h0 : _GEN_490; // @[src/main/scala/fpga/Core.scala 1273:22 1275:33]
+  wire  _ex2_reg_div_stall_T_9 = ex2_reg_divrem & _ex2_reg_div_stall_T_3; // @[src/main/scala/fpga/Core.scala 1227:23]
+  wire  _T_95 = ~ex2_reg_div_stall; // @[src/main/scala/fpga/Core.scala 1230:23]
+  reg [36:0] ex2_reg_dividend; // @[src/main/scala/fpga/Core.scala 1243:37]
+  reg [35:0] ex2_reg_divisor; // @[src/main/scala/fpga/Core.scala 1244:37]
+  reg [63:0] ex2_reg_p_divisor; // @[src/main/scala/fpga/Core.scala 1245:37]
+  reg [4:0] ex2_reg_divrem_count; // @[src/main/scala/fpga/Core.scala 1246:37]
+  reg [4:0] ex2_reg_rem_shift; // @[src/main/scala/fpga/Core.scala 1247:37]
+  reg  ex2_reg_extra_shift; // @[src/main/scala/fpga/Core.scala 1248:37]
+  reg [2:0] ex2_reg_d; // @[src/main/scala/fpga/Core.scala 1249:37]
+  reg [31:0] ex2_reg_reminder; // @[src/main/scala/fpga/Core.scala 1250:37]
+  reg [31:0] ex2_reg_quotient; // @[src/main/scala/fpga/Core.scala 1251:37]
+  wire  _ex2_alu_muldiv_out_T = ex2_reg_exe_fun == 4'h8; // @[src/main/scala/fpga/Core.scala 1261:22]
+  wire [31:0] _ex2_alu_muldiv_out_T_3 = {ex2_reg_mulhuu[15:0], 16'h0}; // @[src/main/scala/fpga/Core.scala 1261:106]
+  wire [31:0] _ex2_alu_muldiv_out_T_5 = ex2_reg_mullu[31:0] + _ex2_alu_muldiv_out_T_3; // @[src/main/scala/fpga/Core.scala 1261:71]
+  wire  _ex2_alu_muldiv_out_T_6 = ex2_reg_exe_fun == 4'h9; // @[src/main/scala/fpga/Core.scala 1262:22]
+  wire [15:0] _ex2_alu_muldiv_out_T_9 = ex2_reg_mulls[31] ? 16'hffff : 16'h0; // @[src/main/scala/fpga/Core.scala 1254:12]
+  wire [47:0] _ex2_alu_muldiv_out_T_12 = {_ex2_alu_muldiv_out_T_9,ex2_reg_mulls}; // @[src/main/scala/fpga/Core.scala 1254:65]
+  wire [47:0] _ex2_alu_muldiv_out_T_15 = $signed(_ex2_alu_muldiv_out_T_12) + $signed(ex2_reg_mulhss); // @[src/main/scala/fpga/Core.scala 1262:80]
+  wire  _ex2_alu_muldiv_out_T_17 = ex2_reg_exe_fun == 4'ha; // @[src/main/scala/fpga/Core.scala 1263:22]
+  wire [47:0] _ex2_alu_muldiv_out_T_21 = {16'h0,ex2_reg_mullu[47:16]}; // @[src/main/scala/fpga/Core.scala 1257:35]
+  wire [47:0] _ex2_alu_muldiv_out_T_23 = _ex2_alu_muldiv_out_T_21 + ex2_reg_mulhuu; // @[src/main/scala/fpga/Core.scala 1263:108]
+  wire  _ex2_alu_muldiv_out_T_25 = ex2_reg_exe_fun == 4'hb; // @[src/main/scala/fpga/Core.scala 1264:22]
+  wire [47:0] _ex2_alu_muldiv_out_T_34 = $signed(_ex2_alu_muldiv_out_T_12) + $signed(ex2_reg_mulhsu); // @[src/main/scala/fpga/Core.scala 1264:80]
+  wire  _ex2_alu_muldiv_out_T_36 = ex2_reg_exe_fun == 4'hc; // @[src/main/scala/fpga/Core.scala 1265:22]
+  wire  _ex2_alu_muldiv_out_T_37 = ex2_reg_exe_fun == 4'he; // @[src/main/scala/fpga/Core.scala 1266:22]
+  wire  _ex2_alu_muldiv_out_T_38 = ex2_reg_exe_fun == 4'hd; // @[src/main/scala/fpga/Core.scala 1267:22]
+  wire  _ex2_alu_muldiv_out_T_39 = ex2_reg_exe_fun == 4'hf; // @[src/main/scala/fpga/Core.scala 1268:22]
   wire [31:0] _ex2_alu_muldiv_out_T_40 = _ex2_alu_muldiv_out_T_39 ? ex2_reg_reminder : 32'h0; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
   wire [31:0] _ex2_alu_muldiv_out_T_41 = _ex2_alu_muldiv_out_T_38 ? ex2_reg_reminder : _ex2_alu_muldiv_out_T_40; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
   wire [31:0] _ex2_alu_muldiv_out_T_42 = _ex2_alu_muldiv_out_T_37 ? ex2_reg_quotient : _ex2_alu_muldiv_out_T_41; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
@@ -5694,221 +6029,224 @@ module Core(
   wire [31:0] _ex2_alu_muldiv_out_T_46 = _ex2_alu_muldiv_out_T_6 ? _ex2_alu_muldiv_out_T_15[47:16] :
     _ex2_alu_muldiv_out_T_45; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
   wire [31:0] ex2_alu_muldiv_out = _ex2_alu_muldiv_out_T ? _ex2_alu_muldiv_out_T_5 : _ex2_alu_muldiv_out_T_46; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
-  wire [1:0] _GEN_419 = ex2_reg_init_divisor[31:2] == 30'h0 ? 2'h2 : 2'h1; // @[src/main/scala/fpga/Core.scala 1211:60 1212:32 1214:32]
-  wire [36:0] _ex2_reg_dividend_T = ex2_reg_init_dividend; // @[src/main/scala/fpga/Core.scala 1218:53]
-  wire [35:0] _ex2_reg_divisor_T_1 = {ex2_reg_init_divisor[3:0],32'h0}; // @[src/main/scala/fpga/Core.scala 1219:34]
-  wire [63:0] _ex2_reg_p_divisor_T = {ex2_reg_init_divisor,32'h0}; // @[src/main/scala/fpga/Core.scala 1220:34]
-  wire [2:0] _ex2_reg_d_T_1 = {ex2_reg_init_divisor[0],2'h0}; // @[src/main/scala/fpga/Core.scala 1229:35]
-  wire [4:0] _ex2_reg_divrem_count_T_1 = ex2_reg_divrem_count + 5'h1; // @[src/main/scala/fpga/Core.scala 1238:52]
-  wire  _p_T_1 = ~ex2_reg_dividend[36]; // @[src/main/scala/fpga/Core.scala 1250:42]
-  wire [4:0] _p_T_4 = ~ex2_reg_dividend[35:31]; // @[src/main/scala/fpga/Core.scala 1252:11]
-  wire [4:0] _p_T_5 = ~ex2_reg_dividend[36] ? ex2_reg_dividend[35:31] : _p_T_4; // @[src/main/scala/fpga/Core.scala 1250:12]
-  wire [4:0] _p_T_10 = ~ex2_reg_dividend[34:30]; // @[src/main/scala/fpga/Core.scala 1256:11]
-  wire [4:0] _p_T_11 = _p_T_1 ? ex2_reg_dividend[34:30] : _p_T_10; // @[src/main/scala/fpga/Core.scala 1254:12]
-  wire [4:0] p = ex2_reg_extra_shift ? _p_T_5 : _p_T_11; // @[src/main/scala/fpga/Core.scala 1249:18]
-  wire [1:0] _ex2_q_T_5 = 5'h2 == p ? 2'h1 : 2'h0; // @[src/main/scala/fpga/Core.scala 1271:55]
-  wire [1:0] _ex2_q_T_7 = 5'h3 == p ? 2'h1 : _ex2_q_T_5; // @[src/main/scala/fpga/Core.scala 1271:55]
-  wire [1:0] _ex2_q_T_9 = 5'h4 == p ? 2'h1 : _ex2_q_T_7; // @[src/main/scala/fpga/Core.scala 1271:55]
-  wire [1:0] _ex2_q_T_11 = 5'h5 == p ? 2'h1 : _ex2_q_T_9; // @[src/main/scala/fpga/Core.scala 1271:55]
-  wire [1:0] _ex2_q_T_13 = 5'h6 == p ? 2'h2 : _ex2_q_T_11; // @[src/main/scala/fpga/Core.scala 1271:55]
-  wire [1:0] _ex2_q_T_15 = 5'h7 == p ? 2'h2 : _ex2_q_T_13; // @[src/main/scala/fpga/Core.scala 1271:55]
-  wire [1:0] _ex2_q_T_17 = 5'h8 == p ? 2'h2 : _ex2_q_T_15; // @[src/main/scala/fpga/Core.scala 1271:55]
-  wire [1:0] _ex2_q_T_19 = 5'h9 == p ? 2'h2 : _ex2_q_T_17; // @[src/main/scala/fpga/Core.scala 1271:55]
-  wire [1:0] _ex2_q_T_21 = 5'ha == p ? 2'h2 : _ex2_q_T_19; // @[src/main/scala/fpga/Core.scala 1271:55]
-  wire [1:0] _ex2_q_T_23 = 5'hb == p ? 2'h2 : _ex2_q_T_21; // @[src/main/scala/fpga/Core.scala 1271:55]
-  wire [1:0] _ex2_q_T_37 = 5'h6 == p ? 2'h1 : _ex2_q_T_11; // @[src/main/scala/fpga/Core.scala 1271:55]
-  wire [1:0] _ex2_q_T_39 = 5'h7 == p ? 2'h2 : _ex2_q_T_37; // @[src/main/scala/fpga/Core.scala 1271:55]
-  wire [1:0] _ex2_q_T_41 = 5'h8 == p ? 2'h2 : _ex2_q_T_39; // @[src/main/scala/fpga/Core.scala 1271:55]
-  wire [1:0] _ex2_q_T_43 = 5'h9 == p ? 2'h2 : _ex2_q_T_41; // @[src/main/scala/fpga/Core.scala 1271:55]
-  wire [1:0] _ex2_q_T_45 = 5'ha == p ? 2'h2 : _ex2_q_T_43; // @[src/main/scala/fpga/Core.scala 1271:55]
-  wire [1:0] _ex2_q_T_47 = 5'hb == p ? 2'h2 : _ex2_q_T_45; // @[src/main/scala/fpga/Core.scala 1271:55]
-  wire [1:0] _ex2_q_T_49 = 5'hc == p ? 2'h2 : _ex2_q_T_47; // @[src/main/scala/fpga/Core.scala 1271:55]
-  wire [1:0] _ex2_q_T_51 = 5'hd == p ? 2'h2 : _ex2_q_T_49; // @[src/main/scala/fpga/Core.scala 1271:55]
-  wire [1:0] _ex2_q_T_67 = 5'h7 == p ? 2'h1 : _ex2_q_T_37; // @[src/main/scala/fpga/Core.scala 1271:55]
-  wire [1:0] _ex2_q_T_69 = 5'h8 == p ? 2'h2 : _ex2_q_T_67; // @[src/main/scala/fpga/Core.scala 1271:55]
-  wire [1:0] _ex2_q_T_71 = 5'h9 == p ? 2'h2 : _ex2_q_T_69; // @[src/main/scala/fpga/Core.scala 1271:55]
-  wire [1:0] _ex2_q_T_73 = 5'ha == p ? 2'h2 : _ex2_q_T_71; // @[src/main/scala/fpga/Core.scala 1271:55]
-  wire [1:0] _ex2_q_T_75 = 5'hb == p ? 2'h2 : _ex2_q_T_73; // @[src/main/scala/fpga/Core.scala 1271:55]
-  wire [1:0] _ex2_q_T_77 = 5'hc == p ? 2'h2 : _ex2_q_T_75; // @[src/main/scala/fpga/Core.scala 1271:55]
-  wire [1:0] _ex2_q_T_79 = 5'hd == p ? 2'h2 : _ex2_q_T_77; // @[src/main/scala/fpga/Core.scala 1271:55]
-  wire [1:0] _ex2_q_T_81 = 5'he == p ? 2'h2 : _ex2_q_T_79; // @[src/main/scala/fpga/Core.scala 1271:55]
-  wire [1:0] _ex2_q_T_83 = 5'hf == p ? 2'h2 : _ex2_q_T_81; // @[src/main/scala/fpga/Core.scala 1271:55]
-  wire [1:0] _ex2_q_T_125 = 5'h4 == p ? 2'h1 : 2'h0; // @[src/main/scala/fpga/Core.scala 1271:55]
-  wire [1:0] _ex2_q_T_127 = 5'h5 == p ? 2'h1 : _ex2_q_T_125; // @[src/main/scala/fpga/Core.scala 1271:55]
-  wire [1:0] _ex2_q_T_129 = 5'h6 == p ? 2'h1 : _ex2_q_T_127; // @[src/main/scala/fpga/Core.scala 1271:55]
-  wire [1:0] _ex2_q_T_131 = 5'h7 == p ? 2'h1 : _ex2_q_T_129; // @[src/main/scala/fpga/Core.scala 1271:55]
-  wire [1:0] _ex2_q_T_133 = 5'h8 == p ? 2'h1 : _ex2_q_T_131; // @[src/main/scala/fpga/Core.scala 1271:55]
-  wire [1:0] _ex2_q_T_135 = 5'h9 == p ? 2'h1 : _ex2_q_T_133; // @[src/main/scala/fpga/Core.scala 1271:55]
-  wire [1:0] _ex2_q_T_137 = 5'ha == p ? 2'h2 : _ex2_q_T_135; // @[src/main/scala/fpga/Core.scala 1271:55]
-  wire [1:0] _ex2_q_T_139 = 5'hb == p ? 2'h2 : _ex2_q_T_137; // @[src/main/scala/fpga/Core.scala 1271:55]
-  wire [1:0] _ex2_q_T_141 = 5'hc == p ? 2'h2 : _ex2_q_T_139; // @[src/main/scala/fpga/Core.scala 1271:55]
-  wire [1:0] _ex2_q_T_143 = 5'hd == p ? 2'h2 : _ex2_q_T_141; // @[src/main/scala/fpga/Core.scala 1271:55]
-  wire [1:0] _ex2_q_T_145 = 5'he == p ? 2'h2 : _ex2_q_T_143; // @[src/main/scala/fpga/Core.scala 1271:55]
-  wire [1:0] _ex2_q_T_147 = 5'hf == p ? 2'h2 : _ex2_q_T_145; // @[src/main/scala/fpga/Core.scala 1271:55]
-  wire [1:0] _ex2_q_T_149 = 5'h10 == p ? 2'h2 : _ex2_q_T_147; // @[src/main/scala/fpga/Core.scala 1271:55]
-  wire [1:0] _ex2_q_T_151 = 5'h11 == p ? 2'h2 : _ex2_q_T_149; // @[src/main/scala/fpga/Core.scala 1271:55]
-  wire [1:0] _ex2_q_T_189 = 5'h12 == p ? 2'h2 : _ex2_q_T_151; // @[src/main/scala/fpga/Core.scala 1271:55]
-  wire [1:0] _ex2_q_T_191 = 5'h13 == p ? 2'h2 : _ex2_q_T_189; // @[src/main/scala/fpga/Core.scala 1271:55]
-  wire [1:0] _ex2_q_T_253 = 5'ha == p ? 2'h1 : _ex2_q_T_135; // @[src/main/scala/fpga/Core.scala 1271:55]
-  wire [1:0] _ex2_q_T_255 = 5'hb == p ? 2'h1 : _ex2_q_T_253; // @[src/main/scala/fpga/Core.scala 1271:55]
-  wire [1:0] _ex2_q_T_257 = 5'hc == p ? 2'h2 : _ex2_q_T_255; // @[src/main/scala/fpga/Core.scala 1271:55]
-  wire [1:0] _ex2_q_T_259 = 5'hd == p ? 2'h2 : _ex2_q_T_257; // @[src/main/scala/fpga/Core.scala 1271:55]
-  wire [1:0] _ex2_q_T_261 = 5'he == p ? 2'h2 : _ex2_q_T_259; // @[src/main/scala/fpga/Core.scala 1271:55]
-  wire [1:0] _ex2_q_T_263 = 5'hf == p ? 2'h2 : _ex2_q_T_261; // @[src/main/scala/fpga/Core.scala 1271:55]
-  wire [1:0] _ex2_q_T_265 = 5'h10 == p ? 2'h2 : _ex2_q_T_263; // @[src/main/scala/fpga/Core.scala 1271:55]
-  wire [1:0] _ex2_q_T_267 = 5'h11 == p ? 2'h2 : _ex2_q_T_265; // @[src/main/scala/fpga/Core.scala 1271:55]
-  wire [1:0] _ex2_q_T_269 = 5'h12 == p ? 2'h2 : _ex2_q_T_267; // @[src/main/scala/fpga/Core.scala 1271:55]
-  wire [1:0] _ex2_q_T_271 = 5'h13 == p ? 2'h2 : _ex2_q_T_269; // @[src/main/scala/fpga/Core.scala 1271:55]
-  wire [1:0] _ex2_q_T_273 = 5'h14 == p ? 2'h2 : _ex2_q_T_271; // @[src/main/scala/fpga/Core.scala 1271:55]
-  wire [1:0] _ex2_q_T_275 = 5'h15 == p ? 2'h2 : _ex2_q_T_273; // @[src/main/scala/fpga/Core.scala 1271:55]
-  wire [1:0] _ex2_q_T_277 = 3'h1 == ex2_reg_d ? _ex2_q_T_51 : _ex2_q_T_23; // @[src/main/scala/fpga/Core.scala 1269:49]
-  wire [1:0] _ex2_q_T_279 = 3'h2 == ex2_reg_d ? _ex2_q_T_83 : _ex2_q_T_277; // @[src/main/scala/fpga/Core.scala 1269:49]
-  wire [1:0] _ex2_q_T_281 = 3'h3 == ex2_reg_d ? _ex2_q_T_83 : _ex2_q_T_279; // @[src/main/scala/fpga/Core.scala 1269:49]
-  wire [1:0] _ex2_q_T_283 = 3'h4 == ex2_reg_d ? _ex2_q_T_151 : _ex2_q_T_281; // @[src/main/scala/fpga/Core.scala 1269:49]
-  wire [1:0] _ex2_q_T_285 = 3'h5 == ex2_reg_d ? _ex2_q_T_191 : _ex2_q_T_283; // @[src/main/scala/fpga/Core.scala 1269:49]
-  wire [1:0] _ex2_q_T_287 = 3'h6 == ex2_reg_d ? _ex2_q_T_191 : _ex2_q_T_285; // @[src/main/scala/fpga/Core.scala 1269:49]
-  wire [1:0] ex2_q = 3'h7 == ex2_reg_d ? _ex2_q_T_275 : _ex2_q_T_287; // @[src/main/scala/fpga/Core.scala 1269:49]
-  wire [38:0] _ex2_reg_dividend_T_1 = {$signed(ex2_reg_dividend), 2'h0}; // @[src/main/scala/fpga/Core.scala 1276:54]
-  wire [36:0] _ex2_reg_dividend_T_5 = {1'h0,ex2_reg_divisor}; // @[src/main/scala/fpga/Core.scala 1277:85]
-  wire [36:0] _ex2_reg_dividend_T_8 = $signed(ex2_reg_dividend) - $signed(_ex2_reg_dividend_T_5); // @[src/main/scala/fpga/Core.scala 1277:52]
-  wire [38:0] _ex2_reg_dividend_T_9 = {$signed(_ex2_reg_dividend_T_8), 2'h0}; // @[src/main/scala/fpga/Core.scala 1277:93]
-  wire [36:0] _ex2_reg_dividend_T_13 = {ex2_reg_divisor,1'h0}; // @[src/main/scala/fpga/Core.scala 1278:85]
-  wire [36:0] _ex2_reg_dividend_T_16 = $signed(ex2_reg_dividend) - $signed(_ex2_reg_dividend_T_13); // @[src/main/scala/fpga/Core.scala 1278:52]
-  wire [38:0] _ex2_reg_dividend_T_17 = {$signed(_ex2_reg_dividend_T_16), 2'h0}; // @[src/main/scala/fpga/Core.scala 1278:93]
+  wire [1:0] _GEN_459 = ex2_reg_init_divisor[31:2] == 30'h0 ? 2'h2 : 2'h1; // @[src/main/scala/fpga/Core.scala 1278:60 1279:32 1281:32]
+  wire [36:0] _ex2_reg_dividend_T = ex2_reg_init_dividend; // @[src/main/scala/fpga/Core.scala 1285:53]
+  wire [35:0] _ex2_reg_divisor_T_1 = {ex2_reg_init_divisor[3:0],32'h0}; // @[src/main/scala/fpga/Core.scala 1286:34]
+  wire [63:0] _ex2_reg_p_divisor_T = {ex2_reg_init_divisor,32'h0}; // @[src/main/scala/fpga/Core.scala 1287:34]
+  wire [2:0] _ex2_reg_d_T_1 = {ex2_reg_init_divisor[0],2'h0}; // @[src/main/scala/fpga/Core.scala 1296:35]
+  wire [4:0] _ex2_reg_divrem_count_T_1 = ex2_reg_divrem_count + 5'h1; // @[src/main/scala/fpga/Core.scala 1305:52]
+  wire  _p_T_1 = ~ex2_reg_dividend[36]; // @[src/main/scala/fpga/Core.scala 1317:42]
+  wire [4:0] _p_T_4 = ~ex2_reg_dividend[35:31]; // @[src/main/scala/fpga/Core.scala 1319:11]
+  wire [4:0] _p_T_5 = ~ex2_reg_dividend[36] ? ex2_reg_dividend[35:31] : _p_T_4; // @[src/main/scala/fpga/Core.scala 1317:12]
+  wire [4:0] _p_T_10 = ~ex2_reg_dividend[34:30]; // @[src/main/scala/fpga/Core.scala 1323:11]
+  wire [4:0] _p_T_11 = _p_T_1 ? ex2_reg_dividend[34:30] : _p_T_10; // @[src/main/scala/fpga/Core.scala 1321:12]
+  wire [4:0] p = ex2_reg_extra_shift ? _p_T_5 : _p_T_11; // @[src/main/scala/fpga/Core.scala 1316:18]
+  wire [1:0] _ex2_q_T_5 = 5'h2 == p ? 2'h1 : 2'h0; // @[src/main/scala/fpga/Core.scala 1338:55]
+  wire [1:0] _ex2_q_T_7 = 5'h3 == p ? 2'h1 : _ex2_q_T_5; // @[src/main/scala/fpga/Core.scala 1338:55]
+  wire [1:0] _ex2_q_T_9 = 5'h4 == p ? 2'h1 : _ex2_q_T_7; // @[src/main/scala/fpga/Core.scala 1338:55]
+  wire [1:0] _ex2_q_T_11 = 5'h5 == p ? 2'h1 : _ex2_q_T_9; // @[src/main/scala/fpga/Core.scala 1338:55]
+  wire [1:0] _ex2_q_T_13 = 5'h6 == p ? 2'h2 : _ex2_q_T_11; // @[src/main/scala/fpga/Core.scala 1338:55]
+  wire [1:0] _ex2_q_T_15 = 5'h7 == p ? 2'h2 : _ex2_q_T_13; // @[src/main/scala/fpga/Core.scala 1338:55]
+  wire [1:0] _ex2_q_T_17 = 5'h8 == p ? 2'h2 : _ex2_q_T_15; // @[src/main/scala/fpga/Core.scala 1338:55]
+  wire [1:0] _ex2_q_T_19 = 5'h9 == p ? 2'h2 : _ex2_q_T_17; // @[src/main/scala/fpga/Core.scala 1338:55]
+  wire [1:0] _ex2_q_T_21 = 5'ha == p ? 2'h2 : _ex2_q_T_19; // @[src/main/scala/fpga/Core.scala 1338:55]
+  wire [1:0] _ex2_q_T_23 = 5'hb == p ? 2'h2 : _ex2_q_T_21; // @[src/main/scala/fpga/Core.scala 1338:55]
+  wire [1:0] _ex2_q_T_37 = 5'h6 == p ? 2'h1 : _ex2_q_T_11; // @[src/main/scala/fpga/Core.scala 1338:55]
+  wire [1:0] _ex2_q_T_39 = 5'h7 == p ? 2'h2 : _ex2_q_T_37; // @[src/main/scala/fpga/Core.scala 1338:55]
+  wire [1:0] _ex2_q_T_41 = 5'h8 == p ? 2'h2 : _ex2_q_T_39; // @[src/main/scala/fpga/Core.scala 1338:55]
+  wire [1:0] _ex2_q_T_43 = 5'h9 == p ? 2'h2 : _ex2_q_T_41; // @[src/main/scala/fpga/Core.scala 1338:55]
+  wire [1:0] _ex2_q_T_45 = 5'ha == p ? 2'h2 : _ex2_q_T_43; // @[src/main/scala/fpga/Core.scala 1338:55]
+  wire [1:0] _ex2_q_T_47 = 5'hb == p ? 2'h2 : _ex2_q_T_45; // @[src/main/scala/fpga/Core.scala 1338:55]
+  wire [1:0] _ex2_q_T_49 = 5'hc == p ? 2'h2 : _ex2_q_T_47; // @[src/main/scala/fpga/Core.scala 1338:55]
+  wire [1:0] _ex2_q_T_51 = 5'hd == p ? 2'h2 : _ex2_q_T_49; // @[src/main/scala/fpga/Core.scala 1338:55]
+  wire [1:0] _ex2_q_T_67 = 5'h7 == p ? 2'h1 : _ex2_q_T_37; // @[src/main/scala/fpga/Core.scala 1338:55]
+  wire [1:0] _ex2_q_T_69 = 5'h8 == p ? 2'h2 : _ex2_q_T_67; // @[src/main/scala/fpga/Core.scala 1338:55]
+  wire [1:0] _ex2_q_T_71 = 5'h9 == p ? 2'h2 : _ex2_q_T_69; // @[src/main/scala/fpga/Core.scala 1338:55]
+  wire [1:0] _ex2_q_T_73 = 5'ha == p ? 2'h2 : _ex2_q_T_71; // @[src/main/scala/fpga/Core.scala 1338:55]
+  wire [1:0] _ex2_q_T_75 = 5'hb == p ? 2'h2 : _ex2_q_T_73; // @[src/main/scala/fpga/Core.scala 1338:55]
+  wire [1:0] _ex2_q_T_77 = 5'hc == p ? 2'h2 : _ex2_q_T_75; // @[src/main/scala/fpga/Core.scala 1338:55]
+  wire [1:0] _ex2_q_T_79 = 5'hd == p ? 2'h2 : _ex2_q_T_77; // @[src/main/scala/fpga/Core.scala 1338:55]
+  wire [1:0] _ex2_q_T_81 = 5'he == p ? 2'h2 : _ex2_q_T_79; // @[src/main/scala/fpga/Core.scala 1338:55]
+  wire [1:0] _ex2_q_T_83 = 5'hf == p ? 2'h2 : _ex2_q_T_81; // @[src/main/scala/fpga/Core.scala 1338:55]
+  wire [1:0] _ex2_q_T_125 = 5'h4 == p ? 2'h1 : 2'h0; // @[src/main/scala/fpga/Core.scala 1338:55]
+  wire [1:0] _ex2_q_T_127 = 5'h5 == p ? 2'h1 : _ex2_q_T_125; // @[src/main/scala/fpga/Core.scala 1338:55]
+  wire [1:0] _ex2_q_T_129 = 5'h6 == p ? 2'h1 : _ex2_q_T_127; // @[src/main/scala/fpga/Core.scala 1338:55]
+  wire [1:0] _ex2_q_T_131 = 5'h7 == p ? 2'h1 : _ex2_q_T_129; // @[src/main/scala/fpga/Core.scala 1338:55]
+  wire [1:0] _ex2_q_T_133 = 5'h8 == p ? 2'h1 : _ex2_q_T_131; // @[src/main/scala/fpga/Core.scala 1338:55]
+  wire [1:0] _ex2_q_T_135 = 5'h9 == p ? 2'h1 : _ex2_q_T_133; // @[src/main/scala/fpga/Core.scala 1338:55]
+  wire [1:0] _ex2_q_T_137 = 5'ha == p ? 2'h2 : _ex2_q_T_135; // @[src/main/scala/fpga/Core.scala 1338:55]
+  wire [1:0] _ex2_q_T_139 = 5'hb == p ? 2'h2 : _ex2_q_T_137; // @[src/main/scala/fpga/Core.scala 1338:55]
+  wire [1:0] _ex2_q_T_141 = 5'hc == p ? 2'h2 : _ex2_q_T_139; // @[src/main/scala/fpga/Core.scala 1338:55]
+  wire [1:0] _ex2_q_T_143 = 5'hd == p ? 2'h2 : _ex2_q_T_141; // @[src/main/scala/fpga/Core.scala 1338:55]
+  wire [1:0] _ex2_q_T_145 = 5'he == p ? 2'h2 : _ex2_q_T_143; // @[src/main/scala/fpga/Core.scala 1338:55]
+  wire [1:0] _ex2_q_T_147 = 5'hf == p ? 2'h2 : _ex2_q_T_145; // @[src/main/scala/fpga/Core.scala 1338:55]
+  wire [1:0] _ex2_q_T_149 = 5'h10 == p ? 2'h2 : _ex2_q_T_147; // @[src/main/scala/fpga/Core.scala 1338:55]
+  wire [1:0] _ex2_q_T_151 = 5'h11 == p ? 2'h2 : _ex2_q_T_149; // @[src/main/scala/fpga/Core.scala 1338:55]
+  wire [1:0] _ex2_q_T_189 = 5'h12 == p ? 2'h2 : _ex2_q_T_151; // @[src/main/scala/fpga/Core.scala 1338:55]
+  wire [1:0] _ex2_q_T_191 = 5'h13 == p ? 2'h2 : _ex2_q_T_189; // @[src/main/scala/fpga/Core.scala 1338:55]
+  wire [1:0] _ex2_q_T_253 = 5'ha == p ? 2'h1 : _ex2_q_T_135; // @[src/main/scala/fpga/Core.scala 1338:55]
+  wire [1:0] _ex2_q_T_255 = 5'hb == p ? 2'h1 : _ex2_q_T_253; // @[src/main/scala/fpga/Core.scala 1338:55]
+  wire [1:0] _ex2_q_T_257 = 5'hc == p ? 2'h2 : _ex2_q_T_255; // @[src/main/scala/fpga/Core.scala 1338:55]
+  wire [1:0] _ex2_q_T_259 = 5'hd == p ? 2'h2 : _ex2_q_T_257; // @[src/main/scala/fpga/Core.scala 1338:55]
+  wire [1:0] _ex2_q_T_261 = 5'he == p ? 2'h2 : _ex2_q_T_259; // @[src/main/scala/fpga/Core.scala 1338:55]
+  wire [1:0] _ex2_q_T_263 = 5'hf == p ? 2'h2 : _ex2_q_T_261; // @[src/main/scala/fpga/Core.scala 1338:55]
+  wire [1:0] _ex2_q_T_265 = 5'h10 == p ? 2'h2 : _ex2_q_T_263; // @[src/main/scala/fpga/Core.scala 1338:55]
+  wire [1:0] _ex2_q_T_267 = 5'h11 == p ? 2'h2 : _ex2_q_T_265; // @[src/main/scala/fpga/Core.scala 1338:55]
+  wire [1:0] _ex2_q_T_269 = 5'h12 == p ? 2'h2 : _ex2_q_T_267; // @[src/main/scala/fpga/Core.scala 1338:55]
+  wire [1:0] _ex2_q_T_271 = 5'h13 == p ? 2'h2 : _ex2_q_T_269; // @[src/main/scala/fpga/Core.scala 1338:55]
+  wire [1:0] _ex2_q_T_273 = 5'h14 == p ? 2'h2 : _ex2_q_T_271; // @[src/main/scala/fpga/Core.scala 1338:55]
+  wire [1:0] _ex2_q_T_275 = 5'h15 == p ? 2'h2 : _ex2_q_T_273; // @[src/main/scala/fpga/Core.scala 1338:55]
+  wire [1:0] _ex2_q_T_277 = 3'h1 == ex2_reg_d ? _ex2_q_T_51 : _ex2_q_T_23; // @[src/main/scala/fpga/Core.scala 1336:49]
+  wire [1:0] _ex2_q_T_279 = 3'h2 == ex2_reg_d ? _ex2_q_T_83 : _ex2_q_T_277; // @[src/main/scala/fpga/Core.scala 1336:49]
+  wire [1:0] _ex2_q_T_281 = 3'h3 == ex2_reg_d ? _ex2_q_T_83 : _ex2_q_T_279; // @[src/main/scala/fpga/Core.scala 1336:49]
+  wire [1:0] _ex2_q_T_283 = 3'h4 == ex2_reg_d ? _ex2_q_T_151 : _ex2_q_T_281; // @[src/main/scala/fpga/Core.scala 1336:49]
+  wire [1:0] _ex2_q_T_285 = 3'h5 == ex2_reg_d ? _ex2_q_T_191 : _ex2_q_T_283; // @[src/main/scala/fpga/Core.scala 1336:49]
+  wire [1:0] _ex2_q_T_287 = 3'h6 == ex2_reg_d ? _ex2_q_T_191 : _ex2_q_T_285; // @[src/main/scala/fpga/Core.scala 1336:49]
+  wire [1:0] ex2_q = 3'h7 == ex2_reg_d ? _ex2_q_T_275 : _ex2_q_T_287; // @[src/main/scala/fpga/Core.scala 1336:49]
+  wire [38:0] _ex2_reg_dividend_T_1 = {$signed(ex2_reg_dividend), 2'h0}; // @[src/main/scala/fpga/Core.scala 1343:54]
+  wire [36:0] _ex2_reg_dividend_T_5 = {1'h0,ex2_reg_divisor}; // @[src/main/scala/fpga/Core.scala 1344:85]
+  wire [36:0] _ex2_reg_dividend_T_8 = $signed(ex2_reg_dividend) - $signed(_ex2_reg_dividend_T_5); // @[src/main/scala/fpga/Core.scala 1344:52]
+  wire [38:0] _ex2_reg_dividend_T_9 = {$signed(_ex2_reg_dividend_T_8), 2'h0}; // @[src/main/scala/fpga/Core.scala 1344:93]
+  wire [36:0] _ex2_reg_dividend_T_13 = {ex2_reg_divisor,1'h0}; // @[src/main/scala/fpga/Core.scala 1345:85]
+  wire [36:0] _ex2_reg_dividend_T_16 = $signed(ex2_reg_dividend) - $signed(_ex2_reg_dividend_T_13); // @[src/main/scala/fpga/Core.scala 1345:52]
+  wire [38:0] _ex2_reg_dividend_T_17 = {$signed(_ex2_reg_dividend_T_16), 2'h0}; // @[src/main/scala/fpga/Core.scala 1345:93]
   wire [38:0] _ex2_reg_dividend_T_18 = ex2_q[1] ? $signed(_ex2_reg_dividend_T_17) : $signed(_ex2_reg_dividend_T_1); // @[src/main/scala/chisel3/util/Mux.scala 141:16]
   wire [38:0] _ex2_reg_dividend_T_19 = ex2_q[0] ? $signed(_ex2_reg_dividend_T_9) : $signed(_ex2_reg_dividend_T_18); // @[src/main/scala/chisel3/util/Mux.scala 141:16]
-  wire [33:0] _ex2_reg_quotient_T = {ex2_reg_quotient, 2'h0}; // @[src/main/scala/fpga/Core.scala 1280:54]
-  wire [33:0] _ex2_reg_quotient_T_5 = _ex2_reg_quotient_T + 34'h1; // @[src/main/scala/fpga/Core.scala 1281:58]
-  wire [33:0] _ex2_reg_quotient_T_10 = _ex2_reg_quotient_T + 34'h2; // @[src/main/scala/fpga/Core.scala 1282:58]
+  wire [33:0] _ex2_reg_quotient_T = {ex2_reg_quotient, 2'h0}; // @[src/main/scala/fpga/Core.scala 1347:54]
+  wire [33:0] _ex2_reg_quotient_T_5 = _ex2_reg_quotient_T + 34'h1; // @[src/main/scala/fpga/Core.scala 1348:58]
+  wire [33:0] _ex2_reg_quotient_T_10 = _ex2_reg_quotient_T + 34'h2; // @[src/main/scala/fpga/Core.scala 1349:58]
   wire [33:0] _ex2_reg_quotient_T_11 = ex2_q[1] ? _ex2_reg_quotient_T_10 : _ex2_reg_quotient_T; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
   wire [33:0] _ex2_reg_quotient_T_12 = ex2_q[0] ? _ex2_reg_quotient_T_5 : _ex2_reg_quotient_T_11; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
-  wire [36:0] _ex2_reg_dividend_T_27 = $signed(ex2_reg_dividend) + $signed(_ex2_reg_dividend_T_5); // @[src/main/scala/fpga/Core.scala 1286:52]
-  wire [38:0] _ex2_reg_dividend_T_28 = {$signed(_ex2_reg_dividend_T_27), 2'h0}; // @[src/main/scala/fpga/Core.scala 1286:93]
-  wire [36:0] _ex2_reg_dividend_T_35 = $signed(ex2_reg_dividend) + $signed(_ex2_reg_dividend_T_13); // @[src/main/scala/fpga/Core.scala 1287:52]
-  wire [38:0] _ex2_reg_dividend_T_36 = {$signed(_ex2_reg_dividend_T_35), 2'h0}; // @[src/main/scala/fpga/Core.scala 1287:93]
+  wire [36:0] _ex2_reg_dividend_T_27 = $signed(ex2_reg_dividend) + $signed(_ex2_reg_dividend_T_5); // @[src/main/scala/fpga/Core.scala 1353:52]
+  wire [38:0] _ex2_reg_dividend_T_28 = {$signed(_ex2_reg_dividend_T_27), 2'h0}; // @[src/main/scala/fpga/Core.scala 1353:93]
+  wire [36:0] _ex2_reg_dividend_T_35 = $signed(ex2_reg_dividend) + $signed(_ex2_reg_dividend_T_13); // @[src/main/scala/fpga/Core.scala 1354:52]
+  wire [38:0] _ex2_reg_dividend_T_36 = {$signed(_ex2_reg_dividend_T_35), 2'h0}; // @[src/main/scala/fpga/Core.scala 1354:93]
   wire [38:0] _ex2_reg_dividend_T_37 = ex2_q[1] ? $signed(_ex2_reg_dividend_T_36) : $signed(_ex2_reg_dividend_T_1); // @[src/main/scala/chisel3/util/Mux.scala 141:16]
   wire [38:0] _ex2_reg_dividend_T_38 = ex2_q[0] ? $signed(_ex2_reg_dividend_T_28) : $signed(_ex2_reg_dividend_T_37); // @[src/main/scala/chisel3/util/Mux.scala 141:16]
-  wire [33:0] _ex2_reg_quotient_T_18 = _ex2_reg_quotient_T - 34'h1; // @[src/main/scala/fpga/Core.scala 1290:58]
-  wire [33:0] _ex2_reg_quotient_T_23 = _ex2_reg_quotient_T - 34'h2; // @[src/main/scala/fpga/Core.scala 1291:58]
+  wire [33:0] _ex2_reg_quotient_T_18 = _ex2_reg_quotient_T - 34'h1; // @[src/main/scala/fpga/Core.scala 1357:58]
+  wire [33:0] _ex2_reg_quotient_T_23 = _ex2_reg_quotient_T - 34'h2; // @[src/main/scala/fpga/Core.scala 1358:58]
   wire [33:0] _ex2_reg_quotient_T_24 = ex2_q[1] ? _ex2_reg_quotient_T_23 : _ex2_reg_quotient_T; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
   wire [33:0] _ex2_reg_quotient_T_25 = ex2_q[0] ? _ex2_reg_quotient_T_18 : _ex2_reg_quotient_T_24; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
-  wire [38:0] _GEN_426 = _p_T_1 ? $signed(_ex2_reg_dividend_T_19) : $signed(_ex2_reg_dividend_T_38); // @[src/main/scala/fpga/Core.scala 1275:51 1276:26 1285:26]
-  wire [33:0] _GEN_427 = _p_T_1 ? _ex2_reg_quotient_T_12 : _ex2_reg_quotient_T_25; // @[src/main/scala/fpga/Core.scala 1275:51 1280:26 1289:26]
-  wire [4:0] _ex2_reg_rem_shift_T_1 = ex2_reg_rem_shift + 5'h1; // @[src/main/scala/fpga/Core.scala 1294:46]
-  wire [2:0] _GEN_428 = ex2_reg_divrem_count == 5'h10 ? 3'h3 : ex2_reg_divrem_state; // @[src/main/scala/fpga/Core.scala 1296:44 1297:30 307:37]
-  wire [5:0] _ex2_reg_reminder_T = {ex2_reg_rem_shift,1'h0}; // @[src/main/scala/fpga/Core.scala 1302:51]
-  wire [36:0] _ex2_reg_reminder_T_1 = $signed(ex2_reg_dividend) >>> _ex2_reg_reminder_T; // @[src/main/scala/fpga/Core.scala 1302:45]
-  wire [31:0] _reminder_T_4 = ex2_reg_reminder + ex2_reg_init_divisor; // @[src/main/scala/fpga/Core.scala 1308:26]
-  wire [31:0] reminder = ex2_reg_dividend[36] ? _reminder_T_4 : ex2_reg_reminder; // @[src/main/scala/fpga/Core.scala 1307:25]
-  wire [31:0] _ex2_reg_reminder_T_4 = ~reminder; // @[src/main/scala/fpga/Core.scala 1315:11]
-  wire [31:0] _ex2_reg_reminder_T_6 = _ex2_reg_reminder_T_4 + 32'h1; // @[src/main/scala/fpga/Core.scala 1315:21]
-  wire [31:0] _ex2_reg_reminder_T_7 = ~ex2_reg_sign_op1 ? reminder : _ex2_reg_reminder_T_6; // @[src/main/scala/fpga/Core.scala 1313:12]
-  wire [31:0] _ex2_reg_reminder_T_8 = ex2_reg_zero_op2 ? ex2_reg_orig_dividend : _ex2_reg_reminder_T_7; // @[src/main/scala/fpga/Core.scala 1311:30]
-  wire [31:0] _quotient_T_3 = ex2_reg_quotient - 32'h1; // @[src/main/scala/fpga/Core.scala 1319:26]
-  wire [31:0] quotient = ex2_reg_dividend[36] ? _quotient_T_3 : ex2_reg_quotient; // @[src/main/scala/fpga/Core.scala 1318:25]
-  wire [31:0] _ex2_reg_quotient_T_27 = ~quotient; // @[src/main/scala/fpga/Core.scala 1326:11]
-  wire [31:0] _ex2_reg_quotient_T_29 = _ex2_reg_quotient_T_27 + 32'h1; // @[src/main/scala/fpga/Core.scala 1326:21]
-  wire [31:0] _ex2_reg_quotient_T_30 = ~ex2_reg_sign_op12 ? quotient : _ex2_reg_quotient_T_29; // @[src/main/scala/fpga/Core.scala 1324:12]
-  wire [31:0] _ex2_reg_quotient_T_31 = ex2_reg_zero_op2 ? 32'hffffffff : _ex2_reg_quotient_T_30; // @[src/main/scala/fpga/Core.scala 1322:30]
-  wire [2:0] _GEN_429 = 3'h5 == ex2_reg_divrem_state ? 3'h0 : ex2_reg_divrem_state; // @[src/main/scala/fpga/Core.scala 1208:33 1333:28 307:37]
-  wire [31:0] _GEN_430 = 3'h4 == ex2_reg_divrem_state ? _ex2_reg_reminder_T_8 : ex2_reg_reminder; // @[src/main/scala/fpga/Core.scala 1208:33 1311:24 1183:37]
-  wire [31:0] _GEN_431 = 3'h4 == ex2_reg_divrem_state ? _ex2_reg_quotient_T_31 : ex2_reg_quotient; // @[src/main/scala/fpga/Core.scala 1208:33 1322:24 1184:37]
-  wire [2:0] _GEN_432 = 3'h4 == ex2_reg_divrem_state ? 3'h5 : _GEN_429; // @[src/main/scala/fpga/Core.scala 1208:33 1329:28]
-  wire [31:0] _GEN_433 = 3'h3 == ex2_reg_divrem_state ? _ex2_reg_reminder_T_1[31:0] : _GEN_430; // @[src/main/scala/fpga/Core.scala 1208:33 1302:24]
-  wire [2:0] _GEN_434 = 3'h3 == ex2_reg_divrem_state ? 3'h4 : _GEN_432; // @[src/main/scala/fpga/Core.scala 1208:33 1303:28]
-  wire [31:0] _GEN_436 = 3'h3 == ex2_reg_divrem_state ? ex2_reg_quotient : _GEN_431; // @[src/main/scala/fpga/Core.scala 1208:33 1184:37]
-  wire [38:0] _GEN_437 = 3'h2 == ex2_reg_divrem_state ? $signed(_GEN_426) : $signed({{2{ex2_reg_dividend[36]}},
-    ex2_reg_dividend}); // @[src/main/scala/fpga/Core.scala 1208:33 1176:37]
-  wire [33:0] _GEN_438 = 3'h2 == ex2_reg_divrem_state ? _GEN_427 : {{2'd0}, _GEN_436}; // @[src/main/scala/fpga/Core.scala 1208:33]
-  wire [38:0] _GEN_451 = 3'h1 == ex2_reg_divrem_state ? $signed({{2{ex2_reg_dividend[36]}},ex2_reg_dividend}) : $signed(
-    _GEN_437); // @[src/main/scala/fpga/Core.scala 1208:33 1176:37]
-  wire [33:0] _GEN_452 = 3'h1 == ex2_reg_divrem_state ? {{2'd0}, ex2_reg_quotient} : _GEN_438; // @[src/main/scala/fpga/Core.scala 1208:33 1184:37]
-  wire [38:0] _GEN_456 = 3'h0 == ex2_reg_divrem_state ? $signed({{2{_ex2_reg_dividend_T[36]}},_ex2_reg_dividend_T}) :
-    $signed(_GEN_451); // @[src/main/scala/fpga/Core.scala 1208:33 1218:28]
-  wire [33:0] _GEN_461 = 3'h0 == ex2_reg_divrem_state ? 34'h0 : _GEN_452; // @[src/main/scala/fpga/Core.scala 1208:33 1223:28]
-  wire  _ex2_wb_data_T_4 = _ex2_fw_data_T_1 | _ex2_fw_data_T_4; // @[src/main/scala/fpga/Core.scala 1349:34]
-  wire  _ex2_wb_data_T_7 = ex2_reg_fun_sel == 3'h1 | ex2_reg_fun_sel == 3'h5; // @[src/main/scala/fpga/Core.scala 1350:33]
+  wire [38:0] _GEN_466 = _p_T_1 ? $signed(_ex2_reg_dividend_T_19) : $signed(_ex2_reg_dividend_T_38); // @[src/main/scala/fpga/Core.scala 1342:51 1343:26 1352:26]
+  wire [33:0] _GEN_467 = _p_T_1 ? _ex2_reg_quotient_T_12 : _ex2_reg_quotient_T_25; // @[src/main/scala/fpga/Core.scala 1342:51 1347:26 1356:26]
+  wire [4:0] _ex2_reg_rem_shift_T_1 = ex2_reg_rem_shift + 5'h1; // @[src/main/scala/fpga/Core.scala 1361:46]
+  wire [2:0] _GEN_468 = ex2_reg_divrem_count == 5'h10 ? 3'h3 : ex2_reg_divrem_state; // @[src/main/scala/fpga/Core.scala 1363:44 1364:30 308:37]
+  wire [5:0] _ex2_reg_reminder_T = {ex2_reg_rem_shift,1'h0}; // @[src/main/scala/fpga/Core.scala 1369:51]
+  wire [36:0] _ex2_reg_reminder_T_1 = $signed(ex2_reg_dividend) >>> _ex2_reg_reminder_T; // @[src/main/scala/fpga/Core.scala 1369:45]
+  wire [31:0] _reminder_T_4 = ex2_reg_reminder + ex2_reg_init_divisor; // @[src/main/scala/fpga/Core.scala 1375:26]
+  wire [31:0] reminder = ex2_reg_dividend[36] ? _reminder_T_4 : ex2_reg_reminder; // @[src/main/scala/fpga/Core.scala 1374:25]
+  wire [31:0] _ex2_reg_reminder_T_4 = ~reminder; // @[src/main/scala/fpga/Core.scala 1382:11]
+  wire [31:0] _ex2_reg_reminder_T_6 = _ex2_reg_reminder_T_4 + 32'h1; // @[src/main/scala/fpga/Core.scala 1382:21]
+  wire [31:0] _ex2_reg_reminder_T_7 = ~ex2_reg_sign_op1 ? reminder : _ex2_reg_reminder_T_6; // @[src/main/scala/fpga/Core.scala 1380:12]
+  wire [31:0] _ex2_reg_reminder_T_8 = ex2_reg_zero_op2 ? ex2_reg_orig_dividend : _ex2_reg_reminder_T_7; // @[src/main/scala/fpga/Core.scala 1378:30]
+  wire [31:0] _quotient_T_3 = ex2_reg_quotient - 32'h1; // @[src/main/scala/fpga/Core.scala 1386:26]
+  wire [31:0] quotient = ex2_reg_dividend[36] ? _quotient_T_3 : ex2_reg_quotient; // @[src/main/scala/fpga/Core.scala 1385:25]
+  wire [31:0] _ex2_reg_quotient_T_27 = ~quotient; // @[src/main/scala/fpga/Core.scala 1393:11]
+  wire [31:0] _ex2_reg_quotient_T_29 = _ex2_reg_quotient_T_27 + 32'h1; // @[src/main/scala/fpga/Core.scala 1393:21]
+  wire [31:0] _ex2_reg_quotient_T_30 = ~ex2_reg_sign_op12 ? quotient : _ex2_reg_quotient_T_29; // @[src/main/scala/fpga/Core.scala 1391:12]
+  wire [31:0] _ex2_reg_quotient_T_31 = ex2_reg_zero_op2 ? 32'hffffffff : _ex2_reg_quotient_T_30; // @[src/main/scala/fpga/Core.scala 1389:30]
+  wire [2:0] _GEN_469 = 3'h5 == ex2_reg_divrem_state ? 3'h0 : ex2_reg_divrem_state; // @[src/main/scala/fpga/Core.scala 1275:33 1400:28 308:37]
+  wire [31:0] _GEN_470 = 3'h4 == ex2_reg_divrem_state ? _ex2_reg_reminder_T_8 : ex2_reg_reminder; // @[src/main/scala/fpga/Core.scala 1275:33 1378:24 1250:37]
+  wire [31:0] _GEN_471 = 3'h4 == ex2_reg_divrem_state ? _ex2_reg_quotient_T_31 : ex2_reg_quotient; // @[src/main/scala/fpga/Core.scala 1275:33 1389:24 1251:37]
+  wire [2:0] _GEN_472 = 3'h4 == ex2_reg_divrem_state ? 3'h5 : _GEN_469; // @[src/main/scala/fpga/Core.scala 1275:33 1396:28]
+  wire [31:0] _GEN_473 = 3'h3 == ex2_reg_divrem_state ? _ex2_reg_reminder_T_1[31:0] : _GEN_470; // @[src/main/scala/fpga/Core.scala 1275:33 1369:24]
+  wire [2:0] _GEN_474 = 3'h3 == ex2_reg_divrem_state ? 3'h4 : _GEN_472; // @[src/main/scala/fpga/Core.scala 1275:33 1370:28]
+  wire [31:0] _GEN_476 = 3'h3 == ex2_reg_divrem_state ? ex2_reg_quotient : _GEN_471; // @[src/main/scala/fpga/Core.scala 1275:33 1251:37]
+  wire [38:0] _GEN_477 = 3'h2 == ex2_reg_divrem_state ? $signed(_GEN_466) : $signed({{2{ex2_reg_dividend[36]}},
+    ex2_reg_dividend}); // @[src/main/scala/fpga/Core.scala 1275:33 1243:37]
+  wire [33:0] _GEN_478 = 3'h2 == ex2_reg_divrem_state ? _GEN_467 : {{2'd0}, _GEN_476}; // @[src/main/scala/fpga/Core.scala 1275:33]
+  wire [38:0] _GEN_491 = 3'h1 == ex2_reg_divrem_state ? $signed({{2{ex2_reg_dividend[36]}},ex2_reg_dividend}) : $signed(
+    _GEN_477); // @[src/main/scala/fpga/Core.scala 1275:33 1243:37]
+  wire [33:0] _GEN_492 = 3'h1 == ex2_reg_divrem_state ? {{2'd0}, ex2_reg_quotient} : _GEN_478; // @[src/main/scala/fpga/Core.scala 1275:33 1251:37]
+  wire [38:0] _GEN_496 = 3'h0 == ex2_reg_divrem_state ? $signed({{2{_ex2_reg_dividend_T[36]}},_ex2_reg_dividend_T}) :
+    $signed(_GEN_491); // @[src/main/scala/fpga/Core.scala 1275:33 1285:28]
+  wire [33:0] _GEN_501 = 3'h0 == ex2_reg_divrem_state ? 34'h0 : _GEN_492; // @[src/main/scala/fpga/Core.scala 1275:33 1290:28]
+  wire  _ex2_wb_data_T_4 = _ex2_fw_data_T_1 | _ex2_fw_data_T_4; // @[src/main/scala/fpga/Core.scala 1416:34]
+  wire  _ex2_wb_data_T_7 = ex2_reg_fun_sel == 3'h1 | ex2_reg_fun_sel == 3'h5; // @[src/main/scala/fpga/Core.scala 1417:33]
   wire [31:0] _ex2_wb_data_T_8 = _ex2_wb_data_T_7 ? ex2_alu_muldiv_out : ex2_reg_alu_out; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
   wire [31:0] _ex2_wb_data_T_9 = _ex2_wb_data_T_4 ? csr_rdata : _ex2_wb_data_T_8; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
   wire [31:0] _ex2_wb_data_T_10 = _ex2_fw_data_T_3 ? ex2_reg_pc_bit_out : _ex2_wb_data_T_9; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
   wire [31:0] ex2_wb_data = _ex2_fw_data_T ? ex2_mask_out : _ex2_wb_data_T_10; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
-  wire  _T_106 = _T_71 & ex2_reg_rf_wen; // @[src/main/scala/fpga/Core.scala 1363:28]
-  wire  _mem1_reg_mem_wstrb_T_2 = ex1_reg_mem_w == 3'h5 | ex1_reg_mem_w == 3'h7; // @[src/main/scala/fpga/Core.scala 1377:31]
-  wire  _mem1_reg_mem_wstrb_T_5 = ex1_reg_mem_w == 3'h4 | ex1_reg_mem_w == 3'h6; // @[src/main/scala/fpga/Core.scala 1378:31]
+  wire  _T_130 = _T_95 & ex2_reg_rf_wen; // @[src/main/scala/fpga/Core.scala 1430:28]
+  wire  _mem1_reg_mem_wstrb_T_2 = ex1_reg_mem_w == 3'h5 | ex1_reg_mem_w == 3'h7; // @[src/main/scala/fpga/Core.scala 1444:31]
+  wire  _mem1_reg_mem_wstrb_T_5 = ex1_reg_mem_w == 3'h4 | ex1_reg_mem_w == 3'h6; // @[src/main/scala/fpga/Core.scala 1445:31]
   wire [3:0] _mem1_reg_mem_wstrb_T_6 = _mem1_reg_mem_wstrb_T_5 ? 4'h3 : 4'hf; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
   wire [3:0] _mem1_reg_mem_wstrb_T_7 = _mem1_reg_mem_wstrb_T_2 ? 4'h1 : _mem1_reg_mem_wstrb_T_6; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
-  wire [6:0] _GEN_27 = {{3'd0}, _mem1_reg_mem_wstrb_T_7}; // @[src/main/scala/fpga/Core.scala 1380:8]
-  wire [6:0] _mem1_reg_mem_wstrb_T_9 = _GEN_27 << ex1_add_out[1:0]; // @[src/main/scala/fpga/Core.scala 1380:8]
-  wire  _mem1_reg_unaligned_T_1 = ex1_add_out[1:0] != 2'h0; // @[src/main/scala/fpga/Core.scala 1381:57]
-  wire  _mem1_reg_unaligned_T_9 = ex1_add_out[1:0] == 2'h3; // @[src/main/scala/fpga/Core.scala 1383:81]
+  wire [6:0] _GEN_29 = {{3'd0}, _mem1_reg_mem_wstrb_T_7}; // @[src/main/scala/fpga/Core.scala 1447:8]
+  wire [6:0] _mem1_reg_mem_wstrb_T_9 = _GEN_29 << ex1_add_out[1:0]; // @[src/main/scala/fpga/Core.scala 1447:8]
+  wire  _mem1_reg_unaligned_T_1 = ex1_add_out[1:0] != 2'h0; // @[src/main/scala/fpga/Core.scala 1448:57]
+  wire  _mem1_reg_unaligned_T_9 = ex1_add_out[1:0] == 2'h3; // @[src/main/scala/fpga/Core.scala 1450:81]
   wire  _mem1_reg_unaligned_T_10 = _mem1_reg_mem_wstrb_T_5 ? _mem1_reg_unaligned_T_9 : _mem1_reg_unaligned_T_1; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
   wire  _mem1_reg_unaligned_T_11 = _mem1_reg_mem_wstrb_T_2 ? 1'h0 : _mem1_reg_unaligned_T_10; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
-  wire  _mem1_reg_unaligned_T_12 = ex1_reg_wb_sel == 3'h5; // @[src/main/scala/fpga/Core.scala 1384:27]
-  wire  _mem1_reg_unaligned_T_13 = ex1_reg_wb_sel == 3'h4; // @[src/main/scala/fpga/Core.scala 1384:55]
-  wire  _mem1_reg_unaligned_T_14 = ex1_reg_wb_sel == 3'h5 | ex1_reg_wb_sel == 3'h4; // @[src/main/scala/fpga/Core.scala 1384:37]
+  wire  _mem1_reg_unaligned_T_12 = ex1_reg_wb_sel == 3'h5; // @[src/main/scala/fpga/Core.scala 1451:27]
+  wire  _mem1_reg_unaligned_T_13 = ex1_reg_wb_sel == 3'h4; // @[src/main/scala/fpga/Core.scala 1451:55]
+  wire  _mem1_reg_unaligned_T_14 = ex1_reg_wb_sel == 3'h5 | ex1_reg_wb_sel == 3'h4; // @[src/main/scala/fpga/Core.scala 1451:37]
   wire  _mem1_reg_unaligned_T_16 = _mem1_reg_unaligned_T_11 & (ex1_reg_wb_sel == 3'h5 | ex1_reg_wb_sel == 3'h4) & ex1_en
-    ; // @[src/main/scala/fpga/Core.scala 1384:66]
-  wire [55:0] _mem1_reg_wdata_T_1 = {ex1_reg_op3_data,ex1_reg_op3_data[31:8]}; // @[src/main/scala/fpga/Core.scala 1385:35]
-  wire [5:0] _mem1_reg_wdata_T_3 = 4'h8 * ex1_add_out[1:0]; // @[src/main/scala/fpga/Core.scala 1385:87]
-  wire [118:0] _GEN_28 = {{63'd0}, _mem1_reg_wdata_T_1}; // @[src/main/scala/fpga/Core.scala 1385:79]
-  wire [118:0] _mem1_reg_wdata_T_4 = _GEN_28 << _mem1_reg_wdata_T_3; // @[src/main/scala/fpga/Core.scala 1385:79]
-  wire  mem1_is_dram = ex1_add_out[31:28] == 4'h2; // @[src/main/scala/fpga/Core.scala 1388:70]
-  wire  _mem1_reg_is_mem_load_T = ~mem1_is_dram; // @[src/main/scala/fpga/Core.scala 1390:31]
-  wire  _T_109 = ~mem1_mem_stall; // @[src/main/scala/fpga/Core.scala 1402:9]
-  wire  _T_110 = ~mem1_dram_stall; // @[src/main/scala/fpga/Core.scala 1402:28]
-  wire  _T_111 = ~mem1_mem_stall & ~mem1_dram_stall; // @[src/main/scala/fpga/Core.scala 1402:25]
-  wire [31:0] _mem_addr_T_1 = ex2_reg_alu_out + 32'h4; // @[src/main/scala/fpga/Core.scala 1406:59]
-  wire [3:0] _mem_wstrb_T_1 = {1'h0,mem1_reg_mem_wstrb[6:4]}; // @[src/main/scala/fpga/Core.scala 1407:46]
-  wire  _T_113 = ~mem2_dram_stall; // @[src/main/scala/fpga/Core.scala 1435:9]
-  wire  _mem2_reg_is_valid_load_T_1 = _T_109 & mem1_reg_is_mem_load; // @[src/main/scala/fpga/Core.scala 1440:49]
-  wire  _mem2_reg_is_valid_load_T_3 = _T_110 & mem1_reg_is_dram_load; // @[src/main/scala/fpga/Core.scala 1440:95]
-  wire  _mem2_is_valid_load_T_2 = _T_113 & ~mem2_reg_unaligned; // @[src/main/scala/fpga/Core.scala 1458:40]
-  wire  mem2_is_valid_load = _T_113 & ~mem2_reg_unaligned & mem2_reg_is_valid_load; // @[src/main/scala/fpga/Core.scala 1458:63]
-  wire  _mem2_is_aligned_lw_T_4 = mem2_reg_mem_w != 3'h5; // @[src/main/scala/fpga/Core.scala 1460:20]
-  wire  _mem2_is_aligned_lw_T_5 = _T_113 & mem2_reg_is_valid_load & mem2_reg_wb_byte_offset == 2'h0 &
-    _mem2_is_aligned_lw_T_4; // @[src/main/scala/fpga/Core.scala 1459:105]
-  wire  _mem2_is_aligned_lw_T_8 = mem2_reg_mem_w != 3'h4; // @[src/main/scala/fpga/Core.scala 1461:20]
-  wire  _mem2_is_aligned_lw_T_9 = _mem2_is_aligned_lw_T_5 & mem2_reg_mem_w != 3'h7 & _mem2_is_aligned_lw_T_8; // @[src/main/scala/fpga/Core.scala 1460:57]
-  wire  _mem2_is_aligned_lw_T_10 = mem2_reg_mem_w != 3'h6; // @[src/main/scala/fpga/Core.scala 1461:47]
-  wire  mem2_is_aligned_lw = _mem2_is_aligned_lw_T_9 & mem2_reg_mem_w != 3'h6; // @[src/main/scala/fpga/Core.scala 1461:29]
-  wire [55:0] _mem3_wb_rdata_T = {mem3_reg_rdata_high,mem3_reg_dmem_rdata}; // @[src/main/scala/fpga/Core.scala 1495:27]
-  wire [5:0] _mem3_wb_rdata_T_1 = 4'h8 * mem3_reg_wb_byte_offset; // @[src/main/scala/fpga/Core.scala 1495:78]
-  wire [55:0] _mem3_wb_rdata_T_2 = _mem3_wb_rdata_T >> _mem3_wb_rdata_T_1; // @[src/main/scala/fpga/Core.scala 1495:70]
-  wire [31:0] mem3_wb_rdata = _mem3_wb_rdata_T_2[31:0]; // @[src/main/scala/fpga/Core.scala 1495:105]
-  wire  _mem3_wb_data_load_T = mem3_reg_mem_w == 3'h5; // @[src/main/scala/fpga/Core.scala 1497:21]
-  wire [23:0] _mem3_wb_data_load_T_3 = mem3_wb_rdata[7] ? 24'hffffff : 24'h0; // @[src/main/scala/fpga/Core.scala 1486:11]
-  wire [31:0] _mem3_wb_data_load_T_5 = {_mem3_wb_data_load_T_3,mem3_wb_rdata[7:0]}; // @[src/main/scala/fpga/Core.scala 1486:40]
-  wire  _mem3_wb_data_load_T_6 = mem3_reg_mem_w == 3'h4; // @[src/main/scala/fpga/Core.scala 1498:21]
-  wire [15:0] _mem3_wb_data_load_T_9 = mem3_wb_rdata[15] ? 16'hffff : 16'h0; // @[src/main/scala/fpga/Core.scala 1486:11]
-  wire [31:0] _mem3_wb_data_load_T_11 = {_mem3_wb_data_load_T_9,mem3_wb_rdata[15:0]}; // @[src/main/scala/fpga/Core.scala 1486:40]
-  wire  _mem3_wb_data_load_T_12 = mem3_reg_mem_w == 3'h7; // @[src/main/scala/fpga/Core.scala 1499:21]
-  wire [31:0] _mem3_wb_data_load_T_15 = {24'h0,mem3_wb_rdata[7:0]}; // @[src/main/scala/fpga/Core.scala 1489:31]
-  wire  _mem3_wb_data_load_T_16 = mem3_reg_mem_w == 3'h6; // @[src/main/scala/fpga/Core.scala 1500:21]
-  wire [31:0] _mem3_wb_data_load_T_19 = {16'h0,mem3_wb_rdata[15:0]}; // @[src/main/scala/fpga/Core.scala 1489:31]
+    ; // @[src/main/scala/fpga/Core.scala 1451:66]
+  wire [55:0] _mem1_reg_wdata_T_1 = {ex1_reg_op3_data,ex1_reg_op3_data[31:8]}; // @[src/main/scala/fpga/Core.scala 1452:35]
+  wire [5:0] _mem1_reg_wdata_T_3 = 4'h8 * ex1_add_out[1:0]; // @[src/main/scala/fpga/Core.scala 1452:87]
+  wire [118:0] _GEN_30 = {{63'd0}, _mem1_reg_wdata_T_1}; // @[src/main/scala/fpga/Core.scala 1452:79]
+  wire [118:0] _mem1_reg_wdata_T_4 = _GEN_30 << _mem1_reg_wdata_T_3; // @[src/main/scala/fpga/Core.scala 1452:79]
+  wire  mem1_is_dram = ex1_add_out[31:28] == 4'h2; // @[src/main/scala/fpga/Core.scala 1455:70]
+  wire  _mem1_reg_is_mem_load_T = ~mem1_is_dram; // @[src/main/scala/fpga/Core.scala 1457:31]
+  wire  _T_133 = ~mem1_mem_stall; // @[src/main/scala/fpga/Core.scala 1469:9]
+  wire  _T_134 = ~mem1_dram_stall; // @[src/main/scala/fpga/Core.scala 1469:28]
+  wire  _T_135 = ~mem1_mem_stall & ~mem1_dram_stall; // @[src/main/scala/fpga/Core.scala 1469:25]
+  wire [31:0] _mem_addr_T_1 = ex2_reg_alu_out + 32'h4; // @[src/main/scala/fpga/Core.scala 1473:59]
+  wire [3:0] _mem_wstrb_T_1 = {1'h0,mem1_reg_mem_wstrb[6:4]}; // @[src/main/scala/fpga/Core.scala 1474:46]
+  wire  _T_137 = ~mem2_dram_stall; // @[src/main/scala/fpga/Core.scala 1502:9]
+  wire  _mem2_reg_is_valid_load_T_1 = _T_133 & mem1_reg_is_mem_load; // @[src/main/scala/fpga/Core.scala 1507:49]
+  wire  _mem2_reg_is_valid_load_T_3 = _T_134 & mem1_reg_is_dram_load; // @[src/main/scala/fpga/Core.scala 1507:95]
+  wire  _mem2_is_valid_load_T_2 = _T_137 & ~mem2_reg_unaligned; // @[src/main/scala/fpga/Core.scala 1525:40]
+  wire  mem2_is_valid_load = _T_137 & ~mem2_reg_unaligned & mem2_reg_is_valid_load; // @[src/main/scala/fpga/Core.scala 1525:63]
+  wire  _mem2_is_aligned_lw_T_4 = mem2_reg_mem_w != 3'h5; // @[src/main/scala/fpga/Core.scala 1527:20]
+  wire  _mem2_is_aligned_lw_T_5 = _T_137 & mem2_reg_is_valid_load & mem2_reg_wb_byte_offset == 2'h0 &
+    _mem2_is_aligned_lw_T_4; // @[src/main/scala/fpga/Core.scala 1526:105]
+  wire  _mem2_is_aligned_lw_T_8 = mem2_reg_mem_w != 3'h4; // @[src/main/scala/fpga/Core.scala 1528:20]
+  wire  _mem2_is_aligned_lw_T_9 = _mem2_is_aligned_lw_T_5 & mem2_reg_mem_w != 3'h7 & _mem2_is_aligned_lw_T_8; // @[src/main/scala/fpga/Core.scala 1527:57]
+  wire  _mem2_is_aligned_lw_T_10 = mem2_reg_mem_w != 3'h6; // @[src/main/scala/fpga/Core.scala 1528:47]
+  wire  mem2_is_aligned_lw = _mem2_is_aligned_lw_T_9 & mem2_reg_mem_w != 3'h6; // @[src/main/scala/fpga/Core.scala 1528:29]
+  wire [55:0] _mem3_wb_rdata_T = {mem3_reg_rdata_high,mem3_reg_dmem_rdata}; // @[src/main/scala/fpga/Core.scala 1562:27]
+  wire [5:0] _mem3_wb_rdata_T_1 = 4'h8 * mem3_reg_wb_byte_offset; // @[src/main/scala/fpga/Core.scala 1562:78]
+  wire [55:0] _mem3_wb_rdata_T_2 = _mem3_wb_rdata_T >> _mem3_wb_rdata_T_1; // @[src/main/scala/fpga/Core.scala 1562:70]
+  wire [31:0] mem3_wb_rdata = _mem3_wb_rdata_T_2[31:0]; // @[src/main/scala/fpga/Core.scala 1562:105]
+  wire  _mem3_wb_data_load_T = mem3_reg_mem_w == 3'h5; // @[src/main/scala/fpga/Core.scala 1564:21]
+  wire [23:0] _mem3_wb_data_load_T_3 = mem3_wb_rdata[7] ? 24'hffffff : 24'h0; // @[src/main/scala/fpga/Core.scala 1553:11]
+  wire [31:0] _mem3_wb_data_load_T_5 = {_mem3_wb_data_load_T_3,mem3_wb_rdata[7:0]}; // @[src/main/scala/fpga/Core.scala 1553:40]
+  wire  _mem3_wb_data_load_T_6 = mem3_reg_mem_w == 3'h4; // @[src/main/scala/fpga/Core.scala 1565:21]
+  wire [15:0] _mem3_wb_data_load_T_9 = mem3_wb_rdata[15] ? 16'hffff : 16'h0; // @[src/main/scala/fpga/Core.scala 1553:11]
+  wire [31:0] _mem3_wb_data_load_T_11 = {_mem3_wb_data_load_T_9,mem3_wb_rdata[15:0]}; // @[src/main/scala/fpga/Core.scala 1553:40]
+  wire  _mem3_wb_data_load_T_12 = mem3_reg_mem_w == 3'h7; // @[src/main/scala/fpga/Core.scala 1566:21]
+  wire [31:0] _mem3_wb_data_load_T_15 = {24'h0,mem3_wb_rdata[7:0]}; // @[src/main/scala/fpga/Core.scala 1556:31]
+  wire  _mem3_wb_data_load_T_16 = mem3_reg_mem_w == 3'h6; // @[src/main/scala/fpga/Core.scala 1567:21]
+  wire [31:0] _mem3_wb_data_load_T_19 = {16'h0,mem3_wb_rdata[15:0]}; // @[src/main/scala/fpga/Core.scala 1556:31]
   wire [31:0] _mem3_wb_data_load_T_20 = _mem3_wb_data_load_T_16 ? _mem3_wb_data_load_T_19 : mem3_wb_rdata; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
   wire [31:0] _mem3_wb_data_load_T_21 = _mem3_wb_data_load_T_12 ? _mem3_wb_data_load_T_15 : _mem3_wb_data_load_T_20; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
   wire [31:0] _mem3_wb_data_load_T_22 = _mem3_wb_data_load_T_6 ? _mem3_wb_data_load_T_11 : _mem3_wb_data_load_T_21; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
   wire [31:0] mem3_wb_data_load = _mem3_wb_data_load_T ? _mem3_wb_data_load_T_5 : _mem3_wb_data_load_T_22; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
-  wire  _T_115 = ~mem3_reg_is_aligned_lw; // @[src/main/scala/fpga/Core.scala 1506:35]
-  wire [63:0] _instret_T_1 = instret + 64'h2; // @[src/main/scala/fpga/Core.scala 1512:24]
-  wire [63:0] _instret_T_3 = instret + 64'h1; // @[src/main/scala/fpga/Core.scala 1514:24]
-  wire [31:0] _io_debug_signal_ex2_reg_pc_T = {ex2_reg_pc,1'h0}; // @[src/main/scala/fpga/Core.scala 1525:45]
+  wire  _T_139 = ~mem3_reg_is_aligned_lw; // @[src/main/scala/fpga/Core.scala 1573:35]
+  wire [63:0] _instret_T_1 = instret + 64'h2; // @[src/main/scala/fpga/Core.scala 1579:24]
+  wire [63:0] _instret_T_3 = instret + 64'h1; // @[src/main/scala/fpga/Core.scala 1581:24]
+  wire [31:0] _io_debug_signal_ex2_reg_pc_T = {ex2_reg_pc,1'h0}; // @[src/main/scala/fpga/Core.scala 1592:45]
   wire [7:0] lo_lo = {scoreboard_MPORT_31_data,scoreboard_MPORT_32_data,scoreboard_MPORT_33_data,
     scoreboard_MPORT_34_data,scoreboard_MPORT_35_data,scoreboard_MPORT_36_data,scoreboard_MPORT_37_data,
-    scoreboard_MPORT_38_data}; // @[src/main/scala/fpga/Core.scala 1584:39]
+    scoreboard_MPORT_38_data}; // @[src/main/scala/fpga/Core.scala 1652:39]
   wire [15:0] lo = {scoreboard_MPORT_23_data,scoreboard_MPORT_24_data,scoreboard_MPORT_25_data,scoreboard_MPORT_26_data,
-    scoreboard_MPORT_27_data,scoreboard_MPORT_28_data,scoreboard_MPORT_29_data,scoreboard_MPORT_30_data,lo_lo}; // @[src/main/scala/fpga/Core.scala 1584:39]
+    scoreboard_MPORT_27_data,scoreboard_MPORT_28_data,scoreboard_MPORT_29_data,scoreboard_MPORT_30_data,lo_lo}; // @[src/main/scala/fpga/Core.scala 1652:39]
   wire [7:0] hi_lo = {scoreboard_MPORT_15_data,scoreboard_MPORT_16_data,scoreboard_MPORT_17_data,
     scoreboard_MPORT_18_data,scoreboard_MPORT_19_data,scoreboard_MPORT_20_data,scoreboard_MPORT_21_data,
-    scoreboard_MPORT_22_data}; // @[src/main/scala/fpga/Core.scala 1584:39]
-  wire [38:0] _GEN_548 = reset ? $signed(39'sh0) : $signed(_GEN_456); // @[src/main/scala/fpga/Core.scala 1176:{37,37}]
-  wire [33:0] _GEN_550 = reset ? 34'h0 : _GEN_461; // @[src/main/scala/fpga/Core.scala 1184:{37,37}]
-  LongCounter cycle_counter ( // @[src/main/scala/fpga/Core.scala 129:29]
+    scoreboard_MPORT_22_data}; // @[src/main/scala/fpga/Core.scala 1652:39]
+  wire [38:0] _GEN_588 = reset ? $signed(39'sh0) : $signed(_GEN_496); // @[src/main/scala/fpga/Core.scala 1243:{37,37}]
+  wire [33:0] _GEN_590 = reset ? 34'h0 : _GEN_501; // @[src/main/scala/fpga/Core.scala 1251:{37,37}]
+  wire  _GEN_591 = _T_67 & _T_70; // @[src/main/scala/fpga/Core.scala 980:15]
+  wire  _GEN_594 = ~ex1_is_br_taken; // @[src/main/scala/fpga/Core.scala 982:15]
+  wire  _GEN_598 = _T_67 & ~_T_70 & _T_78; // @[src/main/scala/fpga/Core.scala 986:15]
+  LongCounter cycle_counter ( // @[src/main/scala/fpga/Core.scala 130:29]
     .clock(cycle_counter_clock),
     .reset(cycle_counter_reset),
     .io_value(cycle_counter_io_value)
   );
-  MachineTimer mtimer ( // @[src/main/scala/fpga/Core.scala 130:22]
+  MachineTimer mtimer ( // @[src/main/scala/fpga/Core.scala 131:22]
     .clock(mtimer_clock),
     .reset(mtimer_reset),
     .io_mem_raddr(mtimer_io_mem_raddr),
@@ -5919,7 +6257,7 @@ module Core(
     .io_intr(mtimer_io_intr),
     .io_mtime(mtimer_io_mtime)
   );
-  BTB ic_btb ( // @[src/main/scala/fpga/Core.scala 353:22]
+  BTB ic_btb ( // @[src/main/scala/fpga/Core.scala 354:22]
     .clock(ic_btb_clock),
     .reset(ic_btb_reset),
     .io_lu_pc(ic_btb_io_lu_pc),
@@ -5939,20 +6277,41 @@ module Core(
     .io_up_is_ret(ic_btb_io_up_is_ret),
     .io_up_target(ic_btb_io_up_target)
   );
-  PHT ic_pht ( // @[src/main/scala/fpga/Core.scala 354:22]
+  PHT ic_pht ( // @[src/main/scala/fpga/Core.scala 355:22]
+    .clock(ic_pht_clock),
+    .reset(ic_pht_reset),
     .io_lu_pc(ic_pht_io_lu_pc),
+    .io_lu_taken0(ic_pht_io_lu_taken0),
+    .io_lu_taken1(ic_pht_io_lu_taken1),
     .io_lu_cnt0(ic_pht_io_lu_cnt0),
     .io_lu_cnt1(ic_pht_io_lu_cnt1),
+    .io_lu_gcnt0(ic_pht_io_lu_gcnt0),
+    .io_lu_gcnt1(ic_pht_io_lu_gcnt1),
     .io_up_en(ic_pht_io_up_en),
+    .io_up_history(ic_pht_io_up_history),
     .io_up_pc(ic_pht_io_up_pc),
     .io_up_cnt(ic_pht_io_up_cnt),
-    .io_mem_wen(ic_pht_io_mem_wen),
-    .io_mem_raddr(ic_pht_io_mem_raddr),
-    .io_mem_rdata(ic_pht_io_mem_rdata),
-    .io_mem_waddr(ic_pht_io_mem_waddr),
-    .io_mem_wdata(ic_pht_io_mem_wdata)
+    .io_up_gcnt(ic_pht_io_up_gcnt),
+    .io_lmem_wen(ic_pht_io_lmem_wen),
+    .io_lmem_raddr(ic_pht_io_lmem_raddr),
+    .io_lmem_rdata(ic_pht_io_lmem_rdata),
+    .io_lmem_waddr(ic_pht_io_lmem_waddr),
+    .io_lmem_wdata(ic_pht_io_lmem_wdata),
+    .io_gmem_wen(ic_pht_io_gmem_wen),
+    .io_gmem_raddr(ic_pht_io_gmem_raddr),
+    .io_gmem_rdata(ic_pht_io_gmem_rdata),
+    .io_gmem_waddr(ic_pht_io_gmem_waddr),
+    .io_gmem_wdata(ic_pht_io_gmem_wdata),
+    .io_br_en(ic_pht_io_br_en),
+    .io_br_pc(ic_pht_io_br_pc),
+    .io_br2_en(ic_pht_io_br2_en),
+    .io_br2_history(ic_pht_io_br2_history),
+    .io_br2_pc(ic_pht_io_br2_pc),
+    .io_history(ic_pht_io_history),
+    .io_res_en(ic_pht_io_res_en),
+    .io_res_history(ic_pht_io_res_history)
   );
-  ZBTB ic_zbtb ( // @[src/main/scala/fpga/Core.scala 355:23]
+  ZBTB ic_zbtb ( // @[src/main/scala/fpga/Core.scala 356:23]
     .clock(ic_zbtb_clock),
     .reset(ic_zbtb_reset),
     .io_lu_pc(ic_zbtb_io_lu_pc),
@@ -5966,7 +6325,7 @@ module Core(
     .io_inv_en(ic_zbtb_io_inv_en),
     .io_inv_pc(ic_zbtb_io_inv_pc)
   );
-  RAS ic_ras ( // @[src/main/scala/fpga/Core.scala 356:22]
+  RAS ic_ras ( // @[src/main/scala/fpga/Core.scala 357:22]
     .clock(ic_ras_clock),
     .reset(ic_ras_reset),
     .io_top_ret_pc(ic_ras_io_top_ret_pc),
@@ -5984,7 +6343,7 @@ module Core(
     .io_call2_index(ic_ras_io_call2_index),
     .io_call2_ret_pc(ic_ras_io_call2_ret_pc)
   );
-  InstructionDecoder id_stage ( // @[src/main/scala/fpga/Core.scala 624:24]
+  InstructionDecoder id_stage ( // @[src/main/scala/fpga/Core.scala 649:24]
     .clock(id_stage_clock),
     .reset(id_stage_reset),
     .io_in_ready(id_stage_io_in_ready),
@@ -5997,7 +6356,9 @@ module Core(
     .io_in_bits_bp_is_ret(id_stage_io_in_bits_bp_is_ret),
     .io_in_bits_bp_rasindex(id_stage_io_in_bits_bp_rasindex),
     .io_in_bits_bp_target(id_stage_io_in_bits_bp_target),
+    .io_in_bits_bp_history(id_stage_io_in_bits_bp_history),
     .io_in_bits_bp_cnt(id_stage_io_in_bits_bp_cnt),
+    .io_in_bits_bp_gcnt(id_stage_io_in_bits_bp_gcnt),
     .io_out_ready(id_stage_io_out_ready),
     .io_out_flush(id_stage_io_out_flush),
     .io_out_bits_pc(id_stage_io_out_bits_pc),
@@ -6028,7 +6389,9 @@ module Core(
     .io_out_bits_bp_is_ret(id_stage_io_out_bits_bp_is_ret),
     .io_out_bits_bp_rasindex(id_stage_io_out_bits_bp_rasindex),
     .io_out_bits_bp_target(id_stage_io_out_bits_bp_target),
+    .io_out_bits_bp_history(id_stage_io_out_bits_bp_history),
     .io_out_bits_bp_cnt(id_stage_io_out_bits_bp_cnt),
+    .io_out_bits_bp_gcnt(id_stage_io_out_bits_bp_gcnt),
     .io_out_bits_actual_attr(id_stage_io_out_bits_actual_attr),
     .io_out_bits_actual_is_ret(id_stage_io_out_bits_actual_is_ret),
     .io_out_bits_is_half(id_stage_io_out_bits_is_half),
@@ -6039,141 +6402,141 @@ module Core(
   );
   assign regfile_rrd_op1_data_MPORT_en = 1'h1;
   assign regfile_rrd_op1_data_MPORT_addr = rrd_reg_rs1_addr;
-  assign regfile_rrd_op1_data_MPORT_data = regfile[regfile_rrd_op1_data_MPORT_addr]; // @[src/main/scala/fpga/Core.scala 127:20]
+  assign regfile_rrd_op1_data_MPORT_data = regfile[regfile_rrd_op1_data_MPORT_addr]; // @[src/main/scala/fpga/Core.scala 128:20]
   assign regfile_rrd_op2_data_MPORT_en = 1'h1;
   assign regfile_rrd_op2_data_MPORT_addr = rrd_reg_rs2_addr;
-  assign regfile_rrd_op2_data_MPORT_data = regfile[regfile_rrd_op2_data_MPORT_addr]; // @[src/main/scala/fpga/Core.scala 127:20]
+  assign regfile_rrd_op2_data_MPORT_data = regfile[regfile_rrd_op2_data_MPORT_addr]; // @[src/main/scala/fpga/Core.scala 128:20]
   assign regfile_rrd_op3_data_MPORT_en = 1'h1;
   assign regfile_rrd_op3_data_MPORT_addr = rrd_reg_rs3_addr;
-  assign regfile_rrd_op3_data_MPORT_data = regfile[regfile_rrd_op3_data_MPORT_addr]; // @[src/main/scala/fpga/Core.scala 127:20]
+  assign regfile_rrd_op3_data_MPORT_data = regfile[regfile_rrd_op3_data_MPORT_addr]; // @[src/main/scala/fpga/Core.scala 128:20]
   assign regfile_MPORT_3_data = _ex2_fw_data_T ? ex2_mask_out : _ex2_wb_data_T_10;
   assign regfile_MPORT_3_addr = ex2_reg_wb_addr;
   assign regfile_MPORT_3_mask = 1'h1;
-  assign regfile_MPORT_3_en = _T_106 & ex2_reg_no_mem;
+  assign regfile_MPORT_3_en = _T_130 & ex2_reg_no_mem;
   assign regfile_MPORT_5_data = _mem3_wb_data_load_T ? _mem3_wb_data_load_T_5 : _mem3_wb_data_load_T_22;
   assign regfile_MPORT_5_addr = mem3_reg_wb_addr;
   assign regfile_MPORT_5_mask = 1'h1;
   assign regfile_MPORT_5_en = mem3_reg_is_valid_load;
   assign scoreboard_rrd_stall_MPORT_en = 1'h1;
   assign scoreboard_rrd_stall_MPORT_addr = rrd_reg_rs1_addr;
-  assign scoreboard_rrd_stall_MPORT_data = scoreboard[scoreboard_rrd_stall_MPORT_addr]; // @[src/main/scala/fpga/Core.scala 143:25]
+  assign scoreboard_rrd_stall_MPORT_data = scoreboard[scoreboard_rrd_stall_MPORT_addr]; // @[src/main/scala/fpga/Core.scala 144:25]
   assign scoreboard_rrd_stall_MPORT_1_en = 1'h1;
   assign scoreboard_rrd_stall_MPORT_1_addr = rrd_reg_rs2_addr;
-  assign scoreboard_rrd_stall_MPORT_1_data = scoreboard[scoreboard_rrd_stall_MPORT_1_addr]; // @[src/main/scala/fpga/Core.scala 143:25]
+  assign scoreboard_rrd_stall_MPORT_1_data = scoreboard[scoreboard_rrd_stall_MPORT_1_addr]; // @[src/main/scala/fpga/Core.scala 144:25]
   assign scoreboard_rrd_stall_MPORT_2_en = 1'h1;
   assign scoreboard_rrd_stall_MPORT_2_addr = rrd_reg_rs3_addr;
-  assign scoreboard_rrd_stall_MPORT_2_data = scoreboard[scoreboard_rrd_stall_MPORT_2_addr]; // @[src/main/scala/fpga/Core.scala 143:25]
+  assign scoreboard_rrd_stall_MPORT_2_data = scoreboard[scoreboard_rrd_stall_MPORT_2_addr]; // @[src/main/scala/fpga/Core.scala 144:25]
   assign scoreboard_rrd_stall_MPORT_3_en = 1'h1;
   assign scoreboard_rrd_stall_MPORT_3_addr = rrd_reg_wb_addr;
-  assign scoreboard_rrd_stall_MPORT_3_data = scoreboard[scoreboard_rrd_stall_MPORT_3_addr]; // @[src/main/scala/fpga/Core.scala 143:25]
+  assign scoreboard_rrd_stall_MPORT_3_data = scoreboard[scoreboard_rrd_stall_MPORT_3_addr]; // @[src/main/scala/fpga/Core.scala 144:25]
   assign scoreboard_MPORT_7_en = 1'h1;
   assign scoreboard_MPORT_7_addr = 5'h0;
-  assign scoreboard_MPORT_7_data = scoreboard[scoreboard_MPORT_7_addr]; // @[src/main/scala/fpga/Core.scala 143:25]
+  assign scoreboard_MPORT_7_data = scoreboard[scoreboard_MPORT_7_addr]; // @[src/main/scala/fpga/Core.scala 144:25]
   assign scoreboard_MPORT_8_en = 1'h1;
   assign scoreboard_MPORT_8_addr = 5'h1;
-  assign scoreboard_MPORT_8_data = scoreboard[scoreboard_MPORT_8_addr]; // @[src/main/scala/fpga/Core.scala 143:25]
+  assign scoreboard_MPORT_8_data = scoreboard[scoreboard_MPORT_8_addr]; // @[src/main/scala/fpga/Core.scala 144:25]
   assign scoreboard_MPORT_9_en = 1'h1;
   assign scoreboard_MPORT_9_addr = 5'h2;
-  assign scoreboard_MPORT_9_data = scoreboard[scoreboard_MPORT_9_addr]; // @[src/main/scala/fpga/Core.scala 143:25]
+  assign scoreboard_MPORT_9_data = scoreboard[scoreboard_MPORT_9_addr]; // @[src/main/scala/fpga/Core.scala 144:25]
   assign scoreboard_MPORT_10_en = 1'h1;
   assign scoreboard_MPORT_10_addr = 5'h3;
-  assign scoreboard_MPORT_10_data = scoreboard[scoreboard_MPORT_10_addr]; // @[src/main/scala/fpga/Core.scala 143:25]
+  assign scoreboard_MPORT_10_data = scoreboard[scoreboard_MPORT_10_addr]; // @[src/main/scala/fpga/Core.scala 144:25]
   assign scoreboard_MPORT_11_en = 1'h1;
   assign scoreboard_MPORT_11_addr = 5'h4;
-  assign scoreboard_MPORT_11_data = scoreboard[scoreboard_MPORT_11_addr]; // @[src/main/scala/fpga/Core.scala 143:25]
+  assign scoreboard_MPORT_11_data = scoreboard[scoreboard_MPORT_11_addr]; // @[src/main/scala/fpga/Core.scala 144:25]
   assign scoreboard_MPORT_12_en = 1'h1;
   assign scoreboard_MPORT_12_addr = 5'h5;
-  assign scoreboard_MPORT_12_data = scoreboard[scoreboard_MPORT_12_addr]; // @[src/main/scala/fpga/Core.scala 143:25]
+  assign scoreboard_MPORT_12_data = scoreboard[scoreboard_MPORT_12_addr]; // @[src/main/scala/fpga/Core.scala 144:25]
   assign scoreboard_MPORT_13_en = 1'h1;
   assign scoreboard_MPORT_13_addr = 5'h6;
-  assign scoreboard_MPORT_13_data = scoreboard[scoreboard_MPORT_13_addr]; // @[src/main/scala/fpga/Core.scala 143:25]
+  assign scoreboard_MPORT_13_data = scoreboard[scoreboard_MPORT_13_addr]; // @[src/main/scala/fpga/Core.scala 144:25]
   assign scoreboard_MPORT_14_en = 1'h1;
   assign scoreboard_MPORT_14_addr = 5'h7;
-  assign scoreboard_MPORT_14_data = scoreboard[scoreboard_MPORT_14_addr]; // @[src/main/scala/fpga/Core.scala 143:25]
+  assign scoreboard_MPORT_14_data = scoreboard[scoreboard_MPORT_14_addr]; // @[src/main/scala/fpga/Core.scala 144:25]
   assign scoreboard_MPORT_15_en = 1'h1;
   assign scoreboard_MPORT_15_addr = 5'h8;
-  assign scoreboard_MPORT_15_data = scoreboard[scoreboard_MPORT_15_addr]; // @[src/main/scala/fpga/Core.scala 143:25]
+  assign scoreboard_MPORT_15_data = scoreboard[scoreboard_MPORT_15_addr]; // @[src/main/scala/fpga/Core.scala 144:25]
   assign scoreboard_MPORT_16_en = 1'h1;
   assign scoreboard_MPORT_16_addr = 5'h9;
-  assign scoreboard_MPORT_16_data = scoreboard[scoreboard_MPORT_16_addr]; // @[src/main/scala/fpga/Core.scala 143:25]
+  assign scoreboard_MPORT_16_data = scoreboard[scoreboard_MPORT_16_addr]; // @[src/main/scala/fpga/Core.scala 144:25]
   assign scoreboard_MPORT_17_en = 1'h1;
   assign scoreboard_MPORT_17_addr = 5'ha;
-  assign scoreboard_MPORT_17_data = scoreboard[scoreboard_MPORT_17_addr]; // @[src/main/scala/fpga/Core.scala 143:25]
+  assign scoreboard_MPORT_17_data = scoreboard[scoreboard_MPORT_17_addr]; // @[src/main/scala/fpga/Core.scala 144:25]
   assign scoreboard_MPORT_18_en = 1'h1;
   assign scoreboard_MPORT_18_addr = 5'hb;
-  assign scoreboard_MPORT_18_data = scoreboard[scoreboard_MPORT_18_addr]; // @[src/main/scala/fpga/Core.scala 143:25]
+  assign scoreboard_MPORT_18_data = scoreboard[scoreboard_MPORT_18_addr]; // @[src/main/scala/fpga/Core.scala 144:25]
   assign scoreboard_MPORT_19_en = 1'h1;
   assign scoreboard_MPORT_19_addr = 5'hc;
-  assign scoreboard_MPORT_19_data = scoreboard[scoreboard_MPORT_19_addr]; // @[src/main/scala/fpga/Core.scala 143:25]
+  assign scoreboard_MPORT_19_data = scoreboard[scoreboard_MPORT_19_addr]; // @[src/main/scala/fpga/Core.scala 144:25]
   assign scoreboard_MPORT_20_en = 1'h1;
   assign scoreboard_MPORT_20_addr = 5'hd;
-  assign scoreboard_MPORT_20_data = scoreboard[scoreboard_MPORT_20_addr]; // @[src/main/scala/fpga/Core.scala 143:25]
+  assign scoreboard_MPORT_20_data = scoreboard[scoreboard_MPORT_20_addr]; // @[src/main/scala/fpga/Core.scala 144:25]
   assign scoreboard_MPORT_21_en = 1'h1;
   assign scoreboard_MPORT_21_addr = 5'he;
-  assign scoreboard_MPORT_21_data = scoreboard[scoreboard_MPORT_21_addr]; // @[src/main/scala/fpga/Core.scala 143:25]
+  assign scoreboard_MPORT_21_data = scoreboard[scoreboard_MPORT_21_addr]; // @[src/main/scala/fpga/Core.scala 144:25]
   assign scoreboard_MPORT_22_en = 1'h1;
   assign scoreboard_MPORT_22_addr = 5'hf;
-  assign scoreboard_MPORT_22_data = scoreboard[scoreboard_MPORT_22_addr]; // @[src/main/scala/fpga/Core.scala 143:25]
+  assign scoreboard_MPORT_22_data = scoreboard[scoreboard_MPORT_22_addr]; // @[src/main/scala/fpga/Core.scala 144:25]
   assign scoreboard_MPORT_23_en = 1'h1;
   assign scoreboard_MPORT_23_addr = 5'h10;
-  assign scoreboard_MPORT_23_data = scoreboard[scoreboard_MPORT_23_addr]; // @[src/main/scala/fpga/Core.scala 143:25]
+  assign scoreboard_MPORT_23_data = scoreboard[scoreboard_MPORT_23_addr]; // @[src/main/scala/fpga/Core.scala 144:25]
   assign scoreboard_MPORT_24_en = 1'h1;
   assign scoreboard_MPORT_24_addr = 5'h11;
-  assign scoreboard_MPORT_24_data = scoreboard[scoreboard_MPORT_24_addr]; // @[src/main/scala/fpga/Core.scala 143:25]
+  assign scoreboard_MPORT_24_data = scoreboard[scoreboard_MPORT_24_addr]; // @[src/main/scala/fpga/Core.scala 144:25]
   assign scoreboard_MPORT_25_en = 1'h1;
   assign scoreboard_MPORT_25_addr = 5'h12;
-  assign scoreboard_MPORT_25_data = scoreboard[scoreboard_MPORT_25_addr]; // @[src/main/scala/fpga/Core.scala 143:25]
+  assign scoreboard_MPORT_25_data = scoreboard[scoreboard_MPORT_25_addr]; // @[src/main/scala/fpga/Core.scala 144:25]
   assign scoreboard_MPORT_26_en = 1'h1;
   assign scoreboard_MPORT_26_addr = 5'h13;
-  assign scoreboard_MPORT_26_data = scoreboard[scoreboard_MPORT_26_addr]; // @[src/main/scala/fpga/Core.scala 143:25]
+  assign scoreboard_MPORT_26_data = scoreboard[scoreboard_MPORT_26_addr]; // @[src/main/scala/fpga/Core.scala 144:25]
   assign scoreboard_MPORT_27_en = 1'h1;
   assign scoreboard_MPORT_27_addr = 5'h14;
-  assign scoreboard_MPORT_27_data = scoreboard[scoreboard_MPORT_27_addr]; // @[src/main/scala/fpga/Core.scala 143:25]
+  assign scoreboard_MPORT_27_data = scoreboard[scoreboard_MPORT_27_addr]; // @[src/main/scala/fpga/Core.scala 144:25]
   assign scoreboard_MPORT_28_en = 1'h1;
   assign scoreboard_MPORT_28_addr = 5'h15;
-  assign scoreboard_MPORT_28_data = scoreboard[scoreboard_MPORT_28_addr]; // @[src/main/scala/fpga/Core.scala 143:25]
+  assign scoreboard_MPORT_28_data = scoreboard[scoreboard_MPORT_28_addr]; // @[src/main/scala/fpga/Core.scala 144:25]
   assign scoreboard_MPORT_29_en = 1'h1;
   assign scoreboard_MPORT_29_addr = 5'h16;
-  assign scoreboard_MPORT_29_data = scoreboard[scoreboard_MPORT_29_addr]; // @[src/main/scala/fpga/Core.scala 143:25]
+  assign scoreboard_MPORT_29_data = scoreboard[scoreboard_MPORT_29_addr]; // @[src/main/scala/fpga/Core.scala 144:25]
   assign scoreboard_MPORT_30_en = 1'h1;
   assign scoreboard_MPORT_30_addr = 5'h17;
-  assign scoreboard_MPORT_30_data = scoreboard[scoreboard_MPORT_30_addr]; // @[src/main/scala/fpga/Core.scala 143:25]
+  assign scoreboard_MPORT_30_data = scoreboard[scoreboard_MPORT_30_addr]; // @[src/main/scala/fpga/Core.scala 144:25]
   assign scoreboard_MPORT_31_en = 1'h1;
   assign scoreboard_MPORT_31_addr = 5'h18;
-  assign scoreboard_MPORT_31_data = scoreboard[scoreboard_MPORT_31_addr]; // @[src/main/scala/fpga/Core.scala 143:25]
+  assign scoreboard_MPORT_31_data = scoreboard[scoreboard_MPORT_31_addr]; // @[src/main/scala/fpga/Core.scala 144:25]
   assign scoreboard_MPORT_32_en = 1'h1;
   assign scoreboard_MPORT_32_addr = 5'h19;
-  assign scoreboard_MPORT_32_data = scoreboard[scoreboard_MPORT_32_addr]; // @[src/main/scala/fpga/Core.scala 143:25]
+  assign scoreboard_MPORT_32_data = scoreboard[scoreboard_MPORT_32_addr]; // @[src/main/scala/fpga/Core.scala 144:25]
   assign scoreboard_MPORT_33_en = 1'h1;
   assign scoreboard_MPORT_33_addr = 5'h1a;
-  assign scoreboard_MPORT_33_data = scoreboard[scoreboard_MPORT_33_addr]; // @[src/main/scala/fpga/Core.scala 143:25]
+  assign scoreboard_MPORT_33_data = scoreboard[scoreboard_MPORT_33_addr]; // @[src/main/scala/fpga/Core.scala 144:25]
   assign scoreboard_MPORT_34_en = 1'h1;
   assign scoreboard_MPORT_34_addr = 5'h1b;
-  assign scoreboard_MPORT_34_data = scoreboard[scoreboard_MPORT_34_addr]; // @[src/main/scala/fpga/Core.scala 143:25]
+  assign scoreboard_MPORT_34_data = scoreboard[scoreboard_MPORT_34_addr]; // @[src/main/scala/fpga/Core.scala 144:25]
   assign scoreboard_MPORT_35_en = 1'h1;
   assign scoreboard_MPORT_35_addr = 5'h1c;
-  assign scoreboard_MPORT_35_data = scoreboard[scoreboard_MPORT_35_addr]; // @[src/main/scala/fpga/Core.scala 143:25]
+  assign scoreboard_MPORT_35_data = scoreboard[scoreboard_MPORT_35_addr]; // @[src/main/scala/fpga/Core.scala 144:25]
   assign scoreboard_MPORT_36_en = 1'h1;
   assign scoreboard_MPORT_36_addr = 5'h1d;
-  assign scoreboard_MPORT_36_data = scoreboard[scoreboard_MPORT_36_addr]; // @[src/main/scala/fpga/Core.scala 143:25]
+  assign scoreboard_MPORT_36_data = scoreboard[scoreboard_MPORT_36_addr]; // @[src/main/scala/fpga/Core.scala 144:25]
   assign scoreboard_MPORT_37_en = 1'h1;
   assign scoreboard_MPORT_37_addr = 5'h1e;
-  assign scoreboard_MPORT_37_data = scoreboard[scoreboard_MPORT_37_addr]; // @[src/main/scala/fpga/Core.scala 143:25]
+  assign scoreboard_MPORT_37_data = scoreboard[scoreboard_MPORT_37_addr]; // @[src/main/scala/fpga/Core.scala 144:25]
   assign scoreboard_MPORT_38_en = 1'h1;
   assign scoreboard_MPORT_38_addr = 5'h1f;
-  assign scoreboard_MPORT_38_data = scoreboard[scoreboard_MPORT_38_addr]; // @[src/main/scala/fpga/Core.scala 143:25]
+  assign scoreboard_MPORT_38_data = scoreboard[scoreboard_MPORT_38_addr]; // @[src/main/scala/fpga/Core.scala 144:25]
   assign scoreboard_MPORT_data = rrd_reg_wb_sel != 3'h0;
   assign scoreboard_MPORT_addr = rrd_reg_wb_addr;
   assign scoreboard_MPORT_mask = 1'h1;
-  assign scoreboard_MPORT_en = _T_44 & _rrd_hazard_T_1;
+  assign scoreboard_MPORT_en = _T_52 & _rrd_hazard_T_1;
   assign scoreboard_MPORT_1_data = 1'h0;
   assign scoreboard_MPORT_1_addr = ex1_reg_wb_addr;
   assign scoreboard_MPORT_1_mask = 1'h1;
-  assign scoreboard_MPORT_1_en = ex1_reg_inst2_use_reg | _T_61;
+  assign scoreboard_MPORT_1_en = ex1_reg_inst2_use_reg | _T_85;
   assign scoreboard_MPORT_2_data = 1'h0;
   assign scoreboard_MPORT_2_addr = ex2_reg_wb_addr;
   assign scoreboard_MPORT_2_mask = 1'h1;
-  assign scoreboard_MPORT_2_en = ex2_reg_inst3_use_reg & _T_71;
+  assign scoreboard_MPORT_2_en = ex2_reg_inst3_use_reg & _T_95;
   assign scoreboard_MPORT_4_data = 1'h0;
   assign scoreboard_MPORT_4_addr = mem2_reg_wb_addr;
   assign scoreboard_MPORT_4_mask = 1'h1;
@@ -6181,415 +6544,443 @@ module Core(
   assign scoreboard_MPORT_6_data = 1'h0;
   assign scoreboard_MPORT_6_addr = mem3_reg_wb_addr;
   assign scoreboard_MPORT_6_mask = 1'h1;
-  assign scoreboard_MPORT_6_en = mem3_reg_is_valid_load & _T_115;
-  assign io_imem_addr = {ic_imem_addr,1'h0}; // @[src/main/scala/fpga/Core.scala 377:26]
-  assign io_dmem_raddr = mem1_reg_unaligned ? _mem_addr_T_1 : ex2_reg_alu_out; // @[src/main/scala/fpga/Core.scala 1406:22]
-  assign io_dmem_ren = mem1_reg_is_mem_load; // @[src/main/scala/fpga/Core.scala 1410:17]
-  assign io_dmem_waddr = mem1_reg_unaligned ? _mem_addr_T_1 : ex2_reg_alu_out; // @[src/main/scala/fpga/Core.scala 1406:22]
-  assign io_dmem_wen = mem1_reg_is_mem_store; // @[src/main/scala/fpga/Core.scala 1411:17]
-  assign io_dmem_wstrb = mem1_reg_unaligned ? _mem_wstrb_T_1 : mem1_reg_mem_wstrb[3:0]; // @[src/main/scala/fpga/Core.scala 1407:22]
-  assign io_dmem_wdata = mem1_reg_wdata; // @[src/main/scala/fpga/Core.scala 1413:17]
-  assign io_cache_iinvalidate = mem1_reg_is_dram_fence; // @[src/main/scala/fpga/Core.scala 1420:24]
-  assign io_cache_raddr = mem1_reg_unaligned ? _mem_addr_T_1 : ex2_reg_alu_out; // @[src/main/scala/fpga/Core.scala 1406:22]
-  assign io_cache_ren = mem1_reg_is_dram_load; // @[src/main/scala/fpga/Core.scala 1416:18]
-  assign io_cache_waddr = mem1_reg_unaligned ? _mem_addr_T_1 : ex2_reg_alu_out; // @[src/main/scala/fpga/Core.scala 1406:22]
-  assign io_cache_wen = mem1_reg_is_dram_store; // @[src/main/scala/fpga/Core.scala 1417:18]
-  assign io_cache_wstrb = mem1_reg_unaligned ? _mem_wstrb_T_1 : mem1_reg_mem_wstrb[3:0]; // @[src/main/scala/fpga/Core.scala 1407:22]
-  assign io_cache_wdata = mem1_reg_wdata; // @[src/main/scala/fpga/Core.scala 1419:18]
-  assign io_pht_mem_wen = ic_pht_io_mem_wen; // @[src/main/scala/fpga/Core.scala 392:17]
-  assign io_pht_mem_raddr = ic_pht_io_mem_raddr; // @[src/main/scala/fpga/Core.scala 392:17]
-  assign io_pht_mem_waddr = ic_pht_io_mem_waddr; // @[src/main/scala/fpga/Core.scala 392:17]
-  assign io_pht_mem_wdata = ic_pht_io_mem_wdata; // @[src/main/scala/fpga/Core.scala 392:17]
-  assign io_mtimer_mem_rdata = mtimer_io_mem_rdata; // @[src/main/scala/fpga/Core.scala 145:17]
-  assign io_debug_signal_ex2_reg_pc = {ex2_reg_pc,1'h0}; // @[src/main/scala/fpga/Core.scala 1525:45]
-  assign io_debug_signal_ex2_is_valid_inst = ex2_reg_is_valid_inst; // @[src/main/scala/fpga/Core.scala 1526:39]
-  assign io_debug_signal_me_intr = csr_reg_is_meintr & csr_is_valid_inst; // @[src/main/scala/fpga/Core.scala 1030:41]
-  assign io_debug_signal_mt_intr = csr_reg_is_mtintr & csr_is_valid_inst; // @[src/main/scala/fpga/Core.scala 1031:41]
-  assign io_debug_signal_trap = ex1_en & ex1_reg_is_trap; // @[src/main/scala/fpga/Core.scala 1033:28]
-  assign io_debug_signal_cycle_counter = cycle_counter_io_value[47:0]; // @[src/main/scala/fpga/Core.scala 1522:64]
-  assign io_debug_signal_id_pc = id_stage_io_debug_signals_id_pc; // @[src/main/scala/fpga/Core.scala 1530:39]
-  assign io_debug_signal_id_inst = id_stage_io_debug_signals_id_inst; // @[src/main/scala/fpga/Core.scala 1531:39]
-  assign io_debug_signal_mem3_rdata = mem3_reg_dmem_rdata; // @[src/main/scala/fpga/Core.scala 1532:39]
-  assign io_debug_signal_mem3_rvalid = mem3_reg_is_valid_load; // @[src/main/scala/fpga/Core.scala 1533:39]
+  assign scoreboard_MPORT_6_en = mem3_reg_is_valid_load & _T_139;
+  assign io_imem_addr = {ic_imem_addr,1'h0}; // @[src/main/scala/fpga/Core.scala 378:26]
+  assign io_dmem_raddr = mem1_reg_unaligned ? _mem_addr_T_1 : ex2_reg_alu_out; // @[src/main/scala/fpga/Core.scala 1473:22]
+  assign io_dmem_ren = mem1_reg_is_mem_load; // @[src/main/scala/fpga/Core.scala 1477:17]
+  assign io_dmem_waddr = mem1_reg_unaligned ? _mem_addr_T_1 : ex2_reg_alu_out; // @[src/main/scala/fpga/Core.scala 1473:22]
+  assign io_dmem_wen = mem1_reg_is_mem_store; // @[src/main/scala/fpga/Core.scala 1478:17]
+  assign io_dmem_wstrb = mem1_reg_unaligned ? _mem_wstrb_T_1 : mem1_reg_mem_wstrb[3:0]; // @[src/main/scala/fpga/Core.scala 1474:22]
+  assign io_dmem_wdata = mem1_reg_wdata; // @[src/main/scala/fpga/Core.scala 1480:17]
+  assign io_cache_iinvalidate = mem1_reg_is_dram_fence; // @[src/main/scala/fpga/Core.scala 1487:24]
+  assign io_cache_raddr = mem1_reg_unaligned ? _mem_addr_T_1 : ex2_reg_alu_out; // @[src/main/scala/fpga/Core.scala 1473:22]
+  assign io_cache_ren = mem1_reg_is_dram_load; // @[src/main/scala/fpga/Core.scala 1483:18]
+  assign io_cache_waddr = mem1_reg_unaligned ? _mem_addr_T_1 : ex2_reg_alu_out; // @[src/main/scala/fpga/Core.scala 1473:22]
+  assign io_cache_wen = mem1_reg_is_dram_store; // @[src/main/scala/fpga/Core.scala 1484:18]
+  assign io_cache_wstrb = mem1_reg_unaligned ? _mem_wstrb_T_1 : mem1_reg_mem_wstrb[3:0]; // @[src/main/scala/fpga/Core.scala 1474:22]
+  assign io_cache_wdata = mem1_reg_wdata; // @[src/main/scala/fpga/Core.scala 1486:18]
+  assign io_pht_lmem_wen = ic_pht_io_lmem_wen; // @[src/main/scala/fpga/Core.scala 393:18]
+  assign io_pht_lmem_raddr = ic_pht_io_lmem_raddr; // @[src/main/scala/fpga/Core.scala 393:18]
+  assign io_pht_lmem_waddr = ic_pht_io_lmem_waddr; // @[src/main/scala/fpga/Core.scala 393:18]
+  assign io_pht_lmem_wdata = ic_pht_io_lmem_wdata; // @[src/main/scala/fpga/Core.scala 393:18]
+  assign io_pht_gmem_wen = ic_pht_io_gmem_wen; // @[src/main/scala/fpga/Core.scala 394:18]
+  assign io_pht_gmem_raddr = ic_pht_io_gmem_raddr; // @[src/main/scala/fpga/Core.scala 394:18]
+  assign io_pht_gmem_waddr = ic_pht_io_gmem_waddr; // @[src/main/scala/fpga/Core.scala 394:18]
+  assign io_pht_gmem_wdata = ic_pht_io_gmem_wdata; // @[src/main/scala/fpga/Core.scala 394:18]
+  assign io_mtimer_mem_rdata = mtimer_io_mem_rdata; // @[src/main/scala/fpga/Core.scala 146:17]
+  assign io_debug_signal_ex2_reg_pc = {ex2_reg_pc,1'h0}; // @[src/main/scala/fpga/Core.scala 1592:45]
+  assign io_debug_signal_ex2_is_valid_inst = ex2_reg_is_valid_inst; // @[src/main/scala/fpga/Core.scala 1593:39]
+  assign io_debug_signal_me_intr = csr_reg_is_meintr & csr_is_valid_inst; // @[src/main/scala/fpga/Core.scala 1097:41]
+  assign io_debug_signal_mt_intr = csr_reg_is_mtintr & csr_is_valid_inst; // @[src/main/scala/fpga/Core.scala 1098:41]
+  assign io_debug_signal_trap = ex1_en & ex1_reg_is_trap; // @[src/main/scala/fpga/Core.scala 1100:28]
+  assign io_debug_signal_cycle_counter = cycle_counter_io_value[47:0]; // @[src/main/scala/fpga/Core.scala 1589:64]
+  assign io_debug_signal_id_pc = id_stage_io_debug_signals_id_pc; // @[src/main/scala/fpga/Core.scala 1597:39]
+  assign io_debug_signal_id_inst = id_stage_io_debug_signals_id_inst; // @[src/main/scala/fpga/Core.scala 1598:39]
+  assign io_debug_signal_mem3_rdata = mem3_reg_dmem_rdata; // @[src/main/scala/fpga/Core.scala 1599:39]
+  assign io_debug_signal_mem3_rvalid = mem3_reg_is_valid_load; // @[src/main/scala/fpga/Core.scala 1600:39]
   assign io_debug_signal_rwaddr = _ex2_fw_data_T ? ex2_mask_out : _ex2_wb_data_T_10; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
-  assign io_debug_signal_ex2_reg_is_br = ex2_reg_is_br; // @[src/main/scala/fpga/Core.scala 1535:39]
-  assign io_debug_signal_id_reg_bp_taken = id_reg_bp_taken; // @[src/main/scala/fpga/Core.scala 1536:39]
-  assign io_debug_signal_if2_zbp_taken = ~id_reg_stall & ~id_flush & ~id_reg_bp_taken & ic_read_rdy & ic_zbp_taken; // @[src/main/scala/fpga/Core.scala 571:82]
-  assign io_debug_signal_ic_state = ic_state; // @[src/main/scala/fpga/Core.scala 1538:51]
+  assign io_debug_signal_ex2_reg_is_br = ex2_reg_is_br; // @[src/main/scala/fpga/Core.scala 1602:39]
+  assign io_debug_signal_id_reg_bp_taken = id_reg_bp_taken; // @[src/main/scala/fpga/Core.scala 1603:39]
+  assign io_debug_signal_if2_zbp_taken = ~id_reg_stall & ~id_flush & ~id_reg_bp_taken & ic_read_rdy & ic_zbp_taken; // @[src/main/scala/fpga/Core.scala 589:82]
+  assign io_debug_signal_ic_state = ic_state; // @[src/main/scala/fpga/Core.scala 1605:51]
   assign cycle_counter_clock = clock;
   assign cycle_counter_reset = reset;
   assign mtimer_clock = clock;
   assign mtimer_reset = reset;
-  assign mtimer_io_mem_raddr = io_mtimer_mem_raddr; // @[src/main/scala/fpga/Core.scala 145:17]
-  assign mtimer_io_mem_waddr = io_mtimer_mem_waddr; // @[src/main/scala/fpga/Core.scala 145:17]
-  assign mtimer_io_mem_wen = io_mtimer_mem_wen; // @[src/main/scala/fpga/Core.scala 145:17]
-  assign mtimer_io_mem_wdata = io_mtimer_mem_wdata; // @[src/main/scala/fpga/Core.scala 145:17]
+  assign mtimer_io_mem_raddr = io_mtimer_mem_raddr; // @[src/main/scala/fpga/Core.scala 146:17]
+  assign mtimer_io_mem_waddr = io_mtimer_mem_waddr; // @[src/main/scala/fpga/Core.scala 146:17]
+  assign mtimer_io_mem_wen = io_mtimer_mem_wen; // @[src/main/scala/fpga/Core.scala 146:17]
+  assign mtimer_io_mem_wdata = io_mtimer_mem_wdata; // @[src/main/scala/fpga/Core.scala 146:17]
   assign ic_btb_clock = clock;
   assign ic_btb_reset = reset;
-  assign ic_btb_io_lu_pc = if1_is_jump ? ic_next_imem_addr : _GEN_189; // @[src/main/scala/fpga/Core.scala 539:21 541:22]
-  assign ic_btb_io_up_en = ex1_en & _ic_btb_io_up_en_T_8; // @[src/main/scala/fpga/Core.scala 970:29]
-  assign ic_btb_io_up_pc = ex1_reg_pc; // @[src/main/scala/fpga/Core.scala 979:23]
-  assign ic_btb_io_up_attr = ex1_reg_actual_attr; // @[src/main/scala/fpga/Core.scala 977:23]
-  assign ic_btb_io_up_is_ret = ex1_reg_actual_is_ret; // @[src/main/scala/fpga/Core.scala 978:23]
-  assign ic_btb_io_up_target = ex1_reg_is_j ? ex1_add_out[31:1] : ex1_reg_direct_jbr_pc; // @[src/main/scala/fpga/Core.scala 940:25]
-  assign ic_pht_io_lu_pc = if1_is_jump ? ic_next_imem_addr : _GEN_189; // @[src/main/scala/fpga/Core.scala 539:21 541:22]
-  assign ic_pht_io_up_en = ex1_en & ex1_reg_is_br; // @[src/main/scala/fpga/Core.scala 981:33]
-  assign ic_pht_io_up_pc = ex1_reg_pc; // @[src/main/scala/fpga/Core.scala 982:23]
-  assign ic_pht_io_up_cnt = ex1_is_br_taken ? ex1_cnt_if_taken : ex1_cnt_if_not_taken; // @[src/main/scala/fpga/Core.scala 969:24]
-  assign ic_pht_io_mem_rdata = io_pht_mem_rdata; // @[src/main/scala/fpga/Core.scala 392:17]
+  assign ic_btb_io_lu_pc = if1_is_jump ? ic_next_imem_addr : _GEN_225; // @[src/main/scala/fpga/Core.scala 557:21 559:22]
+  assign ic_btb_io_up_en = ex1_en & _ic_btb_io_up_en_T_8; // @[src/main/scala/fpga/Core.scala 1027:29]
+  assign ic_btb_io_up_pc = ex1_reg_pc; // @[src/main/scala/fpga/Core.scala 1036:24]
+  assign ic_btb_io_up_attr = ex1_reg_actual_attr; // @[src/main/scala/fpga/Core.scala 1034:24]
+  assign ic_btb_io_up_is_ret = ex1_reg_actual_is_ret; // @[src/main/scala/fpga/Core.scala 1035:24]
+  assign ic_btb_io_up_target = ex1_reg_is_j ? ex1_add_out[31:1] : ex1_reg_direct_jbr_pc; // @[src/main/scala/fpga/Core.scala 967:25]
+  assign ic_pht_clock = clock;
+  assign ic_pht_reset = reset;
+  assign ic_pht_io_lu_pc = if1_is_jump ? ic_next_imem_addr : _GEN_225; // @[src/main/scala/fpga/Core.scala 557:21 559:22]
+  assign ic_pht_io_up_en = ex1_en & ex1_reg_is_br; // @[src/main/scala/fpga/Core.scala 1042:34]
+  assign ic_pht_io_up_history = ex1_reg_bp_history; // @[src/main/scala/fpga/Core.scala 1043:24]
+  assign ic_pht_io_up_pc = ex1_reg_pc; // @[src/main/scala/fpga/Core.scala 1044:24]
+  assign ic_pht_io_up_cnt = ex1_is_br_taken ? ex1_cnt_if_taken : ex1_cnt_if_not_taken; // @[src/main/scala/fpga/Core.scala 1006:24]
+  assign ic_pht_io_up_gcnt = ex1_is_br_taken ? ex1_gcnt_if_taken : ex1_gcnt_if_not_taken; // @[src/main/scala/fpga/Core.scala 1020:25]
+  assign ic_pht_io_lmem_rdata = io_pht_lmem_rdata; // @[src/main/scala/fpga/Core.scala 393:18]
+  assign ic_pht_io_gmem_rdata = io_pht_gmem_rdata; // @[src/main/scala/fpga/Core.scala 394:18]
+  assign ic_pht_io_br_en = ic_bp_taken & ic_bp_attr == 2'h1 & if2_is_valid_inst & _if2_zbp_taken_T; // @[src/main/scala/fpga/Core.scala 639:87]
+  assign ic_pht_io_br_pc = ic_reg_addr_out; // @[src/main/scala/fpga/Core.scala 640:19]
+  assign ic_pht_io_br2_en = ex1_en & ex1_is_br_taken & (~ex1_reg_bp_taken | ex1_reg_bp_attr != 2'h1); // @[src/main/scala/fpga/Core.scala 1048:54]
+  assign ic_pht_io_br2_history = ex1_reg_bp_history; // @[src/main/scala/fpga/Core.scala 1049:25]
+  assign ic_pht_io_br2_pc = ex1_reg_pc; // @[src/main/scala/fpga/Core.scala 1050:25]
+  assign ic_pht_io_res_en = ex1_bp_failure & _rrd_stall_T; // @[src/main/scala/fpga/Core.scala 975:37]
+  assign ic_pht_io_res_history = ex1_reg_bp_history; // @[src/main/scala/fpga/Core.scala 1040:25]
   assign ic_zbtb_clock = clock;
   assign ic_zbtb_reset = reset;
-  assign ic_zbtb_io_lu_pc = if1_is_jump ? ic_next_imem_addr : _GEN_189; // @[src/main/scala/fpga/Core.scala 539:21 541:22]
-  assign ic_zbtb_io_up_en = ex1_en & (ex1_is_br_taken | (_ic_btb_io_up_en_T_4 | _ic_btb_io_up_en_T_6)); // @[src/main/scala/fpga/Core.scala 985:34]
-  assign ic_zbtb_io_up_pc = ex1_reg_pc; // @[src/main/scala/fpga/Core.scala 986:24]
-  assign ic_zbtb_io_up_target = ex1_reg_is_j ? ex1_add_out[31:1] : ex1_reg_direct_jbr_pc; // @[src/main/scala/fpga/Core.scala 940:25]
-  assign ic_zbtb_io_inv_en = id_reg_bp_not_taken; // @[src/main/scala/fpga/Core.scala 604:21]
-  assign ic_zbtb_io_inv_pc = id_reg_bp_pc; // @[src/main/scala/fpga/Core.scala 605:21]
+  assign ic_zbtb_io_lu_pc = if1_is_jump ? ic_next_imem_addr : _GEN_225; // @[src/main/scala/fpga/Core.scala 557:21 559:22]
+  assign ic_zbtb_io_up_en = ex1_en & (ex1_is_br_taken | (_ic_btb_io_up_en_T_4 | _ic_btb_io_up_en_T_6)); // @[src/main/scala/fpga/Core.scala 1052:34]
+  assign ic_zbtb_io_up_pc = ex1_reg_pc; // @[src/main/scala/fpga/Core.scala 1053:24]
+  assign ic_zbtb_io_up_target = ex1_reg_is_j ? ex1_add_out[31:1] : ex1_reg_direct_jbr_pc; // @[src/main/scala/fpga/Core.scala 967:25]
+  assign ic_zbtb_io_inv_en = id_reg_bp_not_taken; // @[src/main/scala/fpga/Core.scala 622:21]
+  assign ic_zbtb_io_inv_pc = id_reg_bp_pc; // @[src/main/scala/fpga/Core.scala 623:21]
   assign ic_ras_clock = clock;
   assign ic_ras_reset = reset;
-  assign ic_ras_io_ret1_en = ic_bp_is_ret & if2_is_valid_inst & _if2_zbp_taken_T; // @[src/main/scala/fpga/Core.scala 608:63]
-  assign ic_ras_io_ret1_index = ic_ras_io_top_index - 3'h1; // @[src/main/scala/fpga/Core.scala 607:48]
-  assign ic_ras_io_call1_en = ic_bp_attr == 2'h3 & if2_is_valid_inst & _if2_zbp_taken_T; // @[src/main/scala/fpga/Core.scala 612:82]
-  assign ic_ras_io_call1_index = ic_ras_io_top_index + 3'h1; // @[src/main/scala/fpga/Core.scala 611:48]
-  assign ic_ras_io_call1_ret_pc = if2_is_half_inst ? _if2_next_pc_T_1 : _if2_next_pc_T_3; // @[src/main/scala/fpga/Core.scala 588:24]
-  assign ic_ras_io_up_en = ex1_bp_failure & _rrd_stall_T; // @[src/main/scala/fpga/Core.scala 948:37]
-  assign ic_ras_io_up_index = ex1_reg_bp_rasindex; // @[src/main/scala/fpga/Core.scala 990:22]
-  assign ic_ras_io_ret2_en = ex1_en & ex1_reg_actual_is_ret & ~ex1_reg_bp_is_ret; // @[src/main/scala/fpga/Core.scala 992:61]
-  assign ic_ras_io_ret2_index = ex1_reg_bp_rasindex - 3'h1; // @[src/main/scala/fpga/Core.scala 993:49]
-  assign ic_ras_io_call2_en = ex1_en & _ic_btb_io_up_en_T_6 & ex1_reg_bp_attr != 2'h3; // @[src/main/scala/fpga/Core.scala 994:80]
-  assign ic_ras_io_call2_index = ex1_reg_bp_rasindex + 3'h1; // @[src/main/scala/fpga/Core.scala 995:49]
-  assign ic_ras_io_call2_ret_pc = ex1_reg_is_half ? _ex1_next_pc_T_1 : _ex1_next_pc_T_3; // @[src/main/scala/fpga/Core.scala 869:24]
+  assign ic_ras_io_ret1_en = ic_bp_is_ret & if2_is_valid_inst & _if2_zbp_taken_T; // @[src/main/scala/fpga/Core.scala 626:63]
+  assign ic_ras_io_ret1_index = ic_ras_io_top_index - 3'h1; // @[src/main/scala/fpga/Core.scala 625:48]
+  assign ic_ras_io_call1_en = ic_bp_attr == 2'h3 & if2_is_valid_inst & _if2_zbp_taken_T; // @[src/main/scala/fpga/Core.scala 630:82]
+  assign ic_ras_io_call1_index = ic_ras_io_top_index + 3'h1; // @[src/main/scala/fpga/Core.scala 629:48]
+  assign ic_ras_io_call1_ret_pc = if2_is_half_inst ? _if2_next_pc_T_1 : _if2_next_pc_T_3; // @[src/main/scala/fpga/Core.scala 606:24]
+  assign ic_ras_io_up_en = ex1_bp_failure & _rrd_stall_T; // @[src/main/scala/fpga/Core.scala 975:37]
+  assign ic_ras_io_up_index = ex1_reg_bp_rasindex; // @[src/main/scala/fpga/Core.scala 1057:22]
+  assign ic_ras_io_ret2_en = ex1_en & ex1_reg_actual_is_ret & ~ex1_reg_bp_is_ret; // @[src/main/scala/fpga/Core.scala 1059:61]
+  assign ic_ras_io_ret2_index = ex1_reg_bp_rasindex - 3'h1; // @[src/main/scala/fpga/Core.scala 1060:49]
+  assign ic_ras_io_call2_en = ex1_en & _ic_btb_io_up_en_T_6 & ex1_reg_bp_attr != 2'h3; // @[src/main/scala/fpga/Core.scala 1061:80]
+  assign ic_ras_io_call2_index = ex1_reg_bp_rasindex + 3'h1; // @[src/main/scala/fpga/Core.scala 1062:49]
+  assign ic_ras_io_call2_ret_pc = ex1_reg_is_half ? _ex1_next_pc_T_1 : _ex1_next_pc_T_3; // @[src/main/scala/fpga/Core.scala 896:24]
   assign id_stage_clock = clock;
   assign id_stage_reset = reset;
-  assign id_stage_io_in_bits_is_valid_inst = _if2_zbp_taken_T_1 & _if2_zbp_taken_T_3 & if2_is_inst_read; // @[src/main/scala/fpga/Core.scala 567:57]
-  assign id_stage_io_in_bits_inst = if2_is_valid_inst ? ic_data_out : 32'h13; // @[src/main/scala/fpga/Core.scala 568:21]
-  assign id_stage_io_in_bits_pc = ic_reg_addr_out; // @[src/main/scala/fpga/Core.scala 628:37]
-  assign id_stage_io_in_bits_bp_taken = if2_bp_taken | if2_is_valid_inst & ic_bp_is_ret; // @[src/main/scala/fpga/Core.scala 629:53]
-  assign id_stage_io_in_bits_bp_attr = 3'h0 == ic_state ? ic_btb_io_lu_attr0 : _GEN_78; // @[src/main/scala/fpga/Core.scala 394:21 401:31]
-  assign id_stage_io_in_bits_bp_is_ret = 3'h0 == ic_state ? ic_btb_io_lu_is_ret0 : _GEN_120; // @[src/main/scala/fpga/Core.scala 394:21 402:31]
-  assign id_stage_io_in_bits_bp_rasindex = ic_ras_io_top_index; // @[src/main/scala/fpga/Core.scala 632:37]
+  assign id_stage_io_in_bits_is_valid_inst = _if2_zbp_taken_T_1 & _if2_zbp_taken_T_3 & if2_is_inst_read; // @[src/main/scala/fpga/Core.scala 585:57]
+  assign id_stage_io_in_bits_inst = if2_is_valid_inst ? ic_data_out : 32'h13; // @[src/main/scala/fpga/Core.scala 586:21]
+  assign id_stage_io_in_bits_pc = ic_reg_addr_out; // @[src/main/scala/fpga/Core.scala 653:37]
+  assign id_stage_io_in_bits_bp_taken = if2_bp_taken | if2_is_valid_inst & ic_bp_is_ret; // @[src/main/scala/fpga/Core.scala 654:53]
+  assign id_stage_io_in_bits_bp_attr = 3'h0 == ic_state ? ic_btb_io_lu_attr0 : _GEN_90; // @[src/main/scala/fpga/Core.scala 396:21 403:31]
+  assign id_stage_io_in_bits_bp_is_ret = 3'h0 == ic_state ? ic_btb_io_lu_is_ret0 : _GEN_140; // @[src/main/scala/fpga/Core.scala 396:21 404:31]
+  assign id_stage_io_in_bits_bp_rasindex = ic_ras_io_top_index; // @[src/main/scala/fpga/Core.scala 657:37]
   assign id_stage_io_in_bits_bp_target = ic_bp_taken ? ic_bp_target : _id_bp_target_T; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
-  assign id_stage_io_in_bits_bp_cnt = 3'h0 == ic_state ? ic_pht_io_lu_cnt0 : _GEN_121; // @[src/main/scala/fpga/Core.scala 394:21 404:31]
-  assign id_stage_io_out_ready = ex2_reg_is_br | id_rrd_ready; // @[src/main/scala/fpga/Core.scala 647:41]
-  assign id_stage_io_out_flush = ex2_reg_is_br; // @[src/main/scala/fpga/Core.scala 648:25]
+  assign id_stage_io_in_bits_bp_history = 3'h0 == ic_state ? ic_pht_io_history : _GEN_141; // @[src/main/scala/fpga/Core.scala 396:21 406:31]
+  assign id_stage_io_in_bits_bp_cnt = 3'h0 == ic_state ? ic_pht_io_lu_cnt0 : _GEN_142; // @[src/main/scala/fpga/Core.scala 396:21 407:31]
+  assign id_stage_io_in_bits_bp_gcnt = 3'h0 == ic_state ? ic_pht_io_lu_gcnt0 : _GEN_143; // @[src/main/scala/fpga/Core.scala 396:21 408:31]
+  assign id_stage_io_out_ready = ex2_reg_is_br | id_rrd_ready; // @[src/main/scala/fpga/Core.scala 674:41]
+  assign id_stage_io_out_flush = ex2_reg_is_br; // @[src/main/scala/fpga/Core.scala 675:25]
   always @(posedge clock) begin
     if (regfile_MPORT_3_en & regfile_MPORT_3_mask) begin
-      regfile[regfile_MPORT_3_addr] <= regfile_MPORT_3_data; // @[src/main/scala/fpga/Core.scala 127:20]
+      regfile[regfile_MPORT_3_addr] <= regfile_MPORT_3_data; // @[src/main/scala/fpga/Core.scala 128:20]
     end
     if (regfile_MPORT_5_en & regfile_MPORT_5_mask) begin
-      regfile[regfile_MPORT_5_addr] <= regfile_MPORT_5_data; // @[src/main/scala/fpga/Core.scala 127:20]
+      regfile[regfile_MPORT_5_addr] <= regfile_MPORT_5_data; // @[src/main/scala/fpga/Core.scala 128:20]
     end
     if (scoreboard_MPORT_en & scoreboard_MPORT_mask) begin
-      scoreboard[scoreboard_MPORT_addr] <= scoreboard_MPORT_data; // @[src/main/scala/fpga/Core.scala 143:25]
+      scoreboard[scoreboard_MPORT_addr] <= scoreboard_MPORT_data; // @[src/main/scala/fpga/Core.scala 144:25]
     end
     if (scoreboard_MPORT_1_en & scoreboard_MPORT_1_mask) begin
-      scoreboard[scoreboard_MPORT_1_addr] <= scoreboard_MPORT_1_data; // @[src/main/scala/fpga/Core.scala 143:25]
+      scoreboard[scoreboard_MPORT_1_addr] <= scoreboard_MPORT_1_data; // @[src/main/scala/fpga/Core.scala 144:25]
     end
     if (scoreboard_MPORT_2_en & scoreboard_MPORT_2_mask) begin
-      scoreboard[scoreboard_MPORT_2_addr] <= scoreboard_MPORT_2_data; // @[src/main/scala/fpga/Core.scala 143:25]
+      scoreboard[scoreboard_MPORT_2_addr] <= scoreboard_MPORT_2_data; // @[src/main/scala/fpga/Core.scala 144:25]
     end
     if (scoreboard_MPORT_4_en & scoreboard_MPORT_4_mask) begin
-      scoreboard[scoreboard_MPORT_4_addr] <= scoreboard_MPORT_4_data; // @[src/main/scala/fpga/Core.scala 143:25]
+      scoreboard[scoreboard_MPORT_4_addr] <= scoreboard_MPORT_4_data; // @[src/main/scala/fpga/Core.scala 144:25]
     end
     if (scoreboard_MPORT_6_en & scoreboard_MPORT_6_mask) begin
-      scoreboard[scoreboard_MPORT_6_addr] <= scoreboard_MPORT_6_data; // @[src/main/scala/fpga/Core.scala 143:25]
+      scoreboard[scoreboard_MPORT_6_addr] <= scoreboard_MPORT_6_data; // @[src/main/scala/fpga/Core.scala 144:25]
     end
-    if (reset) begin // @[src/main/scala/fpga/Core.scala 132:24]
-      instret <= 64'h0; // @[src/main/scala/fpga/Core.scala 132:24]
-    end else if (ex2_reg_is_retired & mem3_reg_is_retired) begin // @[src/main/scala/fpga/Core.scala 1511:52]
-      instret <= _instret_T_1; // @[src/main/scala/fpga/Core.scala 1512:13]
-    end else if (ex2_reg_is_retired | mem3_reg_is_retired) begin // @[src/main/scala/fpga/Core.scala 1513:58]
-      instret <= _instret_T_3; // @[src/main/scala/fpga/Core.scala 1514:13]
-    end
-    if (reset) begin // @[src/main/scala/fpga/Core.scala 133:37]
-      csr_reg_trap_vector <= 31'h0; // @[src/main/scala/fpga/Core.scala 133:37]
-    end else if (ex1_en & _ex1_fun_sel_T_10) begin // @[src/main/scala/fpga/Core.scala 1060:46]
-      if (ex1_reg_csr_addr == 12'h305) begin // @[src/main/scala/fpga/Core.scala 1061:48]
-        csr_reg_trap_vector <= csr_wdata[31:1]; // @[src/main/scala/fpga/Core.scala 1062:27]
-      end
+    if (reset) begin // @[src/main/scala/fpga/Core.scala 133:24]
+      instret <= 64'h0; // @[src/main/scala/fpga/Core.scala 133:24]
+    end else if (ex2_reg_is_retired & mem3_reg_is_retired) begin // @[src/main/scala/fpga/Core.scala 1578:52]
+      instret <= _instret_T_1; // @[src/main/scala/fpga/Core.scala 1579:13]
+    end else if (ex2_reg_is_retired | mem3_reg_is_retired) begin // @[src/main/scala/fpga/Core.scala 1580:58]
+      instret <= _instret_T_3; // @[src/main/scala/fpga/Core.scala 1581:13]
     end
     if (reset) begin // @[src/main/scala/fpga/Core.scala 134:37]
-      csr_reg_mcause <= 32'h0; // @[src/main/scala/fpga/Core.scala 134:37]
-    end else if (csr_is_meintr) begin // @[src/main/scala/fpga/Core.scala 1083:24]
-      csr_reg_mcause <= 32'h8000000b; // @[src/main/scala/fpga/Core.scala 1084:26]
-    end else if (csr_is_mtintr) begin // @[src/main/scala/fpga/Core.scala 1093:30]
-      csr_reg_mcause <= 32'h80000007; // @[src/main/scala/fpga/Core.scala 1094:26]
-    end else if (csr_is_trap) begin // @[src/main/scala/fpga/Core.scala 1103:28]
-      csr_reg_mcause <= 32'hb; // @[src/main/scala/fpga/Core.scala 1104:26]
-    end
-    if (reset) begin // @[src/main/scala/fpga/Core.scala 136:37]
-      csr_reg_mepc <= 31'h0; // @[src/main/scala/fpga/Core.scala 136:37]
-    end else if (csr_is_meintr) begin // @[src/main/scala/fpga/Core.scala 1083:24]
-      csr_reg_mepc <= ex1_reg_pc; // @[src/main/scala/fpga/Core.scala 1086:26]
-    end else if (csr_is_mtintr) begin // @[src/main/scala/fpga/Core.scala 1093:30]
-      csr_reg_mepc <= ex1_reg_pc; // @[src/main/scala/fpga/Core.scala 1096:26]
-    end else if (csr_is_trap) begin // @[src/main/scala/fpga/Core.scala 1103:28]
-      csr_reg_mepc <= ex1_reg_pc; // @[src/main/scala/fpga/Core.scala 1106:26]
-    end else begin
-      csr_reg_mepc <= _GEN_349;
-    end
-    if (reset) begin // @[src/main/scala/fpga/Core.scala 137:37]
-      csr_reg_mstatus_mie <= 1'h0; // @[src/main/scala/fpga/Core.scala 137:37]
-    end else if (csr_is_meintr) begin // @[src/main/scala/fpga/Core.scala 1083:24]
-      csr_reg_mstatus_mie <= 1'h0; // @[src/main/scala/fpga/Core.scala 1088:26]
-    end else if (csr_is_mtintr) begin // @[src/main/scala/fpga/Core.scala 1093:30]
-      csr_reg_mstatus_mie <= 1'h0; // @[src/main/scala/fpga/Core.scala 1098:26]
-    end else if (csr_is_trap) begin // @[src/main/scala/fpga/Core.scala 1103:28]
-      csr_reg_mstatus_mie <= 1'h0; // @[src/main/scala/fpga/Core.scala 1108:26]
-    end else begin
-      csr_reg_mstatus_mie <= _GEN_361;
-    end
-    if (reset) begin // @[src/main/scala/fpga/Core.scala 138:37]
-      csr_reg_mstatus_mpie <= 1'h0; // @[src/main/scala/fpga/Core.scala 138:37]
-    end else if (csr_is_meintr) begin // @[src/main/scala/fpga/Core.scala 1083:24]
-      csr_reg_mstatus_mpie <= csr_reg_mstatus_mie; // @[src/main/scala/fpga/Core.scala 1087:26]
-    end else if (csr_is_mtintr) begin // @[src/main/scala/fpga/Core.scala 1093:30]
-      csr_reg_mstatus_mpie <= csr_reg_mstatus_mie; // @[src/main/scala/fpga/Core.scala 1097:26]
-    end else if (csr_is_trap) begin // @[src/main/scala/fpga/Core.scala 1103:28]
-      csr_reg_mstatus_mpie <= csr_reg_mstatus_mie; // @[src/main/scala/fpga/Core.scala 1107:26]
-    end else begin
-      csr_reg_mstatus_mpie <= _GEN_360;
-    end
-    if (reset) begin // @[src/main/scala/fpga/Core.scala 139:37]
-      csr_reg_mscratch <= 32'h0; // @[src/main/scala/fpga/Core.scala 139:37]
-    end else if (ex1_en & _ex1_fun_sel_T_10) begin // @[src/main/scala/fpga/Core.scala 1060:46]
-      if (!(ex1_reg_csr_addr == 12'h305)) begin // @[src/main/scala/fpga/Core.scala 1061:48]
-        if (!(ex1_reg_csr_addr == 12'h341)) begin // @[src/main/scala/fpga/Core.scala 1063:53]
-          csr_reg_mscratch <= _GEN_319;
-        end
+      csr_reg_trap_vector <= 31'h0; // @[src/main/scala/fpga/Core.scala 134:37]
+    end else if (ex1_en & _ex1_fun_sel_T_10) begin // @[src/main/scala/fpga/Core.scala 1127:46]
+      if (ex1_reg_csr_addr == 12'h305) begin // @[src/main/scala/fpga/Core.scala 1128:48]
+        csr_reg_trap_vector <= csr_wdata[31:1]; // @[src/main/scala/fpga/Core.scala 1129:27]
       end
     end
+    if (reset) begin // @[src/main/scala/fpga/Core.scala 135:37]
+      csr_reg_mcause <= 32'h0; // @[src/main/scala/fpga/Core.scala 135:37]
+    end else if (csr_is_meintr) begin // @[src/main/scala/fpga/Core.scala 1150:24]
+      csr_reg_mcause <= 32'h8000000b; // @[src/main/scala/fpga/Core.scala 1151:26]
+    end else if (csr_is_mtintr) begin // @[src/main/scala/fpga/Core.scala 1160:30]
+      csr_reg_mcause <= 32'h80000007; // @[src/main/scala/fpga/Core.scala 1161:26]
+    end else if (csr_is_trap) begin // @[src/main/scala/fpga/Core.scala 1170:28]
+      csr_reg_mcause <= 32'hb; // @[src/main/scala/fpga/Core.scala 1171:26]
+    end
+    if (reset) begin // @[src/main/scala/fpga/Core.scala 137:37]
+      csr_reg_mepc <= 31'h0; // @[src/main/scala/fpga/Core.scala 137:37]
+    end else if (csr_is_meintr) begin // @[src/main/scala/fpga/Core.scala 1150:24]
+      csr_reg_mepc <= ex1_reg_pc; // @[src/main/scala/fpga/Core.scala 1153:26]
+    end else if (csr_is_mtintr) begin // @[src/main/scala/fpga/Core.scala 1160:30]
+      csr_reg_mepc <= ex1_reg_pc; // @[src/main/scala/fpga/Core.scala 1163:26]
+    end else if (csr_is_trap) begin // @[src/main/scala/fpga/Core.scala 1170:28]
+      csr_reg_mepc <= ex1_reg_pc; // @[src/main/scala/fpga/Core.scala 1173:26]
+    end else begin
+      csr_reg_mepc <= _GEN_389;
+    end
+    if (reset) begin // @[src/main/scala/fpga/Core.scala 138:37]
+      csr_reg_mstatus_mie <= 1'h0; // @[src/main/scala/fpga/Core.scala 138:37]
+    end else if (csr_is_meintr) begin // @[src/main/scala/fpga/Core.scala 1150:24]
+      csr_reg_mstatus_mie <= 1'h0; // @[src/main/scala/fpga/Core.scala 1155:26]
+    end else if (csr_is_mtintr) begin // @[src/main/scala/fpga/Core.scala 1160:30]
+      csr_reg_mstatus_mie <= 1'h0; // @[src/main/scala/fpga/Core.scala 1165:26]
+    end else if (csr_is_trap) begin // @[src/main/scala/fpga/Core.scala 1170:28]
+      csr_reg_mstatus_mie <= 1'h0; // @[src/main/scala/fpga/Core.scala 1175:26]
+    end else begin
+      csr_reg_mstatus_mie <= _GEN_401;
+    end
+    if (reset) begin // @[src/main/scala/fpga/Core.scala 139:37]
+      csr_reg_mstatus_mpie <= 1'h0; // @[src/main/scala/fpga/Core.scala 139:37]
+    end else if (csr_is_meintr) begin // @[src/main/scala/fpga/Core.scala 1150:24]
+      csr_reg_mstatus_mpie <= csr_reg_mstatus_mie; // @[src/main/scala/fpga/Core.scala 1154:26]
+    end else if (csr_is_mtintr) begin // @[src/main/scala/fpga/Core.scala 1160:30]
+      csr_reg_mstatus_mpie <= csr_reg_mstatus_mie; // @[src/main/scala/fpga/Core.scala 1164:26]
+    end else if (csr_is_trap) begin // @[src/main/scala/fpga/Core.scala 1170:28]
+      csr_reg_mstatus_mpie <= csr_reg_mstatus_mie; // @[src/main/scala/fpga/Core.scala 1174:26]
+    end else begin
+      csr_reg_mstatus_mpie <= _GEN_400;
+    end
     if (reset) begin // @[src/main/scala/fpga/Core.scala 140:37]
-      csr_reg_mie_meie <= 1'h0; // @[src/main/scala/fpga/Core.scala 140:37]
-    end else if (ex1_en & _ex1_fun_sel_T_10) begin // @[src/main/scala/fpga/Core.scala 1060:46]
-      if (!(ex1_reg_csr_addr == 12'h305)) begin // @[src/main/scala/fpga/Core.scala 1061:48]
-        if (!(ex1_reg_csr_addr == 12'h341)) begin // @[src/main/scala/fpga/Core.scala 1063:53]
-          csr_reg_mie_meie <= _GEN_320;
+      csr_reg_mscratch <= 32'h0; // @[src/main/scala/fpga/Core.scala 140:37]
+    end else if (ex1_en & _ex1_fun_sel_T_10) begin // @[src/main/scala/fpga/Core.scala 1127:46]
+      if (!(ex1_reg_csr_addr == 12'h305)) begin // @[src/main/scala/fpga/Core.scala 1128:48]
+        if (!(ex1_reg_csr_addr == 12'h341)) begin // @[src/main/scala/fpga/Core.scala 1130:53]
+          csr_reg_mscratch <= _GEN_359;
         end
       end
     end
     if (reset) begin // @[src/main/scala/fpga/Core.scala 141:37]
-      csr_reg_mie_mtie <= 1'h0; // @[src/main/scala/fpga/Core.scala 141:37]
-    end else if (ex1_en & _ex1_fun_sel_T_10) begin // @[src/main/scala/fpga/Core.scala 1060:46]
-      if (!(ex1_reg_csr_addr == 12'h305)) begin // @[src/main/scala/fpga/Core.scala 1061:48]
-        if (!(ex1_reg_csr_addr == 12'h341)) begin // @[src/main/scala/fpga/Core.scala 1063:53]
-          csr_reg_mie_mtie <= _GEN_321;
+      csr_reg_mie_meie <= 1'h0; // @[src/main/scala/fpga/Core.scala 141:37]
+    end else if (ex1_en & _ex1_fun_sel_T_10) begin // @[src/main/scala/fpga/Core.scala 1127:46]
+      if (!(ex1_reg_csr_addr == 12'h305)) begin // @[src/main/scala/fpga/Core.scala 1128:48]
+        if (!(ex1_reg_csr_addr == 12'h341)) begin // @[src/main/scala/fpga/Core.scala 1130:53]
+          csr_reg_mie_meie <= _GEN_360;
         end
       end
     end
-    id_reg_bp_taken <= reset | if2_is_valid_inst & _if2_zbp_taken_T & _id_reg_bp_taken_T_7; // @[src/main/scala/fpga/Core.scala 153:{36,36} 590:22]
-    if (reset) begin // @[src/main/scala/fpga/Core.scala 154:36]
-      id_reg_bp_target <= 31'h4000000; // @[src/main/scala/fpga/Core.scala 154:36]
+    if (reset) begin // @[src/main/scala/fpga/Core.scala 142:37]
+      csr_reg_mie_mtie <= 1'h0; // @[src/main/scala/fpga/Core.scala 142:37]
+    end else if (ex1_en & _ex1_fun_sel_T_10) begin // @[src/main/scala/fpga/Core.scala 1127:46]
+      if (!(ex1_reg_csr_addr == 12'h305)) begin // @[src/main/scala/fpga/Core.scala 1128:48]
+        if (!(ex1_reg_csr_addr == 12'h341)) begin // @[src/main/scala/fpga/Core.scala 1130:53]
+          csr_reg_mie_mtie <= _GEN_361;
+        end
+      end
+    end
+    id_reg_bp_taken <= reset | if2_is_valid_inst & _if2_zbp_taken_T & _id_reg_bp_taken_T_7; // @[src/main/scala/fpga/Core.scala 154:{36,36} 608:22]
+    if (reset) begin // @[src/main/scala/fpga/Core.scala 155:36]
+      id_reg_bp_target <= 31'h4000000; // @[src/main/scala/fpga/Core.scala 155:36]
     end else if (ic_bp_taken) begin // @[src/main/scala/chisel3/util/Mux.scala 141:16]
-      if (3'h0 == ic_state) begin // @[src/main/scala/fpga/Core.scala 394:21]
-        id_reg_bp_target <= ic_btb_io_lu_target0; // @[src/main/scala/fpga/Core.scala 403:31]
-      end else if (3'h4 == ic_state) begin // @[src/main/scala/fpga/Core.scala 394:21]
-        id_reg_bp_target <= ic_btb_io_lu_target1; // @[src/main/scala/fpga/Core.scala 437:31]
+      if (3'h0 == ic_state) begin // @[src/main/scala/fpga/Core.scala 396:21]
+        id_reg_bp_target <= ic_btb_io_lu_target0; // @[src/main/scala/fpga/Core.scala 405:31]
+      end else if (3'h4 == ic_state) begin // @[src/main/scala/fpga/Core.scala 396:21]
+        id_reg_bp_target <= ic_btb_io_lu_target1; // @[src/main/scala/fpga/Core.scala 445:31]
       end else begin
-        id_reg_bp_target <= _GEN_81;
+        id_reg_bp_target <= _GEN_93;
       end
     end else if (ic_bp_is_ret) begin // @[src/main/scala/chisel3/util/Mux.scala 141:16]
       id_reg_bp_target <= ic_ras_io_top_ret_pc;
-    end else if (if2_is_half_inst) begin // @[src/main/scala/fpga/Core.scala 588:24]
+    end else if (if2_is_half_inst) begin // @[src/main/scala/fpga/Core.scala 606:24]
       id_reg_bp_target <= _if2_next_pc_T_1;
     end else begin
       id_reg_bp_target <= _if2_next_pc_T_3;
     end
-    if (reset) begin // @[src/main/scala/fpga/Core.scala 155:36]
-      id_reg_bp_not_taken <= 1'h0; // @[src/main/scala/fpga/Core.scala 155:36]
-    end else begin
-      id_reg_bp_not_taken <= _id_reg_bp_taken_T_1 & _id_reg_bp_taken_T_4 & if2_zbp_taken; // @[src/main/scala/fpga/Core.scala 601:23]
-    end
     if (reset) begin // @[src/main/scala/fpga/Core.scala 156:36]
-      id_reg_bp_pc <= 31'h0; // @[src/main/scala/fpga/Core.scala 156:36]
+      id_reg_bp_not_taken <= 1'h0; // @[src/main/scala/fpga/Core.scala 156:36]
     end else begin
-      id_reg_bp_pc <= ic_reg_addr_out; // @[src/main/scala/fpga/Core.scala 602:23]
+      id_reg_bp_not_taken <= _id_reg_bp_taken_T_1 & _id_reg_bp_taken_T_4 & if2_zbp_taken; // @[src/main/scala/fpga/Core.scala 619:23]
     end
-    if (reset) begin // @[src/main/scala/fpga/Core.scala 159:38]
-      rrd_reg_pc <= 31'h0; // @[src/main/scala/fpga/Core.scala 159:38]
-    end else if (id_rrd_ready) begin // @[src/main/scala/fpga/Core.scala 649:23]
-      rrd_reg_pc <= id_stage_io_out_bits_pc; // @[src/main/scala/fpga/Core.scala 650:27]
+    if (reset) begin // @[src/main/scala/fpga/Core.scala 157:36]
+      id_reg_bp_pc <= 31'h0; // @[src/main/scala/fpga/Core.scala 157:36]
+    end else begin
+      id_reg_bp_pc <= ic_reg_addr_out; // @[src/main/scala/fpga/Core.scala 620:23]
     end
     if (reset) begin // @[src/main/scala/fpga/Core.scala 160:38]
-      rrd_reg_wb_addr <= 5'h0; // @[src/main/scala/fpga/Core.scala 160:38]
-    end else if (id_rrd_ready) begin // @[src/main/scala/fpga/Core.scala 649:23]
-      rrd_reg_wb_addr <= id_stage_io_out_bits_wb_addr; // @[src/main/scala/fpga/Core.scala 660:27]
+      rrd_reg_pc <= 31'h0; // @[src/main/scala/fpga/Core.scala 160:38]
+    end else if (id_rrd_ready) begin // @[src/main/scala/fpga/Core.scala 676:23]
+      rrd_reg_pc <= id_stage_io_out_bits_pc; // @[src/main/scala/fpga/Core.scala 677:27]
     end
     if (reset) begin // @[src/main/scala/fpga/Core.scala 161:38]
-      rrd_reg_op1_sel <= 1'h0; // @[src/main/scala/fpga/Core.scala 161:38]
-    end else if (id_rrd_ready) begin // @[src/main/scala/fpga/Core.scala 649:23]
-      rrd_reg_op1_sel <= id_stage_io_out_bits_op1_sel; // @[src/main/scala/fpga/Core.scala 651:27]
+      rrd_reg_wb_addr <= 5'h0; // @[src/main/scala/fpga/Core.scala 161:38]
+    end else if (id_rrd_ready) begin // @[src/main/scala/fpga/Core.scala 676:23]
+      rrd_reg_wb_addr <= id_stage_io_out_bits_wb_addr; // @[src/main/scala/fpga/Core.scala 687:27]
     end
     if (reset) begin // @[src/main/scala/fpga/Core.scala 162:38]
-      rrd_reg_op2_sel <= 1'h0; // @[src/main/scala/fpga/Core.scala 162:38]
-    end else if (id_rrd_ready) begin // @[src/main/scala/fpga/Core.scala 649:23]
-      rrd_reg_op2_sel <= id_stage_io_out_bits_op2_sel; // @[src/main/scala/fpga/Core.scala 652:27]
+      rrd_reg_op1_sel <= 1'h0; // @[src/main/scala/fpga/Core.scala 162:38]
+    end else if (id_rrd_ready) begin // @[src/main/scala/fpga/Core.scala 676:23]
+      rrd_reg_op1_sel <= id_stage_io_out_bits_op1_sel; // @[src/main/scala/fpga/Core.scala 678:27]
     end
     if (reset) begin // @[src/main/scala/fpga/Core.scala 163:38]
-      rrd_reg_op3_sel <= 2'h0; // @[src/main/scala/fpga/Core.scala 163:38]
-    end else if (id_rrd_ready) begin // @[src/main/scala/fpga/Core.scala 649:23]
-      rrd_reg_op3_sel <= id_stage_io_out_bits_op3_sel; // @[src/main/scala/fpga/Core.scala 653:27]
+      rrd_reg_op2_sel <= 1'h0; // @[src/main/scala/fpga/Core.scala 163:38]
+    end else if (id_rrd_ready) begin // @[src/main/scala/fpga/Core.scala 676:23]
+      rrd_reg_op2_sel <= id_stage_io_out_bits_op2_sel; // @[src/main/scala/fpga/Core.scala 679:27]
     end
     if (reset) begin // @[src/main/scala/fpga/Core.scala 164:38]
-      rrd_reg_rs1_addr <= 5'h0; // @[src/main/scala/fpga/Core.scala 164:38]
-    end else if (id_rrd_ready) begin // @[src/main/scala/fpga/Core.scala 649:23]
-      rrd_reg_rs1_addr <= id_stage_io_out_bits_rs1_addr; // @[src/main/scala/fpga/Core.scala 654:27]
+      rrd_reg_op3_sel <= 2'h0; // @[src/main/scala/fpga/Core.scala 164:38]
+    end else if (id_rrd_ready) begin // @[src/main/scala/fpga/Core.scala 676:23]
+      rrd_reg_op3_sel <= id_stage_io_out_bits_op3_sel; // @[src/main/scala/fpga/Core.scala 680:27]
     end
     if (reset) begin // @[src/main/scala/fpga/Core.scala 165:38]
-      rrd_reg_rs2_addr <= 5'h0; // @[src/main/scala/fpga/Core.scala 165:38]
-    end else if (id_rrd_ready) begin // @[src/main/scala/fpga/Core.scala 649:23]
-      rrd_reg_rs2_addr <= id_stage_io_out_bits_rs2_addr; // @[src/main/scala/fpga/Core.scala 655:27]
+      rrd_reg_rs1_addr <= 5'h0; // @[src/main/scala/fpga/Core.scala 165:38]
+    end else if (id_rrd_ready) begin // @[src/main/scala/fpga/Core.scala 676:23]
+      rrd_reg_rs1_addr <= id_stage_io_out_bits_rs1_addr; // @[src/main/scala/fpga/Core.scala 681:27]
     end
     if (reset) begin // @[src/main/scala/fpga/Core.scala 166:38]
-      rrd_reg_rs3_addr <= 5'h0; // @[src/main/scala/fpga/Core.scala 166:38]
-    end else if (id_rrd_ready) begin // @[src/main/scala/fpga/Core.scala 649:23]
-      rrd_reg_rs3_addr <= id_stage_io_out_bits_rs3_addr; // @[src/main/scala/fpga/Core.scala 656:27]
+      rrd_reg_rs2_addr <= 5'h0; // @[src/main/scala/fpga/Core.scala 166:38]
+    end else if (id_rrd_ready) begin // @[src/main/scala/fpga/Core.scala 676:23]
+      rrd_reg_rs2_addr <= id_stage_io_out_bits_rs2_addr; // @[src/main/scala/fpga/Core.scala 682:27]
     end
     if (reset) begin // @[src/main/scala/fpga/Core.scala 167:38]
-      rrd_reg_op1_data <= 32'h0; // @[src/main/scala/fpga/Core.scala 167:38]
-    end else if (id_rrd_ready) begin // @[src/main/scala/fpga/Core.scala 649:23]
-      rrd_reg_op1_data <= id_stage_io_out_bits_op1_data; // @[src/main/scala/fpga/Core.scala 657:27]
+      rrd_reg_rs3_addr <= 5'h0; // @[src/main/scala/fpga/Core.scala 167:38]
+    end else if (id_rrd_ready) begin // @[src/main/scala/fpga/Core.scala 676:23]
+      rrd_reg_rs3_addr <= id_stage_io_out_bits_rs3_addr; // @[src/main/scala/fpga/Core.scala 683:27]
     end
     if (reset) begin // @[src/main/scala/fpga/Core.scala 168:38]
-      rrd_reg_op2_data_im1 <= 32'h0; // @[src/main/scala/fpga/Core.scala 168:38]
-    end else if (id_rrd_ready) begin // @[src/main/scala/fpga/Core.scala 649:23]
-      rrd_reg_op2_data_im1 <= id_stage_io_out_bits_op2_data_im1; // @[src/main/scala/fpga/Core.scala 658:27]
+      rrd_reg_op1_data <= 32'h0; // @[src/main/scala/fpga/Core.scala 168:38]
+    end else if (id_rrd_ready) begin // @[src/main/scala/fpga/Core.scala 676:23]
+      rrd_reg_op1_data <= id_stage_io_out_bits_op1_data; // @[src/main/scala/fpga/Core.scala 684:27]
     end
     if (reset) begin // @[src/main/scala/fpga/Core.scala 169:38]
-      rrd_reg_op2_data_im0 <= 12'h0; // @[src/main/scala/fpga/Core.scala 169:38]
-    end else if (id_rrd_ready) begin // @[src/main/scala/fpga/Core.scala 649:23]
-      rrd_reg_op2_data_im0 <= id_stage_io_out_bits_op2_data_im0; // @[src/main/scala/fpga/Core.scala 659:27]
+      rrd_reg_op2_data_im1 <= 32'h0; // @[src/main/scala/fpga/Core.scala 169:38]
+    end else if (id_rrd_ready) begin // @[src/main/scala/fpga/Core.scala 676:23]
+      rrd_reg_op2_data_im1 <= id_stage_io_out_bits_op2_data_im1; // @[src/main/scala/fpga/Core.scala 685:27]
     end
     if (reset) begin // @[src/main/scala/fpga/Core.scala 170:38]
-      rrd_reg_exe_fun <= 4'h0; // @[src/main/scala/fpga/Core.scala 170:38]
-    end else if (_id_stage_io_out_ready_T) begin // @[src/main/scala/fpga/Core.scala 673:39]
-      rrd_reg_exe_fun <= id_stage_io_out_bits_exe_fun; // @[src/main/scala/fpga/Core.scala 675:27]
+      rrd_reg_op2_data_im0 <= 12'h0; // @[src/main/scala/fpga/Core.scala 170:38]
+    end else if (id_rrd_ready) begin // @[src/main/scala/fpga/Core.scala 676:23]
+      rrd_reg_op2_data_im0 <= id_stage_io_out_bits_op2_data_im0; // @[src/main/scala/fpga/Core.scala 686:27]
     end
     if (reset) begin // @[src/main/scala/fpga/Core.scala 171:38]
-      rrd_reg_rf_wen <= 1'h0; // @[src/main/scala/fpga/Core.scala 171:38]
-    end else if (_id_stage_io_out_ready_T) begin // @[src/main/scala/fpga/Core.scala 673:39]
-      rrd_reg_rf_wen <= id_stage_io_out_bits_rf_wen; // @[src/main/scala/fpga/Core.scala 674:27]
+      rrd_reg_exe_fun <= 4'h0; // @[src/main/scala/fpga/Core.scala 171:38]
+    end else if (_id_stage_io_out_ready_T) begin // @[src/main/scala/fpga/Core.scala 700:39]
+      rrd_reg_exe_fun <= id_stage_io_out_bits_exe_fun; // @[src/main/scala/fpga/Core.scala 702:27]
     end
     if (reset) begin // @[src/main/scala/fpga/Core.scala 172:38]
-      rrd_reg_wb_sel <= 3'h0; // @[src/main/scala/fpga/Core.scala 172:38]
-    end else if (_id_stage_io_out_ready_T) begin // @[src/main/scala/fpga/Core.scala 673:39]
-      rrd_reg_wb_sel <= id_stage_io_out_bits_wb_sel; // @[src/main/scala/fpga/Core.scala 676:27]
+      rrd_reg_rf_wen <= 1'h0; // @[src/main/scala/fpga/Core.scala 172:38]
+    end else if (_id_stage_io_out_ready_T) begin // @[src/main/scala/fpga/Core.scala 700:39]
+      rrd_reg_rf_wen <= id_stage_io_out_bits_rf_wen; // @[src/main/scala/fpga/Core.scala 701:27]
     end
     if (reset) begin // @[src/main/scala/fpga/Core.scala 173:38]
-      rrd_reg_csr_addr <= 12'h0; // @[src/main/scala/fpga/Core.scala 173:38]
-    end else if (id_rrd_ready) begin // @[src/main/scala/fpga/Core.scala 649:23]
-      rrd_reg_csr_addr <= id_stage_io_out_bits_csr_addr; // @[src/main/scala/fpga/Core.scala 665:27]
+      rrd_reg_wb_sel <= 3'h0; // @[src/main/scala/fpga/Core.scala 173:38]
+    end else if (_id_stage_io_out_ready_T) begin // @[src/main/scala/fpga/Core.scala 700:39]
+      rrd_reg_wb_sel <= id_stage_io_out_bits_wb_sel; // @[src/main/scala/fpga/Core.scala 703:27]
     end
     if (reset) begin // @[src/main/scala/fpga/Core.scala 174:38]
-      rrd_reg_csr_cmd <= 2'h0; // @[src/main/scala/fpga/Core.scala 174:38]
-    end else if (_id_stage_io_out_ready_T) begin // @[src/main/scala/fpga/Core.scala 673:39]
-      rrd_reg_csr_cmd <= id_stage_io_out_bits_csr_cmd; // @[src/main/scala/fpga/Core.scala 677:27]
+      rrd_reg_csr_addr <= 12'h0; // @[src/main/scala/fpga/Core.scala 174:38]
+    end else if (id_rrd_ready) begin // @[src/main/scala/fpga/Core.scala 676:23]
+      rrd_reg_csr_addr <= id_stage_io_out_bits_csr_addr; // @[src/main/scala/fpga/Core.scala 692:27]
     end
     if (reset) begin // @[src/main/scala/fpga/Core.scala 175:38]
-      rrd_reg_imm_b_sext <= 32'h0; // @[src/main/scala/fpga/Core.scala 175:38]
-    end else if (id_rrd_ready) begin // @[src/main/scala/fpga/Core.scala 649:23]
-      rrd_reg_imm_b_sext <= id_stage_io_out_bits_imm_b_sext; // @[src/main/scala/fpga/Core.scala 661:27]
+      rrd_reg_csr_cmd <= 2'h0; // @[src/main/scala/fpga/Core.scala 175:38]
+    end else if (_id_stage_io_out_ready_T) begin // @[src/main/scala/fpga/Core.scala 700:39]
+      rrd_reg_csr_cmd <= id_stage_io_out_bits_csr_cmd; // @[src/main/scala/fpga/Core.scala 704:27]
     end
     if (reset) begin // @[src/main/scala/fpga/Core.scala 176:38]
-      rrd_reg_shamt <= 2'h0; // @[src/main/scala/fpga/Core.scala 176:38]
-    end else if (id_rrd_ready) begin // @[src/main/scala/fpga/Core.scala 649:23]
-      rrd_reg_shamt <= id_stage_io_out_bits_shamt; // @[src/main/scala/fpga/Core.scala 662:27]
+      rrd_reg_imm_b_sext <= 32'h0; // @[src/main/scala/fpga/Core.scala 176:38]
+    end else if (id_rrd_ready) begin // @[src/main/scala/fpga/Core.scala 676:23]
+      rrd_reg_imm_b_sext <= id_stage_io_out_bits_imm_b_sext; // @[src/main/scala/fpga/Core.scala 688:27]
     end
     if (reset) begin // @[src/main/scala/fpga/Core.scala 177:38]
-      rrd_reg_op2op <= 1'h0; // @[src/main/scala/fpga/Core.scala 177:38]
-    end else if (id_rrd_ready) begin // @[src/main/scala/fpga/Core.scala 649:23]
-      rrd_reg_op2op <= id_stage_io_out_bits_op2op; // @[src/main/scala/fpga/Core.scala 663:27]
+      rrd_reg_shamt <= 2'h0; // @[src/main/scala/fpga/Core.scala 177:38]
+    end else if (id_rrd_ready) begin // @[src/main/scala/fpga/Core.scala 676:23]
+      rrd_reg_shamt <= id_stage_io_out_bits_shamt; // @[src/main/scala/fpga/Core.scala 689:27]
     end
     if (reset) begin // @[src/main/scala/fpga/Core.scala 178:38]
-      rrd_reg_mem_w <= 3'h0; // @[src/main/scala/fpga/Core.scala 178:38]
-    end else if (_id_stage_io_out_ready_T) begin // @[src/main/scala/fpga/Core.scala 673:39]
-      rrd_reg_mem_w <= id_stage_io_out_bits_mem_w; // @[src/main/scala/fpga/Core.scala 678:27]
+      rrd_reg_op2op <= 1'h0; // @[src/main/scala/fpga/Core.scala 178:38]
+    end else if (id_rrd_ready) begin // @[src/main/scala/fpga/Core.scala 676:23]
+      rrd_reg_op2op <= id_stage_io_out_bits_op2op; // @[src/main/scala/fpga/Core.scala 690:27]
     end
     if (reset) begin // @[src/main/scala/fpga/Core.scala 179:38]
-      rrd_reg_is_bflen <= 1'h0; // @[src/main/scala/fpga/Core.scala 179:38]
-    end else if (id_rrd_ready) begin // @[src/main/scala/fpga/Core.scala 649:23]
-      rrd_reg_is_bflen <= id_stage_io_out_bits_is_bflen; // @[src/main/scala/fpga/Core.scala 664:27]
+      rrd_reg_mem_w <= 3'h0; // @[src/main/scala/fpga/Core.scala 179:38]
+    end else if (_id_stage_io_out_ready_T) begin // @[src/main/scala/fpga/Core.scala 700:39]
+      rrd_reg_mem_w <= id_stage_io_out_bits_mem_w; // @[src/main/scala/fpga/Core.scala 705:27]
     end
     if (reset) begin // @[src/main/scala/fpga/Core.scala 180:38]
-      rrd_reg_is_br <= 1'h0; // @[src/main/scala/fpga/Core.scala 180:38]
-    end else if (_id_stage_io_out_ready_T) begin // @[src/main/scala/fpga/Core.scala 673:39]
-      rrd_reg_is_br <= id_stage_io_out_bits_is_br; // @[src/main/scala/fpga/Core.scala 679:27]
+      rrd_reg_is_bflen <= 1'h0; // @[src/main/scala/fpga/Core.scala 180:38]
+    end else if (id_rrd_ready) begin // @[src/main/scala/fpga/Core.scala 676:23]
+      rrd_reg_is_bflen <= id_stage_io_out_bits_is_bflen; // @[src/main/scala/fpga/Core.scala 691:27]
     end
     if (reset) begin // @[src/main/scala/fpga/Core.scala 181:38]
-      rrd_reg_is_j <= 1'h0; // @[src/main/scala/fpga/Core.scala 181:38]
-    end else if (_id_stage_io_out_ready_T) begin // @[src/main/scala/fpga/Core.scala 673:39]
-      rrd_reg_is_j <= id_stage_io_out_bits_is_j; // @[src/main/scala/fpga/Core.scala 680:27]
+      rrd_reg_is_br <= 1'h0; // @[src/main/scala/fpga/Core.scala 181:38]
+    end else if (_id_stage_io_out_ready_T) begin // @[src/main/scala/fpga/Core.scala 700:39]
+      rrd_reg_is_br <= id_stage_io_out_bits_is_br; // @[src/main/scala/fpga/Core.scala 706:27]
     end
     if (reset) begin // @[src/main/scala/fpga/Core.scala 182:38]
-      rrd_reg_bp_taken <= 1'h0; // @[src/main/scala/fpga/Core.scala 182:38]
-    end else if (_id_stage_io_out_ready_T) begin // @[src/main/scala/fpga/Core.scala 673:39]
-      rrd_reg_bp_taken <= id_stage_io_out_bits_bp_taken; // @[src/main/scala/fpga/Core.scala 681:27]
-    end else if (id_rrd_ready) begin // @[src/main/scala/fpga/Core.scala 649:23]
-      rrd_reg_bp_taken <= id_stage_io_out_bits_bp_taken; // @[src/main/scala/fpga/Core.scala 666:27]
-    end
-    if (reset) begin // @[src/main/scala/fpga/Core.scala 182:38]
-      rrd_reg_bp_attr <= 2'h0; // @[src/main/scala/fpga/Core.scala 182:38]
-    end else if (id_rrd_ready) begin // @[src/main/scala/fpga/Core.scala 649:23]
-      rrd_reg_bp_attr <= id_stage_io_out_bits_bp_attr; // @[src/main/scala/fpga/Core.scala 666:27]
-    end
-    if (reset) begin // @[src/main/scala/fpga/Core.scala 182:38]
-      rrd_reg_bp_is_ret <= 1'h0; // @[src/main/scala/fpga/Core.scala 182:38]
-    end else if (id_rrd_ready) begin // @[src/main/scala/fpga/Core.scala 649:23]
-      rrd_reg_bp_is_ret <= id_stage_io_out_bits_bp_is_ret; // @[src/main/scala/fpga/Core.scala 666:27]
-    end
-    if (reset) begin // @[src/main/scala/fpga/Core.scala 182:38]
-      rrd_reg_bp_rasindex <= 3'h0; // @[src/main/scala/fpga/Core.scala 182:38]
-    end else if (id_rrd_ready) begin // @[src/main/scala/fpga/Core.scala 649:23]
-      rrd_reg_bp_rasindex <= id_stage_io_out_bits_bp_rasindex; // @[src/main/scala/fpga/Core.scala 666:27]
-    end
-    if (reset) begin // @[src/main/scala/fpga/Core.scala 182:38]
-      rrd_reg_bp_target <= 31'h0; // @[src/main/scala/fpga/Core.scala 182:38]
-    end else if (id_rrd_ready) begin // @[src/main/scala/fpga/Core.scala 649:23]
-      rrd_reg_bp_target <= id_stage_io_out_bits_bp_target; // @[src/main/scala/fpga/Core.scala 666:27]
-    end
-    if (reset) begin // @[src/main/scala/fpga/Core.scala 182:38]
-      rrd_reg_bp_cnt <= 2'h0; // @[src/main/scala/fpga/Core.scala 182:38]
-    end else if (id_rrd_ready) begin // @[src/main/scala/fpga/Core.scala 649:23]
-      rrd_reg_bp_cnt <= id_stage_io_out_bits_bp_cnt; // @[src/main/scala/fpga/Core.scala 666:27]
+      rrd_reg_is_j <= 1'h0; // @[src/main/scala/fpga/Core.scala 182:38]
+    end else if (_id_stage_io_out_ready_T) begin // @[src/main/scala/fpga/Core.scala 700:39]
+      rrd_reg_is_j <= id_stage_io_out_bits_is_j; // @[src/main/scala/fpga/Core.scala 707:27]
     end
     if (reset) begin // @[src/main/scala/fpga/Core.scala 183:38]
-      rrd_reg_actual_attr <= 2'h0; // @[src/main/scala/fpga/Core.scala 183:38]
-    end else if (id_rrd_ready) begin // @[src/main/scala/fpga/Core.scala 649:23]
-      rrd_reg_actual_attr <= id_stage_io_out_bits_actual_attr; // @[src/main/scala/fpga/Core.scala 667:27]
+      rrd_reg_bp_taken <= 1'h0; // @[src/main/scala/fpga/Core.scala 183:38]
+    end else if (_id_stage_io_out_ready_T) begin // @[src/main/scala/fpga/Core.scala 700:39]
+      rrd_reg_bp_taken <= id_stage_io_out_bits_bp_taken; // @[src/main/scala/fpga/Core.scala 708:27]
+    end else if (id_rrd_ready) begin // @[src/main/scala/fpga/Core.scala 676:23]
+      rrd_reg_bp_taken <= id_stage_io_out_bits_bp_taken; // @[src/main/scala/fpga/Core.scala 693:27]
+    end
+    if (reset) begin // @[src/main/scala/fpga/Core.scala 183:38]
+      rrd_reg_bp_attr <= 2'h0; // @[src/main/scala/fpga/Core.scala 183:38]
+    end else if (id_rrd_ready) begin // @[src/main/scala/fpga/Core.scala 676:23]
+      rrd_reg_bp_attr <= id_stage_io_out_bits_bp_attr; // @[src/main/scala/fpga/Core.scala 693:27]
+    end
+    if (reset) begin // @[src/main/scala/fpga/Core.scala 183:38]
+      rrd_reg_bp_is_ret <= 1'h0; // @[src/main/scala/fpga/Core.scala 183:38]
+    end else if (id_rrd_ready) begin // @[src/main/scala/fpga/Core.scala 676:23]
+      rrd_reg_bp_is_ret <= id_stage_io_out_bits_bp_is_ret; // @[src/main/scala/fpga/Core.scala 693:27]
+    end
+    if (reset) begin // @[src/main/scala/fpga/Core.scala 183:38]
+      rrd_reg_bp_rasindex <= 3'h0; // @[src/main/scala/fpga/Core.scala 183:38]
+    end else if (id_rrd_ready) begin // @[src/main/scala/fpga/Core.scala 676:23]
+      rrd_reg_bp_rasindex <= id_stage_io_out_bits_bp_rasindex; // @[src/main/scala/fpga/Core.scala 693:27]
+    end
+    if (reset) begin // @[src/main/scala/fpga/Core.scala 183:38]
+      rrd_reg_bp_target <= 31'h0; // @[src/main/scala/fpga/Core.scala 183:38]
+    end else if (id_rrd_ready) begin // @[src/main/scala/fpga/Core.scala 676:23]
+      rrd_reg_bp_target <= id_stage_io_out_bits_bp_target; // @[src/main/scala/fpga/Core.scala 693:27]
+    end
+    if (reset) begin // @[src/main/scala/fpga/Core.scala 183:38]
+      rrd_reg_bp_history <= 6'h0; // @[src/main/scala/fpga/Core.scala 183:38]
+    end else if (id_rrd_ready) begin // @[src/main/scala/fpga/Core.scala 676:23]
+      rrd_reg_bp_history <= id_stage_io_out_bits_bp_history; // @[src/main/scala/fpga/Core.scala 693:27]
+    end
+    if (reset) begin // @[src/main/scala/fpga/Core.scala 183:38]
+      rrd_reg_bp_cnt <= 2'h0; // @[src/main/scala/fpga/Core.scala 183:38]
+    end else if (id_rrd_ready) begin // @[src/main/scala/fpga/Core.scala 676:23]
+      rrd_reg_bp_cnt <= id_stage_io_out_bits_bp_cnt; // @[src/main/scala/fpga/Core.scala 693:27]
+    end
+    if (reset) begin // @[src/main/scala/fpga/Core.scala 183:38]
+      rrd_reg_bp_gcnt <= 2'h0; // @[src/main/scala/fpga/Core.scala 183:38]
+    end else if (id_rrd_ready) begin // @[src/main/scala/fpga/Core.scala 676:23]
+      rrd_reg_bp_gcnt <= id_stage_io_out_bits_bp_gcnt; // @[src/main/scala/fpga/Core.scala 693:27]
     end
     if (reset) begin // @[src/main/scala/fpga/Core.scala 184:38]
-      rrd_reg_actual_is_ret <= 1'h0; // @[src/main/scala/fpga/Core.scala 184:38]
-    end else if (id_rrd_ready) begin // @[src/main/scala/fpga/Core.scala 649:23]
-      rrd_reg_actual_is_ret <= id_stage_io_out_bits_actual_is_ret; // @[src/main/scala/fpga/Core.scala 668:27]
+      rrd_reg_actual_attr <= 2'h0; // @[src/main/scala/fpga/Core.scala 184:38]
+    end else if (id_rrd_ready) begin // @[src/main/scala/fpga/Core.scala 676:23]
+      rrd_reg_actual_attr <= id_stage_io_out_bits_actual_attr; // @[src/main/scala/fpga/Core.scala 694:27]
     end
     if (reset) begin // @[src/main/scala/fpga/Core.scala 185:38]
-      rrd_reg_is_half <= 1'h0; // @[src/main/scala/fpga/Core.scala 185:38]
-    end else if (id_rrd_ready) begin // @[src/main/scala/fpga/Core.scala 649:23]
-      rrd_reg_is_half <= id_stage_io_out_bits_is_half; // @[src/main/scala/fpga/Core.scala 669:27]
+      rrd_reg_actual_is_ret <= 1'h0; // @[src/main/scala/fpga/Core.scala 185:38]
+    end else if (id_rrd_ready) begin // @[src/main/scala/fpga/Core.scala 676:23]
+      rrd_reg_actual_is_ret <= id_stage_io_out_bits_actual_is_ret; // @[src/main/scala/fpga/Core.scala 695:27]
     end
     if (reset) begin // @[src/main/scala/fpga/Core.scala 186:38]
-      rrd_reg_is_valid_inst <= 1'h0; // @[src/main/scala/fpga/Core.scala 186:38]
-    end else if (_id_stage_io_out_ready_T) begin // @[src/main/scala/fpga/Core.scala 673:39]
-      rrd_reg_is_valid_inst <= id_stage_io_out_bits_is_valid_inst; // @[src/main/scala/fpga/Core.scala 682:27]
+      rrd_reg_is_half <= 1'h0; // @[src/main/scala/fpga/Core.scala 186:38]
+    end else if (id_rrd_ready) begin // @[src/main/scala/fpga/Core.scala 676:23]
+      rrd_reg_is_half <= id_stage_io_out_bits_is_half; // @[src/main/scala/fpga/Core.scala 696:27]
     end
     if (reset) begin // @[src/main/scala/fpga/Core.scala 187:38]
-      rrd_reg_is_trap <= 1'h0; // @[src/main/scala/fpga/Core.scala 187:38]
-    end else if (_id_stage_io_out_ready_T) begin // @[src/main/scala/fpga/Core.scala 673:39]
-      rrd_reg_is_trap <= id_stage_io_out_bits_is_trap; // @[src/main/scala/fpga/Core.scala 683:27]
+      rrd_reg_is_valid_inst <= 1'h0; // @[src/main/scala/fpga/Core.scala 187:38]
+    end else if (_id_stage_io_out_ready_T) begin // @[src/main/scala/fpga/Core.scala 700:39]
+      rrd_reg_is_valid_inst <= id_stage_io_out_bits_is_valid_inst; // @[src/main/scala/fpga/Core.scala 709:27]
     end
-    if (reset) begin // @[src/main/scala/fpga/Core.scala 192:38]
-      ex1_reg_pc <= 31'h0; // @[src/main/scala/fpga/Core.scala 192:38]
-    end else if (_id_rrd_ready_T_1) begin // @[src/main/scala/fpga/Core.scala 760:20]
-      ex1_reg_pc <= rrd_reg_pc; // @[src/main/scala/fpga/Core.scala 761:27]
+    if (reset) begin // @[src/main/scala/fpga/Core.scala 188:38]
+      rrd_reg_is_trap <= 1'h0; // @[src/main/scala/fpga/Core.scala 188:38]
+    end else if (_id_stage_io_out_ready_T) begin // @[src/main/scala/fpga/Core.scala 700:39]
+      rrd_reg_is_trap <= id_stage_io_out_bits_is_trap; // @[src/main/scala/fpga/Core.scala 710:27]
     end
     if (reset) begin // @[src/main/scala/fpga/Core.scala 193:38]
-      ex1_reg_wb_addr <= 5'h0; // @[src/main/scala/fpga/Core.scala 193:38]
-    end else if (_id_rrd_ready_T_1) begin // @[src/main/scala/fpga/Core.scala 760:20]
-      ex1_reg_wb_addr <= rrd_reg_wb_addr; // @[src/main/scala/fpga/Core.scala 765:27]
+      ex1_reg_pc <= 31'h0; // @[src/main/scala/fpga/Core.scala 193:38]
+    end else if (_id_rrd_ready_T_1) begin // @[src/main/scala/fpga/Core.scala 787:20]
+      ex1_reg_pc <= rrd_reg_pc; // @[src/main/scala/fpga/Core.scala 788:27]
     end
     if (reset) begin // @[src/main/scala/fpga/Core.scala 194:38]
-      ex1_reg_op1_data <= 32'h0; // @[src/main/scala/fpga/Core.scala 194:38]
-    end else if (_id_rrd_ready_T_1) begin // @[src/main/scala/fpga/Core.scala 760:20]
+      ex1_reg_wb_addr <= 5'h0; // @[src/main/scala/fpga/Core.scala 194:38]
+    end else if (_id_rrd_ready_T_1) begin // @[src/main/scala/fpga/Core.scala 787:20]
+      ex1_reg_wb_addr <= rrd_reg_wb_addr; // @[src/main/scala/fpga/Core.scala 792:27]
+    end
+    if (reset) begin // @[src/main/scala/fpga/Core.scala 195:38]
+      ex1_reg_op1_data <= 32'h0; // @[src/main/scala/fpga/Core.scala 195:38]
+    end else if (_id_rrd_ready_T_1) begin // @[src/main/scala/fpga/Core.scala 787:20]
       if (_rrd_op1_data_T_3) begin // @[src/main/scala/chisel3/util/Mux.scala 141:16]
         if (_ex1_alu_out_T) begin // @[src/main/scala/chisel3/util/Mux.scala 141:16]
           ex1_reg_op1_data <= _ex1_alu_out_T_4;
@@ -6602,9 +6993,9 @@ module Core(
         ex1_reg_op1_data <= _rrd_op1_data_T_14;
       end
     end
-    if (reset) begin // @[src/main/scala/fpga/Core.scala 195:38]
-      ex1_reg_op2_data <= 32'h0; // @[src/main/scala/fpga/Core.scala 195:38]
-    end else if (_id_rrd_ready_T_1) begin // @[src/main/scala/fpga/Core.scala 760:20]
+    if (reset) begin // @[src/main/scala/fpga/Core.scala 196:38]
+      ex1_reg_op2_data <= 32'h0; // @[src/main/scala/fpga/Core.scala 196:38]
+    end else if (_id_rrd_ready_T_1) begin // @[src/main/scala/fpga/Core.scala 787:20]
       if (_rrd_op2_data_T_5) begin // @[src/main/scala/chisel3/util/Mux.scala 141:16]
         if (_ex1_alu_out_T) begin // @[src/main/scala/chisel3/util/Mux.scala 141:16]
           ex1_reg_op2_data <= _ex1_alu_out_T_4;
@@ -6617,9 +7008,9 @@ module Core(
         ex1_reg_op2_data <= _rrd_op2_data_T_16;
       end
     end
-    if (reset) begin // @[src/main/scala/fpga/Core.scala 196:38]
-      ex1_reg_op3_data <= 32'h0; // @[src/main/scala/fpga/Core.scala 196:38]
-    end else if (_id_rrd_ready_T_1) begin // @[src/main/scala/fpga/Core.scala 760:20]
+    if (reset) begin // @[src/main/scala/fpga/Core.scala 197:38]
+      ex1_reg_op3_data <= 32'h0; // @[src/main/scala/fpga/Core.scala 197:38]
+    end else if (_id_rrd_ready_T_1) begin // @[src/main/scala/fpga/Core.scala 787:20]
       if (_rrd_op3_data_T) begin // @[src/main/scala/chisel3/util/Mux.scala 141:16]
         ex1_reg_op3_data <= 32'h0;
       end else if (_rrd_op3_data_T_1) begin // @[src/main/scala/chisel3/util/Mux.scala 141:16]
@@ -6628,240 +7019,250 @@ module Core(
         ex1_reg_op3_data <= _rrd_op3_data_T_15;
       end
     end
-    if (reset) begin // @[src/main/scala/fpga/Core.scala 197:38]
-      ex1_reg_exe_fun <= 4'h0; // @[src/main/scala/fpga/Core.scala 197:38]
-    end else if (_id_rrd_ready_T_1) begin // @[src/main/scala/fpga/Core.scala 760:20]
-      ex1_reg_exe_fun <= rrd_reg_exe_fun; // @[src/main/scala/fpga/Core.scala 766:27]
-    end
     if (reset) begin // @[src/main/scala/fpga/Core.scala 198:38]
-      ex1_reg_rf_wen <= 1'h0; // @[src/main/scala/fpga/Core.scala 198:38]
-    end else if (ex2_reg_is_br) begin // @[src/main/scala/fpga/Core.scala 795:24]
-      ex1_reg_rf_wen <= 1'h0; // @[src/main/scala/fpga/Core.scala 797:27]
-    end else if (_id_rrd_ready_T_1) begin // @[src/main/scala/fpga/Core.scala 760:20]
-      if (rrd_stall) begin // @[src/main/scala/fpga/Core.scala 787:33]
+      ex1_reg_exe_fun <= 4'h0; // @[src/main/scala/fpga/Core.scala 198:38]
+    end else if (_id_rrd_ready_T_1) begin // @[src/main/scala/fpga/Core.scala 787:20]
+      ex1_reg_exe_fun <= rrd_reg_exe_fun; // @[src/main/scala/fpga/Core.scala 793:27]
+    end
+    if (reset) begin // @[src/main/scala/fpga/Core.scala 199:38]
+      ex1_reg_rf_wen <= 1'h0; // @[src/main/scala/fpga/Core.scala 199:38]
+    end else if (ex2_reg_is_br) begin // @[src/main/scala/fpga/Core.scala 822:24]
+      ex1_reg_rf_wen <= 1'h0; // @[src/main/scala/fpga/Core.scala 824:27]
+    end else if (_id_rrd_ready_T_1) begin // @[src/main/scala/fpga/Core.scala 787:20]
+      if (rrd_stall) begin // @[src/main/scala/fpga/Core.scala 814:33]
         ex1_reg_rf_wen <= 1'h0;
       end else begin
         ex1_reg_rf_wen <= rrd_reg_rf_wen;
       end
     end
-    if (reset) begin // @[src/main/scala/fpga/Core.scala 199:38]
-      ex1_reg_wb_sel <= 3'h0; // @[src/main/scala/fpga/Core.scala 199:38]
-    end else if (ex2_reg_is_br) begin // @[src/main/scala/fpga/Core.scala 795:24]
-      ex1_reg_wb_sel <= 3'h0; // @[src/main/scala/fpga/Core.scala 798:27]
-    end else if (_id_rrd_ready_T_1) begin // @[src/main/scala/fpga/Core.scala 760:20]
-      if (rrd_stall) begin // @[src/main/scala/fpga/Core.scala 788:33]
+    if (reset) begin // @[src/main/scala/fpga/Core.scala 200:38]
+      ex1_reg_wb_sel <= 3'h0; // @[src/main/scala/fpga/Core.scala 200:38]
+    end else if (ex2_reg_is_br) begin // @[src/main/scala/fpga/Core.scala 822:24]
+      ex1_reg_wb_sel <= 3'h0; // @[src/main/scala/fpga/Core.scala 825:27]
+    end else if (_id_rrd_ready_T_1) begin // @[src/main/scala/fpga/Core.scala 787:20]
+      if (rrd_stall) begin // @[src/main/scala/fpga/Core.scala 815:33]
         ex1_reg_wb_sel <= 3'h0;
       end else begin
         ex1_reg_wb_sel <= rrd_reg_wb_sel;
       end
     end
-    if (reset) begin // @[src/main/scala/fpga/Core.scala 200:38]
-      ex1_reg_csr_addr <= 12'h0; // @[src/main/scala/fpga/Core.scala 200:38]
-    end else if (_id_rrd_ready_T_1) begin // @[src/main/scala/fpga/Core.scala 760:20]
-      ex1_reg_csr_addr <= rrd_reg_csr_addr; // @[src/main/scala/fpga/Core.scala 768:27]
-    end
     if (reset) begin // @[src/main/scala/fpga/Core.scala 201:38]
-      ex1_reg_csr_cmd <= 2'h0; // @[src/main/scala/fpga/Core.scala 201:38]
-    end else if (_id_rrd_ready_T_1) begin // @[src/main/scala/fpga/Core.scala 760:20]
-      ex1_reg_csr_cmd <= rrd_reg_csr_cmd; // @[src/main/scala/fpga/Core.scala 769:27]
+      ex1_reg_csr_addr <= 12'h0; // @[src/main/scala/fpga/Core.scala 201:38]
+    end else if (_id_rrd_ready_T_1) begin // @[src/main/scala/fpga/Core.scala 787:20]
+      ex1_reg_csr_addr <= rrd_reg_csr_addr; // @[src/main/scala/fpga/Core.scala 795:27]
     end
     if (reset) begin // @[src/main/scala/fpga/Core.scala 202:38]
-      ex1_reg_shamt <= 2'h0; // @[src/main/scala/fpga/Core.scala 202:38]
-    end else if (_id_rrd_ready_T_1) begin // @[src/main/scala/fpga/Core.scala 760:20]
-      if (rrd_reg_op2op) begin // @[src/main/scala/fpga/Core.scala 770:33]
+      ex1_reg_csr_cmd <= 2'h0; // @[src/main/scala/fpga/Core.scala 202:38]
+    end else if (_id_rrd_ready_T_1) begin // @[src/main/scala/fpga/Core.scala 787:20]
+      ex1_reg_csr_cmd <= rrd_reg_csr_cmd; // @[src/main/scala/fpga/Core.scala 796:27]
+    end
+    if (reset) begin // @[src/main/scala/fpga/Core.scala 203:38]
+      ex1_reg_shamt <= 2'h0; // @[src/main/scala/fpga/Core.scala 203:38]
+    end else if (_id_rrd_ready_T_1) begin // @[src/main/scala/fpga/Core.scala 787:20]
+      if (rrd_reg_op2op) begin // @[src/main/scala/fpga/Core.scala 797:33]
         ex1_reg_shamt <= rrd_reg_shamt;
       end else begin
         ex1_reg_shamt <= 2'h0;
       end
     end
-    if (reset) begin // @[src/main/scala/fpga/Core.scala 203:38]
-      ex1_reg_op2op <= 1'h0; // @[src/main/scala/fpga/Core.scala 203:38]
-    end else if (_id_rrd_ready_T_1) begin // @[src/main/scala/fpga/Core.scala 760:20]
-      ex1_reg_op2op <= rrd_reg_op2op; // @[src/main/scala/fpga/Core.scala 771:27]
-    end
     if (reset) begin // @[src/main/scala/fpga/Core.scala 204:38]
-      ex1_reg_mem_w <= 3'h0; // @[src/main/scala/fpga/Core.scala 204:38]
-    end else if (_id_rrd_ready_T_1) begin // @[src/main/scala/fpga/Core.scala 760:20]
-      ex1_reg_mem_w <= rrd_reg_mem_w; // @[src/main/scala/fpga/Core.scala 774:27]
+      ex1_reg_op2op <= 1'h0; // @[src/main/scala/fpga/Core.scala 204:38]
+    end else if (_id_rrd_ready_T_1) begin // @[src/main/scala/fpga/Core.scala 787:20]
+      ex1_reg_op2op <= rrd_reg_op2op; // @[src/main/scala/fpga/Core.scala 798:27]
     end
     if (reset) begin // @[src/main/scala/fpga/Core.scala 205:38]
-      ex1_reg_is_bflen <= 1'h0; // @[src/main/scala/fpga/Core.scala 205:38]
-    end else if (_id_rrd_ready_T_1) begin // @[src/main/scala/fpga/Core.scala 760:20]
-      ex1_reg_is_bflen <= rrd_reg_is_bflen; // @[src/main/scala/fpga/Core.scala 772:27]
+      ex1_reg_mem_w <= 3'h0; // @[src/main/scala/fpga/Core.scala 205:38]
+    end else if (_id_rrd_ready_T_1) begin // @[src/main/scala/fpga/Core.scala 787:20]
+      ex1_reg_mem_w <= rrd_reg_mem_w; // @[src/main/scala/fpga/Core.scala 801:27]
     end
     if (reset) begin // @[src/main/scala/fpga/Core.scala 206:38]
-      ex1_reg_imm_len <= 5'h0; // @[src/main/scala/fpga/Core.scala 206:38]
-    end else if (_id_rrd_ready_T_1) begin // @[src/main/scala/fpga/Core.scala 760:20]
-      ex1_reg_imm_len <= rrd_reg_op2_data_im0[10:6]; // @[src/main/scala/fpga/Core.scala 773:27]
+      ex1_reg_is_bflen <= 1'h0; // @[src/main/scala/fpga/Core.scala 206:38]
+    end else if (_id_rrd_ready_T_1) begin // @[src/main/scala/fpga/Core.scala 787:20]
+      ex1_reg_is_bflen <= rrd_reg_is_bflen; // @[src/main/scala/fpga/Core.scala 799:27]
     end
     if (reset) begin // @[src/main/scala/fpga/Core.scala 207:38]
-      ex1_reg_is_j <= 1'h0; // @[src/main/scala/fpga/Core.scala 207:38]
-    end else if (ex2_reg_is_br) begin // @[src/main/scala/fpga/Core.scala 795:24]
-      ex1_reg_is_j <= 1'h0; // @[src/main/scala/fpga/Core.scala 801:27]
-    end else if (_id_rrd_ready_T_1) begin // @[src/main/scala/fpga/Core.scala 760:20]
-      if (rrd_stall) begin // @[src/main/scala/fpga/Core.scala 791:33]
+      ex1_reg_imm_len <= 5'h0; // @[src/main/scala/fpga/Core.scala 207:38]
+    end else if (_id_rrd_ready_T_1) begin // @[src/main/scala/fpga/Core.scala 787:20]
+      ex1_reg_imm_len <= rrd_reg_op2_data_im0[10:6]; // @[src/main/scala/fpga/Core.scala 800:27]
+    end
+    if (reset) begin // @[src/main/scala/fpga/Core.scala 208:38]
+      ex1_reg_is_j <= 1'h0; // @[src/main/scala/fpga/Core.scala 208:38]
+    end else if (ex2_reg_is_br) begin // @[src/main/scala/fpga/Core.scala 822:24]
+      ex1_reg_is_j <= 1'h0; // @[src/main/scala/fpga/Core.scala 828:27]
+    end else if (_id_rrd_ready_T_1) begin // @[src/main/scala/fpga/Core.scala 787:20]
+      if (rrd_stall) begin // @[src/main/scala/fpga/Core.scala 818:33]
         ex1_reg_is_j <= 1'h0;
       end else begin
         ex1_reg_is_j <= rrd_reg_is_j;
       end
     end
-    if (reset) begin // @[src/main/scala/fpga/Core.scala 208:38]
-      ex1_reg_bp_taken <= 1'h0; // @[src/main/scala/fpga/Core.scala 208:38]
-    end else if (ex2_reg_is_br) begin // @[src/main/scala/fpga/Core.scala 795:24]
-      ex1_reg_bp_taken <= 1'h0; // @[src/main/scala/fpga/Core.scala 802:27]
-    end else if (_id_rrd_ready_T_1) begin // @[src/main/scala/fpga/Core.scala 760:20]
-      if (rrd_stall) begin // @[src/main/scala/fpga/Core.scala 792:33]
+    if (reset) begin // @[src/main/scala/fpga/Core.scala 209:38]
+      ex1_reg_bp_taken <= 1'h0; // @[src/main/scala/fpga/Core.scala 209:38]
+    end else if (ex2_reg_is_br) begin // @[src/main/scala/fpga/Core.scala 822:24]
+      ex1_reg_bp_taken <= 1'h0; // @[src/main/scala/fpga/Core.scala 829:27]
+    end else if (_id_rrd_ready_T_1) begin // @[src/main/scala/fpga/Core.scala 787:20]
+      if (rrd_stall) begin // @[src/main/scala/fpga/Core.scala 819:33]
         ex1_reg_bp_taken <= 1'h0;
       end else begin
         ex1_reg_bp_taken <= rrd_reg_bp_taken;
       end
     end
-    if (reset) begin // @[src/main/scala/fpga/Core.scala 208:38]
-      ex1_reg_bp_attr <= 2'h0; // @[src/main/scala/fpga/Core.scala 208:38]
-    end else if (_id_rrd_ready_T_1) begin // @[src/main/scala/fpga/Core.scala 760:20]
-      ex1_reg_bp_attr <= rrd_reg_bp_attr; // @[src/main/scala/fpga/Core.scala 775:27]
-    end
-    if (reset) begin // @[src/main/scala/fpga/Core.scala 208:38]
-      ex1_reg_bp_is_ret <= 1'h0; // @[src/main/scala/fpga/Core.scala 208:38]
-    end else if (_id_rrd_ready_T_1) begin // @[src/main/scala/fpga/Core.scala 760:20]
-      ex1_reg_bp_is_ret <= rrd_reg_bp_is_ret; // @[src/main/scala/fpga/Core.scala 775:27]
-    end
-    if (reset) begin // @[src/main/scala/fpga/Core.scala 208:38]
-      ex1_reg_bp_rasindex <= 3'h0; // @[src/main/scala/fpga/Core.scala 208:38]
-    end else if (_id_rrd_ready_T_1) begin // @[src/main/scala/fpga/Core.scala 760:20]
-      ex1_reg_bp_rasindex <= rrd_reg_bp_rasindex; // @[src/main/scala/fpga/Core.scala 775:27]
-    end
-    if (reset) begin // @[src/main/scala/fpga/Core.scala 208:38]
-      ex1_reg_bp_target <= 31'h0; // @[src/main/scala/fpga/Core.scala 208:38]
-    end else if (_id_rrd_ready_T_1) begin // @[src/main/scala/fpga/Core.scala 760:20]
-      ex1_reg_bp_target <= rrd_reg_bp_target; // @[src/main/scala/fpga/Core.scala 775:27]
-    end
-    if (reset) begin // @[src/main/scala/fpga/Core.scala 208:38]
-      ex1_reg_bp_cnt <= 2'h0; // @[src/main/scala/fpga/Core.scala 208:38]
-    end else if (_id_rrd_ready_T_1) begin // @[src/main/scala/fpga/Core.scala 760:20]
-      ex1_reg_bp_cnt <= rrd_reg_bp_cnt; // @[src/main/scala/fpga/Core.scala 775:27]
+    if (reset) begin // @[src/main/scala/fpga/Core.scala 209:38]
+      ex1_reg_bp_attr <= 2'h0; // @[src/main/scala/fpga/Core.scala 209:38]
+    end else if (_id_rrd_ready_T_1) begin // @[src/main/scala/fpga/Core.scala 787:20]
+      ex1_reg_bp_attr <= rrd_reg_bp_attr; // @[src/main/scala/fpga/Core.scala 802:27]
     end
     if (reset) begin // @[src/main/scala/fpga/Core.scala 209:38]
-      ex1_reg_actual_attr <= 2'h0; // @[src/main/scala/fpga/Core.scala 209:38]
-    end else if (_id_rrd_ready_T_1) begin // @[src/main/scala/fpga/Core.scala 760:20]
-      ex1_reg_actual_attr <= rrd_reg_actual_attr; // @[src/main/scala/fpga/Core.scala 776:27]
+      ex1_reg_bp_is_ret <= 1'h0; // @[src/main/scala/fpga/Core.scala 209:38]
+    end else if (_id_rrd_ready_T_1) begin // @[src/main/scala/fpga/Core.scala 787:20]
+      ex1_reg_bp_is_ret <= rrd_reg_bp_is_ret; // @[src/main/scala/fpga/Core.scala 802:27]
+    end
+    if (reset) begin // @[src/main/scala/fpga/Core.scala 209:38]
+      ex1_reg_bp_rasindex <= 3'h0; // @[src/main/scala/fpga/Core.scala 209:38]
+    end else if (_id_rrd_ready_T_1) begin // @[src/main/scala/fpga/Core.scala 787:20]
+      ex1_reg_bp_rasindex <= rrd_reg_bp_rasindex; // @[src/main/scala/fpga/Core.scala 802:27]
+    end
+    if (reset) begin // @[src/main/scala/fpga/Core.scala 209:38]
+      ex1_reg_bp_target <= 31'h0; // @[src/main/scala/fpga/Core.scala 209:38]
+    end else if (_id_rrd_ready_T_1) begin // @[src/main/scala/fpga/Core.scala 787:20]
+      ex1_reg_bp_target <= rrd_reg_bp_target; // @[src/main/scala/fpga/Core.scala 802:27]
+    end
+    if (reset) begin // @[src/main/scala/fpga/Core.scala 209:38]
+      ex1_reg_bp_history <= 6'h0; // @[src/main/scala/fpga/Core.scala 209:38]
+    end else if (_id_rrd_ready_T_1) begin // @[src/main/scala/fpga/Core.scala 787:20]
+      ex1_reg_bp_history <= rrd_reg_bp_history; // @[src/main/scala/fpga/Core.scala 802:27]
+    end
+    if (reset) begin // @[src/main/scala/fpga/Core.scala 209:38]
+      ex1_reg_bp_cnt <= 2'h0; // @[src/main/scala/fpga/Core.scala 209:38]
+    end else if (_id_rrd_ready_T_1) begin // @[src/main/scala/fpga/Core.scala 787:20]
+      ex1_reg_bp_cnt <= rrd_reg_bp_cnt; // @[src/main/scala/fpga/Core.scala 802:27]
+    end
+    if (reset) begin // @[src/main/scala/fpga/Core.scala 209:38]
+      ex1_reg_bp_gcnt <= 2'h0; // @[src/main/scala/fpga/Core.scala 209:38]
+    end else if (_id_rrd_ready_T_1) begin // @[src/main/scala/fpga/Core.scala 787:20]
+      ex1_reg_bp_gcnt <= rrd_reg_bp_gcnt; // @[src/main/scala/fpga/Core.scala 802:27]
     end
     if (reset) begin // @[src/main/scala/fpga/Core.scala 210:38]
-      ex1_reg_actual_is_ret <= 1'h0; // @[src/main/scala/fpga/Core.scala 210:38]
-    end else if (_id_rrd_ready_T_1) begin // @[src/main/scala/fpga/Core.scala 760:20]
-      ex1_reg_actual_is_ret <= rrd_reg_actual_is_ret; // @[src/main/scala/fpga/Core.scala 777:27]
+      ex1_reg_actual_attr <= 2'h0; // @[src/main/scala/fpga/Core.scala 210:38]
+    end else if (_id_rrd_ready_T_1) begin // @[src/main/scala/fpga/Core.scala 787:20]
+      ex1_reg_actual_attr <= rrd_reg_actual_attr; // @[src/main/scala/fpga/Core.scala 803:27]
     end
     if (reset) begin // @[src/main/scala/fpga/Core.scala 211:38]
-      ex1_reg_is_half <= 1'h0; // @[src/main/scala/fpga/Core.scala 211:38]
-    end else if (_id_rrd_ready_T_1) begin // @[src/main/scala/fpga/Core.scala 760:20]
-      ex1_reg_is_half <= rrd_reg_is_half; // @[src/main/scala/fpga/Core.scala 778:27]
+      ex1_reg_actual_is_ret <= 1'h0; // @[src/main/scala/fpga/Core.scala 211:38]
+    end else if (_id_rrd_ready_T_1) begin // @[src/main/scala/fpga/Core.scala 787:20]
+      ex1_reg_actual_is_ret <= rrd_reg_actual_is_ret; // @[src/main/scala/fpga/Core.scala 804:27]
     end
     if (reset) begin // @[src/main/scala/fpga/Core.scala 212:38]
-      ex1_reg_is_valid_inst <= 1'h0; // @[src/main/scala/fpga/Core.scala 212:38]
-    end else if (ex2_reg_is_br) begin // @[src/main/scala/fpga/Core.scala 795:24]
-      ex1_reg_is_valid_inst <= 1'h0; // @[src/main/scala/fpga/Core.scala 796:27]
-    end else if (_id_rrd_ready_T_1) begin // @[src/main/scala/fpga/Core.scala 760:20]
-      ex1_reg_is_valid_inst <= rrd_reg_is_valid_inst & _id_rrd_ready_T; // @[src/main/scala/fpga/Core.scala 786:27]
+      ex1_reg_is_half <= 1'h0; // @[src/main/scala/fpga/Core.scala 212:38]
+    end else if (_id_rrd_ready_T_1) begin // @[src/main/scala/fpga/Core.scala 787:20]
+      ex1_reg_is_half <= rrd_reg_is_half; // @[src/main/scala/fpga/Core.scala 805:27]
     end
     if (reset) begin // @[src/main/scala/fpga/Core.scala 213:38]
-      ex1_reg_is_trap <= 1'h0; // @[src/main/scala/fpga/Core.scala 213:38]
-    end else if (ex2_reg_is_br) begin // @[src/main/scala/fpga/Core.scala 795:24]
-      ex1_reg_is_trap <= 1'h0; // @[src/main/scala/fpga/Core.scala 803:27]
-    end else if (_id_rrd_ready_T_1) begin // @[src/main/scala/fpga/Core.scala 760:20]
-      if (rrd_stall) begin // @[src/main/scala/fpga/Core.scala 793:33]
+      ex1_reg_is_valid_inst <= 1'h0; // @[src/main/scala/fpga/Core.scala 213:38]
+    end else if (ex2_reg_is_br) begin // @[src/main/scala/fpga/Core.scala 822:24]
+      ex1_reg_is_valid_inst <= 1'h0; // @[src/main/scala/fpga/Core.scala 823:27]
+    end else if (_id_rrd_ready_T_1) begin // @[src/main/scala/fpga/Core.scala 787:20]
+      ex1_reg_is_valid_inst <= rrd_reg_is_valid_inst & _id_rrd_ready_T; // @[src/main/scala/fpga/Core.scala 813:27]
+    end
+    if (reset) begin // @[src/main/scala/fpga/Core.scala 214:38]
+      ex1_reg_is_trap <= 1'h0; // @[src/main/scala/fpga/Core.scala 214:38]
+    end else if (ex2_reg_is_br) begin // @[src/main/scala/fpga/Core.scala 822:24]
+      ex1_reg_is_trap <= 1'h0; // @[src/main/scala/fpga/Core.scala 830:27]
+    end else if (_id_rrd_ready_T_1) begin // @[src/main/scala/fpga/Core.scala 787:20]
+      if (rrd_stall) begin // @[src/main/scala/fpga/Core.scala 820:33]
         ex1_reg_is_trap <= 1'h0;
       end else begin
         ex1_reg_is_trap <= rrd_reg_is_trap;
       end
     end
-    if (reset) begin // @[src/main/scala/fpga/Core.scala 214:38]
-      ex1_reg_is_mret <= 1'h0; // @[src/main/scala/fpga/Core.scala 214:38]
-    end else if (ex2_reg_is_br) begin // @[src/main/scala/fpga/Core.scala 795:24]
-      ex1_reg_is_mret <= 1'h0; // @[src/main/scala/fpga/Core.scala 799:27]
-    end else if (_id_rrd_ready_T_1) begin // @[src/main/scala/fpga/Core.scala 760:20]
-      ex1_reg_is_mret <= _id_rrd_ready_T & (rrd_reg_exe_fun == 4'hf & rrd_reg_mem_w == 3'h3); // @[src/main/scala/fpga/Core.scala 789:27]
-    end
-    if (reset) begin // @[src/main/scala/fpga/Core.scala 217:38]
-      ex1_reg_mem_use_reg <= 1'h0; // @[src/main/scala/fpga/Core.scala 217:38]
-    end else if (_id_rrd_ready_T_1) begin // @[src/main/scala/fpga/Core.scala 760:20]
-      ex1_reg_mem_use_reg <= rrd_mem_use_reg; // @[src/main/scala/fpga/Core.scala 781:27]
+    if (reset) begin // @[src/main/scala/fpga/Core.scala 215:38]
+      ex1_reg_is_mret <= 1'h0; // @[src/main/scala/fpga/Core.scala 215:38]
+    end else if (ex2_reg_is_br) begin // @[src/main/scala/fpga/Core.scala 822:24]
+      ex1_reg_is_mret <= 1'h0; // @[src/main/scala/fpga/Core.scala 826:27]
+    end else if (_id_rrd_ready_T_1) begin // @[src/main/scala/fpga/Core.scala 787:20]
+      ex1_reg_is_mret <= _id_rrd_ready_T & (rrd_reg_exe_fun == 4'hf & rrd_reg_mem_w == 3'h3); // @[src/main/scala/fpga/Core.scala 816:27]
     end
     if (reset) begin // @[src/main/scala/fpga/Core.scala 218:38]
-      ex1_reg_inst2_use_reg <= 1'h0; // @[src/main/scala/fpga/Core.scala 218:38]
-    end else if (_id_rrd_ready_T_1) begin // @[src/main/scala/fpga/Core.scala 760:20]
-      ex1_reg_inst2_use_reg <= rrd_inst2_use_reg; // @[src/main/scala/fpga/Core.scala 782:27]
+      ex1_reg_mem_use_reg <= 1'h0; // @[src/main/scala/fpga/Core.scala 218:38]
+    end else if (_id_rrd_ready_T_1) begin // @[src/main/scala/fpga/Core.scala 787:20]
+      ex1_reg_mem_use_reg <= rrd_mem_use_reg; // @[src/main/scala/fpga/Core.scala 808:27]
     end
     if (reset) begin // @[src/main/scala/fpga/Core.scala 219:38]
-      ex1_reg_inst3_use_reg <= 1'h0; // @[src/main/scala/fpga/Core.scala 219:38]
-    end else if (_id_rrd_ready_T_1) begin // @[src/main/scala/fpga/Core.scala 760:20]
-      ex1_reg_inst3_use_reg <= rrd_inst3_use_reg; // @[src/main/scala/fpga/Core.scala 783:27]
+      ex1_reg_inst2_use_reg <= 1'h0; // @[src/main/scala/fpga/Core.scala 219:38]
+    end else if (_id_rrd_ready_T_1) begin // @[src/main/scala/fpga/Core.scala 787:20]
+      ex1_reg_inst2_use_reg <= rrd_inst2_use_reg; // @[src/main/scala/fpga/Core.scala 809:27]
     end
     if (reset) begin // @[src/main/scala/fpga/Core.scala 220:38]
-      ex1_reg_is_br <= 1'h0; // @[src/main/scala/fpga/Core.scala 220:38]
-    end else if (ex2_reg_is_br) begin // @[src/main/scala/fpga/Core.scala 795:24]
-      ex1_reg_is_br <= 1'h0; // @[src/main/scala/fpga/Core.scala 800:27]
-    end else if (_id_rrd_ready_T_1) begin // @[src/main/scala/fpga/Core.scala 760:20]
-      if (rrd_stall) begin // @[src/main/scala/fpga/Core.scala 790:33]
+      ex1_reg_inst3_use_reg <= 1'h0; // @[src/main/scala/fpga/Core.scala 220:38]
+    end else if (_id_rrd_ready_T_1) begin // @[src/main/scala/fpga/Core.scala 787:20]
+      ex1_reg_inst3_use_reg <= rrd_inst3_use_reg; // @[src/main/scala/fpga/Core.scala 810:27]
+    end
+    if (reset) begin // @[src/main/scala/fpga/Core.scala 221:38]
+      ex1_reg_is_br <= 1'h0; // @[src/main/scala/fpga/Core.scala 221:38]
+    end else if (ex2_reg_is_br) begin // @[src/main/scala/fpga/Core.scala 822:24]
+      ex1_reg_is_br <= 1'h0; // @[src/main/scala/fpga/Core.scala 827:27]
+    end else if (_id_rrd_ready_T_1) begin // @[src/main/scala/fpga/Core.scala 787:20]
+      if (rrd_stall) begin // @[src/main/scala/fpga/Core.scala 817:33]
         ex1_reg_is_br <= 1'h0;
       end else begin
         ex1_reg_is_br <= rrd_reg_is_br;
       end
     end
-    if (reset) begin // @[src/main/scala/fpga/Core.scala 221:38]
-      ex1_reg_direct_jbr_pc <= 31'h0; // @[src/main/scala/fpga/Core.scala 221:38]
-    end else if (_id_rrd_ready_T_1) begin // @[src/main/scala/fpga/Core.scala 760:20]
-      ex1_reg_direct_jbr_pc <= rrd_direct_jbr_pc; // @[src/main/scala/fpga/Core.scala 767:27]
-    end
-    if (reset) begin // @[src/main/scala/fpga/Core.scala 224:38]
-      ex2_reg_pc <= 31'h0; // @[src/main/scala/fpga/Core.scala 224:38]
-    end else if (_id_rrd_ready_T_1) begin // @[src/main/scala/fpga/Core.scala 1130:21]
-      ex2_reg_pc <= ex1_reg_pc; // @[src/main/scala/fpga/Core.scala 1131:24]
+    if (reset) begin // @[src/main/scala/fpga/Core.scala 222:38]
+      ex1_reg_direct_jbr_pc <= 31'h0; // @[src/main/scala/fpga/Core.scala 222:38]
+    end else if (_id_rrd_ready_T_1) begin // @[src/main/scala/fpga/Core.scala 787:20]
+      ex1_reg_direct_jbr_pc <= rrd_direct_jbr_pc; // @[src/main/scala/fpga/Core.scala 794:27]
     end
     if (reset) begin // @[src/main/scala/fpga/Core.scala 225:38]
-      ex2_reg_wb_addr <= 5'h0; // @[src/main/scala/fpga/Core.scala 225:38]
-    end else if (_id_rrd_ready_T_1) begin // @[src/main/scala/fpga/Core.scala 1130:21]
-      ex2_reg_wb_addr <= ex1_reg_wb_addr; // @[src/main/scala/fpga/Core.scala 1132:24]
+      ex2_reg_pc <= 31'h0; // @[src/main/scala/fpga/Core.scala 225:38]
+    end else if (_id_rrd_ready_T_1) begin // @[src/main/scala/fpga/Core.scala 1197:21]
+      ex2_reg_pc <= ex1_reg_pc; // @[src/main/scala/fpga/Core.scala 1198:24]
     end
     if (reset) begin // @[src/main/scala/fpga/Core.scala 226:38]
-      ex2_reg_mullu <= 48'h0; // @[src/main/scala/fpga/Core.scala 226:38]
-    end else if (_id_rrd_ready_T_1) begin // @[src/main/scala/fpga/Core.scala 1130:21]
-      ex2_reg_mullu <= ex1_mullu; // @[src/main/scala/fpga/Core.scala 1134:24]
+      ex2_reg_wb_addr <= 5'h0; // @[src/main/scala/fpga/Core.scala 226:38]
+    end else if (_id_rrd_ready_T_1) begin // @[src/main/scala/fpga/Core.scala 1197:21]
+      ex2_reg_wb_addr <= ex1_reg_wb_addr; // @[src/main/scala/fpga/Core.scala 1199:24]
     end
     if (reset) begin // @[src/main/scala/fpga/Core.scala 227:38]
-      ex2_reg_mulls <= 32'h0; // @[src/main/scala/fpga/Core.scala 227:38]
-    end else if (_id_rrd_ready_T_1) begin // @[src/main/scala/fpga/Core.scala 1130:21]
-      ex2_reg_mulls <= ex1_mulls; // @[src/main/scala/fpga/Core.scala 1135:24]
+      ex2_reg_mullu <= 48'h0; // @[src/main/scala/fpga/Core.scala 227:38]
+    end else if (_id_rrd_ready_T_1) begin // @[src/main/scala/fpga/Core.scala 1197:21]
+      ex2_reg_mullu <= ex1_mullu; // @[src/main/scala/fpga/Core.scala 1201:24]
     end
     if (reset) begin // @[src/main/scala/fpga/Core.scala 228:38]
-      ex2_reg_mulhuu <= 48'h0; // @[src/main/scala/fpga/Core.scala 228:38]
-    end else if (_id_rrd_ready_T_1) begin // @[src/main/scala/fpga/Core.scala 1130:21]
-      ex2_reg_mulhuu <= ex1_mulhuu; // @[src/main/scala/fpga/Core.scala 1136:24]
+      ex2_reg_mulls <= 32'h0; // @[src/main/scala/fpga/Core.scala 228:38]
+    end else if (_id_rrd_ready_T_1) begin // @[src/main/scala/fpga/Core.scala 1197:21]
+      ex2_reg_mulls <= ex1_mulls; // @[src/main/scala/fpga/Core.scala 1202:24]
     end
     if (reset) begin // @[src/main/scala/fpga/Core.scala 229:38]
-      ex2_reg_mulhss <= 48'sh0; // @[src/main/scala/fpga/Core.scala 229:38]
-    end else if (_id_rrd_ready_T_1) begin // @[src/main/scala/fpga/Core.scala 1130:21]
-      ex2_reg_mulhss <= ex1_mulhss; // @[src/main/scala/fpga/Core.scala 1137:24]
+      ex2_reg_mulhuu <= 48'h0; // @[src/main/scala/fpga/Core.scala 229:38]
+    end else if (_id_rrd_ready_T_1) begin // @[src/main/scala/fpga/Core.scala 1197:21]
+      ex2_reg_mulhuu <= ex1_mulhuu; // @[src/main/scala/fpga/Core.scala 1203:24]
     end
     if (reset) begin // @[src/main/scala/fpga/Core.scala 230:38]
-      ex2_reg_mulhsu <= 48'sh0; // @[src/main/scala/fpga/Core.scala 230:38]
-    end else if (_id_rrd_ready_T_1) begin // @[src/main/scala/fpga/Core.scala 1130:21]
-      ex2_reg_mulhsu <= ex1_mulhsu; // @[src/main/scala/fpga/Core.scala 1138:24]
+      ex2_reg_mulhss <= 48'sh0; // @[src/main/scala/fpga/Core.scala 230:38]
+    end else if (_id_rrd_ready_T_1) begin // @[src/main/scala/fpga/Core.scala 1197:21]
+      ex2_reg_mulhss <= ex1_mulhss; // @[src/main/scala/fpga/Core.scala 1204:24]
     end
     if (reset) begin // @[src/main/scala/fpga/Core.scala 231:38]
-      ex2_reg_exe_fun <= 4'h0; // @[src/main/scala/fpga/Core.scala 231:38]
-    end else if (_id_rrd_ready_T_1) begin // @[src/main/scala/fpga/Core.scala 1130:21]
-      ex2_reg_exe_fun <= ex1_reg_exe_fun; // @[src/main/scala/fpga/Core.scala 1140:24]
+      ex2_reg_mulhsu <= 48'sh0; // @[src/main/scala/fpga/Core.scala 231:38]
+    end else if (_id_rrd_ready_T_1) begin // @[src/main/scala/fpga/Core.scala 1197:21]
+      ex2_reg_mulhsu <= ex1_mulhsu; // @[src/main/scala/fpga/Core.scala 1205:24]
     end
     if (reset) begin // @[src/main/scala/fpga/Core.scala 232:38]
-      ex2_reg_rf_wen <= 1'h0; // @[src/main/scala/fpga/Core.scala 232:38]
-    end else if (mem2_dram_stall & ~ex2_reg_div_stall) begin // @[src/main/scala/fpga/Core.scala 1163:43]
-      ex2_reg_rf_wen <= 1'h0; // @[src/main/scala/fpga/Core.scala 1165:27]
-    end else if (_id_rrd_ready_T_1) begin // @[src/main/scala/fpga/Core.scala 1130:21]
-      ex2_reg_rf_wen <= ex1_en & ex1_reg_rf_wen; // @[src/main/scala/fpga/Core.scala 1141:24]
+      ex2_reg_exe_fun <= 4'h0; // @[src/main/scala/fpga/Core.scala 232:38]
+    end else if (_id_rrd_ready_T_1) begin // @[src/main/scala/fpga/Core.scala 1197:21]
+      ex2_reg_exe_fun <= ex1_reg_exe_fun; // @[src/main/scala/fpga/Core.scala 1207:24]
     end
     if (reset) begin // @[src/main/scala/fpga/Core.scala 233:38]
-      ex2_reg_fun_sel <= 3'h0; // @[src/main/scala/fpga/Core.scala 233:38]
-    end else if (_id_rrd_ready_T_1) begin // @[src/main/scala/fpga/Core.scala 1130:21]
+      ex2_reg_rf_wen <= 1'h0; // @[src/main/scala/fpga/Core.scala 233:38]
+    end else if (mem2_dram_stall & ~ex2_reg_div_stall) begin // @[src/main/scala/fpga/Core.scala 1230:43]
+      ex2_reg_rf_wen <= 1'h0; // @[src/main/scala/fpga/Core.scala 1232:27]
+    end else if (_id_rrd_ready_T_1) begin // @[src/main/scala/fpga/Core.scala 1197:21]
+      ex2_reg_rf_wen <= ex1_en & ex1_reg_rf_wen; // @[src/main/scala/fpga/Core.scala 1208:24]
+    end
+    if (reset) begin // @[src/main/scala/fpga/Core.scala 234:38]
+      ex2_reg_fun_sel <= 3'h0; // @[src/main/scala/fpga/Core.scala 234:38]
+    end else if (_id_rrd_ready_T_1) begin // @[src/main/scala/fpga/Core.scala 1197:21]
       if (_ex1_fun_sel_T_6) begin // @[src/main/scala/chisel3/util/Mux.scala 141:16]
         ex2_reg_fun_sel <= 3'h2;
       end else if (_ex1_fun_sel_T_2) begin // @[src/main/scala/chisel3/util/Mux.scala 141:16]
@@ -6870,9 +7271,9 @@ module Core(
         ex2_reg_fun_sel <= _ex1_fun_sel_T_15;
       end
     end
-    if (reset) begin // @[src/main/scala/fpga/Core.scala 234:38]
-      ex2_reg_alu_out <= 32'h0; // @[src/main/scala/fpga/Core.scala 234:38]
-    end else if (_id_rrd_ready_T_1) begin // @[src/main/scala/fpga/Core.scala 1130:21]
+    if (reset) begin // @[src/main/scala/fpga/Core.scala 235:38]
+      ex2_reg_alu_out <= 32'h0; // @[src/main/scala/fpga/Core.scala 235:38]
+    end else if (_id_rrd_ready_T_1) begin // @[src/main/scala/fpga/Core.scala 1197:21]
       if (_ex1_alu_out_T) begin // @[src/main/scala/chisel3/util/Mux.scala 141:16]
         ex2_reg_alu_out <= _ex1_alu_out_T_4;
       end else if (_ex1_alu_out_T_5) begin // @[src/main/scala/chisel3/util/Mux.scala 141:16]
@@ -6881,9 +7282,9 @@ module Core(
         ex2_reg_alu_out <= _ex1_alu_out_T_98;
       end
     end
-    if (reset) begin // @[src/main/scala/fpga/Core.scala 235:38]
-      ex2_reg_pc_bit_out <= 32'h0; // @[src/main/scala/fpga/Core.scala 235:38]
-    end else if (_id_rrd_ready_T_1) begin // @[src/main/scala/fpga/Core.scala 1130:21]
+    if (reset) begin // @[src/main/scala/fpga/Core.scala 236:38]
+      ex2_reg_pc_bit_out <= 32'h0; // @[src/main/scala/fpga/Core.scala 236:38]
+    end else if (_id_rrd_ready_T_1) begin // @[src/main/scala/fpga/Core.scala 1197:21]
       if (_ex1_pc_bit_out_T) begin // @[src/main/scala/chisel3/util/Mux.scala 141:16]
         ex2_reg_pc_bit_out <= _ex1_pc_bit_out_T_1;
       end else if (_ex1_alu_out_T_44) begin // @[src/main/scala/chisel3/util/Mux.scala 141:16]
@@ -6892,325 +7293,325 @@ module Core(
         ex2_reg_pc_bit_out <= _ex1_pc_bit_out_T_868;
       end
     end
-    if (reset) begin // @[src/main/scala/fpga/Core.scala 236:38]
-      ex2_reg_op3_data <= 32'h0; // @[src/main/scala/fpga/Core.scala 236:38]
-    end else if (_id_rrd_ready_T_1) begin // @[src/main/scala/fpga/Core.scala 1130:21]
-      ex2_reg_op3_data <= ex1_reg_op3_data; // @[src/main/scala/fpga/Core.scala 1143:24]
-    end
     if (reset) begin // @[src/main/scala/fpga/Core.scala 237:38]
-      ex2_reg_is_valid_inst <= 1'h0; // @[src/main/scala/fpga/Core.scala 237:38]
-    end else if (mem2_dram_stall & ~ex2_reg_div_stall) begin // @[src/main/scala/fpga/Core.scala 1163:43]
-      ex2_reg_is_valid_inst <= 1'h0; // @[src/main/scala/fpga/Core.scala 1167:27]
-    end else if (_id_rrd_ready_T_1) begin // @[src/main/scala/fpga/Core.scala 1130:21]
-      ex2_reg_is_valid_inst <= ex1_is_valid_inst; // @[src/main/scala/fpga/Core.scala 1145:27]
+      ex2_reg_op3_data <= 32'h0; // @[src/main/scala/fpga/Core.scala 237:38]
+    end else if (_id_rrd_ready_T_1) begin // @[src/main/scala/fpga/Core.scala 1197:21]
+      ex2_reg_op3_data <= ex1_reg_op3_data; // @[src/main/scala/fpga/Core.scala 1210:24]
     end
-    if (reset) begin // @[src/main/scala/fpga/Core.scala 240:38]
-      ex2_reg_divrem <= 1'h0; // @[src/main/scala/fpga/Core.scala 240:38]
-    end else if (mem2_dram_stall & ~ex2_reg_div_stall) begin // @[src/main/scala/fpga/Core.scala 1163:43]
-      ex2_reg_divrem <= 1'h0; // @[src/main/scala/fpga/Core.scala 1166:27]
-    end else if (_id_rrd_ready_T_1) begin // @[src/main/scala/fpga/Core.scala 1130:21]
-      ex2_reg_divrem <= ex1_divrem & ex1_en; // @[src/main/scala/fpga/Core.scala 1146:31]
+    if (reset) begin // @[src/main/scala/fpga/Core.scala 238:38]
+      ex2_reg_is_valid_inst <= 1'h0; // @[src/main/scala/fpga/Core.scala 238:38]
+    end else if (mem2_dram_stall & ~ex2_reg_div_stall) begin // @[src/main/scala/fpga/Core.scala 1230:43]
+      ex2_reg_is_valid_inst <= 1'h0; // @[src/main/scala/fpga/Core.scala 1234:27]
+    end else if (_id_rrd_ready_T_1) begin // @[src/main/scala/fpga/Core.scala 1197:21]
+      ex2_reg_is_valid_inst <= ex1_is_valid_inst; // @[src/main/scala/fpga/Core.scala 1212:27]
     end
     if (reset) begin // @[src/main/scala/fpga/Core.scala 241:38]
-      ex2_reg_sign_op1 <= 1'h0; // @[src/main/scala/fpga/Core.scala 241:38]
-    end else if (_id_rrd_ready_T_1) begin // @[src/main/scala/fpga/Core.scala 1130:21]
-      ex2_reg_sign_op1 <= ex1_sign_op1; // @[src/main/scala/fpga/Core.scala 1149:31]
+      ex2_reg_divrem <= 1'h0; // @[src/main/scala/fpga/Core.scala 241:38]
+    end else if (mem2_dram_stall & ~ex2_reg_div_stall) begin // @[src/main/scala/fpga/Core.scala 1230:43]
+      ex2_reg_divrem <= 1'h0; // @[src/main/scala/fpga/Core.scala 1233:27]
+    end else if (_id_rrd_ready_T_1) begin // @[src/main/scala/fpga/Core.scala 1197:21]
+      ex2_reg_divrem <= ex1_divrem & ex1_en; // @[src/main/scala/fpga/Core.scala 1213:31]
     end
     if (reset) begin // @[src/main/scala/fpga/Core.scala 242:38]
-      ex2_reg_sign_op12 <= 1'h0; // @[src/main/scala/fpga/Core.scala 242:38]
-    end else if (_id_rrd_ready_T_1) begin // @[src/main/scala/fpga/Core.scala 1130:21]
-      ex2_reg_sign_op12 <= ex1_sign_op12; // @[src/main/scala/fpga/Core.scala 1150:31]
+      ex2_reg_sign_op1 <= 1'h0; // @[src/main/scala/fpga/Core.scala 242:38]
+    end else if (_id_rrd_ready_T_1) begin // @[src/main/scala/fpga/Core.scala 1197:21]
+      ex2_reg_sign_op1 <= ex1_sign_op1; // @[src/main/scala/fpga/Core.scala 1216:31]
     end
     if (reset) begin // @[src/main/scala/fpga/Core.scala 243:38]
-      ex2_reg_zero_op2 <= 1'h0; // @[src/main/scala/fpga/Core.scala 243:38]
-    end else if (_id_rrd_ready_T_1) begin // @[src/main/scala/fpga/Core.scala 1130:21]
-      ex2_reg_zero_op2 <= ex1_zero_op2; // @[src/main/scala/fpga/Core.scala 1151:31]
+      ex2_reg_sign_op12 <= 1'h0; // @[src/main/scala/fpga/Core.scala 243:38]
+    end else if (_id_rrd_ready_T_1) begin // @[src/main/scala/fpga/Core.scala 1197:21]
+      ex2_reg_sign_op12 <= ex1_sign_op12; // @[src/main/scala/fpga/Core.scala 1217:31]
     end
     if (reset) begin // @[src/main/scala/fpga/Core.scala 244:38]
-      ex2_reg_init_dividend <= 37'h0; // @[src/main/scala/fpga/Core.scala 244:38]
-    end else if (_id_rrd_ready_T_1) begin // @[src/main/scala/fpga/Core.scala 1130:21]
-      if (_ex1_alu_out_T_79 | _ex1_alu_out_T_74) begin // @[src/main/scala/fpga/Core.scala 902:69]
-        if (ex1_reg_op1_data[31]) begin // @[src/main/scala/fpga/Core.scala 904:49]
-          ex2_reg_init_dividend <= _ex1_dividend_T_5; // @[src/main/scala/fpga/Core.scala 905:20]
-        end else begin
-          ex2_reg_init_dividend <= _ex1_dividend_T_8; // @[src/main/scala/fpga/Core.scala 907:20]
-        end
-      end else if (_ex1_alu_out_T_63 | _ex1_alu_out_T_69) begin // @[src/main/scala/fpga/Core.scala 917:77]
-        ex2_reg_init_dividend <= _ex1_dividend_T_8; // @[src/main/scala/fpga/Core.scala 919:18]
-      end else begin
-        ex2_reg_init_dividend <= 37'h0; // @[src/main/scala/fpga/Core.scala 898:33]
-      end
+      ex2_reg_zero_op2 <= 1'h0; // @[src/main/scala/fpga/Core.scala 244:38]
+    end else if (_id_rrd_ready_T_1) begin // @[src/main/scala/fpga/Core.scala 1197:21]
+      ex2_reg_zero_op2 <= ex1_zero_op2; // @[src/main/scala/fpga/Core.scala 1218:31]
     end
     if (reset) begin // @[src/main/scala/fpga/Core.scala 245:38]
-      ex2_reg_init_divisor <= 32'h0; // @[src/main/scala/fpga/Core.scala 245:38]
-    end else if (_id_rrd_ready_T_1) begin // @[src/main/scala/fpga/Core.scala 1130:21]
-      if (_ex1_alu_out_T_79 | _ex1_alu_out_T_74) begin // @[src/main/scala/fpga/Core.scala 902:69]
-        if (ex1_reg_op2_data[31]) begin // @[src/main/scala/fpga/Core.scala 910:49]
-          ex2_reg_init_divisor <= _ex1_divisor_T_2; // @[src/main/scala/fpga/Core.scala 911:19]
+      ex2_reg_init_dividend <= 37'h0; // @[src/main/scala/fpga/Core.scala 245:38]
+    end else if (_id_rrd_ready_T_1) begin // @[src/main/scala/fpga/Core.scala 1197:21]
+      if (_ex1_alu_out_T_79 | _ex1_alu_out_T_74) begin // @[src/main/scala/fpga/Core.scala 929:69]
+        if (ex1_reg_op1_data[31]) begin // @[src/main/scala/fpga/Core.scala 931:49]
+          ex2_reg_init_dividend <= _ex1_dividend_T_5; // @[src/main/scala/fpga/Core.scala 932:20]
         end else begin
-          ex2_reg_init_divisor <= ex1_reg_op2_data; // @[src/main/scala/fpga/Core.scala 914:19]
+          ex2_reg_init_dividend <= _ex1_dividend_T_8; // @[src/main/scala/fpga/Core.scala 934:20]
         end
-      end else if (_ex1_alu_out_T_63 | _ex1_alu_out_T_69) begin // @[src/main/scala/fpga/Core.scala 917:77]
-        ex2_reg_init_divisor <= ex1_reg_op2_data; // @[src/main/scala/fpga/Core.scala 921:17]
+      end else if (_ex1_alu_out_T_63 | _ex1_alu_out_T_69) begin // @[src/main/scala/fpga/Core.scala 944:77]
+        ex2_reg_init_dividend <= _ex1_dividend_T_8; // @[src/main/scala/fpga/Core.scala 946:18]
       end else begin
-        ex2_reg_init_divisor <= 32'h0; // @[src/main/scala/fpga/Core.scala 899:32]
+        ex2_reg_init_dividend <= 37'h0; // @[src/main/scala/fpga/Core.scala 925:33]
       end
     end
     if (reset) begin // @[src/main/scala/fpga/Core.scala 246:38]
-      ex2_reg_orig_dividend <= 32'h0; // @[src/main/scala/fpga/Core.scala 246:38]
-    end else if (_id_rrd_ready_T_1) begin // @[src/main/scala/fpga/Core.scala 1130:21]
-      ex2_reg_orig_dividend <= ex1_reg_op1_data; // @[src/main/scala/fpga/Core.scala 1154:31]
+      ex2_reg_init_divisor <= 32'h0; // @[src/main/scala/fpga/Core.scala 246:38]
+    end else if (_id_rrd_ready_T_1) begin // @[src/main/scala/fpga/Core.scala 1197:21]
+      if (_ex1_alu_out_T_79 | _ex1_alu_out_T_74) begin // @[src/main/scala/fpga/Core.scala 929:69]
+        if (ex1_reg_op2_data[31]) begin // @[src/main/scala/fpga/Core.scala 937:49]
+          ex2_reg_init_divisor <= _ex1_divisor_T_2; // @[src/main/scala/fpga/Core.scala 938:19]
+        end else begin
+          ex2_reg_init_divisor <= ex1_reg_op2_data; // @[src/main/scala/fpga/Core.scala 941:19]
+        end
+      end else if (_ex1_alu_out_T_63 | _ex1_alu_out_T_69) begin // @[src/main/scala/fpga/Core.scala 944:77]
+        ex2_reg_init_divisor <= ex1_reg_op2_data; // @[src/main/scala/fpga/Core.scala 948:17]
+      end else begin
+        ex2_reg_init_divisor <= 32'h0; // @[src/main/scala/fpga/Core.scala 926:32]
+      end
     end
     if (reset) begin // @[src/main/scala/fpga/Core.scala 247:38]
-      ex2_reg_inst3_use_reg <= 1'h0; // @[src/main/scala/fpga/Core.scala 247:38]
-    end else if (mem2_dram_stall & ~ex2_reg_div_stall) begin // @[src/main/scala/fpga/Core.scala 1163:43]
-      ex2_reg_inst3_use_reg <= 1'h0; // @[src/main/scala/fpga/Core.scala 1168:27]
-    end else if (_id_rrd_ready_T_1) begin // @[src/main/scala/fpga/Core.scala 1130:21]
-      ex2_reg_inst3_use_reg <= ex1_reg_inst3_use_reg & ex1_en; // @[src/main/scala/fpga/Core.scala 1155:31]
+      ex2_reg_orig_dividend <= 32'h0; // @[src/main/scala/fpga/Core.scala 247:38]
+    end else if (_id_rrd_ready_T_1) begin // @[src/main/scala/fpga/Core.scala 1197:21]
+      ex2_reg_orig_dividend <= ex1_reg_op1_data; // @[src/main/scala/fpga/Core.scala 1221:31]
     end
     if (reset) begin // @[src/main/scala/fpga/Core.scala 248:38]
-      ex2_reg_no_mem <= 1'h0; // @[src/main/scala/fpga/Core.scala 248:38]
-    end else if (_id_rrd_ready_T_1) begin // @[src/main/scala/fpga/Core.scala 1130:21]
-      ex2_reg_no_mem <= _ex1_fw_en_next_T_2 & ex1_reg_wb_sel != 3'h4 & ex1_reg_wb_sel != 3'h7 & ex1_en; // @[src/main/scala/fpga/Core.scala 1144:24]
+      ex2_reg_inst3_use_reg <= 1'h0; // @[src/main/scala/fpga/Core.scala 248:38]
+    end else if (mem2_dram_stall & ~ex2_reg_div_stall) begin // @[src/main/scala/fpga/Core.scala 1230:43]
+      ex2_reg_inst3_use_reg <= 1'h0; // @[src/main/scala/fpga/Core.scala 1235:27]
+    end else if (_id_rrd_ready_T_1) begin // @[src/main/scala/fpga/Core.scala 1197:21]
+      ex2_reg_inst3_use_reg <= ex1_reg_inst3_use_reg & ex1_en; // @[src/main/scala/fpga/Core.scala 1222:31]
     end
-    if (reset) begin // @[src/main/scala/fpga/Core.scala 251:39]
-      mem1_reg_mem_wstrb <= 7'h0; // @[src/main/scala/fpga/Core.scala 251:39]
-    end else if (_id_rrd_ready_T_1) begin // @[src/main/scala/fpga/Core.scala 1375:21]
-      mem1_reg_mem_wstrb <= _mem1_reg_mem_wstrb_T_9; // @[src/main/scala/fpga/Core.scala 1376:28]
+    if (reset) begin // @[src/main/scala/fpga/Core.scala 249:38]
+      ex2_reg_no_mem <= 1'h0; // @[src/main/scala/fpga/Core.scala 249:38]
+    end else if (_id_rrd_ready_T_1) begin // @[src/main/scala/fpga/Core.scala 1197:21]
+      ex2_reg_no_mem <= _ex1_fw_en_next_T_2 & ex1_reg_wb_sel != 3'h4 & ex1_reg_wb_sel != 3'h7 & ex1_en; // @[src/main/scala/fpga/Core.scala 1211:24]
     end
     if (reset) begin // @[src/main/scala/fpga/Core.scala 252:39]
-      mem1_reg_wdata <= 32'h0; // @[src/main/scala/fpga/Core.scala 252:39]
-    end else if (_id_rrd_ready_T_1) begin // @[src/main/scala/fpga/Core.scala 1375:21]
-      mem1_reg_wdata <= _mem1_reg_wdata_T_4[55:24]; // @[src/main/scala/fpga/Core.scala 1385:28]
+      mem1_reg_mem_wstrb <= 7'h0; // @[src/main/scala/fpga/Core.scala 252:39]
+    end else if (_id_rrd_ready_T_1) begin // @[src/main/scala/fpga/Core.scala 1442:21]
+      mem1_reg_mem_wstrb <= _mem1_reg_mem_wstrb_T_9; // @[src/main/scala/fpga/Core.scala 1443:28]
     end
     if (reset) begin // @[src/main/scala/fpga/Core.scala 253:39]
-      mem1_reg_mem_w <= 3'h0; // @[src/main/scala/fpga/Core.scala 253:39]
-    end else if (_id_rrd_ready_T_1) begin // @[src/main/scala/fpga/Core.scala 1375:21]
-      mem1_reg_mem_w <= ex1_reg_mem_w; // @[src/main/scala/fpga/Core.scala 1386:28]
+      mem1_reg_wdata <= 32'h0; // @[src/main/scala/fpga/Core.scala 253:39]
+    end else if (_id_rrd_ready_T_1) begin // @[src/main/scala/fpga/Core.scala 1442:21]
+      mem1_reg_wdata <= _mem1_reg_wdata_T_4[55:24]; // @[src/main/scala/fpga/Core.scala 1452:28]
     end
-    if (reset) begin // @[src/main/scala/fpga/Core.scala 256:39]
-      mem1_reg_is_mem_load <= 1'h0; // @[src/main/scala/fpga/Core.scala 256:39]
-    end else if (_id_rrd_ready_T_1) begin // @[src/main/scala/fpga/Core.scala 1375:21]
-      mem1_reg_is_mem_load <= ~mem1_is_dram & _mem1_reg_unaligned_T_12 & ex1_en; // @[src/main/scala/fpga/Core.scala 1390:28]
+    if (reset) begin // @[src/main/scala/fpga/Core.scala 254:39]
+      mem1_reg_mem_w <= 3'h0; // @[src/main/scala/fpga/Core.scala 254:39]
+    end else if (_id_rrd_ready_T_1) begin // @[src/main/scala/fpga/Core.scala 1442:21]
+      mem1_reg_mem_w <= ex1_reg_mem_w; // @[src/main/scala/fpga/Core.scala 1453:28]
     end
     if (reset) begin // @[src/main/scala/fpga/Core.scala 257:39]
-      mem1_reg_is_mem_store <= 1'h0; // @[src/main/scala/fpga/Core.scala 257:39]
-    end else if (_id_rrd_ready_T_1) begin // @[src/main/scala/fpga/Core.scala 1375:21]
-      mem1_reg_is_mem_store <= _mem1_reg_is_mem_load_T & _mem1_reg_unaligned_T_13 & ex1_en; // @[src/main/scala/fpga/Core.scala 1391:28]
+      mem1_reg_is_mem_load <= 1'h0; // @[src/main/scala/fpga/Core.scala 257:39]
+    end else if (_id_rrd_ready_T_1) begin // @[src/main/scala/fpga/Core.scala 1442:21]
+      mem1_reg_is_mem_load <= ~mem1_is_dram & _mem1_reg_unaligned_T_12 & ex1_en; // @[src/main/scala/fpga/Core.scala 1457:28]
     end
     if (reset) begin // @[src/main/scala/fpga/Core.scala 258:39]
-      mem1_reg_is_dram_load <= 1'h0; // @[src/main/scala/fpga/Core.scala 258:39]
-    end else if (_id_rrd_ready_T_1) begin // @[src/main/scala/fpga/Core.scala 1375:21]
-      mem1_reg_is_dram_load <= mem1_is_dram & _mem1_reg_unaligned_T_12 & ex1_en; // @[src/main/scala/fpga/Core.scala 1392:28]
+      mem1_reg_is_mem_store <= 1'h0; // @[src/main/scala/fpga/Core.scala 258:39]
+    end else if (_id_rrd_ready_T_1) begin // @[src/main/scala/fpga/Core.scala 1442:21]
+      mem1_reg_is_mem_store <= _mem1_reg_is_mem_load_T & _mem1_reg_unaligned_T_13 & ex1_en; // @[src/main/scala/fpga/Core.scala 1458:28]
     end
     if (reset) begin // @[src/main/scala/fpga/Core.scala 259:39]
-      mem1_reg_is_dram_store <= 1'h0; // @[src/main/scala/fpga/Core.scala 259:39]
-    end else if (_id_rrd_ready_T_1) begin // @[src/main/scala/fpga/Core.scala 1375:21]
-      mem1_reg_is_dram_store <= mem1_is_dram & _mem1_reg_unaligned_T_13 & ex1_en; // @[src/main/scala/fpga/Core.scala 1393:28]
+      mem1_reg_is_dram_load <= 1'h0; // @[src/main/scala/fpga/Core.scala 259:39]
+    end else if (_id_rrd_ready_T_1) begin // @[src/main/scala/fpga/Core.scala 1442:21]
+      mem1_reg_is_dram_load <= mem1_is_dram & _mem1_reg_unaligned_T_12 & ex1_en; // @[src/main/scala/fpga/Core.scala 1459:28]
     end
     if (reset) begin // @[src/main/scala/fpga/Core.scala 260:39]
-      mem1_reg_is_dram_fence <= 1'h0; // @[src/main/scala/fpga/Core.scala 260:39]
-    end else if (_id_rrd_ready_T_1) begin // @[src/main/scala/fpga/Core.scala 1375:21]
-      mem1_reg_is_dram_fence <= _ex1_fun_sel_T_11 & ex1_en; // @[src/main/scala/fpga/Core.scala 1394:28]
+      mem1_reg_is_dram_store <= 1'h0; // @[src/main/scala/fpga/Core.scala 260:39]
+    end else if (_id_rrd_ready_T_1) begin // @[src/main/scala/fpga/Core.scala 1442:21]
+      mem1_reg_is_dram_store <= mem1_is_dram & _mem1_reg_unaligned_T_13 & ex1_en; // @[src/main/scala/fpga/Core.scala 1460:28]
     end
     if (reset) begin // @[src/main/scala/fpga/Core.scala 261:39]
-      mem1_reg_is_valid_inst <= 1'h0; // @[src/main/scala/fpga/Core.scala 261:39]
-    end else if (_id_rrd_ready_T_1) begin // @[src/main/scala/fpga/Core.scala 1375:21]
-      mem1_reg_is_valid_inst <= (_mem1_reg_unaligned_T_14 | _ex1_fun_sel_T_11) & ex1_en; // @[src/main/scala/fpga/Core.scala 1395:28]
+      mem1_reg_is_dram_fence <= 1'h0; // @[src/main/scala/fpga/Core.scala 261:39]
+    end else if (_id_rrd_ready_T_1) begin // @[src/main/scala/fpga/Core.scala 1442:21]
+      mem1_reg_is_dram_fence <= _ex1_fun_sel_T_11 & ex1_en; // @[src/main/scala/fpga/Core.scala 1461:28]
     end
     if (reset) begin // @[src/main/scala/fpga/Core.scala 262:39]
-      mem1_reg_unaligned <= 1'h0; // @[src/main/scala/fpga/Core.scala 262:39]
-    end else if (~mem1_mem_stall & ~mem1_dram_stall & mem1_reg_unaligned) begin // @[src/main/scala/fpga/Core.scala 1402:68]
-      mem1_reg_unaligned <= 1'h0; // @[src/main/scala/fpga/Core.scala 1403:30]
-    end else if (_id_rrd_ready_T_1) begin // @[src/main/scala/fpga/Core.scala 1375:21]
-      mem1_reg_unaligned <= _mem1_reg_unaligned_T_16; // @[src/main/scala/fpga/Core.scala 1381:28]
+      mem1_reg_is_valid_inst <= 1'h0; // @[src/main/scala/fpga/Core.scala 262:39]
+    end else if (_id_rrd_ready_T_1) begin // @[src/main/scala/fpga/Core.scala 1442:21]
+      mem1_reg_is_valid_inst <= (_mem1_reg_unaligned_T_14 | _ex1_fun_sel_T_11) & ex1_en; // @[src/main/scala/fpga/Core.scala 1462:28]
     end
-    if (reset) begin // @[src/main/scala/fpga/Core.scala 265:40]
-      mem2_reg_wb_byte_offset <= 2'h0; // @[src/main/scala/fpga/Core.scala 265:40]
-    end else if (~mem2_dram_stall) begin // @[src/main/scala/fpga/Core.scala 1435:22]
-      mem2_reg_wb_byte_offset <= ex2_reg_alu_out[1:0]; // @[src/main/scala/fpga/Core.scala 1436:29]
+    if (reset) begin // @[src/main/scala/fpga/Core.scala 263:39]
+      mem1_reg_unaligned <= 1'h0; // @[src/main/scala/fpga/Core.scala 263:39]
+    end else if (~mem1_mem_stall & ~mem1_dram_stall & mem1_reg_unaligned) begin // @[src/main/scala/fpga/Core.scala 1469:68]
+      mem1_reg_unaligned <= 1'h0; // @[src/main/scala/fpga/Core.scala 1470:30]
+    end else if (_id_rrd_ready_T_1) begin // @[src/main/scala/fpga/Core.scala 1442:21]
+      mem1_reg_unaligned <= _mem1_reg_unaligned_T_16; // @[src/main/scala/fpga/Core.scala 1448:28]
     end
     if (reset) begin // @[src/main/scala/fpga/Core.scala 266:40]
-      mem2_reg_mem_w <= 3'h0; // @[src/main/scala/fpga/Core.scala 266:40]
-    end else if (~mem2_dram_stall) begin // @[src/main/scala/fpga/Core.scala 1435:22]
-      mem2_reg_mem_w <= mem1_reg_mem_w; // @[src/main/scala/fpga/Core.scala 1437:29]
+      mem2_reg_wb_byte_offset <= 2'h0; // @[src/main/scala/fpga/Core.scala 266:40]
+    end else if (~mem2_dram_stall) begin // @[src/main/scala/fpga/Core.scala 1502:22]
+      mem2_reg_wb_byte_offset <= ex2_reg_alu_out[1:0]; // @[src/main/scala/fpga/Core.scala 1503:29]
     end
-    if (reset) begin // @[src/main/scala/fpga/Core.scala 268:40]
-      mem2_reg_wb_addr <= 5'h0; // @[src/main/scala/fpga/Core.scala 268:40]
-    end else if (~mem2_dram_stall) begin // @[src/main/scala/fpga/Core.scala 1435:22]
-      mem2_reg_wb_addr <= ex2_reg_wb_addr; // @[src/main/scala/fpga/Core.scala 1439:29]
+    if (reset) begin // @[src/main/scala/fpga/Core.scala 267:40]
+      mem2_reg_mem_w <= 3'h0; // @[src/main/scala/fpga/Core.scala 267:40]
+    end else if (~mem2_dram_stall) begin // @[src/main/scala/fpga/Core.scala 1502:22]
+      mem2_reg_mem_w <= mem1_reg_mem_w; // @[src/main/scala/fpga/Core.scala 1504:29]
     end
     if (reset) begin // @[src/main/scala/fpga/Core.scala 269:40]
-      mem2_reg_is_valid_load <= 1'h0; // @[src/main/scala/fpga/Core.scala 269:40]
-    end else if (~mem2_dram_stall) begin // @[src/main/scala/fpga/Core.scala 1435:22]
-      mem2_reg_is_valid_load <= _T_109 & mem1_reg_is_mem_load | _T_110 & mem1_reg_is_dram_load; // @[src/main/scala/fpga/Core.scala 1440:29]
+      mem2_reg_wb_addr <= 5'h0; // @[src/main/scala/fpga/Core.scala 269:40]
+    end else if (~mem2_dram_stall) begin // @[src/main/scala/fpga/Core.scala 1502:22]
+      mem2_reg_wb_addr <= ex2_reg_wb_addr; // @[src/main/scala/fpga/Core.scala 1506:29]
     end
-    if (reset) begin // @[src/main/scala/fpga/Core.scala 271:40]
-      mem2_reg_is_valid_inst <= 1'h0; // @[src/main/scala/fpga/Core.scala 271:40]
-    end else if (~mem2_dram_stall) begin // @[src/main/scala/fpga/Core.scala 1435:22]
-      mem2_reg_is_valid_inst <= _T_111 & mem1_reg_is_valid_inst; // @[src/main/scala/fpga/Core.scala 1442:29]
+    if (reset) begin // @[src/main/scala/fpga/Core.scala 270:40]
+      mem2_reg_is_valid_load <= 1'h0; // @[src/main/scala/fpga/Core.scala 270:40]
+    end else if (~mem2_dram_stall) begin // @[src/main/scala/fpga/Core.scala 1502:22]
+      mem2_reg_is_valid_load <= _T_133 & mem1_reg_is_mem_load | _T_134 & mem1_reg_is_dram_load; // @[src/main/scala/fpga/Core.scala 1507:29]
     end
     if (reset) begin // @[src/main/scala/fpga/Core.scala 272:40]
-      mem2_reg_is_mem_load <= 1'h0; // @[src/main/scala/fpga/Core.scala 272:40]
-    end else if (~mem2_dram_stall) begin // @[src/main/scala/fpga/Core.scala 1435:22]
-      mem2_reg_is_mem_load <= _mem2_reg_is_valid_load_T_1; // @[src/main/scala/fpga/Core.scala 1443:29]
+      mem2_reg_is_valid_inst <= 1'h0; // @[src/main/scala/fpga/Core.scala 272:40]
+    end else if (~mem2_dram_stall) begin // @[src/main/scala/fpga/Core.scala 1502:22]
+      mem2_reg_is_valid_inst <= _T_135 & mem1_reg_is_valid_inst; // @[src/main/scala/fpga/Core.scala 1509:29]
     end
     if (reset) begin // @[src/main/scala/fpga/Core.scala 273:40]
-      mem2_reg_is_dram_load <= 1'h0; // @[src/main/scala/fpga/Core.scala 273:40]
-    end else if (~mem2_dram_stall) begin // @[src/main/scala/fpga/Core.scala 1435:22]
-      mem2_reg_is_dram_load <= _mem2_reg_is_valid_load_T_3; // @[src/main/scala/fpga/Core.scala 1444:29]
+      mem2_reg_is_mem_load <= 1'h0; // @[src/main/scala/fpga/Core.scala 273:40]
+    end else if (~mem2_dram_stall) begin // @[src/main/scala/fpga/Core.scala 1502:22]
+      mem2_reg_is_mem_load <= _mem2_reg_is_valid_load_T_1; // @[src/main/scala/fpga/Core.scala 1510:29]
     end
     if (reset) begin // @[src/main/scala/fpga/Core.scala 274:40]
-      mem2_reg_unaligned <= 1'h0; // @[src/main/scala/fpga/Core.scala 274:40]
-    end else if (~mem2_dram_stall) begin // @[src/main/scala/fpga/Core.scala 1435:22]
-      mem2_reg_unaligned <= mem1_reg_unaligned; // @[src/main/scala/fpga/Core.scala 1445:29]
+      mem2_reg_is_dram_load <= 1'h0; // @[src/main/scala/fpga/Core.scala 274:40]
+    end else if (~mem2_dram_stall) begin // @[src/main/scala/fpga/Core.scala 1502:22]
+      mem2_reg_is_dram_load <= _mem2_reg_is_valid_load_T_3; // @[src/main/scala/fpga/Core.scala 1511:29]
     end
-    if (reset) begin // @[src/main/scala/fpga/Core.scala 277:40]
-      mem3_reg_wb_byte_offset <= 2'h0; // @[src/main/scala/fpga/Core.scala 277:40]
-    end else begin
-      mem3_reg_wb_byte_offset <= mem2_reg_wb_byte_offset; // @[src/main/scala/fpga/Core.scala 1469:27]
+    if (reset) begin // @[src/main/scala/fpga/Core.scala 275:40]
+      mem2_reg_unaligned <= 1'h0; // @[src/main/scala/fpga/Core.scala 275:40]
+    end else if (~mem2_dram_stall) begin // @[src/main/scala/fpga/Core.scala 1502:22]
+      mem2_reg_unaligned <= mem1_reg_unaligned; // @[src/main/scala/fpga/Core.scala 1512:29]
     end
     if (reset) begin // @[src/main/scala/fpga/Core.scala 278:40]
-      mem3_reg_mem_w <= 3'h0; // @[src/main/scala/fpga/Core.scala 278:40]
+      mem3_reg_wb_byte_offset <= 2'h0; // @[src/main/scala/fpga/Core.scala 278:40]
     end else begin
-      mem3_reg_mem_w <= mem2_reg_mem_w; // @[src/main/scala/fpga/Core.scala 1470:27]
+      mem3_reg_wb_byte_offset <= mem2_reg_wb_byte_offset; // @[src/main/scala/fpga/Core.scala 1536:27]
     end
     if (reset) begin // @[src/main/scala/fpga/Core.scala 279:40]
-      mem3_reg_dmem_rdata <= 32'h0; // @[src/main/scala/fpga/Core.scala 279:40]
-    end else if (mem2_reg_is_dram_load) begin // @[src/main/scala/fpga/Core.scala 1471:33]
+      mem3_reg_mem_w <= 3'h0; // @[src/main/scala/fpga/Core.scala 279:40]
+    end else begin
+      mem3_reg_mem_w <= mem2_reg_mem_w; // @[src/main/scala/fpga/Core.scala 1537:27]
+    end
+    if (reset) begin // @[src/main/scala/fpga/Core.scala 280:40]
+      mem3_reg_dmem_rdata <= 32'h0; // @[src/main/scala/fpga/Core.scala 280:40]
+    end else if (mem2_reg_is_dram_load) begin // @[src/main/scala/fpga/Core.scala 1538:33]
       mem3_reg_dmem_rdata <= io_cache_rdata;
     end else begin
       mem3_reg_dmem_rdata <= io_dmem_rdata;
     end
-    if (reset) begin // @[src/main/scala/fpga/Core.scala 280:40]
-      mem3_reg_rdata_high <= 24'h0; // @[src/main/scala/fpga/Core.scala 280:40]
-    end else if (mem3_reg_unaligned) begin // @[src/main/scala/fpga/Core.scala 1492:29]
-      mem3_reg_rdata_high <= mem3_reg_dmem_rdata[23:0]; // @[src/main/scala/fpga/Core.scala 1493:25]
-    end
     if (reset) begin // @[src/main/scala/fpga/Core.scala 281:40]
-      mem3_reg_wb_addr <= 5'h0; // @[src/main/scala/fpga/Core.scala 281:40]
-    end else begin
-      mem3_reg_wb_addr <= mem2_reg_wb_addr; // @[src/main/scala/fpga/Core.scala 1472:27]
+      mem3_reg_rdata_high <= 24'h0; // @[src/main/scala/fpga/Core.scala 281:40]
+    end else if (mem3_reg_unaligned) begin // @[src/main/scala/fpga/Core.scala 1559:29]
+      mem3_reg_rdata_high <= mem3_reg_dmem_rdata[23:0]; // @[src/main/scala/fpga/Core.scala 1560:25]
     end
     if (reset) begin // @[src/main/scala/fpga/Core.scala 282:40]
-      mem3_reg_is_valid_load <= 1'h0; // @[src/main/scala/fpga/Core.scala 282:40]
+      mem3_reg_wb_addr <= 5'h0; // @[src/main/scala/fpga/Core.scala 282:40]
     end else begin
-      mem3_reg_is_valid_load <= _mem2_is_valid_load_T_2 & mem2_is_valid_load; // @[src/main/scala/fpga/Core.scala 1473:27]
+      mem3_reg_wb_addr <= mem2_reg_wb_addr; // @[src/main/scala/fpga/Core.scala 1539:27]
     end
     if (reset) begin // @[src/main/scala/fpga/Core.scala 283:40]
-      mem3_reg_is_valid_inst <= 1'h0; // @[src/main/scala/fpga/Core.scala 283:40]
+      mem3_reg_is_valid_load <= 1'h0; // @[src/main/scala/fpga/Core.scala 283:40]
     end else begin
-      mem3_reg_is_valid_inst <= _mem2_is_valid_load_T_2 & mem2_reg_is_valid_inst; // @[src/main/scala/fpga/Core.scala 1475:27]
+      mem3_reg_is_valid_load <= _mem2_is_valid_load_T_2 & mem2_is_valid_load; // @[src/main/scala/fpga/Core.scala 1540:27]
     end
-    if (reset) begin // @[src/main/scala/fpga/Core.scala 285:40]
-      mem3_reg_unaligned <= 1'h0; // @[src/main/scala/fpga/Core.scala 285:40]
+    if (reset) begin // @[src/main/scala/fpga/Core.scala 284:40]
+      mem3_reg_is_valid_inst <= 1'h0; // @[src/main/scala/fpga/Core.scala 284:40]
     end else begin
-      mem3_reg_unaligned <= mem2_reg_unaligned; // @[src/main/scala/fpga/Core.scala 1477:27]
+      mem3_reg_is_valid_inst <= _mem2_is_valid_load_T_2 & mem2_reg_is_valid_inst; // @[src/main/scala/fpga/Core.scala 1542:27]
     end
     if (reset) begin // @[src/main/scala/fpga/Core.scala 286:40]
-      mem3_reg_is_aligned_lw <= 1'h0; // @[src/main/scala/fpga/Core.scala 286:40]
+      mem3_reg_unaligned <= 1'h0; // @[src/main/scala/fpga/Core.scala 286:40]
     end else begin
-      mem3_reg_is_aligned_lw <= mem2_is_aligned_lw; // @[src/main/scala/fpga/Core.scala 1478:27]
+      mem3_reg_unaligned <= mem2_reg_unaligned; // @[src/main/scala/fpga/Core.scala 1544:27]
     end
-    if (reset) begin // @[src/main/scala/fpga/Core.scala 298:37]
-      ex1_reg_fw_en <= 1'h0; // @[src/main/scala/fpga/Core.scala 298:37]
-    end else if (_id_rrd_ready_T_1) begin // @[src/main/scala/fpga/Core.scala 760:20]
-      ex1_reg_fw_en <= rrd_fw_en_next; // @[src/main/scala/fpga/Core.scala 784:27]
-    end
-    if (reset) begin // @[src/main/scala/fpga/Core.scala 300:37]
-      ex2_reg_fw_en <= 1'h0; // @[src/main/scala/fpga/Core.scala 300:37]
-    end else if (_id_rrd_ready_T_1) begin // @[src/main/scala/fpga/Core.scala 1130:21]
-      ex2_reg_fw_en <= ex1_fw_en_next; // @[src/main/scala/fpga/Core.scala 1156:31]
-    end
-    if (reset) begin // @[src/main/scala/fpga/Core.scala 302:37]
-      mem3_reg_fw_en <= 1'h0; // @[src/main/scala/fpga/Core.scala 302:37]
+    if (reset) begin // @[src/main/scala/fpga/Core.scala 287:40]
+      mem3_reg_is_aligned_lw <= 1'h0; // @[src/main/scala/fpga/Core.scala 287:40]
     end else begin
-      mem3_reg_fw_en <= mem2_is_aligned_lw; // @[src/main/scala/fpga/Core.scala 1476:27]
+      mem3_reg_is_aligned_lw <= mem2_is_aligned_lw; // @[src/main/scala/fpga/Core.scala 1545:27]
     end
-    if (reset) begin // @[src/main/scala/fpga/Core.scala 305:37]
-      ex2_reg_div_stall <= 1'h0; // @[src/main/scala/fpga/Core.scala 305:37]
-    end else if (_id_rrd_ready_T_1) begin // @[src/main/scala/fpga/Core.scala 1130:21]
-      ex2_reg_div_stall <= ex2_div_stall_next | _ex2_reg_div_stall_T_4; // @[src/main/scala/fpga/Core.scala 1147:31]
-    end else begin
-      ex2_reg_div_stall <= ex2_div_stall_next | _ex2_reg_div_stall_T_9; // @[src/main/scala/fpga/Core.scala 1159:23]
+    if (reset) begin // @[src/main/scala/fpga/Core.scala 299:37]
+      ex1_reg_fw_en <= 1'h0; // @[src/main/scala/fpga/Core.scala 299:37]
+    end else if (_id_rrd_ready_T_1) begin // @[src/main/scala/fpga/Core.scala 787:20]
+      ex1_reg_fw_en <= rrd_fw_en_next; // @[src/main/scala/fpga/Core.scala 811:27]
     end
-    if (reset) begin // @[src/main/scala/fpga/Core.scala 307:37]
-      ex2_reg_divrem_state <= 3'h0; // @[src/main/scala/fpga/Core.scala 307:37]
-    end else if (3'h0 == ex2_reg_divrem_state) begin // @[src/main/scala/fpga/Core.scala 1208:33]
-      if (ex2_reg_divrem) begin // @[src/main/scala/fpga/Core.scala 1210:29]
-        ex2_reg_divrem_state <= {{1'd0}, _GEN_419};
-      end
-    end else if (3'h1 == ex2_reg_divrem_state) begin // @[src/main/scala/fpga/Core.scala 1208:33]
-      if (ex2_reg_p_divisor[63:36] == 28'h0) begin // @[src/main/scala/fpga/Core.scala 1233:66]
-        ex2_reg_divrem_state <= 3'h2; // @[src/main/scala/fpga/Core.scala 1234:30]
-      end
-    end else if (3'h2 == ex2_reg_divrem_state) begin // @[src/main/scala/fpga/Core.scala 1208:33]
-      ex2_reg_divrem_state <= _GEN_428;
+    if (reset) begin // @[src/main/scala/fpga/Core.scala 301:37]
+      ex2_reg_fw_en <= 1'h0; // @[src/main/scala/fpga/Core.scala 301:37]
+    end else if (_id_rrd_ready_T_1) begin // @[src/main/scala/fpga/Core.scala 1197:21]
+      ex2_reg_fw_en <= ex1_fw_en_next; // @[src/main/scala/fpga/Core.scala 1223:31]
+    end
+    if (reset) begin // @[src/main/scala/fpga/Core.scala 303:37]
+      mem3_reg_fw_en <= 1'h0; // @[src/main/scala/fpga/Core.scala 303:37]
     end else begin
-      ex2_reg_divrem_state <= _GEN_434;
+      mem3_reg_fw_en <= mem2_is_aligned_lw; // @[src/main/scala/fpga/Core.scala 1543:27]
+    end
+    if (reset) begin // @[src/main/scala/fpga/Core.scala 306:37]
+      ex2_reg_div_stall <= 1'h0; // @[src/main/scala/fpga/Core.scala 306:37]
+    end else if (_id_rrd_ready_T_1) begin // @[src/main/scala/fpga/Core.scala 1197:21]
+      ex2_reg_div_stall <= ex2_div_stall_next | _ex2_reg_div_stall_T_4; // @[src/main/scala/fpga/Core.scala 1214:31]
+    end else begin
+      ex2_reg_div_stall <= ex2_div_stall_next | _ex2_reg_div_stall_T_9; // @[src/main/scala/fpga/Core.scala 1226:23]
     end
     if (reset) begin // @[src/main/scala/fpga/Core.scala 308:37]
-      ex2_reg_is_br <= 1'h0; // @[src/main/scala/fpga/Core.scala 308:37]
+      ex2_reg_divrem_state <= 3'h0; // @[src/main/scala/fpga/Core.scala 308:37]
+    end else if (3'h0 == ex2_reg_divrem_state) begin // @[src/main/scala/fpga/Core.scala 1275:33]
+      if (ex2_reg_divrem) begin // @[src/main/scala/fpga/Core.scala 1277:29]
+        ex2_reg_divrem_state <= {{1'd0}, _GEN_459};
+      end
+    end else if (3'h1 == ex2_reg_divrem_state) begin // @[src/main/scala/fpga/Core.scala 1275:33]
+      if (ex2_reg_p_divisor[63:36] == 28'h0) begin // @[src/main/scala/fpga/Core.scala 1300:66]
+        ex2_reg_divrem_state <= 3'h2; // @[src/main/scala/fpga/Core.scala 1301:30]
+      end
+    end else if (3'h2 == ex2_reg_divrem_state) begin // @[src/main/scala/fpga/Core.scala 1275:33]
+      ex2_reg_divrem_state <= _GEN_468;
     end else begin
-      ex2_reg_is_br <= csr_is_br | ex1_fetch_pc_en; // @[src/main/scala/fpga/Core.scala 1125:17]
+      ex2_reg_divrem_state <= _GEN_474;
     end
     if (reset) begin // @[src/main/scala/fpga/Core.scala 309:37]
-      ex2_reg_br_pc <= 31'h0; // @[src/main/scala/fpga/Core.scala 309:37]
+      ex2_reg_is_br <= 1'h0; // @[src/main/scala/fpga/Core.scala 309:37]
+    end else begin
+      ex2_reg_is_br <= csr_is_br | ex1_fetch_pc_en; // @[src/main/scala/fpga/Core.scala 1192:17]
+    end
+    if (reset) begin // @[src/main/scala/fpga/Core.scala 310:37]
+      ex2_reg_br_pc <= 31'h0; // @[src/main/scala/fpga/Core.scala 310:37]
     end else if (csr_is_br) begin // @[src/main/scala/chisel3/util/Mux.scala 141:16]
-      if (csr_is_meintr) begin // @[src/main/scala/fpga/Core.scala 1083:24]
-        ex2_reg_br_pc <= csr_reg_trap_vector; // @[src/main/scala/fpga/Core.scala 1092:26]
-      end else if (csr_is_mtintr) begin // @[src/main/scala/fpga/Core.scala 1093:30]
-        ex2_reg_br_pc <= csr_reg_trap_vector; // @[src/main/scala/fpga/Core.scala 1102:26]
+      if (csr_is_meintr) begin // @[src/main/scala/fpga/Core.scala 1150:24]
+        ex2_reg_br_pc <= csr_reg_trap_vector; // @[src/main/scala/fpga/Core.scala 1159:26]
+      end else if (csr_is_mtintr) begin // @[src/main/scala/fpga/Core.scala 1160:30]
+        ex2_reg_br_pc <= csr_reg_trap_vector; // @[src/main/scala/fpga/Core.scala 1169:26]
       end else begin
-        ex2_reg_br_pc <= _GEN_373;
+        ex2_reg_br_pc <= _GEN_413;
       end
     end else if (_ex1_csr_fetch_pc_T) begin // @[src/main/scala/chisel3/util/Mux.scala 141:16]
-      if (ex1_reg_is_j) begin // @[src/main/scala/fpga/Core.scala 940:25]
+      if (ex1_reg_is_j) begin // @[src/main/scala/fpga/Core.scala 967:25]
         ex2_reg_br_pc <= ex1_add_out[31:1];
       end else begin
         ex2_reg_br_pc <= ex1_reg_direct_jbr_pc;
       end
-    end else if (ex1_reg_is_half) begin // @[src/main/scala/fpga/Core.scala 869:24]
+    end else if (ex1_reg_is_half) begin // @[src/main/scala/fpga/Core.scala 896:24]
       ex2_reg_br_pc <= _ex1_next_pc_T_1;
     end else begin
       ex2_reg_br_pc <= _ex1_next_pc_T_3;
     end
-    if (reset) begin // @[src/main/scala/fpga/Core.scala 314:37]
-      ex2_reg_is_retired <= 1'h0; // @[src/main/scala/fpga/Core.scala 314:37]
-    end else begin
-      ex2_reg_is_retired <= ex2_reg_is_valid_inst & _T_71 & ex2_reg_no_mem; // @[src/main/scala/fpga/Core.scala 1361:22]
-    end
     if (reset) begin // @[src/main/scala/fpga/Core.scala 315:37]
-      mem3_reg_is_retired <= 1'h0; // @[src/main/scala/fpga/Core.scala 315:37]
+      ex2_reg_is_retired <= 1'h0; // @[src/main/scala/fpga/Core.scala 315:37]
     end else begin
-      mem3_reg_is_retired <= mem3_reg_is_valid_inst; // @[src/main/scala/fpga/Core.scala 1509:23]
+      ex2_reg_is_retired <= ex2_reg_is_valid_inst & _T_95 & ex2_reg_no_mem; // @[src/main/scala/fpga/Core.scala 1428:22]
     end
-    if (reset) begin // @[src/main/scala/fpga/Core.scala 336:33]
-      ic_reg_read_rdy <= 1'h0; // @[src/main/scala/fpga/Core.scala 336:33]
-    end else if (if1_is_jump) begin // @[src/main/scala/fpga/Core.scala 539:21]
-      ic_reg_read_rdy <= ~if1_jump_addr[0]; // @[src/main/scala/fpga/Core.scala 544:22]
-    end else if (!(~io_imem_valid)) begin // @[src/main/scala/fpga/Core.scala 530:92]
-      ic_reg_read_rdy <= 1'h1; // @[src/main/scala/fpga/Core.scala 381:20]
+    if (reset) begin // @[src/main/scala/fpga/Core.scala 316:37]
+      mem3_reg_is_retired <= 1'h0; // @[src/main/scala/fpga/Core.scala 316:37]
+    end else begin
+      mem3_reg_is_retired <= mem3_reg_is_valid_inst; // @[src/main/scala/fpga/Core.scala 1576:23]
     end
     if (reset) begin // @[src/main/scala/fpga/Core.scala 337:33]
-      ic_reg_half_rdy <= 1'h0; // @[src/main/scala/fpga/Core.scala 337:33]
-    end else if (!(~io_imem_valid)) begin // @[src/main/scala/fpga/Core.scala 530:92]
-      ic_reg_half_rdy <= 1'h1; // @[src/main/scala/fpga/Core.scala 382:20]
+      ic_reg_read_rdy <= 1'h0; // @[src/main/scala/fpga/Core.scala 337:33]
+    end else if (if1_is_jump) begin // @[src/main/scala/fpga/Core.scala 557:21]
+      ic_reg_read_rdy <= ~if1_jump_addr[0]; // @[src/main/scala/fpga/Core.scala 562:22]
+    end else if (!(~io_imem_valid)) begin // @[src/main/scala/fpga/Core.scala 548:92]
+      ic_reg_read_rdy <= 1'h1; // @[src/main/scala/fpga/Core.scala 382:20]
     end
-    if (reset) begin // @[src/main/scala/fpga/Core.scala 341:33]
-      ic_reg_imem_addr <= 31'h0; // @[src/main/scala/fpga/Core.scala 341:33]
-    end else if (if1_is_jump) begin // @[src/main/scala/fpga/Core.scala 539:21]
-      ic_reg_imem_addr <= ic_next_imem_addr; // @[src/main/scala/fpga/Core.scala 541:22]
-    end else if (!(~io_imem_valid)) begin // @[src/main/scala/fpga/Core.scala 530:92]
-      if (3'h0 == ic_state) begin // @[src/main/scala/fpga/Core.scala 394:21]
-        ic_reg_imem_addr <= ic_imem_addr_4; // @[src/main/scala/fpga/Core.scala 396:31]
-      end else begin
-        ic_reg_imem_addr <= _GEN_113;
-      end
+    if (reset) begin // @[src/main/scala/fpga/Core.scala 338:33]
+      ic_reg_half_rdy <= 1'h0; // @[src/main/scala/fpga/Core.scala 338:33]
+    end else if (!(~io_imem_valid)) begin // @[src/main/scala/fpga/Core.scala 548:92]
+      ic_reg_half_rdy <= 1'h1; // @[src/main/scala/fpga/Core.scala 383:20]
     end
     if (reset) begin // @[src/main/scala/fpga/Core.scala 342:33]
-      ic_reg_addr_out <= 31'h0; // @[src/main/scala/fpga/Core.scala 342:33]
-    end else if (if1_is_jump) begin // @[src/main/scala/fpga/Core.scala 539:21]
+      ic_reg_imem_addr <= 31'h0; // @[src/main/scala/fpga/Core.scala 342:33]
+    end else if (if1_is_jump) begin // @[src/main/scala/fpga/Core.scala 557:21]
+      ic_reg_imem_addr <= ic_next_imem_addr; // @[src/main/scala/fpga/Core.scala 559:22]
+    end else if (!(~io_imem_valid)) begin // @[src/main/scala/fpga/Core.scala 548:92]
+      if (3'h0 == ic_state) begin // @[src/main/scala/fpga/Core.scala 396:21]
+        ic_reg_imem_addr <= ic_imem_addr_4; // @[src/main/scala/fpga/Core.scala 398:31]
+      end else begin
+        ic_reg_imem_addr <= _GEN_133;
+      end
+    end
+    if (reset) begin // @[src/main/scala/fpga/Core.scala 343:33]
+      ic_reg_addr_out <= 31'h0; // @[src/main/scala/fpga/Core.scala 343:33]
+    end else if (if1_is_jump) begin // @[src/main/scala/fpga/Core.scala 557:21]
       if (ex2_reg_is_br) begin // @[src/main/scala/chisel3/util/Mux.scala 141:16]
         ic_reg_addr_out <= ex2_reg_br_pc;
       end else if (id_reg_bp_taken) begin // @[src/main/scala/chisel3/util/Mux.scala 141:16]
@@ -7218,307 +7619,379 @@ module Core(
       end else begin
         ic_reg_addr_out <= ic_zbp_target;
       end
-    end else if (!(~io_imem_valid)) begin // @[src/main/scala/fpga/Core.scala 530:92]
-      if (3'h0 == ic_state) begin // @[src/main/scala/fpga/Core.scala 394:21]
+    end else if (!(~io_imem_valid)) begin // @[src/main/scala/fpga/Core.scala 548:92]
+      if (3'h0 == ic_state) begin // @[src/main/scala/fpga/Core.scala 396:21]
         ic_reg_addr_out <= _GEN_2;
       end else begin
-        ic_reg_addr_out <= _GEN_117;
+        ic_reg_addr_out <= _GEN_137;
       end
     end
-    if (reset) begin // @[src/main/scala/fpga/Core.scala 346:34]
-      ic_reg_inst <= 32'h0; // @[src/main/scala/fpga/Core.scala 346:34]
-    end else if (3'h0 == ic_state) begin // @[src/main/scala/fpga/Core.scala 394:21]
-      ic_reg_inst <= io_imem_inst; // @[src/main/scala/fpga/Core.scala 397:31]
-    end else if (3'h4 == ic_state) begin // @[src/main/scala/fpga/Core.scala 394:21]
-      ic_reg_inst <= io_imem_inst; // @[src/main/scala/fpga/Core.scala 432:31]
-    end else if (!(3'h1 == ic_state | 3'h5 == ic_state)) begin // @[src/main/scala/fpga/Core.scala 394:21]
-      ic_reg_inst <= _GEN_39;
-    end
     if (reset) begin // @[src/main/scala/fpga/Core.scala 347:34]
-      ic_reg_inst_addr <= 31'h0; // @[src/main/scala/fpga/Core.scala 347:34]
-    end else if (3'h0 == ic_state) begin // @[src/main/scala/fpga/Core.scala 394:21]
-      ic_reg_inst_addr <= ic_reg_imem_addr; // @[src/main/scala/fpga/Core.scala 398:31]
-    end else if (3'h4 == ic_state) begin // @[src/main/scala/fpga/Core.scala 394:21]
-      ic_reg_inst_addr <= ic_reg_imem_addr; // @[src/main/scala/fpga/Core.scala 433:31]
-    end else if (!(3'h1 == ic_state | 3'h5 == ic_state)) begin // @[src/main/scala/fpga/Core.scala 394:21]
-      ic_reg_inst_addr <= _GEN_40;
+      ic_reg_inst <= 32'h0; // @[src/main/scala/fpga/Core.scala 347:34]
+    end else if (3'h0 == ic_state) begin // @[src/main/scala/fpga/Core.scala 396:21]
+      ic_reg_inst <= io_imem_inst; // @[src/main/scala/fpga/Core.scala 399:31]
+    end else if (3'h4 == ic_state) begin // @[src/main/scala/fpga/Core.scala 396:21]
+      ic_reg_inst <= io_imem_inst; // @[src/main/scala/fpga/Core.scala 440:31]
+    end else if (!(3'h1 == ic_state | 3'h5 == ic_state)) begin // @[src/main/scala/fpga/Core.scala 396:21]
+      ic_reg_inst <= _GEN_43;
     end
     if (reset) begin // @[src/main/scala/fpga/Core.scala 348:34]
-      ic_reg_inst2 <= 32'h0; // @[src/main/scala/fpga/Core.scala 348:34]
-    end else if (!(3'h0 == ic_state)) begin // @[src/main/scala/fpga/Core.scala 394:21]
-      if (!(3'h4 == ic_state)) begin // @[src/main/scala/fpga/Core.scala 394:21]
-        if (!(3'h1 == ic_state | 3'h5 == ic_state)) begin // @[src/main/scala/fpga/Core.scala 394:21]
-          ic_reg_inst2 <= _GEN_41;
+      ic_reg_inst_addr <= 31'h0; // @[src/main/scala/fpga/Core.scala 348:34]
+    end else if (3'h0 == ic_state) begin // @[src/main/scala/fpga/Core.scala 396:21]
+      ic_reg_inst_addr <= ic_reg_imem_addr; // @[src/main/scala/fpga/Core.scala 400:31]
+    end else if (3'h4 == ic_state) begin // @[src/main/scala/fpga/Core.scala 396:21]
+      ic_reg_inst_addr <= ic_reg_imem_addr; // @[src/main/scala/fpga/Core.scala 441:31]
+    end else if (!(3'h1 == ic_state | 3'h5 == ic_state)) begin // @[src/main/scala/fpga/Core.scala 396:21]
+      ic_reg_inst_addr <= _GEN_44;
+    end
+    if (reset) begin // @[src/main/scala/fpga/Core.scala 349:34]
+      ic_reg_inst2 <= 32'h0; // @[src/main/scala/fpga/Core.scala 349:34]
+    end else if (!(3'h0 == ic_state)) begin // @[src/main/scala/fpga/Core.scala 396:21]
+      if (!(3'h4 == ic_state)) begin // @[src/main/scala/fpga/Core.scala 396:21]
+        if (!(3'h1 == ic_state | 3'h5 == ic_state)) begin // @[src/main/scala/fpga/Core.scala 396:21]
+          ic_reg_inst2 <= _GEN_45;
         end
       end
     end
-    if (reset) begin // @[src/main/scala/fpga/Core.scala 351:25]
-      ic_state <= 3'h0; // @[src/main/scala/fpga/Core.scala 351:25]
-    end else if (if1_is_jump) begin // @[src/main/scala/fpga/Core.scala 539:21]
-      if (if1_jump_addr[0]) begin // @[src/main/scala/fpga/Core.scala 543:28]
+    if (reset) begin // @[src/main/scala/fpga/Core.scala 352:25]
+      ic_state <= 3'h0; // @[src/main/scala/fpga/Core.scala 352:25]
+    end else if (if1_is_jump) begin // @[src/main/scala/fpga/Core.scala 557:21]
+      if (if1_jump_addr[0]) begin // @[src/main/scala/fpga/Core.scala 561:28]
         ic_state <= 3'h4;
       end else begin
         ic_state <= 3'h0;
       end
-    end else if (!(~io_imem_valid)) begin // @[src/main/scala/fpga/Core.scala 530:92]
-      if (3'h0 == ic_state) begin // @[src/main/scala/fpga/Core.scala 394:21]
+    end else if (!(~io_imem_valid)) begin // @[src/main/scala/fpga/Core.scala 548:92]
+      if (3'h0 == ic_state) begin // @[src/main/scala/fpga/Core.scala 396:21]
         ic_state <= {{1'd0}, _GEN_3};
       end else begin
-        ic_state <= _GEN_138;
+        ic_state <= _GEN_164;
       end
     end
-    if (reset) begin // @[src/main/scala/fpga/Core.scala 359:32]
-      ic_reg_bp_next0_taken <= 1'h0; // @[src/main/scala/fpga/Core.scala 359:32]
-    end else if (3'h0 == ic_state) begin // @[src/main/scala/fpga/Core.scala 394:21]
-      ic_reg_bp_next0_taken <= _ic_bp_taken_T_2; // @[src/main/scala/fpga/Core.scala 405:31]
-    end else if (3'h4 == ic_state) begin // @[src/main/scala/fpga/Core.scala 394:21]
-      ic_reg_bp_next0_taken <= _ic_bp_taken_T_2; // @[src/main/scala/fpga/Core.scala 440:31]
-    end else if (!(3'h1 == ic_state | 3'h5 == ic_state)) begin // @[src/main/scala/fpga/Core.scala 394:21]
-      ic_reg_bp_next0_taken <= _GEN_49;
-    end
-    if (reset) begin // @[src/main/scala/fpga/Core.scala 359:32]
-      ic_reg_bp_next0_attr <= 2'h0; // @[src/main/scala/fpga/Core.scala 359:32]
-    end else if (3'h0 == ic_state) begin // @[src/main/scala/fpga/Core.scala 394:21]
-      ic_reg_bp_next0_attr <= ic_btb_io_lu_attr0; // @[src/main/scala/fpga/Core.scala 406:31]
-    end else if (3'h4 == ic_state) begin // @[src/main/scala/fpga/Core.scala 394:21]
-      ic_reg_bp_next0_attr <= ic_btb_io_lu_attr0; // @[src/main/scala/fpga/Core.scala 441:31]
-    end else if (!(3'h1 == ic_state | 3'h5 == ic_state)) begin // @[src/main/scala/fpga/Core.scala 394:21]
-      ic_reg_bp_next0_attr <= _GEN_50;
-    end
-    if (reset) begin // @[src/main/scala/fpga/Core.scala 359:32]
-      ic_reg_bp_next0_is_ret <= 1'h0; // @[src/main/scala/fpga/Core.scala 359:32]
-    end else if (3'h0 == ic_state) begin // @[src/main/scala/fpga/Core.scala 394:21]
-      ic_reg_bp_next0_is_ret <= ic_btb_io_lu_is_ret0; // @[src/main/scala/fpga/Core.scala 407:31]
-    end else if (3'h4 == ic_state) begin // @[src/main/scala/fpga/Core.scala 394:21]
-      ic_reg_bp_next0_is_ret <= ic_btb_io_lu_is_ret0; // @[src/main/scala/fpga/Core.scala 442:31]
-    end else if (!(3'h1 == ic_state | 3'h5 == ic_state)) begin // @[src/main/scala/fpga/Core.scala 394:21]
-      ic_reg_bp_next0_is_ret <= _GEN_51;
-    end
-    if (reset) begin // @[src/main/scala/fpga/Core.scala 359:32]
-      ic_reg_bp_next0_target <= 31'h0; // @[src/main/scala/fpga/Core.scala 359:32]
-    end else if (3'h0 == ic_state) begin // @[src/main/scala/fpga/Core.scala 394:21]
-      ic_reg_bp_next0_target <= ic_btb_io_lu_target0; // @[src/main/scala/fpga/Core.scala 408:31]
-    end else if (3'h4 == ic_state) begin // @[src/main/scala/fpga/Core.scala 394:21]
-      ic_reg_bp_next0_target <= ic_btb_io_lu_target0; // @[src/main/scala/fpga/Core.scala 443:31]
-    end else if (!(3'h1 == ic_state | 3'h5 == ic_state)) begin // @[src/main/scala/fpga/Core.scala 394:21]
-      ic_reg_bp_next0_target <= _GEN_52;
-    end
-    if (reset) begin // @[src/main/scala/fpga/Core.scala 359:32]
-      ic_reg_bp_next0_cnt <= 2'h0; // @[src/main/scala/fpga/Core.scala 359:32]
-    end else if (3'h0 == ic_state) begin // @[src/main/scala/fpga/Core.scala 394:21]
-      ic_reg_bp_next0_cnt <= ic_pht_io_lu_cnt0; // @[src/main/scala/fpga/Core.scala 409:31]
-    end else if (3'h4 == ic_state) begin // @[src/main/scala/fpga/Core.scala 394:21]
-      ic_reg_bp_next0_cnt <= ic_pht_io_lu_cnt0; // @[src/main/scala/fpga/Core.scala 444:31]
-    end else if (!(3'h1 == ic_state | 3'h5 == ic_state)) begin // @[src/main/scala/fpga/Core.scala 394:21]
-      ic_reg_bp_next0_cnt <= _GEN_53;
+    if (reset) begin // @[src/main/scala/fpga/Core.scala 360:32]
+      ic_reg_bp_next0_taken <= 1'h0; // @[src/main/scala/fpga/Core.scala 360:32]
+    end else if (3'h0 == ic_state) begin // @[src/main/scala/fpga/Core.scala 396:21]
+      ic_reg_bp_next0_taken <= _ic_bp_taken_T_1; // @[src/main/scala/fpga/Core.scala 409:31]
+    end else if (3'h4 == ic_state) begin // @[src/main/scala/fpga/Core.scala 396:21]
+      ic_reg_bp_next0_taken <= _ic_bp_taken_T_1; // @[src/main/scala/fpga/Core.scala 450:31]
+    end else if (!(3'h1 == ic_state | 3'h5 == ic_state)) begin // @[src/main/scala/fpga/Core.scala 396:21]
+      ic_reg_bp_next0_taken <= _GEN_55;
     end
     if (reset) begin // @[src/main/scala/fpga/Core.scala 360:32]
-      ic_reg_bp_next1_taken <= 1'h0; // @[src/main/scala/fpga/Core.scala 360:32]
-    end else if (3'h0 == ic_state) begin // @[src/main/scala/fpga/Core.scala 394:21]
-      ic_reg_bp_next1_taken <= ic_btb_io_lu_jump1 | ic_btb_io_lu_br1 & ic_pht_io_lu_cnt1[0]; // @[src/main/scala/fpga/Core.scala 410:31]
-    end else if (3'h4 == ic_state) begin // @[src/main/scala/fpga/Core.scala 394:21]
-      ic_reg_bp_next1_taken <= _ic_reg_bp_next1_taken_T_2; // @[src/main/scala/fpga/Core.scala 445:31]
-    end else if (!(3'h1 == ic_state | 3'h5 == ic_state)) begin // @[src/main/scala/fpga/Core.scala 394:21]
-      ic_reg_bp_next1_taken <= _GEN_58;
+      ic_reg_bp_next0_attr <= 2'h0; // @[src/main/scala/fpga/Core.scala 360:32]
+    end else if (3'h0 == ic_state) begin // @[src/main/scala/fpga/Core.scala 396:21]
+      ic_reg_bp_next0_attr <= ic_btb_io_lu_attr0; // @[src/main/scala/fpga/Core.scala 410:31]
+    end else if (3'h4 == ic_state) begin // @[src/main/scala/fpga/Core.scala 396:21]
+      ic_reg_bp_next0_attr <= ic_btb_io_lu_attr0; // @[src/main/scala/fpga/Core.scala 451:31]
+    end else if (!(3'h1 == ic_state | 3'h5 == ic_state)) begin // @[src/main/scala/fpga/Core.scala 396:21]
+      ic_reg_bp_next0_attr <= _GEN_56;
     end
     if (reset) begin // @[src/main/scala/fpga/Core.scala 360:32]
-      ic_reg_bp_next1_attr <= 2'h0; // @[src/main/scala/fpga/Core.scala 360:32]
-    end else if (3'h0 == ic_state) begin // @[src/main/scala/fpga/Core.scala 394:21]
-      ic_reg_bp_next1_attr <= ic_btb_io_lu_attr1; // @[src/main/scala/fpga/Core.scala 411:31]
-    end else if (3'h4 == ic_state) begin // @[src/main/scala/fpga/Core.scala 394:21]
-      ic_reg_bp_next1_attr <= ic_btb_io_lu_attr1; // @[src/main/scala/fpga/Core.scala 446:31]
-    end else if (!(3'h1 == ic_state | 3'h5 == ic_state)) begin // @[src/main/scala/fpga/Core.scala 394:21]
-      ic_reg_bp_next1_attr <= _GEN_59;
+      ic_reg_bp_next0_is_ret <= 1'h0; // @[src/main/scala/fpga/Core.scala 360:32]
+    end else if (3'h0 == ic_state) begin // @[src/main/scala/fpga/Core.scala 396:21]
+      ic_reg_bp_next0_is_ret <= ic_btb_io_lu_is_ret0; // @[src/main/scala/fpga/Core.scala 411:31]
+    end else if (3'h4 == ic_state) begin // @[src/main/scala/fpga/Core.scala 396:21]
+      ic_reg_bp_next0_is_ret <= ic_btb_io_lu_is_ret0; // @[src/main/scala/fpga/Core.scala 452:31]
+    end else if (!(3'h1 == ic_state | 3'h5 == ic_state)) begin // @[src/main/scala/fpga/Core.scala 396:21]
+      ic_reg_bp_next0_is_ret <= _GEN_57;
     end
     if (reset) begin // @[src/main/scala/fpga/Core.scala 360:32]
-      ic_reg_bp_next1_is_ret <= 1'h0; // @[src/main/scala/fpga/Core.scala 360:32]
-    end else if (3'h0 == ic_state) begin // @[src/main/scala/fpga/Core.scala 394:21]
-      ic_reg_bp_next1_is_ret <= ic_btb_io_lu_is_ret1; // @[src/main/scala/fpga/Core.scala 412:31]
-    end else if (3'h4 == ic_state) begin // @[src/main/scala/fpga/Core.scala 394:21]
-      ic_reg_bp_next1_is_ret <= ic_btb_io_lu_is_ret1; // @[src/main/scala/fpga/Core.scala 447:31]
-    end else if (!(3'h1 == ic_state | 3'h5 == ic_state)) begin // @[src/main/scala/fpga/Core.scala 394:21]
-      ic_reg_bp_next1_is_ret <= _GEN_60;
+      ic_reg_bp_next0_target <= 31'h0; // @[src/main/scala/fpga/Core.scala 360:32]
+    end else if (3'h0 == ic_state) begin // @[src/main/scala/fpga/Core.scala 396:21]
+      ic_reg_bp_next0_target <= ic_btb_io_lu_target0; // @[src/main/scala/fpga/Core.scala 412:31]
+    end else if (3'h4 == ic_state) begin // @[src/main/scala/fpga/Core.scala 396:21]
+      ic_reg_bp_next0_target <= ic_btb_io_lu_target0; // @[src/main/scala/fpga/Core.scala 453:31]
+    end else if (!(3'h1 == ic_state | 3'h5 == ic_state)) begin // @[src/main/scala/fpga/Core.scala 396:21]
+      ic_reg_bp_next0_target <= _GEN_58;
     end
     if (reset) begin // @[src/main/scala/fpga/Core.scala 360:32]
-      ic_reg_bp_next1_target <= 31'h0; // @[src/main/scala/fpga/Core.scala 360:32]
-    end else if (3'h0 == ic_state) begin // @[src/main/scala/fpga/Core.scala 394:21]
-      ic_reg_bp_next1_target <= ic_btb_io_lu_target1; // @[src/main/scala/fpga/Core.scala 413:31]
-    end else if (3'h4 == ic_state) begin // @[src/main/scala/fpga/Core.scala 394:21]
-      ic_reg_bp_next1_target <= ic_btb_io_lu_target1; // @[src/main/scala/fpga/Core.scala 448:31]
-    end else if (!(3'h1 == ic_state | 3'h5 == ic_state)) begin // @[src/main/scala/fpga/Core.scala 394:21]
-      ic_reg_bp_next1_target <= _GEN_61;
+      ic_reg_bp_next0_history <= 6'h0; // @[src/main/scala/fpga/Core.scala 360:32]
+    end else if (3'h0 == ic_state) begin // @[src/main/scala/fpga/Core.scala 396:21]
+      ic_reg_bp_next0_history <= ic_pht_io_history; // @[src/main/scala/fpga/Core.scala 413:31]
+    end else if (3'h4 == ic_state) begin // @[src/main/scala/fpga/Core.scala 396:21]
+      ic_reg_bp_next0_history <= ic_pht_io_history; // @[src/main/scala/fpga/Core.scala 454:31]
+    end else if (!(3'h1 == ic_state | 3'h5 == ic_state)) begin // @[src/main/scala/fpga/Core.scala 396:21]
+      ic_reg_bp_next0_history <= _GEN_59;
     end
     if (reset) begin // @[src/main/scala/fpga/Core.scala 360:32]
-      ic_reg_bp_next1_cnt <= 2'h0; // @[src/main/scala/fpga/Core.scala 360:32]
-    end else if (3'h0 == ic_state) begin // @[src/main/scala/fpga/Core.scala 394:21]
-      ic_reg_bp_next1_cnt <= ic_pht_io_lu_cnt1; // @[src/main/scala/fpga/Core.scala 414:31]
-    end else if (3'h4 == ic_state) begin // @[src/main/scala/fpga/Core.scala 394:21]
-      ic_reg_bp_next1_cnt <= ic_pht_io_lu_cnt1; // @[src/main/scala/fpga/Core.scala 449:31]
-    end else if (!(3'h1 == ic_state | 3'h5 == ic_state)) begin // @[src/main/scala/fpga/Core.scala 394:21]
-      ic_reg_bp_next1_cnt <= _GEN_62;
+      ic_reg_bp_next0_cnt <= 2'h0; // @[src/main/scala/fpga/Core.scala 360:32]
+    end else if (3'h0 == ic_state) begin // @[src/main/scala/fpga/Core.scala 396:21]
+      ic_reg_bp_next0_cnt <= ic_pht_io_lu_cnt0; // @[src/main/scala/fpga/Core.scala 414:31]
+    end else if (3'h4 == ic_state) begin // @[src/main/scala/fpga/Core.scala 396:21]
+      ic_reg_bp_next0_cnt <= ic_pht_io_lu_cnt0; // @[src/main/scala/fpga/Core.scala 455:31]
+    end else if (!(3'h1 == ic_state | 3'h5 == ic_state)) begin // @[src/main/scala/fpga/Core.scala 396:21]
+      ic_reg_bp_next0_cnt <= _GEN_60;
+    end
+    if (reset) begin // @[src/main/scala/fpga/Core.scala 360:32]
+      ic_reg_bp_next0_gcnt <= 2'h0; // @[src/main/scala/fpga/Core.scala 360:32]
+    end else if (3'h0 == ic_state) begin // @[src/main/scala/fpga/Core.scala 396:21]
+      ic_reg_bp_next0_gcnt <= ic_pht_io_lu_gcnt0; // @[src/main/scala/fpga/Core.scala 415:31]
+    end else if (3'h4 == ic_state) begin // @[src/main/scala/fpga/Core.scala 396:21]
+      ic_reg_bp_next0_gcnt <= ic_pht_io_lu_gcnt0; // @[src/main/scala/fpga/Core.scala 456:31]
+    end else if (!(3'h1 == ic_state | 3'h5 == ic_state)) begin // @[src/main/scala/fpga/Core.scala 396:21]
+      ic_reg_bp_next0_gcnt <= _GEN_61;
     end
     if (reset) begin // @[src/main/scala/fpga/Core.scala 361:32]
-      ic_reg_bp_next2_taken <= 1'h0; // @[src/main/scala/fpga/Core.scala 361:32]
-    end else if (!(3'h0 == ic_state)) begin // @[src/main/scala/fpga/Core.scala 394:21]
-      if (!(3'h4 == ic_state)) begin // @[src/main/scala/fpga/Core.scala 394:21]
-        if (!(3'h1 == ic_state | 3'h5 == ic_state)) begin // @[src/main/scala/fpga/Core.scala 394:21]
-          ic_reg_bp_next2_taken <= _GEN_43;
+      ic_reg_bp_next1_taken <= 1'h0; // @[src/main/scala/fpga/Core.scala 361:32]
+    end else if (3'h0 == ic_state) begin // @[src/main/scala/fpga/Core.scala 396:21]
+      ic_reg_bp_next1_taken <= ic_btb_io_lu_jump1 | ic_btb_io_lu_br1 & ic_pht_io_lu_taken1; // @[src/main/scala/fpga/Core.scala 416:31]
+    end else if (3'h4 == ic_state) begin // @[src/main/scala/fpga/Core.scala 396:21]
+      ic_reg_bp_next1_taken <= _ic_reg_bp_next1_taken_T_1; // @[src/main/scala/fpga/Core.scala 457:31]
+    end else if (!(3'h1 == ic_state | 3'h5 == ic_state)) begin // @[src/main/scala/fpga/Core.scala 396:21]
+      ic_reg_bp_next1_taken <= _GEN_66;
+    end
+    if (reset) begin // @[src/main/scala/fpga/Core.scala 361:32]
+      ic_reg_bp_next1_attr <= 2'h0; // @[src/main/scala/fpga/Core.scala 361:32]
+    end else if (3'h0 == ic_state) begin // @[src/main/scala/fpga/Core.scala 396:21]
+      ic_reg_bp_next1_attr <= ic_btb_io_lu_attr1; // @[src/main/scala/fpga/Core.scala 417:31]
+    end else if (3'h4 == ic_state) begin // @[src/main/scala/fpga/Core.scala 396:21]
+      ic_reg_bp_next1_attr <= ic_btb_io_lu_attr1; // @[src/main/scala/fpga/Core.scala 458:31]
+    end else if (!(3'h1 == ic_state | 3'h5 == ic_state)) begin // @[src/main/scala/fpga/Core.scala 396:21]
+      ic_reg_bp_next1_attr <= _GEN_67;
+    end
+    if (reset) begin // @[src/main/scala/fpga/Core.scala 361:32]
+      ic_reg_bp_next1_is_ret <= 1'h0; // @[src/main/scala/fpga/Core.scala 361:32]
+    end else if (3'h0 == ic_state) begin // @[src/main/scala/fpga/Core.scala 396:21]
+      ic_reg_bp_next1_is_ret <= ic_btb_io_lu_is_ret1; // @[src/main/scala/fpga/Core.scala 418:31]
+    end else if (3'h4 == ic_state) begin // @[src/main/scala/fpga/Core.scala 396:21]
+      ic_reg_bp_next1_is_ret <= ic_btb_io_lu_is_ret1; // @[src/main/scala/fpga/Core.scala 459:31]
+    end else if (!(3'h1 == ic_state | 3'h5 == ic_state)) begin // @[src/main/scala/fpga/Core.scala 396:21]
+      ic_reg_bp_next1_is_ret <= _GEN_68;
+    end
+    if (reset) begin // @[src/main/scala/fpga/Core.scala 361:32]
+      ic_reg_bp_next1_target <= 31'h0; // @[src/main/scala/fpga/Core.scala 361:32]
+    end else if (3'h0 == ic_state) begin // @[src/main/scala/fpga/Core.scala 396:21]
+      ic_reg_bp_next1_target <= ic_btb_io_lu_target1; // @[src/main/scala/fpga/Core.scala 419:31]
+    end else if (3'h4 == ic_state) begin // @[src/main/scala/fpga/Core.scala 396:21]
+      ic_reg_bp_next1_target <= ic_btb_io_lu_target1; // @[src/main/scala/fpga/Core.scala 460:31]
+    end else if (!(3'h1 == ic_state | 3'h5 == ic_state)) begin // @[src/main/scala/fpga/Core.scala 396:21]
+      ic_reg_bp_next1_target <= _GEN_69;
+    end
+    if (reset) begin // @[src/main/scala/fpga/Core.scala 361:32]
+      ic_reg_bp_next1_history <= 6'h0; // @[src/main/scala/fpga/Core.scala 361:32]
+    end else if (3'h0 == ic_state) begin // @[src/main/scala/fpga/Core.scala 396:21]
+      ic_reg_bp_next1_history <= ic_pht_io_history; // @[src/main/scala/fpga/Core.scala 420:31]
+    end else if (3'h4 == ic_state) begin // @[src/main/scala/fpga/Core.scala 396:21]
+      ic_reg_bp_next1_history <= ic_pht_io_history; // @[src/main/scala/fpga/Core.scala 461:31]
+    end else if (!(3'h1 == ic_state | 3'h5 == ic_state)) begin // @[src/main/scala/fpga/Core.scala 396:21]
+      ic_reg_bp_next1_history <= _GEN_70;
+    end
+    if (reset) begin // @[src/main/scala/fpga/Core.scala 361:32]
+      ic_reg_bp_next1_cnt <= 2'h0; // @[src/main/scala/fpga/Core.scala 361:32]
+    end else if (3'h0 == ic_state) begin // @[src/main/scala/fpga/Core.scala 396:21]
+      ic_reg_bp_next1_cnt <= ic_pht_io_lu_cnt1; // @[src/main/scala/fpga/Core.scala 421:31]
+    end else if (3'h4 == ic_state) begin // @[src/main/scala/fpga/Core.scala 396:21]
+      ic_reg_bp_next1_cnt <= ic_pht_io_lu_cnt1; // @[src/main/scala/fpga/Core.scala 462:31]
+    end else if (!(3'h1 == ic_state | 3'h5 == ic_state)) begin // @[src/main/scala/fpga/Core.scala 396:21]
+      ic_reg_bp_next1_cnt <= _GEN_71;
+    end
+    if (reset) begin // @[src/main/scala/fpga/Core.scala 361:32]
+      ic_reg_bp_next1_gcnt <= 2'h0; // @[src/main/scala/fpga/Core.scala 361:32]
+    end else if (3'h0 == ic_state) begin // @[src/main/scala/fpga/Core.scala 396:21]
+      ic_reg_bp_next1_gcnt <= ic_pht_io_lu_gcnt1; // @[src/main/scala/fpga/Core.scala 422:31]
+    end else if (3'h4 == ic_state) begin // @[src/main/scala/fpga/Core.scala 396:21]
+      ic_reg_bp_next1_gcnt <= ic_pht_io_lu_gcnt1; // @[src/main/scala/fpga/Core.scala 463:31]
+    end else if (!(3'h1 == ic_state | 3'h5 == ic_state)) begin // @[src/main/scala/fpga/Core.scala 396:21]
+      ic_reg_bp_next1_gcnt <= _GEN_72;
+    end
+    if (reset) begin // @[src/main/scala/fpga/Core.scala 362:32]
+      ic_reg_bp_next2_taken <= 1'h0; // @[src/main/scala/fpga/Core.scala 362:32]
+    end else if (!(3'h0 == ic_state)) begin // @[src/main/scala/fpga/Core.scala 396:21]
+      if (!(3'h4 == ic_state)) begin // @[src/main/scala/fpga/Core.scala 396:21]
+        if (!(3'h1 == ic_state | 3'h5 == ic_state)) begin // @[src/main/scala/fpga/Core.scala 396:21]
+          ic_reg_bp_next2_taken <= _GEN_47;
         end
       end
     end
-    if (reset) begin // @[src/main/scala/fpga/Core.scala 361:32]
-      ic_reg_bp_next2_attr <= 2'h0; // @[src/main/scala/fpga/Core.scala 361:32]
-    end else if (!(3'h0 == ic_state)) begin // @[src/main/scala/fpga/Core.scala 394:21]
-      if (!(3'h4 == ic_state)) begin // @[src/main/scala/fpga/Core.scala 394:21]
-        if (!(3'h1 == ic_state | 3'h5 == ic_state)) begin // @[src/main/scala/fpga/Core.scala 394:21]
-          ic_reg_bp_next2_attr <= _GEN_44;
+    if (reset) begin // @[src/main/scala/fpga/Core.scala 362:32]
+      ic_reg_bp_next2_attr <= 2'h0; // @[src/main/scala/fpga/Core.scala 362:32]
+    end else if (!(3'h0 == ic_state)) begin // @[src/main/scala/fpga/Core.scala 396:21]
+      if (!(3'h4 == ic_state)) begin // @[src/main/scala/fpga/Core.scala 396:21]
+        if (!(3'h1 == ic_state | 3'h5 == ic_state)) begin // @[src/main/scala/fpga/Core.scala 396:21]
+          ic_reg_bp_next2_attr <= _GEN_48;
         end
       end
     end
-    if (reset) begin // @[src/main/scala/fpga/Core.scala 361:32]
-      ic_reg_bp_next2_is_ret <= 1'h0; // @[src/main/scala/fpga/Core.scala 361:32]
-    end else if (!(3'h0 == ic_state)) begin // @[src/main/scala/fpga/Core.scala 394:21]
-      if (!(3'h4 == ic_state)) begin // @[src/main/scala/fpga/Core.scala 394:21]
-        if (!(3'h1 == ic_state | 3'h5 == ic_state)) begin // @[src/main/scala/fpga/Core.scala 394:21]
-          ic_reg_bp_next2_is_ret <= _GEN_45;
+    if (reset) begin // @[src/main/scala/fpga/Core.scala 362:32]
+      ic_reg_bp_next2_is_ret <= 1'h0; // @[src/main/scala/fpga/Core.scala 362:32]
+    end else if (!(3'h0 == ic_state)) begin // @[src/main/scala/fpga/Core.scala 396:21]
+      if (!(3'h4 == ic_state)) begin // @[src/main/scala/fpga/Core.scala 396:21]
+        if (!(3'h1 == ic_state | 3'h5 == ic_state)) begin // @[src/main/scala/fpga/Core.scala 396:21]
+          ic_reg_bp_next2_is_ret <= _GEN_49;
         end
       end
     end
-    if (reset) begin // @[src/main/scala/fpga/Core.scala 361:32]
-      ic_reg_bp_next2_target <= 31'h0; // @[src/main/scala/fpga/Core.scala 361:32]
-    end else if (!(3'h0 == ic_state)) begin // @[src/main/scala/fpga/Core.scala 394:21]
-      if (!(3'h4 == ic_state)) begin // @[src/main/scala/fpga/Core.scala 394:21]
-        if (!(3'h1 == ic_state | 3'h5 == ic_state)) begin // @[src/main/scala/fpga/Core.scala 394:21]
-          ic_reg_bp_next2_target <= _GEN_47;
+    if (reset) begin // @[src/main/scala/fpga/Core.scala 362:32]
+      ic_reg_bp_next2_target <= 31'h0; // @[src/main/scala/fpga/Core.scala 362:32]
+    end else if (!(3'h0 == ic_state)) begin // @[src/main/scala/fpga/Core.scala 396:21]
+      if (!(3'h4 == ic_state)) begin // @[src/main/scala/fpga/Core.scala 396:21]
+        if (!(3'h1 == ic_state | 3'h5 == ic_state)) begin // @[src/main/scala/fpga/Core.scala 396:21]
+          ic_reg_bp_next2_target <= _GEN_51;
         end
       end
     end
-    if (reset) begin // @[src/main/scala/fpga/Core.scala 361:32]
-      ic_reg_bp_next2_cnt <= 2'h0; // @[src/main/scala/fpga/Core.scala 361:32]
-    end else if (!(3'h0 == ic_state)) begin // @[src/main/scala/fpga/Core.scala 394:21]
-      if (!(3'h4 == ic_state)) begin // @[src/main/scala/fpga/Core.scala 394:21]
-        if (!(3'h1 == ic_state | 3'h5 == ic_state)) begin // @[src/main/scala/fpga/Core.scala 394:21]
-          ic_reg_bp_next2_cnt <= _GEN_48;
+    if (reset) begin // @[src/main/scala/fpga/Core.scala 362:32]
+      ic_reg_bp_next2_history <= 6'h0; // @[src/main/scala/fpga/Core.scala 362:32]
+    end else if (!(3'h0 == ic_state)) begin // @[src/main/scala/fpga/Core.scala 396:21]
+      if (!(3'h4 == ic_state)) begin // @[src/main/scala/fpga/Core.scala 396:21]
+        if (!(3'h1 == ic_state | 3'h5 == ic_state)) begin // @[src/main/scala/fpga/Core.scala 396:21]
+          ic_reg_bp_next2_history <= _GEN_52;
         end
       end
+    end
+    if (reset) begin // @[src/main/scala/fpga/Core.scala 362:32]
+      ic_reg_bp_next2_cnt <= 2'h0; // @[src/main/scala/fpga/Core.scala 362:32]
+    end else if (!(3'h0 == ic_state)) begin // @[src/main/scala/fpga/Core.scala 396:21]
+      if (!(3'h4 == ic_state)) begin // @[src/main/scala/fpga/Core.scala 396:21]
+        if (!(3'h1 == ic_state | 3'h5 == ic_state)) begin // @[src/main/scala/fpga/Core.scala 396:21]
+          ic_reg_bp_next2_cnt <= _GEN_53;
+        end
+      end
+    end
+    if (reset) begin // @[src/main/scala/fpga/Core.scala 362:32]
+      ic_reg_bp_next2_gcnt <= 2'h0; // @[src/main/scala/fpga/Core.scala 362:32]
+    end else if (!(3'h0 == ic_state)) begin // @[src/main/scala/fpga/Core.scala 396:21]
+      if (!(3'h4 == ic_state)) begin // @[src/main/scala/fpga/Core.scala 396:21]
+        if (!(3'h1 == ic_state | 3'h5 == ic_state)) begin // @[src/main/scala/fpga/Core.scala 396:21]
+          ic_reg_bp_next2_gcnt <= _GEN_54;
+        end
+      end
+    end
+    if (reset) begin // @[src/main/scala/fpga/Core.scala 366:40]
+      ic_reg_zbp_next_taken0 <= 1'h0; // @[src/main/scala/fpga/Core.scala 366:40]
+    end else if (3'h0 == ic_state) begin // @[src/main/scala/fpga/Core.scala 396:21]
+      ic_reg_zbp_next_taken0 <= ic_zbtb_io_lu_matches0; // @[src/main/scala/fpga/Core.scala 425:31]
+    end else if (3'h4 == ic_state) begin // @[src/main/scala/fpga/Core.scala 396:21]
+      ic_reg_zbp_next_taken0 <= ic_zbtb_io_lu_matches0; // @[src/main/scala/fpga/Core.scala 466:31]
+    end else if (!(3'h1 == ic_state | 3'h5 == ic_state)) begin // @[src/main/scala/fpga/Core.scala 396:21]
+      ic_reg_zbp_next_taken0 <= _GEN_64;
     end
     if (reset) begin // @[src/main/scala/fpga/Core.scala 367:40]
-      ic_reg_zbp_next_taken1 <= 1'h0; // @[src/main/scala/fpga/Core.scala 367:40]
-    end else if (3'h0 == ic_state) begin // @[src/main/scala/fpga/Core.scala 394:21]
-      ic_reg_zbp_next_taken1 <= ic_zbtb_io_lu_matches1; // @[src/main/scala/fpga/Core.scala 419:31]
-    end else if (3'h4 == ic_state) begin // @[src/main/scala/fpga/Core.scala 394:21]
-      ic_reg_zbp_next_taken1 <= ic_zbtb_io_lu_matches1; // @[src/main/scala/fpga/Core.scala 454:31]
-    end else if (!(3'h1 == ic_state | 3'h5 == ic_state)) begin // @[src/main/scala/fpga/Core.scala 394:21]
-      ic_reg_zbp_next_taken1 <= _GEN_63;
+      ic_reg_zbp_next_target0 <= 31'h0; // @[src/main/scala/fpga/Core.scala 367:40]
+    end else if (3'h0 == ic_state) begin // @[src/main/scala/fpga/Core.scala 396:21]
+      ic_reg_zbp_next_target0 <= ic_zbtb_io_lu_target0; // @[src/main/scala/fpga/Core.scala 426:31]
+    end else if (3'h4 == ic_state) begin // @[src/main/scala/fpga/Core.scala 396:21]
+      ic_reg_zbp_next_target0 <= ic_zbtb_io_lu_target0; // @[src/main/scala/fpga/Core.scala 467:31]
+    end else if (!(3'h1 == ic_state | 3'h5 == ic_state)) begin // @[src/main/scala/fpga/Core.scala 396:21]
+      ic_reg_zbp_next_target0 <= _GEN_65;
     end
     if (reset) begin // @[src/main/scala/fpga/Core.scala 368:40]
-      ic_reg_zbp_next_target1 <= 31'h0; // @[src/main/scala/fpga/Core.scala 368:40]
-    end else if (3'h0 == ic_state) begin // @[src/main/scala/fpga/Core.scala 394:21]
-      ic_reg_zbp_next_target1 <= ic_zbtb_io_lu_target1; // @[src/main/scala/fpga/Core.scala 420:31]
-    end else if (3'h4 == ic_state) begin // @[src/main/scala/fpga/Core.scala 394:21]
-      ic_reg_zbp_next_target1 <= ic_zbtb_io_lu_target1; // @[src/main/scala/fpga/Core.scala 455:31]
-    end else if (!(3'h1 == ic_state | 3'h5 == ic_state)) begin // @[src/main/scala/fpga/Core.scala 394:21]
-      ic_reg_zbp_next_target1 <= _GEN_64;
+      ic_reg_zbp_next_taken1 <= 1'h0; // @[src/main/scala/fpga/Core.scala 368:40]
+    end else if (3'h0 == ic_state) begin // @[src/main/scala/fpga/Core.scala 396:21]
+      ic_reg_zbp_next_taken1 <= ic_zbtb_io_lu_matches1; // @[src/main/scala/fpga/Core.scala 427:31]
+    end else if (3'h4 == ic_state) begin // @[src/main/scala/fpga/Core.scala 396:21]
+      ic_reg_zbp_next_taken1 <= ic_zbtb_io_lu_matches1; // @[src/main/scala/fpga/Core.scala 468:31]
+    end else if (!(3'h1 == ic_state | 3'h5 == ic_state)) begin // @[src/main/scala/fpga/Core.scala 396:21]
+      ic_reg_zbp_next_taken1 <= _GEN_73;
     end
     if (reset) begin // @[src/main/scala/fpga/Core.scala 369:40]
-      ic_reg_zbp_next_taken2 <= 1'h0; // @[src/main/scala/fpga/Core.scala 369:40]
-    end else if (!(3'h0 == ic_state)) begin // @[src/main/scala/fpga/Core.scala 394:21]
-      if (!(3'h4 == ic_state)) begin // @[src/main/scala/fpga/Core.scala 394:21]
-        if (!(3'h1 == ic_state | 3'h5 == ic_state)) begin // @[src/main/scala/fpga/Core.scala 394:21]
-          ic_reg_zbp_next_taken2 <= _GEN_54;
-        end
-      end
+      ic_reg_zbp_next_target1 <= 31'h0; // @[src/main/scala/fpga/Core.scala 369:40]
+    end else if (3'h0 == ic_state) begin // @[src/main/scala/fpga/Core.scala 396:21]
+      ic_reg_zbp_next_target1 <= ic_zbtb_io_lu_target1; // @[src/main/scala/fpga/Core.scala 428:31]
+    end else if (3'h4 == ic_state) begin // @[src/main/scala/fpga/Core.scala 396:21]
+      ic_reg_zbp_next_target1 <= ic_zbtb_io_lu_target1; // @[src/main/scala/fpga/Core.scala 469:31]
+    end else if (!(3'h1 == ic_state | 3'h5 == ic_state)) begin // @[src/main/scala/fpga/Core.scala 396:21]
+      ic_reg_zbp_next_target1 <= _GEN_74;
     end
     if (reset) begin // @[src/main/scala/fpga/Core.scala 370:40]
-      ic_reg_zbp_next_target2 <= 31'h0; // @[src/main/scala/fpga/Core.scala 370:40]
-    end else if (!(3'h0 == ic_state)) begin // @[src/main/scala/fpga/Core.scala 394:21]
-      if (!(3'h4 == ic_state)) begin // @[src/main/scala/fpga/Core.scala 394:21]
-        if (!(3'h1 == ic_state | 3'h5 == ic_state)) begin // @[src/main/scala/fpga/Core.scala 394:21]
-          ic_reg_zbp_next_target2 <= _GEN_55;
+      ic_reg_zbp_next_taken2 <= 1'h0; // @[src/main/scala/fpga/Core.scala 370:40]
+    end else if (!(3'h0 == ic_state)) begin // @[src/main/scala/fpga/Core.scala 396:21]
+      if (!(3'h4 == ic_state)) begin // @[src/main/scala/fpga/Core.scala 396:21]
+        if (!(3'h1 == ic_state | 3'h5 == ic_state)) begin // @[src/main/scala/fpga/Core.scala 396:21]
+          ic_reg_zbp_next_taken2 <= _GEN_62;
         end
       end
     end
-    csr_reg_is_meintr <= _csr_reg_is_meintr_T_4 & _csr_reg_is_meintr_T_8; // @[src/main/scala/fpga/Core.scala 1020:15]
-    csr_reg_is_mtintr <= _csr_reg_is_mtintr_T_4 & _csr_reg_is_mtintr_T_8; // @[src/main/scala/fpga/Core.scala 1025:22]
-    ex2_reg_dividend <= _GEN_548[36:0]; // @[src/main/scala/fpga/Core.scala 1176:{37,37}]
-    if (reset) begin // @[src/main/scala/fpga/Core.scala 1177:37]
-      ex2_reg_divisor <= 36'h0; // @[src/main/scala/fpga/Core.scala 1177:37]
-    end else if (3'h0 == ex2_reg_divrem_state) begin // @[src/main/scala/fpga/Core.scala 1208:33]
-      ex2_reg_divisor <= _ex2_reg_divisor_T_1; // @[src/main/scala/fpga/Core.scala 1219:28]
-    end else if (3'h1 == ex2_reg_divrem_state) begin // @[src/main/scala/fpga/Core.scala 1208:33]
-      ex2_reg_divisor <= ex2_reg_p_divisor[37:2]; // @[src/main/scala/fpga/Core.scala 1237:28]
-    end
-    if (reset) begin // @[src/main/scala/fpga/Core.scala 1178:37]
-      ex2_reg_p_divisor <= 64'h0; // @[src/main/scala/fpga/Core.scala 1178:37]
-    end else if (3'h0 == ex2_reg_divrem_state) begin // @[src/main/scala/fpga/Core.scala 1208:33]
-      ex2_reg_p_divisor <= _ex2_reg_p_divisor_T; // @[src/main/scala/fpga/Core.scala 1220:28]
-    end else if (3'h1 == ex2_reg_divrem_state) begin // @[src/main/scala/fpga/Core.scala 1208:33]
-      ex2_reg_p_divisor <= {{2'd0}, ex2_reg_p_divisor[63:2]}; // @[src/main/scala/fpga/Core.scala 1236:28]
-    end
-    if (reset) begin // @[src/main/scala/fpga/Core.scala 1179:37]
-      ex2_reg_divrem_count <= 5'h0; // @[src/main/scala/fpga/Core.scala 1179:37]
-    end else if (3'h0 == ex2_reg_divrem_state) begin // @[src/main/scala/fpga/Core.scala 1208:33]
-      ex2_reg_divrem_count <= 5'h0; // @[src/main/scala/fpga/Core.scala 1221:28]
-    end else if (3'h1 == ex2_reg_divrem_state) begin // @[src/main/scala/fpga/Core.scala 1208:33]
-      ex2_reg_divrem_count <= _ex2_reg_divrem_count_T_1; // @[src/main/scala/fpga/Core.scala 1238:28]
-    end else if (3'h2 == ex2_reg_divrem_state) begin // @[src/main/scala/fpga/Core.scala 1208:33]
-      ex2_reg_divrem_count <= _ex2_reg_divrem_count_T_1; // @[src/main/scala/fpga/Core.scala 1295:28]
-    end
-    if (reset) begin // @[src/main/scala/fpga/Core.scala 1180:37]
-      ex2_reg_rem_shift <= 5'h0; // @[src/main/scala/fpga/Core.scala 1180:37]
-    end else if (3'h0 == ex2_reg_divrem_state) begin // @[src/main/scala/fpga/Core.scala 1208:33]
-      ex2_reg_rem_shift <= 5'h0; // @[src/main/scala/fpga/Core.scala 1222:28]
-    end else if (!(3'h1 == ex2_reg_divrem_state)) begin // @[src/main/scala/fpga/Core.scala 1208:33]
-      if (3'h2 == ex2_reg_divrem_state) begin // @[src/main/scala/fpga/Core.scala 1208:33]
-        ex2_reg_rem_shift <= _ex2_reg_rem_shift_T_1; // @[src/main/scala/fpga/Core.scala 1294:25]
-      end
-    end
-    if (reset) begin // @[src/main/scala/fpga/Core.scala 1181:37]
-      ex2_reg_extra_shift <= 1'h0; // @[src/main/scala/fpga/Core.scala 1181:37]
-    end else if (3'h0 == ex2_reg_divrem_state) begin // @[src/main/scala/fpga/Core.scala 1208:33]
-      if (~ex2_reg_init_divisor[1]) begin // @[src/main/scala/fpga/Core.scala 1224:46]
-        ex2_reg_extra_shift <= 1'h0; // @[src/main/scala/fpga/Core.scala 1225:29]
-      end else begin
-        ex2_reg_extra_shift <= 1'h1; // @[src/main/scala/fpga/Core.scala 1228:29]
-      end
-    end else if (3'h1 == ex2_reg_divrem_state) begin // @[src/main/scala/fpga/Core.scala 1208:33]
-      if (~ex2_reg_p_divisor[35]) begin // @[src/main/scala/fpga/Core.scala 1239:52]
-        ex2_reg_extra_shift <= 1'h0; // @[src/main/scala/fpga/Core.scala 1240:29]
-      end else begin
-        ex2_reg_extra_shift <= 1'h1; // @[src/main/scala/fpga/Core.scala 1243:29]
-      end
-    end
-    if (reset) begin // @[src/main/scala/fpga/Core.scala 1182:37]
-      ex2_reg_d <= 3'h0; // @[src/main/scala/fpga/Core.scala 1182:37]
-    end else if (3'h0 == ex2_reg_divrem_state) begin // @[src/main/scala/fpga/Core.scala 1208:33]
-      if (~ex2_reg_init_divisor[1]) begin // @[src/main/scala/fpga/Core.scala 1224:46]
-        ex2_reg_d <= 3'h0; // @[src/main/scala/fpga/Core.scala 1226:29]
-      end else begin
-        ex2_reg_d <= _ex2_reg_d_T_1; // @[src/main/scala/fpga/Core.scala 1229:29]
-      end
-    end else if (3'h1 == ex2_reg_divrem_state) begin // @[src/main/scala/fpga/Core.scala 1208:33]
-      if (~ex2_reg_p_divisor[35]) begin // @[src/main/scala/fpga/Core.scala 1239:52]
-        ex2_reg_d <= ex2_reg_p_divisor[33:31]; // @[src/main/scala/fpga/Core.scala 1241:29]
-      end else begin
-        ex2_reg_d <= ex2_reg_p_divisor[34:32]; // @[src/main/scala/fpga/Core.scala 1244:29]
-      end
-    end
-    if (reset) begin // @[src/main/scala/fpga/Core.scala 1183:37]
-      ex2_reg_reminder <= 32'h0; // @[src/main/scala/fpga/Core.scala 1183:37]
-    end else if (!(3'h0 == ex2_reg_divrem_state)) begin // @[src/main/scala/fpga/Core.scala 1208:33]
-      if (!(3'h1 == ex2_reg_divrem_state)) begin // @[src/main/scala/fpga/Core.scala 1208:33]
-        if (!(3'h2 == ex2_reg_divrem_state)) begin // @[src/main/scala/fpga/Core.scala 1208:33]
-          ex2_reg_reminder <= _GEN_433;
+    if (reset) begin // @[src/main/scala/fpga/Core.scala 371:40]
+      ic_reg_zbp_next_target2 <= 31'h0; // @[src/main/scala/fpga/Core.scala 371:40]
+    end else if (!(3'h0 == ic_state)) begin // @[src/main/scala/fpga/Core.scala 396:21]
+      if (!(3'h4 == ic_state)) begin // @[src/main/scala/fpga/Core.scala 396:21]
+        if (!(3'h1 == ic_state | 3'h5 == ic_state)) begin // @[src/main/scala/fpga/Core.scala 396:21]
+          ic_reg_zbp_next_target2 <= _GEN_63;
         end
       end
     end
-    ex2_reg_quotient <= _GEN_550[31:0]; // @[src/main/scala/fpga/Core.scala 1184:{37,37}]
+    csr_reg_is_meintr <= _csr_reg_is_meintr_T_4 & _csr_reg_is_meintr_T_8; // @[src/main/scala/fpga/Core.scala 1087:15]
+    csr_reg_is_mtintr <= _csr_reg_is_mtintr_T_4 & _csr_reg_is_mtintr_T_8; // @[src/main/scala/fpga/Core.scala 1092:22]
+    ex2_reg_dividend <= _GEN_588[36:0]; // @[src/main/scala/fpga/Core.scala 1243:{37,37}]
+    if (reset) begin // @[src/main/scala/fpga/Core.scala 1244:37]
+      ex2_reg_divisor <= 36'h0; // @[src/main/scala/fpga/Core.scala 1244:37]
+    end else if (3'h0 == ex2_reg_divrem_state) begin // @[src/main/scala/fpga/Core.scala 1275:33]
+      ex2_reg_divisor <= _ex2_reg_divisor_T_1; // @[src/main/scala/fpga/Core.scala 1286:28]
+    end else if (3'h1 == ex2_reg_divrem_state) begin // @[src/main/scala/fpga/Core.scala 1275:33]
+      ex2_reg_divisor <= ex2_reg_p_divisor[37:2]; // @[src/main/scala/fpga/Core.scala 1304:28]
+    end
+    if (reset) begin // @[src/main/scala/fpga/Core.scala 1245:37]
+      ex2_reg_p_divisor <= 64'h0; // @[src/main/scala/fpga/Core.scala 1245:37]
+    end else if (3'h0 == ex2_reg_divrem_state) begin // @[src/main/scala/fpga/Core.scala 1275:33]
+      ex2_reg_p_divisor <= _ex2_reg_p_divisor_T; // @[src/main/scala/fpga/Core.scala 1287:28]
+    end else if (3'h1 == ex2_reg_divrem_state) begin // @[src/main/scala/fpga/Core.scala 1275:33]
+      ex2_reg_p_divisor <= {{2'd0}, ex2_reg_p_divisor[63:2]}; // @[src/main/scala/fpga/Core.scala 1303:28]
+    end
+    if (reset) begin // @[src/main/scala/fpga/Core.scala 1246:37]
+      ex2_reg_divrem_count <= 5'h0; // @[src/main/scala/fpga/Core.scala 1246:37]
+    end else if (3'h0 == ex2_reg_divrem_state) begin // @[src/main/scala/fpga/Core.scala 1275:33]
+      ex2_reg_divrem_count <= 5'h0; // @[src/main/scala/fpga/Core.scala 1288:28]
+    end else if (3'h1 == ex2_reg_divrem_state) begin // @[src/main/scala/fpga/Core.scala 1275:33]
+      ex2_reg_divrem_count <= _ex2_reg_divrem_count_T_1; // @[src/main/scala/fpga/Core.scala 1305:28]
+    end else if (3'h2 == ex2_reg_divrem_state) begin // @[src/main/scala/fpga/Core.scala 1275:33]
+      ex2_reg_divrem_count <= _ex2_reg_divrem_count_T_1; // @[src/main/scala/fpga/Core.scala 1362:28]
+    end
+    if (reset) begin // @[src/main/scala/fpga/Core.scala 1247:37]
+      ex2_reg_rem_shift <= 5'h0; // @[src/main/scala/fpga/Core.scala 1247:37]
+    end else if (3'h0 == ex2_reg_divrem_state) begin // @[src/main/scala/fpga/Core.scala 1275:33]
+      ex2_reg_rem_shift <= 5'h0; // @[src/main/scala/fpga/Core.scala 1289:28]
+    end else if (!(3'h1 == ex2_reg_divrem_state)) begin // @[src/main/scala/fpga/Core.scala 1275:33]
+      if (3'h2 == ex2_reg_divrem_state) begin // @[src/main/scala/fpga/Core.scala 1275:33]
+        ex2_reg_rem_shift <= _ex2_reg_rem_shift_T_1; // @[src/main/scala/fpga/Core.scala 1361:25]
+      end
+    end
+    if (reset) begin // @[src/main/scala/fpga/Core.scala 1248:37]
+      ex2_reg_extra_shift <= 1'h0; // @[src/main/scala/fpga/Core.scala 1248:37]
+    end else if (3'h0 == ex2_reg_divrem_state) begin // @[src/main/scala/fpga/Core.scala 1275:33]
+      if (~ex2_reg_init_divisor[1]) begin // @[src/main/scala/fpga/Core.scala 1291:46]
+        ex2_reg_extra_shift <= 1'h0; // @[src/main/scala/fpga/Core.scala 1292:29]
+      end else begin
+        ex2_reg_extra_shift <= 1'h1; // @[src/main/scala/fpga/Core.scala 1295:29]
+      end
+    end else if (3'h1 == ex2_reg_divrem_state) begin // @[src/main/scala/fpga/Core.scala 1275:33]
+      if (~ex2_reg_p_divisor[35]) begin // @[src/main/scala/fpga/Core.scala 1306:52]
+        ex2_reg_extra_shift <= 1'h0; // @[src/main/scala/fpga/Core.scala 1307:29]
+      end else begin
+        ex2_reg_extra_shift <= 1'h1; // @[src/main/scala/fpga/Core.scala 1310:29]
+      end
+    end
+    if (reset) begin // @[src/main/scala/fpga/Core.scala 1249:37]
+      ex2_reg_d <= 3'h0; // @[src/main/scala/fpga/Core.scala 1249:37]
+    end else if (3'h0 == ex2_reg_divrem_state) begin // @[src/main/scala/fpga/Core.scala 1275:33]
+      if (~ex2_reg_init_divisor[1]) begin // @[src/main/scala/fpga/Core.scala 1291:46]
+        ex2_reg_d <= 3'h0; // @[src/main/scala/fpga/Core.scala 1293:29]
+      end else begin
+        ex2_reg_d <= _ex2_reg_d_T_1; // @[src/main/scala/fpga/Core.scala 1296:29]
+      end
+    end else if (3'h1 == ex2_reg_divrem_state) begin // @[src/main/scala/fpga/Core.scala 1275:33]
+      if (~ex2_reg_p_divisor[35]) begin // @[src/main/scala/fpga/Core.scala 1306:52]
+        ex2_reg_d <= ex2_reg_p_divisor[33:31]; // @[src/main/scala/fpga/Core.scala 1308:29]
+      end else begin
+        ex2_reg_d <= ex2_reg_p_divisor[34:32]; // @[src/main/scala/fpga/Core.scala 1311:29]
+      end
+    end
+    if (reset) begin // @[src/main/scala/fpga/Core.scala 1250:37]
+      ex2_reg_reminder <= 32'h0; // @[src/main/scala/fpga/Core.scala 1250:37]
+    end else if (!(3'h0 == ex2_reg_divrem_state)) begin // @[src/main/scala/fpga/Core.scala 1275:33]
+      if (!(3'h1 == ex2_reg_divrem_state)) begin // @[src/main/scala/fpga/Core.scala 1275:33]
+        if (!(3'h2 == ex2_reg_divrem_state)) begin // @[src/main/scala/fpga/Core.scala 1275:33]
+          ex2_reg_reminder <= _GEN_473;
+        end
+      end
+    end
+    ex2_reg_quotient <= _GEN_590[31:0]; // @[src/main/scala/fpga/Core.scala 1251:{37,37}]
     `ifndef SYNTHESIS
     `ifdef PRINTF_COND
       if (`PRINTF_COND) begin
     `endif
         if (~reset) begin
-          $fwrite(32'h80000002,"ic_addr_out: 0x%x\n",{ic_addr_out,1'h0}); // @[src/main/scala/fpga/Core.scala 581:9]
+          $fwrite(32'h80000002,"ic_addr_out: 0x%x\n",{ic_addr_out,1'h0}); // @[src/main/scala/fpga/Core.scala 599:9]
         end
     `ifdef PRINTF_COND
       end
@@ -7529,7 +8002,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_30) begin
-          $fwrite(32'h80000002,"ic_reg_addr_out: 0x%x, ic_data_out: 0x%x\n",{ic_reg_addr_out,1'h0},ic_data_out); // @[src/main/scala/fpga/Core.scala 582:9]
+          $fwrite(32'h80000002,"ic_reg_addr_out: 0x%x, ic_data_out: 0x%x\n",{ic_reg_addr_out,1'h0},ic_data_out); // @[src/main/scala/fpga/Core.scala 600:9]
         end
     `ifdef PRINTF_COND
       end
@@ -7541,7 +8014,62 @@ module Core(
     `endif
         if (_T_30) begin
           $fwrite(32'h80000002,"inst: 0x%x, ic_read_rdy: %d, ic_state: %d, ic_addr_en: %d\n",if2_inst,ic_read_rdy,
-            ic_state,if1_is_jump); // @[src/main/scala/fpga/Core.scala 583:9]
+            ic_state,if1_is_jump); // @[src/main/scala/fpga/Core.scala 601:9]
+        end
+    `ifdef PRINTF_COND
+      end
+    `endif
+    `endif // SYNTHESIS
+    `ifndef SYNTHESIS
+    `ifdef PRINTF_COND
+      if (`PRINTF_COND) begin
+    `endif
+        if (_T_40 & _T_30) begin
+          $fwrite(32'h80000002,"PHT history: %x taken: %d gcnt: %d\n",_T_41[5:0],ic_bp_taken,ic_bp_gcnt); // @[src/main/scala/fpga/Core.scala 643:11]
+        end
+    `ifdef PRINTF_COND
+      end
+    `endif
+    `endif // SYNTHESIS
+    `ifndef SYNTHESIS
+    `ifdef PRINTF_COND
+      if (`PRINTF_COND) begin
+    `endif
+        if (_T_67 & _T_70 & ex1_is_br_taken & _T_30) begin
+          $fwrite(32'h80000002,"PHT local correct\n"); // @[src/main/scala/fpga/Core.scala 980:15]
+        end
+    `ifdef PRINTF_COND
+      end
+    `endif
+    `endif // SYNTHESIS
+    `ifndef SYNTHESIS
+    `ifdef PRINTF_COND
+      if (`PRINTF_COND) begin
+    `endif
+        if (_GEN_591 & ~ex1_is_br_taken & _T_30) begin
+          $fwrite(32'h80000002,"PHT global correct\n"); // @[src/main/scala/fpga/Core.scala 982:15]
+        end
+    `ifdef PRINTF_COND
+      end
+    `endif
+    `endif // SYNTHESIS
+    `ifndef SYNTHESIS
+    `ifdef PRINTF_COND
+      if (`PRINTF_COND) begin
+    `endif
+        if (_T_67 & ~_T_70 & _T_78 & ex1_is_br_taken & _T_30) begin
+          $fwrite(32'h80000002,"PHT global correct\n"); // @[src/main/scala/fpga/Core.scala 986:15]
+        end
+    `ifdef PRINTF_COND
+      end
+    `endif
+    `endif // SYNTHESIS
+    `ifndef SYNTHESIS
+    `ifdef PRINTF_COND
+      if (`PRINTF_COND) begin
+    `endif
+        if (_GEN_598 & _GEN_594 & _T_30) begin
+          $fwrite(32'h80000002,"PHT local correct\n"); // @[src/main/scala/fpga/Core.scala 988:15]
         end
     `ifdef PRINTF_COND
       end
@@ -7552,7 +8080,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_30) begin
-          $fwrite(32'h80000002,"if2_pc           : 0x%x\n",_T_31); // @[src/main/scala/fpga/Core.scala 1551:9]
+          $fwrite(32'h80000002,"if2_pc           : 0x%x\n",_T_31); // @[src/main/scala/fpga/Core.scala 1618:9]
         end
     `ifdef PRINTF_COND
       end
@@ -7563,7 +8091,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_30) begin
-          $fwrite(32'h80000002,"if2_is_valid_inst: %d\n",if2_is_valid_inst); // @[src/main/scala/fpga/Core.scala 1552:9]
+          $fwrite(32'h80000002,"if2_is_valid_inst: %d\n",if2_is_valid_inst); // @[src/main/scala/fpga/Core.scala 1619:9]
         end
     `ifdef PRINTF_COND
       end
@@ -7574,7 +8102,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_30) begin
-          $fwrite(32'h80000002,"if2_inst         : 0x%x\n",if2_inst); // @[src/main/scala/fpga/Core.scala 1553:9]
+          $fwrite(32'h80000002,"if2_inst         : 0x%x\n",if2_inst); // @[src/main/scala/fpga/Core.scala 1620:9]
         end
     `ifdef PRINTF_COND
       end
@@ -7585,7 +8113,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_30) begin
-          $fwrite(32'h80000002,"if2_zbp_taken    : %d\n",if2_zbp_taken); // @[src/main/scala/fpga/Core.scala 1554:9]
+          $fwrite(32'h80000002,"if2_zbp_taken    : %d\n",if2_zbp_taken); // @[src/main/scala/fpga/Core.scala 1621:9]
         end
     `ifdef PRINTF_COND
       end
@@ -7596,7 +8124,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_30) begin
-          $fwrite(32'h80000002,"ic_zbp_target    : 0x%x\n",{ic_zbp_target,1'h0}); // @[src/main/scala/fpga/Core.scala 1555:9]
+          $fwrite(32'h80000002,"ic_zbp_target    : 0x%x\n",{ic_zbp_target,1'h0}); // @[src/main/scala/fpga/Core.scala 1622:9]
         end
     `ifdef PRINTF_COND
       end
@@ -7607,7 +8135,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_30) begin
-          $fwrite(32'h80000002,"ic_bp_taken      : %d\n",ic_bp_taken); // @[src/main/scala/fpga/Core.scala 1556:9]
+          $fwrite(32'h80000002,"ic_bp_taken      : %d\n",ic_bp_taken); // @[src/main/scala/fpga/Core.scala 1623:9]
         end
     `ifdef PRINTF_COND
       end
@@ -7618,7 +8146,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_30) begin
-          $fwrite(32'h80000002,"ic_bp_attr       : 0x%x\n",ic_bp_attr); // @[src/main/scala/fpga/Core.scala 1557:9]
+          $fwrite(32'h80000002,"ic_bp_attr       : 0x%x\n",ic_bp_attr); // @[src/main/scala/fpga/Core.scala 1624:9]
         end
     `ifdef PRINTF_COND
       end
@@ -7629,7 +8157,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_30) begin
-          $fwrite(32'h80000002,"ic_bp_rasindex   : 0x%x\n",ic_ras_io_top_index); // @[src/main/scala/fpga/Core.scala 1558:9]
+          $fwrite(32'h80000002,"ic_bp_rasindex   : 0x%x\n",ic_ras_io_top_index); // @[src/main/scala/fpga/Core.scala 1625:9]
         end
     `ifdef PRINTF_COND
       end
@@ -7640,7 +8168,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_30) begin
-          $fwrite(32'h80000002,"ic_bp_target     : 0x%x\n",{ic_bp_target,1'h0}); // @[src/main/scala/fpga/Core.scala 1559:9]
+          $fwrite(32'h80000002,"ic_bp_target     : 0x%x\n",{ic_bp_target,1'h0}); // @[src/main/scala/fpga/Core.scala 1626:9]
         end
     `ifdef PRINTF_COND
       end
@@ -7651,7 +8179,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_30) begin
-          $fwrite(32'h80000002,"ic_bp_cnt        : 0x%x\n",ic_bp_cnt); // @[src/main/scala/fpga/Core.scala 1560:9]
+          $fwrite(32'h80000002,"ic_bp_cnt        : 0x%x\n",ic_bp_cnt); // @[src/main/scala/fpga/Core.scala 1627:9]
         end
     `ifdef PRINTF_COND
       end
@@ -7662,7 +8190,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_30) begin
-          $fwrite(32'h80000002,"id_reg_pc        : 0x%x\n",id_stage_io_debug_signals_id_pc); // @[src/main/scala/fpga/Core.scala 1561:9]
+          $fwrite(32'h80000002,"ic_bp_gcnt       : 0x%x\n",ic_bp_gcnt); // @[src/main/scala/fpga/Core.scala 1628:9]
         end
     `ifdef PRINTF_COND
       end
@@ -7673,7 +8201,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_30) begin
-          $fwrite(32'h80000002,"id_reg_inst      : 0x%x\n",id_stage_io_debug_signals_id_inst); // @[src/main/scala/fpga/Core.scala 1562:9]
+          $fwrite(32'h80000002,"id_reg_pc        : 0x%x\n",id_stage_io_debug_signals_id_pc); // @[src/main/scala/fpga/Core.scala 1629:9]
         end
     `ifdef PRINTF_COND
       end
@@ -7684,7 +8212,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_30) begin
-          $fwrite(32'h80000002,"id_reg_bp_taken  : %d\n",id_reg_bp_taken); // @[src/main/scala/fpga/Core.scala 1563:9]
+          $fwrite(32'h80000002,"id_reg_inst      : 0x%x\n",id_stage_io_debug_signals_id_inst); // @[src/main/scala/fpga/Core.scala 1630:9]
         end
     `ifdef PRINTF_COND
       end
@@ -7695,7 +8223,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_30) begin
-          $fwrite(32'h80000002,"id_reg_bp_target : 0x%x\n",{id_reg_bp_target,1'h0}); // @[src/main/scala/fpga/Core.scala 1564:9]
+          $fwrite(32'h80000002,"id_reg_bp_taken  : %d\n",id_reg_bp_taken); // @[src/main/scala/fpga/Core.scala 1631:9]
         end
     `ifdef PRINTF_COND
       end
@@ -7706,7 +8234,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_30) begin
-          $fwrite(32'h80000002,"id_is_valid_inst : %d\n",1'h0); // @[src/main/scala/fpga/Core.scala 1565:9]
+          $fwrite(32'h80000002,"id_reg_bp_target : 0x%x\n",{id_reg_bp_target,1'h0}); // @[src/main/scala/fpga/Core.scala 1632:9]
         end
     `ifdef PRINTF_COND
       end
@@ -7717,7 +8245,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_30) begin
-          $fwrite(32'h80000002,"id_reg_stall     : %d\n",id_reg_stall); // @[src/main/scala/fpga/Core.scala 1566:9]
+          $fwrite(32'h80000002,"id_is_valid_inst : %d\n",1'h0); // @[src/main/scala/fpga/Core.scala 1633:9]
         end
     `ifdef PRINTF_COND
       end
@@ -7728,7 +8256,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_30) begin
-          $fwrite(32'h80000002,"rrd_reg_pc       : 0x%x\n",{rrd_reg_pc,1'h0}); // @[src/main/scala/fpga/Core.scala 1570:9]
+          $fwrite(32'h80000002,"id_reg_stall     : %d\n",id_reg_stall); // @[src/main/scala/fpga/Core.scala 1634:9]
         end
     `ifdef PRINTF_COND
       end
@@ -7739,7 +8267,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_30) begin
-          $fwrite(32'h80000002,"rrd_reg_is_valid_: %d\n",rrd_reg_is_valid_inst); // @[src/main/scala/fpga/Core.scala 1571:9]
+          $fwrite(32'h80000002,"rrd_reg_pc       : 0x%x\n",{rrd_reg_pc,1'h0}); // @[src/main/scala/fpga/Core.scala 1638:9]
         end
     `ifdef PRINTF_COND
       end
@@ -7750,7 +8278,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_30) begin
-          $fwrite(32'h80000002,"rrd_stall        : %d\n",rrd_stall); // @[src/main/scala/fpga/Core.scala 1572:9]
+          $fwrite(32'h80000002,"rrd_reg_is_valid_: %d\n",rrd_reg_is_valid_inst); // @[src/main/scala/fpga/Core.scala 1639:9]
         end
     `ifdef PRINTF_COND
       end
@@ -7761,7 +8289,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_30) begin
-          $fwrite(32'h80000002,"rrd_op1_data     : 0x%x\n",rrd_op1_data); // @[src/main/scala/fpga/Core.scala 1575:9]
+          $fwrite(32'h80000002,"rrd_stall        : %d\n",rrd_stall); // @[src/main/scala/fpga/Core.scala 1640:9]
         end
     `ifdef PRINTF_COND
       end
@@ -7772,7 +8300,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_30) begin
-          $fwrite(32'h80000002,"rrd_op2_data     : 0x%x\n",rrd_op2_data); // @[src/main/scala/fpga/Core.scala 1576:9]
+          $fwrite(32'h80000002,"rrd_op1_data     : 0x%x\n",rrd_op1_data); // @[src/main/scala/fpga/Core.scala 1643:9]
         end
     `ifdef PRINTF_COND
       end
@@ -7783,7 +8311,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_30) begin
-          $fwrite(32'h80000002,"rrd_op3_data     : 0x%x\n",rrd_op3_data); // @[src/main/scala/fpga/Core.scala 1577:9]
+          $fwrite(32'h80000002,"rrd_op2_data     : 0x%x\n",rrd_op2_data); // @[src/main/scala/fpga/Core.scala 1644:9]
         end
     `ifdef PRINTF_COND
       end
@@ -7794,7 +8322,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_30) begin
-          $fwrite(32'h80000002,"rrd_reg_op1_sel  : 0x%x\n",rrd_reg_op1_sel); // @[src/main/scala/fpga/Core.scala 1578:9]
+          $fwrite(32'h80000002,"rrd_op3_data     : 0x%x\n",rrd_op3_data); // @[src/main/scala/fpga/Core.scala 1645:9]
         end
     `ifdef PRINTF_COND
       end
@@ -7805,7 +8333,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_30) begin
-          $fwrite(32'h80000002,"rrd_reg_rs1_addr : 0x%x\n",rrd_reg_rs1_addr); // @[src/main/scala/fpga/Core.scala 1580:9]
+          $fwrite(32'h80000002,"rrd_reg_op1_sel  : 0x%x\n",rrd_reg_op1_sel); // @[src/main/scala/fpga/Core.scala 1646:9]
         end
     `ifdef PRINTF_COND
       end
@@ -7816,7 +8344,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_30) begin
-          $fwrite(32'h80000002,"rrd_reg_wb_addr  : 0x%x\n",rrd_reg_wb_addr); // @[src/main/scala/fpga/Core.scala 1581:9]
+          $fwrite(32'h80000002,"rrd_reg_rs1_addr : 0x%x\n",rrd_reg_rs1_addr); // @[src/main/scala/fpga/Core.scala 1648:9]
         end
     `ifdef PRINTF_COND
       end
@@ -7827,7 +8355,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_30) begin
-          $fwrite(32'h80000002,"rrd_reg_rf_wen   : 0x%x\n",rrd_reg_rf_wen); // @[src/main/scala/fpga/Core.scala 1582:9]
+          $fwrite(32'h80000002,"rrd_reg_wb_addr  : 0x%x\n",rrd_reg_wb_addr); // @[src/main/scala/fpga/Core.scala 1649:9]
         end
     `ifdef PRINTF_COND
       end
@@ -7838,7 +8366,18 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_30) begin
-          $fwrite(32'h80000002,"rrd_reg_wb_sel   : 0x%x\n",rrd_reg_wb_sel); // @[src/main/scala/fpga/Core.scala 1583:9]
+          $fwrite(32'h80000002,"rrd_reg_rf_wen   : 0x%x\n",rrd_reg_rf_wen); // @[src/main/scala/fpga/Core.scala 1650:9]
+        end
+    `ifdef PRINTF_COND
+      end
+    `endif
+    `endif // SYNTHESIS
+    `ifndef SYNTHESIS
+    `ifdef PRINTF_COND
+      if (`PRINTF_COND) begin
+    `endif
+        if (_T_30) begin
+          $fwrite(32'h80000002,"rrd_reg_wb_sel   : 0x%x\n",rrd_reg_wb_sel); // @[src/main/scala/fpga/Core.scala 1651:9]
         end
     `ifdef PRINTF_COND
       end
@@ -7851,7 +8390,7 @@ module Core(
         if (_T_30) begin
           $fwrite(32'h80000002,"scoreboard       : 0x%x\n",{scoreboard_MPORT_7_data,scoreboard_MPORT_8_data,
             scoreboard_MPORT_9_data,scoreboard_MPORT_10_data,scoreboard_MPORT_11_data,scoreboard_MPORT_12_data,
-            scoreboard_MPORT_13_data,scoreboard_MPORT_14_data,hi_lo,lo}); // @[src/main/scala/fpga/Core.scala 1584:9]
+            scoreboard_MPORT_13_data,scoreboard_MPORT_14_data,hi_lo,lo}); // @[src/main/scala/fpga/Core.scala 1652:9]
         end
     `ifdef PRINTF_COND
       end
@@ -7862,7 +8401,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_30) begin
-          $fwrite(32'h80000002,"ex1_fw_data      : 0x%x\n",ex1_alu_out); // @[src/main/scala/fpga/Core.scala 1585:9]
+          $fwrite(32'h80000002,"ex1_fw_data      : 0x%x\n",ex1_alu_out); // @[src/main/scala/fpga/Core.scala 1653:9]
         end
     `ifdef PRINTF_COND
       end
@@ -7873,7 +8412,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_30) begin
-          $fwrite(32'h80000002,"ex1_reg_pc       : 0x%x\n",{ex1_reg_pc,1'h0}); // @[src/main/scala/fpga/Core.scala 1586:9]
+          $fwrite(32'h80000002,"ex1_reg_pc       : 0x%x\n",{ex1_reg_pc,1'h0}); // @[src/main/scala/fpga/Core.scala 1654:9]
         end
     `ifdef PRINTF_COND
       end
@@ -7884,7 +8423,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_30) begin
-          $fwrite(32'h80000002,"ex1_reg_is_valid_: %d\n",ex1_reg_is_valid_inst); // @[src/main/scala/fpga/Core.scala 1587:9]
+          $fwrite(32'h80000002,"ex1_reg_is_valid_: %d\n",ex1_reg_is_valid_inst); // @[src/main/scala/fpga/Core.scala 1655:9]
         end
     `ifdef PRINTF_COND
       end
@@ -7895,7 +8434,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_30) begin
-          $fwrite(32'h80000002,"ex1_reg_op1_data : 0x%x\n",ex1_reg_op1_data); // @[src/main/scala/fpga/Core.scala 1588:9]
+          $fwrite(32'h80000002,"ex1_reg_op1_data : 0x%x\n",ex1_reg_op1_data); // @[src/main/scala/fpga/Core.scala 1656:9]
         end
     `ifdef PRINTF_COND
       end
@@ -7906,7 +8445,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_30) begin
-          $fwrite(32'h80000002,"ex1_reg_op2_data : 0x%x\n",ex1_reg_op2_data); // @[src/main/scala/fpga/Core.scala 1589:9]
+          $fwrite(32'h80000002,"ex1_reg_op2_data : 0x%x\n",ex1_reg_op2_data); // @[src/main/scala/fpga/Core.scala 1657:9]
         end
     `ifdef PRINTF_COND
       end
@@ -7917,7 +8456,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_30) begin
-          $fwrite(32'h80000002,"ex1_reg_op3_data : 0x%x\n",ex1_reg_op3_data); // @[src/main/scala/fpga/Core.scala 1590:9]
+          $fwrite(32'h80000002,"ex1_reg_op3_data : 0x%x\n",ex1_reg_op3_data); // @[src/main/scala/fpga/Core.scala 1658:9]
         end
     `ifdef PRINTF_COND
       end
@@ -7928,7 +8467,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_30) begin
-          $fwrite(32'h80000002,"ex1_alu_out      : 0x%x\n",ex1_alu_out); // @[src/main/scala/fpga/Core.scala 1591:9]
+          $fwrite(32'h80000002,"ex1_alu_out      : 0x%x\n",ex1_alu_out); // @[src/main/scala/fpga/Core.scala 1659:9]
         end
     `ifdef PRINTF_COND
       end
@@ -7939,7 +8478,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_30) begin
-          $fwrite(32'h80000002,"ex1_pc_bit_out   : 0x%x\n",ex1_pc_bit_out); // @[src/main/scala/fpga/Core.scala 1592:9]
+          $fwrite(32'h80000002,"ex1_pc_bit_out   : 0x%x\n",ex1_pc_bit_out); // @[src/main/scala/fpga/Core.scala 1660:9]
         end
     `ifdef PRINTF_COND
       end
@@ -7950,7 +8489,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_30) begin
-          $fwrite(32'h80000002,"ex1_reg_exe_fun  : 0x%x\n",ex1_reg_exe_fun); // @[src/main/scala/fpga/Core.scala 1593:9]
+          $fwrite(32'h80000002,"ex1_reg_exe_fun  : 0x%x\n",ex1_reg_exe_fun); // @[src/main/scala/fpga/Core.scala 1661:9]
         end
     `ifdef PRINTF_COND
       end
@@ -7961,7 +8500,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_30) begin
-          $fwrite(32'h80000002,"ex1_reg_wb_sel   : 0x%x\n",ex1_reg_wb_sel); // @[src/main/scala/fpga/Core.scala 1594:9]
+          $fwrite(32'h80000002,"ex1_reg_wb_sel   : 0x%x\n",ex1_reg_wb_sel); // @[src/main/scala/fpga/Core.scala 1662:9]
         end
     `ifdef PRINTF_COND
       end
@@ -7972,7 +8511,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_30) begin
-          $fwrite(32'h80000002,"ex1_reg_wb_addr  : 0x%x\n",ex1_reg_wb_addr); // @[src/main/scala/fpga/Core.scala 1595:9]
+          $fwrite(32'h80000002,"ex1_reg_wb_addr  : 0x%x\n",ex1_reg_wb_addr); // @[src/main/scala/fpga/Core.scala 1663:9]
         end
     `ifdef PRINTF_COND
       end
@@ -7983,7 +8522,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_30) begin
-          $fwrite(32'h80000002,"ex1_reg_bp_taken : %d\n",ex1_reg_bp_taken); // @[src/main/scala/fpga/Core.scala 1596:9]
+          $fwrite(32'h80000002,"ex1_reg_bp_taken : %d\n",ex1_reg_bp_taken); // @[src/main/scala/fpga/Core.scala 1664:9]
         end
     `ifdef PRINTF_COND
       end
@@ -7994,7 +8533,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_30) begin
-          $fwrite(32'h80000002,"ex1_reg_bp_target: 0x%x\n",{ex1_reg_bp_target,1'h0}); // @[src/main/scala/fpga/Core.scala 1597:9]
+          $fwrite(32'h80000002,"ex1_reg_bp_target: 0x%x\n",{ex1_reg_bp_target,1'h0}); // @[src/main/scala/fpga/Core.scala 1665:9]
         end
     `ifdef PRINTF_COND
       end
@@ -8005,7 +8544,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_30) begin
-          $fwrite(32'h80000002,"ex1_fetch_pc_en  : %d\n",ex1_fetch_pc_en); // @[src/main/scala/fpga/Core.scala 1598:9]
+          $fwrite(32'h80000002,"ex1_fetch_pc_en  : %d\n",ex1_fetch_pc_en); // @[src/main/scala/fpga/Core.scala 1666:9]
         end
     `ifdef PRINTF_COND
       end
@@ -8016,7 +8555,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_30) begin
-          $fwrite(32'h80000002,"ex1_reg_bp_cnt   : 0x%x\n",ex1_reg_bp_cnt); // @[src/main/scala/fpga/Core.scala 1599:9]
+          $fwrite(32'h80000002,"ex1_reg_bp_cnt   : 0x%x\n",ex1_reg_bp_cnt); // @[src/main/scala/fpga/Core.scala 1667:9]
         end
     `ifdef PRINTF_COND
       end
@@ -8027,7 +8566,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_30) begin
-          $fwrite(32'h80000002,"ex1_reg_bp_rasind: 0x%x\n",ex1_reg_bp_rasindex); // @[src/main/scala/fpga/Core.scala 1600:9]
+          $fwrite(32'h80000002,"ex1_reg_bp_gcnt  : 0x%x\n",ex1_reg_bp_gcnt); // @[src/main/scala/fpga/Core.scala 1668:9]
         end
     `ifdef PRINTF_COND
       end
@@ -8038,7 +8577,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_30) begin
-          $fwrite(32'h80000002,"ex1_reg_actual_at: 0x%x\n",ex1_reg_actual_attr); // @[src/main/scala/fpga/Core.scala 1601:9]
+          $fwrite(32'h80000002,"ex1_reg_bp_rasind: 0x%x\n",ex1_reg_bp_rasindex); // @[src/main/scala/fpga/Core.scala 1669:9]
         end
     `ifdef PRINTF_COND
       end
@@ -8049,7 +8588,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_30) begin
-          $fwrite(32'h80000002,"ex2_reg_is_br    : %d\n",ex2_reg_is_br); // @[src/main/scala/fpga/Core.scala 1602:9]
+          $fwrite(32'h80000002,"ex1_reg_actual_at: 0x%x\n",ex1_reg_actual_attr); // @[src/main/scala/fpga/Core.scala 1670:9]
         end
     `ifdef PRINTF_COND
       end
@@ -8060,7 +8599,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_30) begin
-          $fwrite(32'h80000002,"ex2_reg_br_pc    : 0x%x\n",{ex2_reg_br_pc,1'h0}); // @[src/main/scala/fpga/Core.scala 1603:9]
+          $fwrite(32'h80000002,"ex2_reg_is_br    : %d\n",ex2_reg_is_br); // @[src/main/scala/fpga/Core.scala 1671:9]
         end
     `ifdef PRINTF_COND
       end
@@ -8071,7 +8610,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_30) begin
-          $fwrite(32'h80000002,"ex2_reg_pc       : 0x%x\n",_io_debug_signal_ex2_reg_pc_T); // @[src/main/scala/fpga/Core.scala 1604:9]
+          $fwrite(32'h80000002,"ex2_reg_br_pc    : 0x%x\n",{ex2_reg_br_pc,1'h0}); // @[src/main/scala/fpga/Core.scala 1672:9]
         end
     `ifdef PRINTF_COND
       end
@@ -8082,7 +8621,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_30) begin
-          $fwrite(32'h80000002,"ex2_reg_is_valid_: %d\n",ex2_reg_is_valid_inst); // @[src/main/scala/fpga/Core.scala 1605:9]
+          $fwrite(32'h80000002,"ex2_reg_pc       : 0x%x\n",_io_debug_signal_ex2_reg_pc_T); // @[src/main/scala/fpga/Core.scala 1673:9]
         end
     `ifdef PRINTF_COND
       end
@@ -8093,7 +8632,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_30) begin
-          $fwrite(32'h80000002,"ex2_stall        : %d\n",ex2_stall); // @[src/main/scala/fpga/Core.scala 1606:9]
+          $fwrite(32'h80000002,"ex2_reg_is_valid_: %d\n",ex2_reg_is_valid_inst); // @[src/main/scala/fpga/Core.scala 1674:9]
         end
     `ifdef PRINTF_COND
       end
@@ -8104,7 +8643,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_30) begin
-          $fwrite(32'h80000002,"ex2_wb_data      : 0x%x\n",ex2_wb_data); // @[src/main/scala/fpga/Core.scala 1607:9]
+          $fwrite(32'h80000002,"ex2_stall        : %d\n",ex2_stall); // @[src/main/scala/fpga/Core.scala 1675:9]
         end
     `ifdef PRINTF_COND
       end
@@ -8115,7 +8654,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_30) begin
-          $fwrite(32'h80000002,"ex2_alu_muldiv_ou: 0x%x\n",ex2_alu_muldiv_out); // @[src/main/scala/fpga/Core.scala 1608:9]
+          $fwrite(32'h80000002,"ex2_wb_data      : 0x%x\n",ex2_wb_data); // @[src/main/scala/fpga/Core.scala 1676:9]
         end
     `ifdef PRINTF_COND
       end
@@ -8126,7 +8665,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_30) begin
-          $fwrite(32'h80000002,"ex2_reg_wb_addr  : 0x%x\n",ex2_reg_wb_addr); // @[src/main/scala/fpga/Core.scala 1609:9]
+          $fwrite(32'h80000002,"ex2_alu_muldiv_ou: 0x%x\n",ex2_alu_muldiv_out); // @[src/main/scala/fpga/Core.scala 1677:9]
         end
     `ifdef PRINTF_COND
       end
@@ -8137,7 +8676,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_30) begin
-          $fwrite(32'h80000002,"mem1_reg_wdata   : 0x%x\n",mem1_reg_wdata); // @[src/main/scala/fpga/Core.scala 1611:9]
+          $fwrite(32'h80000002,"ex2_reg_wb_addr  : 0x%x\n",ex2_reg_wb_addr); // @[src/main/scala/fpga/Core.scala 1678:9]
         end
     `ifdef PRINTF_COND
       end
@@ -8148,7 +8687,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_30) begin
-          $fwrite(32'h80000002,"mem1_mem_stall   : %d\n",mem1_mem_stall); // @[src/main/scala/fpga/Core.scala 1612:9]
+          $fwrite(32'h80000002,"mem1_reg_wdata   : 0x%x\n",mem1_reg_wdata); // @[src/main/scala/fpga/Core.scala 1680:9]
         end
     `ifdef PRINTF_COND
       end
@@ -8159,7 +8698,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_30) begin
-          $fwrite(32'h80000002,"mem1_dram_stall  : %d\n",mem1_dram_stall); // @[src/main/scala/fpga/Core.scala 1613:9]
+          $fwrite(32'h80000002,"mem1_mem_stall   : %d\n",mem1_mem_stall); // @[src/main/scala/fpga/Core.scala 1681:9]
         end
     `ifdef PRINTF_COND
       end
@@ -8170,7 +8709,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_30) begin
-          $fwrite(32'h80000002,"mem1_reg_unaligne: %d\n",mem1_reg_unaligned); // @[src/main/scala/fpga/Core.scala 1614:9]
+          $fwrite(32'h80000002,"mem1_dram_stall  : %d\n",mem1_dram_stall); // @[src/main/scala/fpga/Core.scala 1682:9]
         end
     `ifdef PRINTF_COND
       end
@@ -8181,7 +8720,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_30) begin
-          $fwrite(32'h80000002,"mem1_is_valid_ins: %d\n",mem1_reg_is_valid_inst); // @[src/main/scala/fpga/Core.scala 1615:9]
+          $fwrite(32'h80000002,"mem1_reg_unaligne: %d\n",mem1_reg_unaligned); // @[src/main/scala/fpga/Core.scala 1683:9]
         end
     `ifdef PRINTF_COND
       end
@@ -8192,7 +8731,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_30) begin
-          $fwrite(32'h80000002,"mem2_mem_stall   : %d\n",1'h0); // @[src/main/scala/fpga/Core.scala 1616:9]
+          $fwrite(32'h80000002,"mem1_is_valid_ins: %d\n",mem1_reg_is_valid_inst); // @[src/main/scala/fpga/Core.scala 1684:9]
         end
     `ifdef PRINTF_COND
       end
@@ -8203,7 +8742,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_30) begin
-          $fwrite(32'h80000002,"mem2_dram_stall  : %d\n",mem2_dram_stall); // @[src/main/scala/fpga/Core.scala 1617:9]
+          $fwrite(32'h80000002,"mem2_mem_stall   : %d\n",1'h0); // @[src/main/scala/fpga/Core.scala 1685:9]
         end
     `ifdef PRINTF_COND
       end
@@ -8214,7 +8753,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_30) begin
-          $fwrite(32'h80000002,"mem2_reg_is_valid: %d\n",mem2_reg_is_valid_inst); // @[src/main/scala/fpga/Core.scala 1620:9]
+          $fwrite(32'h80000002,"mem2_dram_stall  : %d\n",mem2_dram_stall); // @[src/main/scala/fpga/Core.scala 1686:9]
         end
     `ifdef PRINTF_COND
       end
@@ -8225,7 +8764,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_30) begin
-          $fwrite(32'h80000002,"mem2_reg_is_mem_l: %d\n",mem2_reg_is_mem_load); // @[src/main/scala/fpga/Core.scala 1621:9]
+          $fwrite(32'h80000002,"mem2_reg_is_valid: %d\n",mem2_reg_is_valid_inst); // @[src/main/scala/fpga/Core.scala 1689:9]
         end
     `ifdef PRINTF_COND
       end
@@ -8236,7 +8775,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_30) begin
-          $fwrite(32'h80000002,"mem2_reg_is_dram_: %d\n",mem2_reg_is_dram_load); // @[src/main/scala/fpga/Core.scala 1622:9]
+          $fwrite(32'h80000002,"mem2_reg_is_mem_l: %d\n",mem2_reg_is_mem_load); // @[src/main/scala/fpga/Core.scala 1690:9]
         end
     `ifdef PRINTF_COND
       end
@@ -8247,7 +8786,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_30) begin
-          $fwrite(32'h80000002,"mem2_reg_unaligne: %d\n",mem2_reg_unaligned); // @[src/main/scala/fpga/Core.scala 1623:9]
+          $fwrite(32'h80000002,"mem2_reg_is_dram_: %d\n",mem2_reg_is_dram_load); // @[src/main/scala/fpga/Core.scala 1691:9]
         end
     `ifdef PRINTF_COND
       end
@@ -8258,7 +8797,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_30) begin
-          $fwrite(32'h80000002,"mem2_is_aligned_l: %d\n",mem2_is_aligned_lw); // @[src/main/scala/fpga/Core.scala 1624:9]
+          $fwrite(32'h80000002,"mem2_reg_unaligne: %d\n",mem2_reg_unaligned); // @[src/main/scala/fpga/Core.scala 1692:9]
         end
     `ifdef PRINTF_COND
       end
@@ -8269,7 +8808,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_30) begin
-          $fwrite(32'h80000002,"mem2_reg_wb_addr : 0x%x\n",mem2_reg_wb_addr); // @[src/main/scala/fpga/Core.scala 1625:9]
+          $fwrite(32'h80000002,"mem2_is_aligned_l: %d\n",mem2_is_aligned_lw); // @[src/main/scala/fpga/Core.scala 1693:9]
         end
     `ifdef PRINTF_COND
       end
@@ -8280,7 +8819,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_30) begin
-          $fwrite(32'h80000002,"mem3_reg_dmem_rda: 0x%x\n",mem3_reg_dmem_rdata); // @[src/main/scala/fpga/Core.scala 1626:9]
+          $fwrite(32'h80000002,"mem2_reg_wb_addr : 0x%x\n",mem2_reg_wb_addr); // @[src/main/scala/fpga/Core.scala 1694:9]
         end
     `ifdef PRINTF_COND
       end
@@ -8291,7 +8830,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_30) begin
-          $fwrite(32'h80000002,"mem3_wb_data_load: 0x%x\n",mem3_wb_data_load); // @[src/main/scala/fpga/Core.scala 1627:9]
+          $fwrite(32'h80000002,"mem3_reg_dmem_rda: 0x%x\n",mem3_reg_dmem_rdata); // @[src/main/scala/fpga/Core.scala 1695:9]
         end
     `ifdef PRINTF_COND
       end
@@ -8302,7 +8841,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_30) begin
-          $fwrite(32'h80000002,"mem3_reg_unaligne: %d\n",mem3_reg_unaligned); // @[src/main/scala/fpga/Core.scala 1628:9]
+          $fwrite(32'h80000002,"mem3_wb_data_load: 0x%x\n",mem3_wb_data_load); // @[src/main/scala/fpga/Core.scala 1696:9]
         end
     `ifdef PRINTF_COND
       end
@@ -8313,7 +8852,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_30) begin
-          $fwrite(32'h80000002,"mem3_reg_is_align: %d\n",mem3_reg_is_aligned_lw); // @[src/main/scala/fpga/Core.scala 1629:9]
+          $fwrite(32'h80000002,"mem3_reg_unaligne: %d\n",mem3_reg_unaligned); // @[src/main/scala/fpga/Core.scala 1697:9]
         end
     `ifdef PRINTF_COND
       end
@@ -8324,7 +8863,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_30) begin
-          $fwrite(32'h80000002,"mem3_reg_is_valid: %d\n",mem3_reg_is_valid_inst); // @[src/main/scala/fpga/Core.scala 1630:9]
+          $fwrite(32'h80000002,"mem3_reg_is_align: %d\n",mem3_reg_is_aligned_lw); // @[src/main/scala/fpga/Core.scala 1698:9]
         end
     `ifdef PRINTF_COND
       end
@@ -8335,7 +8874,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_30) begin
-          $fwrite(32'h80000002,"mem3_reg_wb_addr : 0x%x\n",mem3_reg_wb_addr); // @[src/main/scala/fpga/Core.scala 1631:9]
+          $fwrite(32'h80000002,"mem3_reg_is_valid: %d\n",mem3_reg_is_valid_inst); // @[src/main/scala/fpga/Core.scala 1699:9]
         end
     `ifdef PRINTF_COND
       end
@@ -8346,7 +8885,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_30) begin
-          $fwrite(32'h80000002,"csr_is_meintr    : %d\n",csr_is_meintr); // @[src/main/scala/fpga/Core.scala 1633:9]
+          $fwrite(32'h80000002,"mem3_reg_wb_addr : 0x%x\n",mem3_reg_wb_addr); // @[src/main/scala/fpga/Core.scala 1700:9]
         end
     `ifdef PRINTF_COND
       end
@@ -8357,7 +8896,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_30) begin
-          $fwrite(32'h80000002,"csr_is_mtintr    : %d\n",csr_is_mtintr); // @[src/main/scala/fpga/Core.scala 1634:9]
+          $fwrite(32'h80000002,"csr_is_meintr    : %d\n",csr_is_meintr); // @[src/main/scala/fpga/Core.scala 1702:9]
         end
     `ifdef PRINTF_COND
       end
@@ -8368,7 +8907,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_30) begin
-          $fwrite(32'h80000002,"csr_is_trap      : %d\n",csr_is_trap); // @[src/main/scala/fpga/Core.scala 1635:9]
+          $fwrite(32'h80000002,"csr_is_mtintr    : %d\n",csr_is_mtintr); // @[src/main/scala/fpga/Core.scala 1703:9]
         end
     `ifdef PRINTF_COND
       end
@@ -8379,7 +8918,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_30) begin
-          $fwrite(32'h80000002,"csr_is_br        : %d\n",csr_is_br); // @[src/main/scala/fpga/Core.scala 1637:9]
+          $fwrite(32'h80000002,"csr_is_trap      : %d\n",csr_is_trap); // @[src/main/scala/fpga/Core.scala 1704:9]
         end
     `ifdef PRINTF_COND
       end
@@ -8390,7 +8929,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_30) begin
-          $fwrite(32'h80000002,"instret          : %d\n",instret); // @[src/main/scala/fpga/Core.scala 1640:9]
+          $fwrite(32'h80000002,"csr_is_br        : %d\n",csr_is_br); // @[src/main/scala/fpga/Core.scala 1706:9]
         end
     `ifdef PRINTF_COND
       end
@@ -8401,7 +8940,7 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_30) begin
-          $fwrite(32'h80000002,"cycle_counter    : %d\n",io_debug_signal_cycle_counter); // @[src/main/scala/fpga/Core.scala 1643:9]
+          $fwrite(32'h80000002,"instret          : %d\n",instret); // @[src/main/scala/fpga/Core.scala 1709:9]
         end
     `ifdef PRINTF_COND
       end
@@ -8412,7 +8951,18 @@ module Core(
       if (`PRINTF_COND) begin
     `endif
         if (_T_30) begin
-          $fwrite(32'h80000002,"---------\n"); // @[src/main/scala/fpga/Core.scala 1644:9]
+          $fwrite(32'h80000002,"cycle_counter    : %d\n",io_debug_signal_cycle_counter); // @[src/main/scala/fpga/Core.scala 1712:9]
+        end
+    `ifdef PRINTF_COND
+      end
+    `endif
+    `endif // SYNTHESIS
+    `ifndef SYNTHESIS
+    `ifdef PRINTF_COND
+      if (`PRINTF_COND) begin
+    `endif
+        if (_T_30) begin
+          $fwrite(32'h80000002,"---------\n"); // @[src/main/scala/fpga/Core.scala 1713:9]
         end
     `ifdef PRINTF_COND
       end
@@ -8546,277 +9096,301 @@ initial begin
   _RAND_42 = {1{`RANDOM}};
   rrd_reg_bp_target = _RAND_42[30:0];
   _RAND_43 = {1{`RANDOM}};
-  rrd_reg_bp_cnt = _RAND_43[1:0];
+  rrd_reg_bp_history = _RAND_43[5:0];
   _RAND_44 = {1{`RANDOM}};
-  rrd_reg_actual_attr = _RAND_44[1:0];
+  rrd_reg_bp_cnt = _RAND_44[1:0];
   _RAND_45 = {1{`RANDOM}};
-  rrd_reg_actual_is_ret = _RAND_45[0:0];
+  rrd_reg_bp_gcnt = _RAND_45[1:0];
   _RAND_46 = {1{`RANDOM}};
-  rrd_reg_is_half = _RAND_46[0:0];
+  rrd_reg_actual_attr = _RAND_46[1:0];
   _RAND_47 = {1{`RANDOM}};
-  rrd_reg_is_valid_inst = _RAND_47[0:0];
+  rrd_reg_actual_is_ret = _RAND_47[0:0];
   _RAND_48 = {1{`RANDOM}};
-  rrd_reg_is_trap = _RAND_48[0:0];
+  rrd_reg_is_half = _RAND_48[0:0];
   _RAND_49 = {1{`RANDOM}};
-  ex1_reg_pc = _RAND_49[30:0];
+  rrd_reg_is_valid_inst = _RAND_49[0:0];
   _RAND_50 = {1{`RANDOM}};
-  ex1_reg_wb_addr = _RAND_50[4:0];
+  rrd_reg_is_trap = _RAND_50[0:0];
   _RAND_51 = {1{`RANDOM}};
-  ex1_reg_op1_data = _RAND_51[31:0];
+  ex1_reg_pc = _RAND_51[30:0];
   _RAND_52 = {1{`RANDOM}};
-  ex1_reg_op2_data = _RAND_52[31:0];
+  ex1_reg_wb_addr = _RAND_52[4:0];
   _RAND_53 = {1{`RANDOM}};
-  ex1_reg_op3_data = _RAND_53[31:0];
+  ex1_reg_op1_data = _RAND_53[31:0];
   _RAND_54 = {1{`RANDOM}};
-  ex1_reg_exe_fun = _RAND_54[3:0];
+  ex1_reg_op2_data = _RAND_54[31:0];
   _RAND_55 = {1{`RANDOM}};
-  ex1_reg_rf_wen = _RAND_55[0:0];
+  ex1_reg_op3_data = _RAND_55[31:0];
   _RAND_56 = {1{`RANDOM}};
-  ex1_reg_wb_sel = _RAND_56[2:0];
+  ex1_reg_exe_fun = _RAND_56[3:0];
   _RAND_57 = {1{`RANDOM}};
-  ex1_reg_csr_addr = _RAND_57[11:0];
+  ex1_reg_rf_wen = _RAND_57[0:0];
   _RAND_58 = {1{`RANDOM}};
-  ex1_reg_csr_cmd = _RAND_58[1:0];
+  ex1_reg_wb_sel = _RAND_58[2:0];
   _RAND_59 = {1{`RANDOM}};
-  ex1_reg_shamt = _RAND_59[1:0];
+  ex1_reg_csr_addr = _RAND_59[11:0];
   _RAND_60 = {1{`RANDOM}};
-  ex1_reg_op2op = _RAND_60[0:0];
+  ex1_reg_csr_cmd = _RAND_60[1:0];
   _RAND_61 = {1{`RANDOM}};
-  ex1_reg_mem_w = _RAND_61[2:0];
+  ex1_reg_shamt = _RAND_61[1:0];
   _RAND_62 = {1{`RANDOM}};
-  ex1_reg_is_bflen = _RAND_62[0:0];
+  ex1_reg_op2op = _RAND_62[0:0];
   _RAND_63 = {1{`RANDOM}};
-  ex1_reg_imm_len = _RAND_63[4:0];
+  ex1_reg_mem_w = _RAND_63[2:0];
   _RAND_64 = {1{`RANDOM}};
-  ex1_reg_is_j = _RAND_64[0:0];
+  ex1_reg_is_bflen = _RAND_64[0:0];
   _RAND_65 = {1{`RANDOM}};
-  ex1_reg_bp_taken = _RAND_65[0:0];
+  ex1_reg_imm_len = _RAND_65[4:0];
   _RAND_66 = {1{`RANDOM}};
-  ex1_reg_bp_attr = _RAND_66[1:0];
+  ex1_reg_is_j = _RAND_66[0:0];
   _RAND_67 = {1{`RANDOM}};
-  ex1_reg_bp_is_ret = _RAND_67[0:0];
+  ex1_reg_bp_taken = _RAND_67[0:0];
   _RAND_68 = {1{`RANDOM}};
-  ex1_reg_bp_rasindex = _RAND_68[2:0];
+  ex1_reg_bp_attr = _RAND_68[1:0];
   _RAND_69 = {1{`RANDOM}};
-  ex1_reg_bp_target = _RAND_69[30:0];
+  ex1_reg_bp_is_ret = _RAND_69[0:0];
   _RAND_70 = {1{`RANDOM}};
-  ex1_reg_bp_cnt = _RAND_70[1:0];
+  ex1_reg_bp_rasindex = _RAND_70[2:0];
   _RAND_71 = {1{`RANDOM}};
-  ex1_reg_actual_attr = _RAND_71[1:0];
+  ex1_reg_bp_target = _RAND_71[30:0];
   _RAND_72 = {1{`RANDOM}};
-  ex1_reg_actual_is_ret = _RAND_72[0:0];
+  ex1_reg_bp_history = _RAND_72[5:0];
   _RAND_73 = {1{`RANDOM}};
-  ex1_reg_is_half = _RAND_73[0:0];
+  ex1_reg_bp_cnt = _RAND_73[1:0];
   _RAND_74 = {1{`RANDOM}};
-  ex1_reg_is_valid_inst = _RAND_74[0:0];
+  ex1_reg_bp_gcnt = _RAND_74[1:0];
   _RAND_75 = {1{`RANDOM}};
-  ex1_reg_is_trap = _RAND_75[0:0];
+  ex1_reg_actual_attr = _RAND_75[1:0];
   _RAND_76 = {1{`RANDOM}};
-  ex1_reg_is_mret = _RAND_76[0:0];
+  ex1_reg_actual_is_ret = _RAND_76[0:0];
   _RAND_77 = {1{`RANDOM}};
-  ex1_reg_mem_use_reg = _RAND_77[0:0];
+  ex1_reg_is_half = _RAND_77[0:0];
   _RAND_78 = {1{`RANDOM}};
-  ex1_reg_inst2_use_reg = _RAND_78[0:0];
+  ex1_reg_is_valid_inst = _RAND_78[0:0];
   _RAND_79 = {1{`RANDOM}};
-  ex1_reg_inst3_use_reg = _RAND_79[0:0];
+  ex1_reg_is_trap = _RAND_79[0:0];
   _RAND_80 = {1{`RANDOM}};
-  ex1_reg_is_br = _RAND_80[0:0];
+  ex1_reg_is_mret = _RAND_80[0:0];
   _RAND_81 = {1{`RANDOM}};
-  ex1_reg_direct_jbr_pc = _RAND_81[30:0];
+  ex1_reg_mem_use_reg = _RAND_81[0:0];
   _RAND_82 = {1{`RANDOM}};
-  ex2_reg_pc = _RAND_82[30:0];
+  ex1_reg_inst2_use_reg = _RAND_82[0:0];
   _RAND_83 = {1{`RANDOM}};
-  ex2_reg_wb_addr = _RAND_83[4:0];
-  _RAND_84 = {2{`RANDOM}};
-  ex2_reg_mullu = _RAND_84[47:0];
+  ex1_reg_inst3_use_reg = _RAND_83[0:0];
+  _RAND_84 = {1{`RANDOM}};
+  ex1_reg_is_br = _RAND_84[0:0];
   _RAND_85 = {1{`RANDOM}};
-  ex2_reg_mulls = _RAND_85[31:0];
-  _RAND_86 = {2{`RANDOM}};
-  ex2_reg_mulhuu = _RAND_86[47:0];
-  _RAND_87 = {2{`RANDOM}};
-  ex2_reg_mulhss = _RAND_87[47:0];
+  ex1_reg_direct_jbr_pc = _RAND_85[30:0];
+  _RAND_86 = {1{`RANDOM}};
+  ex2_reg_pc = _RAND_86[30:0];
+  _RAND_87 = {1{`RANDOM}};
+  ex2_reg_wb_addr = _RAND_87[4:0];
   _RAND_88 = {2{`RANDOM}};
-  ex2_reg_mulhsu = _RAND_88[47:0];
+  ex2_reg_mullu = _RAND_88[47:0];
   _RAND_89 = {1{`RANDOM}};
-  ex2_reg_exe_fun = _RAND_89[3:0];
-  _RAND_90 = {1{`RANDOM}};
-  ex2_reg_rf_wen = _RAND_90[0:0];
-  _RAND_91 = {1{`RANDOM}};
-  ex2_reg_fun_sel = _RAND_91[2:0];
-  _RAND_92 = {1{`RANDOM}};
-  ex2_reg_alu_out = _RAND_92[31:0];
+  ex2_reg_mulls = _RAND_89[31:0];
+  _RAND_90 = {2{`RANDOM}};
+  ex2_reg_mulhuu = _RAND_90[47:0];
+  _RAND_91 = {2{`RANDOM}};
+  ex2_reg_mulhss = _RAND_91[47:0];
+  _RAND_92 = {2{`RANDOM}};
+  ex2_reg_mulhsu = _RAND_92[47:0];
   _RAND_93 = {1{`RANDOM}};
-  ex2_reg_pc_bit_out = _RAND_93[31:0];
+  ex2_reg_exe_fun = _RAND_93[3:0];
   _RAND_94 = {1{`RANDOM}};
-  ex2_reg_op3_data = _RAND_94[31:0];
+  ex2_reg_rf_wen = _RAND_94[0:0];
   _RAND_95 = {1{`RANDOM}};
-  ex2_reg_is_valid_inst = _RAND_95[0:0];
+  ex2_reg_fun_sel = _RAND_95[2:0];
   _RAND_96 = {1{`RANDOM}};
-  ex2_reg_divrem = _RAND_96[0:0];
+  ex2_reg_alu_out = _RAND_96[31:0];
   _RAND_97 = {1{`RANDOM}};
-  ex2_reg_sign_op1 = _RAND_97[0:0];
+  ex2_reg_pc_bit_out = _RAND_97[31:0];
   _RAND_98 = {1{`RANDOM}};
-  ex2_reg_sign_op12 = _RAND_98[0:0];
+  ex2_reg_op3_data = _RAND_98[31:0];
   _RAND_99 = {1{`RANDOM}};
-  ex2_reg_zero_op2 = _RAND_99[0:0];
-  _RAND_100 = {2{`RANDOM}};
-  ex2_reg_init_dividend = _RAND_100[36:0];
+  ex2_reg_is_valid_inst = _RAND_99[0:0];
+  _RAND_100 = {1{`RANDOM}};
+  ex2_reg_divrem = _RAND_100[0:0];
   _RAND_101 = {1{`RANDOM}};
-  ex2_reg_init_divisor = _RAND_101[31:0];
+  ex2_reg_sign_op1 = _RAND_101[0:0];
   _RAND_102 = {1{`RANDOM}};
-  ex2_reg_orig_dividend = _RAND_102[31:0];
+  ex2_reg_sign_op12 = _RAND_102[0:0];
   _RAND_103 = {1{`RANDOM}};
-  ex2_reg_inst3_use_reg = _RAND_103[0:0];
-  _RAND_104 = {1{`RANDOM}};
-  ex2_reg_no_mem = _RAND_104[0:0];
+  ex2_reg_zero_op2 = _RAND_103[0:0];
+  _RAND_104 = {2{`RANDOM}};
+  ex2_reg_init_dividend = _RAND_104[36:0];
   _RAND_105 = {1{`RANDOM}};
-  mem1_reg_mem_wstrb = _RAND_105[6:0];
+  ex2_reg_init_divisor = _RAND_105[31:0];
   _RAND_106 = {1{`RANDOM}};
-  mem1_reg_wdata = _RAND_106[31:0];
+  ex2_reg_orig_dividend = _RAND_106[31:0];
   _RAND_107 = {1{`RANDOM}};
-  mem1_reg_mem_w = _RAND_107[2:0];
+  ex2_reg_inst3_use_reg = _RAND_107[0:0];
   _RAND_108 = {1{`RANDOM}};
-  mem1_reg_is_mem_load = _RAND_108[0:0];
+  ex2_reg_no_mem = _RAND_108[0:0];
   _RAND_109 = {1{`RANDOM}};
-  mem1_reg_is_mem_store = _RAND_109[0:0];
+  mem1_reg_mem_wstrb = _RAND_109[6:0];
   _RAND_110 = {1{`RANDOM}};
-  mem1_reg_is_dram_load = _RAND_110[0:0];
+  mem1_reg_wdata = _RAND_110[31:0];
   _RAND_111 = {1{`RANDOM}};
-  mem1_reg_is_dram_store = _RAND_111[0:0];
+  mem1_reg_mem_w = _RAND_111[2:0];
   _RAND_112 = {1{`RANDOM}};
-  mem1_reg_is_dram_fence = _RAND_112[0:0];
+  mem1_reg_is_mem_load = _RAND_112[0:0];
   _RAND_113 = {1{`RANDOM}};
-  mem1_reg_is_valid_inst = _RAND_113[0:0];
+  mem1_reg_is_mem_store = _RAND_113[0:0];
   _RAND_114 = {1{`RANDOM}};
-  mem1_reg_unaligned = _RAND_114[0:0];
+  mem1_reg_is_dram_load = _RAND_114[0:0];
   _RAND_115 = {1{`RANDOM}};
-  mem2_reg_wb_byte_offset = _RAND_115[1:0];
+  mem1_reg_is_dram_store = _RAND_115[0:0];
   _RAND_116 = {1{`RANDOM}};
-  mem2_reg_mem_w = _RAND_116[2:0];
+  mem1_reg_is_dram_fence = _RAND_116[0:0];
   _RAND_117 = {1{`RANDOM}};
-  mem2_reg_wb_addr = _RAND_117[4:0];
+  mem1_reg_is_valid_inst = _RAND_117[0:0];
   _RAND_118 = {1{`RANDOM}};
-  mem2_reg_is_valid_load = _RAND_118[0:0];
+  mem1_reg_unaligned = _RAND_118[0:0];
   _RAND_119 = {1{`RANDOM}};
-  mem2_reg_is_valid_inst = _RAND_119[0:0];
+  mem2_reg_wb_byte_offset = _RAND_119[1:0];
   _RAND_120 = {1{`RANDOM}};
-  mem2_reg_is_mem_load = _RAND_120[0:0];
+  mem2_reg_mem_w = _RAND_120[2:0];
   _RAND_121 = {1{`RANDOM}};
-  mem2_reg_is_dram_load = _RAND_121[0:0];
+  mem2_reg_wb_addr = _RAND_121[4:0];
   _RAND_122 = {1{`RANDOM}};
-  mem2_reg_unaligned = _RAND_122[0:0];
+  mem2_reg_is_valid_load = _RAND_122[0:0];
   _RAND_123 = {1{`RANDOM}};
-  mem3_reg_wb_byte_offset = _RAND_123[1:0];
+  mem2_reg_is_valid_inst = _RAND_123[0:0];
   _RAND_124 = {1{`RANDOM}};
-  mem3_reg_mem_w = _RAND_124[2:0];
+  mem2_reg_is_mem_load = _RAND_124[0:0];
   _RAND_125 = {1{`RANDOM}};
-  mem3_reg_dmem_rdata = _RAND_125[31:0];
+  mem2_reg_is_dram_load = _RAND_125[0:0];
   _RAND_126 = {1{`RANDOM}};
-  mem3_reg_rdata_high = _RAND_126[23:0];
+  mem2_reg_unaligned = _RAND_126[0:0];
   _RAND_127 = {1{`RANDOM}};
-  mem3_reg_wb_addr = _RAND_127[4:0];
+  mem3_reg_wb_byte_offset = _RAND_127[1:0];
   _RAND_128 = {1{`RANDOM}};
-  mem3_reg_is_valid_load = _RAND_128[0:0];
+  mem3_reg_mem_w = _RAND_128[2:0];
   _RAND_129 = {1{`RANDOM}};
-  mem3_reg_is_valid_inst = _RAND_129[0:0];
+  mem3_reg_dmem_rdata = _RAND_129[31:0];
   _RAND_130 = {1{`RANDOM}};
-  mem3_reg_unaligned = _RAND_130[0:0];
+  mem3_reg_rdata_high = _RAND_130[23:0];
   _RAND_131 = {1{`RANDOM}};
-  mem3_reg_is_aligned_lw = _RAND_131[0:0];
+  mem3_reg_wb_addr = _RAND_131[4:0];
   _RAND_132 = {1{`RANDOM}};
-  ex1_reg_fw_en = _RAND_132[0:0];
+  mem3_reg_is_valid_load = _RAND_132[0:0];
   _RAND_133 = {1{`RANDOM}};
-  ex2_reg_fw_en = _RAND_133[0:0];
+  mem3_reg_is_valid_inst = _RAND_133[0:0];
   _RAND_134 = {1{`RANDOM}};
-  mem3_reg_fw_en = _RAND_134[0:0];
+  mem3_reg_unaligned = _RAND_134[0:0];
   _RAND_135 = {1{`RANDOM}};
-  ex2_reg_div_stall = _RAND_135[0:0];
+  mem3_reg_is_aligned_lw = _RAND_135[0:0];
   _RAND_136 = {1{`RANDOM}};
-  ex2_reg_divrem_state = _RAND_136[2:0];
+  ex1_reg_fw_en = _RAND_136[0:0];
   _RAND_137 = {1{`RANDOM}};
-  ex2_reg_is_br = _RAND_137[0:0];
+  ex2_reg_fw_en = _RAND_137[0:0];
   _RAND_138 = {1{`RANDOM}};
-  ex2_reg_br_pc = _RAND_138[30:0];
+  mem3_reg_fw_en = _RAND_138[0:0];
   _RAND_139 = {1{`RANDOM}};
-  ex2_reg_is_retired = _RAND_139[0:0];
+  ex2_reg_div_stall = _RAND_139[0:0];
   _RAND_140 = {1{`RANDOM}};
-  mem3_reg_is_retired = _RAND_140[0:0];
+  ex2_reg_divrem_state = _RAND_140[2:0];
   _RAND_141 = {1{`RANDOM}};
-  ic_reg_read_rdy = _RAND_141[0:0];
+  ex2_reg_is_br = _RAND_141[0:0];
   _RAND_142 = {1{`RANDOM}};
-  ic_reg_half_rdy = _RAND_142[0:0];
+  ex2_reg_br_pc = _RAND_142[30:0];
   _RAND_143 = {1{`RANDOM}};
-  ic_reg_imem_addr = _RAND_143[30:0];
+  ex2_reg_is_retired = _RAND_143[0:0];
   _RAND_144 = {1{`RANDOM}};
-  ic_reg_addr_out = _RAND_144[30:0];
+  mem3_reg_is_retired = _RAND_144[0:0];
   _RAND_145 = {1{`RANDOM}};
-  ic_reg_inst = _RAND_145[31:0];
+  ic_reg_read_rdy = _RAND_145[0:0];
   _RAND_146 = {1{`RANDOM}};
-  ic_reg_inst_addr = _RAND_146[30:0];
+  ic_reg_half_rdy = _RAND_146[0:0];
   _RAND_147 = {1{`RANDOM}};
-  ic_reg_inst2 = _RAND_147[31:0];
+  ic_reg_imem_addr = _RAND_147[30:0];
   _RAND_148 = {1{`RANDOM}};
-  ic_state = _RAND_148[2:0];
+  ic_reg_addr_out = _RAND_148[30:0];
   _RAND_149 = {1{`RANDOM}};
-  ic_reg_bp_next0_taken = _RAND_149[0:0];
+  ic_reg_inst = _RAND_149[31:0];
   _RAND_150 = {1{`RANDOM}};
-  ic_reg_bp_next0_attr = _RAND_150[1:0];
+  ic_reg_inst_addr = _RAND_150[30:0];
   _RAND_151 = {1{`RANDOM}};
-  ic_reg_bp_next0_is_ret = _RAND_151[0:0];
+  ic_reg_inst2 = _RAND_151[31:0];
   _RAND_152 = {1{`RANDOM}};
-  ic_reg_bp_next0_target = _RAND_152[30:0];
+  ic_state = _RAND_152[2:0];
   _RAND_153 = {1{`RANDOM}};
-  ic_reg_bp_next0_cnt = _RAND_153[1:0];
+  ic_reg_bp_next0_taken = _RAND_153[0:0];
   _RAND_154 = {1{`RANDOM}};
-  ic_reg_bp_next1_taken = _RAND_154[0:0];
+  ic_reg_bp_next0_attr = _RAND_154[1:0];
   _RAND_155 = {1{`RANDOM}};
-  ic_reg_bp_next1_attr = _RAND_155[1:0];
+  ic_reg_bp_next0_is_ret = _RAND_155[0:0];
   _RAND_156 = {1{`RANDOM}};
-  ic_reg_bp_next1_is_ret = _RAND_156[0:0];
+  ic_reg_bp_next0_target = _RAND_156[30:0];
   _RAND_157 = {1{`RANDOM}};
-  ic_reg_bp_next1_target = _RAND_157[30:0];
+  ic_reg_bp_next0_history = _RAND_157[5:0];
   _RAND_158 = {1{`RANDOM}};
-  ic_reg_bp_next1_cnt = _RAND_158[1:0];
+  ic_reg_bp_next0_cnt = _RAND_158[1:0];
   _RAND_159 = {1{`RANDOM}};
-  ic_reg_bp_next2_taken = _RAND_159[0:0];
+  ic_reg_bp_next0_gcnt = _RAND_159[1:0];
   _RAND_160 = {1{`RANDOM}};
-  ic_reg_bp_next2_attr = _RAND_160[1:0];
+  ic_reg_bp_next1_taken = _RAND_160[0:0];
   _RAND_161 = {1{`RANDOM}};
-  ic_reg_bp_next2_is_ret = _RAND_161[0:0];
+  ic_reg_bp_next1_attr = _RAND_161[1:0];
   _RAND_162 = {1{`RANDOM}};
-  ic_reg_bp_next2_target = _RAND_162[30:0];
+  ic_reg_bp_next1_is_ret = _RAND_162[0:0];
   _RAND_163 = {1{`RANDOM}};
-  ic_reg_bp_next2_cnt = _RAND_163[1:0];
+  ic_reg_bp_next1_target = _RAND_163[30:0];
   _RAND_164 = {1{`RANDOM}};
-  ic_reg_zbp_next_taken1 = _RAND_164[0:0];
+  ic_reg_bp_next1_history = _RAND_164[5:0];
   _RAND_165 = {1{`RANDOM}};
-  ic_reg_zbp_next_target1 = _RAND_165[30:0];
+  ic_reg_bp_next1_cnt = _RAND_165[1:0];
   _RAND_166 = {1{`RANDOM}};
-  ic_reg_zbp_next_taken2 = _RAND_166[0:0];
+  ic_reg_bp_next1_gcnt = _RAND_166[1:0];
   _RAND_167 = {1{`RANDOM}};
-  ic_reg_zbp_next_target2 = _RAND_167[30:0];
+  ic_reg_bp_next2_taken = _RAND_167[0:0];
   _RAND_168 = {1{`RANDOM}};
-  csr_reg_is_meintr = _RAND_168[0:0];
+  ic_reg_bp_next2_attr = _RAND_168[1:0];
   _RAND_169 = {1{`RANDOM}};
-  csr_reg_is_mtintr = _RAND_169[0:0];
-  _RAND_170 = {2{`RANDOM}};
-  ex2_reg_dividend = _RAND_170[36:0];
-  _RAND_171 = {2{`RANDOM}};
-  ex2_reg_divisor = _RAND_171[35:0];
-  _RAND_172 = {2{`RANDOM}};
-  ex2_reg_p_divisor = _RAND_172[63:0];
+  ic_reg_bp_next2_is_ret = _RAND_169[0:0];
+  _RAND_170 = {1{`RANDOM}};
+  ic_reg_bp_next2_target = _RAND_170[30:0];
+  _RAND_171 = {1{`RANDOM}};
+  ic_reg_bp_next2_history = _RAND_171[5:0];
+  _RAND_172 = {1{`RANDOM}};
+  ic_reg_bp_next2_cnt = _RAND_172[1:0];
   _RAND_173 = {1{`RANDOM}};
-  ex2_reg_divrem_count = _RAND_173[4:0];
+  ic_reg_bp_next2_gcnt = _RAND_173[1:0];
   _RAND_174 = {1{`RANDOM}};
-  ex2_reg_rem_shift = _RAND_174[4:0];
+  ic_reg_zbp_next_taken0 = _RAND_174[0:0];
   _RAND_175 = {1{`RANDOM}};
-  ex2_reg_extra_shift = _RAND_175[0:0];
+  ic_reg_zbp_next_target0 = _RAND_175[30:0];
   _RAND_176 = {1{`RANDOM}};
-  ex2_reg_d = _RAND_176[2:0];
+  ic_reg_zbp_next_taken1 = _RAND_176[0:0];
   _RAND_177 = {1{`RANDOM}};
-  ex2_reg_reminder = _RAND_177[31:0];
+  ic_reg_zbp_next_target1 = _RAND_177[30:0];
   _RAND_178 = {1{`RANDOM}};
-  ex2_reg_quotient = _RAND_178[31:0];
+  ic_reg_zbp_next_taken2 = _RAND_178[0:0];
+  _RAND_179 = {1{`RANDOM}};
+  ic_reg_zbp_next_target2 = _RAND_179[30:0];
+  _RAND_180 = {1{`RANDOM}};
+  csr_reg_is_meintr = _RAND_180[0:0];
+  _RAND_181 = {1{`RANDOM}};
+  csr_reg_is_mtintr = _RAND_181[0:0];
+  _RAND_182 = {2{`RANDOM}};
+  ex2_reg_dividend = _RAND_182[36:0];
+  _RAND_183 = {2{`RANDOM}};
+  ex2_reg_divisor = _RAND_183[35:0];
+  _RAND_184 = {2{`RANDOM}};
+  ex2_reg_p_divisor = _RAND_184[63:0];
+  _RAND_185 = {1{`RANDOM}};
+  ex2_reg_divrem_count = _RAND_185[4:0];
+  _RAND_186 = {1{`RANDOM}};
+  ex2_reg_rem_shift = _RAND_186[4:0];
+  _RAND_187 = {1{`RANDOM}};
+  ex2_reg_extra_shift = _RAND_187[0:0];
+  _RAND_188 = {1{`RANDOM}};
+  ex2_reg_d = _RAND_188[2:0];
+  _RAND_189 = {1{`RANDOM}};
+  ex2_reg_reminder = _RAND_189[31:0];
+  _RAND_190 = {1{`RANDOM}};
+  ex2_reg_quotient = _RAND_190[31:0];
 `endif // RANDOMIZE_REG_INIT
   `endif // RANDOMIZE
 end // initial
@@ -17039,11 +17613,16 @@ module RiscV(
   wire  core_io_cache_wready; // @[src/main/scala/fpga/Top.scala 78:20]
   wire [3:0] core_io_cache_wstrb; // @[src/main/scala/fpga/Top.scala 78:20]
   wire [31:0] core_io_cache_wdata; // @[src/main/scala/fpga/Top.scala 78:20]
-  wire  core_io_pht_mem_wen; // @[src/main/scala/fpga/Top.scala 78:20]
-  wire [11:0] core_io_pht_mem_raddr; // @[src/main/scala/fpga/Top.scala 78:20]
-  wire [3:0] core_io_pht_mem_rdata; // @[src/main/scala/fpga/Top.scala 78:20]
-  wire [12:0] core_io_pht_mem_waddr; // @[src/main/scala/fpga/Top.scala 78:20]
-  wire [1:0] core_io_pht_mem_wdata; // @[src/main/scala/fpga/Top.scala 78:20]
+  wire  core_io_pht_lmem_wen; // @[src/main/scala/fpga/Top.scala 78:20]
+  wire [11:0] core_io_pht_lmem_raddr; // @[src/main/scala/fpga/Top.scala 78:20]
+  wire [3:0] core_io_pht_lmem_rdata; // @[src/main/scala/fpga/Top.scala 78:20]
+  wire [12:0] core_io_pht_lmem_waddr; // @[src/main/scala/fpga/Top.scala 78:20]
+  wire [1:0] core_io_pht_lmem_wdata; // @[src/main/scala/fpga/Top.scala 78:20]
+  wire  core_io_pht_gmem_wen; // @[src/main/scala/fpga/Top.scala 78:20]
+  wire [11:0] core_io_pht_gmem_raddr; // @[src/main/scala/fpga/Top.scala 78:20]
+  wire [3:0] core_io_pht_gmem_rdata; // @[src/main/scala/fpga/Top.scala 78:20]
+  wire [12:0] core_io_pht_gmem_waddr; // @[src/main/scala/fpga/Top.scala 78:20]
+  wire [1:0] core_io_pht_gmem_wdata; // @[src/main/scala/fpga/Top.scala 78:20]
   wire [31:0] core_io_mtimer_mem_raddr; // @[src/main/scala/fpga/Top.scala 78:20]
   wire [31:0] core_io_mtimer_mem_rdata; // @[src/main/scala/fpga/Top.scala 78:20]
   wire [31:0] core_io_mtimer_mem_waddr; // @[src/main/scala/fpga/Top.scala 78:20]
@@ -17166,126 +17745,133 @@ module RiscV(
   wire [1:0] icache_valid_wdata; // @[src/main/scala/fpga/Top.scala 85:28]
   wire [63:0] icache_valid_idata; // @[src/main/scala/fpga/Top.scala 85:28]
   wire [1:0] icache_valid_dummy_data; // @[src/main/scala/fpga/Top.scala 85:28]
-  wire  pht_mem_clock; // @[src/main/scala/fpga/Top.scala 86:23]
-  wire  pht_mem_ren; // @[src/main/scala/fpga/Top.scala 86:23]
-  wire  pht_mem_wen; // @[src/main/scala/fpga/Top.scala 86:23]
-  wire [11:0] pht_mem_raddr; // @[src/main/scala/fpga/Top.scala 86:23]
-  wire [3:0] pht_mem_rdata; // @[src/main/scala/fpga/Top.scala 86:23]
-  wire [12:0] pht_mem_waddr; // @[src/main/scala/fpga/Top.scala 86:23]
-  wire [1:0] pht_mem_wdata; // @[src/main/scala/fpga/Top.scala 86:23]
-  wire  gpio_clock; // @[src/main/scala/fpga/Top.scala 87:20]
-  wire  gpio_reset; // @[src/main/scala/fpga/Top.scala 87:20]
-  wire  gpio_io_mem_wen; // @[src/main/scala/fpga/Top.scala 87:20]
-  wire [31:0] gpio_io_mem_wdata; // @[src/main/scala/fpga/Top.scala 87:20]
-  wire [31:0] gpio_io_gpio; // @[src/main/scala/fpga/Top.scala 87:20]
-  wire  uart_clock; // @[src/main/scala/fpga/Top.scala 88:20]
-  wire  uart_reset; // @[src/main/scala/fpga/Top.scala 88:20]
-  wire [31:0] uart_io_mem_raddr; // @[src/main/scala/fpga/Top.scala 88:20]
-  wire [31:0] uart_io_mem_rdata; // @[src/main/scala/fpga/Top.scala 88:20]
-  wire [31:0] uart_io_mem_waddr; // @[src/main/scala/fpga/Top.scala 88:20]
-  wire  uart_io_mem_wen; // @[src/main/scala/fpga/Top.scala 88:20]
-  wire [31:0] uart_io_mem_wdata; // @[src/main/scala/fpga/Top.scala 88:20]
-  wire  uart_io_intr; // @[src/main/scala/fpga/Top.scala 88:20]
-  wire  uart_io_tx; // @[src/main/scala/fpga/Top.scala 88:20]
-  wire  uart_io_rx; // @[src/main/scala/fpga/Top.scala 88:20]
-  wire  sdc_clock; // @[src/main/scala/fpga/Top.scala 89:19]
-  wire  sdc_reset; // @[src/main/scala/fpga/Top.scala 89:19]
-  wire [31:0] sdc_io_mem_raddr; // @[src/main/scala/fpga/Top.scala 89:19]
-  wire [31:0] sdc_io_mem_rdata; // @[src/main/scala/fpga/Top.scala 89:19]
-  wire  sdc_io_mem_ren; // @[src/main/scala/fpga/Top.scala 89:19]
-  wire [31:0] sdc_io_mem_waddr; // @[src/main/scala/fpga/Top.scala 89:19]
-  wire  sdc_io_mem_wen; // @[src/main/scala/fpga/Top.scala 89:19]
-  wire [31:0] sdc_io_mem_wdata; // @[src/main/scala/fpga/Top.scala 89:19]
-  wire  sdc_io_sdc_port_clk; // @[src/main/scala/fpga/Top.scala 89:19]
-  wire  sdc_io_sdc_port_cmd_wrt; // @[src/main/scala/fpga/Top.scala 89:19]
-  wire  sdc_io_sdc_port_cmd_out; // @[src/main/scala/fpga/Top.scala 89:19]
-  wire  sdc_io_sdc_port_res_in; // @[src/main/scala/fpga/Top.scala 89:19]
-  wire  sdc_io_sdc_port_dat_wrt; // @[src/main/scala/fpga/Top.scala 89:19]
-  wire [3:0] sdc_io_sdc_port_dat_out; // @[src/main/scala/fpga/Top.scala 89:19]
-  wire [3:0] sdc_io_sdc_port_dat_in; // @[src/main/scala/fpga/Top.scala 89:19]
-  wire  sdc_io_sdbuf_ren1; // @[src/main/scala/fpga/Top.scala 89:19]
-  wire  sdc_io_sdbuf_wen1; // @[src/main/scala/fpga/Top.scala 89:19]
-  wire [7:0] sdc_io_sdbuf_addr1; // @[src/main/scala/fpga/Top.scala 89:19]
-  wire [31:0] sdc_io_sdbuf_rdata1; // @[src/main/scala/fpga/Top.scala 89:19]
-  wire [31:0] sdc_io_sdbuf_wdata1; // @[src/main/scala/fpga/Top.scala 89:19]
-  wire  sdc_io_sdbuf_ren2; // @[src/main/scala/fpga/Top.scala 89:19]
-  wire  sdc_io_sdbuf_wen2; // @[src/main/scala/fpga/Top.scala 89:19]
-  wire [7:0] sdc_io_sdbuf_addr2; // @[src/main/scala/fpga/Top.scala 89:19]
-  wire [31:0] sdc_io_sdbuf_rdata2; // @[src/main/scala/fpga/Top.scala 89:19]
-  wire [31:0] sdc_io_sdbuf_wdata2; // @[src/main/scala/fpga/Top.scala 89:19]
-  wire  sdc_io_intr; // @[src/main/scala/fpga/Top.scala 89:19]
-  wire  sdbuf_clock; // @[src/main/scala/fpga/Top.scala 90:21]
-  wire  sdbuf_ren1; // @[src/main/scala/fpga/Top.scala 90:21]
-  wire  sdbuf_wen1; // @[src/main/scala/fpga/Top.scala 90:21]
-  wire [7:0] sdbuf_addr1; // @[src/main/scala/fpga/Top.scala 90:21]
-  wire [31:0] sdbuf_wdata1; // @[src/main/scala/fpga/Top.scala 90:21]
-  wire [31:0] sdbuf_rdata1; // @[src/main/scala/fpga/Top.scala 90:21]
-  wire  sdbuf_ren2; // @[src/main/scala/fpga/Top.scala 90:21]
-  wire  sdbuf_wen2; // @[src/main/scala/fpga/Top.scala 90:21]
-  wire [7:0] sdbuf_addr2; // @[src/main/scala/fpga/Top.scala 90:21]
-  wire [31:0] sdbuf_wdata2; // @[src/main/scala/fpga/Top.scala 90:21]
-  wire [31:0] sdbuf_rdata2; // @[src/main/scala/fpga/Top.scala 90:21]
-  wire  intr_clock; // @[src/main/scala/fpga/Top.scala 91:20]
-  wire  intr_reset; // @[src/main/scala/fpga/Top.scala 91:20]
-  wire [31:0] intr_io_mem_raddr; // @[src/main/scala/fpga/Top.scala 91:20]
-  wire [31:0] intr_io_mem_rdata; // @[src/main/scala/fpga/Top.scala 91:20]
-  wire  intr_io_mem_wen; // @[src/main/scala/fpga/Top.scala 91:20]
-  wire [31:0] intr_io_mem_wdata; // @[src/main/scala/fpga/Top.scala 91:20]
-  wire [1:0] intr_io_intr_periferal; // @[src/main/scala/fpga/Top.scala 91:20]
-  wire  intr_io_intr_cpu; // @[src/main/scala/fpga/Top.scala 91:20]
-  wire [31:0] config__io_mem_raddr; // @[src/main/scala/fpga/Top.scala 92:22]
-  wire [31:0] config__io_mem_rdata; // @[src/main/scala/fpga/Top.scala 92:22]
-  wire  dmem_decoder_clock; // @[src/main/scala/fpga/Top.scala 94:28]
-  wire  dmem_decoder_reset; // @[src/main/scala/fpga/Top.scala 94:28]
-  wire [31:0] dmem_decoder_io_initiator_raddr; // @[src/main/scala/fpga/Top.scala 94:28]
-  wire [31:0] dmem_decoder_io_initiator_rdata; // @[src/main/scala/fpga/Top.scala 94:28]
-  wire  dmem_decoder_io_initiator_ren; // @[src/main/scala/fpga/Top.scala 94:28]
-  wire [31:0] dmem_decoder_io_initiator_waddr; // @[src/main/scala/fpga/Top.scala 94:28]
-  wire  dmem_decoder_io_initiator_wen; // @[src/main/scala/fpga/Top.scala 94:28]
-  wire  dmem_decoder_io_initiator_wready; // @[src/main/scala/fpga/Top.scala 94:28]
-  wire [31:0] dmem_decoder_io_initiator_wdata; // @[src/main/scala/fpga/Top.scala 94:28]
-  wire [31:0] dmem_decoder_io_targets_0_raddr; // @[src/main/scala/fpga/Top.scala 94:28]
-  wire [31:0] dmem_decoder_io_targets_0_rdata; // @[src/main/scala/fpga/Top.scala 94:28]
-  wire  dmem_decoder_io_targets_0_ren; // @[src/main/scala/fpga/Top.scala 94:28]
-  wire [31:0] dmem_decoder_io_targets_0_waddr; // @[src/main/scala/fpga/Top.scala 94:28]
-  wire  dmem_decoder_io_targets_0_wen; // @[src/main/scala/fpga/Top.scala 94:28]
-  wire [31:0] dmem_decoder_io_targets_0_wdata; // @[src/main/scala/fpga/Top.scala 94:28]
-  wire  dmem_decoder_io_targets_1_wen; // @[src/main/scala/fpga/Top.scala 94:28]
-  wire [31:0] dmem_decoder_io_targets_1_wdata; // @[src/main/scala/fpga/Top.scala 94:28]
-  wire [31:0] dmem_decoder_io_targets_2_raddr; // @[src/main/scala/fpga/Top.scala 94:28]
-  wire [31:0] dmem_decoder_io_targets_2_rdata; // @[src/main/scala/fpga/Top.scala 94:28]
-  wire [31:0] dmem_decoder_io_targets_2_waddr; // @[src/main/scala/fpga/Top.scala 94:28]
-  wire  dmem_decoder_io_targets_2_wen; // @[src/main/scala/fpga/Top.scala 94:28]
-  wire [31:0] dmem_decoder_io_targets_2_wdata; // @[src/main/scala/fpga/Top.scala 94:28]
-  wire [31:0] dmem_decoder_io_targets_3_raddr; // @[src/main/scala/fpga/Top.scala 94:28]
-  wire [31:0] dmem_decoder_io_targets_3_rdata; // @[src/main/scala/fpga/Top.scala 94:28]
-  wire [31:0] dmem_decoder_io_targets_3_waddr; // @[src/main/scala/fpga/Top.scala 94:28]
-  wire  dmem_decoder_io_targets_3_wen; // @[src/main/scala/fpga/Top.scala 94:28]
-  wire [31:0] dmem_decoder_io_targets_3_wdata; // @[src/main/scala/fpga/Top.scala 94:28]
-  wire [31:0] dmem_decoder_io_targets_4_raddr; // @[src/main/scala/fpga/Top.scala 94:28]
-  wire [31:0] dmem_decoder_io_targets_4_rdata; // @[src/main/scala/fpga/Top.scala 94:28]
-  wire  dmem_decoder_io_targets_4_ren; // @[src/main/scala/fpga/Top.scala 94:28]
-  wire [31:0] dmem_decoder_io_targets_4_waddr; // @[src/main/scala/fpga/Top.scala 94:28]
-  wire  dmem_decoder_io_targets_4_wen; // @[src/main/scala/fpga/Top.scala 94:28]
-  wire [31:0] dmem_decoder_io_targets_4_wdata; // @[src/main/scala/fpga/Top.scala 94:28]
-  wire [31:0] dmem_decoder_io_targets_5_raddr; // @[src/main/scala/fpga/Top.scala 94:28]
-  wire [31:0] dmem_decoder_io_targets_5_rdata; // @[src/main/scala/fpga/Top.scala 94:28]
-  wire  dmem_decoder_io_targets_5_wen; // @[src/main/scala/fpga/Top.scala 94:28]
-  wire [31:0] dmem_decoder_io_targets_5_wdata; // @[src/main/scala/fpga/Top.scala 94:28]
-  wire [31:0] dmem_decoder_io_targets_6_raddr; // @[src/main/scala/fpga/Top.scala 94:28]
-  wire [31:0] dmem_decoder_io_targets_6_rdata; // @[src/main/scala/fpga/Top.scala 94:28]
-  wire  imem_decoder_clock; // @[src/main/scala/fpga/Top.scala 113:28]
-  wire [31:0] imem_decoder_io_initiator_addr; // @[src/main/scala/fpga/Top.scala 113:28]
-  wire [31:0] imem_decoder_io_initiator_inst; // @[src/main/scala/fpga/Top.scala 113:28]
-  wire  imem_decoder_io_initiator_valid; // @[src/main/scala/fpga/Top.scala 113:28]
-  wire  imem_decoder_io_targets_0_en; // @[src/main/scala/fpga/Top.scala 113:28]
-  wire [31:0] imem_decoder_io_targets_0_addr; // @[src/main/scala/fpga/Top.scala 113:28]
-  wire [31:0] imem_decoder_io_targets_0_inst; // @[src/main/scala/fpga/Top.scala 113:28]
-  wire  imem_decoder_io_targets_0_valid; // @[src/main/scala/fpga/Top.scala 113:28]
-  wire  imem_decoder_io_targets_1_en; // @[src/main/scala/fpga/Top.scala 113:28]
-  wire [31:0] imem_decoder_io_targets_1_addr; // @[src/main/scala/fpga/Top.scala 113:28]
-  wire [31:0] imem_decoder_io_targets_1_inst; // @[src/main/scala/fpga/Top.scala 113:28]
-  wire  imem_decoder_io_targets_1_valid; // @[src/main/scala/fpga/Top.scala 113:28]
+  wire  pht_lmem_clock; // @[src/main/scala/fpga/Top.scala 86:24]
+  wire  pht_lmem_ren; // @[src/main/scala/fpga/Top.scala 86:24]
+  wire  pht_lmem_wen; // @[src/main/scala/fpga/Top.scala 86:24]
+  wire [11:0] pht_lmem_raddr; // @[src/main/scala/fpga/Top.scala 86:24]
+  wire [3:0] pht_lmem_rdata; // @[src/main/scala/fpga/Top.scala 86:24]
+  wire [12:0] pht_lmem_waddr; // @[src/main/scala/fpga/Top.scala 86:24]
+  wire [1:0] pht_lmem_wdata; // @[src/main/scala/fpga/Top.scala 86:24]
+  wire  pht_gmem_clock; // @[src/main/scala/fpga/Top.scala 87:24]
+  wire  pht_gmem_ren; // @[src/main/scala/fpga/Top.scala 87:24]
+  wire  pht_gmem_wen; // @[src/main/scala/fpga/Top.scala 87:24]
+  wire [11:0] pht_gmem_raddr; // @[src/main/scala/fpga/Top.scala 87:24]
+  wire [3:0] pht_gmem_rdata; // @[src/main/scala/fpga/Top.scala 87:24]
+  wire [12:0] pht_gmem_waddr; // @[src/main/scala/fpga/Top.scala 87:24]
+  wire [1:0] pht_gmem_wdata; // @[src/main/scala/fpga/Top.scala 87:24]
+  wire  gpio_clock; // @[src/main/scala/fpga/Top.scala 88:20]
+  wire  gpio_reset; // @[src/main/scala/fpga/Top.scala 88:20]
+  wire  gpio_io_mem_wen; // @[src/main/scala/fpga/Top.scala 88:20]
+  wire [31:0] gpio_io_mem_wdata; // @[src/main/scala/fpga/Top.scala 88:20]
+  wire [31:0] gpio_io_gpio; // @[src/main/scala/fpga/Top.scala 88:20]
+  wire  uart_clock; // @[src/main/scala/fpga/Top.scala 89:20]
+  wire  uart_reset; // @[src/main/scala/fpga/Top.scala 89:20]
+  wire [31:0] uart_io_mem_raddr; // @[src/main/scala/fpga/Top.scala 89:20]
+  wire [31:0] uart_io_mem_rdata; // @[src/main/scala/fpga/Top.scala 89:20]
+  wire [31:0] uart_io_mem_waddr; // @[src/main/scala/fpga/Top.scala 89:20]
+  wire  uart_io_mem_wen; // @[src/main/scala/fpga/Top.scala 89:20]
+  wire [31:0] uart_io_mem_wdata; // @[src/main/scala/fpga/Top.scala 89:20]
+  wire  uart_io_intr; // @[src/main/scala/fpga/Top.scala 89:20]
+  wire  uart_io_tx; // @[src/main/scala/fpga/Top.scala 89:20]
+  wire  uart_io_rx; // @[src/main/scala/fpga/Top.scala 89:20]
+  wire  sdc_clock; // @[src/main/scala/fpga/Top.scala 90:19]
+  wire  sdc_reset; // @[src/main/scala/fpga/Top.scala 90:19]
+  wire [31:0] sdc_io_mem_raddr; // @[src/main/scala/fpga/Top.scala 90:19]
+  wire [31:0] sdc_io_mem_rdata; // @[src/main/scala/fpga/Top.scala 90:19]
+  wire  sdc_io_mem_ren; // @[src/main/scala/fpga/Top.scala 90:19]
+  wire [31:0] sdc_io_mem_waddr; // @[src/main/scala/fpga/Top.scala 90:19]
+  wire  sdc_io_mem_wen; // @[src/main/scala/fpga/Top.scala 90:19]
+  wire [31:0] sdc_io_mem_wdata; // @[src/main/scala/fpga/Top.scala 90:19]
+  wire  sdc_io_sdc_port_clk; // @[src/main/scala/fpga/Top.scala 90:19]
+  wire  sdc_io_sdc_port_cmd_wrt; // @[src/main/scala/fpga/Top.scala 90:19]
+  wire  sdc_io_sdc_port_cmd_out; // @[src/main/scala/fpga/Top.scala 90:19]
+  wire  sdc_io_sdc_port_res_in; // @[src/main/scala/fpga/Top.scala 90:19]
+  wire  sdc_io_sdc_port_dat_wrt; // @[src/main/scala/fpga/Top.scala 90:19]
+  wire [3:0] sdc_io_sdc_port_dat_out; // @[src/main/scala/fpga/Top.scala 90:19]
+  wire [3:0] sdc_io_sdc_port_dat_in; // @[src/main/scala/fpga/Top.scala 90:19]
+  wire  sdc_io_sdbuf_ren1; // @[src/main/scala/fpga/Top.scala 90:19]
+  wire  sdc_io_sdbuf_wen1; // @[src/main/scala/fpga/Top.scala 90:19]
+  wire [7:0] sdc_io_sdbuf_addr1; // @[src/main/scala/fpga/Top.scala 90:19]
+  wire [31:0] sdc_io_sdbuf_rdata1; // @[src/main/scala/fpga/Top.scala 90:19]
+  wire [31:0] sdc_io_sdbuf_wdata1; // @[src/main/scala/fpga/Top.scala 90:19]
+  wire  sdc_io_sdbuf_ren2; // @[src/main/scala/fpga/Top.scala 90:19]
+  wire  sdc_io_sdbuf_wen2; // @[src/main/scala/fpga/Top.scala 90:19]
+  wire [7:0] sdc_io_sdbuf_addr2; // @[src/main/scala/fpga/Top.scala 90:19]
+  wire [31:0] sdc_io_sdbuf_rdata2; // @[src/main/scala/fpga/Top.scala 90:19]
+  wire [31:0] sdc_io_sdbuf_wdata2; // @[src/main/scala/fpga/Top.scala 90:19]
+  wire  sdc_io_intr; // @[src/main/scala/fpga/Top.scala 90:19]
+  wire  sdbuf_clock; // @[src/main/scala/fpga/Top.scala 91:21]
+  wire  sdbuf_ren1; // @[src/main/scala/fpga/Top.scala 91:21]
+  wire  sdbuf_wen1; // @[src/main/scala/fpga/Top.scala 91:21]
+  wire [7:0] sdbuf_addr1; // @[src/main/scala/fpga/Top.scala 91:21]
+  wire [31:0] sdbuf_wdata1; // @[src/main/scala/fpga/Top.scala 91:21]
+  wire [31:0] sdbuf_rdata1; // @[src/main/scala/fpga/Top.scala 91:21]
+  wire  sdbuf_ren2; // @[src/main/scala/fpga/Top.scala 91:21]
+  wire  sdbuf_wen2; // @[src/main/scala/fpga/Top.scala 91:21]
+  wire [7:0] sdbuf_addr2; // @[src/main/scala/fpga/Top.scala 91:21]
+  wire [31:0] sdbuf_wdata2; // @[src/main/scala/fpga/Top.scala 91:21]
+  wire [31:0] sdbuf_rdata2; // @[src/main/scala/fpga/Top.scala 91:21]
+  wire  intr_clock; // @[src/main/scala/fpga/Top.scala 92:20]
+  wire  intr_reset; // @[src/main/scala/fpga/Top.scala 92:20]
+  wire [31:0] intr_io_mem_raddr; // @[src/main/scala/fpga/Top.scala 92:20]
+  wire [31:0] intr_io_mem_rdata; // @[src/main/scala/fpga/Top.scala 92:20]
+  wire  intr_io_mem_wen; // @[src/main/scala/fpga/Top.scala 92:20]
+  wire [31:0] intr_io_mem_wdata; // @[src/main/scala/fpga/Top.scala 92:20]
+  wire [1:0] intr_io_intr_periferal; // @[src/main/scala/fpga/Top.scala 92:20]
+  wire  intr_io_intr_cpu; // @[src/main/scala/fpga/Top.scala 92:20]
+  wire [31:0] config__io_mem_raddr; // @[src/main/scala/fpga/Top.scala 93:22]
+  wire [31:0] config__io_mem_rdata; // @[src/main/scala/fpga/Top.scala 93:22]
+  wire  dmem_decoder_clock; // @[src/main/scala/fpga/Top.scala 95:28]
+  wire  dmem_decoder_reset; // @[src/main/scala/fpga/Top.scala 95:28]
+  wire [31:0] dmem_decoder_io_initiator_raddr; // @[src/main/scala/fpga/Top.scala 95:28]
+  wire [31:0] dmem_decoder_io_initiator_rdata; // @[src/main/scala/fpga/Top.scala 95:28]
+  wire  dmem_decoder_io_initiator_ren; // @[src/main/scala/fpga/Top.scala 95:28]
+  wire [31:0] dmem_decoder_io_initiator_waddr; // @[src/main/scala/fpga/Top.scala 95:28]
+  wire  dmem_decoder_io_initiator_wen; // @[src/main/scala/fpga/Top.scala 95:28]
+  wire  dmem_decoder_io_initiator_wready; // @[src/main/scala/fpga/Top.scala 95:28]
+  wire [31:0] dmem_decoder_io_initiator_wdata; // @[src/main/scala/fpga/Top.scala 95:28]
+  wire [31:0] dmem_decoder_io_targets_0_raddr; // @[src/main/scala/fpga/Top.scala 95:28]
+  wire [31:0] dmem_decoder_io_targets_0_rdata; // @[src/main/scala/fpga/Top.scala 95:28]
+  wire  dmem_decoder_io_targets_0_ren; // @[src/main/scala/fpga/Top.scala 95:28]
+  wire [31:0] dmem_decoder_io_targets_0_waddr; // @[src/main/scala/fpga/Top.scala 95:28]
+  wire  dmem_decoder_io_targets_0_wen; // @[src/main/scala/fpga/Top.scala 95:28]
+  wire [31:0] dmem_decoder_io_targets_0_wdata; // @[src/main/scala/fpga/Top.scala 95:28]
+  wire  dmem_decoder_io_targets_1_wen; // @[src/main/scala/fpga/Top.scala 95:28]
+  wire [31:0] dmem_decoder_io_targets_1_wdata; // @[src/main/scala/fpga/Top.scala 95:28]
+  wire [31:0] dmem_decoder_io_targets_2_raddr; // @[src/main/scala/fpga/Top.scala 95:28]
+  wire [31:0] dmem_decoder_io_targets_2_rdata; // @[src/main/scala/fpga/Top.scala 95:28]
+  wire [31:0] dmem_decoder_io_targets_2_waddr; // @[src/main/scala/fpga/Top.scala 95:28]
+  wire  dmem_decoder_io_targets_2_wen; // @[src/main/scala/fpga/Top.scala 95:28]
+  wire [31:0] dmem_decoder_io_targets_2_wdata; // @[src/main/scala/fpga/Top.scala 95:28]
+  wire [31:0] dmem_decoder_io_targets_3_raddr; // @[src/main/scala/fpga/Top.scala 95:28]
+  wire [31:0] dmem_decoder_io_targets_3_rdata; // @[src/main/scala/fpga/Top.scala 95:28]
+  wire [31:0] dmem_decoder_io_targets_3_waddr; // @[src/main/scala/fpga/Top.scala 95:28]
+  wire  dmem_decoder_io_targets_3_wen; // @[src/main/scala/fpga/Top.scala 95:28]
+  wire [31:0] dmem_decoder_io_targets_3_wdata; // @[src/main/scala/fpga/Top.scala 95:28]
+  wire [31:0] dmem_decoder_io_targets_4_raddr; // @[src/main/scala/fpga/Top.scala 95:28]
+  wire [31:0] dmem_decoder_io_targets_4_rdata; // @[src/main/scala/fpga/Top.scala 95:28]
+  wire  dmem_decoder_io_targets_4_ren; // @[src/main/scala/fpga/Top.scala 95:28]
+  wire [31:0] dmem_decoder_io_targets_4_waddr; // @[src/main/scala/fpga/Top.scala 95:28]
+  wire  dmem_decoder_io_targets_4_wen; // @[src/main/scala/fpga/Top.scala 95:28]
+  wire [31:0] dmem_decoder_io_targets_4_wdata; // @[src/main/scala/fpga/Top.scala 95:28]
+  wire [31:0] dmem_decoder_io_targets_5_raddr; // @[src/main/scala/fpga/Top.scala 95:28]
+  wire [31:0] dmem_decoder_io_targets_5_rdata; // @[src/main/scala/fpga/Top.scala 95:28]
+  wire  dmem_decoder_io_targets_5_wen; // @[src/main/scala/fpga/Top.scala 95:28]
+  wire [31:0] dmem_decoder_io_targets_5_wdata; // @[src/main/scala/fpga/Top.scala 95:28]
+  wire [31:0] dmem_decoder_io_targets_6_raddr; // @[src/main/scala/fpga/Top.scala 95:28]
+  wire [31:0] dmem_decoder_io_targets_6_rdata; // @[src/main/scala/fpga/Top.scala 95:28]
+  wire  imem_decoder_clock; // @[src/main/scala/fpga/Top.scala 114:28]
+  wire [31:0] imem_decoder_io_initiator_addr; // @[src/main/scala/fpga/Top.scala 114:28]
+  wire [31:0] imem_decoder_io_initiator_inst; // @[src/main/scala/fpga/Top.scala 114:28]
+  wire  imem_decoder_io_initiator_valid; // @[src/main/scala/fpga/Top.scala 114:28]
+  wire  imem_decoder_io_targets_0_en; // @[src/main/scala/fpga/Top.scala 114:28]
+  wire [31:0] imem_decoder_io_targets_0_addr; // @[src/main/scala/fpga/Top.scala 114:28]
+  wire [31:0] imem_decoder_io_targets_0_inst; // @[src/main/scala/fpga/Top.scala 114:28]
+  wire  imem_decoder_io_targets_0_valid; // @[src/main/scala/fpga/Top.scala 114:28]
+  wire  imem_decoder_io_targets_1_en; // @[src/main/scala/fpga/Top.scala 114:28]
+  wire [31:0] imem_decoder_io_targets_1_addr; // @[src/main/scala/fpga/Top.scala 114:28]
+  wire [31:0] imem_decoder_io_targets_1_inst; // @[src/main/scala/fpga/Top.scala 114:28]
+  wire  imem_decoder_io_targets_1_valid; // @[src/main/scala/fpga/Top.scala 114:28]
   Core core ( // @[src/main/scala/fpga/Top.scala 78:20]
     .clock(core_clock),
     .reset(core_reset),
@@ -17312,11 +17898,16 @@ module RiscV(
     .io_cache_wready(core_io_cache_wready),
     .io_cache_wstrb(core_io_cache_wstrb),
     .io_cache_wdata(core_io_cache_wdata),
-    .io_pht_mem_wen(core_io_pht_mem_wen),
-    .io_pht_mem_raddr(core_io_pht_mem_raddr),
-    .io_pht_mem_rdata(core_io_pht_mem_rdata),
-    .io_pht_mem_waddr(core_io_pht_mem_waddr),
-    .io_pht_mem_wdata(core_io_pht_mem_wdata),
+    .io_pht_lmem_wen(core_io_pht_lmem_wen),
+    .io_pht_lmem_raddr(core_io_pht_lmem_raddr),
+    .io_pht_lmem_rdata(core_io_pht_lmem_rdata),
+    .io_pht_lmem_waddr(core_io_pht_lmem_waddr),
+    .io_pht_lmem_wdata(core_io_pht_lmem_wdata),
+    .io_pht_gmem_wen(core_io_pht_gmem_wen),
+    .io_pht_gmem_raddr(core_io_pht_gmem_raddr),
+    .io_pht_gmem_rdata(core_io_pht_gmem_rdata),
+    .io_pht_gmem_waddr(core_io_pht_gmem_waddr),
+    .io_pht_gmem_wdata(core_io_pht_gmem_wdata),
     .io_mtimer_mem_raddr(core_io_mtimer_mem_raddr),
     .io_mtimer_mem_rdata(core_io_mtimer_mem_rdata),
     .io_mtimer_mem_waddr(core_io_mtimer_mem_waddr),
@@ -17453,23 +18044,32 @@ module RiscV(
     .idata(icache_valid_idata),
     .dummy_data(icache_valid_dummy_data)
   );
-  PHTMem #(.RADDR_WIDTH(12), .RDATA_WIDTH_BITS(2), .WADDR_WIDTH(13), .WDATA_WIDTH_BITS(1)) pht_mem ( // @[src/main/scala/fpga/Top.scala 86:23]
-    .clock(pht_mem_clock),
-    .ren(pht_mem_ren),
-    .wen(pht_mem_wen),
-    .raddr(pht_mem_raddr),
-    .rdata(pht_mem_rdata),
-    .waddr(pht_mem_waddr),
-    .wdata(pht_mem_wdata)
+  PHTMem #(.RADDR_WIDTH(12), .RDATA_WIDTH_BITS(2), .WADDR_WIDTH(13), .WDATA_WIDTH_BITS(1)) pht_lmem ( // @[src/main/scala/fpga/Top.scala 86:24]
+    .clock(pht_lmem_clock),
+    .ren(pht_lmem_ren),
+    .wen(pht_lmem_wen),
+    .raddr(pht_lmem_raddr),
+    .rdata(pht_lmem_rdata),
+    .waddr(pht_lmem_waddr),
+    .wdata(pht_lmem_wdata)
   );
-  Gpio gpio ( // @[src/main/scala/fpga/Top.scala 87:20]
+  PHTMem #(.RADDR_WIDTH(12), .RDATA_WIDTH_BITS(2), .WADDR_WIDTH(13), .WDATA_WIDTH_BITS(1)) pht_gmem ( // @[src/main/scala/fpga/Top.scala 87:24]
+    .clock(pht_gmem_clock),
+    .ren(pht_gmem_ren),
+    .wen(pht_gmem_wen),
+    .raddr(pht_gmem_raddr),
+    .rdata(pht_gmem_rdata),
+    .waddr(pht_gmem_waddr),
+    .wdata(pht_gmem_wdata)
+  );
+  Gpio gpio ( // @[src/main/scala/fpga/Top.scala 88:20]
     .clock(gpio_clock),
     .reset(gpio_reset),
     .io_mem_wen(gpio_io_mem_wen),
     .io_mem_wdata(gpio_io_mem_wdata),
     .io_gpio(gpio_io_gpio)
   );
-  Uart uart ( // @[src/main/scala/fpga/Top.scala 88:20]
+  Uart uart ( // @[src/main/scala/fpga/Top.scala 89:20]
     .clock(uart_clock),
     .reset(uart_reset),
     .io_mem_raddr(uart_io_mem_raddr),
@@ -17481,7 +18081,7 @@ module RiscV(
     .io_tx(uart_io_tx),
     .io_rx(uart_io_rx)
   );
-  Sdc sdc ( // @[src/main/scala/fpga/Top.scala 89:19]
+  Sdc sdc ( // @[src/main/scala/fpga/Top.scala 90:19]
     .clock(sdc_clock),
     .reset(sdc_reset),
     .io_mem_raddr(sdc_io_mem_raddr),
@@ -17509,7 +18109,7 @@ module RiscV(
     .io_sdbuf_wdata2(sdc_io_sdbuf_wdata2),
     .io_intr(sdc_io_intr)
   );
-  SdBuf #(.ADDR_WIDTH(8), .DATA_WIDTH(32)) sdbuf ( // @[src/main/scala/fpga/Top.scala 90:21]
+  SdBuf #(.ADDR_WIDTH(8), .DATA_WIDTH(32)) sdbuf ( // @[src/main/scala/fpga/Top.scala 91:21]
     .clock(sdbuf_clock),
     .ren1(sdbuf_ren1),
     .wen1(sdbuf_wen1),
@@ -17522,7 +18122,7 @@ module RiscV(
     .wdata2(sdbuf_wdata2),
     .rdata2(sdbuf_rdata2)
   );
-  InterruptController intr ( // @[src/main/scala/fpga/Top.scala 91:20]
+  InterruptController intr ( // @[src/main/scala/fpga/Top.scala 92:20]
     .clock(intr_clock),
     .reset(intr_reset),
     .io_mem_raddr(intr_io_mem_raddr),
@@ -17532,11 +18132,11 @@ module RiscV(
     .io_intr_periferal(intr_io_intr_periferal),
     .io_intr_cpu(intr_io_intr_cpu)
   );
-  Config config_ ( // @[src/main/scala/fpga/Top.scala 92:22]
+  Config config_ ( // @[src/main/scala/fpga/Top.scala 93:22]
     .io_mem_raddr(config__io_mem_raddr),
     .io_mem_rdata(config__io_mem_rdata)
   );
-  DMemDecoder dmem_decoder ( // @[src/main/scala/fpga/Top.scala 94:28]
+  DMemDecoder dmem_decoder ( // @[src/main/scala/fpga/Top.scala 95:28]
     .clock(dmem_decoder_clock),
     .reset(dmem_decoder_reset),
     .io_initiator_raddr(dmem_decoder_io_initiator_raddr),
@@ -17577,7 +18177,7 @@ module RiscV(
     .io_targets_6_raddr(dmem_decoder_io_targets_6_raddr),
     .io_targets_6_rdata(dmem_decoder_io_targets_6_rdata)
   );
-  IMemDecoder imem_decoder ( // @[src/main/scala/fpga/Top.scala 113:28]
+  IMemDecoder imem_decoder ( // @[src/main/scala/fpga/Top.scala 114:28]
     .clock(imem_decoder_clock),
     .io_initiator_addr(imem_decoder_io_initiator_addr),
     .io_initiator_inst(imem_decoder_io_initiator_inst),
@@ -17591,177 +18191,184 @@ module RiscV(
     .io_targets_1_inst(imem_decoder_io_targets_1_inst),
     .io_targets_1_valid(imem_decoder_io_targets_1_valid)
   );
-  assign io_dram_ren = memory_io_dramPort_ren; // @[src/main/scala/fpga/Top.scala 126:11]
-  assign io_dram_wen = memory_io_dramPort_wen; // @[src/main/scala/fpga/Top.scala 126:11]
-  assign io_dram_addr = memory_io_dramPort_addr; // @[src/main/scala/fpga/Top.scala 126:11]
-  assign io_dram_wdata = memory_io_dramPort_wdata; // @[src/main/scala/fpga/Top.scala 126:11]
-  assign io_dram_wmask = 16'h0; // @[src/main/scala/fpga/Top.scala 126:11]
-  assign io_dram_user_busy = 1'h0; // @[src/main/scala/fpga/Top.scala 126:11]
-  assign io_gpio = gpio_io_gpio[7:0]; // @[src/main/scala/fpga/Top.scala 207:11]
-  assign io_uart_tx = uart_io_tx; // @[src/main/scala/fpga/Top.scala 208:14]
-  assign io_sdc_port_clk = sdc_io_sdc_port_clk; // @[src/main/scala/fpga/Top.scala 210:15]
-  assign io_sdc_port_cmd_wrt = sdc_io_sdc_port_cmd_wrt; // @[src/main/scala/fpga/Top.scala 210:15]
-  assign io_sdc_port_cmd_out = sdc_io_sdc_port_cmd_out; // @[src/main/scala/fpga/Top.scala 210:15]
-  assign io_sdc_port_dat_wrt = sdc_io_sdc_port_dat_wrt; // @[src/main/scala/fpga/Top.scala 210:15]
-  assign io_sdc_port_dat_out = sdc_io_sdc_port_dat_out; // @[src/main/scala/fpga/Top.scala 210:15]
-  assign io_debugSignals_core_ex2_reg_pc = core_io_debug_signal_ex2_reg_pc; // @[src/main/scala/fpga/Top.scala 173:24]
-  assign io_debugSignals_core_ex2_is_valid_inst = core_io_debug_signal_ex2_is_valid_inst; // @[src/main/scala/fpga/Top.scala 173:24]
-  assign io_debugSignals_core_me_intr = core_io_debug_signal_me_intr; // @[src/main/scala/fpga/Top.scala 173:24]
-  assign io_debugSignals_core_mt_intr = core_io_debug_signal_mt_intr; // @[src/main/scala/fpga/Top.scala 173:24]
-  assign io_debugSignals_core_trap = core_io_debug_signal_trap; // @[src/main/scala/fpga/Top.scala 173:24]
-  assign io_debugSignals_core_cycle_counter = core_io_debug_signal_cycle_counter; // @[src/main/scala/fpga/Top.scala 173:24]
-  assign io_debugSignals_core_id_pc = core_io_debug_signal_id_pc; // @[src/main/scala/fpga/Top.scala 173:24]
-  assign io_debugSignals_core_id_inst = core_io_debug_signal_id_inst; // @[src/main/scala/fpga/Top.scala 173:24]
-  assign io_debugSignals_core_mem3_rdata = core_io_debug_signal_mem3_rdata; // @[src/main/scala/fpga/Top.scala 173:24]
-  assign io_debugSignals_core_mem3_rvalid = core_io_debug_signal_mem3_rvalid; // @[src/main/scala/fpga/Top.scala 173:24]
-  assign io_debugSignals_core_rwaddr = core_io_debug_signal_rwaddr; // @[src/main/scala/fpga/Top.scala 173:24]
-  assign io_debugSignals_core_ex2_reg_is_br = core_io_debug_signal_ex2_reg_is_br; // @[src/main/scala/fpga/Top.scala 173:24]
-  assign io_debugSignals_core_id_reg_bp_taken = core_io_debug_signal_id_reg_bp_taken; // @[src/main/scala/fpga/Top.scala 173:24]
-  assign io_debugSignals_core_if2_zbp_taken = core_io_debug_signal_if2_zbp_taken; // @[src/main/scala/fpga/Top.scala 173:24]
-  assign io_debugSignals_core_ic_state = core_io_debug_signal_ic_state; // @[src/main/scala/fpga/Top.scala 173:24]
-  assign io_debugSignals_ren = core_io_dmem_ren | core_io_cache_ren; // @[src/main/scala/fpga/Top.scala 176:46]
-  assign io_debugSignals_wen = core_io_dmem_wen | core_io_cache_wen; // @[src/main/scala/fpga/Top.scala 180:46]
-  assign io_debugSignals_wready = memory_io_cache_wready; // @[src/main/scala/fpga/Top.scala 181:26]
-  assign io_debugSignals_wstrb = core_io_dmem_wstrb; // @[src/main/scala/fpga/Top.scala 182:26]
-  assign io_debugSignals_wdata = core_io_dmem_wdata; // @[src/main/scala/fpga/Top.scala 179:26]
-  assign io_debugSignals_mem_icache_state = memory_io_icache_state; // @[src/main/scala/fpga/Top.scala 189:36]
-  assign io_debugSignals_mem_dram_state = memory_io_dram_state; // @[src/main/scala/fpga/Top.scala 190:34]
-  assign io_debugSignals_mem_imem_addr = core_io_imem_addr[15:0]; // @[src/main/scala/fpga/Top.scala 191:53]
+  assign io_dram_ren = memory_io_dramPort_ren; // @[src/main/scala/fpga/Top.scala 127:11]
+  assign io_dram_wen = memory_io_dramPort_wen; // @[src/main/scala/fpga/Top.scala 127:11]
+  assign io_dram_addr = memory_io_dramPort_addr; // @[src/main/scala/fpga/Top.scala 127:11]
+  assign io_dram_wdata = memory_io_dramPort_wdata; // @[src/main/scala/fpga/Top.scala 127:11]
+  assign io_dram_wmask = 16'h0; // @[src/main/scala/fpga/Top.scala 127:11]
+  assign io_dram_user_busy = 1'h0; // @[src/main/scala/fpga/Top.scala 127:11]
+  assign io_gpio = gpio_io_gpio[7:0]; // @[src/main/scala/fpga/Top.scala 216:11]
+  assign io_uart_tx = uart_io_tx; // @[src/main/scala/fpga/Top.scala 217:14]
+  assign io_sdc_port_clk = sdc_io_sdc_port_clk; // @[src/main/scala/fpga/Top.scala 219:15]
+  assign io_sdc_port_cmd_wrt = sdc_io_sdc_port_cmd_wrt; // @[src/main/scala/fpga/Top.scala 219:15]
+  assign io_sdc_port_cmd_out = sdc_io_sdc_port_cmd_out; // @[src/main/scala/fpga/Top.scala 219:15]
+  assign io_sdc_port_dat_wrt = sdc_io_sdc_port_dat_wrt; // @[src/main/scala/fpga/Top.scala 219:15]
+  assign io_sdc_port_dat_out = sdc_io_sdc_port_dat_out; // @[src/main/scala/fpga/Top.scala 219:15]
+  assign io_debugSignals_core_ex2_reg_pc = core_io_debug_signal_ex2_reg_pc; // @[src/main/scala/fpga/Top.scala 182:24]
+  assign io_debugSignals_core_ex2_is_valid_inst = core_io_debug_signal_ex2_is_valid_inst; // @[src/main/scala/fpga/Top.scala 182:24]
+  assign io_debugSignals_core_me_intr = core_io_debug_signal_me_intr; // @[src/main/scala/fpga/Top.scala 182:24]
+  assign io_debugSignals_core_mt_intr = core_io_debug_signal_mt_intr; // @[src/main/scala/fpga/Top.scala 182:24]
+  assign io_debugSignals_core_trap = core_io_debug_signal_trap; // @[src/main/scala/fpga/Top.scala 182:24]
+  assign io_debugSignals_core_cycle_counter = core_io_debug_signal_cycle_counter; // @[src/main/scala/fpga/Top.scala 182:24]
+  assign io_debugSignals_core_id_pc = core_io_debug_signal_id_pc; // @[src/main/scala/fpga/Top.scala 182:24]
+  assign io_debugSignals_core_id_inst = core_io_debug_signal_id_inst; // @[src/main/scala/fpga/Top.scala 182:24]
+  assign io_debugSignals_core_mem3_rdata = core_io_debug_signal_mem3_rdata; // @[src/main/scala/fpga/Top.scala 182:24]
+  assign io_debugSignals_core_mem3_rvalid = core_io_debug_signal_mem3_rvalid; // @[src/main/scala/fpga/Top.scala 182:24]
+  assign io_debugSignals_core_rwaddr = core_io_debug_signal_rwaddr; // @[src/main/scala/fpga/Top.scala 182:24]
+  assign io_debugSignals_core_ex2_reg_is_br = core_io_debug_signal_ex2_reg_is_br; // @[src/main/scala/fpga/Top.scala 182:24]
+  assign io_debugSignals_core_id_reg_bp_taken = core_io_debug_signal_id_reg_bp_taken; // @[src/main/scala/fpga/Top.scala 182:24]
+  assign io_debugSignals_core_if2_zbp_taken = core_io_debug_signal_if2_zbp_taken; // @[src/main/scala/fpga/Top.scala 182:24]
+  assign io_debugSignals_core_ic_state = core_io_debug_signal_ic_state; // @[src/main/scala/fpga/Top.scala 182:24]
+  assign io_debugSignals_ren = core_io_dmem_ren | core_io_cache_ren; // @[src/main/scala/fpga/Top.scala 185:46]
+  assign io_debugSignals_wen = core_io_dmem_wen | core_io_cache_wen; // @[src/main/scala/fpga/Top.scala 189:46]
+  assign io_debugSignals_wready = memory_io_cache_wready; // @[src/main/scala/fpga/Top.scala 190:26]
+  assign io_debugSignals_wstrb = core_io_dmem_wstrb; // @[src/main/scala/fpga/Top.scala 191:26]
+  assign io_debugSignals_wdata = core_io_dmem_wdata; // @[src/main/scala/fpga/Top.scala 188:26]
+  assign io_debugSignals_mem_icache_state = memory_io_icache_state; // @[src/main/scala/fpga/Top.scala 198:36]
+  assign io_debugSignals_mem_dram_state = memory_io_dram_state; // @[src/main/scala/fpga/Top.scala 199:34]
+  assign io_debugSignals_mem_imem_addr = core_io_imem_addr[15:0]; // @[src/main/scala/fpga/Top.scala 200:53]
   assign core_clock = clock;
   assign core_reset = reset;
-  assign core_io_imem_inst = imem_decoder_io_initiator_inst; // @[src/main/scala/fpga/Top.scala 120:16]
-  assign core_io_imem_valid = imem_decoder_io_initiator_valid; // @[src/main/scala/fpga/Top.scala 120:16]
-  assign core_io_dmem_rdata = dmem_decoder_io_initiator_rdata; // @[src/main/scala/fpga/Top.scala 121:16]
-  assign core_io_dmem_wready = dmem_decoder_io_initiator_wready; // @[src/main/scala/fpga/Top.scala 121:16]
-  assign core_io_cache_ibusy = memory_io_cache_ibusy; // @[src/main/scala/fpga/Top.scala 123:17]
-  assign core_io_cache_rdata = memory_io_cache_rdata; // @[src/main/scala/fpga/Top.scala 123:17]
-  assign core_io_cache_rvalid = memory_io_cache_rvalid; // @[src/main/scala/fpga/Top.scala 123:17]
-  assign core_io_cache_rready = memory_io_cache_rready; // @[src/main/scala/fpga/Top.scala 123:17]
-  assign core_io_cache_wready = memory_io_cache_wready; // @[src/main/scala/fpga/Top.scala 123:17]
-  assign core_io_pht_mem_rdata = pht_mem_rdata; // @[src/main/scala/fpga/Top.scala 168:25]
-  assign core_io_mtimer_mem_raddr = dmem_decoder_io_targets_3_raddr; // @[src/main/scala/fpga/Top.scala 108:30]
-  assign core_io_mtimer_mem_waddr = dmem_decoder_io_targets_3_waddr; // @[src/main/scala/fpga/Top.scala 108:30]
-  assign core_io_mtimer_mem_wen = dmem_decoder_io_targets_3_wen; // @[src/main/scala/fpga/Top.scala 108:30]
-  assign core_io_mtimer_mem_wdata = dmem_decoder_io_targets_3_wdata; // @[src/main/scala/fpga/Top.scala 108:30]
-  assign core_io_intr = intr_io_intr_cpu; // @[src/main/scala/fpga/Top.scala 213:16]
+  assign core_io_imem_inst = imem_decoder_io_initiator_inst; // @[src/main/scala/fpga/Top.scala 121:16]
+  assign core_io_imem_valid = imem_decoder_io_initiator_valid; // @[src/main/scala/fpga/Top.scala 121:16]
+  assign core_io_dmem_rdata = dmem_decoder_io_initiator_rdata; // @[src/main/scala/fpga/Top.scala 122:16]
+  assign core_io_dmem_wready = dmem_decoder_io_initiator_wready; // @[src/main/scala/fpga/Top.scala 122:16]
+  assign core_io_cache_ibusy = memory_io_cache_ibusy; // @[src/main/scala/fpga/Top.scala 124:17]
+  assign core_io_cache_rdata = memory_io_cache_rdata; // @[src/main/scala/fpga/Top.scala 124:17]
+  assign core_io_cache_rvalid = memory_io_cache_rvalid; // @[src/main/scala/fpga/Top.scala 124:17]
+  assign core_io_cache_rready = memory_io_cache_rready; // @[src/main/scala/fpga/Top.scala 124:17]
+  assign core_io_cache_wready = memory_io_cache_wready; // @[src/main/scala/fpga/Top.scala 124:17]
+  assign core_io_pht_lmem_rdata = pht_lmem_rdata; // @[src/main/scala/fpga/Top.scala 169:26]
+  assign core_io_pht_gmem_rdata = pht_gmem_rdata; // @[src/main/scala/fpga/Top.scala 177:26]
+  assign core_io_mtimer_mem_raddr = dmem_decoder_io_targets_3_raddr; // @[src/main/scala/fpga/Top.scala 109:30]
+  assign core_io_mtimer_mem_waddr = dmem_decoder_io_targets_3_waddr; // @[src/main/scala/fpga/Top.scala 109:30]
+  assign core_io_mtimer_mem_wen = dmem_decoder_io_targets_3_wen; // @[src/main/scala/fpga/Top.scala 109:30]
+  assign core_io_mtimer_mem_wdata = dmem_decoder_io_targets_3_wdata; // @[src/main/scala/fpga/Top.scala 109:30]
+  assign core_io_intr = intr_io_intr_cpu; // @[src/main/scala/fpga/Top.scala 222:16]
   assign memory_clock = clock;
   assign memory_reset = reset;
-  assign memory_io_imem_en = imem_decoder_io_targets_1_en; // @[src/main/scala/fpga/Top.scala 118:30]
-  assign memory_io_imem_addr = imem_decoder_io_targets_1_addr; // @[src/main/scala/fpga/Top.scala 118:30]
-  assign memory_io_cache_iinvalidate = core_io_cache_iinvalidate; // @[src/main/scala/fpga/Top.scala 123:17]
-  assign memory_io_cache_raddr = core_io_cache_raddr; // @[src/main/scala/fpga/Top.scala 123:17]
-  assign memory_io_cache_ren = core_io_cache_ren; // @[src/main/scala/fpga/Top.scala 123:17]
-  assign memory_io_cache_waddr = core_io_cache_waddr; // @[src/main/scala/fpga/Top.scala 123:17]
-  assign memory_io_cache_wen = core_io_cache_wen; // @[src/main/scala/fpga/Top.scala 123:17]
-  assign memory_io_cache_wstrb = core_io_cache_wstrb; // @[src/main/scala/fpga/Top.scala 123:17]
-  assign memory_io_cache_wdata = core_io_cache_wdata; // @[src/main/scala/fpga/Top.scala 123:17]
-  assign memory_io_dramPort_init_calib_complete = io_dram_init_calib_complete; // @[src/main/scala/fpga/Top.scala 126:11]
-  assign memory_io_dramPort_rdata = io_dram_rdata; // @[src/main/scala/fpga/Top.scala 126:11]
-  assign memory_io_dramPort_rdata_valid = io_dram_rdata_valid; // @[src/main/scala/fpga/Top.scala 126:11]
-  assign memory_io_dramPort_busy = io_dram_busy; // @[src/main/scala/fpga/Top.scala 126:11]
-  assign memory_io_cache_array1_rdata = dcache1_rdata; // @[src/main/scala/fpga/Top.scala 135:32]
-  assign memory_io_cache_array2_rdata = dcache2_rdata; // @[src/main/scala/fpga/Top.scala 143:32]
-  assign memory_io_icache_rdata = icache_rdata; // @[src/main/scala/fpga/Top.scala 149:26]
-  assign memory_io_icache_valid_rdata = icache_valid_rdata; // @[src/main/scala/fpga/Top.scala 159:32]
+  assign memory_io_imem_en = imem_decoder_io_targets_1_en; // @[src/main/scala/fpga/Top.scala 119:30]
+  assign memory_io_imem_addr = imem_decoder_io_targets_1_addr; // @[src/main/scala/fpga/Top.scala 119:30]
+  assign memory_io_cache_iinvalidate = core_io_cache_iinvalidate; // @[src/main/scala/fpga/Top.scala 124:17]
+  assign memory_io_cache_raddr = core_io_cache_raddr; // @[src/main/scala/fpga/Top.scala 124:17]
+  assign memory_io_cache_ren = core_io_cache_ren; // @[src/main/scala/fpga/Top.scala 124:17]
+  assign memory_io_cache_waddr = core_io_cache_waddr; // @[src/main/scala/fpga/Top.scala 124:17]
+  assign memory_io_cache_wen = core_io_cache_wen; // @[src/main/scala/fpga/Top.scala 124:17]
+  assign memory_io_cache_wstrb = core_io_cache_wstrb; // @[src/main/scala/fpga/Top.scala 124:17]
+  assign memory_io_cache_wdata = core_io_cache_wdata; // @[src/main/scala/fpga/Top.scala 124:17]
+  assign memory_io_dramPort_init_calib_complete = io_dram_init_calib_complete; // @[src/main/scala/fpga/Top.scala 127:11]
+  assign memory_io_dramPort_rdata = io_dram_rdata; // @[src/main/scala/fpga/Top.scala 127:11]
+  assign memory_io_dramPort_rdata_valid = io_dram_rdata_valid; // @[src/main/scala/fpga/Top.scala 127:11]
+  assign memory_io_dramPort_busy = io_dram_busy; // @[src/main/scala/fpga/Top.scala 127:11]
+  assign memory_io_cache_array1_rdata = dcache1_rdata; // @[src/main/scala/fpga/Top.scala 136:32]
+  assign memory_io_cache_array2_rdata = dcache2_rdata; // @[src/main/scala/fpga/Top.scala 144:32]
+  assign memory_io_icache_rdata = icache_rdata; // @[src/main/scala/fpga/Top.scala 150:26]
+  assign memory_io_icache_valid_rdata = icache_valid_rdata; // @[src/main/scala/fpga/Top.scala 160:32]
   assign boot_rom_clock = clock;
   assign boot_rom_reset = reset;
-  assign boot_rom_io_imem_en = imem_decoder_io_targets_0_en; // @[src/main/scala/fpga/Top.scala 117:30]
-  assign boot_rom_io_imem_addr = imem_decoder_io_targets_0_addr; // @[src/main/scala/fpga/Top.scala 117:30]
-  assign boot_rom_io_dmem_raddr = dmem_decoder_io_targets_0_raddr; // @[src/main/scala/fpga/Top.scala 104:30]
-  assign boot_rom_io_dmem_ren = dmem_decoder_io_targets_0_ren; // @[src/main/scala/fpga/Top.scala 104:30]
-  assign boot_rom_io_dmem_waddr = dmem_decoder_io_targets_0_waddr; // @[src/main/scala/fpga/Top.scala 104:30]
-  assign boot_rom_io_dmem_wen = dmem_decoder_io_targets_0_wen; // @[src/main/scala/fpga/Top.scala 104:30]
-  assign boot_rom_io_dmem_wdata = dmem_decoder_io_targets_0_wdata; // @[src/main/scala/fpga/Top.scala 104:30]
-  assign dcache1_clock = clock; // @[src/main/scala/fpga/Top.scala 128:20]
-  assign dcache1_ren = memory_io_cache_array1_ren; // @[src/main/scala/fpga/Top.scala 129:18]
-  assign dcache1_wen = memory_io_cache_array1_wen; // @[src/main/scala/fpga/Top.scala 130:18]
-  assign dcache1_we = memory_io_cache_array1_we; // @[src/main/scala/fpga/Top.scala 131:17]
-  assign dcache1_raddr = memory_io_cache_array1_raddr; // @[src/main/scala/fpga/Top.scala 132:20]
-  assign dcache1_waddr = memory_io_cache_array1_waddr; // @[src/main/scala/fpga/Top.scala 133:20]
-  assign dcache1_wdata = memory_io_cache_array1_wdata; // @[src/main/scala/fpga/Top.scala 134:20]
-  assign dcache2_clock = clock; // @[src/main/scala/fpga/Top.scala 136:20]
-  assign dcache2_ren = memory_io_cache_array2_ren; // @[src/main/scala/fpga/Top.scala 137:18]
-  assign dcache2_wen = memory_io_cache_array2_wen; // @[src/main/scala/fpga/Top.scala 138:18]
-  assign dcache2_we = memory_io_cache_array2_we; // @[src/main/scala/fpga/Top.scala 139:17]
-  assign dcache2_raddr = memory_io_cache_array2_raddr; // @[src/main/scala/fpga/Top.scala 140:20]
-  assign dcache2_waddr = memory_io_cache_array2_waddr; // @[src/main/scala/fpga/Top.scala 141:20]
-  assign dcache2_wdata = memory_io_cache_array2_wdata; // @[src/main/scala/fpga/Top.scala 142:20]
-  assign icache_clock = clock; // @[src/main/scala/fpga/Top.scala 145:19]
-  assign icache_ren = memory_io_icache_ren; // @[src/main/scala/fpga/Top.scala 146:17]
-  assign icache_wen = memory_io_icache_wen; // @[src/main/scala/fpga/Top.scala 147:17]
-  assign icache_raddr = memory_io_icache_raddr; // @[src/main/scala/fpga/Top.scala 148:19]
-  assign icache_waddr = memory_io_icache_waddr; // @[src/main/scala/fpga/Top.scala 150:19]
-  assign icache_wdata = memory_io_icache_wdata; // @[src/main/scala/fpga/Top.scala 151:19]
-  assign icache_valid_clock = clock; // @[src/main/scala/fpga/Top.scala 153:25]
-  assign icache_valid_ren = memory_io_icache_valid_ren; // @[src/main/scala/fpga/Top.scala 154:23]
-  assign icache_valid_wen = memory_io_icache_valid_wen; // @[src/main/scala/fpga/Top.scala 155:23]
-  assign icache_valid_ien = memory_io_icache_valid_invalidate; // @[src/main/scala/fpga/Top.scala 162:23]
-  assign icache_valid_invalidate = memory_io_icache_valid_invalidate; // @[src/main/scala/fpga/Top.scala 156:30]
-  assign icache_valid_addr = memory_io_icache_valid_addr; // @[src/main/scala/fpga/Top.scala 157:24]
-  assign icache_valid_iaddr = memory_io_icache_valid_iaddr; // @[src/main/scala/fpga/Top.scala 158:25]
-  assign icache_valid_wdata = memory_io_icache_valid_wdata; // @[src/main/scala/fpga/Top.scala 160:25]
-  assign icache_valid_idata = 64'h0; // @[src/main/scala/fpga/Top.scala 161:25]
-  assign pht_mem_clock = clock; // @[src/main/scala/fpga/Top.scala 164:20]
-  assign pht_mem_ren = 1'h1; // @[src/main/scala/fpga/Top.scala 165:20]
-  assign pht_mem_wen = core_io_pht_mem_wen; // @[src/main/scala/fpga/Top.scala 166:20]
-  assign pht_mem_raddr = core_io_pht_mem_raddr; // @[src/main/scala/fpga/Top.scala 167:20]
-  assign pht_mem_waddr = core_io_pht_mem_waddr; // @[src/main/scala/fpga/Top.scala 169:20]
-  assign pht_mem_wdata = core_io_pht_mem_wdata; // @[src/main/scala/fpga/Top.scala 170:20]
+  assign boot_rom_io_imem_en = imem_decoder_io_targets_0_en; // @[src/main/scala/fpga/Top.scala 118:30]
+  assign boot_rom_io_imem_addr = imem_decoder_io_targets_0_addr; // @[src/main/scala/fpga/Top.scala 118:30]
+  assign boot_rom_io_dmem_raddr = dmem_decoder_io_targets_0_raddr; // @[src/main/scala/fpga/Top.scala 105:30]
+  assign boot_rom_io_dmem_ren = dmem_decoder_io_targets_0_ren; // @[src/main/scala/fpga/Top.scala 105:30]
+  assign boot_rom_io_dmem_waddr = dmem_decoder_io_targets_0_waddr; // @[src/main/scala/fpga/Top.scala 105:30]
+  assign boot_rom_io_dmem_wen = dmem_decoder_io_targets_0_wen; // @[src/main/scala/fpga/Top.scala 105:30]
+  assign boot_rom_io_dmem_wdata = dmem_decoder_io_targets_0_wdata; // @[src/main/scala/fpga/Top.scala 105:30]
+  assign dcache1_clock = clock; // @[src/main/scala/fpga/Top.scala 129:20]
+  assign dcache1_ren = memory_io_cache_array1_ren; // @[src/main/scala/fpga/Top.scala 130:18]
+  assign dcache1_wen = memory_io_cache_array1_wen; // @[src/main/scala/fpga/Top.scala 131:18]
+  assign dcache1_we = memory_io_cache_array1_we; // @[src/main/scala/fpga/Top.scala 132:17]
+  assign dcache1_raddr = memory_io_cache_array1_raddr; // @[src/main/scala/fpga/Top.scala 133:20]
+  assign dcache1_waddr = memory_io_cache_array1_waddr; // @[src/main/scala/fpga/Top.scala 134:20]
+  assign dcache1_wdata = memory_io_cache_array1_wdata; // @[src/main/scala/fpga/Top.scala 135:20]
+  assign dcache2_clock = clock; // @[src/main/scala/fpga/Top.scala 137:20]
+  assign dcache2_ren = memory_io_cache_array2_ren; // @[src/main/scala/fpga/Top.scala 138:18]
+  assign dcache2_wen = memory_io_cache_array2_wen; // @[src/main/scala/fpga/Top.scala 139:18]
+  assign dcache2_we = memory_io_cache_array2_we; // @[src/main/scala/fpga/Top.scala 140:17]
+  assign dcache2_raddr = memory_io_cache_array2_raddr; // @[src/main/scala/fpga/Top.scala 141:20]
+  assign dcache2_waddr = memory_io_cache_array2_waddr; // @[src/main/scala/fpga/Top.scala 142:20]
+  assign dcache2_wdata = memory_io_cache_array2_wdata; // @[src/main/scala/fpga/Top.scala 143:20]
+  assign icache_clock = clock; // @[src/main/scala/fpga/Top.scala 146:19]
+  assign icache_ren = memory_io_icache_ren; // @[src/main/scala/fpga/Top.scala 147:17]
+  assign icache_wen = memory_io_icache_wen; // @[src/main/scala/fpga/Top.scala 148:17]
+  assign icache_raddr = memory_io_icache_raddr; // @[src/main/scala/fpga/Top.scala 149:19]
+  assign icache_waddr = memory_io_icache_waddr; // @[src/main/scala/fpga/Top.scala 151:19]
+  assign icache_wdata = memory_io_icache_wdata; // @[src/main/scala/fpga/Top.scala 152:19]
+  assign icache_valid_clock = clock; // @[src/main/scala/fpga/Top.scala 154:25]
+  assign icache_valid_ren = memory_io_icache_valid_ren; // @[src/main/scala/fpga/Top.scala 155:23]
+  assign icache_valid_wen = memory_io_icache_valid_wen; // @[src/main/scala/fpga/Top.scala 156:23]
+  assign icache_valid_ien = memory_io_icache_valid_invalidate; // @[src/main/scala/fpga/Top.scala 163:23]
+  assign icache_valid_invalidate = memory_io_icache_valid_invalidate; // @[src/main/scala/fpga/Top.scala 157:30]
+  assign icache_valid_addr = memory_io_icache_valid_addr; // @[src/main/scala/fpga/Top.scala 158:24]
+  assign icache_valid_iaddr = memory_io_icache_valid_iaddr; // @[src/main/scala/fpga/Top.scala 159:25]
+  assign icache_valid_wdata = memory_io_icache_valid_wdata; // @[src/main/scala/fpga/Top.scala 161:25]
+  assign icache_valid_idata = 64'h0; // @[src/main/scala/fpga/Top.scala 162:25]
+  assign pht_lmem_clock = clock; // @[src/main/scala/fpga/Top.scala 165:21]
+  assign pht_lmem_ren = 1'h1; // @[src/main/scala/fpga/Top.scala 166:21]
+  assign pht_lmem_wen = core_io_pht_lmem_wen; // @[src/main/scala/fpga/Top.scala 167:21]
+  assign pht_lmem_raddr = core_io_pht_lmem_raddr; // @[src/main/scala/fpga/Top.scala 168:21]
+  assign pht_lmem_waddr = core_io_pht_lmem_waddr; // @[src/main/scala/fpga/Top.scala 170:21]
+  assign pht_lmem_wdata = core_io_pht_lmem_wdata; // @[src/main/scala/fpga/Top.scala 171:21]
+  assign pht_gmem_clock = clock; // @[src/main/scala/fpga/Top.scala 173:21]
+  assign pht_gmem_ren = 1'h1; // @[src/main/scala/fpga/Top.scala 174:21]
+  assign pht_gmem_wen = core_io_pht_gmem_wen; // @[src/main/scala/fpga/Top.scala 175:21]
+  assign pht_gmem_raddr = core_io_pht_gmem_raddr; // @[src/main/scala/fpga/Top.scala 176:21]
+  assign pht_gmem_waddr = core_io_pht_gmem_waddr; // @[src/main/scala/fpga/Top.scala 178:21]
+  assign pht_gmem_wdata = core_io_pht_gmem_wdata; // @[src/main/scala/fpga/Top.scala 179:21]
   assign gpio_clock = clock;
   assign gpio_reset = reset;
-  assign gpio_io_mem_wen = dmem_decoder_io_targets_1_wen; // @[src/main/scala/fpga/Top.scala 106:30]
-  assign gpio_io_mem_wdata = dmem_decoder_io_targets_1_wdata; // @[src/main/scala/fpga/Top.scala 106:30]
+  assign gpio_io_mem_wen = dmem_decoder_io_targets_1_wen; // @[src/main/scala/fpga/Top.scala 107:30]
+  assign gpio_io_mem_wdata = dmem_decoder_io_targets_1_wdata; // @[src/main/scala/fpga/Top.scala 107:30]
   assign uart_clock = clock;
   assign uart_reset = reset;
-  assign uart_io_mem_raddr = dmem_decoder_io_targets_2_raddr; // @[src/main/scala/fpga/Top.scala 107:30]
-  assign uart_io_mem_waddr = dmem_decoder_io_targets_2_waddr; // @[src/main/scala/fpga/Top.scala 107:30]
-  assign uart_io_mem_wen = dmem_decoder_io_targets_2_wen; // @[src/main/scala/fpga/Top.scala 107:30]
-  assign uart_io_mem_wdata = dmem_decoder_io_targets_2_wdata; // @[src/main/scala/fpga/Top.scala 107:30]
-  assign uart_io_rx = io_uart_rx; // @[src/main/scala/fpga/Top.scala 209:14]
+  assign uart_io_mem_raddr = dmem_decoder_io_targets_2_raddr; // @[src/main/scala/fpga/Top.scala 108:30]
+  assign uart_io_mem_waddr = dmem_decoder_io_targets_2_waddr; // @[src/main/scala/fpga/Top.scala 108:30]
+  assign uart_io_mem_wen = dmem_decoder_io_targets_2_wen; // @[src/main/scala/fpga/Top.scala 108:30]
+  assign uart_io_mem_wdata = dmem_decoder_io_targets_2_wdata; // @[src/main/scala/fpga/Top.scala 108:30]
+  assign uart_io_rx = io_uart_rx; // @[src/main/scala/fpga/Top.scala 218:14]
   assign sdc_clock = clock;
   assign sdc_reset = reset;
-  assign sdc_io_mem_raddr = dmem_decoder_io_targets_4_raddr; // @[src/main/scala/fpga/Top.scala 109:30]
-  assign sdc_io_mem_ren = dmem_decoder_io_targets_4_ren; // @[src/main/scala/fpga/Top.scala 109:30]
-  assign sdc_io_mem_waddr = dmem_decoder_io_targets_4_waddr; // @[src/main/scala/fpga/Top.scala 109:30]
-  assign sdc_io_mem_wen = dmem_decoder_io_targets_4_wen; // @[src/main/scala/fpga/Top.scala 109:30]
-  assign sdc_io_mem_wdata = dmem_decoder_io_targets_4_wdata; // @[src/main/scala/fpga/Top.scala 109:30]
-  assign sdc_io_sdc_port_res_in = io_sdc_port_res_in; // @[src/main/scala/fpga/Top.scala 210:15]
-  assign sdc_io_sdc_port_dat_in = io_sdc_port_dat_in; // @[src/main/scala/fpga/Top.scala 210:15]
-  assign sdc_io_sdbuf_rdata1 = sdbuf_rdata1; // @[src/main/scala/fpga/Top.scala 220:23]
-  assign sdc_io_sdbuf_rdata2 = sdbuf_rdata2; // @[src/main/scala/fpga/Top.scala 225:23]
-  assign sdbuf_clock = clock; // @[src/main/scala/fpga/Top.scala 215:19]
-  assign sdbuf_ren1 = sdc_io_sdbuf_ren1; // @[src/main/scala/fpga/Top.scala 216:19]
-  assign sdbuf_wen1 = sdc_io_sdbuf_wen1; // @[src/main/scala/fpga/Top.scala 217:19]
-  assign sdbuf_addr1 = sdc_io_sdbuf_addr1; // @[src/main/scala/fpga/Top.scala 218:19]
-  assign sdbuf_wdata1 = sdc_io_sdbuf_wdata1; // @[src/main/scala/fpga/Top.scala 219:19]
-  assign sdbuf_ren2 = sdc_io_sdbuf_ren2; // @[src/main/scala/fpga/Top.scala 221:19]
-  assign sdbuf_wen2 = sdc_io_sdbuf_wen2; // @[src/main/scala/fpga/Top.scala 222:19]
-  assign sdbuf_addr2 = sdc_io_sdbuf_addr2; // @[src/main/scala/fpga/Top.scala 223:19]
-  assign sdbuf_wdata2 = sdc_io_sdbuf_wdata2; // @[src/main/scala/fpga/Top.scala 224:19]
+  assign sdc_io_mem_raddr = dmem_decoder_io_targets_4_raddr; // @[src/main/scala/fpga/Top.scala 110:30]
+  assign sdc_io_mem_ren = dmem_decoder_io_targets_4_ren; // @[src/main/scala/fpga/Top.scala 110:30]
+  assign sdc_io_mem_waddr = dmem_decoder_io_targets_4_waddr; // @[src/main/scala/fpga/Top.scala 110:30]
+  assign sdc_io_mem_wen = dmem_decoder_io_targets_4_wen; // @[src/main/scala/fpga/Top.scala 110:30]
+  assign sdc_io_mem_wdata = dmem_decoder_io_targets_4_wdata; // @[src/main/scala/fpga/Top.scala 110:30]
+  assign sdc_io_sdc_port_res_in = io_sdc_port_res_in; // @[src/main/scala/fpga/Top.scala 219:15]
+  assign sdc_io_sdc_port_dat_in = io_sdc_port_dat_in; // @[src/main/scala/fpga/Top.scala 219:15]
+  assign sdc_io_sdbuf_rdata1 = sdbuf_rdata1; // @[src/main/scala/fpga/Top.scala 229:23]
+  assign sdc_io_sdbuf_rdata2 = sdbuf_rdata2; // @[src/main/scala/fpga/Top.scala 234:23]
+  assign sdbuf_clock = clock; // @[src/main/scala/fpga/Top.scala 224:19]
+  assign sdbuf_ren1 = sdc_io_sdbuf_ren1; // @[src/main/scala/fpga/Top.scala 225:19]
+  assign sdbuf_wen1 = sdc_io_sdbuf_wen1; // @[src/main/scala/fpga/Top.scala 226:19]
+  assign sdbuf_addr1 = sdc_io_sdbuf_addr1; // @[src/main/scala/fpga/Top.scala 227:19]
+  assign sdbuf_wdata1 = sdc_io_sdbuf_wdata1; // @[src/main/scala/fpga/Top.scala 228:19]
+  assign sdbuf_ren2 = sdc_io_sdbuf_ren2; // @[src/main/scala/fpga/Top.scala 230:19]
+  assign sdbuf_wen2 = sdc_io_sdbuf_wen2; // @[src/main/scala/fpga/Top.scala 231:19]
+  assign sdbuf_addr2 = sdc_io_sdbuf_addr2; // @[src/main/scala/fpga/Top.scala 232:19]
+  assign sdbuf_wdata2 = sdc_io_sdbuf_wdata2; // @[src/main/scala/fpga/Top.scala 233:19]
   assign intr_clock = clock;
   assign intr_reset = reset;
-  assign intr_io_mem_raddr = dmem_decoder_io_targets_5_raddr; // @[src/main/scala/fpga/Top.scala 110:30]
-  assign intr_io_mem_wen = dmem_decoder_io_targets_5_wen; // @[src/main/scala/fpga/Top.scala 110:30]
-  assign intr_io_mem_wdata = dmem_decoder_io_targets_5_wdata; // @[src/main/scala/fpga/Top.scala 110:30]
-  assign intr_io_intr_periferal = {sdc_io_intr,uart_io_intr}; // @[src/main/scala/fpga/Top.scala 212:32]
-  assign config__io_mem_raddr = dmem_decoder_io_targets_6_raddr; // @[src/main/scala/fpga/Top.scala 111:30]
+  assign intr_io_mem_raddr = dmem_decoder_io_targets_5_raddr; // @[src/main/scala/fpga/Top.scala 111:30]
+  assign intr_io_mem_wen = dmem_decoder_io_targets_5_wen; // @[src/main/scala/fpga/Top.scala 111:30]
+  assign intr_io_mem_wdata = dmem_decoder_io_targets_5_wdata; // @[src/main/scala/fpga/Top.scala 111:30]
+  assign intr_io_intr_periferal = {sdc_io_intr,uart_io_intr}; // @[src/main/scala/fpga/Top.scala 221:32]
+  assign config__io_mem_raddr = dmem_decoder_io_targets_6_raddr; // @[src/main/scala/fpga/Top.scala 112:30]
   assign dmem_decoder_clock = clock;
   assign dmem_decoder_reset = reset;
-  assign dmem_decoder_io_initiator_raddr = core_io_dmem_raddr; // @[src/main/scala/fpga/Top.scala 121:16]
-  assign dmem_decoder_io_initiator_ren = core_io_dmem_ren; // @[src/main/scala/fpga/Top.scala 121:16]
-  assign dmem_decoder_io_initiator_waddr = core_io_dmem_waddr; // @[src/main/scala/fpga/Top.scala 121:16]
-  assign dmem_decoder_io_initiator_wen = core_io_dmem_wen; // @[src/main/scala/fpga/Top.scala 121:16]
-  assign dmem_decoder_io_initiator_wdata = core_io_dmem_wdata; // @[src/main/scala/fpga/Top.scala 121:16]
-  assign dmem_decoder_io_targets_0_rdata = boot_rom_io_dmem_rdata; // @[src/main/scala/fpga/Top.scala 104:30]
-  assign dmem_decoder_io_targets_2_rdata = uart_io_mem_rdata; // @[src/main/scala/fpga/Top.scala 107:30]
-  assign dmem_decoder_io_targets_3_rdata = core_io_mtimer_mem_rdata; // @[src/main/scala/fpga/Top.scala 108:30]
-  assign dmem_decoder_io_targets_4_rdata = sdc_io_mem_rdata; // @[src/main/scala/fpga/Top.scala 109:30]
-  assign dmem_decoder_io_targets_5_rdata = intr_io_mem_rdata; // @[src/main/scala/fpga/Top.scala 110:30]
-  assign dmem_decoder_io_targets_6_rdata = config__io_mem_rdata; // @[src/main/scala/fpga/Top.scala 111:30]
+  assign dmem_decoder_io_initiator_raddr = core_io_dmem_raddr; // @[src/main/scala/fpga/Top.scala 122:16]
+  assign dmem_decoder_io_initiator_ren = core_io_dmem_ren; // @[src/main/scala/fpga/Top.scala 122:16]
+  assign dmem_decoder_io_initiator_waddr = core_io_dmem_waddr; // @[src/main/scala/fpga/Top.scala 122:16]
+  assign dmem_decoder_io_initiator_wen = core_io_dmem_wen; // @[src/main/scala/fpga/Top.scala 122:16]
+  assign dmem_decoder_io_initiator_wdata = core_io_dmem_wdata; // @[src/main/scala/fpga/Top.scala 122:16]
+  assign dmem_decoder_io_targets_0_rdata = boot_rom_io_dmem_rdata; // @[src/main/scala/fpga/Top.scala 105:30]
+  assign dmem_decoder_io_targets_2_rdata = uart_io_mem_rdata; // @[src/main/scala/fpga/Top.scala 108:30]
+  assign dmem_decoder_io_targets_3_rdata = core_io_mtimer_mem_rdata; // @[src/main/scala/fpga/Top.scala 109:30]
+  assign dmem_decoder_io_targets_4_rdata = sdc_io_mem_rdata; // @[src/main/scala/fpga/Top.scala 110:30]
+  assign dmem_decoder_io_targets_5_rdata = intr_io_mem_rdata; // @[src/main/scala/fpga/Top.scala 111:30]
+  assign dmem_decoder_io_targets_6_rdata = config__io_mem_rdata; // @[src/main/scala/fpga/Top.scala 112:30]
   assign imem_decoder_clock = clock;
-  assign imem_decoder_io_initiator_addr = core_io_imem_addr; // @[src/main/scala/fpga/Top.scala 120:16]
-  assign imem_decoder_io_targets_0_inst = boot_rom_io_imem_inst; // @[src/main/scala/fpga/Top.scala 117:30]
-  assign imem_decoder_io_targets_0_valid = boot_rom_io_imem_valid; // @[src/main/scala/fpga/Top.scala 117:30]
-  assign imem_decoder_io_targets_1_inst = memory_io_imem_inst; // @[src/main/scala/fpga/Top.scala 118:30]
-  assign imem_decoder_io_targets_1_valid = memory_io_imem_valid; // @[src/main/scala/fpga/Top.scala 118:30]
+  assign imem_decoder_io_initiator_addr = core_io_imem_addr; // @[src/main/scala/fpga/Top.scala 121:16]
+  assign imem_decoder_io_targets_0_inst = boot_rom_io_imem_inst; // @[src/main/scala/fpga/Top.scala 118:30]
+  assign imem_decoder_io_targets_0_valid = boot_rom_io_imem_valid; // @[src/main/scala/fpga/Top.scala 118:30]
+  assign imem_decoder_io_targets_1_inst = memory_io_imem_inst; // @[src/main/scala/fpga/Top.scala 119:30]
+  assign imem_decoder_io_targets_1_valid = memory_io_imem_valid; // @[src/main/scala/fpga/Top.scala 119:30]
 endmodule
