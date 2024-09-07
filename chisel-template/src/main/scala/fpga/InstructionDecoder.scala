@@ -14,6 +14,7 @@ class BranchPrediction extends Bundle {
   val is_ret   = Bool()
   val rasindex = UInt(RAS_INDEX_BITS.W)
   val target   = UInt(PC_LEN.W)
+  val history  = UInt(PHT_HISTORY_BITS.W)
   val cnt      = UInt(2.W)
 }
 

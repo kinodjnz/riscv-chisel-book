@@ -401,16 +401,19 @@ class Core(
       ic_bp.attr              := ic_btb.io.lu.attr0
       ic_bp.is_ret            := ic_btb.io.lu.is_ret0
       ic_bp.target            := ic_btb.io.lu.target0
+      ic_bp.history           := ic_pht.io.history
       ic_bp.cnt               := ic_pht.io.lu.cnt0
       ic_reg_bp_next0.taken   := ic_btb.io.lu.jump0 || (ic_btb.io.lu.br0 && ic_pht.io.lu.cnt0(0))
       ic_reg_bp_next0.attr    := ic_btb.io.lu.attr0
       ic_reg_bp_next0.is_ret  := ic_btb.io.lu.is_ret0
       ic_reg_bp_next0.target  := ic_btb.io.lu.target0
+      ic_reg_bp_next0.history := ic_pht.io.history
       ic_reg_bp_next0.cnt     := ic_pht.io.lu.cnt0
       ic_reg_bp_next1.taken   := ic_btb.io.lu.jump1 || (ic_btb.io.lu.br1 && ic_pht.io.lu.cnt1(0))
       ic_reg_bp_next1.attr    := ic_btb.io.lu.attr1
       ic_reg_bp_next1.is_ret  := ic_btb.io.lu.is_ret1
       ic_reg_bp_next1.target  := ic_btb.io.lu.target1
+      ic_reg_bp_next1.history := ic_pht.io.history
       ic_reg_bp_next1.cnt     := ic_pht.io.lu.cnt1
       ic_zbp_taken            := ic_zbtb.io.lu.matches0
       ic_zbp_target           := ic_zbtb.io.lu.target0
@@ -436,16 +439,19 @@ class Core(
       ic_bp.taken             := ic_btb.io.lu.jump1 || (ic_btb.io.lu.br1 && ic_pht.io.lu.cnt1(0))
       ic_bp.target            := ic_btb.io.lu.target1
       ic_bp.is_ret            := ic_btb.io.lu.is_ret1
+      ic_bp.history           := ic_pht.io.history
       ic_bp.cnt               := ic_pht.io.lu.cnt1
       ic_reg_bp_next0.taken   := ic_btb.io.lu.jump0 || (ic_btb.io.lu.br0 && ic_pht.io.lu.cnt0(0))
       ic_reg_bp_next0.attr    := ic_btb.io.lu.attr0
       ic_reg_bp_next0.is_ret  := ic_btb.io.lu.is_ret0
       ic_reg_bp_next0.target  := ic_btb.io.lu.target0
+      ic_reg_bp_next0.history := ic_pht.io.history
       ic_reg_bp_next0.cnt     := ic_pht.io.lu.cnt0
       ic_reg_bp_next1.taken   := ic_btb.io.lu.jump1 || (ic_btb.io.lu.br1 && ic_pht.io.lu.cnt1(0))
       ic_reg_bp_next1.attr    := ic_btb.io.lu.attr1
       ic_reg_bp_next1.is_ret  := ic_btb.io.lu.is_ret1
       ic_reg_bp_next1.target  := ic_btb.io.lu.target1
+      ic_reg_bp_next1.history := ic_pht.io.history
       ic_reg_bp_next1.cnt     := ic_pht.io.lu.cnt1
       ic_zbp_taken            := ic_zbtb.io.lu.matches1
       ic_zbp_target           := ic_zbtb.io.lu.target1
@@ -463,8 +469,8 @@ class Core(
       ic_imem_addr  := ic_reg_imem_addr
       ic_data_out   := ic_reg_inst
       ic_bp         := ic_reg_bp_next0
-      ic_zbp_taken  := ic_zbtb.io.lu.matches0
-      ic_zbp_target := ic_zbtb.io.lu.target0
+      ic_zbp_taken  := ic_reg_zbp_next_taken0 // ic_zbtb.io.lu.matches0
+      ic_zbp_target := ic_reg_zbp_next_target0 // ic_zbtb.io.lu.target0
       when (ic_read_en2) {
         ic_addr_out := ic_inst_addr_2
         ic_state := IcState.FullHalf
@@ -485,9 +491,10 @@ class Core(
       ic_reg_bp_next0.attr    := ic_btb.io.lu.attr0
       ic_reg_bp_next0.is_ret  := ic_btb.io.lu.is_ret0
       ic_reg_bp_next0.target  := ic_btb.io.lu.target0
+      ic_reg_bp_next0.history := ic_pht.io.history
       ic_reg_bp_next0.cnt     := ic_pht.io.lu.cnt0
-      ic_zbp_taken            := ic_reg_zbp_next_taken1
-      ic_zbp_target           := ic_reg_zbp_next_target1
+      ic_zbp_taken            := ic_reg_zbp_next_taken1 // ic_reg_zbp_next_taken1
+      ic_zbp_target           := ic_reg_zbp_next_target1 // ic_reg_zbp_next_target1
       ic_reg_zbp_next_taken0  := ic_zbtb.io.lu.matches0
       ic_reg_zbp_next_target0 := ic_zbtb.io.lu.target0
       when (io.imem.valid) {
@@ -495,6 +502,7 @@ class Core(
         ic_reg_bp_next1.attr    := ic_btb.io.lu.attr1
         ic_reg_bp_next1.is_ret  := ic_btb.io.lu.is_ret1
         ic_reg_bp_next1.target  := ic_btb.io.lu.target1
+        ic_reg_bp_next1.history := ic_pht.io.history
         ic_reg_bp_next1.cnt     := ic_pht.io.lu.cnt1
         ic_reg_zbp_next_taken1  := ic_zbtb.io.lu.matches1
         ic_reg_zbp_next_target1 := ic_zbtb.io.lu.target1
@@ -618,6 +626,13 @@ class Core(
     (ic_bp.attr === BTB_ATTR_DCALL) -> if2_dcall_rasindex,
   ))
 
+  ic_pht.io.br.en := ic_bp.taken && (ic_bp.attr === BTB_ATTR_BR) && if2_is_valid_inst && !id_reg_stall
+  ic_pht.io.br.pc := if2_pc
+
+  when ((ic_bp.attr === BTB_ATTR_BR) && if2_is_valid_inst && !id_reg_stall) {
+    printf(cf"PHT history: ${Cat(ic_bp.history, 0.U(1.W))(PHT_HISTORY_BITS-1, 0)}%x taken: ${ic_bp.taken}\n")
+  }
+
   //**********************************
   // Instruction Decode (ID) Stage
 
@@ -631,6 +646,7 @@ class Core(
   id_stage.io.in.bits.bp.is_ret     := ic_bp.is_ret
   id_stage.io.in.bits.bp.rasindex   := ic_ras.io.top.index
   id_stage.io.in.bits.bp.target     := id_bp_target
+  id_stage.io.in.bits.bp.history    := ic_bp.history
   id_stage.io.in.bits.bp.cnt        := ic_bp.cnt
   map2(id_stage.io.in.bits.inst_id, if2_reg_inst_id)(_ := _)
 
@@ -974,13 +990,22 @@ class Core(
     (ex1_reg_actual_attr === BTB_ATTR_DCALL) ||
     (ex1_reg_actual_is_ret)
   )
-  ic_btb.io.up.attr   := ex1_reg_actual_attr
-  ic_btb.io.up.is_ret := ex1_reg_actual_is_ret
-  ic_btb.io.up.pc     := ex1_reg_pc
-  ic_btb.io.up.target := ex1_fetch_pc
-  ic_pht.io.up.en     := ex1_en && ex1_is_br
-  ic_pht.io.up.pc     := ex1_reg_pc
-  ic_pht.io.up.cnt    := updated_cnt
+  ic_btb.io.up.attr    := ex1_reg_actual_attr
+  ic_btb.io.up.is_ret  := ex1_reg_actual_is_ret
+  ic_btb.io.up.pc      := ex1_reg_pc
+  ic_btb.io.up.target  := ex1_fetch_pc
+
+  ic_pht.io.res.en      := ex1_fetch_pc_en
+  ic_pht.io.res.history := ex1_reg_bp.history
+
+  ic_pht.io.up.en      := ex1_en && ex1_is_br
+  ic_pht.io.up.history := ex1_reg_bp.history
+  ic_pht.io.up.pc      := ex1_reg_pc
+  ic_pht.io.up.cnt     := updated_cnt
+
+  ic_pht.io.br2.en      := ex1_en && ex1_is_br_taken && (!ex1_reg_bp.taken || ex1_reg_bp.attr =/= BTB_ATTR_BR)
+  ic_pht.io.br2.history := ex1_reg_bp.history
+  ic_pht.io.br2.pc      := ex1_reg_pc
 
   ic_zbtb.io.up.en     := ex1_en && (ex1_is_br_taken || (ex1_reg_actual_attr === BTB_ATTR_DJUMP || ex1_reg_actual_attr === BTB_ATTR_DCALL))
   ic_zbtb.io.up.pc     := ex1_reg_pc

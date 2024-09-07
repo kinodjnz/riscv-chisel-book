@@ -85,9 +85,26 @@ class PHTLookup extends Bundle {
 }
 
 class PHTUpdate extends Bundle {
+  val en      = Output(Bool())
+  val history = Output(UInt(PHT_HISTORY_BITS.W))
+  val pc      = Output(UInt(PC_LEN.W))
+  val cnt     = Output(UInt(2.W))
+}
+
+class PHTBranch extends Bundle {
   val en  = Output(Bool())
   val pc  = Output(UInt(PC_LEN.W))
-  val cnt = Output(UInt(2.W))
+}
+
+class PHTBranch2 extends Bundle {
+  val en      = Output(Bool())
+  val history = Output(UInt(PHT_HISTORY_BITS.W))
+  val pc      = Output(UInt(PC_LEN.W))
+}
+
+class PHTReset extends Bundle {
+  val en      = Output(Bool())
+  val history = Output(UInt(PHT_HISTORY_BITS.W))
 }
 
 class RASTop extends Bundle {
@@ -139,9 +156,11 @@ class ZBTB(zbtb_entries: Int) extends Module {
 
   when (io.inv.en && !io.inv.pc(0)) {
     zbtb0(io.inv.pc(index_bits - 1, 1)).en := false.B
+    printf(cf"zbtb0(0x${Cat(io.inv.pc, 0.U(1.W))}%x) inv\n")
   }
   when (io.inv.en && io.inv.pc(0)) {
     zbtb1(io.inv.pc(index_bits - 1, 1)).en := false.B
+    printf(cf"zbtb1(0x${Cat(io.inv.pc, 1.U(1.W))}%x) inv\n")
   }
 
   val entry = Wire(new ZeroBranchTargetBuffer())
@@ -154,7 +173,7 @@ class ZBTB(zbtb_entries: Int) extends Module {
   }
   when (io.up.en && io.up.pc(0)) {
     zbtb1(io.up.pc(index_bits - 1, 1)) := entry
-    printf(cf"zbtb1(0x${Cat(io.up.pc, 0.U(1.W))}%x) := 0x${Cat(io.up.target, 0.U(1.W))}%x\n")
+    printf(cf"zbtb1(0x${Cat(io.up.pc, 1.U(1.W))}%x) := 0x${Cat(io.up.target, 0.U(1.W))}%x\n")
   }
 }
 
@@ -210,16 +229,49 @@ class PHT(pht_len: Int) extends Module {
     val lu = Flipped(new PHTLookup)
     val up = Flipped(new PHTUpdate)
     val mem = Flipped(new PHTMemIo)
+    val br = Flipped(new PHTBranch)
+    val br2 = Flipped(new PHTBranch2)
+    val history = Output(UInt(PHT_HISTORY_BITS.W))
+    val res = Flipped(new PHTReset)
   })
 
+  val history = RegInit(0.U(PHT_HISTORY_BITS.W))
+
+  def merge(history: UInt, pc: UInt): UInt = {
+    ((Reverse(history) << (PHT_INDEX_BITS - PHT_HISTORY_BITS)) ^ pc)(PHT_INDEX_BITS-1, 0)
+  }
+
+  def hash(history: UInt, pc: UInt): UInt = {
+    ((history << PHT_HISTORY_SHIFT) ^ pc)(PHT_HISTORY_BITS-1, 0)
+  }
+
   io.mem.ren   := true.B
-  io.mem.raddr := io.lu.pc(PHT_INDEX_BITS-1, 1)
+  io.mem.raddr := merge(history, io.lu.pc)(PHT_INDEX_BITS-1, 1)
   val cnt = io.mem.rdata
   io.lu.cnt0 := cnt(1, 0)
   io.lu.cnt1 := cnt(3, 2)
 
+  io.history := RegNext(history, 0.U(PHT_HISTORY_BITS.W))
+
+  when (io.br.en) {
+    history := hash(history, io.br.pc)(PHT_HISTORY_BITS-1, 0)
+    printf(cf"PHT br 0x${hash(history, io.br.pc)(PHT_HISTORY_BITS-1, 0)}%x\n")
+  }
+
+  when (io.res.en) {
+    history := io.res.history
+    printf(cf"PHT reset 0x${io.res.history}%x\n")
+  }
+
+  when (io.br2.en) {
+    history := hash(io.br2.history, io.br2.pc)(PHT_HISTORY_BITS-1, 0)
+    printf(cf"PHT br2 0x${hash(io.br2.history, io.br2.pc)(PHT_HISTORY_BITS-1, 0)}%x\n")
+  }
+
+  // history := 0.U
+
   io.mem.wen   := io.up.en
-  io.mem.waddr := io.up.pc(PHT_INDEX_BITS-1, 0)
+  io.mem.waddr := merge(io.up.history, io.up.pc)(PHT_INDEX_BITS-1, 0)
   io.mem.wdata := io.up.cnt
 
   // printf(cf"io.lu.pc         : 0x${Cat(io.lu.pc, 0.U(1.W))}%x\n")
