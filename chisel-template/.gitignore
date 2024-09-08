@@ -114,6 +114,8 @@ local.properties
 *.a
 *.la
 *.lo
+*.lto
+*.lbc
 
 # Shared objects (inc. Windows DLLs)
 *.dll
