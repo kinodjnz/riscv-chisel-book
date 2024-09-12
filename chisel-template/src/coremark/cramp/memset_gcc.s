@@ -4,7 +4,10 @@
 
 memset:
         andi    a1, a1, 255
-        orc8    a1, a1
+        slli    a3, a1, 8
+        or      a1, a1, a3
+        slli    a3, a1, 16
+        or      a1, a1, a3
         andi    a3, a2, -8
         add     a3, a0, a3
         add     a2, a0, a2
