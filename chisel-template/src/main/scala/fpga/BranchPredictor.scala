@@ -322,7 +322,7 @@ class RAS extends Module {
     printf(cf"RAS ret1 index=${io.ret1.index} pc=0x${Cat(ras(index), 0.U(1.W))}%x\n")
   }
 
-  when (io.call1.en) {
+  when (io.call1.en && !io.call2.en) {
     index := io.call1.index
     ras(io.call1.index) := io.call1.ret_pc
     printf(cf"RAS call index=${io.call1.index} pc=0x${Cat(io.call1.ret_pc, 0.U(1.W))}%x\n")
