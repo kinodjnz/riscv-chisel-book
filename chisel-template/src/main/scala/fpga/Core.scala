@@ -234,6 +234,7 @@ class Core(
   val ex2_reg_fun_sel       = RegInit(0.U(EX2_FUN_LEN.W))
   val ex2_reg_alu_out       = RegInit(0.U(WORD_LEN.W))
   val ex2_reg_pc_bit_out    = RegInit(0.U(WORD_LEN.W))
+  val ex2_reg_csr_rdata     = RegInit(0.U(WORD_LEN.W))
   val ex2_reg_op3_data      = RegInit(0.U(WORD_LEN.W))
   val ex2_reg_is_valid_inst = RegInit(false.B)
   // val ex2_reminder          = Wire(UInt(WORD_LEN.W))
@@ -308,6 +309,7 @@ class Core(
   val ex2_reg_divrem_state = RegInit(DivremState.Idle)
   val ex2_reg_is_br        = RegInit(false.B)
   val ex2_reg_br_pc        = RegInit(0.U(PC_LEN.W))
+  val ex1_reg_upd_pc_stalled = RegInit(false.B)
   val ex1_fetch_pc_en      = Wire(Bool())
   val csr_is_br            = Wire(Bool())
   val csr_br_pc            = Wire(UInt(PC_LEN.W))
@@ -819,7 +821,7 @@ class Core(
     ex1_reg_bp.taken      := Mux(rrd_stall, false.B, rrd_reg_bp.taken)
     ex1_reg_is_trap       := Mux(rrd_stall, false.B, rrd_reg_is_trap)
   }
-  when (ex2_reg_is_br) {
+  when (ex2_reg_is_br && !ex1_reg_upd_pc_stalled) {
     ex1_reg_is_valid_inst := false.B
     ex1_reg_rf_wen        := REN_X
     ex1_reg_wb_sel        := WB_X
@@ -1093,7 +1095,7 @@ class Core(
       ((csr_mie_fw_en && csr_mie_mtie_fw) || (!csr_mie_fw_en && csr_reg_mie_mtie))
   )
 
-  val csr_is_valid_inst = ex1_reg_is_valid_inst && !ex2_reg_is_br
+  val csr_is_valid_inst = ex1_reg_is_valid_inst && (!ex2_reg_is_br || ex1_reg_upd_pc_stalled)
   val csr_is_meintr = csr_reg_is_meintr && csr_is_valid_inst
   val csr_is_mtintr = csr_reg_is_mtintr && csr_is_valid_inst
   ex1_en := csr_is_valid_inst && !csr_is_meintr && !csr_is_mtintr
@@ -1189,8 +1191,14 @@ class Core(
     csr_br_pc            := DontCare
   }
 
-  ex2_reg_is_br := csr_is_br || ex1_fetch_pc_en
+  ex2_reg_is_br := ex1_fetch_pc_en || csr_is_br
   ex2_reg_br_pc := ex1_csr_fetch_pc
+
+  ex1_reg_upd_pc_stalled := false.B
+  when (ex2_stall) {
+    // ex1_fetch_pc_en の原因になった命令は stall した場合でも無効化しない
+    ex1_reg_upd_pc_stalled := ex1_reg_upd_pc_stalled || ex1_fetch_pc_en
+  }
 
   //**********************************
   // EX1/EX2 register
@@ -1204,6 +1212,7 @@ class Core(
     ex2_reg_mulhss     := ex1_mulhss
     ex2_reg_mulhsu     := ex1_mulhsu
     ex2_reg_pc_bit_out := ex1_pc_bit_out
+    ex2_reg_csr_rdata  := csr_rdata
     ex2_reg_exe_fun    := ex1_reg_exe_fun
     ex2_reg_rf_wen     := Mux(ex1_en, ex1_reg_rf_wen, REN_X)
     ex2_reg_fun_sel    := ex1_fun_sel
@@ -1413,7 +1422,7 @@ class Core(
   ex2_wb_data := MuxCase(ex2_reg_alu_out, Seq(
     (ex2_reg_fun_sel === EX2_MASK) -> ex2_mask_out,
     (ex2_reg_fun_sel === EX2_BIT)  -> ex2_reg_pc_bit_out,
-    (ex2_reg_fun_sel === EX2_CSR || ex2_reg_fun_sel === EX2_CSR1) -> csr_rdata,
+    (ex2_reg_fun_sel === EX2_CSR || ex2_reg_fun_sel === EX2_CSR1) -> ex2_reg_csr_rdata,
     (ex2_reg_fun_sel === EX2_MD || ex2_reg_fun_sel === EX2_MD1)   -> ex2_alu_muldiv_out,
   ))
 
@@ -1676,6 +1685,8 @@ class Core(
   printf(cf"ex2_wb_data      : 0x${ex2_wb_data}%x\n")
   printf(cf"ex2_alu_muldiv_ou: 0x${ex2_alu_muldiv_out}%x\n")
   printf(cf"ex2_reg_wb_addr  : 0x${ex2_reg_wb_addr}%x\n")
+  // printf(cf"ex1_reg_upd_pc_st: ${ex1_reg_upd_pc_stalled}%d\n")
+  // printf(cf"ex2_reg_rf_wen   : ${ex2_reg_rf_wen}%d\n")
   // printf(cf"mem1_reg_mem_w   : 0x${mem1_reg_mem_w}%x\n")
   printf(cf"mem1_reg_wdata   : 0x${mem1_reg_wdata}%x\n")
   printf(cf"mem1_mem_stall   : ${mem1_mem_stall}%d\n")
