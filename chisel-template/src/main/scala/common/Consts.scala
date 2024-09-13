@@ -218,7 +218,7 @@ object Consts {
   val BP_CACHE_LEN  = 256
 
   val PC_LEN            = WORD_LEN - 1
-  val ZBTB_ENTRIES      = 16
+  val ZBTB_ENTRIES      = 32
   val ZBTB_TAG_BITS     = 8
   val ZBTB_TARGET_BITS  = PC_LEN
   val BTB_INDEX_BITS    = 10
