@@ -857,9 +857,9 @@ class Core(
       Mux(ex1_reg_op2op === OP2OP_MIN, ex1_reg_op1_data, ex1_reg_op2_data),
       Mux(ex1_reg_op2op === OP2OP_MIN, ex1_reg_op2_data, ex1_reg_op1_data),
     ),
+    (ex1_reg_exe_fun === ALU_BINV)    -> (ex1_reg_op1_data ^ (1.U(WORD_LEN.W) << ex1_reg_op2_data(4, 0))(WORD_LEN-1, 0)),
     (ex1_reg_exe_fun === ALU_BCLR)    -> (ex1_reg_op1_data & ~((1.U(WORD_LEN.W) << ex1_reg_op2_data(4, 0))(WORD_LEN-1, 0))),
     (ex1_reg_exe_fun === ALU_BSET)    -> (ex1_reg_op1_data | (1.U(WORD_LEN.W) << ex1_reg_op2_data(4, 0))(WORD_LEN-1, 0)),
-    (ex1_reg_exe_fun === ALU_BINV)    -> (ex1_reg_op1_data ^ (1.U(WORD_LEN.W) << ex1_reg_op2_data(4, 0))(WORD_LEN-1, 0)),
     (ex1_reg_exe_fun === ALU_BEXT)    -> Cat(Fill(WORD_LEN-1, 0.U(1.W)), (ex1_reg_op1_data >> ex1_reg_op2_data(4, 0))(0)),
   ))
 
@@ -894,6 +894,12 @@ class Core(
     Fill(WORD_LEN, 1.U(1.W)),
     Cat((0 until WORD_LEN).reverse.map(bit => (bit.U < ex1_mask_len).asUInt))
   )
+  val ex1_sign_pos = ex1_mask_len +& ex1_reg_op2_data(4, 0)
+  val ex1_sign_shift = Mux(ex1_sign_pos(5) || ex1_mask_len === 0.U, 0.U(5.W), ex1_sign_pos(4, 0))
+  val ex1_bfsign = Fill(
+    WORD_LEN,
+    (Cat(ex1_reg_op1_data(WORD_LEN-2, 0), ex1_reg_op1_data(WORD_LEN-1)) >> ex1_sign_shift)(0)
+  )
 
   val ex1_next_pc = Mux(ex1_reg_is_half, ex1_reg_pc + 1.U(PC_LEN.W), ex1_reg_pc + 2.U(PC_LEN.W))
   val ex1_pc_bit_out = MuxCase(0.U(WORD_LEN.W), Seq(
@@ -902,18 +908,18 @@ class Core(
     (ex1_reg_exe_fun === ALU_CLZ)   -> PriorityEncoder(Cat(1.U(1.W), Reverse(ex1_reg_op1_data))),
     (ex1_reg_exe_fun === ALU_CTZ)   -> PriorityEncoder(Cat(1.U(1.W), ex1_reg_op1_data)),
     (ex1_reg_exe_fun === ALU_REV8)  -> Cat(ex1_reg_op1_data(7, 0), ex1_reg_op1_data(15, 8), ex1_reg_op1_data(23, 16), ex1_reg_op1_data(31, 24)),
-    (ex1_reg_exe_fun === ALU_SEXTB) -> Cat(Fill(24, ex1_reg_op1_data(7)), ex1_reg_op1_data(7, 0)),
-    (ex1_reg_exe_fun === ALU_SEXTH) -> Cat(Fill(16, ex1_reg_op1_data(15)), ex1_reg_op1_data(15, 0)),
     (ex1_reg_exe_fun === ALU_BSCTH) -> Cat((0 until 16).reverse.map(bit => scatter_bit(ex1_reg_op1_data, ex1_reg_op2_data, bit))),
     (ex1_reg_exe_fun === ALU_BFM || ex1_reg_exe_fun === ALU_BFP)
                                     -> (ex1_imm_mask << ex1_reg_op2_data(4, 0))(WORD_LEN-1, 0),
+    (ex1_reg_exe_fun === ALU_BFX)   -> ex1_imm_mask,
     (ex1_reg_exe_fun === ALU_GORC)  -> nested_shift_or(ex1_reg_op1_data, ex1_reg_op2_data, 4),
   ))
 
   val ex1_fun_sel = MuxCase(EX2_ALU, Seq(
     (
       (ex1_reg_wb_sel === WB_PC || ex1_reg_wb_sel === WB_BIT) &&
-      (ex1_reg_exe_fun === ALU_BFM || ex1_reg_exe_fun === ALU_BFP)
+      (ex1_reg_exe_fun === ALU_BFM || ex1_reg_exe_fun === ALU_BFP ||
+       ex1_reg_exe_fun === ALU_BFX || ex1_reg_exe_fun === ALU_BF_)
     )                                                          -> EX2_MASK,
     (ex1_reg_wb_sel === WB_PC || ex1_reg_wb_sel === WB_BIT)    -> EX2_BIT,
     (ex1_reg_wb_sel === WB_CSR || ex1_reg_wb_sel === WB_FENCE) -> EX2_CSR,
@@ -1216,7 +1222,7 @@ class Core(
     ex2_reg_exe_fun    := ex1_reg_exe_fun
     ex2_reg_rf_wen     := Mux(ex1_en, ex1_reg_rf_wen, REN_X)
     ex2_reg_fun_sel    := ex1_fun_sel
-    ex2_reg_op3_data   := ex1_reg_op3_data
+    ex2_reg_op3_data   := Mux(ex1_reg_exe_fun === ALU_BFX && ex1_reg_op2op === OP2OP_SIGNED, ex1_bfsign, ex1_reg_op3_data)
     ex2_reg_no_mem     := (ex1_reg_wb_sel =/= WB_LD && ex1_reg_wb_sel =/= WB_ST && ex1_reg_wb_sel =/= WB_FENCE) && ex1_en
     ex2_reg_is_valid_inst := ex1_is_valid_inst
     ex2_reg_divrem            := ex1_divrem && ex1_en

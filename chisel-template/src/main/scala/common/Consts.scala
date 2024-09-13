@@ -34,11 +34,11 @@ object Consts {
   val ALU_GORC    =  2.U(EXE_FUN_LEN.W)
   val ALU_BSCTH   =  3.U(EXE_FUN_LEN.W)
   val ALU_BFP     =  4.U(EXE_FUN_LEN.W)
-  val ALU_REV8    =  5.U(EXE_FUN_LEN.W)
+  val ALU_BFX     =  5.U(EXE_FUN_LEN.W)
   val ALU_BFM     =  6.U(EXE_FUN_LEN.W)
-  val ALU_CPOP    =  7.U(EXE_FUN_LEN.W)
-  val ALU_SEXTB   =  8.U(EXE_FUN_LEN.W)
-  val ALU_SEXTH   =  9.U(EXE_FUN_LEN.W)
+  val ALU_BF_     =  7.U(EXE_FUN_LEN.W)
+  val ALU_CPOP    =  8.U(EXE_FUN_LEN.W)
+  val ALU_REV8    =  9.U(EXE_FUN_LEN.W)
   val ALU_CLZ     = 10.U(EXE_FUN_LEN.W)
   val ALU_CTZ     = 11.U(EXE_FUN_LEN.W)
 
@@ -102,7 +102,8 @@ object Consts {
   val OP2_C_IMA2W = 25.U(OP2_LEN.W)
   val OP2_C_IMA2B = 26.U(OP2_LEN.W)
   val OP2_C_IMU   = 27.U(OP2_LEN.W)
-  val OP2_ZEXTH   = 28.U(OP2_LEN.W)
+  val OP2_EXTH    = 28.U(OP2_LEN.W)
+  val OP2_EXTB    = 29.U(OP2_LEN.W)
   val OP2_RS2     = 32.U(OP2_LEN.W)
   val OP2_C_RS2   = 33.U(OP2_LEN.W)
   val OP2_RS2BFL  = 34.U(OP2_LEN.W)
@@ -114,13 +115,14 @@ object Consts {
   val M_OP2_RS  = 1.U(M_OP2_LEN.W)
   val M_OP2_IMM = 0.U(M_OP2_LEN.W)
 
-  val OP2OP_LEN = 1
+  val OP2OP_LEN   = 1
   val OP2OP_NOP   = 0.U(OP2OP_LEN.W)
   val OP2OP_MIN   = 0.U(OP2OP_LEN.W)
   val OP2OP_NOT   = 1.U(OP2OP_LEN.W)
   val OP2OP_ZERO  = 1.U(OP2OP_LEN.W)
   val OP2OP_SHADD = 1.U(OP2OP_LEN.W)
   val OP2OP_MAX   = 1.U(OP2OP_LEN.W)
+  val OP2OP_SEXT  = 1.U(OP2OP_LEN.W)
 
   val OP3_LEN     = 3
   val OP3_X       = 0.U(OP3_LEN.W)
