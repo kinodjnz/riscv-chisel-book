@@ -3,12 +3,6 @@ package fpga
 import chisel3._
 import chisel3.util._
 import common.Consts._
-import ZeroBranchPredictionConsts._
-
-object ZeroBranchPredictionConsts {
-  val ZBTB_TAG_BITS    = 8
-  val ZBTB_TARGET_BITS = PC_LEN
-}
 
 class ZBTBLookup extends Bundle {
   val pc        = Output(UInt(PC_LEN.W))
