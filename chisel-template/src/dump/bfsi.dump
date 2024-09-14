@@ -21,39 +21,39 @@ Disassembly of section .text:
       1a: 4189         	li	gp, 0x2
       1c: 9abce137     	lui	sp, 0x9abce
       20: efa10113     	addi	sp, sp, -0x106
-      24: 0481365b     	bfsi	a2, sp, 0x8, 0x4
+      24: 2481665b     	bfsi	a2, sp, 0x8, 0x4
       28: 53f9         	li	t2, -0x2
       2a: 06761d63     	bne	a2, t2, 0xa4 <.Ltmp1>
       2e: 418d         	li	gp, 0x3
       30: 9abcd137     	lui	sp, 0x9abcd
       34: 6fa10113     	addi	sp, sp, 0x6fa
-      38: 0481365b     	bfsi	a2, sp, 0x8, 0x4
+      38: 2481665b     	bfsi	a2, sp, 0x8, 0x4
       3c: 4399         	li	t2, 0x6
       3e: 06761363     	bne	a2, t2, 0xa4 <.Ltmp1>
       42: 4191         	li	gp, 0x4
       44: 9abce137     	lui	sp, 0x9abce
       48: efa10113     	addi	sp, sp, -0x106
-      4c: 0081365b     	bfsi	a2, sp, 0x8, 0x0
+      4c: 0481665b     	bfsi	a2, sp, 0x8, 0x0
       50: ff9ac3b7     	lui	t2, 0xff9ac
       54: cde38393     	addi	t2, t2, -0x322   # 00000000
       58: 04761663     	bne	a2, t2, 0xa4 <.Ltmp1>
       5c: 4195         	li	gp, 0x5
       5e: 1abce137     	lui	sp, 0x1abce
       62: efa10113     	addi	sp, sp, -0x106
-      66: 0081365b     	bfsi	a2, sp, 0x8, 0x0
+      66: 0481665b     	bfsi	a2, sp, 0x8, 0x0
       6a: 001ac3b7     	lui	t2, 0x1ac
       6e: cde38393     	addi	t2, t2, -0x322   # 00000000
       72: 02761963     	bne	a2, t2, 0xa4 <.Ltmp1>
       76: 4199         	li	gp, 0x6
       78: 9abce137     	lui	sp, 0x9abce
       7c: ef210113     	addi	sp, sp, -0x10e
-      80: 0601765b     	bfsi	a2, sp, 0x0, 0x8
+      80: 4401665b     	bfsi	a2, sp, 0x0, 0x8
       84: 53c9         	li	t2, -0xe
       86: 00761f63     	bne	a2, t2, 0xa4 <.Ltmp1>
       8a: 419d         	li	gp, 0x7
       8c: 9abce137     	lui	sp, 0x9abce
       90: e7210113     	addi	sp, sp, -0x18e
-      94: 0601765b     	bfsi	a2, sp, 0x0, 0x8
+      94: 4401665b     	bfsi	a2, sp, 0x0, 0x8
       98: 07200393     	li	t2, 0x72
       9c: 00761463     	bne	a2, t2, 0xa4 <.Ltmp1>
       a0: 02760163     	beq	a2, t2, 0xc2 <.Ltmp7>

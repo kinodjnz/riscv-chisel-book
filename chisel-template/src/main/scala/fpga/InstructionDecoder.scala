@@ -193,10 +193,11 @@ class InstructionDecoder(
     6.U(3.W) -> 6.U(5.W),
     7.U(3.W) -> 8.U(5.W),
   ))
+  val id_imm_bfxi_len = id_inst(31, 27)
   val id_imm_bfi_shamt = id_inst(24, 20)
 
+  val id_imm_bfxi = Cat(Fill(1, 0.U), id_imm_bfxi_len(4, 0), 0.U(1.W), id_imm_bfi_shamt(4, 0))
   val id_imm_bfi = Cat(Fill(1, 0.U), id_imm_bfi_len(4, 0), 0.U(1.W), id_imm_bfi_shamt(4, 0))
-  // val id_imm_bfmi = Cat(Fill(7, 0.U), id_inst(24, 20))
 
   val csignals = ListLookup(id_inst,
                     List(ALU_X     , OP1_X     , OP2_X       , OP3_X     , REN_X, WB_X    , WBA_RD , CSR_X, MW_X  , OP2OP_NOP),
@@ -288,16 +289,16 @@ class InstructionDecoder(
       FSRI       -> List(ALU_FSR   , OP1_RS1   , OP2_IMI     , OP3_RS3   , REN_S, WB_ALU  , WBA_RD , CSR_X, MW_X  , OP2OP_NOP),
       BFM        -> List(ALU_BFM   , OP1_RS1   , OP2_RS2BFL  , OP3_RS3   , REN_S, WB_BIT  , WBA_RD , CSR_X, MW_X  , OP2OP_ZERO),
       BFP        -> List(ALU_BFP   , OP1_RS1   , OP2_RS2BFL  , OP3_RS3   , REN_S, WB_BIT  , WBA_RD , CSR_X, MW_X  , OP2OP_NOP),
-      BFX        -> List(ALU_BFX   , OP1_RS1   , OP2_RS2BFL  , OP3_RS3   , REN_S, WB_BIT  , WBA_RD , CSR_X, MW_X  , OP2OP_NOP),
-      BFS        -> List(ALU_BFX   , OP1_RS1   , OP2_RS2BFL  , OP3_X     , REN_S, WB_BIT  , WBA_RD , CSR_X, MW_X  , OP2OP_SEXT),
+      BFX        -> List(ALU_BFX   , OP1_RS1   , OP2_RS2BFX  , OP3_Z     , REN_S, WB_BIT  , WBA_RD , CSR_X, MW_X  , OP2OP_NOP),
+      BFS        -> List(ALU_BFX   , OP1_RS1   , OP2_RS2BFX  , OP3_X     , REN_S, WB_BIT  , WBA_RD , CSR_X, MW_X  , OP2OP_SEXT),
       BFMP       -> List(ALU_BFM   , OP1_RS1   , OP2_RS2     , OP3_RS3   , REN_S, WB_BIT  , WBA_RD , CSR_X, MW_X  , OP2OP_ZERO),
       BFPP       -> List(ALU_BFP   , OP1_RS1   , OP2_RS2     , OP3_RS3   , REN_S, WB_BIT  , WBA_RD , CSR_X, MW_X  , OP2OP_NOP),
-      BFXP       -> List(ALU_BFX   , OP1_RS1   , OP2_RS2     , OP3_RS3   , REN_S, WB_BIT  , WBA_RD , CSR_X, MW_X  , OP2OP_NOP),
-      BFSP       -> List(ALU_BFX   , OP1_RS1   , OP2_RS2     , OP3_X     , REN_S, WB_BIT  , WBA_RD , CSR_X, MW_X  , OP2OP_SEXT),
+      // BFXR       -> List(ALU_BFX   , OP1_RS1   , OP2_RS2BFL  , OP3_RS3   , REN_S, WB_BIT  , WBA_RD , CSR_X, MW_X  , OP2OP_NOP),
+      // BFXRI      -> List(ALU_BFX   , OP1_RS1   , OP2_BFI     , OP3_RS3   , REN_S, WB_BIT  , WBA_RD , CSR_X, MW_X  , OP2OP_NOP),
       BFMI       -> List(ALU_BFM   , OP1_RS1   , OP2_BFI     , OP3_RS3   , REN_S, WB_BIT  , WBA_RD , CSR_X, MW_X  , OP2OP_ZERO),
       BFPI       -> List(ALU_BFP   , OP1_RS1   , OP2_BFI     , OP3_RS3   , REN_S, WB_BIT  , WBA_RD , CSR_X, MW_X  , OP2OP_NOP),
-      BFXI       -> List(ALU_BFX   , OP1_RS1   , OP2_BFI     , OP3_RS3   , REN_S, WB_BIT  , WBA_RD , CSR_X, MW_X  , OP2OP_NOP),
-      BFSI       -> List(ALU_BFX   , OP1_RS1   , OP2_BFI     , OP3_X     , REN_S, WB_BIT  , WBA_RD , CSR_X, MW_X  , OP2OP_SEXT),
+      BFXI       -> List(ALU_BFX   , OP1_RS1   , OP2_BFXI    , OP3_Z     , REN_S, WB_BIT  , WBA_RD , CSR_X, MW_X  , OP2OP_NOP),
+      BFSI       -> List(ALU_BFX   , OP1_RS1   , OP2_BFXI    , OP3_X     , REN_S, WB_BIT  , WBA_RD , CSR_X, MW_X  , OP2OP_SEXT),
       GORCI      -> List(ALU_GORC  , OP1_RS1   , OP2_IMI     , OP3_X     , REN_S, WB_BIT  , WBA_RD , CSR_X, MW_X  , OP2OP_NOP),
       C_ILL      -> List(ALU_X     , OP1_X     , OP2_X       , OP3_X     , REN_X, WB_X    , WBA_C  , CSR_X, MW_X  , OP2OP_NOP),
       C_ADDI4SPN -> List(ALU_ADD   , OP1_C_SP  , OP2_C_IMIW  , OP3_X     , REN_S, WB_ALU  , WBA_CP2, CSR_X, MW_X  , OP2OP_NOP),
@@ -395,7 +396,9 @@ class InstructionDecoder(
     (id_op2_sel === OP2_C_IMSH0) -> 0.U(WORD_LEN.W),
     (id_op2_sel === OP2_IM1)     -> 0.U(WORD_LEN.W),
     (id_op2_sel === OP2_BFI)     -> 0.U(WORD_LEN.W),
+    (id_op2_sel === OP2_BFXI)     -> 0.U(WORD_LEN.W),
     (id_op2_sel === OP2_RS2BFL)  -> 0.U(WORD_LEN.W),
+    (id_op2_sel === OP2_RS2BFX)  -> 0.U(WORD_LEN.W),
     (id_op2_sel === OP2_EXTH)    -> 0.U(WORD_LEN.W),
     (id_op2_sel === OP2_EXTB)    -> 0.U(WORD_LEN.W),
     //
@@ -432,7 +435,9 @@ class InstructionDecoder(
     (id_op2_sel === OP2_C_IMSH0) -> id_c_imm_sh0,
     (id_op2_sel === OP2_IM1)     -> 1.U(12.W),
     (id_op2_sel === OP2_BFI)     -> id_imm_bfi,
+    (id_op2_sel === OP2_BFXI)    -> id_imm_bfxi,
     (id_op2_sel === OP2_RS2BFL)  -> id_imm_bfi,
+    (id_op2_sel === OP2_RS2BFX)  -> id_imm_bfxi,
     (id_op2_sel === OP2_EXTH)   -> 0x400.U(12.W),
     (id_op2_sel === OP2_EXTB)   -> 0x200.U(12.W),
     //
@@ -443,7 +448,7 @@ class InstructionDecoder(
     // (id_op2_sel === OP2_C_RS1P)  -> 0.U(12.W),
   ))
 
-  val id_is_bflen = (id_op2_sel === OP2_RS2BFL)
+  val id_is_bflen = (id_op2_sel === OP2_RS2BFL || id_op2_sel === OP2_RS2BFX)
 
   val id_csr_addr = Mux(id_exe_fun === CMD_ECALL && id_mem_w === MW_CSR, CSR_ADDR_MCAUSE, id_inst(31,20))
 
