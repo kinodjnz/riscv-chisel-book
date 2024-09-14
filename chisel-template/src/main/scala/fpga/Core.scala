@@ -903,6 +903,10 @@ class Core(
     WORD_LEN,
     (Cat(ex1_reg_op1_data(WORD_LEN-2, 0), ex1_reg_op1_data(WORD_LEN-1)) >> ex1_bfx_sign_shift)(0)
   )
+  val ex1_bfx_mask = Mux(ex1_mask_len === 0.U,
+    Cat((0 until WORD_LEN).map(bit => (!(bit.U < ex1_reg_op2_data(4, 0))).asUInt)),
+    Cat((0 until WORD_LEN).reverse.map(bit => (bit.U < ex1_mask_len).asUInt)),
+  )
 
   val ex1_next_pc = Mux(ex1_reg_is_half, ex1_reg_pc + 1.U(PC_LEN.W), ex1_reg_pc + 2.U(PC_LEN.W))
   val ex1_pc_bit_out = MuxCase(0.U(WORD_LEN.W), Seq(
@@ -914,7 +918,7 @@ class Core(
     (ex1_reg_exe_fun === ALU_BSCTH) -> Cat((0 until 16).reverse.map(bit => scatter_bit(ex1_reg_op1_data, ex1_reg_op2_data, bit))),
     (ex1_reg_exe_fun === ALU_BFM || ex1_reg_exe_fun === ALU_BFP)
                                     -> (ex1_imm_mask << ex1_reg_op2_data(4, 0))(WORD_LEN-1, 0),
-    (ex1_reg_exe_fun === ALU_BFX)   -> ex1_imm_mask,
+    (ex1_reg_exe_fun === ALU_BFX)   -> ex1_bfx_mask,
     (ex1_reg_exe_fun === ALU_GORC)  -> nested_shift_or(ex1_reg_op1_data, ex1_reg_op2_data, 4),
   ))
 
@@ -1225,7 +1229,7 @@ class Core(
     ex2_reg_exe_fun    := ex1_reg_exe_fun
     ex2_reg_rf_wen     := Mux(ex1_en, ex1_reg_rf_wen, REN_X)
     ex2_reg_fun_sel    := ex1_fun_sel
-    ex2_reg_op3_data   := Mux(ex1_reg_exe_fun === ALU_BFX && ex1_reg_op2op === OP2OP_SIGNED, ex1_bfx_sext, ex1_reg_op3_data)
+    ex2_reg_op3_data   := Mux(ex1_reg_exe_fun === ALU_BFX && ex1_reg_op2op === OP2OP_SEXT, ex1_bfx_sext, ex1_reg_op3_data)
     ex2_reg_no_mem     := (ex1_reg_wb_sel =/= WB_LD && ex1_reg_wb_sel =/= WB_ST && ex1_reg_wb_sel =/= WB_FENCE) && ex1_en
     ex2_reg_is_valid_inst := ex1_is_valid_inst
     ex2_reg_divrem            := ex1_divrem && ex1_en
@@ -1677,6 +1681,7 @@ class Core(
   printf(cf"ex1_alu_out      : 0x${ex1_alu_out}%x\n")
   printf(cf"ex1_pc_bit_out   : 0x${ex1_pc_bit_out}%x\n")
   printf(cf"ex1_reg_exe_fun  : 0x${ex1_reg_exe_fun}%x\n")
+  // printf(cf"ex1_reg_op2op    : 0x${ex1_reg_op2op}%x\n")
   printf(cf"ex1_reg_wb_sel   : 0x${ex1_reg_wb_sel}%x\n")
   printf(cf"ex1_reg_wb_addr  : 0x${ex1_reg_wb_addr}%x\n")
   printf(cf"ex1_reg_bp_taken : ${ex1_reg_bp.taken}%d\n")
@@ -1686,11 +1691,14 @@ class Core(
   printf(cf"ex1_reg_bp_gcnt  : 0x${ex1_reg_bp.gcnt}%x\n")
   printf(cf"ex1_reg_bp_rasind: 0x${ex1_reg_bp.rasindex}%x\n")
   printf(cf"ex1_reg_actual_at: 0x${ex1_reg_actual_attr}%x\n")
+  // printf(cf"ex1_bfx_sext     : 0x${ex1_bfx_sext}%x\n")
+  // printf(cf"ex1_bfx_sign_shif: 0x${ex1_bfx_sign_shift}%x\n")
   printf(cf"ex2_reg_is_br    : ${ex2_reg_is_br}%d\n")
   printf(cf"ex2_reg_br_pc    : 0x${Cat(ex2_reg_br_pc, 0.U(1.W))}%x\n")
   printf(cf"ex2_reg_pc       : 0x${Cat(ex2_reg_pc, 0.U(1.W))}%x\n")
   printf(cf"ex2_reg_is_valid_: ${ex2_reg_is_valid_inst}%d\n")
   printf(cf"ex2_stall        : ${ex2_stall}%d\n")
+  printf(cf"ex2_reg_op3_data : 0x${ex2_reg_op3_data}%x\n")
   printf(cf"ex2_wb_data      : 0x${ex2_wb_data}%x\n")
   printf(cf"ex2_alu_muldiv_ou: 0x${ex2_alu_muldiv_out}%x\n")
   printf(cf"ex2_reg_wb_addr  : 0x${ex2_reg_wb_addr}%x\n")
