@@ -1,0 +1,77 @@
+
+target/bfxp.elf.fat:	file format elf32-littleriscv
+
+Disassembly of section .text:
+
+00000000 <_start>:
+       0: 20004137     	lui	sp, 0x20004
+       4: 2811         	jal	0x18 <main>
+       6: 81aa         	mv	gp, a0
+       8: 05d00893     	li	a7, 0x5d
+       c: 0001         	nop
+       e: 0001         	nop
+      10: 0001         	nop
+      12: 0001         	nop
+      14: 00000073     	ecall
+
+00000018 <main>:
+      18: a009         	j	0x1a <.Ltmp0>
+
+0000001a <.Ltmp0>:
+      1a: 4189         	li	gp, 0x2
+      1c: 12345137     	lui	sp, 0x12345
+      20: 67810113     	addi	sp, sp, 0x678
+      24: 9abce0b7     	lui	ra, 0x9abce
+      28: efa08093     	addi	ra, ra, -0x106   # 00000000
+      2c: 10800813     	li	a6, 0x108
+      30: 0d01067b     	bfxp	a2, sp, ra, a6
+      34: 9abce3b7     	lui	t2, 0x9abce
+      38: ef638393     	addi	t2, t2, -0x10a   # 00000000
+      3c: 04761963     	bne	a2, t2, 0x8e <.Ltmp1>
+      40: 418d         	li	gp, 0x3
+      42: 12345137     	lui	sp, 0x12345
+      46: 67810113     	addi	sp, sp, 0x678
+      4a: 9abce0b7     	lui	ra, 0x9abce
+      4e: efa08093     	addi	ra, ra, -0x106   # 00000000
+      52: 4821         	li	a6, 0x8
+      54: 0d01067b     	bfxp	a2, sp, ra, a6
+      58: 9a1233b7     	lui	t2, 0x9a123
+      5c: 45638393     	addi	t2, t2, 0x456   # 00000000
+      60: 02761763     	bne	a2, t2, 0x8e <.Ltmp1>
+      64: 4191         	li	gp, 0x4
+      66: 12345137     	lui	sp, 0x12345
+      6a: 67810113     	addi	sp, sp, 0x678
+      6e: 9abce0b7     	lui	ra, 0x9abce
+      72: efa08093     	addi	ra, ra, -0x106   # 00000000
+      76: 20000813     	li	a6, 0x200
+      7a: 0d01067b     	bfxp	a2, sp, ra, a6
+      7e: 9abce3b7     	lui	t2, 0x9abce
+      82: e7838393     	addi	t2, t2, -0x188   # 00000000
+      86: 00761463     	bne	a2, t2, 0x8e <.Ltmp1>
+      8a: 02760163     	beq	a2, t2, 0xac <.Ltmp4>
+
+0000008e <.Ltmp1>:
+      8e: 0ff0000f     	fence
+
+00000092 <.Ltmp5>:
+      92: 00018063     	beqz	gp, 0x92 <.Ltmp5>
+      96: 0186         	slli	gp, gp, 0x1
+      98: 0011e193     	ori	gp, gp, 0x1
+      9c: 05d00893     	li	a7, 0x5d
+      a0: 850e         	mv	a0, gp
+      a2: 00000073     	ecall
+      a6: 0001         	nop
+      a8: 0001         	nop
+      aa: b7d5         	j	0x8e <.Ltmp1>
+
+000000ac <.Ltmp4>:
+      ac: 0ff0000f     	fence
+      b0: 4185         	li	gp, 0x1
+      b2: 05d00893     	li	a7, 0x5d
+      b6: 4501         	li	a0, 0x0
+      b8: 00000073     	ecall
+      bc: 0001         	nop
+      be: 0001         	nop
+      c0: b7f5         	j	0xac <.Ltmp4>
+      c2: 4501         	li	a0, 0x0
+      c4: 8082         	ret

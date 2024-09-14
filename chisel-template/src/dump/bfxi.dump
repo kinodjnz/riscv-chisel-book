@@ -1,0 +1,92 @@
+
+target/bfxi.elf.fat:	file format elf32-littleriscv
+
+Disassembly of section .text:
+
+00000000 <_start>:
+       0: 20004137     	lui	sp, 0x20004
+       4: 2811         	jal	0x18 <main>
+       6: 81aa         	mv	gp, a0
+       8: 05d00893     	li	a7, 0x5d
+       c: 0001         	nop
+       e: 0001         	nop
+      10: 0001         	nop
+      12: 0001         	nop
+      14: 00000073     	ecall
+
+00000018 <main>:
+      18: a009         	j	0x1a <.Ltmp0>
+
+0000001a <.Ltmp0>:
+      1a: 4189         	li	gp, 0x2
+      1c: 12345137     	lui	sp, 0x12345
+      20: 67810113     	addi	sp, sp, 0x678
+      24: 9abce0b7     	lui	ra, 0x9abce
+      28: efa08093     	addi	ra, ra, -0x106   # 00000000
+      2c: 0c81265b     	bfxi	a2, sp, ra, 0x8, 0x4
+      30: 9abce3b7     	lui	t2, 0x9abce
+      34: ef638393     	addi	t2, t2, -0x10a   # 00000000
+      38: 08761863     	bne	a2, t2, 0xc8 <.Ltmp1>
+      3c: 418d         	li	gp, 0x3
+      3e: 12345137     	lui	sp, 0x12345
+      42: 67810113     	addi	sp, sp, 0x678
+      46: 9abce0b7     	lui	ra, 0x9abce
+      4a: efa08093     	addi	ra, ra, -0x106   # 00000000
+      4e: 0841265b     	bfxi	a2, sp, ra, 0x4, 0x0
+      52: 912343b7     	lui	t2, 0x91234
+      56: 56738393     	addi	t2, t2, 0x567   # 00000000
+      5a: 06761763     	bne	a2, t2, 0xc8 <.Ltmp1>
+      5e: 4191         	li	gp, 0x4
+      60: 12345137     	lui	sp, 0x12345
+      64: 67810113     	addi	sp, sp, 0x678
+      68: 9abce0b7     	lui	ra, 0x9abce
+      6c: efa08093     	addi	ra, ra, -0x106   # 00000000
+      70: 0f81665b     	bfxi	a2, sp, ra, 0x18, 0x8
+      74: 9abce3b7     	lui	t2, 0x9abce
+      78: e1238393     	addi	t2, t2, -0x1ee   # 00000000
+      7c: 04761663     	bne	a2, t2, 0xc8 <.Ltmp1>
+      80: 4195         	li	gp, 0x5
+      82: 12345137     	lui	sp, 0x12345
+      86: 67810113     	addi	sp, sp, 0x678
+      8a: 9a8ce0b7     	lui	ra, 0x9a8ce
+      8e: eda08093     	addi	ra, ra, -0x126   # 00000000
+      92: 0f01265b     	bfxi	a2, sp, ra, 0x10, 0x6
+      96: 9a8ce3b7     	lui	t2, 0x9a8ce
+      9a: ef438393     	addi	t2, t2, -0x10c   # 00000000
+      9e: 02761563     	bne	a2, t2, 0xc8 <.Ltmp1>
+      a2: 4199         	li	gp, 0x6
+      a4: 12345137     	lui	sp, 0x12345
+      a8: 67810113     	addi	sp, sp, 0x678
+      ac: 9abce0b7     	lui	ra, 0x9abce
+      b0: efa08093     	addi	ra, ra, -0x106   # 00000000
+      b4: 0ac1665b     	bfxi	a2, sp, ra, 0xc, 0x3
+      b8: 9abce3b7     	lui	t2, 0x9abce
+      bc: efd38393     	addi	t2, t2, -0x103   # 00000000
+      c0: 00761463     	bne	a2, t2, 0xc8 <.Ltmp1>
+      c4: 02760163     	beq	a2, t2, 0xe6 <.Ltmp6>
+
+000000c8 <.Ltmp1>:
+      c8: 0ff0000f     	fence
+
+000000cc <.Ltmp7>:
+      cc: 00018063     	beqz	gp, 0xcc <.Ltmp7>
+      d0: 0186         	slli	gp, gp, 0x1
+      d2: 0011e193     	ori	gp, gp, 0x1
+      d6: 05d00893     	li	a7, 0x5d
+      da: 850e         	mv	a0, gp
+      dc: 00000073     	ecall
+      e0: 0001         	nop
+      e2: 0001         	nop
+      e4: b7d5         	j	0xc8 <.Ltmp1>
+
+000000e6 <.Ltmp6>:
+      e6: 0ff0000f     	fence
+      ea: 4185         	li	gp, 0x1
+      ec: 05d00893     	li	a7, 0x5d
+      f0: 4501         	li	a0, 0x0
+      f2: 00000073     	ecall
+      f6: 0001         	nop
+      f8: 0001         	nop
+      fa: b7f5         	j	0xe6 <.Ltmp6>
+      fc: 4501         	li	a0, 0x0
+      fe: 8082         	ret

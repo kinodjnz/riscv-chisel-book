@@ -1,0 +1,85 @@
+
+target/bfsi.elf.fat:	file format elf32-littleriscv
+
+Disassembly of section .text:
+
+00000000 <_start>:
+       0: 20004137     	lui	sp, 0x20004
+       4: 2811         	jal	0x18 <main>
+       6: 81aa         	mv	gp, a0
+       8: 05d00893     	li	a7, 0x5d
+       c: 0001         	nop
+       e: 0001         	nop
+      10: 0001         	nop
+      12: 0001         	nop
+      14: 00000073     	ecall
+
+00000018 <main>:
+      18: a009         	j	0x1a <.Ltmp0>
+
+0000001a <.Ltmp0>:
+      1a: 4189         	li	gp, 0x2
+      1c: 9abce137     	lui	sp, 0x9abce
+      20: efa10113     	addi	sp, sp, -0x106
+      24: 0481365b     	bfsi	a2, sp, 0x8, 0x4
+      28: 53f9         	li	t2, -0x2
+      2a: 06761d63     	bne	a2, t2, 0xa4 <.Ltmp1>
+      2e: 418d         	li	gp, 0x3
+      30: 9abcd137     	lui	sp, 0x9abcd
+      34: 6fa10113     	addi	sp, sp, 0x6fa
+      38: 0481365b     	bfsi	a2, sp, 0x8, 0x4
+      3c: 4399         	li	t2, 0x6
+      3e: 06761363     	bne	a2, t2, 0xa4 <.Ltmp1>
+      42: 4191         	li	gp, 0x4
+      44: 9abce137     	lui	sp, 0x9abce
+      48: efa10113     	addi	sp, sp, -0x106
+      4c: 0081365b     	bfsi	a2, sp, 0x8, 0x0
+      50: ff9ac3b7     	lui	t2, 0xff9ac
+      54: cde38393     	addi	t2, t2, -0x322   # 00000000
+      58: 04761663     	bne	a2, t2, 0xa4 <.Ltmp1>
+      5c: 4195         	li	gp, 0x5
+      5e: 1abce137     	lui	sp, 0x1abce
+      62: efa10113     	addi	sp, sp, -0x106
+      66: 0081365b     	bfsi	a2, sp, 0x8, 0x0
+      6a: 001ac3b7     	lui	t2, 0x1ac
+      6e: cde38393     	addi	t2, t2, -0x322   # 00000000
+      72: 02761963     	bne	a2, t2, 0xa4 <.Ltmp1>
+      76: 4199         	li	gp, 0x6
+      78: 9abce137     	lui	sp, 0x9abce
+      7c: ef210113     	addi	sp, sp, -0x10e
+      80: 0601765b     	bfsi	a2, sp, 0x0, 0x8
+      84: 53c9         	li	t2, -0xe
+      86: 00761f63     	bne	a2, t2, 0xa4 <.Ltmp1>
+      8a: 419d         	li	gp, 0x7
+      8c: 9abce137     	lui	sp, 0x9abce
+      90: e7210113     	addi	sp, sp, -0x18e
+      94: 0601765b     	bfsi	a2, sp, 0x0, 0x8
+      98: 07200393     	li	t2, 0x72
+      9c: 00761463     	bne	a2, t2, 0xa4 <.Ltmp1>
+      a0: 02760163     	beq	a2, t2, 0xc2 <.Ltmp7>
+
+000000a4 <.Ltmp1>:
+      a4: 0ff0000f     	fence
+
+000000a8 <.Ltmp8>:
+      a8: 00018063     	beqz	gp, 0xa8 <.Ltmp8>
+      ac: 0186         	slli	gp, gp, 0x1
+      ae: 0011e193     	ori	gp, gp, 0x1
+      b2: 05d00893     	li	a7, 0x5d
+      b6: 850e         	mv	a0, gp
+      b8: 00000073     	ecall
+      bc: 0001         	nop
+      be: 0001         	nop
+      c0: b7d5         	j	0xa4 <.Ltmp1>
+
+000000c2 <.Ltmp7>:
+      c2: 0ff0000f     	fence
+      c6: 4185         	li	gp, 0x1
+      c8: 05d00893     	li	a7, 0x5d
+      cc: 4501         	li	a0, 0x0
+      ce: 00000073     	ecall
+      d2: 0001         	nop
+      d4: 0001         	nop
+      d6: b7f5         	j	0xc2 <.Ltmp7>
+      d8: 4501         	li	a0, 0x0
+      da: 8082         	ret
