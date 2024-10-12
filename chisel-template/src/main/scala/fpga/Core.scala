@@ -903,7 +903,7 @@ class Core(
     WORD_LEN,
     (Cat(ex1_reg_op1_data(WORD_LEN-2, 0), ex1_reg_op1_data(WORD_LEN-1)) >> ex1_bfx_sign_shift)(0)
   )
-  val ex1_bfx_mask = Mux(ex1_mask_len === 0.U,
+  val ex1_bfx_mask = Mux(ex1_bfx_sign_pos(5) || ex1_mask_len === 0.U,
     Cat((0 until WORD_LEN).map(bit => (!(bit.U < ex1_reg_op2_data(4, 0))).asUInt)),
     Cat((0 until WORD_LEN).reverse.map(bit => (bit.U < ex1_mask_len).asUInt)),
   )
