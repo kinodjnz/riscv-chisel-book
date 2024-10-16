@@ -1,5 +1,10 @@
 test-targets := $(patsubst %.binhex,%,$(subst ../riscv-tests/isa/,test-,$(wildcard ../riscv-tests/isa/*.binhex)))
 
+SCALA_DIR := src/main/scala/fpga
+SCALA_SRCS := $(wildcard $(SCALA_DIR)/*.scala $(SCALA_DIR)/*/*.scala)
+RISCV_CORE_DIR := rtl/riscv_arty_a7
+RISCV_SIM_DIR := rtl/sim
+
 .PHONY: all-tests $(test-targest) test verilog bootrom rustfmt picocom help
 
 all-tests:
@@ -22,8 +27,18 @@ asm-targets := $(subst -,,$(patsubst test-%,test_run_dir/RiscV_must_runs_%/trace
 
 asm: $(asm-targets)
 
-verilog: ## Generate verilog from chisel source
-	make -C ../vivado/riscv_arty35 src/riscv.v
+.PHONY: verilog
+verilog: $(RISCV_CORE_DIR)/riscv.v ## Generate verilog from chisel source
+# 	make -C ../vivado/riscv_arty35 src/riscv.v
+
+.PHONY: vsim
+vsim: $(RISCV_SIM_DIR)/riscv.v
+
+$(RISCV_CORE_DIR)/riscv.v: $(SCALA_SRCS)
+	sbt "runMain fpga.ElaborateArtyA7"
+
+$(RISCV_SIM_DIR)/riscv.v: $(SCALA_SRCS)
+	sbt "runMain fpga.sim.ElaborateSim"
 
 bootrom: ## Make bootrom
 	make -C src/rust/bootrom

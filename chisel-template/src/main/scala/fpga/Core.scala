@@ -599,7 +599,8 @@ class Core(
   io.pipeline_probe.foreach(_.if2_inst  := if2_inst)
   
   printf(cf"ic_addr_out: 0x${Cat(ic_addr_out, 0.U(1.W))}%x\n")
-  printf(cf"ic_reg_addr_out: 0x${Cat(ic_reg_addr_out, 0.U(1.W))}%x, ic_data_out: 0x${ic_data_out}%x\n")
+  printf(cf"ic_reg_addr_out: 0x${Cat(ic_reg_addr_out, 0.U(1.W))}%x, ic_data_out: 0x${ic_data_out}%x io.imem.valid: ${io.imem.valid}\n")
+  printf(cf"ic_imem_addr_4: 0x${ic_imem_addr_4 ## 0.U(1.W)}%x ic_read_en4: ${ic_read_en4} ic_read_en2: ${ic_read_en2}")
   printf(cf"inst: 0x${if2_inst}%x, ic_read_rdy: ${ic_read_rdy}, ic_state: ${ic_state.asUInt}, ic_addr_en: ${ic_addr_en.asUInt}\n")
 
   //**********************************

@@ -27,7 +27,9 @@ class BootRom(data_memory_path: String = null, imem_size_in_bytes: Int = 2048, e
   })
 
   val imem = Mem(imem_size_in_bytes/4, UInt(WORD_LEN.W))
-  loadMemoryFromFileInline(imem, data_memory_path)
+  if (data_memory_path != null) {
+    loadMemoryFromFileInline(imem, data_memory_path)
+  }
 
   imem_addr := io.imem.addr(addr_len + 1, 2)
   if (disable_imem_read_delay) {

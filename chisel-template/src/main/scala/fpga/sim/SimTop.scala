@@ -3,6 +3,7 @@ package fpga.sim
 import chisel3._
 import chisel3.util._
 import chisel3.util.experimental.loadMemoryFromFile
+import chisel3.stage.ChiselStage
 import fpga._
 import fpga.periferals._
 import common.Consts._
@@ -79,4 +80,11 @@ class SimTop(memoryPath: String, with_sdc: Boolean, enable_pipeline_probe: Boole
   core.io.intr := 0.U
   core.io.sim_probe.foreach(io.sim_probe <> _)
   core.io.pipeline_probe.foreach(io.pipeline_probe <> _)
+}
+
+object ElaborateSim extends App {
+  (new ChiselStage).emitVerilog(new SimTop(null, true, true), Array(
+    "-o", "riscv.v",
+    "--target-dir", "rtl/sim",
+  ))
 }

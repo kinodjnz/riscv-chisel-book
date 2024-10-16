@@ -343,3 +343,6 @@ hs_err_pid*
 
 # rust bootrom
 src/rust/bootrom/rust-toolchain
+
+# verilator objects
+obj_dir
