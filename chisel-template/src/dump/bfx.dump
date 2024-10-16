@@ -22,14 +22,14 @@ Disassembly of section .text:
       1c: 12345137     	lui	sp, 0x12345
       20: 67810113     	addi	sp, sp, 0x678
       24: 4821         	li	a6, 0x8
-      26: 2501267b     	bfx	a2, sp, a6, 0x4
+      26: 2101067b     	bfx	a2, sp, a6, 0x4
       2a: 4399         	li	t2, 0x6
       2c: 02761e63     	bne	a2, t2, 0x68 <.Ltmp1>
       30: 418d         	li	gp, 0x3
       32: 12345137     	lui	sp, 0x12345
       36: 67810113     	addi	sp, sp, 0x678
       3a: 4821         	li	a6, 0x8
-      3c: 0501267b     	bfx	a2, sp, a6, 0x0
+      3c: 0101067b     	bfx	a2, sp, a6, 0x0
       40: 001233b7     	lui	t2, 0x123
       44: 45638393     	addi	t2, t2, 0x456   # 00000000
       48: 02761063     	bne	a2, t2, 0x68 <.Ltmp1>
@@ -37,7 +37,7 @@ Disassembly of section .text:
       4e: 12345137     	lui	sp, 0x12345
       52: 67810113     	addi	sp, sp, 0x678
       56: 4801         	li	a6, 0x0
-      58: 4501267b     	bfx	a2, sp, a6, 0x8
+      58: 4101067b     	bfx	a2, sp, a6, 0x8
       5c: 07800393     	li	t2, 0x78
       60: 00761463     	bne	a2, t2, 0x68 <.Ltmp1>
       64: 02760163     	beq	a2, t2, 0x86 <.Ltmp4>

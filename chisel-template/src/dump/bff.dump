@@ -1,0 +1,69 @@
+
+target/bff.elf.fat:	file format elf32-littleriscv
+
+Disassembly of section .text:
+
+00000000 <_start>:
+       0: 20004137     	lui	sp, 0x20004
+       4: 2811         	jal	0x18 <main>
+       6: 81aa         	mv	gp, a0
+       8: 05d00893     	li	a7, 0x5d
+       c: 0001         	nop
+       e: 0001         	nop
+      10: 0001         	nop
+      12: 0001         	nop
+      14: 00000073     	ecall
+
+00000018 <main>:
+      18: a009         	j	0x1a <.Ltmp0>
+
+0000001a <.Ltmp0>:
+      1a: 4189         	li	gp, 0x2
+      1c: 12345137     	lui	sp, 0x12345
+      20: 67810113     	addi	sp, sp, 0x678
+      24: 4821         	li	a6, 0x8
+      26: 2701067b     	bff	a2, sp, a6, 0x4
+      2a: 28b01393     	bseti	t2, zero, 0xb
+      2e: 02761e63     	bne	a2, t2, 0x6a <.Ltmp1>
+      32: 418d         	li	gp, 0x3
+      34: 12345137     	lui	sp, 0x12345
+      38: 67810113     	addi	sp, sp, 0x678
+      3c: 4821         	li	a6, 0x8
+      3e: 0701067b     	bff	a2, sp, a6, 0x0
+      42: 345683b7     	lui	t2, 0x34568
+      46: 80038393     	addi	t2, t2, -0x800   # 00000000
+      4a: 02761063     	bne	a2, t2, 0x6a <.Ltmp1>
+      4e: 4191         	li	gp, 0x4
+      50: 12345137     	lui	sp, 0x12345
+      54: 67810113     	addi	sp, sp, 0x678
+      58: 4801         	li	a6, 0x0
+      5a: 4701067b     	bff	a2, sp, a6, 0x8
+      5e: 07800393     	li	t2, 0x78
+      62: 00761463     	bne	a2, t2, 0x6a <.Ltmp1>
+      66: 02760163     	beq	a2, t2, 0x88 <.Ltmp4>
+
+0000006a <.Ltmp1>:
+      6a: 0ff0000f     	fence
+
+0000006e <.Ltmp5>:
+      6e: 00018063     	beqz	gp, 0x6e <.Ltmp5>
+      72: 0186         	slli	gp, gp, 0x1
+      74: 0011e193     	ori	gp, gp, 0x1
+      78: 05d00893     	li	a7, 0x5d
+      7c: 850e         	mv	a0, gp
+      7e: 00000073     	ecall
+      82: 0001         	nop
+      84: 0001         	nop
+      86: b7d5         	j	0x6a <.Ltmp1>
+
+00000088 <.Ltmp4>:
+      88: 0ff0000f     	fence
+      8c: 4185         	li	gp, 0x1
+      8e: 05d00893     	li	a7, 0x5d
+      92: 4501         	li	a0, 0x0
+      94: 00000073     	ecall
+      98: 0001         	nop
+      9a: 0001         	nop
+      9c: b7f5         	j	0x88 <.Ltmp4>
+      9e: 4501         	li	a0, 0x0
+      a0: 8082         	ret

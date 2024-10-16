@@ -1,5 +1,5 @@
 
-target/bfp.elf.fat:	file format elf32-littleriscv
+target/bfa.elf.fat:	file format elf32-littleriscv
 
 Disassembly of section .text:
 
@@ -24,9 +24,9 @@ Disassembly of section .text:
       24: 9abce0b7     	lui	ra, 0x9abce
       28: efa08093     	addi	ra, ra, -0x106   # 00000000
       2c: 4821         	li	a6, 0x8
-      2e: 0d01367b     	bfp	a2, sp, ra, a6, 0x4
+      2e: 0d01167b     	bfa	a2, sp, ra, a6, 0x4
       32: 9abce3b7     	lui	t2, 0x9abce
-      36: 8fa38393     	addi	t2, t2, -0x706   # 00000000
+      36: ef638393     	addi	t2, t2, -0x10a   # 00000000
       3a: 04761863     	bne	a2, t2, 0x8a <.Ltmp1>
       3e: 418d         	li	gp, 0x3
       40: 12345137     	lui	sp, 0x12345
@@ -34,9 +34,9 @@ Disassembly of section .text:
       48: 9abce0b7     	lui	ra, 0x9abce
       4c: efa08093     	addi	ra, ra, -0x106   # 00000000
       50: 4821         	li	a6, 0x8
-      52: 0901367b     	bfp	a2, sp, ra, a6, 0x0
-      56: 345683b7     	lui	t2, 0x34568
-      5a: 8fa38393     	addi	t2, t2, -0x706   # 00000000
+      52: 0901167b     	bfa	a2, sp, ra, a6, 0x0
+      56: 9a1233b7     	lui	t2, 0x9a123
+      5a: 45638393     	addi	t2, t2, 0x456   # 00000000
       5e: 02761663     	bne	a2, t2, 0x8a <.Ltmp1>
       62: 4191         	li	gp, 0x4
       64: 12345137     	lui	sp, 0x12345
@@ -44,7 +44,7 @@ Disassembly of section .text:
       6c: 9abce0b7     	lui	ra, 0x9abce
       70: efa08093     	addi	ra, ra, -0x106   # 00000000
       74: 4801         	li	a6, 0x0
-      76: 0f01767b     	bfp	a2, sp, ra, a6, 0x8
+      76: 0f01567b     	bfa	a2, sp, ra, a6, 0x8
       7a: 9abce3b7     	lui	t2, 0x9abce
       7e: e7838393     	addi	t2, t2, -0x188   # 00000000
       82: 00761463     	bne	a2, t2, 0x8a <.Ltmp1>

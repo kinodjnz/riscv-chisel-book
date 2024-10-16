@@ -4,79 +4,74 @@ target/bfm.elf.fat:	file format elf32-littleriscv
 Disassembly of section .text:
 
 00000000 <_start>:
-       0: 37 41 00 20  	lui	sp, 131076
-       4: 11 28        	jal	0x18 <main>
-       6: aa 81        	mv	gp, a0
-       8: 93 08 d0 05  	li	a7, 93
-       c: 01 00        	nop
-       e: 01 00        	nop
-      10: 01 00        	nop
-      12: 01 00        	nop
-      14: 73 00 00 00  	ecall
+       0: 20004137     	lui	sp, 0x20004
+       4: 2811         	jal	0x18 <main>
+       6: 81aa         	mv	gp, a0
+       8: 05d00893     	li	a7, 0x5d
+       c: 0001         	nop
+       e: 0001         	nop
+      10: 0001         	nop
+      12: 0001         	nop
+      14: 00000073     	ecall
 
 00000018 <main>:
-      18: 09 a0        	j	0x1a <.Ltmp0>
+      18: a009         	j	0x1a <.Ltmp0>
 
 0000001a <.Ltmp0>:
-      1a: 89 41        	li	gp, 2
-      1c: 37 51 34 12  	lui	sp, 74565
-      20: 13 01 81 67  	addi	sp, sp, 1656
-      24: b7 e0 bc 9a  	lui	ra, 633806
-      28: 93 80 a0 ef  	addi	ra, ra, -262   # 9abcdefa
-      2c: 21 48        	li	a6, 8
-      2e: 77 26 01 0d  	bfm	a2, sp, ra, a6, 4
-      32: b7 d3 bc 9a  	lui	t2, 633805
-      36: 93 83 a3 6f  	addi	t2, t2, 1786   # 9abcd6fa
-      3a: 63 18 76 04  	bne	a2, t2, 0x8a <.Ltmp1>
-      3e: 8d 41        	li	gp, 3
-      40: 37 51 34 12  	lui	sp, 74565
-      44: 13 01 81 67  	addi	sp, sp, 1656
-      48: b7 e0 bc 9a  	lui	ra, 633806
-      4c: 93 80 a0 ef  	addi	ra, ra, -262   # 9abcdefa
-      50: 21 48        	li	a6, 8
-      52: 77 26 01 09  	bfm	a2, sp, ra, a6, 0
-      56: b7 53 34 12  	lui	t2, 74565
-      5a: 93 83 a3 6f  	addi	t2, t2, 1786   # 123456fa
-      5e: 63 16 76 02  	bne	a2, t2, 0x8a <.Ltmp1>
-      62: 91 41        	li	gp, 4
-      64: 37 51 34 12  	lui	sp, 74565
-      68: 13 01 81 67  	addi	sp, sp, 1656
-      6c: b7 e0 bc 9a  	lui	ra, 633806
-      70: 93 80 a0 ef  	addi	ra, ra, -262   # 9abcdefa
-      74: 01 48        	li	a6, 0
-      76: 77 66 01 0f  	bfm	a2, sp, ra, a6, 8
-      7a: b7 e3 bc 9a  	lui	t2, 633806
-      7e: 93 83 83 e7  	addi	t2, t2, -392   # 9abcde78
-      82: 63 14 76 00  	bne	a2, t2, 0x8a <.Ltmp1>
-      86: 63 01 76 02  	beq	a2, t2, 0xa8 <.Ltmp4>
+      1a: 4189         	li	gp, 0x2
+      1c: 12345137     	lui	sp, 0x12345
+      20: 67810113     	addi	sp, sp, 0x678
+      24: 9abce0b7     	lui	ra, 0x9abce
+      28: efa08093     	addi	ra, ra, -0x106   # 00000000
+      2c: 4821         	li	a6, 0x8
+      2e: 0d01267b     	bfm	a2, sp, ra, a6, 0x4
+      32: 9abcd3b7     	lui	t2, 0x9abcd
+      36: 6fa38393     	addi	t2, t2, 0x6fa   # 00000000
+      3a: 04761863     	bne	a2, t2, 0x8a <.Ltmp1>
+      3e: 418d         	li	gp, 0x3
+      40: 12345137     	lui	sp, 0x12345
+      44: 67810113     	addi	sp, sp, 0x678
+      48: 9abce0b7     	lui	ra, 0x9abce
+      4c: efa08093     	addi	ra, ra, -0x106   # 00000000
+      50: 4821         	li	a6, 0x8
+      52: 0901267b     	bfm	a2, sp, ra, a6, 0x0
+      56: 123453b7     	lui	t2, 0x12345
+      5a: 6fa38393     	addi	t2, t2, 0x6fa   # 00000000
+      5e: 02761663     	bne	a2, t2, 0x8a <.Ltmp1>
+      62: 4191         	li	gp, 0x4
+      64: 12345137     	lui	sp, 0x12345
+      68: 67810113     	addi	sp, sp, 0x678
+      6c: 9abce0b7     	lui	ra, 0x9abce
+      70: efa08093     	addi	ra, ra, -0x106   # 00000000
+      74: 4801         	li	a6, 0x0
+      76: 0f01667b     	bfm	a2, sp, ra, a6, 0x8
+      7a: 9abce3b7     	lui	t2, 0x9abce
+      7e: e7838393     	addi	t2, t2, -0x188   # 00000000
+      82: 00761463     	bne	a2, t2, 0x8a <.Ltmp1>
+      86: 02760163     	beq	a2, t2, 0xa8 <.Ltmp4>
 
 0000008a <.Ltmp1>:
-      8a: 0f 00 f0 0f  	fence
+      8a: 0ff0000f     	fence
 
 0000008e <.Ltmp5>:
-      8e: 63 80 01 00  	beqz	gp, 0x8e <.Ltmp5>
-      92: 86 01        	slli	gp, gp, 1
-      94: 93 e1 11 00  	ori	gp, gp, 1
-      98: 93 08 d0 05  	li	a7, 93
-      9c: 0e 85        	mv	a0, gp
-      9e: 73 00 00 00  	ecall
-      a2: 01 00        	nop
-      a4: 01 00        	nop
-      a6: d5 b7        	j	0x8a <.Ltmp1>
+      8e: 00018063     	beqz	gp, 0x8e <.Ltmp5>
+      92: 0186         	slli	gp, gp, 0x1
+      94: 0011e193     	ori	gp, gp, 0x1
+      98: 05d00893     	li	a7, 0x5d
+      9c: 850e         	mv	a0, gp
+      9e: 00000073     	ecall
+      a2: 0001         	nop
+      a4: 0001         	nop
+      a6: b7d5         	j	0x8a <.Ltmp1>
 
 000000a8 <.Ltmp4>:
-      a8: 0f 00 f0 0f  	fence
-      ac: 85 41        	li	gp, 1
-      ae: 93 08 d0 05  	li	a7, 93
-      b2: 01 45        	li	a0, 0
-      b4: 73 00 00 00  	ecall
-      b8: 01 00        	nop
-      ba: 01 00        	nop
-      bc: f5 b7        	j	0xa8 <.Ltmp4>
-      be: 01 45        	li	a0, 0
-      c0: 82 80        	ret
-
-Disassembly of section .data:
-
-000000c2 <.data>:
-      c2: 00 00        	unimp
+      a8: 0ff0000f     	fence
+      ac: 4185         	li	gp, 0x1
+      ae: 05d00893     	li	a7, 0x5d
+      b2: 4501         	li	a0, 0x0
+      b4: 00000073     	ecall
+      b8: 0001         	nop
+      ba: 0001         	nop
+      bc: b7f5         	j	0xa8 <.Ltmp4>
+      be: 4501         	li	a0, 0x0
+      c0: 8082         	ret

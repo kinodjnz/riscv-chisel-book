@@ -22,21 +22,21 @@ Disassembly of section .text:
       1c: 9abce137     	lui	sp, 0x9abce
       20: efa10113     	addi	sp, sp, -0x106
       24: 4821         	li	a6, 0x8
-      26: 2501667b     	bfs	a2, sp, a6, 0x4
+      26: 2301067b     	bfs	a2, sp, a6, 0x4
       2a: 53f9         	li	t2, -0x2
       2c: 08761263     	bne	a2, t2, 0xb0 <.Ltmp1>
       30: 418d         	li	gp, 0x3
       32: 9abcd137     	lui	sp, 0x9abcd
       36: 6fa10113     	addi	sp, sp, 0x6fa
       3a: 4821         	li	a6, 0x8
-      3c: 2501667b     	bfs	a2, sp, a6, 0x4
+      3c: 2301067b     	bfs	a2, sp, a6, 0x4
       40: 4399         	li	t2, 0x6
       42: 06761763     	bne	a2, t2, 0xb0 <.Ltmp1>
       46: 4191         	li	gp, 0x4
       48: 9abce137     	lui	sp, 0x9abce
       4c: efa10113     	addi	sp, sp, -0x106
       50: 4821         	li	a6, 0x8
-      52: 0501667b     	bfs	a2, sp, a6, 0x0
+      52: 0301067b     	bfs	a2, sp, a6, 0x0
       56: ff9ac3b7     	lui	t2, 0xff9ac
       5a: cde38393     	addi	t2, t2, -0x322   # 00000000
       5e: 04761963     	bne	a2, t2, 0xb0 <.Ltmp1>
@@ -44,7 +44,7 @@ Disassembly of section .text:
       64: 1abce137     	lui	sp, 0x1abce
       68: efa10113     	addi	sp, sp, -0x106
       6c: 4821         	li	a6, 0x8
-      6e: 0501667b     	bfs	a2, sp, a6, 0x0
+      6e: 0301067b     	bfs	a2, sp, a6, 0x0
       72: 001ac3b7     	lui	t2, 0x1ac
       76: cde38393     	addi	t2, t2, -0x322   # 00000000
       7a: 02761b63     	bne	a2, t2, 0xb0 <.Ltmp1>
@@ -52,14 +52,14 @@ Disassembly of section .text:
       80: 9abce137     	lui	sp, 0x9abce
       84: ef210113     	addi	sp, sp, -0x10e
       88: 4801         	li	a6, 0x0
-      8a: 4501667b     	bfs	a2, sp, a6, 0x8
+      8a: 4301067b     	bfs	a2, sp, a6, 0x8
       8e: 53c9         	li	t2, -0xe
       90: 02761063     	bne	a2, t2, 0xb0 <.Ltmp1>
       94: 419d         	li	gp, 0x7
       96: 9abce137     	lui	sp, 0x9abce
       9a: e7210113     	addi	sp, sp, -0x18e
       9e: 4801         	li	a6, 0x0
-      a0: 4501667b     	bfs	a2, sp, a6, 0x8
+      a0: 4301067b     	bfs	a2, sp, a6, 0x8
       a4: 07200393     	li	t2, 0x72
       a8: 00761463     	bne	a2, t2, 0xb0 <.Ltmp1>
       ac: 02760163     	beq	a2, t2, 0xce <.Ltmp7>
