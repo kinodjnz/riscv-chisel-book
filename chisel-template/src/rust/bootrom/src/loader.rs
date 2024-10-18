@@ -12,7 +12,12 @@ fn read<T>(addr: *const u32, byte_offset: usize) -> T {
 
 #[inline(always)]
 fn array_to_u32<const N: usize>(b: &[u8; N]) -> u32 {
-    b.iter().rev().fold(0u32, |acc, x| (acc << 8) + *x as u32)
+    // b.iter().rev().fold(0u32, |acc, x| (acc << 8) + *x as u32)
+    let mut acc = 0;
+    for x in b.iter().rev() {
+        acc = (acc << 8) + (*x as u32);
+    }
+    acc
 }
 
 #[allow(dead_code)]
@@ -129,7 +134,7 @@ pub fn load_kernel(sdc: Sdc) -> u32 {
         }
         remaining_sectors -= sector_per_cluster;
         p = unsafe { p.add((sector_per_cluster << 7) as usize) };
-        let fat_sector: u32 = fat_start_sector + ((current_cluster * 2) >> 9);
+        let fat_sector: u32 = fat_start_sector + ((current_cluster << 1) >> 9);
         if fat_sector != current_fat_sector {
             let s = sdc.read_sector(fat_sector, 1, fat);
             if s != 0 {
@@ -145,9 +150,8 @@ pub fn load_kernel(sdc: Sdc) -> u32 {
 
     unsafe {
         asm!("fence.i");
-        asm!("lui a0,0x20000");
+        asm!("li a0,0x20000000");
         asm!("jr a0");
-        // core::hint::unreachable_unchecked();
+        core::hint::unreachable_unchecked();
     }
-    0
 }

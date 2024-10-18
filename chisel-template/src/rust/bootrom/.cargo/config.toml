@@ -1,3 +1,5 @@
 [build]
 target = "riscv32imc-unknown-none-elf"
 rustflags = ["-C", "relocation-model=pic", "-C", "target-feature=+zba,+zbb,+zbs,+xcramp,+relax"]
+# rustflags = ["-C", "relocation-model=pic", "-C", "target-feature=+zba,+zbb,+zbs,+xcramp,+relax", "--emit=llvm-ir"]
+# rustflags = ["-C", "relocation-model=pic", "-C", "target-feature=+zba,+zbb,+zbs,+xcramp,+relax", "-C", "llvm-args=-view-isel-dags"]

@@ -18,7 +18,7 @@ pub fn print(x: u32) {
     tx(b'0');
     tx(b'x');
     for i in 0..8 {
-        let d = (x >> ((7 - i) * 4)) as u8;
+        let d = ((x >> ((7 - i) * 4)) & 0xf) as u8;
         tx(if d < 10 { b'0' + d } else { b'A' - 10 + d });
     }
 }

@@ -2,6 +2,7 @@ use core::mem::zeroed;
 use core::ptr::write_volatile;
 
 #[allow(dead_code)]
+#[allow(static_mut_refs)]
 pub fn init_bss() {
     extern "C" {
         static mut __bss_start: u32;
