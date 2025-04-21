@@ -42,12 +42,13 @@ object Consts {
   val ALU_CLZ     = 10.U(EXE_FUN_LEN.W)
   val ALU_CTZ     = 11.U(EXE_FUN_LEN.W)
 
-  val BR_BEQ      =  8.U(EXE_FUN_LEN.W)
-  val BR_BNE      =  9.U(EXE_FUN_LEN.W)
-  val BR_BLT      = 10.U(EXE_FUN_LEN.W)
-  val BR_BGE      = 11.U(EXE_FUN_LEN.W)
-  val BR_BLTU     = 12.U(EXE_FUN_LEN.W)
-  val BR_BGEU     = 13.U(EXE_FUN_LEN.W)
+  val BR_BLT      =  8.U(EXE_FUN_LEN.W)
+  val BR_BEQ      =  9.U(EXE_FUN_LEN.W)
+  val BR_BGE      = 10.U(EXE_FUN_LEN.W)
+
+  val PAT_BLT     = BitPat("b??00")
+  val PAT_BEQ     = BitPat("b??01")
+  val PAT_BGE     = BitPat("b??10")
 
   val ALU_MUL     =  8.U(EXE_FUN_LEN.W)
   val ALU_MULH    =  9.U(EXE_FUN_LEN.W)

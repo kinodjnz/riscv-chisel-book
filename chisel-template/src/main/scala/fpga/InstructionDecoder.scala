@@ -20,37 +20,37 @@ class BranchPrediction extends Bundle {
 }
 
 class InstructionDecoderOutput(val enable_pipeline_probe: Boolean) extends Bundle {
-  val pc            = UInt(PC_LEN.W)
-  val wb_addr       = UInt(ADDR_LEN.W)
-  val op1_sel       = UInt(M_OP1_LEN.W)
-  val op2_sel       = UInt(M_OP2_LEN.W)
-  val op3_sel       = UInt(M_OP3_LEN.W)
-  val rs1_addr      = UInt(ADDR_LEN.W)
-  val rs2_addr      = UInt(ADDR_LEN.W)
-  val rs3_addr      = UInt(ADDR_LEN.W)
+  val pc               = UInt(PC_LEN.W)
+  val wb_addr          = UInt(ADDR_LEN.W)
+  val op1_sel          = UInt(M_OP1_LEN.W)
+  val op2_sel          = UInt(M_OP2_LEN.W)
+  val op3_sel          = UInt(M_OP3_LEN.W)
+  val rs1_addr         = UInt(ADDR_LEN.W)
+  val rs2_addr         = UInt(ADDR_LEN.W)
+  val rs3_addr         = UInt(ADDR_LEN.W)
   // val op1_data      = UInt(WORD_LEN.W)
-  val im1_data      = UInt(WORD_LEN.W)
-  val im0_data      = UInt(12.W)
-  val exe_fun       = UInt(EXE_FUN_LEN.W)
-  val rf_wen        = UInt(REN_LEN.W)
-  val wb_sel        = UInt(WB_SEL_LEN.W)
+  val im1_data         = UInt(WORD_LEN.W)
+  val im0_data         = UInt(12.W)
+  val exe_fun          = UInt(EXE_FUN_LEN.W)
+  val rf_wen           = UInt(REN_LEN.W)
+  val wb_sel           = UInt(WB_SEL_LEN.W)
   // val csr_addr      = UInt(CSR_ADDR_LEN.W)
-  val csr_cmd       = UInt(CSR_LEN.W)
+  val csr_cmd_or_shamt = UInt(CSR_LEN.W)
   // val imm_b_sext    = UInt(WORD_LEN.W)
-  val shamt         = UInt(2.W)
-  val op2op         = UInt(OP2OP_LEN.W)
-  val mem_w         = UInt(MW_LEN.W)
-  val is_bflen      = Bool()
-  val is_br         = Bool()
-  val is_j          = Bool()
-  val bp            = new BranchPrediction()
-  val actual_attr   = UInt(BTB_ATTR_LEN.W)
-  val actual_is_ret = Bool()
-  val is_half       = Bool()
-  val is_valid_inst = Bool()
-  val is_trap       = Bool()
-  val mcause_code   = UInt(CSR_MCAUSE_CODE_LEN.W)
-  val inst_id       = Option.when(enable_pipeline_probe)(UInt(INST_ID_LEN.W))
+  // val shamt         = UInt(2.W)
+  val op2op            = UInt(OP2OP_LEN.W)
+  val mem_w            = UInt(MW_LEN.W)
+  val is_bflen         = Bool()
+  val is_br            = Bool()
+  // val is_j             = Bool()
+  val bp               = new BranchPrediction()
+  val actual_attr      = UInt(BTB_ATTR_LEN.W)
+  val actual_is_ret    = Bool()
+  val is_half          = Bool()
+  val is_valid_inst    = Bool()
+  val is_trap          = Bool()
+  val mcause_code      = UInt(CSR_MCAUSE_CODE_LEN.W)
+  val inst_id          = Option.when(enable_pipeline_probe)(UInt(INST_ID_LEN.W))
 }
 
 class PipelineStageIO[+T <: Data](gen: T) extends Bundle {
@@ -201,7 +201,7 @@ class InstructionDecoder(
   val id_imm_bfi_c = Cat(Fill(1, 0.U), id_imm_bfi_c_len(4, 0), 0.U(1.W), id_imm_bfi_shamt(4, 0))
 
   val csignals = ListLookup(id_inst,
-                    List(ALU_X     , OP1_X     , OP2_X       , OP3_X     , OPI_X, REN_X, WB_X    , WBA_RD , CSR_X, MW_X  , OP2OP_NOP),
+                    List(ALU_X     , OP1_X     , OP2_X       , OP3_X     , OPI_X       , REN_X, WB_X    , WBA_RD , CSR_X, MW_X  , OP2OP_NOP),
     Array(
       LB         -> List(ALU_ADD   , OP1_RS1   , OP2_IMM     , OP3_X     , OPI_IMI     , REN_S, WB_LD   , WBA_RD , CSR_X, MW_B  , OP2OP_NOP),
       LBU        -> List(ALU_ADD   , OP1_RS1   , OP2_IMM     , OP3_X     , OPI_IMI     , REN_S, WB_LD   , WBA_RD , CSR_X, MW_BU , OP2OP_NOP),
@@ -231,11 +231,11 @@ class InstructionDecoder(
       SLTI       -> List(ALU_SLT   , OP1_RS1   , OP2_IMM     , OP3_X     , OPI_IMI     , REN_S, WB_ALU  , WBA_RD , CSR_X, MW_X  , OP2OP_SIGNED),
       SLTIU      -> List(ALU_SLT   , OP1_RS1   , OP2_IMM     , OP3_X     , OPI_IMI     , REN_S, WB_ALU  , WBA_RD , CSR_X, MW_X  , OP2OP_UNSIGNED),
       BEQ        -> List(BR_BEQ    , OP1_RS1   , OP2_RS2     , OP3_X     , OPI_IMB     , REN_X, WB_X    , WBA_RD , CSR_X, MW_BR , OP2OP_NOP),
-      BNE        -> List(BR_BNE    , OP1_RS1   , OP2_RS2     , OP3_X     , OPI_IMB     , REN_X, WB_X    , WBA_RD , CSR_X, MW_BR , OP2OP_NOP),
-      BGE        -> List(BR_BGE    , OP1_RS1   , OP2_RS2     , OP3_X     , OPI_IMB     , REN_X, WB_X    , WBA_RD , CSR_X, MW_BR , OP2OP_NOP),
-      BGEU       -> List(BR_BGEU   , OP1_RS1   , OP2_RS2     , OP3_X     , OPI_IMB     , REN_X, WB_X    , WBA_RD , CSR_X, MW_BR , OP2OP_NOP),
-      BLT        -> List(BR_BLT    , OP1_RS1   , OP2_RS2     , OP3_X     , OPI_IMB     , REN_X, WB_X    , WBA_RD , CSR_X, MW_BR , OP2OP_NOP),
-      BLTU       -> List(BR_BLTU   , OP1_RS1   , OP2_RS2     , OP3_X     , OPI_IMB     , REN_X, WB_X    , WBA_RD , CSR_X, MW_BR , OP2OP_NOP),
+      BNE        -> List(BR_BEQ    , OP1_RS1   , OP2_RS2     , OP3_X     , OPI_IMB     , REN_X, WB_X    , WBA_RD , CSR_X, MW_BR , OP2OP_NOT),
+      BGE        -> List(BR_BGE    , OP1_RS1   , OP2_RS2     , OP3_X     , OPI_IMB     , REN_X, WB_X    , WBA_RD , CSR_X, MW_BR , OP2OP_SIGNED),
+      BGEU       -> List(BR_BGE    , OP1_RS1   , OP2_RS2     , OP3_X     , OPI_IMB     , REN_X, WB_X    , WBA_RD , CSR_X, MW_BR , OP2OP_UNSIGNED),
+      BLT        -> List(BR_BLT    , OP1_RS1   , OP2_RS2     , OP3_X     , OPI_IMB     , REN_X, WB_X    , WBA_RD , CSR_X, MW_BR , OP2OP_SIGNED),
+      BLTU       -> List(BR_BLT    , OP1_RS1   , OP2_RS2     , OP3_X     , OPI_IMB     , REN_X, WB_X    , WBA_RD , CSR_X, MW_BR , OP2OP_UNSIGNED),
       JAL        -> List(ALU_ADD   , OP1_PC    , OP2_IMM     , OP3_X     , OPI_IMJ     , REN_S, WB_PC   , WBA_RD , CSR_X, MW_X  , OP2OP_NOP),
       JALR       -> List(ALU_ADD   , OP1_RS1   , OP2_IMM     , OP3_X     , OPI_IMI     , REN_S, WB_PC   , WBA_RD , CSR_X, MW_X  , OP2OP_NOP),
       LUI        -> List(ALU_ADD   , OP1_Z     , OP2_IMM     , OP3_X     , OPI_IMU     , REN_S, WB_ALU  , WBA_RD , CSR_X, MW_X  , OP2OP_NOP),
@@ -322,7 +322,7 @@ class InstructionDecoder(
       C_SLLI     -> List(ALU_FSL   , OP1_C_RS1 , OP2_IMM     , OP3_X     , OPI_C_IMI   , REN_S, WB_ALU  , WBA_C  , CSR_X, MW_X  , OP2OP_NOP),
       C_J        -> List(ALU_ADD   , OP1_PC    , OP2_IMM     , OP3_X     , OPI_C_IMJ   , REN_X, WB_PC   , WBA_C  , CSR_X, MW_X  , OP2OP_NOP),
       C_BEQZ     -> List(BR_BEQ    , OP1_C_RS1P, OP2_Z       , OP3_X     , OPI_C_IMB   , REN_X, WB_X    , WBA_C  , CSR_X, MW_BR , OP2OP_NOP),
-      C_BNEZ     -> List(BR_BNE    , OP1_C_RS1P, OP2_Z       , OP3_X     , OPI_C_IMB   , REN_X, WB_X    , WBA_C  , CSR_X, MW_BR , OP2OP_NOP),
+      C_BNEZ     -> List(BR_BEQ    , OP1_C_RS1P, OP2_Z       , OP3_X     , OPI_C_IMB   , REN_X, WB_X    , WBA_C  , CSR_X, MW_BR , OP2OP_NOT),
       C_JR       -> List(ALU_ADD   , OP1_C_RS1 , OP2_Z       , OP3_X     , OPI_X       , REN_X, WB_PC   , WBA_C  , CSR_X, MW_X  , OP2OP_NOP),
       C_JALR     -> List(ALU_ADD   , OP1_C_RS1 , OP2_Z       , OP3_X     , OPI_X       , REN_S, WB_PC   , WBA_RA , CSR_X, MW_X  , OP2OP_NOP),
       C_JAL      -> List(ALU_ADD   , OP1_PC    , OP2_IMM     , OP3_X     , OPI_C_IMJ   , REN_S, WB_PC   , WBA_RA , CSR_X, MW_X  , OP2OP_NOP),
@@ -348,7 +348,7 @@ class InstructionDecoder(
       C_NOT      -> List(ALU_XOR   , OP1_C_RS1P, OP2_IMM     , OP3_X     , OPI_IMALL1  , REN_S, WB_ALU  , WBA_CP1, CSR_X, MW_X  , OP2OP_NOP),
       C_NEG      -> List(ALU_SUB   , OP1_Z     , OP2_C_RS1P  , OP3_X     , OPI_X       , REN_S, WB_ALU  , WBA_CP1, CSR_X, MW_X  , OP2OP_NOP),
       C_BEQ      -> List(BR_BEQ    , OP1_C_RS1P, OP2_C_RS2P  , OP3_X     , OPI_C_IMB2  , REN_X, WB_X    , WBA_C  , CSR_X, MW_BR , OP2OP_NOP),
-      C_BNE      -> List(BR_BNE    , OP1_C_RS1P, OP2_C_RS2P  , OP3_X     , OPI_C_IMB2  , REN_X, WB_X    , WBA_C  , CSR_X, MW_BR , OP2OP_NOP),
+      C_BNE      -> List(BR_BEQ    , OP1_C_RS1P, OP2_C_RS2P  , OP3_X     , OPI_C_IMB2  , REN_X, WB_X    , WBA_C  , CSR_X, MW_BR , OP2OP_NOT),
       C_ADDI2W   -> List(ALU_ADD   , OP1_C_RS1P, OP2_IMM     , OP3_X     , OPI_C_IMA2W , REN_S, WB_ALU  , WBA_CP2, CSR_X, MW_X  , OP2OP_NOP),
       C_ADD2     -> List(ALU_ADD   , OP1_C_RS1P, OP2_C_RS3P  , OP3_X     , OPI_X       , REN_S, WB_ALU  , WBA_CP2, CSR_X, MW_X  , OP2OP_NOP),
       C_SEQZ     -> List(ALU_SLT   , OP1_C_RS1P, OP2_IMM     , OP3_X     , OPI_IM1     , REN_S, WB_ALU  , WBA_CP2, CSR_X, MW_X  , OP2OP_UNSIGNED),
@@ -505,8 +505,10 @@ class InstructionDecoder(
   //   (id_wba === WBA_CB2) -> id_c_imm_b2,
   // ))
 
+  val id_csr_cmd_or_shamt = Mux(id_op2op === OP2OP_SHADD, id_shamt, id_csr_cmd)
+
   val id_is_br = (id_mem_w === MW_BR)
-  val id_is_j = (id_wb_sel === WB_PC)
+  // val id_is_j = (id_wb_sel === WB_PC)
   val id_is_dj = (id_wb_sel === WB_PC) && (id_op1_sel === OP1_PC)
   val id_is_ret = (id_wb_sel === WB_PC) && (
     ((id_op1_sel === OP1_RS1)   && (id_rs1_addr === 1.U(ADDR_LEN.W))) ||
@@ -527,79 +529,79 @@ class InstructionDecoder(
   io.pipeline_probe.id_valid.foreach(_ := id_reg_is_valid_inst)
   map2(io.pipeline_probe.id_inst_id, id_inst_id)(_ := _)
 
-  id_output_queue.io.enq.valid              := !io.out.flush
-  id_output_queue.io.enq.bits.pc            := id_reg_pc
-  id_output_queue.io.enq.bits.op1_sel       := id_m_op1_sel
-  id_output_queue.io.enq.bits.op2_sel       := id_m_op2_sel
-  id_output_queue.io.enq.bits.op3_sel       := id_m_op3_sel
-  id_output_queue.io.enq.bits.rs1_addr      := id_m_rs1_addr
-  id_output_queue.io.enq.bits.rs2_addr      := id_m_rs2_addr
-  id_output_queue.io.enq.bits.rs3_addr      := id_m_rs3_addr
+  id_output_queue.io.enq.valid                 := !io.out.flush
+  id_output_queue.io.enq.bits.pc               := id_reg_pc
+  id_output_queue.io.enq.bits.op1_sel          := id_m_op1_sel
+  id_output_queue.io.enq.bits.op2_sel          := id_m_op2_sel
+  id_output_queue.io.enq.bits.op3_sel          := id_m_op3_sel
+  id_output_queue.io.enq.bits.rs1_addr         := id_m_rs1_addr
+  id_output_queue.io.enq.bits.rs2_addr         := id_m_rs2_addr
+  id_output_queue.io.enq.bits.rs3_addr         := id_m_rs3_addr
   // id_output_queue.io.enq.bits.op1_data      := id_op1_data
-  id_output_queue.io.enq.bits.im1_data      := id_im1_data
-  id_output_queue.io.enq.bits.im0_data      := id_im0_data
-  id_output_queue.io.enq.bits.wb_addr       := id_wb_addr
+  id_output_queue.io.enq.bits.im1_data         := id_im1_data
+  id_output_queue.io.enq.bits.im0_data         := id_im0_data
+  id_output_queue.io.enq.bits.wb_addr          := id_wb_addr
   // id_output_queue.io.enq.bits.imm_b_sext    := id_m_imm_b_sext
-  id_output_queue.io.enq.bits.shamt         := id_shamt
-  id_output_queue.io.enq.bits.op2op         := id_op2op
-  id_output_queue.io.enq.bits.is_bflen      := id_is_bflen
+  // id_output_queue.io.enq.bits.shamt         := id_shamt
+  id_output_queue.io.enq.bits.op2op            := id_op2op
+  id_output_queue.io.enq.bits.is_bflen         := id_is_bflen
   // id_output_queue.io.enq.bits.csr_addr      := id_csr_addr
-  id_output_queue.io.enq.bits.bp            := id_reg_bp
-  id_output_queue.io.enq.bits.actual_attr   := id_actual_attr
-  id_output_queue.io.enq.bits.actual_is_ret := id_actual_is_ret
-  id_output_queue.io.enq.bits.is_half       := id_is_half
-  id_output_queue.io.enq.bits.mcause_code   := id_mcause_code
-  id_output_queue.io.enq.bits.rf_wen        := id_rf_wen
-  id_output_queue.io.enq.bits.exe_fun       := id_exe_fun
-  id_output_queue.io.enq.bits.wb_sel        := id_wb_sel
-  id_output_queue.io.enq.bits.csr_cmd       := id_csr_cmd
-  id_output_queue.io.enq.bits.mem_w         := id_mem_w
-  id_output_queue.io.enq.bits.is_br         := id_is_br
-  id_output_queue.io.enq.bits.is_j          := id_is_j
-  id_output_queue.io.enq.bits.is_valid_inst := id_reg_is_valid_inst
-  id_output_queue.io.enq.bits.is_trap       := id_is_trap
+  id_output_queue.io.enq.bits.bp               := id_reg_bp
+  id_output_queue.io.enq.bits.actual_attr      := id_actual_attr
+  id_output_queue.io.enq.bits.actual_is_ret    := id_actual_is_ret
+  id_output_queue.io.enq.bits.is_half          := id_is_half
+  id_output_queue.io.enq.bits.mcause_code      := id_mcause_code
+  id_output_queue.io.enq.bits.rf_wen           := id_rf_wen
+  id_output_queue.io.enq.bits.exe_fun          := id_exe_fun
+  id_output_queue.io.enq.bits.wb_sel           := id_wb_sel
+  id_output_queue.io.enq.bits.csr_cmd_or_shamt := id_csr_cmd_or_shamt
+  id_output_queue.io.enq.bits.mem_w            := id_mem_w
+  id_output_queue.io.enq.bits.is_br            := id_is_br
+  // id_output_queue.io.enq.bits.is_j             := id_is_j
+  id_output_queue.io.enq.bits.is_valid_inst    := id_reg_is_valid_inst
+  id_output_queue.io.enq.bits.is_trap          := id_is_trap
   map2(id_output_queue.io.enq.bits.inst_id, id_inst_id)(_ := _)
 
   id_output_queue.io.deq.ready := io.out.flush || io.out.ready
 
-  io.out.bits.pc            := id_output_queue.io.deq.bits.pc
-  io.out.bits.op1_sel       := id_output_queue.io.deq.bits.op1_sel
-  io.out.bits.op2_sel       := id_output_queue.io.deq.bits.op2_sel
-  io.out.bits.op3_sel       := id_output_queue.io.deq.bits.op3_sel
-  io.out.bits.rs1_addr      := id_output_queue.io.deq.bits.rs1_addr
-  io.out.bits.rs2_addr      := id_output_queue.io.deq.bits.rs2_addr
-  io.out.bits.rs3_addr      := id_output_queue.io.deq.bits.rs3_addr
+  io.out.bits.pc               := id_output_queue.io.deq.bits.pc
+  io.out.bits.op1_sel          := id_output_queue.io.deq.bits.op1_sel
+  io.out.bits.op2_sel          := id_output_queue.io.deq.bits.op2_sel
+  io.out.bits.op3_sel          := id_output_queue.io.deq.bits.op3_sel
+  io.out.bits.rs1_addr         := id_output_queue.io.deq.bits.rs1_addr
+  io.out.bits.rs2_addr         := id_output_queue.io.deq.bits.rs2_addr
+  io.out.bits.rs3_addr         := id_output_queue.io.deq.bits.rs3_addr
   // io.out.bits.op1_data      := id_output_queue.io.deq.bits.op1_data
-  io.out.bits.im1_data      := id_output_queue.io.deq.bits.im1_data
-  io.out.bits.im0_data      := id_output_queue.io.deq.bits.im0_data
-  io.out.bits.wb_addr       := id_output_queue.io.deq.bits.wb_addr
+  io.out.bits.im1_data         := id_output_queue.io.deq.bits.im1_data
+  io.out.bits.im0_data         := id_output_queue.io.deq.bits.im0_data
+  io.out.bits.wb_addr          := id_output_queue.io.deq.bits.wb_addr
   // io.out.bits.imm_b_sext    := id_output_queue.io.deq.bits.imm_b_sext
-  io.out.bits.shamt         := id_output_queue.io.deq.bits.shamt
-  io.out.bits.op2op         := id_output_queue.io.deq.bits.op2op
-  io.out.bits.is_bflen      := id_output_queue.io.deq.bits.is_bflen
+  // io.out.bits.shamt         := id_output_queue.io.deq.bits.shamt
+  io.out.bits.op2op            := id_output_queue.io.deq.bits.op2op
+  io.out.bits.is_bflen         := id_output_queue.io.deq.bits.is_bflen
   // io.out.bits.csr_addr      := id_output_queue.io.deq.bits.csr_addr
-  io.out.bits.bp            := id_output_queue.io.deq.bits.bp
-  io.out.bits.actual_attr   := id_output_queue.io.deq.bits.actual_attr
-  io.out.bits.actual_is_ret := id_output_queue.io.deq.bits.actual_is_ret
-  io.out.bits.is_half       := id_output_queue.io.deq.bits.is_half
-  io.out.bits.mcause_code   := id_output_queue.io.deq.bits.mcause_code
-  io.out.bits.rf_wen        := id_output_queue.io.deq.bits.rf_wen
-  io.out.bits.exe_fun       := id_output_queue.io.deq.bits.exe_fun
-  io.out.bits.wb_sel        := id_output_queue.io.deq.bits.wb_sel
-  io.out.bits.csr_cmd       := id_output_queue.io.deq.bits.csr_cmd
-  io.out.bits.mem_w         := id_output_queue.io.deq.bits.mem_w
-  io.out.bits.is_br         := id_output_queue.io.deq.bits.is_br
-  io.out.bits.is_j          := id_output_queue.io.deq.bits.is_j
-  io.out.bits.is_valid_inst := id_output_queue.io.deq.bits.is_valid_inst
-  io.out.bits.is_trap       := id_output_queue.io.deq.bits.is_trap
+  io.out.bits.bp               := id_output_queue.io.deq.bits.bp
+  io.out.bits.actual_attr      := id_output_queue.io.deq.bits.actual_attr
+  io.out.bits.actual_is_ret    := id_output_queue.io.deq.bits.actual_is_ret
+  io.out.bits.is_half          := id_output_queue.io.deq.bits.is_half
+  io.out.bits.mcause_code      := id_output_queue.io.deq.bits.mcause_code
+  io.out.bits.rf_wen           := id_output_queue.io.deq.bits.rf_wen
+  io.out.bits.exe_fun          := id_output_queue.io.deq.bits.exe_fun
+  io.out.bits.wb_sel           := id_output_queue.io.deq.bits.wb_sel
+  io.out.bits.csr_cmd_or_shamt := id_output_queue.io.deq.bits.csr_cmd_or_shamt
+  io.out.bits.mem_w            := id_output_queue.io.deq.bits.mem_w
+  io.out.bits.is_br            := id_output_queue.io.deq.bits.is_br
+  // io.out.bits.is_j             := id_output_queue.io.deq.bits.is_j
+  io.out.bits.is_valid_inst    := id_output_queue.io.deq.bits.is_valid_inst
+  io.out.bits.is_trap          := id_output_queue.io.deq.bits.is_trap
   when (io.out.flush || !id_output_queue.io.deq.valid) {
     io.out.bits.rf_wen        := REN_X
     io.out.bits.exe_fun       := ALU_ADD
     io.out.bits.wb_sel        := WB_X
-    io.out.bits.csr_cmd       := CSR_X
+    // io.out.bits.csr_cmd       := CSR_X
     io.out.bits.mem_w         := MW_X
     io.out.bits.is_br         := false.B
-    io.out.bits.is_j          := false.B
+    // io.out.bits.is_j          := false.B
     io.out.bits.bp.taken      := false.B
     io.out.bits.is_valid_inst := false.B
     io.out.bits.is_trap       := false.B
