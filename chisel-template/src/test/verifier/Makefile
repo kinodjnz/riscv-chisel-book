@@ -34,7 +34,7 @@ RISCV_TESTS_DO=$(filter-out $(patsubst %,$(RISCV_TESTS_DIR)/%.binhex,$(RISCV_TES
 RISCV_TESTS_TARGETS=$(patsubst %.binhex,%.target,$(RISCV_TESTS_DO))
 
 TIMEOUT_OVERRIDES = \
-    fizzbuzz:100000 \
+    fizzbuzz:10000 \
     dhry:20000 \
 	coremark:20000 \
 	sdc_rx:14000 \
@@ -43,24 +43,26 @@ TIMEOUT_OVERRIDES = \
 find_timeout = $(if $(firstword $(2)),$(if $(patsubst $(1):%,,$(firstword $(2))),$(call find_timeout,$(1),$(wordlist 2,9999,$(2))),$(patsubst $(1):%,%,$(firstword $(2)))),)
 
 ifeq ($(TRACE),yes)
-	VERILATOR_ARGS += --trace-fst
-	ADDCFLAGS += -CFLAGS -DTRACE
+	VERILATOR_ARGS += --trace-fst --trace-params --trace-structs --trace-underscore
+	ADDCFLAGS += -CFLAGS -DVERILATOR_TRACE
 endif
 
 LIBS += "-lpthread -ldl"
 
-print:
-	echo $(call find_timeout,dhry,$(TIMEOUT_OVERRIDES))
-	echo $(call find_timeout,fizzbuzz,$(TIMEOUT_OVERRIDES))
-	echo $(call find_timeout,abc,$(TIMEOUT_OVERRIDES))
+.DEFAULT_GOAL = help
 
-run: compile $(patsubst %.binhex,%.target,$(BOOT_BIN))
+print:
+	@echo $(call find_timeout,dhry,$(TIMEOUT_OVERRIDES))
+	@echo $(call find_timeout,fizzbuzz,$(TIMEOUT_OVERRIDES))
+	@echo $(call find_timeout,abc,$(TIMEOUT_OVERRIDES))
+
+run: compile $(patsubst %.binhex,%.target,$(BOOT_BIN)) ## run
 
 all-tests: compile $(RISCV_TESTS_TARGETS)
 
-$(RISCV_TESTS_DIR)/%.target: $(RISCV_TESTS_DIR)/%.binhex
-	$(eval TIMEOUT_OVERRIDE=$(call find_timeout,$(basename $(notdir $<)),$(TIMEOUT_OVERRIDES)))
-	./$(OBJDIR)/Vriscv --load-boot-bin $< --timeout $(if $(TIMEOUT_OVERRIDE),$(TIMEOUT_OVERRIDE),$(TIMEOUT))
+test-%: compile $(RISCV_TESTS_DIR)/%.binhex
+	$(eval TIMEOUT_OVERRIDE=$(call find_timeout,$(patsubst test-%,%,$@),$(TIMEOUT_OVERRIDES)))
+	./$(OBJDIR)/Vriscv --load-boot-bin $(word 2,$?) --timeout $(if $(TIMEOUT_OVERRIDE),$(TIMEOUT_OVERRIDE),$(TIMEOUT)) --trace-fst logs/$@.fst
 
 verilate: $(VERILATOR_OBJS)
 
@@ -74,3 +76,7 @@ compile: ./$(OBJDIR)/Vriscv
 
 clean:
 	rm -rf $(OBJDIR)
+
+.PHONY: help
+help:
+	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'

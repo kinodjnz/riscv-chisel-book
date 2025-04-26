@@ -1,4 +1,5 @@
 #include <verilated.h>
+#include <verilated_fst_c.h>
 #include <Vriscv.h>
 #include <Vriscv___024root.h>
 #include <execinfo.h>
@@ -23,7 +24,10 @@ vluint64_t main_time = 0;
 vluint64_t timeout = -1;
 bool load_bin = false;
 std::string load_bin_name;
-uint64_t load_bin_address;
+bool trace_fst = false;
+std::string fst_name;
+VerilatedFstC* tfp = nullptr;
+// uint64_t load_bin_address;
 Vriscv *top = nullptr;
 
 class success_exception : public std::exception { };
@@ -35,6 +39,7 @@ enum ARG
 {
     ARG_LOAD_BOOT_BIN = 1,
     ARG_TIMEOUT,
+    ARG_TRACE_FST,
     ARG_HELP = 'h',
 };
 
@@ -43,6 +48,7 @@ static const struct option long_options[] =
     { "help", no_argument, 0, ARG_HELP },
     { "load-boot-bin", required_argument, 0, ARG_LOAD_BOOT_BIN },
     { "timeout", required_argument, 0, ARG_TIMEOUT },
+    { "trace-fst", required_argument, 0, ARG_TRACE_FST },
 };
 
 std::string help_string = R"(
@@ -51,6 +57,7 @@ std::string help_string = R"(
 Simulation setup
 --load-boot-bin=FILE    : Load a binary file in the simulation bootrom memory.
 --timeout=INT           : Simulation time before failure (~number of cycles x 2)
+--trace-fst=FILE        : Dump trace to fst file.
 )";
 
 void parse_args_before_init(int argc, char** argv) {
@@ -75,6 +82,10 @@ void parse_args_before_init(int argc, char** argv) {
                 sim_name = load_bin_name.substr(sim_name_first, len);
             } break;
             case ARG_TIMEOUT: timeout = std::stoi(optarg); break;
+            case ARG_TRACE_FST: {
+                trace_fst = true;
+                fst_name = std::string(optarg);
+            } break;
             default: {
                 printf("Unknown argument\n");
                 failure();
@@ -115,6 +126,13 @@ void rtl_init() {
             0,
             ~0ULL);
     }
+    #ifdef VERILATOR_TRACE
+    if (trace_fst) {
+        tfp = new VerilatedFstC;
+        top->trace(tfp, 100); // Trace 100 levels of hierarchy
+        tfp->open(fst_name.c_str());
+    }
+    #endif
 }
 
 struct instruction_trace {
@@ -143,7 +161,7 @@ void sim_loop() {
             top->reset = (main_time <= 4) ? 1 : 0;
             if (!top->clock) {
                 top->eval();
-                if (Verilated::gotFinish()) failure();
+            if (Verilated::gotFinish()) failure();
             } else {
                 if (!top->reset) {
                     if (top->io_sim_probe_exit) {
@@ -188,6 +206,9 @@ void sim_loop() {
                     }
                 }
                 top->eval();
+                if (trace_fst) {
+                    tfp->dump(cycles);
+                }
                 if (Verilated::gotFinish()) failure();
             }
         }
@@ -206,14 +227,13 @@ void cleanup() {
     //     fclose(fptr);
     // }
 
-    // #ifdef TRACE
-    // if(traceWave){
-    //     tfp->flush();
-    //     tfp->close();
-    // }
-    // #endif
     if (top != nullptr) {
         top->final();
+        #ifdef VERILATOR_TRACE
+        if (trace_fst) {
+            tfp->close();
+        }
+        #endif
 
         delete top;
         // if(proc) delete proc;
