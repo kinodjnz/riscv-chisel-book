@@ -1,4 +1,8 @@
+-include .env.mk
+
 test-targets := $(patsubst %.binhex,%,$(subst ../riscv-tests/isa/,test-,$(wildcard ../riscv-tests/isa/*.binhex)))
+
+SBT ?= sbt
 
 SCALA_DIR := src/main/scala/fpga
 SCALA_SRCS := $(wildcard $(SCALA_DIR)/*.scala $(SCALA_DIR)/*/*.scala)
@@ -8,13 +12,13 @@ RISCV_SIM_DIR := rtl/sim
 .PHONY: all-tests $(test-targest) test verilog bootrom rustfmt picocom help
 
 all-tests:
-	sbt "testOnly fpga.RiscvTest"
+	$(SBT) "testOnly fpga.RiscvTest"
 
 $(test-targets): ## Run individual test
-	sbt "testOnly fpga.RiscvTest -- -t \"RiscV must runs $(patsubst test-%,%,$@)\""
+	$(SBT) "testOnly fpga.RiscvTest -- -t \"RiscV must runs $(patsubst test-%,%,$@)\""
 
 test: ## Run tests
-	sbt 'testOnly fpga.RiscvTest -- -t "RiscV must runs rv32ui-p-simple"'
+	$(SBT) 'testOnly fpga.RiscvTest -- -t "RiscV must runs rv32ui-p-simple"'
 
 define TRACE_ASM_RULE
 test_run_dir/RiscV_must_runs_$(subst -,,$(1))/trace.kanata.asm: test_run_dir/RiscV_must_runs_$(subst -,,$(1))/trace.kanata ../riscv-tests/isa/$(1).dump
@@ -35,10 +39,10 @@ verilog: $(RISCV_CORE_DIR)/riscv.v ## Generate verilog from chisel source
 vsim: $(RISCV_SIM_DIR)/riscv.v
 
 $(RISCV_CORE_DIR)/riscv.v: $(SCALA_SRCS)
-	sbt "runMain fpga.ElaborateArtyA7"
+	$(SBT) "runMain fpga.ElaborateArtyA7"
 
 $(RISCV_SIM_DIR)/riscv.v: $(SCALA_SRCS)
-	sbt "runMain fpga.sim.ElaborateSim"
+	$(SBT) "runMain fpga.sim.ElaborateSim"
 
 bootrom: ## Make bootrom
 	make -C src/rust/bootrom
