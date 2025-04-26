@@ -684,16 +684,12 @@ class Core(
     rrd_reg_rs1_addr         := id_stage.io.out.bits.rs1_addr
     rrd_reg_rs2_addr         := id_stage.io.out.bits.rs2_addr
     rrd_reg_rs3_addr         := id_stage.io.out.bits.rs3_addr
-    // rrd_reg_op1_data      := id_stage.io.out.bits.op1_data
     rrd_reg_im1_data         := id_stage.io.out.bits.im1_data
     rrd_reg_im0_data         := id_stage.io.out.bits.im0_data
     rrd_reg_wb_addr          := id_stage.io.out.bits.wb_addr
-    // rrd_reg_imm_b_sext    := id_stage.io.out.bits.imm_b_sext
-    // rrd_reg_shamt         := id_stage.io.out.bits.shamt
     rrd_reg_csr_cmd_or_shamt := id_stage.io.out.bits.csr_cmd_or_shamt
     rrd_reg_op2op            := id_stage.io.out.bits.op2op
     rrd_reg_is_bflen         := id_stage.io.out.bits.is_bflen
-    // rrd_reg_csr_addr      := id_stage.io.out.bits.csr_addr
     rrd_reg_bp               := id_stage.io.out.bits.bp
     rrd_reg_actual_attr      := id_stage.io.out.bits.actual_attr
     rrd_reg_actual_is_ret    := id_stage.io.out.bits.actual_is_ret
@@ -705,10 +701,8 @@ class Core(
     rrd_reg_rf_wen           := id_stage.io.out.bits.rf_wen
     rrd_reg_exe_fun          := id_stage.io.out.bits.exe_fun
     rrd_reg_wb_sel           := id_stage.io.out.bits.wb_sel
-    // rrd_reg_csr_cmd          := id_stage.io.out.bits.csr_cmd
     rrd_reg_mem_w            := id_stage.io.out.bits.mem_w
     rrd_reg_is_br            := id_stage.io.out.bits.is_br
-    // rrd_reg_is_j             := id_stage.io.out.bits.is_j
     rrd_reg_bp.taken         := id_stage.io.out.bits.bp.taken
     rrd_reg_is_valid_inst    := id_stage.io.out.bits.is_valid_inst
     rrd_reg_is_trap          := id_stage.io.out.bits.is_trap
@@ -850,6 +844,11 @@ class Core(
     ex1_reg_op1_data.asSInt < ex1_reg_op2_data.asSInt,
     ex1_reg_op1_data < ex1_reg_op2_data,
   )
+  val ex1_is_eq = Mux(
+    ex1_reg_op2op === OP2OP_NOP,
+     (ex1_reg_op1_data === ex1_reg_op2_data),
+    !(ex1_reg_op1_data === ex1_reg_op2_data)
+  )
 
   val ex1_alu_out = MuxCase(0.U(WORD_LEN.W), Seq(
     (ex1_reg_exe_fun === ALU_ADD)     -> ((ex1_reg_op1_data << ex1_reg_csr_cmd_or_shamt)(WORD_LEN-1, 0) + ex1_reg_op2_data),
@@ -861,6 +860,7 @@ class Core(
     (ex1_reg_exe_fun === ALU_FSR)     -> (Cat(ex1_reg_op3_data(WORD_LEN-2, 0), ex1_reg_op1_data) >> ex1_reg_op2_data(4, 0))(WORD_LEN-1, 0),
     (ex1_reg_exe_fun === ALU_CMOV)    -> Mux(0.U(WORD_LEN.W) < ex1_reg_op2_data, ex1_reg_op1_data, ex1_reg_op3_data),
     (ex1_reg_exe_fun === ALU_SLT)     -> ex1_is_lt.asUInt,
+    (ex1_reg_exe_fun === ALU_SEQ)     -> ex1_is_eq.asUInt,
     (ex1_reg_exe_fun === ALU_SZEXT)   -> Cat((0 until WORD_LEN).reverse.map(bit => Mux(
       bit.U(4, 3) < Cat(ex1_reg_imm_len(4), ~ex1_reg_imm_len(4)),
       ex1_reg_op1_data(bit),
@@ -868,7 +868,6 @@ class Core(
     ))),
     (ex1_reg_exe_fun === ALU_MIN)     -> Mux(ex1_is_lt, ex1_reg_op1_data, ex1_reg_op2_data),
     (ex1_reg_exe_fun === ALU_MAX)     -> Mux(ex1_is_lt, ex1_reg_op2_data, ex1_reg_op1_data),
-    (ex1_reg_exe_fun === ALU_BINV)    -> (ex1_reg_op1_data ^ (1.U(WORD_LEN.W) << ex1_reg_op2_data(4, 0))(WORD_LEN-1, 0)),
     (ex1_reg_exe_fun === ALU_BCLR)    -> (ex1_reg_op1_data & ~((1.U(WORD_LEN.W) << ex1_reg_op2_data(4, 0))(WORD_LEN-1, 0))),
     (ex1_reg_exe_fun === ALU_BSET)    -> (ex1_reg_op1_data | (1.U(WORD_LEN.W) << ex1_reg_op2_data(4, 0))(WORD_LEN-1, 0)),
     (ex1_reg_exe_fun === ALU_BEXT)    -> Cat(Fill(WORD_LEN-1, 0.U(1.W)), (ex1_reg_op1_data >> ex1_reg_op2_data(4, 0))(0)),
@@ -929,6 +928,7 @@ class Core(
                                     -> (ex1_imm_mask << ex1_reg_op2_data(4, 0))(WORD_LEN-1, 0),
     (ex1_reg_exe_fun === ALU_BFX)   -> ex1_bfx_mask,
     (ex1_reg_exe_fun === ALU_GORC)  -> nested_shift_or(ex1_reg_op1_data, ex1_reg_op2_data, 4),
+    (ex1_reg_exe_fun === ALU_BINV)  -> (ex1_reg_op1_data ^ (1.U(WORD_LEN.W) << ex1_reg_op2_data(4, 0))(WORD_LEN-1, 0)),
   ))
 
   val ex1_fun_sel = MuxCase(EX2_ALU, Seq(
@@ -979,11 +979,6 @@ class Core(
   val ex1_maybe_br_taken = Wire(Bool())
   val ex1_is_br        = ex1_reg_is_br
   val ex1_is_uncond_br = ex1_reg_is_j
-  val ex1_is_eq        = Mux(
-    ex1_reg_op2op === OP2OP_NOP,
-     (ex1_reg_op1_data === ex1_reg_op2_data),
-    !(ex1_reg_op1_data === ex1_reg_op2_data)
-  )
   ex1_maybe_br_taken := Lookup(ex1_reg_exe_fun, false.B, Seq(
     PAT_BEQ -> ex1_is_eq,
     PAT_BLT -> ex1_is_lt,

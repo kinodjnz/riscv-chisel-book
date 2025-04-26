@@ -28,21 +28,16 @@ class InstructionDecoderOutput(val enable_pipeline_probe: Boolean) extends Bundl
   val rs1_addr         = UInt(ADDR_LEN.W)
   val rs2_addr         = UInt(ADDR_LEN.W)
   val rs3_addr         = UInt(ADDR_LEN.W)
-  // val op1_data      = UInt(WORD_LEN.W)
   val im1_data         = UInt(WORD_LEN.W)
   val im0_data         = UInt(12.W)
   val exe_fun          = UInt(EXE_FUN_LEN.W)
   val rf_wen           = UInt(REN_LEN.W)
   val wb_sel           = UInt(WB_SEL_LEN.W)
-  // val csr_addr      = UInt(CSR_ADDR_LEN.W)
   val csr_cmd_or_shamt = UInt(CSR_LEN.W)
-  // val imm_b_sext    = UInt(WORD_LEN.W)
-  // val shamt         = UInt(2.W)
   val op2op            = UInt(OP2OP_LEN.W)
   val mem_w            = UInt(MW_LEN.W)
   val is_bflen         = Bool()
   val is_br            = Bool()
-  // val is_j             = Bool()
   val bp               = new BranchPrediction()
   val actual_attr      = UInt(BTB_ATTR_LEN.W)
   val actual_is_ret    = Bool()
@@ -159,7 +154,6 @@ class InstructionDecoder(
   val id_imm_u = id_inst(31,12)
   val id_imm_u_shifted = Cat(id_imm_u, Fill(12, 0.U))
   val id_imm_z = id_inst(19,15)
-  // val id_imm_z_uext = Cat(Fill(27, 0.U), id_imm_z)
   val id_imm_z_uext = Cat(Fill(7, 0.U), id_imm_z)
 
   val id_c_imm_i = Cat(Fill(27, id_inst(12)), id_inst(6, 2))
@@ -278,11 +272,11 @@ class InstructionDecoder(
       SH_ADD     -> List(ALU_ADD   , OP1_RS1   , OP2_RS2     , OP3_X     , OPI_X       , REN_S, WB_ALU  , WBA_RD , CSR_X, MW_X  , OP2OP_SHADD),
       BCLR       -> List(ALU_BCLR  , OP1_RS1   , OP2_RS2     , OP3_X     , OPI_X       , REN_S, WB_ALU  , WBA_RD , CSR_X, MW_X  , OP2OP_NOP),
       BSET       -> List(ALU_BSET  , OP1_RS1   , OP2_RS2     , OP3_X     , OPI_X       , REN_S, WB_ALU  , WBA_RD , CSR_X, MW_X  , OP2OP_NOP),
-      BINV       -> List(ALU_BINV  , OP1_RS1   , OP2_RS2     , OP3_X     , OPI_X       , REN_S, WB_ALU  , WBA_RD , CSR_X, MW_X  , OP2OP_NOP),
+      BINV       -> List(ALU_BINV  , OP1_RS1   , OP2_RS2     , OP3_X     , OPI_X       , REN_S, WB_BIT  , WBA_RD , CSR_X, MW_X  , OP2OP_NOP),
       BEXT       -> List(ALU_BEXT  , OP1_RS1   , OP2_RS2     , OP3_X     , OPI_X       , REN_S, WB_ALU  , WBA_RD , CSR_X, MW_X  , OP2OP_NOP),
       BCLRI      -> List(ALU_BCLR  , OP1_RS1   , OP2_IMM     , OP3_X     , OPI_IMI     , REN_S, WB_ALU  , WBA_RD , CSR_X, MW_X  , OP2OP_NOP),
       BSETI      -> List(ALU_BSET  , OP1_RS1   , OP2_IMM     , OP3_X     , OPI_IMI     , REN_S, WB_ALU  , WBA_RD , CSR_X, MW_X  , OP2OP_NOP),
-      BINVI      -> List(ALU_BINV  , OP1_RS1   , OP2_IMM     , OP3_X     , OPI_IMI     , REN_S, WB_ALU  , WBA_RD , CSR_X, MW_X  , OP2OP_NOP),
+      BINVI      -> List(ALU_BINV  , OP1_RS1   , OP2_IMM     , OP3_X     , OPI_IMI     , REN_S, WB_BIT  , WBA_RD , CSR_X, MW_X  , OP2OP_NOP),
       BEXTI      -> List(ALU_BEXT  , OP1_RS1   , OP2_IMM     , OP3_X     , OPI_IMI     , REN_S, WB_ALU  , WBA_RD , CSR_X, MW_X  , OP2OP_NOP),
       CMOV       -> List(ALU_CMOV  , OP1_RS1   , OP2_RS2     , OP3_RS3   , OPI_X       , REN_S, WB_ALU  , WBA_RD , CSR_X, MW_X  , OP2OP_NOP),
       FSL        -> List(ALU_FSL   , OP1_RS1   , OP2_RS2     , OP3_RS3   , OPI_X       , REN_S, WB_ALU  , WBA_RD , CSR_X, MW_X  , OP2OP_NOP),
@@ -351,8 +345,8 @@ class InstructionDecoder(
       C_BNE      -> List(BR_BEQ    , OP1_C_RS1P, OP2_C_RS2P  , OP3_X     , OPI_C_IMB2  , REN_X, WB_X    , WBA_C  , CSR_X, MW_BR , OP2OP_NOT),
       C_ADDI2W   -> List(ALU_ADD   , OP1_C_RS1P, OP2_IMM     , OP3_X     , OPI_C_IMA2W , REN_S, WB_ALU  , WBA_CP2, CSR_X, MW_X  , OP2OP_NOP),
       C_ADD2     -> List(ALU_ADD   , OP1_C_RS1P, OP2_C_RS3P  , OP3_X     , OPI_X       , REN_S, WB_ALU  , WBA_CP2, CSR_X, MW_X  , OP2OP_NOP),
-      C_SEQZ     -> List(ALU_SLT   , OP1_C_RS1P, OP2_IMM     , OP3_X     , OPI_IM1     , REN_S, WB_ALU  , WBA_CP2, CSR_X, MW_X  , OP2OP_UNSIGNED),
-      C_SNEZ     -> List(ALU_SLT   , OP1_Z     , OP2_C_RS1P  , OP3_X     , OPI_X       , REN_S, WB_ALU  , WBA_CP2, CSR_X, MW_X  , OP2OP_UNSIGNED),
+      C_SEQZ     -> List(ALU_SEQ   , OP1_C_RS1P, OP2_Z       , OP3_X     , OPI_X       , REN_S, WB_ALU  , WBA_CP2, CSR_X, MW_X  , OP2OP_NOP),
+      C_SNEZ     -> List(ALU_SEQ   , OP1_C_RS1P, OP2_Z       , OP3_X     , OPI_X       , REN_S, WB_ALU  , WBA_CP2, CSR_X, MW_X  , OP2OP_NOT),
       C_ADDI2B   -> List(ALU_ADD   , OP1_C_RS1P, OP2_IMM     , OP3_X     , OPI_C_IMA2B , REN_S, WB_ALU  , WBA_CP2, CSR_X, MW_X  , OP2OP_NOP),
       C_SLT      -> List(ALU_SLT   , OP1_C_RS1P, OP2_C_RS3P  , OP3_X     , OPI_X       , REN_S, WB_ALU  , WBA_CP2, CSR_X, MW_X  , OP2OP_SIGNED),
       C_SLTU     -> List(ALU_SLT   , OP1_C_RS1P, OP2_C_RS3P  , OP3_X     , OPI_X       , REN_S, WB_ALU  , WBA_CP2, CSR_X, MW_X  , OP2OP_UNSIGNED),
@@ -367,12 +361,6 @@ class InstructionDecoder(
     (id_wba === WBA_RA)  -> 1.U(ADDR_LEN.W),
   ))
 
-  // val id_op1_data = Wire(UInt(WORD_LEN.W))
-  // id_op1_data := MuxCase(DontCare, Seq(
-  //   (id_op1_sel === OP1_PC)  -> Cat(id_reg_pc, 0.U((WORD_LEN-PC_LEN).W)),
-  //   (id_op1_sel === OP1_IMZ) -> id_imm_z_uext,
-  //   (id_op1_sel === OP1_Z)   -> 0.U(WORD_LEN.W),
-  // ))
   val id_im1_data = Wire(UInt(WORD_LEN.W))
   id_im1_data := MuxCase(DontCare, Seq(
     // 32 bit imm
@@ -403,7 +391,7 @@ class InstructionDecoder(
     (id_opi_sel === OPI_C_IMSW0) -> 0.U(WORD_LEN.W),
     (id_opi_sel === OPI_C_IMSB0) -> 0.U(WORD_LEN.W),
     (id_opi_sel === OPI_C_IMSH0) -> 0.U(WORD_LEN.W),
-    (id_opi_sel === OPI_IM1)     -> 0.U(WORD_LEN.W),
+    // (id_opi_sel === OPI_IM1)     -> 0.U(WORD_LEN.W),
     (id_opi_sel === OPI_BFIC)    -> 0.U(WORD_LEN.W),
     (id_opi_sel === OPI_BFI)     -> 0.U(WORD_LEN.W),
     (id_opi_sel === OPI_EXTH)    -> 0.U(WORD_LEN.W),
@@ -439,7 +427,7 @@ class InstructionDecoder(
     (id_opi_sel === OPI_C_IMSW0) -> id_c_imm_sw0,
     (id_opi_sel === OPI_C_IMSB0) -> id_c_imm_sb0,
     (id_opi_sel === OPI_C_IMSH0) -> id_c_imm_sh0,
-    (id_opi_sel === OPI_IM1)     -> 1.U(12.W),
+    // (id_opi_sel === OPI_IM1)     -> 1.U(12.W),
     (id_opi_sel === OPI_BFIC)    -> id_imm_bfi_c,
     (id_opi_sel === OPI_BFI)     -> id_imm_bfi,
     (id_opi_sel === OPI_EXTH)    -> 0x400.U(12.W),
@@ -468,7 +456,6 @@ class InstructionDecoder(
     (id_op2_sel === OP2_C_RS3P) -> M_OP2_RS,
     (id_op2_sel === OP2_IMM)    -> M_OP2_IMM,
   ))
-  // val id_m_op2_sel = id_op2_sel(OP2_LEN - 1) && !(id_op2_sel === OP2_RS2 && id_rs2_addr === 0.U(ADDR_LEN.W))
   val id_m_op3_sel = MuxCase(M_OP3_Z, Seq(
     (id_op3_sel === OP3_Z)       -> M_OP3_Z,
     (id_op3_sel === OP3_MSB)     -> M_OP3_MSB,
@@ -500,15 +487,10 @@ class InstructionDecoder(
     (id_op3_sel === OP3_RS3)    -> id_rs3_addr,
     // (id_op3_sel === OP3_RD)     -> id_w_wb_addr,
   ))
-  // val id_m_imm_b_sext = MuxCase(id_imm_b_sext, Seq(
-  //   (id_wba === WBA_CBR) -> id_c_imm_b,
-  //   (id_wba === WBA_CB2) -> id_c_imm_b2,
-  // ))
 
   val id_csr_cmd_or_shamt = Mux(id_op2op === OP2OP_SHADD, id_shamt, id_csr_cmd)
 
   val id_is_br = (id_mem_w === MW_BR)
-  // val id_is_j = (id_wb_sel === WB_PC)
   val id_is_dj = (id_wb_sel === WB_PC) && (id_op1_sel === OP1_PC)
   val id_is_ret = (id_wb_sel === WB_PC) && (
     ((id_op1_sel === OP1_RS1)   && (id_rs1_addr === 1.U(ADDR_LEN.W))) ||
@@ -537,15 +519,11 @@ class InstructionDecoder(
   id_output_queue.io.enq.bits.rs1_addr         := id_m_rs1_addr
   id_output_queue.io.enq.bits.rs2_addr         := id_m_rs2_addr
   id_output_queue.io.enq.bits.rs3_addr         := id_m_rs3_addr
-  // id_output_queue.io.enq.bits.op1_data      := id_op1_data
   id_output_queue.io.enq.bits.im1_data         := id_im1_data
   id_output_queue.io.enq.bits.im0_data         := id_im0_data
   id_output_queue.io.enq.bits.wb_addr          := id_wb_addr
-  // id_output_queue.io.enq.bits.imm_b_sext    := id_m_imm_b_sext
-  // id_output_queue.io.enq.bits.shamt         := id_shamt
   id_output_queue.io.enq.bits.op2op            := id_op2op
   id_output_queue.io.enq.bits.is_bflen         := id_is_bflen
-  // id_output_queue.io.enq.bits.csr_addr      := id_csr_addr
   id_output_queue.io.enq.bits.bp               := id_reg_bp
   id_output_queue.io.enq.bits.actual_attr      := id_actual_attr
   id_output_queue.io.enq.bits.actual_is_ret    := id_actual_is_ret
@@ -557,7 +535,6 @@ class InstructionDecoder(
   id_output_queue.io.enq.bits.csr_cmd_or_shamt := id_csr_cmd_or_shamt
   id_output_queue.io.enq.bits.mem_w            := id_mem_w
   id_output_queue.io.enq.bits.is_br            := id_is_br
-  // id_output_queue.io.enq.bits.is_j             := id_is_j
   id_output_queue.io.enq.bits.is_valid_inst    := id_reg_is_valid_inst
   id_output_queue.io.enq.bits.is_trap          := id_is_trap
   map2(id_output_queue.io.enq.bits.inst_id, id_inst_id)(_ := _)
@@ -571,15 +548,11 @@ class InstructionDecoder(
   io.out.bits.rs1_addr         := id_output_queue.io.deq.bits.rs1_addr
   io.out.bits.rs2_addr         := id_output_queue.io.deq.bits.rs2_addr
   io.out.bits.rs3_addr         := id_output_queue.io.deq.bits.rs3_addr
-  // io.out.bits.op1_data      := id_output_queue.io.deq.bits.op1_data
   io.out.bits.im1_data         := id_output_queue.io.deq.bits.im1_data
   io.out.bits.im0_data         := id_output_queue.io.deq.bits.im0_data
   io.out.bits.wb_addr          := id_output_queue.io.deq.bits.wb_addr
-  // io.out.bits.imm_b_sext    := id_output_queue.io.deq.bits.imm_b_sext
-  // io.out.bits.shamt         := id_output_queue.io.deq.bits.shamt
   io.out.bits.op2op            := id_output_queue.io.deq.bits.op2op
   io.out.bits.is_bflen         := id_output_queue.io.deq.bits.is_bflen
-  // io.out.bits.csr_addr      := id_output_queue.io.deq.bits.csr_addr
   io.out.bits.bp               := id_output_queue.io.deq.bits.bp
   io.out.bits.actual_attr      := id_output_queue.io.deq.bits.actual_attr
   io.out.bits.actual_is_ret    := id_output_queue.io.deq.bits.actual_is_ret
@@ -591,17 +564,14 @@ class InstructionDecoder(
   io.out.bits.csr_cmd_or_shamt := id_output_queue.io.deq.bits.csr_cmd_or_shamt
   io.out.bits.mem_w            := id_output_queue.io.deq.bits.mem_w
   io.out.bits.is_br            := id_output_queue.io.deq.bits.is_br
-  // io.out.bits.is_j             := id_output_queue.io.deq.bits.is_j
   io.out.bits.is_valid_inst    := id_output_queue.io.deq.bits.is_valid_inst
   io.out.bits.is_trap          := id_output_queue.io.deq.bits.is_trap
   when (io.out.flush || !id_output_queue.io.deq.valid) {
     io.out.bits.rf_wen        := REN_X
     io.out.bits.exe_fun       := ALU_ADD
     io.out.bits.wb_sel        := WB_X
-    // io.out.bits.csr_cmd       := CSR_X
     io.out.bits.mem_w         := MW_X
     io.out.bits.is_br         := false.B
-    // io.out.bits.is_j          := false.B
     io.out.bits.bp.taken      := false.B
     io.out.bits.is_valid_inst := false.B
     io.out.bits.is_trap       := false.B
