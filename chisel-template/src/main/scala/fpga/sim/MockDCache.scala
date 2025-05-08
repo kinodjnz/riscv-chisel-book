@@ -8,8 +8,8 @@ import fpga.CacheConsts._
 
 class MockDCache extends Module {
   val io = IO(new Bundle() {
-    val cache_array1 = new DCachePort()
-    val cache_array2 = new DCachePort()
+    val cache_array1 = new DCacheSramPort()
+    val cache_array2 = new DCacheSramPort()
   })
 
   val dmem1 = Mem(DCACHE_LINES, Vec(CACHE_LINE_LEN/8, UInt(8.W)))

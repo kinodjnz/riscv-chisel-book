@@ -5,12 +5,19 @@ import chisel3.util._
 
 object Consts {
   val WORD_LEN      = 32
+  val IALIGN_LEN    = 16
+  val IBLOCK_LEN    = 64
+  val IBLOCK_BITS   = log2Ceil(IBLOCK_LEN / 8)
   val START_ADDR    = 0.U(WORD_LEN.W)
   val BUBBLE        = 0x00000013.U(WORD_LEN.W)  // [ADDI x0,x0,0] = BUBBLE
   val UNIMP         = "x_c0001073".U(WORD_LEN.W) // [CSRRW x0, cycle, x0]
   val ADDR_LEN      = 5 // rs1,rs2,wb
   val CSR_ADDR_LEN  = 12
   val INST_ID_LEN   = 32
+  val FETCH_BUFFER_SIZE = 4
+  val FETCH_PTR_LEN = log2Ceil(FETCH_BUFFER_SIZE)
+  val IALIGN_PTR_LEN = log2Ceil(IBLOCK_LEN / IALIGN_LEN)
+  val BPFAILURE      = 0x00100013.U(WORD_LEN.W) // [ADDI x0,x0,1]
 
   val EXE_FUN_LEN = 4
   val ALU_X     =  0.U(EXE_FUN_LEN.W)

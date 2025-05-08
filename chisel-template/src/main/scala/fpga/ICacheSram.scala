@@ -4,7 +4,7 @@ import chisel3._
 import chisel3.util._
 import chisel3.experimental._
 
-class ICache(rdata_width_bits: Int, raddr_width: Int, wdata_width_bits: Int, waddr_width: Int)
+class ICacheSram(rdata_width_bits: Int, raddr_width: Int, wdata_width_bits: Int, waddr_width: Int)
     extends BlackBox(Map("RDATA_WIDTH_BITS" -> rdata_width_bits, "RADDR_WIDTH" -> raddr_width, "WDATA_WIDTH_BITS" -> wdata_width_bits, "WADDR_WIDTH" -> waddr_width)) {
   val io = IO(new Bundle() {
     val clock = Input(Clock())

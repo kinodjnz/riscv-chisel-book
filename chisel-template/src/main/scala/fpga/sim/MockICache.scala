@@ -8,17 +8,17 @@ import fpga.CacheConsts._
 
 class MockICache extends Module {
   val io = IO(new Bundle() {
-    val icache = new ICachePort()
+    val icache_sram = new ICacheSramPort()
   })
 
-  val mem = Mem(ICACHE_LINES*8, UInt(WORD_LEN.W))
-  val rdata = RegInit(0.U(WORD_LEN.W))
+  val mem = Mem(ICACHE_LINES*4, UInt(IBLOCK_LEN.W))
+  val rdata = RegInit(0.U(IBLOCK_LEN.W))
 
-  io.icache.rdata := rdata
-  when (io.icache.ren) {
-    rdata := mem.read(io.icache.raddr)
+  io.icache_sram.rdata := rdata
+  when (io.icache_sram.ren) {
+    rdata := mem.read(io.icache_sram.raddr)
   }
-  when (io.icache.wen) {
-    (0 to 7).foreach(i => mem.write(Cat(io.icache.waddr, i.asUInt(3.W)), io.icache.wdata(i*32+31, i*32)))
+  when (io.icache_sram.wen) {
+    (0 to 3).foreach(i => mem.write(Cat(io.icache_sram.waddr, i.asUInt(2.W)), io.icache_sram.wdata(i*64+63, i*64)))
   }
 }

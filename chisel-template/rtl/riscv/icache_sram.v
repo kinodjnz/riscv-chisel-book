@@ -1,4 +1,4 @@
-module ICache #(
+module ICacheSram #(
     parameter RDATA_WIDTH_BITS = 5,
     parameter RADDR_WIDTH = 10,
     parameter WDATA_WIDTH_BITS = 8,

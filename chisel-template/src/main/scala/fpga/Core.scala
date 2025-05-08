@@ -114,9 +114,10 @@ class Core(
     new Bundle {
       val imem = Flipped(new ImemPortIo())
       val dmem = Flipped(new DmemPortIo())
+      val icache = Flipped(new CachedImemPort())
       val cache = Flipped(new CachePort())
-      val pht_lmem = Flipped(new PHTMemIo())
-      val pht_gmem = Flipped(new PHTMemIo())
+      // val pht_lmem = Flipped(new PHTMemIo())
+      // val pht_gmem = Flipped(new PHTMemIo())
       val mtimer_mem = new DmemPortIo()
       val intr = Input(Bool())
       val debug_signal = new CoreDebugSignals()
@@ -148,7 +149,7 @@ class Core(
   //**********************************
   // Pipeline State Registers
 
-  val if2_zbp_taken = Wire(Bool())
+  // val if2_zbp_taken = Wire(Bool())
 
   val id_reg_stall        = Wire(Bool())
   val id_reg_bp_taken     = RegInit(true.B) // jump start_address when first time
@@ -332,263 +333,277 @@ class Core(
   //**********************************
   // Instruction Fetch And Branch Prediction
 
-  val ic_addr_en       = Wire(Bool())
-  val ic_addr          = Wire(UInt(PC_LEN.W))
-  val ic_read_en2      = Wire(Bool())
-  val ic_read_en4      = Wire(Bool())
-  val ic_reg_read_rdy  = RegInit(false.B)
-  val ic_reg_half_rdy  = RegInit(false.B)
-  val ic_read_rdy      = Wire(Bool())
-  val ic_half_rdy      = Wire(Bool())
-  val ic_data_out      = Wire(UInt(WORD_LEN.W))
-  val ic_reg_imem_addr = RegInit(0.U(PC_LEN.W))
-  val ic_reg_addr_out  = RegInit(0.U(PC_LEN.W))
-  val ic_addr_out      = Wire(UInt(PC_LEN.W))
-  val ic_imem_addr     = Wire(UInt(PC_LEN.W))
+  // val ic_addr_en       = Wire(Bool())
+  // val ic_addr          = Wire(UInt(PC_LEN.W))
+  // val ic_read_en2      = Wire(Bool())
+  // val ic_read_en4      = Wire(Bool())
+  // val ic_reg_read_rdy  = RegInit(false.B)
+  // val ic_reg_half_rdy  = RegInit(false.B)
+  // val ic_read_rdy      = Wire(Bool())
+  // val ic_half_rdy      = Wire(Bool())
+  // val ic_data_out      = Wire(UInt(WORD_LEN.W))
+  // val ic_reg_imem_addr = RegInit(0.U(PC_LEN.W))
+  // val ic_reg_addr_out  = RegInit(0.U(PC_LEN.W))
+  // val ic_addr_out      = Wire(UInt(PC_LEN.W))
+  // val ic_imem_addr     = Wire(UInt(PC_LEN.W))
 
-  val ic_reg_inst       = RegInit(0.U(WORD_LEN.W))
-  val ic_reg_inst_addr  = RegInit(0.U(PC_LEN.W))
-  val ic_reg_inst2      = RegInit(0.U(WORD_LEN.W))
-  val ic_reg_inst2_addr = RegInit(0.U(PC_LEN.W))
+  // val ic_reg_inst       = RegInit(0.U(WORD_LEN.W))
+  // val ic_reg_inst_addr  = RegInit(0.U(PC_LEN.W))
+  // val ic_reg_inst2      = RegInit(0.U(WORD_LEN.W))
+  // val ic_reg_inst2_addr = RegInit(0.U(PC_LEN.W))
 
-  val ic_state = RegInit(IcState.Empty)
+  // val ic_state = RegInit(IcState.Empty)
 
-  val ic_btb = Module(new BTB(BTB_INDEX_LEN))
-  val ic_pht = Module(new PHT(PHT_INDEX_LEN))
-  val ic_zbtb = Module(new ZBTB(ZBTB_ENTRIES))
-  val ic_ras = Module(new RAS())
+  // val ic_btb = Module(new BTB(BTB_INDEX_LEN))
+  // val ic_pht = Module(new PHT(PHT_INDEX_LEN))
+  // val ic_zbtb = Module(new ZBTB(ZBTB_ENTRIES))
+  // val ic_ras = Module(new RAS())
 
-  val ic_bp           = Wire(new BranchPrediction())
-  val ic_reg_bp_next0 = RegInit(0.U.asTypeOf(new BranchPrediction()))
-  val ic_reg_bp_next1 = RegInit(0.U.asTypeOf(new BranchPrediction()))
-  val ic_reg_bp_next2 = RegInit(0.U.asTypeOf(new BranchPrediction()))
+  // val ic_bp           = Wire(new BranchPrediction())
+  // val ic_reg_bp_next0 = RegInit(0.U.asTypeOf(new BranchPrediction()))
+  // val ic_reg_bp_next1 = RegInit(0.U.asTypeOf(new BranchPrediction()))
+  // val ic_reg_bp_next2 = RegInit(0.U.asTypeOf(new BranchPrediction()))
 
-  val ic_zbp_taken            = Wire(Bool())
-  val ic_zbp_target           = Wire(UInt(PC_LEN.W))
-  val ic_reg_zbp_next_taken0  = RegInit(false.B)
-  val ic_reg_zbp_next_target0 = RegInit(0.U(PC_LEN.W))
-  val ic_reg_zbp_next_taken1  = RegInit(false.B)
-  val ic_reg_zbp_next_target1 = RegInit(0.U(PC_LEN.W))
-  val ic_reg_zbp_next_taken2  = RegInit(false.B)
-  val ic_reg_zbp_next_target2 = RegInit(0.U(PC_LEN.W))
+  // val ic_zbp_taken            = Wire(Bool())
+  // val ic_zbp_target           = Wire(UInt(PC_LEN.W))
+  // val ic_reg_zbp_next_taken0  = RegInit(false.B)
+  // val ic_reg_zbp_next_target0 = RegInit(0.U(PC_LEN.W))
+  // val ic_reg_zbp_next_taken1  = RegInit(false.B)
+  // val ic_reg_zbp_next_target1 = RegInit(0.U(PC_LEN.W))
+  // val ic_reg_zbp_next_taken2  = RegInit(false.B)
+  // val ic_reg_zbp_next_target2 = RegInit(0.U(PC_LEN.W))
 
-  val ic_imem_addr_2 = Cat(ic_reg_imem_addr(PC_LEN-1, 1), 1.U(1.W))
-  val ic_imem_addr_4 = ic_reg_imem_addr + 2.U(PC_LEN.W)
-  val ic_inst_addr_2 = Cat(ic_reg_inst_addr(PC_LEN-1, 1), 1.U(1.W))
-  ic_imem_addr     := DontCare
-  ic_reg_imem_addr := ic_imem_addr
-  io.imem.addr     := Cat(ic_imem_addr, 0.U(1.W))
-  io.imem.en       := true.B
-  ic_btb.io.lu.pc  := ic_imem_addr
-  ic_pht.io.lu.pc  := ic_imem_addr
-  ic_reg_read_rdy  := true.B
-  ic_reg_half_rdy  := true.B
-  ic_read_rdy      := ic_reg_read_rdy
-  ic_half_rdy      := ic_reg_half_rdy
-  ic_data_out      := DontCare
-  ic_addr_out      := ic_reg_addr_out
-  ic_reg_addr_out  := ic_addr_out
-  ic_bp            := DontCare
-  ic_zbtb.io.lu.pc := ic_imem_addr
-  ic_zbp_taken     := DontCare
-  ic_zbp_target    := DontCare
-  ic_pht.io.lmem <> io.pht_lmem
-  ic_pht.io.gmem <> io.pht_gmem
+  // val ic_imem_addr_2 = Cat(ic_reg_imem_addr(PC_LEN-1, 1), 1.U(1.W))
+  // val ic_imem_addr_4 = ic_reg_imem_addr + 2.U(PC_LEN.W)
+  // val ic_inst_addr_2 = Cat(ic_reg_inst_addr(PC_LEN-1, 1), 1.U(1.W))
+  // ic_imem_addr     := DontCare
+  // ic_reg_imem_addr := ic_imem_addr
+  // io.imem.addr     := Cat(ic_imem_addr, 0.U(1.W))
+  // io.imem.en       := true.B
+  // ic_btb.io.lu.pc  := ic_imem_addr
+  // ic_pht.io.lu.pc  := ic_imem_addr
+  // ic_reg_read_rdy  := true.B
+  // ic_reg_half_rdy  := true.B
+  // ic_read_rdy      := ic_reg_read_rdy
+  // ic_half_rdy      := ic_reg_half_rdy
+  // ic_data_out      := DontCare
+  // ic_addr_out      := ic_reg_addr_out
+  // ic_reg_addr_out  := ic_addr_out
+  // ic_bp            := DontCare
+  // ic_zbtb.io.lu.pc := ic_imem_addr
+  // ic_zbp_taken     := DontCare
+  // ic_zbp_target    := DontCare
+  // ic_pht.io.lmem <> io.pht_lmem
+  // ic_pht.io.gmem <> io.pht_gmem
 
-  switch (ic_state) {
-    is (IcState.Empty) {
-      ic_imem_addr            := ic_imem_addr_4
-      ic_reg_inst             := io.imem.inst
-      ic_reg_inst_addr        := ic_reg_imem_addr
-      ic_data_out             := io.imem.inst
-      ic_bp.taken             := ic_btb.io.lu.jump0 || (ic_btb.io.lu.br0 && ic_pht.io.lu.taken0)
-      ic_bp.attr              := ic_btb.io.lu.attr0
-      ic_bp.is_ret            := ic_btb.io.lu.is_ret0
-      ic_bp.target            := ic_btb.io.lu.target0
-      ic_bp.history           := ic_pht.io.history
-      ic_bp.cnt               := ic_pht.io.lu.cnt0
-      ic_bp.gcnt              := ic_pht.io.lu.gcnt0
-      ic_reg_bp_next0.taken   := ic_btb.io.lu.jump0 || (ic_btb.io.lu.br0 && ic_pht.io.lu.taken0)
-      ic_reg_bp_next0.attr    := ic_btb.io.lu.attr0
-      ic_reg_bp_next0.is_ret  := ic_btb.io.lu.is_ret0
-      ic_reg_bp_next0.target  := ic_btb.io.lu.target0
-      ic_reg_bp_next0.history := ic_pht.io.history
-      ic_reg_bp_next0.cnt     := ic_pht.io.lu.cnt0
-      ic_reg_bp_next0.gcnt    := ic_pht.io.lu.gcnt0
-      ic_reg_bp_next1.taken   := ic_btb.io.lu.jump1 || (ic_btb.io.lu.br1 && ic_pht.io.lu.taken1)
-      ic_reg_bp_next1.attr    := ic_btb.io.lu.attr1
-      ic_reg_bp_next1.is_ret  := ic_btb.io.lu.is_ret1
-      ic_reg_bp_next1.target  := ic_btb.io.lu.target1
-      ic_reg_bp_next1.history := ic_pht.io.history
-      ic_reg_bp_next1.cnt     := ic_pht.io.lu.cnt1
-      ic_reg_bp_next1.gcnt    := ic_pht.io.lu.gcnt1
-      ic_zbp_taken            := ic_zbtb.io.lu.matches0
-      ic_zbp_target           := ic_zbtb.io.lu.target0
-      ic_reg_zbp_next_taken0  := ic_zbtb.io.lu.matches0
-      ic_reg_zbp_next_target0 := ic_zbtb.io.lu.target0
-      ic_reg_zbp_next_taken1  := ic_zbtb.io.lu.matches1
-      ic_reg_zbp_next_target1 := ic_zbtb.io.lu.target1
-      ic_state := IcState.Full
-      when (ic_read_en2) {
-        ic_addr_out := ic_imem_addr_2
-        ic_state := IcState.FullHalf
-      }.elsewhen (ic_read_en4) {
-        ic_addr_out := ic_imem_addr_4
-        ic_state := IcState.Empty
-      }
-    }
-    is (IcState.EmptyHalf) {
-      ic_imem_addr            := ic_imem_addr_4
-      ic_reg_inst             := io.imem.inst
-      ic_reg_inst_addr        := ic_reg_imem_addr
-      ic_data_out             := Cat(Fill(WORD_LEN/2-1, 0.U), io.imem.inst(WORD_LEN-1, WORD_LEN/2))
-      ic_addr_out             := ic_imem_addr_2
-      ic_bp.taken             := ic_btb.io.lu.jump1 || (ic_btb.io.lu.br1 && ic_pht.io.lu.taken1)
-      ic_bp.target            := ic_btb.io.lu.target1
-      ic_bp.is_ret            := ic_btb.io.lu.is_ret1
-      ic_bp.history           := ic_pht.io.history
-      ic_bp.cnt               := ic_pht.io.lu.cnt1
-      ic_bp.gcnt              := ic_pht.io.lu.gcnt1
-      ic_reg_bp_next0.taken   := ic_btb.io.lu.jump0 || (ic_btb.io.lu.br0 && ic_pht.io.lu.taken0)
-      ic_reg_bp_next0.attr    := ic_btb.io.lu.attr0
-      ic_reg_bp_next0.is_ret  := ic_btb.io.lu.is_ret0
-      ic_reg_bp_next0.target  := ic_btb.io.lu.target0
-      ic_reg_bp_next0.history := ic_pht.io.history
-      ic_reg_bp_next0.cnt     := ic_pht.io.lu.cnt0
-      ic_reg_bp_next0.gcnt    := ic_pht.io.lu.gcnt0
-      ic_reg_bp_next1.taken   := ic_btb.io.lu.jump1 || (ic_btb.io.lu.br1 && ic_pht.io.lu.taken1)
-      ic_reg_bp_next1.attr    := ic_btb.io.lu.attr1
-      ic_reg_bp_next1.is_ret  := ic_btb.io.lu.is_ret1
-      ic_reg_bp_next1.target  := ic_btb.io.lu.target1
-      ic_reg_bp_next1.history := ic_pht.io.history
-      ic_reg_bp_next1.cnt     := ic_pht.io.lu.cnt1
-      ic_reg_bp_next1.gcnt    := ic_pht.io.lu.gcnt1
-      ic_zbp_taken            := ic_zbtb.io.lu.matches1
-      ic_zbp_target           := ic_zbtb.io.lu.target1
-      ic_reg_zbp_next_taken0  := ic_zbtb.io.lu.matches0
-      ic_reg_zbp_next_target0 := ic_zbtb.io.lu.target0
-      ic_reg_zbp_next_taken1  := ic_zbtb.io.lu.matches1
-      ic_reg_zbp_next_target1 := ic_zbtb.io.lu.target1
-      ic_state := IcState.FullHalf
-      when (ic_read_en2) {
-        ic_addr_out := ic_imem_addr_4
-        ic_state := IcState.Empty
-      }
-    }
-    is (IcState.Full, IcState.DummyFull) {
-      ic_imem_addr  := ic_reg_imem_addr
-      ic_data_out   := ic_reg_inst
-      ic_bp         := ic_reg_bp_next0
-      ic_zbp_taken  := ic_reg_zbp_next_taken0
-      ic_zbp_target := ic_reg_zbp_next_target0
-      when (ic_read_en2) {
-        ic_addr_out := ic_inst_addr_2
-        ic_state := IcState.FullHalf
-      }.elsewhen(ic_read_en4) {
-        ic_addr_out := ic_reg_imem_addr
-        ic_state := IcState.Empty
-      }
-    }
-    is (IcState.FullHalf, IcState.DummyFullHalf) {
-      ic_imem_addr            := ic_imem_addr_4
-      ic_data_out             := Cat(io.imem.inst(WORD_LEN/2-1, 0), ic_reg_inst(WORD_LEN-1, WORD_LEN/2))
-      ic_reg_inst             := io.imem.inst
-      ic_reg_inst_addr        := ic_reg_imem_addr
-      ic_reg_inst2            := ic_reg_inst
-      ic_reg_inst2_addr       := ic_reg_inst_addr
-      ic_bp                   := ic_reg_bp_next1
-      ic_reg_bp_next0.taken   := ic_btb.io.lu.jump0 || (ic_btb.io.lu.br0 && ic_pht.io.lu.taken0)
-      ic_reg_bp_next0.attr    := ic_btb.io.lu.attr0
-      ic_reg_bp_next0.is_ret  := ic_btb.io.lu.is_ret0
-      ic_reg_bp_next0.target  := ic_btb.io.lu.target0
-      ic_reg_bp_next0.history := ic_pht.io.history
-      ic_reg_bp_next0.cnt     := ic_pht.io.lu.cnt0
-      ic_reg_bp_next0.gcnt    := ic_pht.io.lu.gcnt0
-      ic_zbp_taken            := ic_reg_zbp_next_taken1
-      ic_zbp_target           := ic_reg_zbp_next_target1
-      ic_reg_zbp_next_taken0  := ic_zbtb.io.lu.matches0
-      ic_reg_zbp_next_target0 := ic_zbtb.io.lu.target0
-      when (io.imem.valid) {
-        ic_reg_bp_next1.taken   := ic_btb.io.lu.jump1 || (ic_btb.io.lu.br1 && ic_pht.io.lu.taken1)
-        ic_reg_bp_next1.attr    := ic_btb.io.lu.attr1
-        ic_reg_bp_next1.is_ret  := ic_btb.io.lu.is_ret1
-        ic_reg_bp_next1.target  := ic_btb.io.lu.target1
-        ic_reg_bp_next1.history := ic_pht.io.history
-        ic_reg_bp_next1.cnt     := ic_pht.io.lu.cnt1
-        ic_reg_bp_next1.gcnt    := ic_pht.io.lu.gcnt1
-        ic_reg_zbp_next_taken1  := ic_zbtb.io.lu.matches1
-        ic_reg_zbp_next_target1 := ic_zbtb.io.lu.target1
-      }
-      ic_reg_bp_next2         := ic_reg_bp_next1
-      ic_reg_zbp_next_taken2  := ic_reg_zbp_next_taken1
-      ic_reg_zbp_next_target2 := ic_reg_zbp_next_target1
-      ic_state := IcState.Full2Half
-      when (ic_read_en2) {
-        ic_addr_out := ic_reg_imem_addr
-        ic_state := IcState.Full
-      }.elsewhen(ic_read_en4) {
-        ic_addr_out := Cat(ic_reg_imem_addr(PC_LEN-1, 1), 1.U(1.W))
-        ic_state := IcState.FullHalf
-      }
-    }
-    is (IcState.Full2Half, IcState.DummyFull2Half) {
-      ic_imem_addr  := ic_reg_imem_addr
-      ic_data_out   := Cat(ic_reg_inst(WORD_LEN/2-1, 0), ic_reg_inst2(WORD_LEN-1, WORD_LEN/2))
-      ic_bp         := ic_reg_bp_next2
-      ic_zbp_taken  := ic_reg_zbp_next_taken2
-      ic_zbp_target := ic_reg_zbp_next_target2
-      when (ic_read_en2) {
-        ic_addr_out := ic_reg_inst_addr
-        ic_state := IcState.Full
-      }.elsewhen(ic_read_en4) {
-        ic_addr_out := Cat(ic_reg_inst_addr(PC_LEN-1, 1), 1.U(1.W))
-        ic_state := IcState.FullHalf
-      }
-    }
-  }
+  // switch (ic_state) {
+  //   is (IcState.Empty) {
+  //     ic_imem_addr            := ic_imem_addr_4
+  //     ic_reg_inst             := io.imem.inst
+  //     ic_reg_inst_addr        := ic_reg_imem_addr
+  //     ic_data_out             := io.imem.inst
+  //     ic_bp.taken             := ic_btb.io.lu.jump0 || (ic_btb.io.lu.br0 && ic_pht.io.lu.taken0)
+  //     ic_bp.attr              := ic_btb.io.lu.attr0
+  //     ic_bp.is_ret            := ic_btb.io.lu.is_ret0
+  //     ic_bp.target            := ic_btb.io.lu.target0
+  //     ic_bp.history           := ic_pht.io.history
+  //     ic_bp.cnt               := ic_pht.io.lu.cnt0
+  //     ic_bp.gcnt              := ic_pht.io.lu.gcnt0
+  //     ic_reg_bp_next0.taken   := ic_btb.io.lu.jump0 || (ic_btb.io.lu.br0 && ic_pht.io.lu.taken0)
+  //     ic_reg_bp_next0.attr    := ic_btb.io.lu.attr0
+  //     ic_reg_bp_next0.is_ret  := ic_btb.io.lu.is_ret0
+  //     ic_reg_bp_next0.target  := ic_btb.io.lu.target0
+  //     ic_reg_bp_next0.history := ic_pht.io.history
+  //     ic_reg_bp_next0.cnt     := ic_pht.io.lu.cnt0
+  //     ic_reg_bp_next0.gcnt    := ic_pht.io.lu.gcnt0
+  //     ic_reg_bp_next1.taken   := ic_btb.io.lu.jump1 || (ic_btb.io.lu.br1 && ic_pht.io.lu.taken1)
+  //     ic_reg_bp_next1.attr    := ic_btb.io.lu.attr1
+  //     ic_reg_bp_next1.is_ret  := ic_btb.io.lu.is_ret1
+  //     ic_reg_bp_next1.target  := ic_btb.io.lu.target1
+  //     ic_reg_bp_next1.history := ic_pht.io.history
+  //     ic_reg_bp_next1.cnt     := ic_pht.io.lu.cnt1
+  //     ic_reg_bp_next1.gcnt    := ic_pht.io.lu.gcnt1
+  //     ic_zbp_taken            := ic_zbtb.io.lu.matches0
+  //     ic_zbp_target           := ic_zbtb.io.lu.target0
+  //     ic_reg_zbp_next_taken0  := ic_zbtb.io.lu.matches0
+  //     ic_reg_zbp_next_target0 := ic_zbtb.io.lu.target0
+  //     ic_reg_zbp_next_taken1  := ic_zbtb.io.lu.matches1
+  //     ic_reg_zbp_next_target1 := ic_zbtb.io.lu.target1
+  //     ic_state := IcState.Full
+  //     when (ic_read_en2) {
+  //       ic_addr_out := ic_imem_addr_2
+  //       ic_state := IcState.FullHalf
+  //     }.elsewhen (ic_read_en4) {
+  //       ic_addr_out := ic_imem_addr_4
+  //       ic_state := IcState.Empty
+  //     }
+  //   }
+  //   is (IcState.EmptyHalf) {
+  //     ic_imem_addr            := ic_imem_addr_4
+  //     ic_reg_inst             := io.imem.inst
+  //     ic_reg_inst_addr        := ic_reg_imem_addr
+  //     ic_data_out             := Cat(Fill(WORD_LEN/2-1, 0.U), io.imem.inst(WORD_LEN-1, WORD_LEN/2))
+  //     ic_addr_out             := ic_imem_addr_2
+  //     ic_bp.taken             := ic_btb.io.lu.jump1 || (ic_btb.io.lu.br1 && ic_pht.io.lu.taken1)
+  //     ic_bp.target            := ic_btb.io.lu.target1
+  //     ic_bp.is_ret            := ic_btb.io.lu.is_ret1
+  //     ic_bp.history           := ic_pht.io.history
+  //     ic_bp.cnt               := ic_pht.io.lu.cnt1
+  //     ic_bp.gcnt              := ic_pht.io.lu.gcnt1
+  //     ic_reg_bp_next0.taken   := ic_btb.io.lu.jump0 || (ic_btb.io.lu.br0 && ic_pht.io.lu.taken0)
+  //     ic_reg_bp_next0.attr    := ic_btb.io.lu.attr0
+  //     ic_reg_bp_next0.is_ret  := ic_btb.io.lu.is_ret0
+  //     ic_reg_bp_next0.target  := ic_btb.io.lu.target0
+  //     ic_reg_bp_next0.history := ic_pht.io.history
+  //     ic_reg_bp_next0.cnt     := ic_pht.io.lu.cnt0
+  //     ic_reg_bp_next0.gcnt    := ic_pht.io.lu.gcnt0
+  //     ic_reg_bp_next1.taken   := ic_btb.io.lu.jump1 || (ic_btb.io.lu.br1 && ic_pht.io.lu.taken1)
+  //     ic_reg_bp_next1.attr    := ic_btb.io.lu.attr1
+  //     ic_reg_bp_next1.is_ret  := ic_btb.io.lu.is_ret1
+  //     ic_reg_bp_next1.target  := ic_btb.io.lu.target1
+  //     ic_reg_bp_next1.history := ic_pht.io.history
+  //     ic_reg_bp_next1.cnt     := ic_pht.io.lu.cnt1
+  //     ic_reg_bp_next1.gcnt    := ic_pht.io.lu.gcnt1
+  //     ic_zbp_taken            := ic_zbtb.io.lu.matches1
+  //     ic_zbp_target           := ic_zbtb.io.lu.target1
+  //     ic_reg_zbp_next_taken0  := ic_zbtb.io.lu.matches0
+  //     ic_reg_zbp_next_target0 := ic_zbtb.io.lu.target0
+  //     ic_reg_zbp_next_taken1  := ic_zbtb.io.lu.matches1
+  //     ic_reg_zbp_next_target1 := ic_zbtb.io.lu.target1
+  //     ic_state := IcState.FullHalf
+  //     when (ic_read_en2) {
+  //       ic_addr_out := ic_imem_addr_4
+  //       ic_state := IcState.Empty
+  //     }
+  //   }
+  //   is (IcState.Full, IcState.DummyFull) {
+  //     ic_imem_addr  := ic_reg_imem_addr
+  //     ic_data_out   := ic_reg_inst
+  //     ic_bp         := ic_reg_bp_next0
+  //     ic_zbp_taken  := ic_reg_zbp_next_taken0
+  //     ic_zbp_target := ic_reg_zbp_next_target0
+  //     when (ic_read_en2) {
+  //       ic_addr_out := ic_inst_addr_2
+  //       ic_state := IcState.FullHalf
+  //     }.elsewhen(ic_read_en4) {
+  //       ic_addr_out := ic_reg_imem_addr
+  //       ic_state := IcState.Empty
+  //     }
+  //   }
+  //   is (IcState.FullHalf, IcState.DummyFullHalf) {
+  //     ic_imem_addr            := ic_imem_addr_4
+  //     ic_data_out             := Cat(io.imem.inst(WORD_LEN/2-1, 0), ic_reg_inst(WORD_LEN-1, WORD_LEN/2))
+  //     ic_reg_inst             := io.imem.inst
+  //     ic_reg_inst_addr        := ic_reg_imem_addr
+  //     ic_reg_inst2            := ic_reg_inst
+  //     ic_reg_inst2_addr       := ic_reg_inst_addr
+  //     ic_bp                   := ic_reg_bp_next1
+  //     ic_reg_bp_next0.taken   := ic_btb.io.lu.jump0 || (ic_btb.io.lu.br0 && ic_pht.io.lu.taken0)
+  //     ic_reg_bp_next0.attr    := ic_btb.io.lu.attr0
+  //     ic_reg_bp_next0.is_ret  := ic_btb.io.lu.is_ret0
+  //     ic_reg_bp_next0.target  := ic_btb.io.lu.target0
+  //     ic_reg_bp_next0.history := ic_pht.io.history
+  //     ic_reg_bp_next0.cnt     := ic_pht.io.lu.cnt0
+  //     ic_reg_bp_next0.gcnt    := ic_pht.io.lu.gcnt0
+  //     ic_zbp_taken            := ic_reg_zbp_next_taken1
+  //     ic_zbp_target           := ic_reg_zbp_next_target1
+  //     ic_reg_zbp_next_taken0  := ic_zbtb.io.lu.matches0
+  //     ic_reg_zbp_next_target0 := ic_zbtb.io.lu.target0
+  //     when (io.imem.valid) {
+  //       ic_reg_bp_next1.taken   := ic_btb.io.lu.jump1 || (ic_btb.io.lu.br1 && ic_pht.io.lu.taken1)
+  //       ic_reg_bp_next1.attr    := ic_btb.io.lu.attr1
+  //       ic_reg_bp_next1.is_ret  := ic_btb.io.lu.is_ret1
+  //       ic_reg_bp_next1.target  := ic_btb.io.lu.target1
+  //       ic_reg_bp_next1.history := ic_pht.io.history
+  //       ic_reg_bp_next1.cnt     := ic_pht.io.lu.cnt1
+  //       ic_reg_bp_next1.gcnt    := ic_pht.io.lu.gcnt1
+  //       ic_reg_zbp_next_taken1  := ic_zbtb.io.lu.matches1
+  //       ic_reg_zbp_next_target1 := ic_zbtb.io.lu.target1
+  //     }
+  //     ic_reg_bp_next2         := ic_reg_bp_next1
+  //     ic_reg_zbp_next_taken2  := ic_reg_zbp_next_taken1
+  //     ic_reg_zbp_next_target2 := ic_reg_zbp_next_target1
+  //     ic_state := IcState.Full2Half
+  //     when (ic_read_en2) {
+  //       ic_addr_out := ic_reg_imem_addr
+  //       ic_state := IcState.Full
+  //     }.elsewhen(ic_read_en4) {
+  //       ic_addr_out := Cat(ic_reg_imem_addr(PC_LEN-1, 1), 1.U(1.W))
+  //       ic_state := IcState.FullHalf
+  //     }
+  //   }
+  //   is (IcState.Full2Half, IcState.DummyFull2Half) {
+  //     ic_imem_addr  := ic_reg_imem_addr
+  //     ic_data_out   := Cat(ic_reg_inst(WORD_LEN/2-1, 0), ic_reg_inst2(WORD_LEN-1, WORD_LEN/2))
+  //     ic_bp         := ic_reg_bp_next2
+  //     ic_zbp_taken  := ic_reg_zbp_next_taken2
+  //     ic_zbp_target := ic_reg_zbp_next_target2
+  //     when (ic_read_en2) {
+  //       ic_addr_out := ic_reg_inst_addr
+  //       ic_state := IcState.Full
+  //     }.elsewhen(ic_read_en4) {
+  //       ic_addr_out := Cat(ic_reg_inst_addr(PC_LEN-1, 1), 1.U(1.W))
+  //       ic_state := IcState.FullHalf
+  //     }
+  //   }
+  // }
 
-  when (/*ic_state =/= IcState.Full && ic_state =/= IcState.Full2Half &&*/ !io.imem.valid) {
-    ic_imem_addr     := ic_reg_imem_addr
-    ic_addr_out      := ic_reg_addr_out
-    ic_state         := ic_state
-    ic_reg_read_rdy  := ic_reg_read_rdy
-    ic_reg_half_rdy  := ic_reg_half_rdy
-    ic_read_rdy      := false.B
-    ic_half_rdy      := false.B
-  }
-  when (ic_addr_en) {
-    val ic_next_imem_addr = Cat(ic_addr(PC_LEN-1, 1), 0.U(1.W))
-    ic_imem_addr     := ic_next_imem_addr
-    ic_addr_out      := ic_addr
-    ic_state         := Mux(ic_addr(0).asBool, IcState.EmptyHalf, IcState.Empty)
-    ic_reg_read_rdy  := !ic_addr(0).asBool
-  }
+  // when (/*ic_state =/= IcState.Full && ic_state =/= IcState.Full2Half &&*/ !io.imem.valid) {
+  //   ic_imem_addr     := ic_reg_imem_addr
+  //   ic_addr_out      := ic_reg_addr_out
+  //   ic_state         := ic_state
+  //   ic_reg_read_rdy  := ic_reg_read_rdy
+  //   ic_reg_half_rdy  := ic_reg_half_rdy
+  //   ic_read_rdy      := false.B
+  //   ic_half_rdy      := false.B
+  // }
+  // when (ic_addr_en) {
+  //   val ic_next_imem_addr = Cat(ic_addr(PC_LEN-1, 1), 0.U(1.W))
+  //   ic_imem_addr     := ic_next_imem_addr
+  //   ic_addr_out      := ic_addr
+  //   ic_state         := Mux(ic_addr(0).asBool, IcState.EmptyHalf, IcState.Empty)
+  //   ic_reg_read_rdy  := !ic_addr(0).asBool
+  // }
 
-  //**********************************
-  // Instruction Fetch (IF) 1 Stage
+  // //**********************************
+  // // Instruction Fetch (IF) 1 Stage
 
-  val if1_jump_addr = MuxCase(ic_zbp_target, Seq(
-    ex2_reg_is_br     -> ex2_reg_br_pc,
-    id_reg_bp_taken   -> id_reg_bp_target
-  ))
-  val if1_is_jump = ex2_reg_is_br || id_reg_bp_taken || if2_zbp_taken
+  // val if1_jump_addr = MuxCase(ic_zbp_target, Seq(
+  //   ex2_reg_is_br     -> ex2_reg_br_pc,
+  //   id_reg_bp_taken   -> id_reg_bp_target
+  // ))
+  // val if1_is_jump = ex2_reg_is_br || id_reg_bp_taken || if2_zbp_taken
 
-  ic_addr_en  := if1_is_jump
-  ic_addr     := if1_jump_addr
+  // ic_addr_en  := if1_is_jump
+  // ic_addr     := if1_jump_addr
+
+  val fetch_unit = Module(new FetchUnit(DramConfig()))
+  fetch_unit.io.flush_en := ex2_reg_is_br
+  fetch_unit.io.flush_iaddr := ex2_reg_br_pc
+  fetch_unit.io.imem <> io.imem
+  fetch_unit.io.icache <> io.icache
+  fetch_unit.io.inst1_ready := !id_reg_stall
+  fetch_unit.io.inst2_ready := false.B
 
   //**********************************
   // Instruction Fetch (IF) 2 Stage
 
-  val if2_is_half_inst = (ic_data_out(1, 0) =/= 3.U)
-  ic_read_en2 := !id_reg_stall && if2_is_half_inst
-  ic_read_en4 := !id_reg_stall && !if2_is_half_inst
-  val if2_is_inst_read = ic_read_rdy || (ic_half_rdy && if2_is_half_inst)
-  val if2_pc = ic_reg_addr_out
-  val if2_is_valid_inst = !id_flush && !id_reg_bp_taken && if2_is_inst_read
-  val if2_inst = Mux(if2_is_valid_inst, ic_data_out, BUBBLE)
-  val if2_bp_taken = if2_is_valid_inst && ic_bp.taken
+  // val if2_is_half_inst = (ic_data_out(1, 0) =/= 3.U)
+  // ic_read_en2 := !id_reg_stall && if2_is_half_inst
+  // ic_read_en4 := !id_reg_stall && !if2_is_half_inst
+  // val if2_is_inst_read = ic_read_rdy || (ic_half_rdy && if2_is_half_inst)
+  // val if2_pc = ic_reg_addr_out
+  // val if2_is_valid_inst = !id_flush && !id_reg_bp_taken && if2_is_inst_read
+  // val if2_inst = Mux(if2_is_valid_inst, ic_data_out, BUBBLE)
+  // val if2_bp_taken = if2_is_valid_inst && ic_bp.taken
 
-  if2_zbp_taken := !id_reg_stall && !id_flush && !id_reg_bp_taken && ic_read_rdy && ic_zbp_taken
+  // if2_zbp_taken := !id_reg_stall && !id_flush && !id_reg_bp_taken && ic_read_rdy && ic_zbp_taken
+
+  val if2_is_half_inst  = fetch_unit.io.inst1_half
+  val if2_is_valid_inst = fetch_unit.io.inst1_valid
+  val if2_pc            = fetch_unit.io.inst1_addr
+  val if2_inst          = Mux(if2_is_valid_inst, fetch_unit.io.inst1_data, BUBBLE)
+  val if2_bp_taken      = false.B
 
   val if2_probe_valid_inst = !id_reg_stall && if2_is_valid_inst
   val if2_inst_id = if2_reg_inst_id.map(_ + Mux(if2_probe_valid_inst, 1.U, 0.U))
@@ -598,53 +613,55 @@ class Core(
   io.pipeline_probe.foreach(_.if2_pc    := Cat(if2_pc, 0.U(1.W)))
   io.pipeline_probe.foreach(_.if2_inst  := if2_inst)
   
-  printf(cf"ic_addr_out: 0x${Cat(ic_addr_out, 0.U(1.W))}%x\n")
-  printf(cf"ic_reg_addr_out: 0x${Cat(ic_reg_addr_out, 0.U(1.W))}%x, ic_data_out: 0x${ic_data_out}%x io.imem.valid: ${io.imem.valid}\n")
-  printf(cf"ic_imem_addr_4: 0x${ic_imem_addr_4 ## 0.U(1.W)}%x ic_read_en4: ${ic_read_en4} ic_read_en2: ${ic_read_en2}")
-  printf(cf"inst: 0x${if2_inst}%x, ic_read_rdy: ${ic_read_rdy}, ic_state: ${ic_state.asUInt}, ic_addr_en: ${ic_addr_en.asUInt}\n")
+  // printf(cf"ic_addr_out: 0x${Cat(ic_addr_out, 0.U(1.W))}%x\n")
+  printf(cf"ic_reg_addr_out: 0x${Cat(fetch_unit.io.inst1_addr, 0.U(1.W))}%x, ic_data_out: 0x${fetch_unit.io.inst1_data}%x\n")
+  // printf(cf"ic_imem_addr_4: 0x${ic_imem_addr_4 ## 0.U(1.W)}%x ic_read_en4: ${ic_read_en4} ic_read_en2: ${ic_read_en2}")
+  // printf(cf"inst: 0x${if2_inst}%x, ic_read_rdy: ${ic_read_rdy}, ic_state: ${ic_state.asUInt}, ic_addr_en: ${ic_addr_en.asUInt}\n")
+  printf(cf"inst: 0x${if2_inst}%x, flush_en: ${fetch_unit.io.flush_en.asUInt}, flush_iaddr: 0x${fetch_unit.io.flush_iaddr ## 0.U(1.W)}%x\n")
 
   //**********************************
   // IF2/ID Register
 
   val if2_next_pc = Mux(if2_is_half_inst, if2_pc + 1.U(PC_LEN.W), if2_pc + 2.U(PC_LEN.W))
-  val if2_is_ret = ic_bp.is_ret
-  id_reg_bp_taken    := if2_is_valid_inst && !id_reg_stall && (
-    (ic_bp.taken && !if2_zbp_taken) ||
-    (!ic_bp.taken && if2_zbp_taken) ||
-    if2_is_ret
-  )
-  val id_bp_target = MuxCase(if2_next_pc, Seq(
-    ic_bp.taken -> ic_bp.target,
-    if2_is_ret  -> ic_ras.io.top.ret_pc
-  ))
-  id_reg_bp_target := id_bp_target
+  val if2_is_ret = false.B
+  // val if2_is_ret = ic_bp.is_ret
+  // id_reg_bp_taken    := if2_is_valid_inst && !id_reg_stall && (
+  //   (ic_bp.taken && !if2_zbp_taken) ||
+  //   (!ic_bp.taken && if2_zbp_taken) ||
+  //   if2_is_ret
+  // )
+  // val id_bp_target = MuxCase(if2_next_pc, Seq(
+  //   ic_bp.taken -> ic_bp.target,
+  //   if2_is_ret  -> ic_ras.io.top.ret_pc
+  // ))
+  // id_reg_bp_target := id_bp_target
 
-  id_reg_bp_not_taken := if2_is_valid_inst && !id_reg_stall && !ic_bp.taken && if2_zbp_taken
-  id_reg_bp_pc        := if2_pc
+  // id_reg_bp_not_taken := if2_is_valid_inst && !id_reg_stall && !ic_bp.taken && if2_zbp_taken
+  // id_reg_bp_pc        := if2_pc
 
-  ic_zbtb.io.inv.en := id_reg_bp_not_taken
-  ic_zbtb.io.inv.pc := id_reg_bp_pc
+  // ic_zbtb.io.inv.en := id_reg_bp_not_taken
+  // ic_zbtb.io.inv.pc := id_reg_bp_pc
 
-  val if2_ret_rasindex   = ic_ras.io.top.index - 1.U(RAS_INDEX_BITS.W)
-  ic_ras.io.ret1.en      := ic_bp.is_ret && if2_is_valid_inst && !id_reg_stall
-  ic_ras.io.ret1.index   := if2_ret_rasindex
+  // val if2_ret_rasindex   = ic_ras.io.top.index - 1.U(RAS_INDEX_BITS.W)
+  // ic_ras.io.ret1.en      := ic_bp.is_ret && if2_is_valid_inst && !id_reg_stall
+  // ic_ras.io.ret1.index   := if2_ret_rasindex
 
-  val if2_dcall_rasindex = ic_ras.io.top.index + 1.U(RAS_INDEX_BITS.W)
-  ic_ras.io.call1.en     := (ic_bp.attr === BTB_ATTR_DCALL) && if2_is_valid_inst && !id_reg_stall
-  ic_ras.io.call1.index  := if2_dcall_rasindex
-  ic_ras.io.call1.ret_pc := if2_next_pc
+  // val if2_dcall_rasindex = ic_ras.io.top.index + 1.U(RAS_INDEX_BITS.W)
+  // ic_ras.io.call1.en     := (ic_bp.attr === BTB_ATTR_DCALL) && if2_is_valid_inst && !id_reg_stall
+  // ic_ras.io.call1.index  := if2_dcall_rasindex
+  // ic_ras.io.call1.ret_pc := if2_next_pc
 
-  val if2_rasindex = MuxCase(ic_ras.io.top.index, Seq(
-    (ic_bp.is_ret)                  -> if2_ret_rasindex,
-    (ic_bp.attr === BTB_ATTR_DCALL) -> if2_dcall_rasindex,
-  ))
+  // val if2_rasindex = MuxCase(ic_ras.io.top.index, Seq(
+  //   (ic_bp.is_ret)                  -> if2_ret_rasindex,
+  //   (ic_bp.attr === BTB_ATTR_DCALL) -> if2_dcall_rasindex,
+  // ))
 
-  ic_pht.io.br.en := ic_bp.taken && (ic_bp.attr === BTB_ATTR_BR) && if2_is_valid_inst && !id_reg_stall
-  ic_pht.io.br.pc := if2_pc
+  // ic_pht.io.br.en := ic_bp.taken && (ic_bp.attr === BTB_ATTR_BR) && if2_is_valid_inst && !id_reg_stall
+  // ic_pht.io.br.pc := if2_pc
 
-  when ((ic_bp.attr === BTB_ATTR_BR) && if2_is_valid_inst && !id_reg_stall) {
-    printf(cf"PHT history: ${Cat(ic_bp.history, 0.U(1.W))(PHT_HISTORY_BITS-1, 0)}%x taken: ${ic_bp.taken} gcnt: ${ic_bp.gcnt}\n")
-  }
+  // when ((ic_bp.attr === BTB_ATTR_BR) && if2_is_valid_inst && !id_reg_stall) {
+  //   printf(cf"PHT history: ${Cat(ic_bp.history, 0.U(1.W))(PHT_HISTORY_BITS-1, 0)}%x taken: ${ic_bp.taken} gcnt: ${ic_bp.gcnt}\n")
+  // }
 
   //**********************************
   // Instruction Decode (ID) Stage
@@ -653,15 +670,15 @@ class Core(
 
   id_stage.io.in.bits.is_valid_inst := if2_is_valid_inst
   id_stage.io.in.bits.inst          := if2_inst
-  id_stage.io.in.bits.pc            := ic_reg_addr_out
+  id_stage.io.in.bits.pc            := if2_pc // ic_reg_addr_out
   id_stage.io.in.bits.bp.taken      := if2_bp_taken || (if2_is_valid_inst && if2_is_ret)
-  id_stage.io.in.bits.bp.attr       := ic_bp.attr
-  id_stage.io.in.bits.bp.is_ret     := ic_bp.is_ret
-  id_stage.io.in.bits.bp.rasindex   := ic_ras.io.top.index
-  id_stage.io.in.bits.bp.target     := id_bp_target
-  id_stage.io.in.bits.bp.history    := ic_bp.history
-  id_stage.io.in.bits.bp.cnt        := ic_bp.cnt
-  id_stage.io.in.bits.bp.gcnt       := ic_bp.gcnt
+  id_stage.io.in.bits.bp.attr       := 0.U // ic_bp.attr
+  id_stage.io.in.bits.bp.is_ret     := false.B // ic_bp.is_ret
+  id_stage.io.in.bits.bp.rasindex   := 0.U // ic_ras.io.top.index
+  id_stage.io.in.bits.bp.target     := 0.U // id_bp_target
+  id_stage.io.in.bits.bp.history    := 0.U // ic_bp.history
+  id_stage.io.in.bits.bp.cnt        := 0.U // ic_bp.cnt
+  id_stage.io.in.bits.bp.gcnt       := 0.U // ic_bp.gcnt
   map2(id_stage.io.in.bits.inst_id, if2_reg_inst_id)(_ := _)
 
   id_reg_stall := !id_stage.io.in.ready
@@ -1040,48 +1057,48 @@ class Core(
 
   val updated_gcnt = Mux(ex1_is_br_taken, ex1_gcnt_if_taken, ex1_gcnt_if_not_taken)
 
-  // actual_attr === inval && attr =/= inval  => new attr <- inval
-  // actual_attr === br    && taken           => new attr <- br
-  // actual_attr === djump                    => new attr <- djump
-  // actual_attr === dcall                    => new attr <- dcall
-  // actual_attr === ret                      => new attr <- ret
-  ic_btb.io.up.en := ex1_en && (
-    ((ex1_reg_actual_attr === BTB_ATTR_INVAL) && (ex1_reg_bp.attr =/= BTB_ATTR_INVAL)) ||
-    (ex1_is_br_taken) ||
-    (ex1_reg_actual_attr === BTB_ATTR_DJUMP) ||
-    (ex1_reg_actual_attr === BTB_ATTR_DCALL) ||
-    (ex1_reg_actual_is_ret)
-  )
-  ic_btb.io.up.attr    := ex1_reg_actual_attr
-  ic_btb.io.up.is_ret  := ex1_reg_actual_is_ret
-  ic_btb.io.up.pc      := ex1_reg_pc
-  ic_btb.io.up.target  := ex1_fetch_pc
+  // // actual_attr === inval && attr =/= inval  => new attr <- inval
+  // // actual_attr === br    && taken           => new attr <- br
+  // // actual_attr === djump                    => new attr <- djump
+  // // actual_attr === dcall                    => new attr <- dcall
+  // // actual_attr === ret                      => new attr <- ret
+  // ic_btb.io.up.en := ex1_en && (
+  //   ((ex1_reg_actual_attr === BTB_ATTR_INVAL) && (ex1_reg_bp.attr =/= BTB_ATTR_INVAL)) ||
+  //   (ex1_is_br_taken) ||
+  //   (ex1_reg_actual_attr === BTB_ATTR_DJUMP) ||
+  //   (ex1_reg_actual_attr === BTB_ATTR_DCALL) ||
+  //   (ex1_reg_actual_is_ret)
+  // )
+  // ic_btb.io.up.attr    := ex1_reg_actual_attr
+  // ic_btb.io.up.is_ret  := ex1_reg_actual_is_ret
+  // ic_btb.io.up.pc      := ex1_reg_pc
+  // ic_btb.io.up.target  := ex1_fetch_pc
 
-  ic_pht.io.res.en      := ex1_fetch_pc_en
-  ic_pht.io.res.history := ex1_reg_bp.history
+  // ic_pht.io.res.en      := ex1_fetch_pc_en
+  // ic_pht.io.res.history := ex1_reg_bp.history
 
-  ic_pht.io.up.en      := ex1_en && ex1_is_br
-  ic_pht.io.up.history := ex1_reg_bp.history
-  ic_pht.io.up.pc      := ex1_reg_pc
-  ic_pht.io.up.cnt     := updated_cnt
-  ic_pht.io.up.gcnt    := updated_gcnt
+  // ic_pht.io.up.en      := ex1_en && ex1_is_br
+  // ic_pht.io.up.history := ex1_reg_bp.history
+  // ic_pht.io.up.pc      := ex1_reg_pc
+  // ic_pht.io.up.cnt     := updated_cnt
+  // ic_pht.io.up.gcnt    := updated_gcnt
 
-  ic_pht.io.br2.en      := ex1_en && ex1_is_br_taken && (!ex1_reg_bp.taken || ex1_reg_bp.attr =/= BTB_ATTR_BR)
-  ic_pht.io.br2.history := ex1_reg_bp.history
-  ic_pht.io.br2.pc      := ex1_reg_pc
+  // ic_pht.io.br2.en      := ex1_en && ex1_is_br_taken && (!ex1_reg_bp.taken || ex1_reg_bp.attr =/= BTB_ATTR_BR)
+  // ic_pht.io.br2.history := ex1_reg_bp.history
+  // ic_pht.io.br2.pc      := ex1_reg_pc
 
-  ic_zbtb.io.up.en     := ex1_en && (ex1_is_br_taken || (ex1_reg_actual_attr === BTB_ATTR_DJUMP || ex1_reg_actual_attr === BTB_ATTR_DCALL))
-  ic_zbtb.io.up.pc     := ex1_reg_pc
-  ic_zbtb.io.up.target := ex1_fetch_pc
+  // ic_zbtb.io.up.en     := ex1_en && (ex1_is_br_taken || (ex1_reg_actual_attr === BTB_ATTR_DJUMP || ex1_reg_actual_attr === BTB_ATTR_DCALL))
+  // ic_zbtb.io.up.pc     := ex1_reg_pc
+  // ic_zbtb.io.up.target := ex1_fetch_pc
 
-  ic_ras.io.up.en    := ex1_fetch_pc_en
-  ic_ras.io.up.index := ex1_reg_bp.rasindex
+  // ic_ras.io.up.en    := ex1_fetch_pc_en
+  // ic_ras.io.up.index := ex1_reg_bp.rasindex
 
-  ic_ras.io.ret2.en      := ex1_en && ex1_reg_actual_is_ret && !ex1_reg_bp.is_ret
-  ic_ras.io.ret2.index   := ex1_reg_bp.rasindex - 1.U(RAS_INDEX_BITS.W)
-  ic_ras.io.call2.en     := ex1_en && (ex1_reg_actual_attr === BTB_ATTR_DCALL) && (ex1_reg_bp.attr =/= BTB_ATTR_DCALL)
-  ic_ras.io.call2.index  := ex1_reg_bp.rasindex + 1.U(RAS_INDEX_BITS.W)
-  ic_ras.io.call2.ret_pc := ex1_next_pc
+  // ic_ras.io.ret2.en      := ex1_en && ex1_reg_actual_is_ret && !ex1_reg_bp.is_ret
+  // ic_ras.io.ret2.index   := ex1_reg_bp.rasindex - 1.U(RAS_INDEX_BITS.W)
+  // ic_ras.io.call2.en     := ex1_en && (ex1_reg_actual_attr === BTB_ATTR_DCALL) && (ex1_reg_bp.attr =/= BTB_ATTR_DCALL)
+  // ic_ras.io.call2.index  := ex1_reg_bp.rasindex + 1.U(RAS_INDEX_BITS.W)
+  // ic_ras.io.call2.ret_pc := ex1_next_pc
 
   ex1_fw_data := ex1_alu_out
 
@@ -1629,8 +1646,8 @@ class Core(
   io.debug_signal.rwaddr              := ex2_wb_data
   io.debug_signal.ex2_reg_is_br       := ex2_reg_is_br
   io.debug_signal.id_reg_bp_taken     := id_reg_bp_taken
-  io.debug_signal.if2_zbp_taken       := if2_zbp_taken
-  io.debug_signal.ic_state            := ic_state.asUInt
+  io.debug_signal.if2_zbp_taken       := false.B // if2_zbp_taken
+  io.debug_signal.ic_state            := 0.U // ic_state.asUInt
 
   //**********************************
   // IO & Debug
@@ -1646,14 +1663,14 @@ class Core(
   printf(cf"if2_pc           : 0x${Cat(if2_pc, 0.U(1.W))}%x\n")
   printf(cf"if2_is_valid_inst: ${if2_is_valid_inst}%d\n")
   printf(cf"if2_inst         : 0x${if2_inst}%x\n")
-  printf(cf"if2_zbp_taken    : ${if2_zbp_taken}%d\n")
-  printf(cf"ic_zbp_target    : 0x${Cat(ic_zbp_target, 0.U(1.W))}%x\n")
-  printf(cf"ic_bp_taken      : ${ic_bp.taken}%d\n")
-  printf(cf"ic_bp_attr       : 0x${ic_bp.attr}%x\n")
-  printf(cf"ic_bp_rasindex   : 0x${ic_ras.io.top.index}%x\n")
-  printf(cf"ic_bp_target     : 0x${Cat(ic_bp.target, 0.U(1.W))}%x\n")
-  printf(cf"ic_bp_cnt        : 0x${ic_bp.cnt}%x\n")
-  printf(cf"ic_bp_gcnt       : 0x${ic_bp.gcnt}%x\n")
+  // printf(cf"if2_zbp_taken    : ${if2_zbp_taken}%d\n")
+  // printf(cf"ic_zbp_target    : 0x${Cat(ic_zbp_target, 0.U(1.W))}%x\n")
+  // printf(cf"ic_bp_taken      : ${ic_bp.taken}%d\n")
+  // printf(cf"ic_bp_attr       : 0x${ic_bp.attr}%x\n")
+  // printf(cf"ic_bp_rasindex   : 0x${ic_ras.io.top.index}%x\n")
+  // printf(cf"ic_bp_target     : 0x${Cat(ic_bp.target, 0.U(1.W))}%x\n")
+  // printf(cf"ic_bp_cnt        : 0x${ic_bp.cnt}%x\n")
+  // printf(cf"ic_bp_gcnt       : 0x${ic_bp.gcnt}%x\n")
   printf(cf"id_reg_pc        : 0x${id_stage.io.debug_signals.id_pc}%x\n")
   printf(cf"id_reg_inst      : 0x${id_stage.io.debug_signals.id_inst}%x\n")
   printf(cf"id_reg_bp_taken  : ${id_reg_bp_taken}%d\n")

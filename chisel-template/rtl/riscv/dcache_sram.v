@@ -1,4 +1,4 @@
-module DCache #(
+module DCacheSram #(
     parameter NUM_COL    =  4,
     parameter COL_WIDTH  =  8,
     parameter ADDR_WIDTH = 10,

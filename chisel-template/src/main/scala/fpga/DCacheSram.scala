@@ -4,7 +4,7 @@ import chisel3._
 import chisel3.util._
 import chisel3.experimental._
 
-class DCache extends BlackBox(Map("NUM_COL" -> 32, "COL_WIDTH" -> 8, "ADDR_WIDTH" -> 7, "DATA_WIDTH" -> 32*8)) {
+class DCacheSram extends BlackBox(Map("NUM_COL" -> 32, "COL_WIDTH" -> 8, "ADDR_WIDTH" -> 7, "DATA_WIDTH" -> 32*8)) {
   val io = IO(new Bundle() {
     val clock = Input(Clock())
     val ren = Input(Bool())

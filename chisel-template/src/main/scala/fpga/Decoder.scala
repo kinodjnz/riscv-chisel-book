@@ -96,4 +96,10 @@ class IMemDecoder(targetAddressRanges: Seq[(BigInt, BigInt)]) extends Module {
       inst := target.inst
     }
   }
+
+  for (index <- (0 until targetAddressRanges.size).reverse) {
+    val target = io.targets(index)
+    valid := target.valid
+    inst := target.inst
+  }
 }

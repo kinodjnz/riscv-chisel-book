@@ -79,12 +79,12 @@ class RiscV(clockHz: Int) extends Module {
   
   val memory = Module(new Memory())
   val boot_rom = Module(new BootRom("bootrom.hex", imemSizeInBytes))
-  val dcache1 = Module(new DCache)
-  val dcache2 = Module(new DCache)
-  val icache = Module(new ICache(log2Ceil(WORD_LEN), ICACHE_INDEX_BITS+(log2Ceil(CACHE_LINE_LEN)-log2Ceil(WORD_LEN)), log2Ceil(CACHE_LINE_LEN), ICACHE_INDEX_BITS))
+  val dcache1 = Module(new DCacheSram)
+  val dcache2 = Module(new DCacheSram)
+  val icache_sram = Module(new ICacheSram(log2Ceil(IBLOCK_LEN), ICACHE_INDEX_BITS+(log2Ceil(CACHE_LINE_LEN)-log2Ceil(IBLOCK_LEN)), log2Ceil(CACHE_LINE_LEN), ICACHE_INDEX_BITS))
   val icache_valid = Module(new ICacheValid(ICACHE_VALID_DATA_BITS, ICACHE_VALID_ADDR_BITS, ICACHE_INVALIDATE_DATA_BITS, ICACHE_INVALIDATE_ADDR_BITS))
-  val pht_lmem = Module(new PHTMem(2, PHT_INDEX_BITS-1, 1, PHT_INDEX_BITS))
-  val pht_gmem = Module(new PHTMem(2, PHT_INDEX_BITS-1, 1, PHT_INDEX_BITS))
+  // val pht_lmem = Module(new PHTMem(2, PHT_INDEX_BITS-1, 1, PHT_INDEX_BITS))
+  // val pht_gmem = Module(new PHTMem(2, PHT_INDEX_BITS-1, 1, PHT_INDEX_BITS))
   val gpio = Module(new Gpio)
   val uart = Module(new Uart(clockHz))
   val sdc = Module(new Sdc)
@@ -120,7 +120,7 @@ class RiscV(clockHz: Int) extends Module {
 
   core.io.imem <> imem_decoder.io.initiator
   core.io.dmem <> dmem_decoder.io.initiator
-
+  core.io.icache <> memory.io.imem
   core.io.cache <> memory.io.cache
 
   // dram
@@ -143,13 +143,13 @@ class RiscV(clockHz: Int) extends Module {
   dcache2.io.wdata := memory.io.cache_array2.wdata
   memory.io.cache_array2.rdata := dcache2.io.rdata
 
-  icache.io.clock := clock
-  icache.io.ren := memory.io.icache.ren
-  icache.io.wen := memory.io.icache.wen
-  icache.io.raddr := memory.io.icache.raddr
-  memory.io.icache.rdata := icache.io.rdata
-  icache.io.waddr := memory.io.icache.waddr
-  icache.io.wdata := memory.io.icache.wdata
+  icache_sram.io.clock := clock
+  icache_sram.io.ren := memory.io.icache_sram.ren
+  icache_sram.io.wen := memory.io.icache_sram.wen
+  icache_sram.io.raddr := memory.io.icache_sram.raddr
+  memory.io.icache_sram.rdata := icache_sram.io.rdata
+  icache_sram.io.waddr := memory.io.icache_sram.waddr
+  icache_sram.io.wdata := memory.io.icache_sram.wdata
 
   icache_valid.io.clock := clock
   icache_valid.io.ren := memory.io.icache_valid.ren
@@ -162,21 +162,21 @@ class RiscV(clockHz: Int) extends Module {
   icache_valid.io.idata := memory.io.icache_valid.idata
   icache_valid.io.ien := memory.io.icache_valid.invalidate
 
-  pht_lmem.io.clock := clock
-  pht_lmem.io.ren   := core.io.pht_lmem.ren
-  pht_lmem.io.wen   := core.io.pht_lmem.wen
-  pht_lmem.io.raddr := core.io.pht_lmem.raddr
-  core.io.pht_lmem.rdata := pht_lmem.io.rdata
-  pht_lmem.io.waddr := core.io.pht_lmem.waddr
-  pht_lmem.io.wdata := core.io.pht_lmem.wdata
+  // pht_lmem.io.clock := clock
+  // pht_lmem.io.ren   := core.io.pht_lmem.ren
+  // pht_lmem.io.wen   := core.io.pht_lmem.wen
+  // pht_lmem.io.raddr := core.io.pht_lmem.raddr
+  // core.io.pht_lmem.rdata := pht_lmem.io.rdata
+  // pht_lmem.io.waddr := core.io.pht_lmem.waddr
+  // pht_lmem.io.wdata := core.io.pht_lmem.wdata
 
-  pht_gmem.io.clock := clock
-  pht_gmem.io.ren   := core.io.pht_gmem.ren
-  pht_gmem.io.wen   := core.io.pht_gmem.wen
-  pht_gmem.io.raddr := core.io.pht_gmem.raddr
-  core.io.pht_gmem.rdata := pht_gmem.io.rdata
-  pht_gmem.io.waddr := core.io.pht_gmem.waddr
-  pht_gmem.io.wdata := core.io.pht_gmem.wdata
+  // pht_gmem.io.clock := clock
+  // pht_gmem.io.ren   := core.io.pht_gmem.ren
+  // pht_gmem.io.wen   := core.io.pht_gmem.wen
+  // pht_gmem.io.raddr := core.io.pht_gmem.raddr
+  // core.io.pht_gmem.rdata := pht_gmem.io.rdata
+  // pht_gmem.io.waddr := core.io.pht_gmem.waddr
+  // pht_gmem.io.wdata := core.io.pht_gmem.wdata
 
   // Debug signals
   io.debugSignals.core <> core.io.debug_signal

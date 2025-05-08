@@ -47,16 +47,16 @@ class SimTop(memoryPath: String, with_sdc: Boolean, enable_pipeline_probe: Boole
     sdc.io.sdbuf <> sdbuf.io.sdbuf
   }
 
-  val imem_decoder = Module(new IMemDecoder(Seq(
-    (BigInt(startAddress), BigInt(0x10000000L/*imemSizeInBytes*/)),
-    (BigInt(0x20000000L), BigInt(dmemSizeInBytes)),
-  )))
-  imem_decoder.io.targets(0) <> boot_rom.io.imem
-  imem_decoder.io.targets(1) <> memory.io.imem
+  // val imem_decoder = Module(new IMemDecoder(Seq(
+  //   (BigInt(startAddress), BigInt(0x10000000L/*imemSizeInBytes*/)),
+  //   (BigInt(0x20000000L), BigInt(dmemSizeInBytes)),
+  // )))
+  // imem_decoder.io.targets(0) <> boot_rom.io.imem
+  // imem_decoder.io.targets(1) <> memory.io.imem
 
-  core.io.imem <> imem_decoder.io.initiator
+  core.io.imem <> boot_rom.io.imem // imem_decoder.io.initiator
   core.io.dmem <> dmem_decoder.io.initiator
-
+  core.io.icache <> memory.io.imem
   core.io.cache <> memory.io.cache
 
   val dram = Module(new MockDram(null, dmemSizeInBytes))
@@ -67,15 +67,15 @@ class SimTop(memoryPath: String, with_sdc: Boolean, enable_pipeline_probe: Boole
   memory.io.cache_array2 <> dcache.io.cache_array2
 
   val icache = Module(new MockICache)
-  memory.io.icache <> icache.io.icache
+  memory.io.icache_sram <> icache.io.icache_sram
 
   val icache_valid = Module(new MockICacheValid)
   memory.io.icache_valid <> icache_valid.io.icache_valid
 
-  val pht_lmem = Module(new MockPHTMem)
-  core.io.pht_lmem <> pht_lmem.io.pht_mem
-  val pht_gmem = Module(new MockPHTMem)
-  core.io.pht_gmem <> pht_gmem.io.pht_mem
+  // val pht_lmem = Module(new MockPHTMem)
+  // core.io.pht_lmem <> pht_lmem.io.pht_mem
+  // val pht_gmem = Module(new MockPHTMem)
+  // core.io.pht_gmem <> pht_gmem.io.pht_mem
 
   core.io.intr := 0.U
   core.io.sim_probe.foreach(io.sim_probe <> _)
@@ -86,5 +86,6 @@ object ElaborateSim extends App {
   (new ChiselStage).emitVerilog(new SimTop(null, true, true), Array(
     "-o", "riscv.v",
     "--target-dir", "rtl/sim",
+    "--throw-on-first-error"
   ))
 }
