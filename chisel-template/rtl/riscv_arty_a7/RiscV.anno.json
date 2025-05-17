@@ -1,27 +1,15 @@
 [
   {
     "class":"firrtl.transforms.DedupedResult",
-    "original":"~RiscV|DCache",
-    "duplicate":"~RiscV|RiscV/dcache1:DCache",
-    "index":0.4074074074074074
+    "original":"~RiscV|DCacheSram",
+    "duplicate":"~RiscV|RiscV/dcache1:DCacheSram",
+    "index":0.4090909090909091
   },
   {
     "class":"firrtl.transforms.DedupedResult",
-    "original":"~RiscV|DCache_1",
-    "duplicate":"~RiscV|RiscV/dcache2:DCache",
-    "index":0.4444444444444444
-  },
-  {
-    "class":"firrtl.transforms.DedupedResult",
-    "original":"~RiscV|PHTMem",
-    "duplicate":"~RiscV|RiscV/pht_lmem:PHTMem",
-    "index":0.5555555555555556
-  },
-  {
-    "class":"firrtl.transforms.DedupedResult",
-    "original":"~RiscV|PHTMem_1",
-    "duplicate":"~RiscV|RiscV/pht_gmem:PHTMem",
-    "index":0.5925925925925926
+    "original":"~RiscV|DCacheSram_1",
+    "duplicate":"~RiscV|RiscV/dcache2:DCacheSram",
+    "index":0.45454545454545453
   },
   {
     "class":"firrtl.EmitCircuitAnnotation",
@@ -66,13 +54,12 @@
     "class":"chisel3.experimental.EnumAnnotations$EnumDefAnnotation",
     "typeName":"fpga.ICacheState",
     "definition":{
-      "Read":3,
-      "Invalidate2":6,
-      "Lookup":2,
-      "WaitingRead":5,
-      "WaitingSnoop":4,
-      "Ready":0,
-      "Prelookup":1
+      "Read":2,
+      "Invalidate2":5,
+      "Lookup":0,
+      "Prelookup":1,
+      "WaitingRead":4,
+      "WaitingSnoop":3
     }
   },
   {
@@ -109,30 +96,6 @@
     "class":"chisel3.experimental.EnumAnnotations$EnumComponentAnnotation",
     "target":"RiscV.Memory.reg_dram_state",
     "enumTypeName":"fpga.DramState"
-  },
-  {
-    "class":"chisel3.experimental.EnumAnnotations$EnumComponentAnnotation",
-    "target":"RiscV.Core._ic_state_T_2",
-    "enumTypeName":"fpga.IcState"
-  },
-  {
-    "class":"chisel3.experimental.EnumAnnotations$EnumDefAnnotation",
-    "typeName":"fpga.IcState",
-    "definition":{
-      "Full2Half":2,
-      "DummyFull2Half":6,
-      "DummyFullHalf":7,
-      "DummyFull":5,
-      "Empty":0,
-      "EmptyHalf":4,
-      "Full":1,
-      "FullHalf":3
-    }
-  },
-  {
-    "class":"chisel3.experimental.EnumAnnotations$EnumComponentAnnotation",
-    "target":"RiscV.Core.ic_state",
-    "enumTypeName":"fpga.IcState"
   },
   {
     "class":"chisel3.experimental.EnumAnnotations$EnumDefAnnotation",

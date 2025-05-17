@@ -1,17 +1,5 @@
 [
   {
-    "class":"firrtl.transforms.DedupedResult",
-    "original":"~SimTop|MockPHTMem",
-    "duplicate":"~SimTop|SimTop/pht_lmem:MockPHTMem",
-    "index":0.9090909090909091
-  },
-  {
-    "class":"firrtl.transforms.DedupedResult",
-    "original":"~SimTop|MockPHTMem_1",
-    "duplicate":"~SimTop|SimTop/pht_gmem:MockPHTMem",
-    "index":0.9545454545454546
-  },
-  {
     "class":"firrtl.EmitCircuitAnnotation",
     "emitter":"firrtl.VerilogEmitter"
   },
@@ -72,13 +60,12 @@
     "class":"chisel3.experimental.EnumAnnotations$EnumDefAnnotation",
     "typeName":"fpga.ICacheState",
     "definition":{
-      "Read":3,
-      "Invalidate2":6,
-      "Lookup":2,
-      "WaitingRead":5,
-      "WaitingSnoop":4,
-      "Ready":0,
-      "Prelookup":1
+      "Read":2,
+      "Invalidate2":5,
+      "Lookup":0,
+      "Prelookup":1,
+      "WaitingRead":4,
+      "WaitingSnoop":3
     }
   },
   {
@@ -115,30 +102,6 @@
     "class":"chisel3.experimental.EnumAnnotations$EnumComponentAnnotation",
     "target":"SimTop.Memory.reg_dram_state",
     "enumTypeName":"fpga.DramState"
-  },
-  {
-    "class":"chisel3.experimental.EnumAnnotations$EnumComponentAnnotation",
-    "target":"SimTop.Core._ic_state_T_2",
-    "enumTypeName":"fpga.IcState"
-  },
-  {
-    "class":"chisel3.experimental.EnumAnnotations$EnumDefAnnotation",
-    "typeName":"fpga.IcState",
-    "definition":{
-      "Full2Half":2,
-      "DummyFull2Half":6,
-      "DummyFullHalf":7,
-      "DummyFull":5,
-      "Empty":0,
-      "EmptyHalf":4,
-      "Full":1,
-      "FullHalf":3
-    }
-  },
-  {
-    "class":"chisel3.experimental.EnumAnnotations$EnumComponentAnnotation",
-    "target":"SimTop.Core.ic_state",
-    "enumTypeName":"fpga.IcState"
   },
   {
     "class":"chisel3.experimental.EnumAnnotations$EnumDefAnnotation",
