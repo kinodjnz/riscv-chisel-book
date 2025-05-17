@@ -1,6 +1,5 @@
 CRAMP_REPO?=$(realpath ../../../rtl/sim)
-CRAMP_GEN_DIR?=${CRAMP_REPO}
-CRAMP_VERILOG?=${CRAMP_GEN_DIR}/riscv.v
+CRAMP_GEN_DIR?=$(CRAMP_REPO)
 
 BOOT_BIN ?= ../../../../riscv-tests/isa/rv32ui-p-add.binhex
 TIMEOUT ?= 2000
@@ -9,7 +8,7 @@ RISCV_TESTS_DIR ?= ../../../../riscv-tests/isa
 
 TRACE?=yes
 
-ADDCFLAGS += -CFLAGS -Iobj_dir
+ADDCFLAGS += -CFLAGS -Isim/obj_dir
 
 ADDCFLAGS += -CFLAGS -g
 ADDCFLAGS += -CFLAGS -rdynamic
@@ -20,13 +19,24 @@ FLAGS += --output-split-cfuncs 500
 FLAGS += --output-split-ctrace 500
 FLAGS +=  --x-assign unique
 
-ADDCFLAGS += -O3 -CFLAGS -O3
+ADDCFLAGS += -O2 -CFLAGS -O2
 
-SRCS=src/main.cpp
+SIM_NAME = riscv
+SIM_VERILOG ?= $(CRAMP_GEN_DIR)/$(SIM_NAME).v
+SIM_DIR = sim
+SIM_SRCS = $(SIM_DIR)/src/main.cpp
 
-OBJDIR=obj_dir
-VERILATOR_OBJ_NAMES=Vriscv.cpp Vriscv.h Vriscv.mk
-VERILATOR_OBJS=$(patsubst %,$(OBJDIR)/%,$(VERILATOR_OBJ_NAMES))
+CXX = c++
+GCC_CXX = g++
+GCC_CXXFLAGS_NO_UNUSED = -faligned-new -fcf-protection=none -Wno-bool-operation -Wno-c++11-narrowing -Wno-constant-logical-operand -Wno-non-pod-varargs -Wno-parentheses-equality -Wno-shadow -Wno-sign-compare -Wno-tautological-bitwise-compare -Wno-tautological-compare -Wno-uninitialized -Wno-unused-but-set-parameter -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable
+
+OBJ_DIR = obj_dir
+VERILATOR_OBJ_POSTFIXES = .cpp .h .mk
+
+UT_DIRS = $(filter-out $(SIM_DIR),$(patsubst %/,%,$(wildcard */)))
+
+SIM_VERILATOR_OBJ_NAMES=V$(SIM_NAME).cpp V$(SIM_NAME).h V$(SIM_NAME).mk
+SIM_VERILATOR_OBJS=$(patsubst %,$(SIM_DIR)/$(OBJ_DIR)/%,$(SIM_VERILATOR_OBJ_NAMES))
 
 RISCV_TESTS=$(wildcard $(RISCV_TESTS_DIR)/*.binhex)
 RISCV_TESTS_EXCLUDES=hash8 opened_hash
@@ -56,26 +66,61 @@ print:
 	@echo $(call find_timeout,fizzbuzz,$(TIMEOUT_OVERRIDES))
 	@echo $(call find_timeout,abc,$(TIMEOUT_OVERRIDES))
 
-run: compile $(patsubst %.binhex,%.target,$(BOOT_BIN)) ## run
+run: sim-compile $(patsubst %.binhex,%.target,$(BOOT_BIN)) ## run
 
-all-tests: compile $(RISCV_TESTS_TARGETS)
+all-tests: sim-compile $(RISCV_TESTS_TARGETS)
 
-test-%: compile $(RISCV_TESTS_DIR)/%.binhex
+test-%: sim-compile $(RISCV_TESTS_DIR)/%.binhex
 	$(eval TIMEOUT_OVERRIDE=$(call find_timeout,$(patsubst test-%,%,$@),$(TIMEOUT_OVERRIDES)))
-	./$(OBJDIR)/Vriscv --load-boot-bin $(word 2,$?) --timeout $(if $(TIMEOUT_OVERRIDE),$(TIMEOUT_OVERRIDE),$(TIMEOUT)) --trace-fst logs/$@.fst
+	$(SIM_DIR)/$(OBJ_DIR)/V$(SIM_NAME) --load-boot-bin $(word 2,$?) --timeout $(if $(TIMEOUT_OVERRIDE),$(TIMEOUT_OVERRIDE),$(TIMEOUT)) --trace-fst $(SIM_DIR)/logs/$@.fst
 
-verilate: $(VERILATOR_OBJS)
+sim-compile: $(SIM_DIR)/$(OBJ_DIR)/V$(SIM_NAME)
 
-$(VERILATOR_OBJS): ${CRAMP_VERILOG}
-	verilator -cc  ${CRAMP_VERILOG} -CFLAGS -std=c++14 -LDFLAGS -pthread  ${ADDCFLAGS} ${FLAGS} --gdbbt ${VERILATOR_ARGS} -Wno-UNOPTFLAT -Wno-WIDTH --x-initial 0 --x-assign unique --exe ${SRCS}
+$(SIM_DIR)/$(OBJ_DIR)/V$(SIM_NAME): sim-verilate $(SIM_SRCS)
+	make -j$(THREAD_COUNT) -C $(SIM_DIR)/$(OBJ_DIR)/ -f V$(SIM_NAME).mk V$(SIM_NAME) LIBS=$(LIBS)
 
-compile: ./$(OBJDIR)/Vriscv
+sim-verilate: $(SIM_VERILATOR_OBJS)
 
-./$(OBJDIR)/Vriscv: verilate ${SRCS}
-	make -j${THREAD_COUNT} -C $(OBJDIR)/ -f Vriscv.mk Vriscv LIBS=${LIBS}
+$(SIM_VERILATOR_OBJS): $(SIM_VERILOG)
+	verilator -cc --Mdir $(SIM_DIR)/$(OBJ_DIR) $(SIM_VERILOG) -CFLAGS -std=c++23 -LDFLAGS -pthread $(ADDCFLAGS) $(FLAGS) --gdbbt $(VERILATOR_ARGS) -Wno-UNOPTFLAT -Wno-WIDTH --x-initial 0 --x-assign unique --exe $(SIM_SRCS)
 
-clean:
-	rm -rf $(OBJDIR)
+UT_VERILATOR_OBJS = $(foreach postfixes,.mk,$(foreach ut_name,$(UT_DIRS),$(ut_name)/$(OBJ_DIR)/V$(ut_name)$(postfixes)))
+UT_EXECUTABLES = $(foreach ut_name,$(UT_DIRS),$(ut_name)/$(OBJ_DIR)/V$(ut_name))
+UT_TARGET = $(patsubst %,ut-%,$(UT_DIRS))
+
+.PHONY: all-ut
+all-ut: $(UT_TARGET)
+
+.PHONY: $(UT_TARGET)
+.SECONDEXPANSION:
+$(UT_TARGET): %: $$(foreach ut_name,$$(subst ut-,,%),$$(ut_name)/$(OBJ_DIR)/V$$(ut_name))
+	$<
+
+.PHONY: ut-compile
+ut-compile: $(UT_EXECUTABLES)
+
+.SECONDEXPANSION:
+$(UT_EXECUTABLES): %: $(UT_VERILATOR_OBJS) $$(firstword $$(subst /, ,%))/src/main.cpp
+	make -j$(THREAD_COUNT) -C $(firstword $(subst /, ,$@))/$(OBJ_DIR)/ -f V$(firstword $(subst /, ,$@)).mk V$(firstword $(subst /, ,$@)) CXX=$(GCC_CXX) LINK=$(GCC_CXX) USER_CPPFLAGS="$(USER_CPPFLAGS)" USER_LDFLAGS="$(USER_LDFLAGS)" USER_LDLIBS="$(USER_LDLIBS)" CFG_CXXFLAGS_NO_UNUSED="$(GCC_CXXFLAGS_NO_UNUSED)" VK_PCH_I_FAST= VK_PCH_I_SLOW= LIBS=$(LIBS)
+
+.PHONY: ut-verilate
+ut-verilate: $(UT_VERILATOR_OBJS)
+
+.SECONDEXPANSION:
+$(UT_VERILATOR_OBJS): %.mk: $(CRAMP_GEN_DIR)/$$(firstword $$(subst /, ,%)).v
+	verilator -cc --Mdir $(firstword $(subst /, ,$@))/$(OBJ_DIR) $< -CFLAGS -std=c++23 -LDFLAGS -pthread $(ADDCFLAGS) $(FLAGS) --gdbbt $(VERILATOR_ARGS) -Wno-UNOPTFLAT -Wno-WIDTH --x-initial 0 --x-assign unique --exe $(firstword $(subst /, ,$@))/src/*.cpp
+
+.PHONY: clean
+clean: clean-ut
+	rm -rf $(SIM_DIR)/$(OBJ_DIR)
+
+CLEAN_UT_TARGET = $(patsubst %,clean-ut-%,$(UT_DIRS))
+
+.PHONY: clean-ut
+clean-ut: $(CLEAN_UT_TARGET)
+
+$(CLEAN_UT_TARGET):
+	rm -rf $(subst clean-ut-,,$@)/$(OBJ_DIR)
 
 .PHONY: help
 help:

@@ -88,4 +88,5 @@ object ElaborateSim extends App {
     "--target-dir", "rtl/sim",
     "--throw-on-first-error"
   ))
+  ElaborateFetchSim.main(args)
 }

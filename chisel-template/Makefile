@@ -9,6 +9,9 @@ SCALA_DIR := src/main/scala/fpga
 SCALA_SRCS := $(wildcard $(SCALA_DIR)/*.scala $(SCALA_DIR)/*/*.scala)
 RISCV_CORE_DIR := rtl/riscv_arty_a7
 RISCV_SIM_DIR := rtl/sim
+GCC_CXX ?= g++
+
+SIM_OBJS := riscv.v fetch.v
 
 .DEFAULT_GOAL = help
 
@@ -40,12 +43,12 @@ verilog: $(RISCV_CORE_DIR)/riscv.v ## Generate verilog from chisel source
 # 	make -C ../vivado/riscv_arty35 src/riscv.v
 
 .PHONY: vsim
-vsim: $(RISCV_SIM_DIR)/riscv.v
+vsim: $(patsubst %,$(RISCV_SIM_DIR)/%,$(SIM_OBJS))
 
 $(RISCV_CORE_DIR)/riscv.v: $(SCALA_SRCS)
 	$(SBT) "runMain fpga.ElaborateArtyA7"
 
-$(RISCV_SIM_DIR)/riscv.v: $(SCALA_SRCS)
+$(patsubst %,$(RISCV_SIM_DIR)/%,$(SIM_OBJS)): $(SCALA_SRCS)
 	$(SBT) "runMain fpga.sim.ElaborateSim"
 
 .PHONY: bootrom
@@ -66,14 +69,22 @@ list-tests: ## List test targets
 
 .PHONY: test
 test: vsim ## Run simple test
-	$(MAKE) -C src/test/verifier test-rv32ui-p-add
+	$(MAKE) -C src/test/verifier GCC_CXX=$(GCC_CXX) USER_CPPFLAGS="$(USER_CPPFLAGS)" USER_LDFLAGS="$(USER_LDFLAGS)" USER_LDLIBS="$(USER_LDLIBS)" test-rv32ui-p-add
 
 .PHONY: $(test-targets)
 $(test-targets): vsim
-	$(MAKE) -C src/test/verifier $@
+	$(MAKE) -C src/test/verifier GCC_CXX=$(GCC_CXX) USER_CPPFLAGS="$(USER_CPPFLAGS)" USER_LDFLAGS="$(USER_LDFLAGS)" USER_LDLIBS="$(USER_LDLIBS)" $@
+
+.PHONY: clean-verifier
+clean-verifier: ## Clean verifier obj_dir
+	$(MAKE) -C src/test/verifier GCC_CXX=$(GCC_CXX) USER_CPPFLAGS="$(USER_CPPFLAGS)" USER_LDFLAGS="$(USER_LDFLAGS)" USER_LDLIBS="$(USER_LDLIBS)" clean
 
 .PHONY: all-tests
 all-tests: vsim $(test-targets) ## Run all tests
+
+.PHONY: all-ut
+all-ut: vsim ## Run all unittests
+	$(MAKE) -C src/test/verifier GCC_CXX=$(GCC_CXX) USER_CPPFLAGS="$(USER_CPPFLAGS)" USER_LDFLAGS="$(USER_LDFLAGS)" USER_LDLIBS="$(USER_LDLIBS)" all-ut
 
 .PHONY: help
 help:

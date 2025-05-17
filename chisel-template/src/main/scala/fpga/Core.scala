@@ -308,8 +308,10 @@ class Core(
   val ex2_reg_div_stall    = RegInit(false.B)
   val ex2_div_stall        = Wire(Bool())
   val ex2_reg_divrem_state = RegInit(DivremState.Idle)
-  val ex2_reg_is_br        = RegInit(false.B)
-  val ex2_reg_br_pc        = RegInit(0.U(PC_LEN.W))
+  // val ex2_reg_is_br        = RegInit(false.B)
+  // val ex2_reg_br_pc        = RegInit(0.U(PC_LEN.W))
+  val ex2_reg_is_br        = RegInit(true.B) // jump start_address when first time
+  val ex2_reg_br_pc        = RegInit((start_address >> (WORD_LEN-PC_LEN)).U(PC_LEN.W))
   val ex1_reg_upd_pc_stalled = RegInit(false.B)
   val ex1_fetch_pc_en      = Wire(Bool())
   val csr_is_br            = Wire(Bool())

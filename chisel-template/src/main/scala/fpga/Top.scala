@@ -111,14 +111,14 @@ class RiscV(clockHz: Int) extends Module {
   dmem_decoder.io.targets(5) <> intr.io.mem
   dmem_decoder.io.targets(6) <> config.io.mem
 
-  val imem_decoder = Module(new IMemDecoder(Seq(
-    (BigInt(startAddress), BigInt(startAddress/*imemSizeInBytes*/)),
-    (BigInt(0x20000000L), BigInt(dmemSizeInBytes)),
-  )))
-  imem_decoder.io.targets(0) <> boot_rom.io.imem
-  imem_decoder.io.targets(1) <> memory.io.imem
+  // val imem_decoder = Module(new IMemDecoder(Seq(
+  //   (BigInt(startAddress), BigInt(startAddress/*imemSizeInBytes*/)),
+  //   (BigInt(0x20000000L), BigInt(dmemSizeInBytes)),
+  // )))
+  // imem_decoder.io.targets(0) <> boot_rom.io.imem
+  // imem_decoder.io.targets(1) <> memory.io.imem
 
-  core.io.imem <> imem_decoder.io.initiator
+  core.io.imem <> boot_rom.io.imem // imem_decoder.io.initiator
   core.io.dmem <> dmem_decoder.io.initiator
   core.io.icache <> memory.io.imem
   core.io.cache <> memory.io.cache

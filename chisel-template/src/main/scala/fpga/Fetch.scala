@@ -46,28 +46,30 @@ class BranchPredictor extends Module {
   io.bp1_fetch_ptr := 0.U
 }
 
+class FetchUnitPort extends Bundle {
+  val flush_en     = Input(Bool())
+  val flush_iaddr  = Input(UInt(PC_LEN.W))
+  val inst1_valid  = Output(Bool())
+  val inst1_addr   = Output(UInt(PC_LEN.W))
+  val inst1_data   = Output(UInt(WORD_LEN.W))
+  val inst1_bpfail = Output(Bool())
+  val inst1_half   = Output(Bool())
+  val inst2_valid  = Output(Bool())
+  val inst2_addr   = Output(UInt(PC_LEN.W))
+  val inst2_data   = Output(UInt(WORD_LEN.W))
+  val inst2_bpfail = Output(Bool())
+  val inst2_half   = Output(Bool())
+  val inst1_ready  = Input(Bool())
+  val inst2_ready  = Input(Bool())
+
+  val imem   = Flipped(new ImemPortIo())
+  val icache = Flipped(new CachedImemPort())
+}
+
 class FetchUnit(
   dram_config: DramConfig,
 ) extends Module {
-  val io = IO(new Bundle {
-    val flush_en     = Input(Bool())
-    val flush_iaddr  = Input(UInt(PC_LEN.W))
-    val inst1_valid  = Output(Bool())
-    val inst1_addr   = Output(UInt(PC_LEN.W))
-    val inst1_data   = Output(UInt(WORD_LEN.W))
-    val inst1_bpfail = Output(Bool())
-    val inst1_half   = Output(Bool())
-    val inst2_valid  = Output(Bool())
-    val inst2_addr   = Output(UInt(PC_LEN.W))
-    val inst2_data   = Output(UInt(WORD_LEN.W))
-    val inst2_bpfail = Output(Bool())
-    val inst2_half   = Output(Bool())
-    val inst1_ready  = Input(Bool())
-    val inst2_ready  = Input(Bool())
-
-    val imem   = Flipped(new ImemPortIo())
-    val icache = Flipped(new CachedImemPort())
-  })
+  val io = IO(new FetchUnitPort)
 
   class FetchBuffer extends Bundle {
     val iaddr = UInt(PC_LEN.W)
@@ -86,14 +88,14 @@ class FetchUnit(
   val bp = Module(new BranchPredictor)
 
   def if0: Unit = {
-    val reg_next_iaddr = RegInit(0.U(PC_LEN.W))
+    val reg_next_iaddr = RegInit(0x0000fff0.U(PC_LEN.W))
     val iaddr = Wire(UInt(PC_LEN.W))
-    val next_iaddr = WireDefault(iaddr + ((IBLOCK_LEN / 8) >> (WORD_LEN - PC_LEN)).U(PC_LEN.W))
-    reg_next_iaddr := next_iaddr
     iaddr := Mux(io.flush_en, io.flush_iaddr, reg_next_iaddr)
+    reg_next_iaddr := iaddr + ((IBLOCK_LEN / 8) >> (WORD_LEN - PC_LEN)).U(PC_LEN.W)
 
     val count = addressing_ptr - read_ptr
     val has_space = (~count(FETCH_PTR_LEN)).asBool
+    // val has_space = count < 3.U
     val is_dram = dram_config.is_dram(iaddr.pc_to_word)
 
     io.imem.addr      := iaddr.pc_to_word.clear_lsbits(IBLOCK_BITS)
@@ -105,24 +107,39 @@ class FetchUnit(
     bp.io.iaddr_en    := true.B
     bp.io.fetch_ptr   := addressing_ptr.take(FETCH_PTR_LEN)
     when (!(has_space || io.flush_en) || (is_dram && !io.icache.addr_ready)) {
-      next_iaddr         := iaddr
-      bp.io.iaddr_en     := false.B
+      reg_next_iaddr := iaddr
+      bp.io.iaddr_en := false.B
     }.otherwise {
       addressing_ptr := addressing_ptr + 1.U
 
       printf(cf"fb(${addressing_ptr}%x): 0x${Cat(iaddr, 0.U(1.W))}%x addressed\n")
     }
 
-    fetch_buf(addressing_ptr.take(FETCH_PTR_LEN)).iaddr := iaddr
-    fetch_buf(addressing_ptr.take(FETCH_PTR_LEN)).receipt_advance := true.B
+    when (has_space || io.flush_en) {
+      fetch_buf(addressing_ptr.take(FETCH_PTR_LEN)).iaddr := iaddr
+      fetch_buf(addressing_ptr.take(FETCH_PTR_LEN)).receipt_advance := true.B
+    }
+
+    printf(cf"iaddr=${iaddr ## 0.U(1.W)}%x\n")
+    printf(cf"reg_next_iaddr=${reg_next_iaddr ## 0.U(1.W)}%x\n")
+    printf(cf"io.imem.addr=${io.imem.addr}%x\n")
+    printf(cf"io.imem.en=${io.imem.en}\n")
+    printf(cf"addressing=${addressing_ptr.take(FETCH_PTR_LEN)}\n")
+    printf(cf"fb(0).iaddr=${fetch_buf(0.U).iaddr ## 0.U(1.W)}%x\n")
+    printf(cf"fb(1).iaddr=${fetch_buf(1.U).iaddr ## 0.U(1.W)}%x\n")
+    printf(cf"fb(2).iaddr=${fetch_buf(2.U).iaddr ## 0.U(1.W)}%x\n")
+    printf(cf"fb(3).iaddr=${fetch_buf(3.U).iaddr ## 0.U(1.W)}%x\n")
   }
 
   def if1: Unit = {
     io.icache.idata_ready := true.B
     val idata = Mux(io.imem.valid, io.imem.inst, io.icache.idata)
-    fetch_buf(fetch_ptr.take(FETCH_PTR_LEN)).idata := idata
-    fetch_buf(fetch_ptr.take(FETCH_PTR_LEN)).iblock_cont := true.B
-    fetch_buf(fetch_ptr.take(FETCH_PTR_LEN)).end_of_iblock := 3.U
+    val fetch_in_progress = (addressing_ptr =/= fetch_ptr)
+    when (fetch_in_progress) {
+      fetch_buf(fetch_ptr.take(FETCH_PTR_LEN)).idata := idata
+      fetch_buf(fetch_ptr.take(FETCH_PTR_LEN)).iblock_cont := true.B
+      fetch_buf(fetch_ptr.take(FETCH_PTR_LEN)).end_of_iblock := 3.U
+    }
 
     val addressed_subsequent = (addressing_ptr.take(FETCH_PTR_LEN) - 2.U === bp.io.bp1_fetch_ptr)
     val receiving_inval = (addressing_ptr.take(FETCH_PTR_LEN) - 1.U === receipt_ptr.take(FETCH_PTR_LEN))
@@ -216,11 +233,14 @@ class FetchUnit(
       (io.inst2_ready && inst2_valid)                     -> inst2_past_us,
       ((io.inst1_ready || io.inst2_ready) && inst1_valid) -> inst1_past_us,
     ))
+    val iaddr_update = (io.inst2_ready && inst2_valid) || ((io.inst1_ready || io.inst2_ready) && inst1_valid)
     read_ptr := read_ptr + Mux(inst_past(IALIGN_PTR_LEN) || inst_past.take(IALIGN_PTR_LEN) > end_of_iblocks(0), 1.U, 0.U)
-    when (inst_past(IALIGN_PTR_LEN) && iblock_cont) {
-      fetch_buf((read_ptr + 1.U).take(FETCH_PTR_LEN)).iaddr := iaddrs(1).replace_lsbits(IALIGN_PTR_LEN, inst_past.take(IALIGN_PTR_LEN))
-    }.otherwise {
-      fetch_buf((read_ptr + 0.U).take(FETCH_PTR_LEN)).iaddr := iaddrs(0).replace_lsbits(IALIGN_PTR_LEN, inst_past.take(IALIGN_PTR_LEN))
+    when (iaddr_update) {
+      when (inst_past(IALIGN_PTR_LEN) && iblock_cont) {
+        fetch_buf((read_ptr + 1.U).take(FETCH_PTR_LEN)).iaddr := iaddrs(1).replace_lsbits(IALIGN_PTR_LEN, inst_past.take(IALIGN_PTR_LEN))
+      }.otherwise {
+        fetch_buf((read_ptr + 0.U).take(FETCH_PTR_LEN)).iaddr := iaddrs(0).replace_lsbits(IALIGN_PTR_LEN, inst_past.take(IALIGN_PTR_LEN))
+      }
     }
     
     // io.inst2_valid  := !io.flush_en && sat_count =/= 0.U && Mux(is_halfs(0),
@@ -268,7 +288,10 @@ class FetchUnit(
     }
 
     when (inst1_valid) {
-      printf(cf"fb(${read_ptr}%x): 0x${Cat(iaddrs(0), 0.U(1.W))}%x: 0x${idatas(1) ## idatas(0)}%x\n")
+      printf(cf"fb(${read_ptr}%x): 0x${Cat(iaddrs(0), 0.U(1.W))}%x: 0x${idatas(1) ## idatas(0)}%x ${io.inst1_ready} read\n")
+    }
+    when (inst2_valid) {
+      printf(cf"fb(${read_ptr}%x): 0x${Cat(io.inst2_addr, 0.U(1.W))}%x: 0x${io.inst2_data}%x ${io.inst2_ready} read\n")
     }
   }
 

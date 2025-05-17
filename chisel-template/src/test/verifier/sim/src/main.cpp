@@ -110,7 +110,6 @@ void verilator_init(int argc, char** argv) {
     Verilated::randReset(2);
     Verilated::traceEverOn(true);
     Verilated::commandArgs(argc, argv);
-    Verilated::mkdir("logs");
 }
 
 void rtl_init() {
