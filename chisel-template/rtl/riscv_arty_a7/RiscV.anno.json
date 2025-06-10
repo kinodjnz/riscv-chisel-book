@@ -3,13 +3,25 @@
     "class":"firrtl.transforms.DedupedResult",
     "original":"~RiscV|DCacheSram",
     "duplicate":"~RiscV|RiscV/dcache1:DCacheSram",
-    "index":0.4090909090909091
+    "index":0.5
   },
   {
     "class":"firrtl.transforms.DedupedResult",
     "original":"~RiscV|DCacheSram_1",
     "duplicate":"~RiscV|RiscV/dcache2:DCacheSram",
-    "index":0.45454545454545453
+    "index":0.5333333333333333
+  },
+  {
+    "class":"firrtl.transforms.DedupedResult",
+    "original":"~RiscV|PHTMem",
+    "duplicate":"~RiscV|RiscV/pht_lmem:PHTMem",
+    "index":0.6333333333333333
+  },
+  {
+    "class":"firrtl.transforms.DedupedResult",
+    "original":"~RiscV|PHTMem_1",
+    "duplicate":"~RiscV|RiscV/pht_gmem:PHTMem",
+    "index":0.6666666666666666
   },
   {
     "class":"firrtl.EmitCircuitAnnotation",
