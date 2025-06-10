@@ -346,7 +346,7 @@ src/rust/bootrom/rust-toolchain
 
 # verilator objects
 obj_dir
-src/test/verifier/sim/logs/*.json
+src/test/verifier/*/logs/*.json
 src/test/verifier/*/logs/*.fst
 
 # Make env file

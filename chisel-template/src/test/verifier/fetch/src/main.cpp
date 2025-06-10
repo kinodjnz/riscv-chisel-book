@@ -191,11 +191,11 @@ public:
 
 std::generator<int64_t> input_task(Vfetch *vp, context *ctx) {
     co_yield 0;
-    vp->io_flush_en = 1;
-    vp->io_flush_iaddr = 0x08000000 >> 1;
+    vp->io_ft_flush_en = 1;
+    vp->io_ft_flush_iaddr = 0x08000000 >> 1;
     co_yield 1;
-    vp->io_flush_en = 0;
-    vp->io_flush_iaddr = 0x00000000 >> 1;
+    vp->io_ft_flush_en = 0;
+    vp->io_ft_flush_iaddr = 0x00000000 >> 1;
     co_yield 1;
 }
 
@@ -226,18 +226,305 @@ std::generator<int64_t> imem_mock_task(Vfetch *vp, context *ctx, const std::vect
     uint64_t idata = 0;
     co_yield 0;
     while (true) {
-        vp->io_imem_inst = idata;
-        vp->io_imem_valid = valid;
+        vp->io_ft_imem_inst = idata;
+        vp->io_ft_imem_valid = valid;
         co_yield -1;
-        // WARN(std::format("io_imem_en={}", vp->io_imem_en));
-        // WARN(std::format("io_imem_addr={0:#x}", vp->io_imem_addr));
-        if (vp->io_imem_en) {
-            idata = (vp->io_imem_addr & 0xff000000) == 0x08000000 ? data[((vp->io_imem_addr - 0x08000000) >> 3) % data.size()] : 0;
+        // WARN(std::format("io_ft_imem_en={}", vp->io_ft_imem_en));
+        // WARN(std::format("io_ft_imem_addr={0:#x}", vp->io_ft_imem_addr));
+        if (vp->io_ft_imem_en) {
+            idata = (vp->io_ft_imem_addr & 0xff000000) == 0x08000000 ? data[((vp->io_ft_imem_addr - 0x08000000) >> 3) % data.size()] : 0;
             valid = true;
         } else {
             idata = 0;
             valid = false;
         }
+        co_yield 1;
+    }
+}
+
+enum class inst_attr {
+    BR = 1,
+    DJUMP = 2,
+    DCALL = 3,
+    RET = 4,
+};
+
+struct bp_cell {
+    std::optional<uint32_t> zbtb_target;
+    std::optional<inst_attr> btb_attr;
+    uint32_t btb_target;
+    bool pht_taken;
+};
+
+static const std::vector<bp_cell> bp_none = {
+    bp_cell(std::nullopt, std::nullopt, 0),
+};
+
+static const std::vector<bp_cell> bp_32bit = {
+    bp_cell(std::nullopt, std::nullopt, 0, false),
+    bp_cell(std::make_optional(0x04000002), std::make_optional(inst_attr::DJUMP), 0x04000002, false),
+    bp_cell(std::nullopt, std::nullopt, 0, false),
+    bp_cell(std::make_optional(0x04000008), std::make_optional(inst_attr::BR), 0x04000008, true),
+    bp_cell(std::nullopt, std::nullopt, 0, false),
+    bp_cell(std::nullopt, std::nullopt, 0, false),
+    bp_cell(std::nullopt, std::nullopt, 0, false),
+    bp_cell(std::make_optional(0x0400000a), std::make_optional(inst_attr::DJUMP), 0x0400000a, false),
+    bp_cell(std::nullopt, std::nullopt, 0, false),
+    bp_cell(std::make_optional(0x04000004), std::make_optional(inst_attr::BR), 0x04000004, true),
+    bp_cell(std::nullopt, std::nullopt, 0, false),
+    bp_cell(std::make_optional(0x0400000c), std::make_optional(inst_attr::DJUMP), 0x0400000c, false),
+    bp_cell(std::nullopt, std::nullopt, 0, false),
+    bp_cell(std::nullopt, std::nullopt, 0, false),
+    bp_cell(std::nullopt, std::nullopt, 0, false),
+    bp_cell(std::nullopt, std::nullopt, 0, false),
+};
+
+static const std::vector<bp_cell> bp_miss_32bit = {
+    bp_cell(std::nullopt, std::nullopt, 0, false),
+    bp_cell(std::nullopt, std::make_optional(inst_attr::BR), 0x04000002, true),
+    bp_cell(std::nullopt, std::nullopt, 0, false),
+    bp_cell(std::nullopt, std::make_optional(inst_attr::DJUMP), 0x04000008, false),
+    bp_cell(std::nullopt, std::nullopt, 0, false),
+    bp_cell(std::nullopt, std::nullopt, 0, false),
+    bp_cell(std::nullopt, std::nullopt, 0, false),
+    bp_cell(std::nullopt, std::make_optional(inst_attr::BR), 0x0400000a, true),
+    bp_cell(std::nullopt, std::nullopt, 0, false),
+    bp_cell(std::nullopt, std::make_optional(inst_attr::DJUMP), 0x04000004, false),
+    bp_cell(std::nullopt, std::nullopt, 0, false),
+    bp_cell(std::nullopt, std::make_optional(inst_attr::BR), 0x0400000c, true),
+    bp_cell(std::nullopt, std::nullopt, 0, false),
+    bp_cell(std::nullopt, std::nullopt, 0, false),
+    bp_cell(std::nullopt, std::nullopt, 0, false),
+    bp_cell(std::nullopt, std::nullopt, 0, false),
+};
+
+static const std::vector<bp_cell> bp_mixed_32bit = {
+    bp_cell(std::nullopt, std::nullopt, 0, false),
+    bp_cell(std::make_optional(0x04000004), std::make_optional(inst_attr::DJUMP), 0x04000002, false),
+    bp_cell(std::nullopt, std::nullopt, 0, false),
+    bp_cell(std::nullopt, std::make_optional(inst_attr::BR), 0x04000008, true),
+    bp_cell(std::nullopt, std::nullopt, 0, false),
+    bp_cell(std::make_optional(0x04000002), std::nullopt, 0, false),
+    bp_cell(std::nullopt, std::nullopt, 0, false),
+    bp_cell(std::nullopt, std::make_optional(inst_attr::DJUMP), 0x0400000a, false),
+    bp_cell(std::nullopt, std::nullopt, 0, false),
+    bp_cell(std::make_optional(0x04000004), std::make_optional(inst_attr::DJUMP), 0x04000004, false),
+    bp_cell(std::nullopt, std::nullopt, 0, false),
+    bp_cell(std::make_optional(0x04000008), std::make_optional(inst_attr::BR), 0x0400000c, true),
+    bp_cell(std::nullopt, std::nullopt, 0, false),
+    bp_cell(std::nullopt, std::nullopt, 0, false),
+    bp_cell(std::nullopt, std::nullopt, 0, false),
+    bp_cell(std::make_optional(0x04000010), std::nullopt, 0, false),
+};
+
+static const std::vector<bp_cell> bp_rvc = {
+    /*00 */ bp_cell(std::make_optional(0x04000003), std::make_optional(inst_attr::DJUMP), 0x04000003, false),
+    /*01 */ bp_cell(std::nullopt, std::nullopt, 0, false),
+    /*02 */ bp_cell(std::make_optional(0x0400000c), std::make_optional(inst_attr::DJUMP), 0x0400000c, false),
+    /*03 */ bp_cell(std::make_optional(0x04000009), std::make_optional(inst_attr::DJUMP), 0x04000009, false),
+    /*04^*/ bp_cell(std::nullopt, std::nullopt, 0, false),
+    /*05v*/ bp_cell(std::make_optional(0x04000016), std::make_optional(inst_attr::DJUMP), 0x04000016, false),
+    /*06 */ bp_cell(std::make_optional(0x04000010), std::make_optional(inst_attr::DJUMP), 0x04000010, false),
+    /*07 */ bp_cell(std::make_optional(0x04000001), std::make_optional(inst_attr::DJUMP), 0x04000001, false),
+    /*08 */ bp_cell(std::make_optional(0x04000014), std::make_optional(inst_attr::DJUMP), 0x04000014, false),
+    /*09^*/ bp_cell(std::nullopt, std::nullopt, 0, false),
+    /*0av*/ bp_cell(std::make_optional(0x04000007), std::make_optional(inst_attr::DJUMP), 0x04000007, false),
+    /*0b */ bp_cell(std::make_optional(0x04000011), std::make_optional(inst_attr::DJUMP), 0x04000011, false),
+    /*0c^*/ bp_cell(std::nullopt, std::nullopt, 0, false),
+    /*0dv*/ bp_cell(std::make_optional(0x04000006), std::make_optional(inst_attr::DJUMP), 0x04000006, false),
+    /*0e^*/ bp_cell(std::nullopt, std::nullopt, 0, false),
+    /*0fv*/ bp_cell(std::make_optional(0x04000008), std::make_optional(inst_attr::DJUMP), 0x04000008, false),
+    /*10 */ bp_cell(std::make_optional(0x0400000e), std::make_optional(inst_attr::DJUMP), 0x0400000e, false),
+    /*11 */ bp_cell(std::nullopt, std::nullopt, 0, false),
+    /*12^*/ bp_cell(std::nullopt, std::nullopt, 0, false),
+    /*13v*/ bp_cell(std::make_optional(0x0400001b), std::make_optional(inst_attr::DJUMP), 0x0400001b, false),
+    /*14^*/ bp_cell(std::nullopt, std::nullopt, 0, false),
+    /*15v*/ bp_cell(std::make_optional(0x0400000b), std::make_optional(inst_attr::DJUMP), 0x0400000b, false),
+    /*16 */ bp_cell(std::make_optional(0x04000023), std::make_optional(inst_attr::DJUMP), 0x04000023, false),
+    /*17^*/ bp_cell(std::nullopt, std::nullopt, 0, false),
+    /*18v*/ bp_cell(std::make_optional(0x04000024), std::make_optional(inst_attr::DJUMP), 0x04000024, false),
+    /*19 */ bp_cell(std::make_optional(0x04000026), std::make_optional(inst_attr::DJUMP), 0x04000026, false),
+    /*1a */ bp_cell(std::make_optional(0x0400001d), std::make_optional(inst_attr::DJUMP), 0x0400001d, false),
+    /*1b */ bp_cell(std::make_optional(0x04000021), std::make_optional(inst_attr::DJUMP), 0x04000021, false),
+    /*1c */ bp_cell(std::make_optional(0x04000029), std::make_optional(inst_attr::DJUMP), 0x04000029, false),
+    /*1d^*/ bp_cell(std::nullopt, std::nullopt, 0, false),
+    /*1ev*/ bp_cell(std::make_optional(0x0400002b), std::make_optional(inst_attr::DJUMP), 0x0400002b, false),
+    /*1f^*/ bp_cell(std::nullopt, std::nullopt, 0, false),
+    /*20v*/ bp_cell(std::make_optional(0x0400001c), std::make_optional(inst_attr::DJUMP), 0x0400001c, false),
+    /*21^*/ bp_cell(std::nullopt, std::nullopt, 0, false),
+    /*22v*/ bp_cell(std::make_optional(0x04000004), std::make_optional(inst_attr::DJUMP), 0x04000004, false),
+    /*23 */ bp_cell(std::make_optional(0x04000019), std::make_optional(inst_attr::DJUMP), 0x04000019, false),
+    /*24^*/ bp_cell(std::nullopt, std::nullopt, 0, false),
+    /*25v*/ bp_cell(std::make_optional(0x04000027), std::make_optional(inst_attr::DJUMP), 0x04000027, false),
+    /*26 */ bp_cell(std::make_optional(0x0400001f), std::make_optional(inst_attr::DJUMP), 0x0400001f, false),
+    /*27^*/ bp_cell(std::nullopt, std::nullopt, 0, false),
+    /*28v*/ bp_cell(std::make_optional(0x0400002e), std::make_optional(inst_attr::DJUMP), 0x0400002e, false),
+    /*29^*/ bp_cell(std::nullopt, std::nullopt, 0, false),
+    /*2av*/ bp_cell(std::make_optional(0x0400002d), std::make_optional(inst_attr::DJUMP), 0x0400002d, false),
+    /*2b^*/ bp_cell(std::nullopt, std::nullopt, 0, false),
+    /*2cv*/ bp_cell(std::make_optional(0x04000017), std::make_optional(inst_attr::DJUMP), 0x04000017, false),
+    /*2d */ bp_cell(std::make_optional(0x0400001a), std::make_optional(inst_attr::DJUMP), 0x0400001a, false),
+    /*2e^*/ bp_cell(std::nullopt, std::nullopt, 0, false),
+    /*2fv*/ bp_cell(std::nullopt, std::nullopt, 0, false),
+};
+
+static const std::vector<bp_cell> bp_miss_rvc = {
+    /*00 */ bp_cell(std::nullopt, std::make_optional(inst_attr::DJUMP), 0x04000003, false),
+    /*01 */ bp_cell(std::nullopt, std::nullopt, 0, false),
+    /*02 */ bp_cell(std::nullopt, std::make_optional(inst_attr::DJUMP), 0x0400000c, false),
+    /*03 */ bp_cell(std::nullopt, std::make_optional(inst_attr::DJUMP), 0x04000009, false),
+    /*04^*/ bp_cell(std::nullopt, std::nullopt, 0, false),
+    /*05v*/ bp_cell(std::nullopt, std::make_optional(inst_attr::DJUMP), 0x04000016, false),
+    /*06 */ bp_cell(std::nullopt, std::make_optional(inst_attr::DJUMP), 0x04000010, false),
+    /*07 */ bp_cell(std::nullopt, std::make_optional(inst_attr::DJUMP), 0x04000001, false),
+    /*08 */ bp_cell(std::nullopt, std::make_optional(inst_attr::DJUMP), 0x04000014, false),
+    /*09^*/ bp_cell(std::nullopt, std::nullopt, 0, false),
+    /*0av*/ bp_cell(std::nullopt, std::make_optional(inst_attr::DJUMP), 0x04000007, false),
+    /*0b */ bp_cell(std::nullopt, std::make_optional(inst_attr::DJUMP), 0x04000011, false),
+    /*0c^*/ bp_cell(std::nullopt, std::nullopt, 0, false),
+    /*0dv*/ bp_cell(std::nullopt, std::make_optional(inst_attr::DJUMP), 0x04000006, false),
+    /*0e^*/ bp_cell(std::nullopt, std::nullopt, 0, false),
+    /*0fv*/ bp_cell(std::nullopt, std::make_optional(inst_attr::DJUMP), 0x04000008, false),
+    /*10 */ bp_cell(std::nullopt, std::make_optional(inst_attr::DJUMP), 0x0400000e, false),
+    /*11 */ bp_cell(std::nullopt, std::nullopt, 0, false),
+    /*12^*/ bp_cell(std::nullopt, std::nullopt, 0, false),
+    /*13v*/ bp_cell(std::nullopt, std::make_optional(inst_attr::DJUMP), 0x0400001b, false),
+    /*14^*/ bp_cell(std::nullopt, std::nullopt, 0, false),
+    /*15v*/ bp_cell(std::nullopt, std::make_optional(inst_attr::DJUMP), 0x0400000b, false),
+    /*16 */ bp_cell(std::nullopt, std::make_optional(inst_attr::DJUMP), 0x04000023, false),
+    /*17^*/ bp_cell(std::nullopt, std::nullopt, 0, false),
+    /*18v*/ bp_cell(std::nullopt, std::make_optional(inst_attr::DJUMP), 0x04000024, false),
+    /*19 */ bp_cell(std::nullopt, std::make_optional(inst_attr::DJUMP), 0x04000026, false),
+    /*1a */ bp_cell(std::nullopt, std::make_optional(inst_attr::DJUMP), 0x0400001d, false),
+    /*1b */ bp_cell(std::nullopt, std::make_optional(inst_attr::DJUMP), 0x04000021, false),
+    /*1c */ bp_cell(std::nullopt, std::make_optional(inst_attr::DJUMP), 0x04000029, false),
+    /*1d^*/ bp_cell(std::nullopt, std::nullopt, 0, false),
+    /*1ev*/ bp_cell(std::nullopt, std::make_optional(inst_attr::DJUMP), 0x0400002b, false),
+    /*1f^*/ bp_cell(std::nullopt, std::nullopt, 0, false),
+    /*20v*/ bp_cell(std::nullopt, std::make_optional(inst_attr::DJUMP), 0x0400001c, false),
+    /*21^*/ bp_cell(std::nullopt, std::nullopt, 0, false),
+    /*22v*/ bp_cell(std::nullopt, std::make_optional(inst_attr::DJUMP), 0x04000004, false),
+    /*23 */ bp_cell(std::nullopt, std::make_optional(inst_attr::DJUMP), 0x04000019, false),
+    /*24^*/ bp_cell(std::nullopt, std::nullopt, 0, false),
+    /*25v*/ bp_cell(std::nullopt, std::make_optional(inst_attr::DJUMP), 0x04000027, false),
+    /*26 */ bp_cell(std::nullopt, std::make_optional(inst_attr::DJUMP), 0x0400001f, false),
+    /*27^*/ bp_cell(std::nullopt, std::nullopt, 0, false),
+    /*28v*/ bp_cell(std::nullopt, std::make_optional(inst_attr::DJUMP), 0x0400002e, false),
+    /*29^*/ bp_cell(std::nullopt, std::nullopt, 0, false),
+    /*2av*/ bp_cell(std::nullopt, std::make_optional(inst_attr::DJUMP), 0x0400002d, false),
+    /*2b^*/ bp_cell(std::nullopt, std::nullopt, 0, false),
+    /*2cv*/ bp_cell(std::nullopt, std::make_optional(inst_attr::DJUMP), 0x04000017, false),
+    /*2d */ bp_cell(std::nullopt, std::make_optional(inst_attr::DJUMP), 0x0400001a, false),
+    /*2e^*/ bp_cell(std::nullopt, std::nullopt, 0, false),
+    /*2fv*/ bp_cell(std::nullopt, std::nullopt, 0, false),
+};
+
+static const std::vector<bp_cell> bp_flush_rvc = {
+    /*00 */ bp_cell(std::nullopt, std::make_optional(inst_attr::DJUMP), 0x04000003, false),
+    /*01 */ bp_cell(std::nullopt, std::nullopt, 0, false),
+    /*02 */ bp_cell(std::make_optional(0x0400000c), std::make_optional(inst_attr::DJUMP), 0x0400000c, false),
+    /*03 */ bp_cell(std::make_optional(0x04000009), std::make_optional(inst_attr::DJUMP), 0x04000009, false),
+    /*04^*/ bp_cell(std::nullopt, std::nullopt, 0, false),
+    /*05v*/ bp_cell(std::nullopt, std::make_optional(inst_attr::DJUMP), 0x04000016, false),
+    /*06 */ bp_cell(std::make_optional(0x04000010), std::make_optional(inst_attr::DJUMP), 0x04000010, false),
+    /*07 */ bp_cell(std::nullopt, std::make_optional(inst_attr::DJUMP), 0x04000001, false),
+    /*08 */ bp_cell(std::make_optional(0x04000014), std::make_optional(inst_attr::DJUMP), 0x04000014, false),
+    /*09^*/ bp_cell(std::nullopt, std::nullopt, 0, false),
+    /*0av*/ bp_cell(std::nullopt, std::make_optional(inst_attr::DJUMP), 0x04000007, false),
+    /*0b */ bp_cell(std::nullopt, std::make_optional(inst_attr::DJUMP), 0x04000011, false),
+    /*0c^*/ bp_cell(std::nullopt, std::nullopt, 0, false),
+    /*0dv*/ bp_cell(std::make_optional(0x04000006), std::make_optional(inst_attr::DJUMP), 0x04000006, false),
+    /*0e^*/ bp_cell(std::nullopt, std::nullopt, 0, false),
+    /*0fv*/ bp_cell(std::make_optional(0x04000008), std::make_optional(inst_attr::DJUMP), 0x04000008, false),
+    /*10 */ bp_cell(std::make_optional(0x0400000e), std::make_optional(inst_attr::DJUMP), 0x0400000e, false),
+    /*11 */ bp_cell(std::nullopt, std::nullopt, 0, false),
+    /*12^*/ bp_cell(std::nullopt, std::nullopt, 0, false),
+    /*13v*/ bp_cell(std::nullopt, std::make_optional(inst_attr::DJUMP), 0x0400001b, false),
+    /*14^*/ bp_cell(std::nullopt, std::nullopt, 0, false),
+    /*15v*/ bp_cell(std::nullopt, std::make_optional(inst_attr::DJUMP), 0x0400010b, false),
+    /*16 */ bp_cell(std::nullopt, std::nullopt, 0, false),
+    /*17^*/ bp_cell(std::nullopt, std::nullopt, 0, false),
+    /*18v*/ bp_cell(std::nullopt, std::make_optional(inst_attr::DJUMP), 0x04000024, false),
+    /*19 */ bp_cell(std::make_optional(0x04000026), std::make_optional(inst_attr::DJUMP), 0x04000026, false),
+    /*1a */ bp_cell(std::nullopt, std::make_optional(inst_attr::DJUMP), 0x0400001d, false),
+    /*1b */ bp_cell(std::make_optional(0x04000021), std::make_optional(inst_attr::DJUMP), 0x04000021, false),
+    /*1c */ bp_cell(std::nullopt, std::make_optional(inst_attr::DJUMP), 0x04000029, false),
+    /*1d^*/ bp_cell(std::nullopt, std::nullopt, 0, false),
+    /*1ev*/ bp_cell(std::nullopt, std::make_optional(inst_attr::DJUMP), 0x0400002b, false),
+    /*1f^*/ bp_cell(std::nullopt, std::nullopt, 0, false),
+    /*20v*/ bp_cell(std::make_optional(0x0400001c), std::make_optional(inst_attr::DJUMP), 0x0400001c, false),
+    /*21^*/ bp_cell(std::nullopt, std::nullopt, 0, false),
+    /*22v*/ bp_cell(std::nullopt, std::make_optional(inst_attr::DJUMP), 0x04000004, false),
+    /*23 */ bp_cell(std::make_optional(0x04000019), std::make_optional(inst_attr::DJUMP), 0x04000019, false),
+    /*24^*/ bp_cell(std::nullopt, std::nullopt, 0, false),
+    /*25v*/ bp_cell(std::nullopt, std::make_optional(inst_attr::DJUMP), 0x04000027, false),
+    /*26 */ bp_cell(std::nullopt, std::nullopt, 0, false),
+    /*27^*/ bp_cell(std::nullopt, std::nullopt, 0, false),
+    /*28v*/ bp_cell(std::make_optional(0x0400002e), std::make_optional(inst_attr::DJUMP), 0x0400002e, false),
+    /*29^*/ bp_cell(std::nullopt, std::nullopt, 0, false),
+    /*2av*/ bp_cell(std::nullopt, std::make_optional(inst_attr::DJUMP), 0x0400002d, false),
+    /*2b^*/ bp_cell(std::nullopt, std::nullopt, 0, false),
+    /*2cv*/ bp_cell(std::nullopt, std::make_optional(inst_attr::DJUMP), 0x04000117, false),
+    /*2d */ bp_cell(std::make_optional(0x0400001a), std::make_optional(inst_attr::DJUMP), 0x0400001a, false),
+    /*2e^*/ bp_cell(std::nullopt, std::nullopt, 0, false),
+    /*2fv*/ bp_cell(std::nullopt, std::nullopt, 0, false),
+};
+
+#define DECLARE_REFERENCE_ARRAY(VAR_NAME) \
+    std::reference_wrapper<std::remove_reference<decltype(vp->io_##VAR_NAME##_0)>::type> VAR_NAME[] = { \
+        vp->io_##VAR_NAME##_0, \
+        vp->io_##VAR_NAME##_1, \
+        vp->io_##VAR_NAME##_2, \
+        vp->io_##VAR_NAME##_3, \
+    }
+
+#define DECLARE_REFERENCE_ARRAY_POSTFIX(VAR_NAME, POSTFIX) \
+    std::reference_wrapper<std::remove_reference<decltype(vp->io_##VAR_NAME##_0_##POSTFIX)>::type> VAR_NAME##_##POSTFIX[] = { \
+        vp->io_##VAR_NAME##_0_##POSTFIX, \
+        vp->io_##VAR_NAME##_1_##POSTFIX, \
+        vp->io_##VAR_NAME##_2_##POSTFIX, \
+        vp->io_##VAR_NAME##_3_##POSTFIX, \
+    }
+
+std::generator<int64_t> bp_mock_task(Vfetch *vp, context *ctx, const std::vector<bp_cell> &data) {
+    uint32_t zbtb_pc = 0;
+    uint32_t btb_pc = 0;
+    uint32_t pht_pc = 0;
+    co_yield 0;
+    while (true) {
+        DECLARE_REFERENCE_ARRAY(zbtb_lu_matches);
+        DECLARE_REFERENCE_ARRAY(zbtb_lu_target);
+        DECLARE_REFERENCE_ARRAY_POSTFIX(btb_lu_result, jump);
+        DECLARE_REFERENCE_ARRAY_POSTFIX(btb_lu_result, br);
+        DECLARE_REFERENCE_ARRAY_POSTFIX(btb_lu_result, attr);
+        DECLARE_REFERENCE_ARRAY_POSTFIX(btb_lu_result, is_ret);
+        DECLARE_REFERENCE_ARRAY_POSTFIX(btb_lu_result, target);
+        DECLARE_REFERENCE_ARRAY(pht___05Flu_taken);
+        DECLARE_REFERENCE_ARRAY(pht___05Flu_lcnt);
+        DECLARE_REFERENCE_ARRAY(pht___05Flu_gcnt);
+        for (int i = 0; i < 4; i++) {
+            const bp_cell &c = data[((zbtb_pc & 0x00fffffc) + i) % data.size()];
+            zbtb_lu_matches[i].get() = c.zbtb_target.has_value();
+            zbtb_lu_target[i].get() = c.zbtb_target.value_or(0);
+        }
+        for (int i = 0; i < 4; i++) {
+            const bp_cell &c = data[((btb_pc & 0x00fffffc) + i) % data.size()];
+            btb_lu_result_jump[i].get() = c.btb_attr.transform([](auto a) { return a == inst_attr::DJUMP || a == inst_attr::DCALL; }).value_or(false);
+            btb_lu_result_br[i].get() = c.btb_attr.transform([](auto a) { return a == inst_attr::BR; }).value_or(false);
+            btb_lu_result_attr[i].get() = c.btb_attr.transform([](auto a) { return a == inst_attr::RET ? 0 : static_cast<int>(a); }).value_or(0);
+            btb_lu_result_is_ret[i].get() = c.btb_attr.transform([](auto a) { return a == inst_attr::RET; }).value_or(false);
+            btb_lu_result_target[i].get() = c.btb_target;
+        }
+        for (int i = 0; i < 4; i++) {
+            const bp_cell &c = data[((btb_pc & 0x00fffffc) + i) % data.size()];
+            pht___05Flu_taken[i].get() = c.pht_taken;
+            pht___05Flu_lcnt[i].get() = c.pht_taken ? 1 : 0;
+            pht___05Flu_gcnt[i].get() = 0;
+        }
+        co_yield -1;
+        zbtb_pc = vp->io_zbtb_lu_pc;
+        btb_pc = vp->io_btb_lu_pc;
+        pht_pc = vp->io_pht___05Flu_pc;
         co_yield 1;
     }
 }
@@ -254,90 +541,166 @@ static const std::vector<int> mixed_ready_counts = {
     1, 2, 0, 2, 1, 0, 0, 1,
 };
 
-static const std::vector<uint32_t> expected_32bit_insts = {
-    0x00000003,
-    0x00000013,
-    0x00000023,
-    0x00000033,
-    0x00000043,
-    0x00000053,
-    0x00000063,
-    0x00000073,
+struct addr_data {
+    uint32_t address;
+    uint32_t data;
 };
 
-static const std::vector<uint32_t> expected_rvc_insts = {
-    0x00000002,
-    0x00000012,
-    0x00000022,
-    0x00000032,
-    0x00000043,
-    0x00000052,
-    0x00000062,
-    0x00000072,
-    0x00000083,
-    0x00000092,
-    0x000000a3,
-    0x000000b3,
-    0x000000c2,
-    0x000000d2,
-    0x000000e3,
-    0x000000f3,
-    0x00000102,
-    0x00000113,
-    0x00000122,
-    0x00000132,
-    0x00000142,
-    0x00000152,
-    0x00000163,
-    0x00000173,
-    0x00000183,
-    0x00000192,
-    0x000001a3,
-    0x000001b2,
-    0x000001c3,
-    0x000001d3,
-    0x000001e3,
-    0x000001f2,
-    0x00000203,
+static const std::vector<addr_data> expected_32bit_insts = {
+    addr_data(0x04000000, 0x00000003),
+    addr_data(0x04000002, 0x00000013),
+    addr_data(0x04000004, 0x00000023),
+    addr_data(0x04000006, 0x00000033),
+    addr_data(0x04000008, 0x00000043),
+    addr_data(0x0400000a, 0x00000053),
+    addr_data(0x0400000c, 0x00000063),
+    addr_data(0x0400000e, 0x00000073),
+};
+
+static const std::vector<addr_data> expected_rvc_insts = {
+    addr_data(0x04000000, 0x00000002),
+    addr_data(0x04000001, 0x00000012),
+    addr_data(0x04000002, 0x00000022),
+    addr_data(0x04000003, 0x00000032),
+    addr_data(0x04000004, 0x00000043),
+    addr_data(0x04000006, 0x00000052),
+    addr_data(0x04000007, 0x00000062),
+    addr_data(0x04000008, 0x00000072),
+    addr_data(0x04000009, 0x00000083),
+    addr_data(0x0400000b, 0x00000092),
+    addr_data(0x0400000c, 0x000000a3),
+    addr_data(0x0400000e, 0x000000b3),
+    addr_data(0x04000010, 0x000000c2),
+    addr_data(0x04000011, 0x000000d2),
+    addr_data(0x04000012, 0x000000e3),
+    addr_data(0x04000014, 0x000000f3),
+    addr_data(0x04000016, 0x00000102),
+    addr_data(0x04000017, 0x00000113),
+    addr_data(0x04000019, 0x00000122),
+    addr_data(0x0400001a, 0x00000132),
+    addr_data(0x0400001b, 0x00000142),
+    addr_data(0x0400001c, 0x00000152),
+    addr_data(0x0400001d, 0x00000163),
+    addr_data(0x0400001f, 0x00000173),
+    addr_data(0x04000021, 0x00000183),
+    addr_data(0x04000023, 0x00000192),
+    addr_data(0x04000024, 0x000001a3),
+    addr_data(0x04000026, 0x000001b2),
+    addr_data(0x04000027, 0x000001c3),
+    addr_data(0x04000029, 0x000001d3),
+    addr_data(0x0400002b, 0x000001e3),
+    addr_data(0x0400002d, 0x000001f2),
+    addr_data(0x0400002e, 0x00000203),
+};
+
+static const std::vector<addr_data> expected_32bit_bp_insts = {
+    addr_data(0x04000000, 0x00000003),
+    addr_data(0x04000002, 0x00000013),
+    addr_data(0x04000008, 0x00000043),
+    addr_data(0x04000004, 0x00000023),
+    addr_data(0x04000006, 0x00000033),
+    addr_data(0x0400000a, 0x00000053),
+    addr_data(0x0400000c, 0x00000063),
+    addr_data(0x0400000e, 0x00000073),
+};
+
+static const std::vector<addr_data> expected_rvc_bp_insts = {
+    addr_data(0x04000000, 0x00000002),
+    addr_data(0x04000003, 0x00000032),
+    addr_data(0x04000009, 0x00000083),
+    addr_data(0x04000007, 0x00000062),
+    addr_data(0x04000001, 0x00000012),
+    addr_data(0x04000002, 0x00000022),
+    addr_data(0x0400000c, 0x000000a3),
+    addr_data(0x04000006, 0x00000052),
+    addr_data(0x04000010, 0x000000c2),
+    addr_data(0x0400000e, 0x000000b3),
+    addr_data(0x04000008, 0x00000072),
+    addr_data(0x04000014, 0x000000f3),
+    addr_data(0x0400000b, 0x00000092),
+    addr_data(0x04000011, 0x000000d2),
+    addr_data(0x04000012, 0x000000e3),
+    addr_data(0x0400001b, 0x00000142),
+    addr_data(0x04000021, 0x00000183),
+    addr_data(0x04000004, 0x00000043),
+    addr_data(0x04000016, 0x00000102),
+    addr_data(0x04000023, 0x00000192),
+    addr_data(0x04000019, 0x00000122),
+    addr_data(0x04000026, 0x000001b2),
+    addr_data(0x0400001f, 0x00000173),
+    addr_data(0x0400001c, 0x00000152),
+    addr_data(0x04000029, 0x000001d3),
+    addr_data(0x0400002d, 0x000001f2),
+    addr_data(0x0400001a, 0x00000132),
+    addr_data(0x0400001d, 0x00000163),
+    addr_data(0x0400002b, 0x000001e3),
+    addr_data(0x04000017, 0x00000113),
+    addr_data(0x04000024, 0x000001a3),
+    addr_data(0x04000027, 0x000001c3),
+    addr_data(0x0400002e, 0x00000203),
+};
+
+static const std::map<uint32_t, uint32_t> flush_addresses = {
+    { 0x04000014, 0x0400000b },
+    { 0x04000016, 0x04000023 },
+    { 0x04000026, 0x0400001f },
+    { 0x0400002b, 0x04000017 },
 };
 
 std::generator<int64_t> probe_fetch_task(
     Vfetch *vp,
     context *ctx,
     const std::vector<int> &ready_counts,
-    const std::vector<uint32_t> &expected
+    const std::vector<addr_data> &expected,
+    const std::map<uint32_t, uint32_t> &flush_addrs = {}
 ) {
     size_t read_count = 0;
     size_t ready_index = 0;
-    uint32_t address_offset = 0;
+    bool flush_en = false;
+    uint32_t flush_target = 0;
     co_yield 0;
     while (read_count < expected.size()) {
         int ready_count = ready_counts[ready_index % ready_counts.size()];
-        vp->io_inst1_ready = ready_count >= 1;
-        vp->io_inst2_ready = ready_count >= 2;
-        co_yield -1;
-        if (ready_count >= 1 && vp->io_inst1_valid) {
-            uint32_t e = expected[read_count];
-            UNSCOPED_INFO(ctx->cycles_str());
-            CHECK((vp->io_inst1_data & ((e & 3) == 3 ? 0xffffffff : 0xffff)) == e);
-            UNSCOPED_INFO(ctx->cycles_str());
-            CHECK(vp->io_inst1_addr == (0x08000000 + address_offset) >> 1);
-            UNSCOPED_INFO(ctx->cycles_str());
-            CHECK(vp->io_inst1_half == ((e & 3) == 3 ? 0 : 1));
-            read_count++;
-            address_offset += ((e & 3) == 3 ? 4 : 2);
+        vp->io_ft_inst1_ready = ready_count >= 1;
+        vp->io_ft_inst2_ready = ready_count >= 2;
+        if (ctx->cycles() >= 1) {
+            vp->io_ft_flush_en = flush_en;
+            vp->io_ft_flush_iaddr = flush_target;
         }
-        if (ready_count >= 2 && vp->io_inst2_valid) {
+        flush_en = false;
+        co_yield -1;
+        if (ready_count >= 1 && vp->io_ft_inst1_valid) {
+            uint32_t addr = expected[read_count].address;
+            uint32_t e = expected[read_count].data;
+            UNSCOPED_INFO(ctx->cycles_str());
+            CHECK((vp->io_ft_inst1_data & ((e & 3) == 3 ? 0xffffffff : 0xffff)) == e);
+            UNSCOPED_INFO(ctx->cycles_str());
+            CHECK(vp->io_ft_inst1_addr == addr);
+            UNSCOPED_INFO(ctx->cycles_str());
+            // CHECK(vp->io_ft_inst1_half == ((e & 3) == 3 ? 0 : 1));
+            auto it = flush_addrs.find(addr);
+            if (it != flush_addrs.end()) {
+                flush_en = true;
+                flush_target = it->second;
+            }
+            read_count++;
+        }
+        if (ready_count >= 2 && vp->io_ft_inst2_valid) {
             if (read_count < expected.size()) {
-                uint32_t e = expected[read_count];
+                uint32_t addr = expected[read_count].address;
+                uint32_t e = expected[read_count].data;
                 UNSCOPED_INFO(ctx->cycles_str());
-                CHECK((vp->io_inst2_data & ((e & 3) == 3 ? 0xffffffff : 0xffff)) == e);
+                CHECK((vp->io_ft_inst2_data & ((e & 3) == 3 ? 0xffffffff : 0xffff)) == e);
                 UNSCOPED_INFO(ctx->cycles_str());
-                CHECK(vp->io_inst2_addr == (0x08000000 + address_offset) >> 1);
+                CHECK(vp->io_ft_inst2_addr == addr);
                 UNSCOPED_INFO(ctx->cycles_str());
-                CHECK(vp->io_inst2_half == ((e & 3) == 3 ? 0 : 1));
+                // CHECK(vp->io_ft_inst2_half == ((e & 3) == 3 ? 0 : 1));
+                auto it = flush_addrs.find(addr);
+                if (!flush_en && it != flush_addrs.end()) {
+                    flush_en = true;
+                    flush_target = it->second;
+                }
                 read_count++;
-                address_offset += ((e & 3) == 3 ? 4 : 2);
             }
         }
         ready_index++;
@@ -352,6 +715,7 @@ TEST_CASE("32bit insts, 32bit fetch", "[fetch]") {
 
     runner.start_task(std::make_shared<task>("input", [&sut, &ctx]() { return input_task(&*sut, ctx); }, false));
     runner.start_task(std::make_shared<task>("imem",  [&sut, &ctx]() { return imem_mock_task(&*sut, ctx, imem_32bit_insts); }, false));
+    runner.start_task(std::make_shared<task>("bp",    [&sut, &ctx]() { return bp_mock_task(&*sut, ctx, bp_none); }, false));
     runner.start_task(std::make_shared<task>("prove", [&sut, &ctx]() { return probe_fetch_task(&*sut, ctx, fixed32bit_ready_counts, expected_32bit_insts); }));
 
     runner.run(sut);
@@ -364,6 +728,7 @@ TEST_CASE("32bit insts, 64bit fetch", "[fetch]") {
 
     runner.start_task(std::make_shared<task>("input", [&sut, &ctx]() { return input_task(&*sut, ctx); }, false));
     runner.start_task(std::make_shared<task>("imem",  [&sut, &ctx]() { return imem_mock_task(&*sut, ctx, imem_32bit_insts); }, false));
+    runner.start_task(std::make_shared<task>("bp",    [&sut, &ctx]() { return bp_mock_task(&*sut, ctx, bp_none); }, false));
     runner.start_task(std::make_shared<task>("prove", [&sut, &ctx]() { return probe_fetch_task(&*sut, ctx, fixed64bit_ready_counts, expected_32bit_insts); }));
 
     runner.run(sut);
@@ -376,6 +741,7 @@ TEST_CASE("32bit insts, mixed fetch", "[fetch]") {
 
     runner.start_task(std::make_shared<task>("input", [&sut, &ctx]() { return input_task(&*sut, ctx); }, false));
     runner.start_task(std::make_shared<task>("imem",  [&sut, &ctx]() { return imem_mock_task(&*sut, ctx, imem_32bit_insts); }, false));
+    runner.start_task(std::make_shared<task>("bp",    [&sut, &ctx]() { return bp_mock_task(&*sut, ctx, bp_none); }, false));
     runner.start_task(std::make_shared<task>("prove", [&sut, &ctx]() { return probe_fetch_task(&*sut, ctx, mixed_ready_counts, expected_32bit_insts); }));
 
     runner.run(sut);
@@ -388,7 +754,86 @@ TEST_CASE("rvc insts, 32bit fetch", "[fetch]") {
 
     runner.start_task(std::make_shared<task>("input", [&sut, &ctx]() { return input_task(&*sut, ctx); }, false));
     runner.start_task(std::make_shared<task>("imem",  [&sut, &ctx]() { return imem_mock_task(&*sut, ctx, imem_rvc_insts); }, false));
+    runner.start_task(std::make_shared<task>("bp",    [&sut, &ctx]() { return bp_mock_task(&*sut, ctx, bp_none); }, false));
     runner.start_task(std::make_shared<task>("prove", [&sut, &ctx]() { return probe_fetch_task(&*sut, ctx, fixed32bit_ready_counts, expected_rvc_insts); }));
+
+    runner.run(sut);
+}
+
+TEST_CASE("32bit bp, 32bit fetch", "[fetch]") {
+    task_runner runner(24);
+    verilated_ptr<Vfetch> sut(new Vfetch{runner.vcontext()}, "fetch/logs/32bit_bp_32bit_fetch.fst");
+    context *ctx = runner.ctx();
+
+    runner.start_task(std::make_shared<task>("input", [&sut, &ctx]() { return input_task(&*sut, ctx); }, false));
+    runner.start_task(std::make_shared<task>("imem",  [&sut, &ctx]() { return imem_mock_task(&*sut, ctx, imem_32bit_insts); }, false));
+    runner.start_task(std::make_shared<task>("bp",    [&sut, &ctx]() { return bp_mock_task(&*sut, ctx, bp_32bit); }, false));
+    runner.start_task(std::make_shared<task>("prove", [&sut, &ctx]() { return probe_fetch_task(&*sut, ctx, fixed32bit_ready_counts, expected_32bit_bp_insts); }));
+
+    runner.run(sut);
+}
+
+TEST_CASE("32bit bp miss, 32bit fetch", "[fetch]") {
+    task_runner runner(24);
+    verilated_ptr<Vfetch> sut(new Vfetch{runner.vcontext()}, "fetch/logs/32bit_bp_miss_32bit_fetch.fst");
+    context *ctx = runner.ctx();
+
+    runner.start_task(std::make_shared<task>("input", [&sut, &ctx]() { return input_task(&*sut, ctx); }, false));
+    runner.start_task(std::make_shared<task>("imem",  [&sut, &ctx]() { return imem_mock_task(&*sut, ctx, imem_32bit_insts); }, false));
+    runner.start_task(std::make_shared<task>("bp",    [&sut, &ctx]() { return bp_mock_task(&*sut, ctx, bp_miss_32bit); }, false));
+    runner.start_task(std::make_shared<task>("prove", [&sut, &ctx]() { return probe_fetch_task(&*sut, ctx, fixed32bit_ready_counts, expected_32bit_bp_insts); }));
+
+    runner.run(sut);
+}
+
+TEST_CASE("32bit bp mixed, 32bit fetch", "[fetch]") {
+    task_runner runner(24);
+    verilated_ptr<Vfetch> sut(new Vfetch{runner.vcontext()}, "fetch/logs/32bit_bp_mixed_32bit_fetch.fst");
+    context *ctx = runner.ctx();
+
+    runner.start_task(std::make_shared<task>("input", [&sut, &ctx]() { return input_task(&*sut, ctx); }, false));
+    runner.start_task(std::make_shared<task>("imem",  [&sut, &ctx]() { return imem_mock_task(&*sut, ctx, imem_32bit_insts); }, false));
+    runner.start_task(std::make_shared<task>("bp",    [&sut, &ctx]() { return bp_mock_task(&*sut, ctx, bp_mixed_32bit); }, false));
+    runner.start_task(std::make_shared<task>("prove", [&sut, &ctx]() { return probe_fetch_task(&*sut, ctx, fixed32bit_ready_counts, expected_32bit_bp_insts); }));
+
+    runner.run(sut);
+}
+
+TEST_CASE("rvc bp, 32bit fetch", "[fetch]") {
+    task_runner runner(60);
+    verilated_ptr<Vfetch> sut(new Vfetch{runner.vcontext()}, "fetch/logs/rvc_bp_32bit_fetch.fst");
+    context *ctx = runner.ctx();
+
+    runner.start_task(std::make_shared<task>("input", [&sut, &ctx]() { return input_task(&*sut, ctx); }, false));
+    runner.start_task(std::make_shared<task>("imem",  [&sut, &ctx]() { return imem_mock_task(&*sut, ctx, imem_rvc_insts); }, false));
+    runner.start_task(std::make_shared<task>("bp",    [&sut, &ctx]() { return bp_mock_task(&*sut, ctx, bp_rvc); }, false));
+    runner.start_task(std::make_shared<task>("prove", [&sut, &ctx]() { return probe_fetch_task(&*sut, ctx, fixed32bit_ready_counts, expected_rvc_bp_insts); }));
+
+    runner.run(sut);
+}
+
+TEST_CASE("rvc bp miss, 32bit fetch", "[fetch]") {
+    task_runner runner(90);
+    verilated_ptr<Vfetch> sut(new Vfetch{runner.vcontext()}, "fetch/logs/rvc_bp_miss_32bit_fetch.fst");
+    context *ctx = runner.ctx();
+
+    runner.start_task(std::make_shared<task>("input", [&sut, &ctx]() { return input_task(&*sut, ctx); }, false));
+    runner.start_task(std::make_shared<task>("imem",  [&sut, &ctx]() { return imem_mock_task(&*sut, ctx, imem_rvc_insts); }, false));
+    runner.start_task(std::make_shared<task>("bp",    [&sut, &ctx]() { return bp_mock_task(&*sut, ctx, bp_miss_rvc); }, false));
+    runner.start_task(std::make_shared<task>("prove", [&sut, &ctx]() { return probe_fetch_task(&*sut, ctx, fixed32bit_ready_counts, expected_rvc_bp_insts); }));
+
+    runner.run(sut);
+}
+
+TEST_CASE("rvc bp flush, 32bit fetch", "[fetch]") {
+    task_runner runner(90);
+    verilated_ptr<Vfetch> sut(new Vfetch{runner.vcontext()}, "fetch/logs/rvc_bp_flush_32bit_fetch.fst");
+    context *ctx = runner.ctx();
+
+    runner.start_task(std::make_shared<task>("input", [&sut, &ctx]() { return input_task(&*sut, ctx); }, false));
+    runner.start_task(std::make_shared<task>("imem",  [&sut, &ctx]() { return imem_mock_task(&*sut, ctx, imem_rvc_insts); }, false));
+    runner.start_task(std::make_shared<task>("bp",    [&sut, &ctx]() { return bp_mock_task(&*sut, ctx, bp_flush_rvc); }, false));
+    runner.start_task(std::make_shared<task>("prove", [&sut, &ctx]() { return probe_fetch_task(&*sut, ctx, fixed32bit_ready_counts, expected_rvc_bp_insts, flush_addresses); }));
 
     runner.run(sut);
 }

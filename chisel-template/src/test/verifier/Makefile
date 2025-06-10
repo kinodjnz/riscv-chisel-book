@@ -8,6 +8,8 @@ RISCV_TESTS_DIR ?= ../../../../riscv-tests/isa
 
 TRACE?=yes
 
+UT_OPTS?=
+
 ADDCFLAGS += -CFLAGS -Isim/obj_dir
 
 ADDCFLAGS += -CFLAGS -g
@@ -94,7 +96,7 @@ all-ut: $(UT_TARGET)
 .PHONY: $(UT_TARGET)
 .SECONDEXPANSION:
 $(UT_TARGET): %: $$(foreach ut_name,$$(subst ut-,,%),$$(ut_name)/$(OBJ_DIR)/V$$(ut_name))
-	$<
+	$< $(UT_OPTS)
 
 .PHONY: ut-compile
 ut-compile: $(UT_EXECUTABLES)

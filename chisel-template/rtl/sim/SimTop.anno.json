@@ -1,5 +1,17 @@
 [
   {
+    "class":"firrtl.transforms.DedupedResult",
+    "original":"~SimTop|MockPHTMem",
+    "duplicate":"~SimTop|SimTop/pht_lmem:MockPHTMem",
+    "index":0.92
+  },
+  {
+    "class":"firrtl.transforms.DedupedResult",
+    "original":"~SimTop|MockPHTMem_1",
+    "duplicate":"~SimTop|SimTop/pht_gmem:MockPHTMem",
+    "index":0.96
+  },
+  {
     "class":"firrtl.EmitCircuitAnnotation",
     "emitter":"firrtl.VerilogEmitter"
   },
