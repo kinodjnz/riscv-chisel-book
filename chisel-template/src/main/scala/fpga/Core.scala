@@ -4,9 +4,10 @@ import chisel3._
 import chisel3.util._
 import common.Instructions._
 import common.Consts._
+import common.OptionExtension._
+import common.UIntExtension._
 import chisel3.util.experimental.loadMemoryFromFileInline
 import chisel3.ChiselEnum
-import common.OptionExtension._
 
 class LongCounter(unitWidth: Int, unitCount: Int) extends Module {
   val counterWidth = unitWidth * unitCount
@@ -116,8 +117,8 @@ class Core(
       val dmem = Flipped(new DmemPortIo())
       val icache = Flipped(new CachedImemPort())
       val cache = Flipped(new CachePort())
-      // val pht_lmem = Flipped(new PHTMemIo())
-      // val pht_gmem = Flipped(new PHTMemIo())
+      val pht_lmem = Flipped(new PHTMemIo(PHT_INDEX_LEN))
+      val pht_gmem = Flipped(new PHTMemIo(PHT_INDEX_LEN))
       val mtimer_mem = new DmemPortIo()
       val intr = Input(Bool())
       val debug_signal = new CoreDebugSignals()
@@ -181,7 +182,7 @@ class Core(
   val rrd_reg_is_bflen         = RegInit(false.B)
   val rrd_reg_is_br            = RegInit(false.B)
   // val rrd_reg_is_j             = RegInit(false.B)
-  val rrd_reg_bp               = RegInit(0.U.asTypeOf(new BranchPrediction()))
+  val rrd_reg_bp               = RegInit(0.U.asTypeOf(new BranchPrediction(REDIRECT_BUFFER_SIZE)))
   val rrd_reg_actual_attr      = RegInit(0.U(BTB_ATTR_LEN.W))
   val rrd_reg_actual_is_ret    = RegInit(false.B)
   val rrd_reg_is_half          = RegInit(false.B)
@@ -207,7 +208,7 @@ class Core(
   val ex1_reg_is_bflen         = RegInit(false.B)
   val ex1_reg_imm_len          = RegInit(0.U(5.W))
   val ex1_reg_is_j             = RegInit(false.B)
-  val ex1_reg_bp               = RegInit(0.U.asTypeOf(new BranchPrediction()))
+  val ex1_reg_bp               = RegInit(0.U.asTypeOf(new BranchPrediction(REDIRECT_BUFFER_SIZE)))
   val ex1_reg_actual_attr      = RegInit(0.U(BTB_ATTR_LEN.W))
   val ex1_reg_actual_is_ret    = RegInit(false.B)
   val ex1_reg_is_half          = RegInit(false.B)
@@ -221,6 +222,7 @@ class Core(
   val ex1_reg_inst3_use_reg    = RegInit(false.B)
   val ex1_reg_is_br            = RegInit(false.B)
   val ex1_reg_direct_jbr_pc    = RegInit(0.U(PC_LEN.W))
+  val ex1_reg_fp_entry         = RegInit(0.U.asTypeOf(new FetchPredictionEntry(PHT_HISTORY_LEN, RAS_ENTRIES)))
 
   // EX1/EX2 State
   val ex2_reg_pc            = RegInit(0.U(PC_LEN.W))
@@ -356,7 +358,7 @@ class Core(
 
   // val ic_state = RegInit(IcState.Empty)
 
-  // val ic_btb = Module(new BTB(BTB_INDEX_LEN))
+  // val ic_btb = Module(new BTB(BTB_ENTRIES))
   // val ic_pht = Module(new PHT(PHT_INDEX_LEN))
   // val ic_zbtb = Module(new ZBTB(ZBTB_ENTRIES))
   // val ic_ras = Module(new RAS())
@@ -579,13 +581,23 @@ class Core(
   // ic_addr_en  := if1_is_jump
   // ic_addr     := if1_jump_addr
 
-  val fetch_unit = Module(new FetchUnit(DramConfig()))
-  fetch_unit.io.flush_en := ex2_reg_is_br
-  fetch_unit.io.flush_iaddr := ex2_reg_br_pc
-  fetch_unit.io.imem <> io.imem
-  fetch_unit.io.icache <> io.icache
-  fetch_unit.io.inst1_ready := !id_reg_stall
-  fetch_unit.io.inst2_ready := false.B
+  val fetch_unit = Module(new FetchUnit(
+    DramConfig(),
+    ZBTB_ENTRIES,
+    BTB_ENTRIES,
+    PHT_INDEX_LEN,
+    PHT_HISTORY_LEN,
+    RAS_ENTRIES,
+    REDIRECT_BUFFER_SIZE,
+  ))
+  fetch_unit.io.ft.flush_en := ex2_reg_is_br
+  fetch_unit.io.ft.flush_iaddr := ex2_reg_br_pc
+  fetch_unit.io.ft.imem <> io.imem
+  fetch_unit.io.ft.icache <> io.icache
+  fetch_unit.io.ft.inst1.ready := !id_reg_stall
+  fetch_unit.io.ft.inst2.ready := false.B
+  fetch_unit.io.pht_lmem <> io.pht_lmem
+  fetch_unit.io.pht_gmem <> io.pht_gmem
 
   //**********************************
   // Instruction Fetch (IF) 2 Stage
@@ -601,11 +613,14 @@ class Core(
 
   // if2_zbp_taken := !id_reg_stall && !id_flush && !id_reg_bp_taken && ic_read_rdy && ic_zbp_taken
 
-  val if2_is_half_inst  = fetch_unit.io.inst1_half
-  val if2_is_valid_inst = fetch_unit.io.inst1_valid
-  val if2_pc            = fetch_unit.io.inst1_addr
-  val if2_inst          = Mux(if2_is_valid_inst, fetch_unit.io.inst1_data, BUBBLE)
-  val if2_bp_taken      = false.B
+  // val if2_is_half_inst  = fetch_unit.io.ft.inst1.half
+  val if2_is_valid_inst = fetch_unit.io.ft.inst1.valid
+  val if2_pc            = fetch_unit.io.ft.inst1.addr
+  val if2_inst          = MuxCase(BUBBLE, Seq(
+    fetch_unit.io.ft.inst1.valid    -> fetch_unit.io.ft.inst1.data,
+    fetch_unit.io.ft.inst1.bpfailed -> BPFAILURE,
+  ))
+  val if2_redirected = fetch_unit.io.ft.inst1.redirected && fetch_unit.io.ft.inst1.valid
 
   val if2_probe_valid_inst = !id_reg_stall && if2_is_valid_inst
   val if2_inst_id = if2_reg_inst_id.map(_ + Mux(if2_probe_valid_inst, 1.U, 0.U))
@@ -616,16 +631,16 @@ class Core(
   io.pipeline_probe.foreach(_.if2_inst  := if2_inst)
   
   // printf(cf"ic_addr_out: 0x${Cat(ic_addr_out, 0.U(1.W))}%x\n")
-  printf(cf"ic_reg_addr_out: 0x${Cat(fetch_unit.io.inst1_addr, 0.U(1.W))}%x, ic_data_out: 0x${fetch_unit.io.inst1_data}%x\n")
+  printf(cf"ic_reg_addr_out: 0x${Cat(fetch_unit.io.ft.inst1.addr, 0.U(1.W))}%x, ic_data_out: 0x${fetch_unit.io.ft.inst1.data}%x\n")
   // printf(cf"ic_imem_addr_4: 0x${ic_imem_addr_4 ## 0.U(1.W)}%x ic_read_en4: ${ic_read_en4} ic_read_en2: ${ic_read_en2}")
   // printf(cf"inst: 0x${if2_inst}%x, ic_read_rdy: ${ic_read_rdy}, ic_state: ${ic_state.asUInt}, ic_addr_en: ${ic_addr_en.asUInt}\n")
-  printf(cf"inst: 0x${if2_inst}%x, flush_en: ${fetch_unit.io.flush_en.asUInt}, flush_iaddr: 0x${fetch_unit.io.flush_iaddr ## 0.U(1.W)}%x\n")
+  printf(cf"inst: 0x${if2_inst}%x, flush_en: ${fetch_unit.io.ft.flush_en.asUInt}, flush_iaddr: 0x${fetch_unit.io.ft.flush_iaddr ## 0.U(1.W)}%x\n")
 
   //**********************************
   // IF2/ID Register
 
-  val if2_next_pc = Mux(if2_is_half_inst, if2_pc + 1.U(PC_LEN.W), if2_pc + 2.U(PC_LEN.W))
-  val if2_is_ret = false.B
+  // val if2_next_pc = Mux(if2_is_half_inst, if2_pc + 1.U(PC_LEN.W), if2_pc + 2.U(PC_LEN.W))
+  // val if2_is_ret = false.B
   // val if2_is_ret = ic_bp.is_ret
   // id_reg_bp_taken    := if2_is_valid_inst && !id_reg_stall && (
   //   (ic_bp.taken && !if2_zbp_taken) ||
@@ -644,11 +659,11 @@ class Core(
   // ic_zbtb.io.inv.en := id_reg_bp_not_taken
   // ic_zbtb.io.inv.pc := id_reg_bp_pc
 
-  // val if2_ret_rasindex   = ic_ras.io.top.index - 1.U(RAS_INDEX_BITS.W)
+  // val if2_ret_rasindex   = ic_ras.io.top.index - 1.U(RAS_INDEX_LEN.W)
   // ic_ras.io.ret1.en      := ic_bp.is_ret && if2_is_valid_inst && !id_reg_stall
   // ic_ras.io.ret1.index   := if2_ret_rasindex
 
-  // val if2_dcall_rasindex = ic_ras.io.top.index + 1.U(RAS_INDEX_BITS.W)
+  // val if2_dcall_rasindex = ic_ras.io.top.index + 1.U(RAS_INDEX_LEN.W)
   // ic_ras.io.call1.en     := (ic_bp.attr === BTB_ATTR_DCALL) && if2_is_valid_inst && !id_reg_stall
   // ic_ras.io.call1.index  := if2_dcall_rasindex
   // ic_ras.io.call1.ret_pc := if2_next_pc
@@ -662,25 +677,29 @@ class Core(
   // ic_pht.io.br.pc := if2_pc
 
   // when ((ic_bp.attr === BTB_ATTR_BR) && if2_is_valid_inst && !id_reg_stall) {
-  //   printf(cf"PHT history: ${Cat(ic_bp.history, 0.U(1.W))(PHT_HISTORY_BITS-1, 0)}%x taken: ${ic_bp.taken} gcnt: ${ic_bp.gcnt}\n")
+  //   printf(cf"PHT history: ${Cat(ic_bp.history, 0.U(1.W))(PHT_HISTORY_LEN-1, 0)}%x taken: ${ic_bp.taken} gcnt: ${ic_bp.gcnt}\n")
   // }
 
   //**********************************
   // Instruction Decode (ID) Stage
 
-  val id_stage = Module(new InstructionDecoder(enable_pipeline_probe))
+  val id_stage = Module(new InstructionDecoder(REDIRECT_BUFFER_SIZE, enable_pipeline_probe))
 
   id_stage.io.in.bits.is_valid_inst := if2_is_valid_inst
   id_stage.io.in.bits.inst          := if2_inst
   id_stage.io.in.bits.pc            := if2_pc // ic_reg_addr_out
-  id_stage.io.in.bits.bp.taken      := if2_bp_taken || (if2_is_valid_inst && if2_is_ret)
-  id_stage.io.in.bits.bp.attr       := 0.U // ic_bp.attr
-  id_stage.io.in.bits.bp.is_ret     := false.B // ic_bp.is_ret
-  id_stage.io.in.bits.bp.rasindex   := 0.U // ic_ras.io.top.index
-  id_stage.io.in.bits.bp.target     := 0.U // id_bp_target
-  id_stage.io.in.bits.bp.history    := 0.U // ic_bp.history
-  id_stage.io.in.bits.bp.cnt        := 0.U // ic_bp.cnt
-  id_stage.io.in.bits.bp.gcnt       := 0.U // ic_bp.gcnt
+  id_stage.io.in.bits.bp.redirected := if2_redirected // if2_bp_taken || (if2_is_valid_inst && if2_is_ret)
+  id_stage.io.in.bits.bp.bpfailed   := fetch_unit.io.ft.inst1.bpfailed && fetch_unit.io.ft.inst1.valid
+  id_stage.io.in.bits.bp.bp_entry   := fetch_unit.io.ft.inst1.bp_entry
+  id_stage.io.in.bits.bp.fp_ptr     := fetch_unit.io.ft.inst1.fp_ptr
+
+  // id_stage.io.in.bits.bp.attr       := 0.U // ic_bp.attr
+  // id_stage.io.in.bits.bp.is_ret     := false.B // ic_bp.is_ret
+  // id_stage.io.in.bits.bp.rasindex   := 0.U // ic_ras.io.top.index
+  // id_stage.io.in.bits.bp.target     := 0.U // id_bp_target
+  // id_stage.io.in.bits.bp.history    := 0.U // ic_bp.history
+  // id_stage.io.in.bits.bp.cnt        := 0.U // ic_bp.cnt
+  // id_stage.io.in.bits.bp.gcnt       := 0.U // ic_bp.gcnt
   map2(id_stage.io.in.bits.inst_id, if2_reg_inst_id)(_ := _)
 
   id_reg_stall := !id_stage.io.in.ready
@@ -722,7 +741,8 @@ class Core(
     rrd_reg_wb_sel           := id_stage.io.out.bits.wb_sel
     rrd_reg_mem_w            := id_stage.io.out.bits.mem_w
     rrd_reg_is_br            := id_stage.io.out.bits.is_br
-    rrd_reg_bp.taken         := id_stage.io.out.bits.bp.taken
+    rrd_reg_bp.redirected    := id_stage.io.out.bits.bp.redirected
+    rrd_reg_bp.bpfailed      := id_stage.io.out.bits.bp.bpfailed
     rrd_reg_is_valid_inst    := id_stage.io.out.bits.is_valid_inst
     rrd_reg_is_trap          := id_stage.io.out.bits.is_trap
   }
@@ -802,6 +822,8 @@ class Core(
       rrd_inst3_use_reg := (rrd_reg_wb_sel === WB_MD || rrd_reg_wb_sel === WB_CSR)
   }
 
+  fetch_unit.io.redir_read.ptr := rrd_reg_bp.fp_ptr
+
   io.pipeline_probe.foreach(_.rrd_valid := rrd_reg_is_valid_inst && !ex2_reg_is_br)
   map2(io.pipeline_probe, rrd_reg_inst_id)(_.rrd_inst_id := _)
 
@@ -823,6 +845,7 @@ class Core(
     ex1_reg_imm_len          := rrd_reg_im0_data(10, 6)
     ex1_reg_mem_w            := rrd_reg_mem_w
     ex1_reg_bp               := rrd_reg_bp
+    ex1_reg_fp_entry         := fetch_unit.io.redir_read.fp_entry
     ex1_reg_actual_attr      := rrd_reg_actual_attr
     ex1_reg_actual_is_ret    := rrd_reg_actual_is_ret
     ex1_reg_is_half          := rrd_reg_is_half
@@ -839,7 +862,8 @@ class Core(
     ex1_reg_is_mret          := !rrd_stall && (rrd_reg_exe_fun === CMD_MRET && rrd_reg_mem_w === MW_CSR)
     ex1_reg_is_br            := Mux(rrd_stall, false.B, rrd_reg_is_br)
     ex1_reg_is_j             := Mux(rrd_stall, false.B, (rrd_reg_wb_sel === WB_PC))
-    ex1_reg_bp.taken         := Mux(rrd_stall, false.B, rrd_reg_bp.taken)
+    ex1_reg_bp.redirected    := Mux(rrd_stall, false.B, rrd_reg_bp.redirected)
+    ex1_reg_bp.bpfailed      := Mux(rrd_stall, false.B, rrd_reg_bp.bpfailed)
     ex1_reg_is_trap          := Mux(rrd_stall, false.B, rrd_reg_is_trap)
   }
   when (ex2_reg_is_br && !ex1_reg_upd_pc_stalled) {
@@ -849,7 +873,8 @@ class Core(
     ex1_reg_is_mret       := false.B
     ex1_reg_is_br         := false.B
     ex1_reg_is_j          := false.B
-    ex1_reg_bp.taken      := false.B
+    ex1_reg_bp.redirected := false.B
+    ex1_reg_bp.bpfailed   := false.B
     ex1_reg_is_trap       := false.B
   }
 
@@ -935,6 +960,7 @@ class Core(
   )
 
   val ex1_next_pc = Mux(ex1_reg_is_half, ex1_reg_pc + 1.U(PC_LEN.W), ex1_reg_pc + 2.U(PC_LEN.W))
+  val ex1_latter_pc = Mux(ex1_reg_is_half, ex1_reg_pc, ex1_reg_pc + 1.U(PC_LEN.W))
   val ex1_pc_bit_out = MuxCase(0.U(WORD_LEN.W), Seq(
     (ex1_reg_exe_fun === ALU_ADD /*&& ex1_reg_wb_sel === WB_PC*/)
                                     -> Cat(ex1_next_pc, 0.U(1.W)),
@@ -1009,19 +1035,19 @@ class Core(
     csr_is_br                             -> csr_br_pc,
     (ex1_is_br_taken || ex1_is_uncond_br) -> ex1_fetch_pc,
   ))
-  val ex1_predict_pc = Mux(ex1_reg_bp.taken, ex1_reg_bp.target, ex1_next_pc)
+  val ex1_predict_pc = Mux(ex1_reg_bp.redirected, fetch_unit.io.redir_read.fp_entry.target, ex1_next_pc)
   val ex1_bp_failure = ex1_csr_fetch_pc =/= ex1_predict_pc
 
   ex1_fetch_pc_en := ex1_bp_failure && !ex2_reg_is_br
 
   when (ex1_en && ex1_is_br) {
-    when (ex1_reg_bp.cnt(0) && (ex1_reg_bp.gcnt === 2.U(2.W))) {
+    when (ex1_reg_bp.bp_entry.lcnt(0) && (ex1_reg_bp.bp_entry.gcnt === 2.U(2.W))) {
       when (ex1_is_br_taken) {
         printf(cf"PHT local correct\n")
       }.otherwise {
         printf(cf"PHT global correct\n")
       }
-    }.elsewhen (!ex1_reg_bp.cnt(0) && (ex1_reg_bp.gcnt === 3.U(2.W))) {
+    }.elsewhen (!ex1_reg_bp.bp_entry.lcnt(0) && (ex1_reg_bp.bp_entry.gcnt === 3.U(2.W))) {
       when (ex1_is_br_taken) {
         printf(cf"PHT global correct\n")
       }.otherwise {
@@ -1029,35 +1055,52 @@ class Core(
       }
     }
   }
-  // if taken:
-  //  (strongly not-taken) 10 => 00
-  //  (weakly not-taken)   00 => 01
-  //  (weakly taken)       01 => 11
-  //  (strongly taken)     11 => 11
-  val ex1_cnt_if_taken = Cat(ex1_reg_bp.cnt(0, 0), (!ex1_reg_bp.cnt(1) | ex1_reg_bp.cnt(0)).asUInt)
 
-  // if not-taken:
-  //  (strongly not-taken) 10 => 10
-  //  (weakly not-taken)   00 => 10
-  //  (weakly taken)       01 => 00
-  //  (strongly taken)     11 => 01
-  val ex1_cnt_if_not_taken = Cat(!ex1_reg_bp.cnt(0, 0), (ex1_reg_bp.cnt(1) & ex1_reg_bp.cnt(0)).asUInt)
+  // fetch_unit.io.redir_read.ptr := ex1_reg_bp.fp_ptr
 
-  val updated_cnt = Mux(ex1_is_br_taken, ex1_cnt_if_taken, ex1_cnt_if_not_taken)
+  fetch_unit.io.cr.en       := ex1_en && !ex2_reg_is_br
+  fetch_unit.io.cr.pc       := ex1_latter_pc
+  fetch_unit.io.cr.bp_entry := ex1_reg_bp.bp_entry
+  fetch_unit.io.cr.fp_entry := ex1_reg_fp_entry // fetch_unit.io.redir_read.fp_entry
+  fetch_unit.io.cr.fp_hit   := ex1_reg_bp.redirected
+  fetch_unit.io.cr.mispred  := ex1_bp_failure && !ex2_reg_is_br
+  fetch_unit.io.cr.br_taken := ex1_is_br_taken
+  fetch_unit.io.cr.attr     := ex1_reg_actual_attr
+  fetch_unit.io.cr.is_ret   := ex1_reg_actual_is_ret
+  fetch_unit.io.cr.target   := ex1_fetch_pc
+  fetch_unit.io.cr.next_pc  := ex1_next_pc
 
-  // if taken:
-  //  (not-taken) 10 => 00
-  //  (neutral)   00 => 11
-  //  (taken)     11 => 11
-  val ex1_gcnt_if_taken = Cat(ex1_reg_bp.gcnt(0) ^ !ex1_reg_bp.gcnt(1), ex1_reg_bp.gcnt(0) ^ !ex1_reg_bp.gcnt(1))
+  fetch_unit.io.redir_deq.en := ex1_en && ex1_reg_bp.redirected && !ex2_reg_is_br
 
-  // if not-taken:
-  //  (not-taken) 10 => 10
-  //  (neutral)   00 => 10
-  //  (taken)     11 => 00
-  val ex1_gcnt_if_not_taken = Cat(!ex1_reg_bp.gcnt(0), 0.U(1.W))
+  // // if taken:
+  // //  (strongly not-taken) 10 => 00
+  // //  (weakly not-taken)   00 => 01
+  // //  (weakly taken)       01 => 11
+  // //  (strongly taken)     11 => 11
+  // val ex1_cnt_if_taken = Cat(ex1_reg_bp.cnt(0, 0), (!ex1_reg_bp.cnt(1) | ex1_reg_bp.cnt(0)).asUInt)
 
-  val updated_gcnt = Mux(ex1_is_br_taken, ex1_gcnt_if_taken, ex1_gcnt_if_not_taken)
+  // // if not-taken:
+  // //  (strongly not-taken) 10 => 10
+  // //  (weakly not-taken)   00 => 10
+  // //  (weakly taken)       01 => 00
+  // //  (strongly taken)     11 => 01
+  // val ex1_cnt_if_not_taken = Cat(!ex1_reg_bp.cnt(0, 0), (ex1_reg_bp.cnt(1) & ex1_reg_bp.cnt(0)).asUInt)
+
+  // val updated_cnt = Mux(ex1_is_br_taken, ex1_cnt_if_taken, ex1_cnt_if_not_taken)
+
+  // // if taken:
+  // //  (not-taken) 10 => 00
+  // //  (neutral)   00 => 11
+  // //  (taken)     11 => 11
+  // val ex1_gcnt_if_taken = Cat(ex1_reg_bp.gcnt(0) ^ !ex1_reg_bp.gcnt(1), ex1_reg_bp.gcnt(0) ^ !ex1_reg_bp.gcnt(1))
+
+  // // if not-taken:
+  // //  (not-taken) 10 => 10
+  // //  (neutral)   00 => 10
+  // //  (taken)     11 => 00
+  // val ex1_gcnt_if_not_taken = Cat(!ex1_reg_bp.gcnt(0), 0.U(1.W))
+
+  // val updated_gcnt = Mux(ex1_is_br_taken, ex1_gcnt_if_taken, ex1_gcnt_if_not_taken)
 
   // // actual_attr === inval && attr =/= inval  => new attr <- inval
   // // actual_attr === br    && taken           => new attr <- br
@@ -1065,7 +1108,7 @@ class Core(
   // // actual_attr === dcall                    => new attr <- dcall
   // // actual_attr === ret                      => new attr <- ret
   // ic_btb.io.up.en := ex1_en && (
-  //   ((ex1_reg_actual_attr === BTB_ATTR_INVAL) && (ex1_reg_bp.attr =/= BTB_ATTR_INVAL)) ||
+  //   ((ex1_reg_actual_attr === BTB_ATTR_INVAL) && ((ex1_reg_bp.attr =/= BTB_ATTR_INVAL) || ex1_reg_bp.is_ret)) ||
   //   (ex1_is_br_taken) ||
   //   (ex1_reg_actual_attr === BTB_ATTR_DJUMP) ||
   //   (ex1_reg_actual_attr === BTB_ATTR_DCALL) ||
@@ -1097,9 +1140,9 @@ class Core(
   // ic_ras.io.up.index := ex1_reg_bp.rasindex
 
   // ic_ras.io.ret2.en      := ex1_en && ex1_reg_actual_is_ret && !ex1_reg_bp.is_ret
-  // ic_ras.io.ret2.index   := ex1_reg_bp.rasindex - 1.U(RAS_INDEX_BITS.W)
+  // ic_ras.io.ret2.index   := ex1_reg_bp.rasindex - 1.U(RAS_INDEX_LEN.W)
   // ic_ras.io.call2.en     := ex1_en && (ex1_reg_actual_attr === BTB_ATTR_DCALL) && (ex1_reg_bp.attr =/= BTB_ATTR_DCALL)
-  // ic_ras.io.call2.index  := ex1_reg_bp.rasindex + 1.U(RAS_INDEX_BITS.W)
+  // ic_ras.io.call2.index  := ex1_reg_bp.rasindex + 1.U(RAS_INDEX_LEN.W)
   // ic_ras.io.call2.ret_pc := ex1_next_pc
 
   ex1_fw_data := ex1_alu_out
@@ -1709,12 +1752,12 @@ class Core(
   // printf(cf"ex1_reg_op2op    : 0x${ex1_reg_op2op}%x\n")
   printf(cf"ex1_reg_wb_sel   : 0x${ex1_reg_wb_sel}%x\n")
   printf(cf"ex1_reg_wb_addr  : 0x${ex1_reg_wb_addr}%x\n")
-  printf(cf"ex1_reg_bp_taken : ${ex1_reg_bp.taken}%d\n")
-  printf(cf"ex1_reg_bp_target: 0x${Cat(ex1_reg_bp.target, 0.U(1.W))}%x\n")
+  printf(cf"ex1_reg_bp_redir : ${ex1_reg_bp.redirected}%d\n")
+  printf(cf"ex1_reg_bp_target: 0x${fetch_unit.io.redir_read.fp_entry.target.pc_to_word}%x\n")
   printf(cf"ex1_fetch_pc_en  : ${ex1_fetch_pc_en}%d\n")
-  printf(cf"ex1_reg_bp_cnt   : 0x${ex1_reg_bp.cnt}%x\n")
-  printf(cf"ex1_reg_bp_gcnt  : 0x${ex1_reg_bp.gcnt}%x\n")
-  printf(cf"ex1_reg_bp_rasind: 0x${ex1_reg_bp.rasindex}%x\n")
+  printf(cf"ex1_reg_bp_lcnt  : 0x${ex1_reg_bp.bp_entry.lcnt}%x\n")
+  printf(cf"ex1_reg_bp_gcnt  : 0x${ex1_reg_bp.bp_entry.gcnt}%x\n")
+  printf(cf"ex1_reg_bp_rasind: 0x${fetch_unit.io.redir_read.fp_entry.ras_index}%x\n")
   printf(cf"ex1_reg_actual_at: 0x${ex1_reg_actual_attr}%x\n")
   // printf(cf"ex1_bfx_sext     : 0x${ex1_bfx_sext}%x\n")
   // printf(cf"ex1_bfx_sign_shif: 0x${ex1_bfx_sign_shift}%x\n")

@@ -1,6 +1,6 @@
 module PHTMem #(
-    parameter RDATA_WIDTH_BITS = 2,
-    parameter RADDR_WIDTH = 12,
+    parameter RDATA_WIDTH_BITS = 3,
+    parameter RADDR_WIDTH = 11,
     parameter WDATA_WIDTH_BITS = 1,
     parameter WADDR_WIDTH = 13
 ) (

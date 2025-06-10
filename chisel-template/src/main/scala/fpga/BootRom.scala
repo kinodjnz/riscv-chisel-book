@@ -18,8 +18,8 @@ class BootRom(data_memory_path: String = null, imem_size_in_bytes: Int = 2048, e
 
   val addr_len = log2Ceil(imem_size_in_bytes) - 3
 
-  val imem_inst  = RegInit(0.U(IBLOCK_LEN.W))
-  val imem_rdata = RegInit(0.U(IBLOCK_LEN.W))
+  val imem_inst  = RegInit(0.U(FETCH_BLOCK_LEN.W))
+  val imem_rdata = RegInit(0.U(FETCH_BLOCK_LEN.W))
   val imem_addr  = RegInit(0.U(addr_len.W))
   val odd_addr   = RegInit(false.B)
 
@@ -28,7 +28,7 @@ class BootRom(data_memory_path: String = null, imem_size_in_bytes: Int = 2048, e
       MemorySynthInit
   })
 
-  val imem = Mem(imem_size_in_bytes/8, UInt(IBLOCK_LEN.W))
+  val imem = Mem(imem_size_in_bytes/8, UInt(FETCH_BLOCK_LEN.W))
   if (data_memory_path != null) {
     loadMemoryFromFileInline(imem, data_memory_path)
   }

@@ -13,5 +13,6 @@ object UIntExtension {
     def replace_lsbits(bits: Int, lsbits: UInt): UInt = data.head(data.getWidth - bits) ## lsbits(bits - 1, 0)
     def take(n: Int): UInt = data(n - 1, 0)
     def subdivideIn(n: Int): IndexedSeq[UInt] = (0 until ((data.getWidth + n - 1) / n)).map(i => data(i * n + n - 1, i * n))
+    def subdivideInVec(n: Int): Vec[UInt] = VecInit.tabulate((data.getWidth + n - 1) / n)(i => data(i * n + n - 1, i * n))
   }
 }

@@ -11,8 +11,8 @@ class MockICache extends Module {
     val icache_sram = new ICacheSramPort()
   })
 
-  val mem = Mem(ICACHE_LINES*4, UInt(IBLOCK_LEN.W))
-  val rdata = RegInit(0.U(IBLOCK_LEN.W))
+  val mem = Mem(ICACHE_LINES*4, UInt(FETCH_BLOCK_LEN.W))
+  val rdata = RegInit(0.U(FETCH_BLOCK_LEN.W))
 
   io.icache_sram.rdata := rdata
   when (io.icache_sram.ren) {

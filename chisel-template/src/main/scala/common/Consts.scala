@@ -4,20 +4,18 @@ import chisel3._
 import chisel3.util._
 
 object Consts {
-  val WORD_LEN      = 32
-  val IALIGN_LEN    = 16
-  val IBLOCK_LEN    = 64
-  val IBLOCK_BITS   = log2Ceil(IBLOCK_LEN / 8)
-  val START_ADDR    = 0.U(WORD_LEN.W)
-  val BUBBLE        = 0x00000013.U(WORD_LEN.W)  // [ADDI x0,x0,0] = BUBBLE
-  val UNIMP         = "x_c0001073".U(WORD_LEN.W) // [CSRRW x0, cycle, x0]
-  val ADDR_LEN      = 5 // rs1,rs2,wb
-  val CSR_ADDR_LEN  = 12
-  val INST_ID_LEN   = 32
-  val FETCH_BUFFER_SIZE = 4
-  val FETCH_PTR_LEN = log2Ceil(FETCH_BUFFER_SIZE)
-  val IALIGN_PTR_LEN = log2Ceil(IBLOCK_LEN / IALIGN_LEN)
-  val BPFAILURE      = 0x00100013.U(WORD_LEN.W) // [ADDI x0,x0,1]
+  val WORD_LEN        = 32
+  val IALIGN_LEN      = 16
+  val PC_LEN          = WORD_LEN - log2Ceil(IALIGN_LEN / 8)
+  val FETCH_BLOCK_LEN = 64
+  val IALIGN_PTR_LEN  = log2Ceil(FETCH_BLOCK_LEN / IALIGN_LEN)
+  val START_ADDR      = 0.U(WORD_LEN.W)
+  val BUBBLE          = 0x00000013.U(WORD_LEN.W)  // [ADDI x0,x0,0] = BUBBLE
+  val UNIMP           = "x_c0001073".U(WORD_LEN.W) // [CSRRW x0, cycle, x0]
+  val BPFAILURE       = 0x00100013.U(WORD_LEN.W) // [ADDI x0,x0,1]
+  val ADDR_LEN        = 5 // rs1,rs2,wb
+  val CSR_ADDR_LEN    = 12
+  val INST_ID_LEN     = 32
 
   val EXE_FUN_LEN = 4
   val ALU_X     =  0.U(EXE_FUN_LEN.W)
@@ -245,27 +243,27 @@ object Consts {
   val BP_BRANCH_LEN = WORD_LEN
   val BP_CACHE_LEN  = 256
 
-  val PC_LEN            = WORD_LEN - 1
   val ZBTB_ENTRIES      = 32
-  val ZBTB_TAG_BITS     = 8
-  val ZBTB_TARGET_BITS  = PC_LEN
-  val BTB_INDEX_BITS    = 10
-  val BTB_INDEX_LEN     = 1 << BTB_INDEX_BITS
+  val ZBTB_TAG_LEN      = 8
+  val ZBTB_TARGET_LEN   = PC_LEN
+  val BTB_INDEX_LEN     = 10
+  val BTB_ENTRIES       = 1 << BTB_INDEX_LEN
   val BTB_TAG_IGNORE    = 4 // ignore leading 4 bits of pc
-  val BTB_TAG_LEN       = PC_LEN - BTB_TAG_IGNORE - BTB_INDEX_BITS
+  // val BTB_TAG_LEN       = PC_LEN - BTB_TAG_IGNORE - BTB_INDEX_LEN
   val BTB_ATTR_LEN      = 2
   val BTB_ATTR_INVAL    = 0.U(BTB_ATTR_LEN.W)
   val BTB_ATTR_BR       = 1.U(BTB_ATTR_LEN.W)
   val BTB_ATTR_DJUMP    = 2.U(BTB_ATTR_LEN.W)
   val BTB_ATTR_DCALL    = 3.U(BTB_ATTR_LEN.W)
-  val BTB_BUNDLE_LEN    = BTB_TAG_LEN + BTB_ATTR_LEN + PC_LEN
-  val PHT_HISTORY_BITS  = 6
+  // val BTB_ENTRY_LEN     = BTB_TAG_LEN + BTB_ATTR_LEN + PC_LEN
+  val PHT_HISTORY_LEN   = 6
   val PHT_HISTORY_SHIFT = 2
-  val PHT_INDEX_BITS    = 13
+  val PHT_INDEX_LEN     = 13
   // val PHT_HISTORY_BITS  = 36
   // val PHT_HISTORY_SHIFT = 12
-  // val PHT_INDEX_BITS    = 36+6
-  val PHT_INDEX_LEN     = 1 << PHT_INDEX_BITS
-  val RAS_INDEX_BITS    = 3
-  val RAS_ENTRIES       = (1 << RAS_INDEX_BITS)
+  // val PHT_INDEX_LEN     = 36+6
+  val RAS_INDEX_LEN     = 3
+  val RAS_ENTRIES       = (1 << RAS_INDEX_LEN)
+  val GCNT_NOT_BRANCH   = 1.U(2.W)
+  val REDIRECT_BUFFER_SIZE = 4
 }

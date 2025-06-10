@@ -8,18 +8,24 @@ import common.OptionExtension._
 import chisel3.util.experimental.loadMemoryFromFileInline
 import chisel3.ChiselEnum
 
-class BranchPrediction extends Bundle {
-  val taken    = Bool()
-  val attr     = UInt(BTB_ATTR_LEN.W)
-  val is_ret   = Bool()
-  val rasindex = UInt(RAS_INDEX_BITS.W)
-  val target   = UInt(PC_LEN.W)
-  val history  = UInt(PHT_HISTORY_BITS.W)
-  val cnt      = UInt(2.W)
-  val gcnt     = UInt(2.W)
+class BranchPrediction(redirect_buffer_size: Int) extends Bundle {
+  val fp_ptr_len = log2Ceil(redirect_buffer_size)
+
+  val redirected = Bool()
+  val bpfailed   = Bool()
+  val bp_entry   = new BranchPredictionEntry()
+  val fp_ptr     = UInt(fp_ptr_len.W)
+
+  // val attr     = UInt(BTB_ATTR_LEN.W)
+  // val is_ret   = Bool()
+  // val rasindex = UInt(RAS_INDEX_LEN.W)
+  // val target   = UInt(PC_LEN.W)
+  // val history  = UInt(PHT_HISTORY_LEN.W)
+  // val cnt      = UInt(2.W)
+  // val gcnt     = UInt(2.W)
 }
 
-class InstructionDecoderOutput(val enable_pipeline_probe: Boolean) extends Bundle {
+class InstructionDecoderOutput(redirect_buffer_size: Int, enable_pipeline_probe: Boolean) extends Bundle {
   val pc               = UInt(PC_LEN.W)
   val wb_addr          = UInt(ADDR_LEN.W)
   val op1_sel          = UInt(M_OP1_LEN.W)
@@ -38,7 +44,7 @@ class InstructionDecoderOutput(val enable_pipeline_probe: Boolean) extends Bundl
   val mem_w            = UInt(MW_LEN.W)
   val is_bflen         = Bool()
   val is_br            = Bool()
-  val bp               = new BranchPrediction()
+  val bp               = new BranchPrediction(redirect_buffer_size)
   val actual_attr      = UInt(BTB_ATTR_LEN.W)
   val actual_is_ret    = Bool()
   val is_half          = Bool()
@@ -54,22 +60,22 @@ class PipelineStageIO[+T <: Data](gen: T) extends Bundle {
   val bits  = Output(gen)
 }
 
-class InstructionFetcherOutput(val enable_pipeline_probe: Boolean) extends Bundle {
+class InstructionFetcherOutput(redirect_buffer_size: Int, enable_pipeline_probe: Boolean) extends Bundle {
   val is_valid_inst = Bool()
   val inst          = UInt(WORD_LEN.W)
   val pc            = UInt(PC_LEN.W)
-  val bp            = new BranchPrediction()
+  val bp            = new BranchPrediction(redirect_buffer_size)
   val inst_id       = Option.when(enable_pipeline_probe)(UInt(INST_ID_LEN.W))
 }
 
 object InstructionDecoderInputIO {
-  def apply(enable_pipeline_probe: Boolean): PipelineStageIO[InstructionFetcherOutput] =
-    new PipelineStageIO(new InstructionFetcherOutput(enable_pipeline_probe))
+  def apply(redirect_buffer_size: Int, enable_pipeline_probe: Boolean): PipelineStageIO[InstructionFetcherOutput] =
+    new PipelineStageIO(new InstructionFetcherOutput(redirect_buffer_size, enable_pipeline_probe))
 }
 
 object InstructionDecoderOutputIO {
-  def apply(enable_pipeline_probe: Boolean): PipelineStageIO[InstructionDecoderOutput] =
-    Flipped(new PipelineStageIO(new InstructionDecoderOutput(enable_pipeline_probe)))
+  def apply(redirect_buffer_size: Int, enable_pipeline_probe: Boolean): PipelineStageIO[InstructionDecoderOutput] =
+    Flipped(new PipelineStageIO(new InstructionDecoderOutput(redirect_buffer_size, enable_pipeline_probe)))
 }
 
 class InstructionDecoderDebugSignals extends Bundle {
@@ -83,26 +89,33 @@ class InstructionDecoderPipelineProbe(enable_pipeline_probe: Boolean) extends Bu
 }
 
 class InstructionDecoderIO(
-  val enable_pipeline_probe: Boolean = false,
+  redirect_buffer_size: Int,
+  enable_pipeline_probe: Boolean = false,
 ) extends Bundle {
-  val in = Flipped(InstructionDecoderInputIO(enable_pipeline_probe))
-  val out = Flipped(InstructionDecoderOutputIO(enable_pipeline_probe))
+  val in = Flipped(InstructionDecoderInputIO(redirect_buffer_size, enable_pipeline_probe))
+  val out = Flipped(InstructionDecoderOutputIO(redirect_buffer_size, enable_pipeline_probe))
   val debug_signals = new InstructionDecoderDebugSignals()
   val pipeline_probe = new InstructionDecoderPipelineProbe(enable_pipeline_probe)
 }
 
 class InstructionDecoder(
-  val enable_pipeline_probe: Boolean = false,
+  redirect_buffer_size: Int,
+  enable_pipeline_probe: Boolean = false,
 ) extends Module {
-  val io = IO(new InstructionDecoderIO(enable_pipeline_probe))
+  val io = IO(new InstructionDecoderIO(redirect_buffer_size, enable_pipeline_probe))
 
   val id_reg_is_valid_inst = RegInit(false.B)
   val id_reg_inst          = RegInit(BUBBLE)
   val id_reg_pc            = RegInit(0.U(PC_LEN.W))
-  val id_reg_bp            = RegInit(0.U.asTypeOf(new BranchPrediction()))
+  val id_reg_bp            = RegInit(0.U.asTypeOf(new BranchPrediction(redirect_buffer_size)))
   val id_reg_is_bp_fail    = RegInit(false.B)
 
-  val id_output_queue = Module(new Queue(new InstructionDecoderOutput(enable_pipeline_probe), 1, pipe = false, flow = true))
+  val id_output_queue = Module(new Queue(
+    new InstructionDecoderOutput(redirect_buffer_size, enable_pipeline_probe),
+    1,
+    pipe = false,
+    flow = true,
+  ))
 
   val id_in_ready = id_output_queue.io.enq.ready
 
@@ -115,7 +128,7 @@ class InstructionDecoder(
     // ストールとBP同時の場合、BP発生源の命令を生かすためストール優先
     id_reg_is_valid_inst := io.in.bits.is_valid_inst
     id_reg_inst          := io.in.bits.inst
-    id_reg_bp.taken      := io.in.bits.bp.taken
+    id_reg_bp.redirected := io.in.bits.bp.redirected
   }
   val id_inst_id = io.in.bits.inst_id
 
@@ -572,7 +585,8 @@ class InstructionDecoder(
     io.out.bits.wb_sel        := WB_X
     io.out.bits.mem_w         := MW_X
     io.out.bits.is_br         := false.B
-    io.out.bits.bp.taken      := false.B
+    io.out.bits.bp.redirected := false.B
+    io.out.bits.bp.bpfailed   := false.B
     io.out.bits.is_valid_inst := false.B
     io.out.bits.is_trap       := false.B
   }

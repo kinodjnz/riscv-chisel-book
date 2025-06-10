@@ -13,7 +13,7 @@ import CacheConsts._
 class ImemPortIo extends Bundle {
   val en = Input(Bool())
   val addr = Input(UInt(WORD_LEN.W))
-  val inst = Output(UInt(IBLOCK_LEN.W))
+  val inst = Output(UInt(FETCH_BLOCK_LEN.W))
   val valid = Output(Bool())
 }
 
@@ -35,7 +35,7 @@ class CachedImemPort extends Bundle {
   val addr_en = Input(Bool())
   val addr = Input(UInt(WORD_LEN.W))
   val addr_ready = Output(Bool())
-  val idata = Output(UInt(IBLOCK_LEN.W))
+  val idata = Output(UInt(FETCH_BLOCK_LEN.W))
   val idata_valid = Output(Bool())
   val idata_ready = Input(Bool())
 }
@@ -305,7 +305,7 @@ class Memory() extends Module {
   val i_reg_valid_rdata = RegInit(0.U((1 << ICACHE_VALID_DATA_BITS).W))
   val i_reg_cur_tag_index = RegInit(Fill(ICACHE_TAG_BITS+ICACHE_INDEX_BITS, 1.U(1.W)))
   val i_reg_idata_valid = RegInit(false.B)
-  val i_reg_next_idata = RegInit(0.U(IBLOCK_LEN.W))
+  val i_reg_next_idata = RegInit(0.U(FETCH_BLOCK_LEN.W))
   val i_reg_sel_next_idata = RegInit(false.B)
 
   val dcache_snoop_en = Wire(Bool())
@@ -386,7 +386,7 @@ class Memory() extends Module {
       io.icache_valid.addr := i_reg_req_addr.index(ICACHE_INDEX_BITS-1, ICACHE_INVALIDATE_ADDR_BITS)
       val icache_valid_wdata = (i_reg_valid_rdata | (1.U << i_reg_req_addr.index(ICACHE_VALID_DATA_BITS-1, 0)))((1 << ICACHE_VALID_DATA_BITS)-1, 0)
       io.icache_valid.wdata := icache_valid_wdata
-      i_reg_next_idata := (dcache_snoop_line >> Cat(i_reg_next_addr.line_off(CACHE_LINE_BITS-1, 3), 0.U(6.W)))(IBLOCK_LEN-1, 0)
+      i_reg_next_idata := (dcache_snoop_line >> Cat(i_reg_next_addr.line_off(CACHE_LINE_BITS-1, 3), 0.U(6.W)))(FETCH_BLOCK_LEN-1, 0)
       i_reg_sel_next_idata := true.B
       val i_next_addr = io.imem.addr.asTypeOf(new ICacheAddrBundle())
       // i_reg_idata_valid := (i_reg_req_addr.tag(ICACHE_TAG_BITS-1, 0) === i_next_addr.tag(ICACHE_TAG_BITS-1, 0) &&
@@ -433,7 +433,7 @@ class Memory() extends Module {
       io.icache_valid.addr := i_reg_req_addr.index(ICACHE_INDEX_BITS-1, ICACHE_INVALIDATE_ADDR_BITS)
       val icache_valid_wdata = (i_reg_valid_rdata | (1.U << i_reg_req_addr.index(ICACHE_VALID_DATA_BITS-1, 0)))((1 << ICACHE_VALID_DATA_BITS)-1, 0)
       io.icache_valid.wdata := icache_valid_wdata
-      i_reg_next_idata := (line >> Cat(i_reg_next_addr.line_off(CACHE_LINE_BITS-1, 3), 0.U(6.W)))(IBLOCK_LEN-1, 0)
+      i_reg_next_idata := (line >> Cat(i_reg_next_addr.line_off(CACHE_LINE_BITS-1, 3), 0.U(6.W)))(FETCH_BLOCK_LEN-1, 0)
       i_reg_sel_next_idata := true.B
       val i_next_addr = io.imem.addr.asTypeOf(new ICacheAddrBundle())
       // i_reg_idata_valid := (i_reg_req_addr.tag(ICACHE_TAG_BITS-1, 0) === i_next_addr.tag(ICACHE_TAG_BITS-1, 0) &&
