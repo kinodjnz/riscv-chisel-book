@@ -6,6 +6,7 @@ import common.Instructions._
 import common.Consts._
 import common.OptionExtension._
 import common.UIntExtension._
+import common.SIntExtension._
 import chisel3.util.experimental.loadMemoryFromFileInline
 import chisel3.ChiselEnum
 
@@ -227,11 +228,8 @@ class Core(
   // EX1/EX2 State
   val ex2_reg_pc            = RegInit(0.U(PC_LEN.W))
   val ex2_reg_wb_addr       = RegInit(0.U(ADDR_LEN.W))
-  val ex2_reg_mullu         = RegInit(0.U((WORD_LEN*3/2).W))
-  val ex2_reg_mulls         = RegInit(0.U(WORD_LEN.W))
-  val ex2_reg_mulhuu        = RegInit(0.U((WORD_LEN*3/2).W))
-  val ex2_reg_mulhss        = RegInit(0.S((WORD_LEN*3/2).W))
-  val ex2_reg_mulhsu        = RegInit(0.S((WORD_LEN*3/2).W))
+  val ex2_reg_mull          = RegInit(0.U((33+24).W))
+  val ex2_reg_mulh          = RegInit(0.U((33+9).W))
   val ex2_reg_exe_fun       = RegInit(0.U(EXE_FUN_LEN.W))
   val ex2_reg_rf_wen        = RegInit(0.U(REN_LEN.W))
   val ex2_reg_fun_sel       = RegInit(0.U(EX2_FUN_LEN.W))
@@ -917,11 +915,16 @@ class Core(
     (ex1_reg_exe_fun === ALU_BEXT)    -> Cat(Fill(WORD_LEN-1, 0.U(1.W)), (ex1_reg_op1_data >> ex1_reg_op2_data(4, 0))(0)),
   ))
 
-  val ex1_mullu  = (ex1_reg_op1_data * ex1_reg_op2_data(WORD_LEN/2-1, 0))
-  val ex1_mulls  = (ex1_reg_op1_data.asSInt * ex1_reg_op2_data(WORD_LEN/2-1, 0))(WORD_LEN*3/2-1, WORD_LEN/2)
-  val ex1_mulhuu = (ex1_reg_op1_data * ex1_reg_op2_data(WORD_LEN-1, WORD_LEN/2))
-  val ex1_mulhss = (ex1_reg_op1_data.asSInt * ex1_reg_op2_data(WORD_LEN-1, WORD_LEN/2).asSInt)
-  val ex1_mulhsu = (ex1_reg_op1_data.asSInt * ex1_reg_op2_data(WORD_LEN-1, WORD_LEN/2))
+  val ex1_mul_op1_data = Mux(ex1_reg_exe_fun.take(2) === ALU_MULH.take(2) || ex1_reg_exe_fun.take(2) === ALU_MULHSU.take(2),
+    ex1_reg_op1_data.asSInt.sext,
+    ex1_reg_op1_data.zext,
+  )
+  val ex1_mul_op2_data = Mux(ex1_reg_exe_fun(1) === ALU_MULH(1),
+    ex1_reg_op2_data.asSInt.sext,
+    ex1_reg_op2_data.zext,
+  )
+  val ex1_mull = (ex1_mul_op1_data * ex1_mul_op2_data.asUInt.take(24)).asUInt
+  val ex1_mulh = (ex1_mul_op1_data * ex1_mul_op2_data(32, 24).asSInt).asUInt
 
   def scatter_bit(value: UInt, mask: UInt, bit: Int): UInt = {
     if (bit == 0) {
@@ -1287,11 +1290,8 @@ class Core(
     ex2_reg_pc         := ex1_reg_pc
     ex2_reg_wb_addr    := ex1_reg_wb_addr
     ex2_reg_alu_out    := ex1_alu_out
-    ex2_reg_mullu      := ex1_mullu
-    ex2_reg_mulls      := ex1_mulls
-    ex2_reg_mulhuu     := ex1_mulhuu
-    ex2_reg_mulhss     := ex1_mulhss
-    ex2_reg_mulhsu     := ex1_mulhsu
+    ex2_reg_mull       := ex1_mull
+    ex2_reg_mulh       := ex1_mulh
     ex2_reg_pc_bit_out := ex1_pc_bit_out
     ex2_reg_csr_rdata  := csr_rdata
     ex2_reg_exe_fun    := ex1_reg_exe_fun
@@ -1340,18 +1340,14 @@ class Core(
   val ex2_reg_reminder     = RegInit(0.U(WORD_LEN.W))
   val ex2_reg_quotient     = RegInit(0.U(WORD_LEN.W))
 
-  def signExtend48(value: UInt, w: Int): SInt = {
-      (Fill(WORD_LEN*3/2 - w, value(w - 1)) ## value(w - 1, 0)).asSInt
-  }
-  def zeroExtend48(value: UInt, w: Int) = {
-      Fill(WORD_LEN*3/2 - w, 0.U) ## value(w - 1, 0)
+  def signExtend40(value: UInt, w: Int): UInt = {
+      Fill(40 - w, value(w - 1)) ## value(w - 1, 0)
   }
 
   val ex2_alu_muldiv_out = MuxCase(0.U(WORD_LEN.W), Seq(
-    (ex2_reg_exe_fun === ALU_MUL)    -> (ex2_reg_mullu(WORD_LEN-1, 0) + (ex2_reg_mulhuu(WORD_LEN/2-1, 0) << (WORD_LEN/2))),
-    (ex2_reg_exe_fun === ALU_MULH)   -> (signExtend48(ex2_reg_mulls, WORD_LEN) + ex2_reg_mulhss)(WORD_LEN*3/2-1, WORD_LEN/2),
-    (ex2_reg_exe_fun === ALU_MULHU)  -> (zeroExtend48(ex2_reg_mullu(WORD_LEN*3/2-1, WORD_LEN/2), WORD_LEN) + ex2_reg_mulhuu)(WORD_LEN*3/2-1, WORD_LEN/2),
-    (ex2_reg_exe_fun === ALU_MULHSU) -> (signExtend48(ex2_reg_mulls, WORD_LEN) + ex2_reg_mulhsu)(WORD_LEN*3/2-1, WORD_LEN/2),
+    (ex2_reg_exe_fun === ALU_MUL)    -> (ex2_reg_mull.take(WORD_LEN) + (ex2_reg_mulh.take(8) << 24)),
+    (ex2_reg_exe_fun === ALU_MULH || ex2_reg_exe_fun === ALU_MULHU || ex2_reg_exe_fun === ALU_MULHSU)
+                                     -> (signExtend40(ex2_reg_mull(33+24-1, 24), 33) + ex2_reg_mulh.take(40))(39, 8),
     (ex2_reg_exe_fun === ALU_DIV)    -> ex2_reg_quotient,
     (ex2_reg_exe_fun === ALU_DIVU)   -> ex2_reg_quotient,
     (ex2_reg_exe_fun === ALU_REM)    -> ex2_reg_reminder,
