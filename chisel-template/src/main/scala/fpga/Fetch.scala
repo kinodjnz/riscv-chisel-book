@@ -130,6 +130,9 @@ class Fetcher(
     val reg_fix_zbp_miss  = RegInit(false.B)
     val reg_fix_addr      = RegInit(0.U(PC_LEN.W))
     val reg_discard_enq   = RegInit(0.U(DISCARD_PTR_LEN.W))
+    val reg_is_dram       = RegInit(false.B)
+    val reg_wait_for_dram = RegInit(false.B)
+    val wait_for_dram     = WireDefault(false.B)
 
     val invalidate        = reg_fix_zbp_miss && reg_addressed
     reg_discard_enq := discard_enq
@@ -155,20 +158,25 @@ class Fetcher(
     val has_space = (~count(FETCH_PTR_LEN)).asBool
     // val has_space = count < 3.U
     val is_dram = dram_config.is_dram(iaddr.pc_to_word)
+    reg_is_dram := is_dram
     val redirect_ready = !(reg_fix_zbp_miss || io.pr.bp0_en) || io.pr.redirect_ready
 
     when (invalidate && !io.ft.flush_en) {
       addressing_ptr := addressing_ptr - 1.U
     }
+    when (reg_is_dram && !is_dram && discard_enq =/= discard_deq) {
+      wait_for_dram := true.B
+      reg_is_dram := true.B
+    }
 
     io.ft.imem.addr      := iaddr.clear_lsbits(IALIGN_PTR_LEN).pc_to_word
-    io.ft.imem.en        := ((has_space && redirect_ready) || io.ft.flush_en) && !is_dram
+    io.ft.imem.en        := ((has_space && redirect_ready) || io.ft.flush_en) && !wait_for_dram && !is_dram
     io.ft.icache.addr    := iaddr.clear_lsbits(IALIGN_PTR_LEN).pc_to_word
     io.ft.icache.addr_en := ((has_space && redirect_ready) || io.ft.flush_en) && is_dram
     io.pr.flush_en       := io.ft.flush_en
     io.pr.redirect_en    := io.ft.flush_en || reg_fix_zbp_miss || io.pr.bp0_en
     io.pr.iaddr          := iaddr
-    when (!((has_space && redirect_ready) || io.ft.flush_en) || (is_dram && !io.ft.icache.addr_ready)) {
+    when ((!(has_space && redirect_ready) && !io.ft.flush_en) || wait_for_dram || (is_dram && !io.ft.icache.addr_ready)) {
       reg_next_iaddr   := iaddr
       io.pr.iaddr_en   := false.B
       reg_addressed    := false.B
@@ -188,9 +196,7 @@ class Fetcher(
     when (io.ft.flush_en) {
       fetch_buf(addressing_ptr.take(FETCH_PTR_LEN) - 1.U).iblock_cont := false.B
       for (i <- 0 until DISCARD_BUFFER_SIZE) {
-        when (discard_enq =/= i.U) {
-          discard_buf(i) := true.B
-        }
+        discard_buf(i) := true.B
       }
     }
 
@@ -207,12 +213,12 @@ class Fetcher(
     forward_i0_ptr := ptr
     forward_i0     := iaddr.take(IALIGN_PTR_LEN)
 
-    when (reg_addressed && !io.ft.flush_en) {
-      discard_buf(reg_discard_enq) := invalidate
+    when (reg_addressed) {
+      discard_buf(reg_discard_enq) := invalidate || io.ft.flush_en
       forward_discard_en           := true.B
     }
     forward_discard_ptr := reg_discard_enq
-    forward_discard     := invalidate
+    forward_discard     := invalidate || io.ft.flush_en
 
     printf(cf"iaddr=${iaddr ## 0.U(1.W)}%x\n")
     printf(cf"reg_next_iaddr=${reg_next_iaddr ## 0.U(1.W)}%x\n")
@@ -310,7 +316,7 @@ class Fetcher(
       (sat_count === 1.U)                   -> (inst2_end <= end_of_iblocks(0)),
     ))
     val iaddr0 = iaddrs(0).replace_lsbits(2, reg_i0)
-    val inst1_bpfailed = !inst1_half && end_of_iblock === i0
+    val inst1_bpfailed = !io.ft.flush_en && sat_count =/= 0.U && !inst1_half && end_of_iblock === i0
     io.ft.inst1.addr       := iaddr0
     io.ft.inst1.data       := idatas(i1) ## idatas(i0)
     io.ft.inst1.bpfailed   := inst1_bpfailed

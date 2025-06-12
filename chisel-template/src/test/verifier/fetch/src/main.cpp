@@ -199,6 +199,16 @@ std::generator<int64_t> input_task(Vfetch *vp, context *ctx) {
     co_yield 1;
 }
 
+std::generator<int64_t> input_icache_task(Vfetch *vp, context *ctx) {
+    co_yield 0;
+    vp->io_ft_flush_en = 1;
+    vp->io_ft_flush_iaddr = 0x20000000 >> 1;
+    co_yield 1;
+    vp->io_ft_flush_en = 0;
+    vp->io_ft_flush_iaddr = 0x00000000 >> 1;
+    co_yield 1;
+}
+
 static const std::vector<uint64_t> imem_32bit_insts = {
     0x00000013'00000003,
     0x00000033'00000023,
@@ -221,6 +231,25 @@ static const std::vector<uint64_t> imem_rvc_insts = {
     0x00000203'01f20000, //  10-
 };
 
+static const std::vector<uint32_t> icache_fixed_delays = {
+    1,
+};
+
+static const std::vector<uint32_t> icache_variable_delays = {
+    1,
+    3,
+    2,
+    1,
+    4,
+    2,
+    6,
+    6,
+    1,
+    5,
+    2,
+    1,
+};
+
 std::generator<int64_t> imem_mock_task(Vfetch *vp, context *ctx, const std::vector<uint64_t> &data) {
     bool valid = false;
     uint64_t idata = 0;
@@ -230,7 +259,7 @@ std::generator<int64_t> imem_mock_task(Vfetch *vp, context *ctx, const std::vect
         vp->io_ft_imem_valid = valid;
         co_yield -1;
         // WARN(std::format("io_ft_imem_en={}", vp->io_ft_imem_en));
-        // WARN(std::format("io_ft_imem_addr={0:#x}", vp->io_ft_imem_addr));
+        // WARN(std::format("io_ft_imem_addr={:#x}", vp->io_ft_imem_addr));
         if (vp->io_ft_imem_en) {
             idata = (vp->io_ft_imem_addr & 0xff000000) == 0x08000000 ? data[((vp->io_ft_imem_addr - 0x08000000) >> 3) % data.size()] : 0;
             valid = true;
@@ -239,6 +268,33 @@ std::generator<int64_t> imem_mock_task(Vfetch *vp, context *ctx, const std::vect
             valid = false;
         }
         co_yield 1;
+    }
+}
+
+std::generator<int64_t> icache_mock_task(Vfetch *vp, context *ctx, const std::vector<uint64_t> &data, const std::vector<uint32_t> &delays = icache_fixed_delays) {
+    std::deque<uint64_t> idatas = {};
+    co_yield 0;
+    while (true) {
+        vp->io_ft_icache_idata_valid = (idatas.size() > 0);
+        vp->io_ft_icache_idata = idatas.size() > 0 ? idatas.front() : 0;
+        vp->io_ft_icache_addr_ready = true;
+        co_yield -1;
+        if (vp->io_ft_icache_idata_ready && idatas.size() > 0) {
+            idatas.pop_front();
+        }
+        if (vp->io_ft_icache_addr_en && (vp->io_ft_icache_addr & 0xf0000000) == 0x20000000) {
+            idatas.push_back(data[((vp->io_ft_imem_addr & 0x0fffffff) >> 3) % data.size()]);
+        }
+        uint32_t delay = 1;
+        if (vp->io_ft_icache_addr_en && (vp->io_ft_icache_addr & 0xf0000000) == 0x20000000) {
+            delay = delays[((vp->io_ft_icache_addr & 0xfffffff) >> 3) % delays.size()];
+        }
+        co_yield 1;
+        if (delay > 1) {
+            vp->io_ft_icache_addr_ready = false;
+            vp->io_ft_icache_idata_valid = false;
+            co_yield delay - 1;
+        }
     }
 }
 
@@ -647,6 +703,31 @@ static const std::map<uint32_t, uint32_t> flush_addresses = {
     { 0x0400002b, 0x04000017 },
 };
 
+std::vector<addr_data> map_addr(const std::vector<addr_data> &addrs, uint32_t base_addr) {
+    std::vector<addr_data> a = addrs;
+    for (auto &e: a) {
+        e.address = (e.address & 0xffffff) + base_addr;
+    }
+    return a;
+}
+
+std::vector<bp_cell> map_bp_cell(const std::vector<bp_cell> &bps, uint32_t base_addr) {
+    std::vector<bp_cell> b = bps;
+    for (auto &e: b) {
+        e.zbtb_target = e.zbtb_target.transform([&](uint32_t t) { return (t & 0xffffff) + base_addr; } );
+        e.btb_target = (e.btb_target & 0xffffff) + base_addr;
+    }
+    return b;
+}
+
+std::map<uint32_t, uint32_t> map_flush_addresses(const std::map<uint32_t, uint32_t> &addrs, uint32_t base_addr) {
+    std::map<uint32_t, uint32_t> a;
+    for (const auto &e: addrs) {
+        a.insert(std::make_pair((e.first & 0xffffff) + base_addr, (e.second & 0xffffff) + base_addr));
+    }
+    return a;
+}
+
 std::generator<int64_t> probe_fetch_task(
     Vfetch *vp,
     context *ctx,
@@ -834,6 +915,23 @@ TEST_CASE("rvc bp flush, 32bit fetch", "[fetch]") {
     runner.start_task(std::make_shared<task>("imem",  [&sut, &ctx]() { return imem_mock_task(&*sut, ctx, imem_rvc_insts); }, false));
     runner.start_task(std::make_shared<task>("bp",    [&sut, &ctx]() { return bp_mock_task(&*sut, ctx, bp_flush_rvc); }, false));
     runner.start_task(std::make_shared<task>("prove", [&sut, &ctx]() { return probe_fetch_task(&*sut, ctx, fixed32bit_ready_counts, expected_rvc_bp_insts, flush_addresses); }));
+
+    runner.run(sut);
+}
+
+TEST_CASE("rvc bp flush, 32bit fetch, icache variable delays", "[fetch]") {
+    task_runner runner(160);
+    verilated_ptr<Vfetch> sut(new Vfetch{runner.vcontext()}, "fetch/logs/rvc_bp_flush_32bit_fetch_icache_var.fst");
+    context *ctx = runner.ctx();
+    const uint32_t base_addr = 0x20000000 >> 1;
+    const std::vector<addr_data> &&addrs = map_addr(expected_rvc_bp_insts, base_addr);
+    const std::vector<bp_cell> &&bps = map_bp_cell(bp_flush_rvc, base_addr);
+    const std::map<uint32_t, uint32_t> &&flush_addrs = map_flush_addresses(flush_addresses, base_addr);
+
+    runner.start_task(std::make_shared<task>("input", [&sut, &ctx]() { return input_icache_task(&*sut, ctx); }, false));
+    runner.start_task(std::make_shared<task>("imem",  [&sut, &ctx]() { return icache_mock_task(&*sut, ctx, imem_rvc_insts, icache_variable_delays); }, false));
+    runner.start_task(std::make_shared<task>("bp",    [&]() { return bp_mock_task(&*sut, ctx, bps); }, false));
+    runner.start_task(std::make_shared<task>("prove", [&]() { return probe_fetch_task(&*sut, ctx, fixed32bit_ready_counts, addrs, flush_addrs); }));
 
     runner.run(sut);
 }

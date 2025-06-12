@@ -299,9 +299,9 @@ class Memory() extends Module {
 
   val icache_state = RegInit(ICacheState.Lookup)
   val i_reg_tag = RegInit(VecInit(0.U(ICACHE_TAG_BITS.W)))
-  val i_reg_line = RegInit(0.U(CACHE_LINE_LEN.W))
+  // val i_reg_line = RegInit(0.U(CACHE_LINE_LEN.W))
   val i_reg_req_addr = RegInit(0.U.asTypeOf(new ICacheAddrBundle()))
-  val i_reg_next_addr = RegInit(0.U.asTypeOf(new ICacheAddrBundle()))
+  // val i_reg_next_addr = RegInit(0.U.asTypeOf(new ICacheAddrBundle()))
   val i_reg_valid_rdata = RegInit(0.U((1 << ICACHE_VALID_DATA_BITS).W))
   val i_reg_cur_tag_index = RegInit(Fill(ICACHE_TAG_BITS+ICACHE_INDEX_BITS, 1.U(1.W)))
   val i_reg_idata_valid = RegInit(false.B)
@@ -317,7 +317,7 @@ class Memory() extends Module {
   io.imem.idata_valid := false.B
   io.imem.addr_ready := false.B
   io.cache.ibusy := true.B
-  i_reg_next_addr := io.imem.addr.asTypeOf(new ICacheAddrBundle())
+  // i_reg_next_addr := io.imem.addr.asTypeOf(new ICacheAddrBundle())
   i_reg_idata_valid := false.B
   i_reg_sel_next_idata := false.B
   dcache_snoop_en := false.B
@@ -386,9 +386,9 @@ class Memory() extends Module {
       io.icache_valid.addr := i_reg_req_addr.index(ICACHE_INDEX_BITS-1, ICACHE_INVALIDATE_ADDR_BITS)
       val icache_valid_wdata = (i_reg_valid_rdata | (1.U << i_reg_req_addr.index(ICACHE_VALID_DATA_BITS-1, 0)))((1 << ICACHE_VALID_DATA_BITS)-1, 0)
       io.icache_valid.wdata := icache_valid_wdata
-      i_reg_next_idata := (dcache_snoop_line >> Cat(i_reg_next_addr.line_off(CACHE_LINE_BITS-1, 3), 0.U(6.W)))(FETCH_BLOCK_LEN-1, 0)
+      i_reg_next_idata := (dcache_snoop_line >> Cat(i_reg_req_addr.line_off(CACHE_LINE_BITS-1, 3), 0.U(6.W)))(FETCH_BLOCK_LEN-1, 0)
       i_reg_sel_next_idata := true.B
-      val i_next_addr = io.imem.addr.asTypeOf(new ICacheAddrBundle())
+      // val i_next_addr = io.imem.addr.asTypeOf(new ICacheAddrBundle())
       // i_reg_idata_valid := (i_reg_req_addr.tag(ICACHE_TAG_BITS-1, 0) === i_next_addr.tag(ICACHE_TAG_BITS-1, 0) &&
       //     i_reg_req_addr.index === i_next_addr.index &&
       //     i_reg_req_addr.line_off(CACHE_LINE_BITS-1, 2) === i_next_addr.line_off(CACHE_LINE_BITS-1, 2))
@@ -400,7 +400,7 @@ class Memory() extends Module {
           dcache_snoop_en := true.B
         }
         is (DCacheSnoopStatus.Found) {
-          i_reg_line := dcache_snoop_line
+          // i_reg_line := dcache_snoop_line
           i_tag_array.write(i_reg_req_addr.index, VecInit(i_reg_req_addr.tag))
           io.icache_sram.wen := true.B
           io.icache_valid.ren := true.B
@@ -433,9 +433,9 @@ class Memory() extends Module {
       io.icache_valid.addr := i_reg_req_addr.index(ICACHE_INDEX_BITS-1, ICACHE_INVALIDATE_ADDR_BITS)
       val icache_valid_wdata = (i_reg_valid_rdata | (1.U << i_reg_req_addr.index(ICACHE_VALID_DATA_BITS-1, 0)))((1 << ICACHE_VALID_DATA_BITS)-1, 0)
       io.icache_valid.wdata := icache_valid_wdata
-      i_reg_next_idata := (line >> Cat(i_reg_next_addr.line_off(CACHE_LINE_BITS-1, 3), 0.U(6.W)))(FETCH_BLOCK_LEN-1, 0)
+      i_reg_next_idata := (line >> Cat(i_reg_req_addr.line_off(CACHE_LINE_BITS-1, 3), 0.U(6.W)))(FETCH_BLOCK_LEN-1, 0)
       i_reg_sel_next_idata := true.B
-      val i_next_addr = io.imem.addr.asTypeOf(new ICacheAddrBundle())
+      // val i_next_addr = io.imem.addr.asTypeOf(new ICacheAddrBundle())
       // i_reg_idata_valid := (i_reg_req_addr.tag(ICACHE_TAG_BITS-1, 0) === i_next_addr.tag(ICACHE_TAG_BITS-1, 0) &&
       //     i_reg_req_addr.index === i_next_addr.index &&
       //     i_reg_req_addr.line_off(CACHE_LINE_BITS-1, 2) === i_next_addr.line_off(CACHE_LINE_BITS-1, 2))
