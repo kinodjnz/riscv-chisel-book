@@ -16,6 +16,8 @@ object Consts {
   val ADDR_LEN        = 5 // rs1,rs2,wb
   val CSR_ADDR_LEN    = 12
   val INST_ID_LEN     = 32
+  val IQ_ENTRIES      = 16
+  val IQ_ID_LEN       = log2Ceil(IQ_ENTRIES)
 
   val EXE_FUN_LEN = 4
   val ALU_X     =  0.U(EXE_FUN_LEN.W)

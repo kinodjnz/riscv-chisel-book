@@ -2,11 +2,12 @@ package fpga
 
 import chisel3._
 import chisel3.util._
+import chisel3.util.experimental.loadMemoryFromFileInline
+import chisel3.ChiselEnum
+import chisel3.experimental.BundleLiterals._
 import common.Instructions._
 import common.Consts._
 import common.OptionExtension._
-import chisel3.util.experimental.loadMemoryFromFileInline
-import chisel3.ChiselEnum
 
 class BranchPrediction(redirect_buffer_size: Int) extends Bundle {
   val fp_ptr_len = log2Ceil(redirect_buffer_size)
@@ -15,18 +16,15 @@ class BranchPrediction(redirect_buffer_size: Int) extends Bundle {
   val bpfailed   = Bool()
   val bp_entry   = new BranchPredictionEntry()
   val fp_ptr     = UInt(fp_ptr_len.W)
-
-  // val attr     = UInt(BTB_ATTR_LEN.W)
-  // val is_ret   = Bool()
-  // val rasindex = UInt(RAS_INDEX_LEN.W)
-  // val target   = UInt(PC_LEN.W)
-  // val history  = UInt(PHT_HISTORY_LEN.W)
-  // val cnt      = UInt(2.W)
-  // val gcnt     = UInt(2.W)
 }
 
-class InstructionDecoderOutput(redirect_buffer_size: Int, enable_pipeline_probe: Boolean) extends Bundle {
-  val pc               = UInt(PC_LEN.W)
+class InstructionQueueEntryInitial(redirect_buffer_size: Int, enable_pipeline_probe: Boolean) extends Bundle {
+  val pc      = UInt(PC_LEN.W)
+  val bp      = new BranchPrediction(redirect_buffer_size)
+  val inst_id = Option.when(enable_pipeline_probe)(UInt(INST_ID_LEN.W))
+}
+
+class InstructionQueueEntryDecoded extends Bundle {
   val wb_addr          = UInt(ADDR_LEN.W)
   val op1_sel          = UInt(M_OP1_LEN.W)
   val op2_sel          = UInt(M_OP2_LEN.W)
@@ -44,38 +42,59 @@ class InstructionDecoderOutput(redirect_buffer_size: Int, enable_pipeline_probe:
   val mem_w            = UInt(MW_LEN.W)
   val is_bflen         = Bool()
   val is_br            = Bool()
-  val bp               = new BranchPrediction(redirect_buffer_size)
   val actual_attr      = UInt(BTB_ATTR_LEN.W)
   val actual_is_ret    = Bool()
   val is_half          = Bool()
-  val is_valid_inst    = Bool()
+  // val is_valid_inst    = Bool()
   val is_trap          = Bool()
   val mcause_code      = UInt(CSR_MCAUSE_CODE_LEN.W)
-  val inst_id          = Option.when(enable_pipeline_probe)(UInt(INST_ID_LEN.W))
 }
 
-class PipelineStageIO[+T <: Data](gen: T) extends Bundle {
-  val ready = Input(Bool())
-  val flush = Input(Bool())
-  val bits  = Output(gen)
+class InstructionDecoderOutput(redirect_buffer_size: Int, enable_pipeline_probe: Boolean) extends Bundle {
+  val ready   = Input(Bool())
+  val flush   = Input(Bool())
+  val valid   = Output(Bool())
+  val initial = Output(new InstructionQueueEntryInitial(redirect_buffer_size, enable_pipeline_probe))
+  val decoded = Output(new InstructionQueueEntryDecoded)
+  // val pc               = UInt(PC_LEN.W)
+  // val wb_addr          = UInt(ADDR_LEN.W)
+  // val op1_sel          = UInt(M_OP1_LEN.W)
+  // val op2_sel          = UInt(M_OP2_LEN.W)
+  // val op3_sel          = UInt(M_OP3_LEN.W)
+  // val rs1_addr         = UInt(ADDR_LEN.W)
+  // val rs2_addr         = UInt(ADDR_LEN.W)
+  // val rs3_addr         = UInt(ADDR_LEN.W)
+  // val im1_data         = UInt(WORD_LEN.W)
+  // val im0_data         = UInt(12.W)
+  // val exe_fun          = UInt(EXE_FUN_LEN.W)
+  // val rf_wen           = UInt(REN_LEN.W)
+  // val wb_sel           = UInt(WB_SEL_LEN.W)
+  // val csr_cmd_or_shamt = UInt(CSR_LEN.W)
+  // val op2op            = UInt(OP2OP_LEN.W)
+  // val mem_w            = UInt(MW_LEN.W)
+  // val is_bflen         = Bool()
+  // val is_br            = Bool()
+  // val bp               = new BranchPrediction(redirect_buffer_size)
+  // val actual_attr      = UInt(BTB_ATTR_LEN.W)
+  // val actual_is_ret    = Bool()
+  // val is_half          = Bool()
+  // val is_valid_inst    = Bool()
+  // val is_trap          = Bool()
+  // val mcause_code      = UInt(CSR_MCAUSE_CODE_LEN.W)
+  // val inst_id          = Option.when(enable_pipeline_probe)(UInt(INST_ID_LEN.W))
 }
 
-class InstructionFetcherOutput(redirect_buffer_size: Int, enable_pipeline_probe: Boolean) extends Bundle {
-  val is_valid_inst = Bool()
-  val inst          = UInt(WORD_LEN.W)
-  val pc            = UInt(PC_LEN.W)
-  val bp            = new BranchPrediction(redirect_buffer_size)
-  val inst_id       = Option.when(enable_pipeline_probe)(UInt(INST_ID_LEN.W))
-}
-
-object InstructionDecoderInputIO {
-  def apply(redirect_buffer_size: Int, enable_pipeline_probe: Boolean): PipelineStageIO[InstructionFetcherOutput] =
-    new PipelineStageIO(new InstructionFetcherOutput(redirect_buffer_size, enable_pipeline_probe))
-}
-
-object InstructionDecoderOutputIO {
-  def apply(redirect_buffer_size: Int, enable_pipeline_probe: Boolean): PipelineStageIO[InstructionDecoderOutput] =
-    Flipped(new PipelineStageIO(new InstructionDecoderOutput(redirect_buffer_size, enable_pipeline_probe)))
+class InstructionDecoderInput(
+  redirect_buffer_size: Int,
+  enable_pipeline_probe: Boolean
+) extends Bundle {
+  val ready   = Output(Bool())
+  val flush   = Output(Bool())
+  val valid   = Input(Bool())
+  val inst    = Input(UInt(WORD_LEN.W))
+  val pc      = Input(UInt(PC_LEN.W))
+  val bp      = Input(new BranchPrediction(redirect_buffer_size))
+  val inst_id = Option.when(enable_pipeline_probe)(Input(UInt(INST_ID_LEN.W)))
 }
 
 class InstructionDecoderDebugSignals extends Bundle {
@@ -88,57 +107,55 @@ class InstructionDecoderPipelineProbe(enable_pipeline_probe: Boolean) extends Bu
   val id_inst_id  = Option.when(enable_pipeline_probe)(Output(UInt(32.W)))
 }
 
-class InstructionDecoderIO(
-  redirect_buffer_size: Int,
-  enable_pipeline_probe: Boolean = false,
-) extends Bundle {
-  val in = Flipped(InstructionDecoderInputIO(redirect_buffer_size, enable_pipeline_probe))
-  val out = Flipped(InstructionDecoderOutputIO(redirect_buffer_size, enable_pipeline_probe))
-  val debug_signals = new InstructionDecoderDebugSignals()
-  val pipeline_probe = new InstructionDecoderPipelineProbe(enable_pipeline_probe)
-}
-
 class InstructionDecoder(
   redirect_buffer_size: Int,
   enable_pipeline_probe: Boolean = false,
 ) extends Module {
-  val io = IO(new InstructionDecoderIO(redirect_buffer_size, enable_pipeline_probe))
+  val iq_id_len = log2Ceil(IQ_ENTRIES)
+  val iq_id_ptr_len = iq_id_len + 1
 
-  val id_reg_is_valid_inst = RegInit(false.B)
-  val id_reg_inst          = RegInit(BUBBLE)
-  val id_reg_pc            = RegInit(0.U(PC_LEN.W))
-  val id_reg_bp            = RegInit(0.U.asTypeOf(new BranchPrediction(redirect_buffer_size)))
-  val id_reg_is_bp_fail    = RegInit(false.B)
+  val io = IO(new Bundle {
+    val in = new InstructionDecoderInput(redirect_buffer_size, enable_pipeline_probe)
+    val out = new InstructionDecoderOutput(redirect_buffer_size, enable_pipeline_probe)
+    val debug_signals = new InstructionDecoderDebugSignals()
+    val pipeline_probe = new InstructionDecoderPipelineProbe(enable_pipeline_probe)
+  })
 
-  val id_output_queue = Module(new Queue(
-    new InstructionDecoderOutput(redirect_buffer_size, enable_pipeline_probe),
-    1,
-    pipe = false,
-    flow = true,
+  val reg_valid   = RegInit(false.B)
+  val reg_inst    = RegInit(BUBBLE)
+  val reg_iq_id   = RegInit(0.U(iq_id_ptr_len.W))
+
+  val iq = Module(new InstructionQueue(
+    IQ_ENTRIES,
+    new InstructionQueueEntryInitial(redirect_buffer_size, enable_pipeline_probe),
+    new InstructionQueueEntryDecoded
   ))
 
-  val id_in_ready = id_output_queue.io.enq.ready
+  reg_valid := io.in.valid && iq.io.enq1.ready && !io.out.flush
+  reg_inst  := io.in.inst
+  reg_iq_id := iq.io.enq1.iq_id
 
-  when (id_in_ready) {
-    id_reg_pc := io.in.bits.pc
-    id_reg_bp := io.in.bits.bp
-  }
-  when (io.in.flush || id_in_ready) {
-    // 優先順位重要！ジャンプ成立とストールが同時発生した場合、ジャンプ処理を優先
-    // ストールとBP同時の場合、BP発生源の命令を生かすためストール優先
-    id_reg_is_valid_inst := io.in.bits.is_valid_inst
-    id_reg_inst          := io.in.bits.inst
-    id_reg_bp.redirected := io.in.bits.bp.redirected
-  }
-  val id_inst_id = io.in.bits.inst_id
+  iq.io.flush := io.out.flush
 
-  io.in.ready := id_in_ready
+  iq.io.enq1.en              := io.in.valid && !io.out.flush
+  iq.io.enq1.initial.pc      := io.in.pc
+  iq.io.enq1.initial.bp      := io.in.bp
+  map2(iq.io.enq1.initial.inst_id, io.in.inst_id)(_ := _)
+
+  iq.io.enq2.en         := false.B
+  iq.io.enq2.initial.pc := io.in.pc
+  iq.io.enq2.initial.bp := io.in.bp
+  map2(iq.io.enq2.initial.inst_id, io.in.inst_id)(_ := _)
+
+  io.in.ready := iq.io.enq1.ready
   io.in.flush := io.out.flush
 
-  io.debug_signals.id_pc   := Cat(id_reg_pc, 0.U((WORD_LEN-PC_LEN).W))
-  io.debug_signals.id_inst := id_reg_inst
+  iq.io.read1.iq_id := reg_iq_id
 
-  val id_inst = id_reg_inst
+  io.debug_signals.id_pc   := Cat(iq.io.read1.initial.pc, 0.U((WORD_LEN-PC_LEN).W))
+  io.debug_signals.id_inst := reg_inst
+
+  val id_inst = reg_inst
 
   val id_is_half = (id_inst(1, 0) =/= 3.U)
 
@@ -521,74 +538,72 @@ class InstructionDecoder(
   val id_mcause_code = CSR_MCAUSE_CODE_ECALL_M
   // val id_mtval = 0.U(WORD_LEN.W)
 
-  io.pipeline_probe.id_valid.foreach(_ := id_reg_is_valid_inst)
-  map2(io.pipeline_probe.id_inst_id, id_inst_id)(_ := _)
+  iq.io.put.en                       := reg_valid
+  iq.io.put.iq_id                    := reg_iq_id
+  iq.io.put.decoded.wb_addr          := id_wb_addr
+  iq.io.put.decoded.op1_sel          := id_m_op1_sel
+  iq.io.put.decoded.op2_sel          := id_m_op2_sel
+  iq.io.put.decoded.op3_sel          := id_m_op3_sel
+  iq.io.put.decoded.rs1_addr         := id_m_rs1_addr
+  iq.io.put.decoded.rs2_addr         := id_m_rs2_addr
+  iq.io.put.decoded.rs3_addr         := id_m_rs3_addr
+  iq.io.put.decoded.im1_data         := id_im1_data
+  iq.io.put.decoded.im0_data         := id_im0_data
+  iq.io.put.decoded.exe_fun          := id_exe_fun
+  iq.io.put.decoded.rf_wen           := id_rf_wen
+  iq.io.put.decoded.wb_sel           := id_wb_sel
+  iq.io.put.decoded.csr_cmd_or_shamt := id_csr_cmd_or_shamt
+  iq.io.put.decoded.op2op            := id_op2op
+  iq.io.put.decoded.mem_w            := id_mem_w
+  iq.io.put.decoded.is_bflen         := id_is_bflen
+  iq.io.put.decoded.is_br            := id_is_br
+  iq.io.put.decoded.actual_attr      := id_actual_attr
+  iq.io.put.decoded.actual_is_ret    := id_actual_is_ret
+  iq.io.put.decoded.is_half          := id_is_half
+  iq.io.put.decoded.is_trap          := id_is_trap
+  iq.io.put.decoded.mcause_code      := id_mcause_code
 
-  id_output_queue.io.enq.valid                 := !io.out.flush
-  id_output_queue.io.enq.bits.pc               := id_reg_pc
-  id_output_queue.io.enq.bits.op1_sel          := id_m_op1_sel
-  id_output_queue.io.enq.bits.op2_sel          := id_m_op2_sel
-  id_output_queue.io.enq.bits.op3_sel          := id_m_op3_sel
-  id_output_queue.io.enq.bits.rs1_addr         := id_m_rs1_addr
-  id_output_queue.io.enq.bits.rs2_addr         := id_m_rs2_addr
-  id_output_queue.io.enq.bits.rs3_addr         := id_m_rs3_addr
-  id_output_queue.io.enq.bits.im1_data         := id_im1_data
-  id_output_queue.io.enq.bits.im0_data         := id_im0_data
-  id_output_queue.io.enq.bits.wb_addr          := id_wb_addr
-  id_output_queue.io.enq.bits.op2op            := id_op2op
-  id_output_queue.io.enq.bits.is_bflen         := id_is_bflen
-  id_output_queue.io.enq.bits.bp               := id_reg_bp
-  id_output_queue.io.enq.bits.actual_attr      := id_actual_attr
-  id_output_queue.io.enq.bits.actual_is_ret    := id_actual_is_ret
-  id_output_queue.io.enq.bits.is_half          := id_is_half
-  id_output_queue.io.enq.bits.mcause_code      := id_mcause_code
-  id_output_queue.io.enq.bits.rf_wen           := id_rf_wen
-  id_output_queue.io.enq.bits.exe_fun          := id_exe_fun
-  id_output_queue.io.enq.bits.wb_sel           := id_wb_sel
-  id_output_queue.io.enq.bits.csr_cmd_or_shamt := id_csr_cmd_or_shamt
-  id_output_queue.io.enq.bits.mem_w            := id_mem_w
-  id_output_queue.io.enq.bits.is_br            := id_is_br
-  id_output_queue.io.enq.bits.is_valid_inst    := id_reg_is_valid_inst
-  id_output_queue.io.enq.bits.is_trap          := id_is_trap
-  map2(id_output_queue.io.enq.bits.inst_id, id_inst_id)(_ := _)
+  io.pipeline_probe.id_valid.foreach(_ := reg_valid)
+  map2(io.pipeline_probe.id_inst_id, iq.io.read1.initial.inst_id)(_ := _)
 
-  id_output_queue.io.deq.ready := io.out.flush || io.out.ready
+  // printf(cf"deq_first : 0x${iq.io.range.deq_first}%x\n")
+  // printf(cf"deq_last  : 0x${iq.io.range.deq_last}%x\n")
 
-  io.out.bits.pc               := id_output_queue.io.deq.bits.pc
-  io.out.bits.op1_sel          := id_output_queue.io.deq.bits.op1_sel
-  io.out.bits.op2_sel          := id_output_queue.io.deq.bits.op2_sel
-  io.out.bits.op3_sel          := id_output_queue.io.deq.bits.op3_sel
-  io.out.bits.rs1_addr         := id_output_queue.io.deq.bits.rs1_addr
-  io.out.bits.rs2_addr         := id_output_queue.io.deq.bits.rs2_addr
-  io.out.bits.rs3_addr         := id_output_queue.io.deq.bits.rs3_addr
-  io.out.bits.im1_data         := id_output_queue.io.deq.bits.im1_data
-  io.out.bits.im0_data         := id_output_queue.io.deq.bits.im0_data
-  io.out.bits.wb_addr          := id_output_queue.io.deq.bits.wb_addr
-  io.out.bits.op2op            := id_output_queue.io.deq.bits.op2op
-  io.out.bits.is_bflen         := id_output_queue.io.deq.bits.is_bflen
-  io.out.bits.bp               := id_output_queue.io.deq.bits.bp
-  io.out.bits.actual_attr      := id_output_queue.io.deq.bits.actual_attr
-  io.out.bits.actual_is_ret    := id_output_queue.io.deq.bits.actual_is_ret
-  io.out.bits.is_half          := id_output_queue.io.deq.bits.is_half
-  io.out.bits.mcause_code      := id_output_queue.io.deq.bits.mcause_code
-  io.out.bits.rf_wen           := id_output_queue.io.deq.bits.rf_wen
-  io.out.bits.exe_fun          := id_output_queue.io.deq.bits.exe_fun
-  io.out.bits.wb_sel           := id_output_queue.io.deq.bits.wb_sel
-  io.out.bits.csr_cmd_or_shamt := id_output_queue.io.deq.bits.csr_cmd_or_shamt
-  io.out.bits.mem_w            := id_output_queue.io.deq.bits.mem_w
-  io.out.bits.is_br            := id_output_queue.io.deq.bits.is_br
-  io.out.bits.is_valid_inst    := id_output_queue.io.deq.bits.is_valid_inst
-  io.out.bits.is_trap          := id_output_queue.io.deq.bits.is_trap
-  when (io.out.flush || !id_output_queue.io.deq.valid) {
-    io.out.bits.rf_wen        := REN_X
-    io.out.bits.exe_fun       := ALU_ADD
-    io.out.bits.wb_sel        := WB_X
-    io.out.bits.mem_w         := MW_X
-    io.out.bits.is_br         := false.B
-    io.out.bits.bp.redirected := false.B
-    io.out.bits.bp.bpfailed   := false.B
-    io.out.bits.is_valid_inst := false.B
-    io.out.bits.is_trap       := false.B
+  class Id1Output(iq_id_len: Int) extends Bundle {
+    val iq_id_ptr_len = iq_id_len + 1
+
+    val valid = Bool()
+    val iq_id = UInt(iq_id_ptr_len.W)
   }
-  map2(io.out.bits.inst_id, id_output_queue.io.deq.bits.inst_id)(_ := _)
+
+  val id1_out = Wire(new Id1Output(iq_id_len))
+  id1_out.valid := reg_valid && !io.out.flush
+  id1_out.iq_id := reg_iq_id
+
+  def id2(in: Id1Output): Unit = {
+    val reg_in = RegNext(in, new Id1Output(iq_id_len).Lit(_.valid -> false.B, _.iq_id -> 0.U))
+
+    iq.io.peek.iq_id := iq.io.range.deq_first
+
+    iq.io.upd_deq.en  := iq.io.peek.valid && io.out.ready
+    iq.io.upd_deq.deq := iq.io.range.deq_first + 1.U
+
+    io.out.valid   := iq.io.peek.valid && !io.out.flush
+    io.out.initial := iq.io.peek.initial
+    io.out.decoded := iq.io.peek.decoded
+
+    when (io.out.flush || !iq.io.peek.valid) {
+      io.out.decoded.rf_wen        := REN_X
+      io.out.decoded.exe_fun       := ALU_ADD
+      io.out.decoded.wb_sel        := WB_X
+      io.out.decoded.mem_w         := MW_X
+      io.out.decoded.is_br         := false.B
+      io.out.initial.bp.redirected := false.B
+      io.out.initial.bp.bpfailed   := false.B
+      // io.out.decoded.is_valid_inst := false.B
+      io.out.decoded.is_trap       := false.B
+    }
+  }
+
+  id2(id1_out)
 }
