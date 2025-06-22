@@ -3,13 +3,13 @@
     "class":"firrtl.transforms.DedupedResult",
     "original":"~SimTop|MockPHTMem",
     "duplicate":"~SimTop|SimTop/pht_lmem:MockPHTMem",
-    "index":0.92
+    "index":0.9230769230769231
   },
   {
     "class":"firrtl.transforms.DedupedResult",
     "original":"~SimTop|MockPHTMem_1",
     "duplicate":"~SimTop|SimTop/pht_gmem:MockPHTMem",
-    "index":0.96
+    "index":0.9615384615384616
   },
   {
     "class":"firrtl.EmitCircuitAnnotation",
