@@ -160,69 +160,73 @@ class Core(
   val id_reg_bp_pc        = RegInit(0.U(PC_LEN.W))
 
   // ID/RRD State
+  val rrd_reg_valid            = RegInit(false.B)
+  val rrd_reg_exe_sel          = RegInit(0.U(EXE_SEL_LEN.W))
+  val rrd_reg_exe_fun          = RegInit(0.U(EXE_FUN_LEN.W))
+  val rrd_reg_sop              = RegInit(0.U(SOP_LEN.W))
   val rrd_reg_pc               = RegInit(0.U(PC_LEN.W))
-  val rrd_reg_wb_addr          = RegInit(0.U(ADDR_LEN.W))
-  val rrd_reg_op1_sel          = RegInit(0.U(M_OP1_LEN.W))
-  val rrd_reg_op2_sel          = RegInit(0.U(M_OP2_LEN.W))
-  val rrd_reg_op3_sel          = RegInit(0.U(M_OP3_LEN.W))
+  val rrd_reg_op1_sel          = RegInit(0.U(OP1_SEL_LEN.W))
+  val rrd_reg_op2_sel          = RegInit(0.U(OP2_SEL_LEN.W))
+  val rrd_reg_op3_sel          = RegInit(0.U(OP3_SEL_LEN.W))
   val rrd_reg_rs1_addr         = RegInit(0.U(ADDR_LEN.W))
   val rrd_reg_rs2_addr         = RegInit(0.U(ADDR_LEN.W))
   val rrd_reg_rs3_addr         = RegInit(0.U(ADDR_LEN.W))
   // val rrd_reg_op1_data      = RegInit(0.U(WORD_LEN.W))
-  val rrd_reg_im1_data         = RegInit(0.U(WORD_LEN.W))
-  val rrd_reg_im0_data         = RegInit(0.U(12.W))
-  val rrd_reg_exe_fun          = RegInit(0.U(EXE_FUN_LEN.W))
+  // val rrd_reg_im1_data         = RegInit(0.U(WORD_LEN.W))
+  // val rrd_reg_im0_data         = RegInit(0.U(12.W))
+  val rrd_reg_imm_data         = RegInit(0.U(IMM_DATA_LEN.W))
   val rrd_reg_rf_wen           = RegInit(0.U(REN_LEN.W))
-  val rrd_reg_wb_sel           = RegInit(0.U(WB_SEL_LEN.W))
+  val rrd_reg_wb_addr          = RegInit(0.U(ADDR_LEN.W))
+  // val rrd_reg_wb_sel           = RegInit(0.U(WB_SEL_LEN.W))
   // val rrd_reg_csr_addr      = RegInit(0.U(CSR_ADDR_LEN.W))
-  val rrd_reg_csr_cmd_or_shamt = RegInit(0.U(CSR_LEN.W))
+  // val rrd_reg_csr_cmd_or_shamt = RegInit(0.U(CSR_LEN.W))
   // val rrd_reg_imm_b_sext    = RegInit(0.U(WORD_LEN.W))
   // val rrd_reg_shamt         = RegInit(0.U(2.W))
-  val rrd_reg_op2op            = RegInit(0.U(OP2OP_LEN.W))
-  val rrd_reg_mem_w            = RegInit(0.U(MW_LEN.W))
-  val rrd_reg_is_bflen         = RegInit(false.B)
-  val rrd_reg_is_br            = RegInit(false.B)
+  // val rrd_reg_mem_w            = RegInit(0.U(MW_LEN.W))
+  // val rrd_reg_is_bflen         = RegInit(false.B)
+  // val rrd_reg_is_br            = RegInit(false.B)
   // val rrd_reg_is_j             = RegInit(false.B)
   val rrd_reg_bp               = RegInit(0.U.asTypeOf(new BranchPrediction(REDIRECT_BUFFER_SIZE)))
-  val rrd_reg_actual_attr      = RegInit(0.U(BTB_ATTR_LEN.W))
-  val rrd_reg_actual_is_ret    = RegInit(false.B)
+  // val rrd_reg_actual_attr      = RegInit(0.U(BTB_ATTR_LEN.W))
+  // val rrd_reg_actual_is_ret    = RegInit(false.B)
   val rrd_reg_is_half          = RegInit(false.B)
-  val rrd_reg_is_valid_inst    = RegInit(false.B)
-  val rrd_reg_is_trap          = RegInit(false.B)
-  val rrd_reg_mcause_code      = RegInit(0.U(CSR_MCAUSE_CODE_LEN.W))
+  // val rrd_reg_is_trap          = RegInit(false.B)
+  // val rrd_reg_mcause_code      = RegInit(0.U(CSR_MCAUSE_CODE_LEN.W))
   // val rrd_reg_mtval          = RegInit(0.U(WORD_LEN.W))
 
   // RRD/EX1 State
   val ex1_reg_pc               = RegInit(0.U(PC_LEN.W))
-  val ex1_reg_wb_addr          = RegInit(0.U(ADDR_LEN.W))
+  val ex1_reg_exe_sel          = RegInit(0.U(EXE_SEL_LEN.W))
+  val ex1_reg_exe_fun          = RegInit(0.U(EXE_FUN_LEN.W))
   val ex1_reg_op1_data         = RegInit(0.U(WORD_LEN.W))
   val ex1_reg_op2_data         = RegInit(0.U(WORD_LEN.W))
   val ex1_reg_op3_data         = RegInit(0.U(WORD_LEN.W))
-  val ex1_reg_exe_fun          = RegInit(0.U(EXE_FUN_LEN.W))
+  val ex1_reg_imm_data         = RegInit(0.U(IMM_DATA_LEN.W))
   val ex1_reg_rf_wen           = RegInit(0.U(REN_LEN.W))
-  val ex1_reg_wb_sel           = RegInit(0.U(WB_SEL_LEN.W))
-  val ex1_reg_csr_addr         = RegInit(0.U(CSR_ADDR_LEN.W))
-  val ex1_reg_csr_cmd_or_shamt = RegInit(0.U(CSR_LEN.W))
+  val ex1_reg_wb_addr          = RegInit(0.U(ADDR_LEN.W))
+  // val ex1_reg_wb_sel           = RegInit(0.U(WB_SEL_LEN.W))
+  // val ex1_reg_csr_addr         = RegInit(0.U(CSR_ADDR_LEN.W))
+  // val ex1_reg_csr_cmd_or_shamt = RegInit(0.U(CSR_LEN.W))
   // val ex1_reg_shamt         = RegInit(0.U(2.W))
-  val ex1_reg_op2op            = RegInit(0.U(OP2OP_LEN.W))
-  val ex1_reg_mem_w            = RegInit(0.U(MW_LEN.W))
-  val ex1_reg_is_bflen         = RegInit(false.B)
-  val ex1_reg_imm_len          = RegInit(0.U(5.W))
-  val ex1_reg_is_j             = RegInit(false.B)
+  val ex1_reg_sop              = RegInit(0.U(SOP_LEN.W))
+  // val ex1_reg_mem_w            = RegInit(0.U(MW_LEN.W))
+  // val ex1_reg_is_bflen         = RegInit(false.B)
+  // val ex1_reg_imm_len          = RegInit(0.U(5.W))
+  // val ex1_reg_is_j             = RegInit(false.B)
   val ex1_reg_bp               = RegInit(0.U.asTypeOf(new BranchPrediction(REDIRECT_BUFFER_SIZE)))
-  val ex1_reg_actual_attr      = RegInit(0.U(BTB_ATTR_LEN.W))
-  val ex1_reg_actual_is_ret    = RegInit(false.B)
+  // val ex1_reg_actual_attr      = RegInit(0.U(BTB_ATTR_LEN.W))
+  // val ex1_reg_actual_is_ret    = RegInit(false.B)
   val ex1_reg_is_half          = RegInit(false.B)
-  val ex1_reg_is_valid_inst    = RegInit(false.B)
-  val ex1_reg_is_trap          = RegInit(false.B)
-  val ex1_reg_is_mret          = RegInit(false.B)
-  val ex1_reg_mcause_code      = RegInit(0.U(CSR_MCAUSE_CODE_LEN.W))
+  val ex1_reg_valid            = RegInit(false.B)
+  // val ex1_reg_is_trap          = RegInit(false.B)
+  // val ex1_reg_is_mret          = RegInit(false.B)
+  // val ex1_reg_mcause_code      = RegInit(0.U(CSR_MCAUSE_CODE_LEN.W))
   // val ex1_reg_mtval         = RegInit(0.U(WORD_LEN.W))
   val ex1_reg_mem_use_reg      = RegInit(false.B)
   val ex1_reg_inst2_use_reg    = RegInit(false.B)
   val ex1_reg_inst3_use_reg    = RegInit(false.B)
-  val ex1_reg_is_br            = RegInit(false.B)
-  val ex1_reg_direct_jbr_pc    = RegInit(0.U(PC_LEN.W))
+  // val ex1_reg_is_br            = RegInit(false.B)
+  // val ex1_reg_direct_jbr_pc    = RegInit(0.U(PC_LEN.W))
   val ex1_reg_fp_entry         = RegInit(0.U.asTypeOf(new FetchPredictionEntry(PHT_HISTORY_LEN, RAS_ENTRIES)))
 
   // EX1/EX2 State
@@ -234,10 +238,10 @@ class Core(
   val ex2_reg_rf_wen        = RegInit(0.U(REN_LEN.W))
   val ex2_reg_fun_sel       = RegInit(0.U(EX2_FUN_LEN.W))
   val ex2_reg_alu_out       = RegInit(0.U(WORD_LEN.W))
-  val ex2_reg_pc_bit_out    = RegInit(0.U(WORD_LEN.W))
+  val ex2_reg_blu_out       = RegInit(0.U(WORD_LEN.W))
   val ex2_reg_csr_rdata     = RegInit(0.U(WORD_LEN.W))
   val ex2_reg_op3_data      = RegInit(0.U(WORD_LEN.W))
-  val ex2_reg_is_valid_inst = RegInit(false.B)
+  val ex2_reg_valid         = RegInit(false.B)
   // val ex2_reminder          = Wire(UInt(WORD_LEN.W))
   // val ex2_quotient          = Wire(UInt(WORD_LEN.W))
   val ex2_reg_divrem        = RegInit(false.B)
@@ -248,9 +252,10 @@ class Core(
   val ex2_reg_init_divisor  = RegInit(0.U(WORD_LEN.W))
   val ex2_reg_orig_dividend = RegInit(0.U(WORD_LEN.W))
   val ex2_reg_inst3_use_reg = RegInit(false.B)
-  val ex2_reg_no_mem        = RegInit(false.B)
+  // val ex2_reg_no_mem        = RegInit(false.B)
 
   // EX1/MEM1 State
+  val mem1_reg_addr          = RegInit(0.U(WORD_LEN.W))
   val mem1_reg_mem_wstrb     = RegInit(0.U(7.W))
   val mem1_reg_wdata         = RegInit(0.U(WORD_LEN.W))
   val mem1_reg_mem_w         = RegInit(0.U(MW_LEN.W))
@@ -261,7 +266,7 @@ class Core(
   val mem1_reg_is_dram_load  = RegInit(false.B)
   val mem1_reg_is_dram_store = RegInit(false.B)
   val mem1_reg_is_dram_fence = RegInit(false.B)
-  val mem1_reg_is_valid_inst = RegInit(false.B)
+  val mem1_reg_valid         = RegInit(false.B)
   val mem1_reg_unaligned     = RegInit(false.B)
 
   // MEM1/MEM2 State
@@ -271,7 +276,7 @@ class Core(
   val mem2_reg_wb_addr        = RegInit(0.U(ADDR_LEN.W))
   val mem2_reg_is_valid_load  = RegInit(false.B)
   val mem2_reg_mem_use_reg    = RegInit(false.B)
-  val mem2_reg_is_valid_inst  = RegInit(false.B)
+  val mem2_reg_valid          = RegInit(false.B)
   val mem2_reg_is_mem_load    = RegInit(false.B)
   val mem2_reg_is_dram_load   = RegInit(false.B)
   val mem2_reg_unaligned      = RegInit(false.B)
@@ -283,7 +288,7 @@ class Core(
   val mem3_reg_rdata_high     = RegInit(0.U(24.W))
   val mem3_reg_wb_addr        = RegInit(0.U(ADDR_LEN.W))
   val mem3_reg_is_valid_load  = RegInit(false.B)
-  val mem3_reg_is_valid_inst  = RegInit(false.B)
+  val mem3_reg_valid          = RegInit(false.B)
   val mem3_reg_mem_use_reg    = RegInit(false.B)
   val mem3_reg_unaligned      = RegInit(false.B)
   val mem3_reg_is_aligned_lw  = RegInit(false.B)
@@ -384,7 +389,7 @@ class Core(
   //**********************************
   // Instruction Decode (ID) Stage
 
-  val id_stage = Module(new InstructionDecoder(REDIRECT_BUFFER_SIZE, enable_pipeline_probe))
+  val id_stage = Module(new InstructionDecoderUnit(REDIRECT_BUFFER_SIZE, enable_pipeline_probe))
 
   id_stage.io.in.valid         := if2_valid
   id_stage.io.in.inst          := if2_inst
@@ -409,6 +414,8 @@ class Core(
   id_stage.io.out.ready := /*id_rrd_flush ||*/ id_rrd_ready
   id_stage.io.out.flush := id_rrd_flush
   when (id_rrd_ready) {
+    rrd_reg_exe_fun          := id_stage.io.out.decoded.exe_fun
+    rrd_reg_sop              := id_stage.io.out.decoded.sop
     rrd_reg_pc               := id_stage.io.out.initial.pc
     rrd_reg_op1_sel          := id_stage.io.out.decoded.op1_sel
     rrd_reg_op2_sel          := id_stage.io.out.decoded.op2_sel
@@ -416,29 +423,30 @@ class Core(
     rrd_reg_rs1_addr         := id_stage.io.out.decoded.rs1_addr
     rrd_reg_rs2_addr         := id_stage.io.out.decoded.rs2_addr
     rrd_reg_rs3_addr         := id_stage.io.out.decoded.rs3_addr
-    rrd_reg_im1_data         := id_stage.io.out.decoded.im1_data
-    rrd_reg_im0_data         := id_stage.io.out.decoded.im0_data
+    rrd_reg_imm_data         := id_stage.io.out.decoded.imm_data
     rrd_reg_wb_addr          := id_stage.io.out.decoded.wb_addr
-    rrd_reg_csr_cmd_or_shamt := id_stage.io.out.decoded.csr_cmd_or_shamt
-    rrd_reg_op2op            := id_stage.io.out.decoded.op2op
-    rrd_reg_is_bflen         := id_stage.io.out.decoded.is_bflen
+    // rrd_reg_csr_cmd_or_shamt := id_stage.io.out.decoded.csr_cmd_or_shamt
+    // rrd_reg_is_bflen         := id_stage.io.out.decoded.is_bflen
     rrd_reg_bp               := id_stage.io.out.initial.bp
-    rrd_reg_actual_attr      := id_stage.io.out.decoded.actual_attr
-    rrd_reg_actual_is_ret    := id_stage.io.out.decoded.actual_is_ret
-    rrd_reg_is_half          := id_stage.io.out.decoded.is_half
-    rrd_reg_mcause_code      := id_stage.io.out.decoded.mcause_code
+    // rrd_reg_actual_attr      := id_stage.io.out.decoded.actual_attr
+    // rrd_reg_actual_is_ret    := id_stage.io.out.decoded.actual_is_ret
+    rrd_reg_is_half          := id_stage.io.out.initial.is_half
+    // rrd_reg_mcause_code      := id_stage.io.out.decoded.mcause_code
     map2(rrd_reg_inst_id, id_stage.io.out.initial.inst_id)(_ := _)
   }
   when (id_rrd_flush || id_rrd_ready) {
+    rrd_reg_valid            := id_stage.io.out.valid
+    rrd_reg_exe_sel          := id_stage.io.out.decoded.exe_sel
+    rrd_reg_op1_sel          := id_stage.io.out.decoded.op1_sel
+    rrd_reg_op2_sel          := id_stage.io.out.decoded.op2_sel
+    rrd_reg_op3_sel          := id_stage.io.out.decoded.op3_sel
     rrd_reg_rf_wen           := id_stage.io.out.decoded.rf_wen
-    rrd_reg_exe_fun          := id_stage.io.out.decoded.exe_fun
-    rrd_reg_wb_sel           := id_stage.io.out.decoded.wb_sel
-    rrd_reg_mem_w            := id_stage.io.out.decoded.mem_w
-    rrd_reg_is_br            := id_stage.io.out.decoded.is_br
+    // rrd_reg_wb_sel           := id_stage.io.out.decoded.wb_sel
+    // rrd_reg_mem_w            := id_stage.io.out.decoded.mem_w
+    // rrd_reg_is_br            := id_stage.io.out.decoded.is_br
     rrd_reg_bp.redirected    := id_stage.io.out.initial.bp.redirected
     rrd_reg_bp.bpfailed      := id_stage.io.out.initial.bp.bpfailed
-    rrd_reg_is_valid_inst    := id_stage.io.out.valid
-    rrd_reg_is_trap          := id_stage.io.out.decoded.is_trap
+    // rrd_reg_is_trap          := id_stage.io.out.decoded.is_trap
   }
 
   //**********************************
@@ -446,176 +454,208 @@ class Core(
 
   rrd_stall :=
     !ex2_reg_is_br && (
-      ((rrd_reg_op1_sel === M_OP1_RS) && scoreboard(rrd_reg_rs1_addr)) ||
-      ((rrd_reg_op2_sel === M_OP2_RS) && scoreboard(rrd_reg_rs2_addr)) ||
-      ((rrd_reg_op3_sel === M_OP3_RS) && scoreboard(rrd_reg_rs3_addr)) ||
-      ((rrd_reg_rf_wen === REN_S) && scoreboard(rrd_reg_wb_addr))
+      ((rrd_reg_op1_sel    === OP1_SEL_RS)    && scoreboard(rrd_reg_rs1_addr)) ||
+      ((rrd_reg_op2_sel(1) === OP2_SEL_RS(1)) && scoreboard(rrd_reg_rs2_addr)) ||
+      ((rrd_reg_op3_sel(1) === OP3_SEL_RS(1)) && scoreboard(rrd_reg_rs3_addr)) ||
+      ((rrd_reg_rf_wen     === REN_S)         && scoreboard(rrd_reg_wb_addr))
     )
 
-  val rrd_op1_data_rs = MuxCase(0.U(WORD_LEN.W), Seq(
-    // (rrd_reg_op1_sel === M_OP1_RS && rrd_reg_rs1_addr === 0.U) -> 0.U(WORD_LEN.W),
+  def mix(op2_sel: UInt, imm_data: UInt, rs_data: UInt): UInt = {
+    // Mux(op2_sel(0) === OP2_SEL_MIX(0), 0.U(1.W) ## imm_data(11, 7) ## rs_data(5, 0), rs_data)
+    Mux(op2_sel(0) === OP2_SEL_MIX(0), imm_data(11, 6) ## rs_data(5, 0), rs_data)
+  }
+  def rmsb(op3_sel: UInt, rs_data: UInt): UInt = {
+    Mux(op3_sel(0) === OP3_SEL_RMSB(0), Fill(WORD_LEN, rs_data(WORD_LEN-1)), rs_data)
+  }
+
+  val rrd_op1_data = MuxCase(0.U(WORD_LEN.W), Seq(
     (ex1_reg_fw_en &&
-     (rrd_reg_op1_sel === M_OP1_RS) &&
-     (rrd_reg_rs1_addr === ex1_reg_wb_addr)) -> ex1_fw_data,
+      (rrd_reg_op1_sel === OP1_SEL_RS) &&
+      (rrd_reg_rs1_addr === ex1_reg_wb_addr)) -> ex1_fw_data,
     (ex2_reg_fw_en &&
-     (rrd_reg_op1_sel === M_OP1_RS) &&
-     (rrd_reg_rs1_addr === ex2_reg_wb_addr)) -> ex2_fw_data,
+      (rrd_reg_op1_sel === OP1_SEL_RS) &&
+      (rrd_reg_rs1_addr === ex2_reg_wb_addr)) -> ex2_fw_data,
     (mem3_reg_fw_en &&
-     (rrd_reg_op1_sel === M_OP1_RS) &&
-     (rrd_reg_rs1_addr === mem3_reg_wb_addr)) -> mem3_fw_data,
-    (rrd_reg_op1_sel === M_OP1_RS) -> regfile(rrd_reg_rs1_addr),
+      (rrd_reg_op1_sel === OP1_SEL_RS) &&
+      (rrd_reg_rs1_addr === mem3_reg_wb_addr)) -> mem3_fw_data,
+    (rrd_reg_op1_sel === OP1_SEL_RS)  -> regfile(rrd_reg_rs1_addr),
+    (rrd_reg_op1_sel === OP1_SEL_PC)  -> rrd_reg_pc.pc_to_word,
+    (rrd_reg_op1_sel === OP1_SEL_IMR) -> 0.U((WORD_LEN-ADDR_LEN).W) ## rrd_reg_rs1_addr,
   ))
-  val rrd_op1_data = MuxCase(Cat(0.U(20.W), rrd_reg_im0_data), Seq(
-    (rrd_reg_op1_sel === M_OP1_RS || rrd_reg_op1_sel === M_OP1_Z)
-                                   -> rrd_op1_data_rs,
-    (rrd_reg_op1_sel === M_OP1_PC) -> Cat(rrd_reg_pc, 0.U((WORD_LEN-PC_LEN).W)),
-  ))
-  val rrd_op2_data = MuxCase(rrd_reg_im1_data | Cat(0.U(20.W), rrd_reg_im0_data), Seq(
-    // (rrd_reg_op2_sel === M_OP2_RS && rrd_reg_rs2_addr === 0.U) -> 0.U(WORD_LEN.W),
+  val rrd_op2_data = MuxCase(0.U(WORD_LEN.W), Seq(
     (ex1_reg_fw_en &&
-     (rrd_reg_op2_sel === M_OP2_RS) &&
-     (rrd_reg_rs2_addr === ex1_reg_wb_addr)) -> ex1_fw_data,
+      (rrd_reg_op2_sel(1) === OP2_SEL_RS(1)) &&
+      (rrd_reg_rs2_addr === ex1_reg_wb_addr)) -> mix(rrd_reg_op2_sel, rrd_reg_imm_data, ex1_fw_data),
     (ex2_reg_fw_en &&
-     (rrd_reg_op2_sel === M_OP2_RS) &&
-     (rrd_reg_rs2_addr === ex2_reg_wb_addr)) -> ex2_fw_data,
+      (rrd_reg_op2_sel(1) === OP2_SEL_RS(1)) &&
+      (rrd_reg_rs2_addr === ex2_reg_wb_addr)) -> mix(rrd_reg_op2_sel, rrd_reg_imm_data, ex2_fw_data),
     (mem3_reg_fw_en &&
-     (rrd_reg_op2_sel === M_OP2_RS) &&
-     (rrd_reg_rs2_addr === mem3_reg_wb_addr)) -> mem3_fw_data,
-    (rrd_reg_op2_sel === M_OP2_RS) -> regfile(rrd_reg_rs2_addr),
-    (rrd_reg_op2_sel === M_OP2_Z)  -> 0.U(WORD_LEN.W),
+      (rrd_reg_op2_sel(1) === OP2_SEL_RS(1)) &&
+      (rrd_reg_rs2_addr === mem3_reg_wb_addr)) -> mix(rrd_reg_op2_sel, rrd_reg_imm_data, mem3_fw_data),
+    (rrd_reg_op2_sel(1) === OP2_SEL_RS(1)) -> mix(rrd_reg_op2_sel, rrd_reg_imm_data, regfile(rrd_reg_rs2_addr)),
+    (rrd_reg_op2_sel === OP2_SEL_IMM &&
+      rrd_reg_rs2_addr(1, 0) === OP2_IMM_I) -> rrd_reg_imm_data.signed_extend(WORD_LEN),
+    (rrd_reg_op2_sel === OP2_SEL_IMM &&
+      rrd_reg_rs2_addr(1, 0) === OP2_IMM_B) -> (rrd_reg_imm_data(11) ## rrd_reg_imm_data(0) ## rrd_reg_imm_data(10, 1) ## 0.U(1.W)).signed_extend(WORD_LEN),
+    (rrd_reg_op2_sel === OP2_SEL_IMM &&
+      rrd_reg_rs2_addr(1, 0) === OP2_IMM_U &&
+      !rrd_reg_is_half) -> rrd_reg_imm_data ## rrd_reg_rs1_addr ## rrd_reg_rs3_addr(2, 0) ## 0.U(12.W),
+    (rrd_reg_op2_sel === OP2_SEL_IMM &&
+      rrd_reg_rs2_addr(1, 0) === OP2_IMM_U &&
+      rrd_reg_is_half)  -> rrd_reg_imm_data.signed_extend(20) ## 0.U(12.W),
+    (rrd_reg_op2_sel === OP2_SEL_IMM &&
+      rrd_reg_rs2_addr(1, 0) === OP2_IMM_J) -> (rrd_reg_imm_data(11) ## rrd_reg_rs1_addr ## rrd_reg_rs3_addr(2, 0) ## rrd_reg_imm_data(0) ## rrd_reg_imm_data(10, 1) ## 0.U(1.W)).signed_extend(WORD_LEN),
   ))
-  val rrd_op3_data = MuxCase(regfile(rrd_reg_rs3_addr), Seq(
-    (rrd_reg_op3_sel === M_OP3_Z)   -> 0.U(WORD_LEN.W),
-    (rrd_reg_op3_sel === M_OP3_MSB) -> Fill(WORD_LEN, rrd_op1_data_rs(WORD_LEN-1, WORD_LEN-1)),
-    (rrd_reg_op3_sel === M_OP3_OP1) -> rrd_op1_data_rs,
-    // (rrd_reg_rs3_addr === 0.U)    -> 0.U(WORD_LEN.W),
+  val rrd_op3_data = MuxCase(0.U(WORD_LEN.W), Seq(
     (ex1_reg_fw_en &&
-     (rrd_reg_rs3_addr === ex1_reg_wb_addr)) -> ex1_fw_data,
+      (rrd_reg_op3_sel(1) === OP3_SEL_RS(1)) &&
+      (rrd_reg_rs3_addr === ex1_reg_wb_addr))  -> rmsb(rrd_reg_op3_sel, ex1_fw_data),
     (ex2_reg_fw_en &&
-     (rrd_reg_rs3_addr === ex2_reg_wb_addr)) -> ex2_fw_data,
+      (rrd_reg_op3_sel(1) === OP3_SEL_RS(1)) &&
+      (rrd_reg_rs3_addr === ex2_reg_wb_addr))  -> rmsb(rrd_reg_op3_sel, ex2_fw_data),
     (mem3_reg_fw_en &&
-     (rrd_reg_rs3_addr === mem3_reg_wb_addr)) -> mem3_fw_data,
+      (rrd_reg_op3_sel(1) === OP3_SEL_RS(1)) &&
+      (rrd_reg_rs3_addr === mem3_reg_wb_addr)) -> rmsb(rrd_reg_op3_sel, mem3_fw_data),
+    (rrd_reg_op3_sel(1) === OP3_SEL_RS(1))     -> rmsb(rrd_reg_op3_sel, regfile(rrd_reg_rs3_addr)),
   ))
 
-  val rrd_direct_jbr_pc = rrd_reg_pc + rrd_reg_im1_data(WORD_LEN-1, WORD_LEN-PC_LEN)
+  val rrd_imm_data = MuxCase(rrd_reg_imm_data, Seq(
+    (rrd_reg_exe_fun === CSR_ECALL) -> CSR_ADDR_MCAUSE,
+    (rrd_reg_exe_fun === ALU_ADD && rrd_reg_sop === SOP_NOP)
+                                    -> rrd_reg_imm_data.replace_lsbits(2, 0.U(2.W)),
+    (rrd_reg_exe_fun === ALU_ADD && rrd_reg_sop === SOP_SHAD)
+                                    -> rrd_reg_imm_data.replace_lsbits(2, rrd_reg_rs3_addr(2, 1)),
+    (PAT_BR.matches(rrd_reg_exe_fun) && rrd_reg_op3_sel(0) === OP3_SEL_Z(0))
+                                    -> rrd_reg_imm_data(11) ## rrd_reg_imm_data(0) ## rrd_reg_imm_data(10, 1),
+    (PAT_BR.matches(rrd_reg_exe_fun) && rrd_reg_op3_sel(0) === OP3_SEL_IMBC(0))
+                                    -> rrd_reg_imm_data(11) ## rrd_reg_imm_data(11, 1),
+  ))
 
-  val rrd_hazard = (rrd_reg_rf_wen === REN_S) && (rrd_reg_wb_addr =/= 0.U) && !rrd_stall && !ex2_reg_is_br
-  val rrd_fw_en_next = rrd_hazard && (rrd_reg_wb_sel === WB_ALU)
+  // val rrd_direct_jbr_pc = rrd_reg_pc + rrd_reg_im1_data(WORD_LEN-1, WORD_LEN-PC_LEN)
+
+  val rrd_hazard = (rrd_reg_rf_wen === REN_S) && !rrd_stall && !ex2_reg_is_br
+  val rrd_fw_en_next = rrd_hazard && (rrd_reg_exe_sel === EXE_ALU)
 
   val rrd_mem_use_reg   = WireDefault(false.B)
   val rrd_inst2_use_reg = WireDefault(false.B)
   val rrd_inst3_use_reg = WireDefault(false.B)
 
   when (
-    !ex2_stall && !rrd_stall && !ex2_reg_is_br &&
-    rrd_reg_rf_wen === REN_S && rrd_reg_wb_addr =/= 0.U
+    !ex2_stall && !rrd_stall && !ex2_reg_is_br && rrd_reg_rf_wen === REN_S
   ) {
-      scoreboard(rrd_reg_wb_addr) := rrd_reg_wb_sel =/= WB_ALU
-      rrd_mem_use_reg   := rrd_reg_wb_sel === WB_LD
-      rrd_inst2_use_reg := (rrd_reg_wb_sel === WB_BIT || rrd_reg_wb_sel === WB_PC)
-      rrd_inst3_use_reg := (rrd_reg_wb_sel === WB_MD || rrd_reg_wb_sel === WB_CSR)
+      scoreboard(rrd_reg_wb_addr) := rrd_reg_exe_sel =/= EXE_ALU
+      rrd_mem_use_reg   := (rrd_reg_exe_sel === EXE_LD  || rrd_reg_exe_sel === EXE_ST)
+      rrd_inst2_use_reg := (rrd_reg_exe_sel === EXE_BLU || rrd_reg_exe_sel === EXE_JB)
+      rrd_inst3_use_reg := (rrd_reg_exe_sel === EXE_MD  || rrd_reg_exe_sel === EXE_CSR)
   }
 
   fetch_unit.io.redir_read.ptr := rrd_reg_bp.fp_ptr
 
-  io.pipeline_probe.foreach(_.rrd_valid := rrd_reg_is_valid_inst && !ex2_reg_is_br)
+  io.pipeline_probe.foreach(_.rrd_valid := rrd_reg_valid && !ex2_reg_is_br)
   map2(io.pipeline_probe, rrd_reg_inst_id)(_.rrd_inst_id := _)
 
   //**********************************
   // RRD/EX1 register
   when(!ex2_stall) {
     ex1_reg_pc               := rrd_reg_pc
+    ex1_reg_exe_sel          := rrd_reg_exe_sel
+    ex1_reg_exe_fun          := rrd_reg_exe_fun
+    ex1_reg_sop              := rrd_reg_sop
     ex1_reg_op1_data         := rrd_op1_data
     ex1_reg_op2_data         := rrd_op2_data
     ex1_reg_op3_data         := rrd_op3_data
     ex1_reg_wb_addr          := rrd_reg_wb_addr
-    ex1_reg_exe_fun          := rrd_reg_exe_fun
-    ex1_reg_direct_jbr_pc    := rrd_direct_jbr_pc
-    ex1_reg_csr_addr         := Mux(rrd_reg_is_trap, CSR_ADDR_MCAUSE, rrd_reg_im1_data(CSR_ADDR_LEN-1, 0))
-    ex1_reg_csr_cmd_or_shamt := rrd_reg_csr_cmd_or_shamt
+    ex1_reg_imm_data         := rrd_imm_data
+    // ex1_reg_direct_jbr_pc    := rrd_direct_jbr_pc
+    // ex1_reg_csr_addr         := Mux(rrd_reg_is_trap, CSR_ADDR_MCAUSE, rrd_reg_im1_data(CSR_ADDR_LEN-1, 0))
+    // ex1_reg_csr_cmd_or_shamt := rrd_reg_csr_cmd_or_shamt
     // ex1_reg_shamt         := Mux(rrd_reg_op2op === OP2OP_SHADD, rrd_reg_shamt, 0.U(2.W))
-    ex1_reg_op2op            := rrd_reg_op2op
-    ex1_reg_is_bflen         := rrd_reg_is_bflen
-    ex1_reg_imm_len          := rrd_reg_im0_data(10, 6)
-    ex1_reg_mem_w            := rrd_reg_mem_w
+    // ex1_reg_is_bflen         := rrd_reg_is_bflen
+    // ex1_reg_imm_len          := rrd_reg_im0_data(10, 6)
+    // ex1_reg_mem_w            := rrd_reg_mem_w
     ex1_reg_bp               := rrd_reg_bp
     ex1_reg_fp_entry         := fetch_unit.io.redir_read.fp_entry
-    ex1_reg_actual_attr      := rrd_reg_actual_attr
-    ex1_reg_actual_is_ret    := rrd_reg_actual_is_ret
+    // ex1_reg_actual_attr      := rrd_reg_actual_attr
+    // ex1_reg_actual_is_ret    := rrd_reg_actual_is_ret
     ex1_reg_is_half          := rrd_reg_is_half
-    ex1_reg_mcause_code      := rrd_reg_mcause_code
+    // ex1_reg_mcause_code      := rrd_reg_mcause_code
     // ex1_reg_mtval         := rrd_reg_mtval
     ex1_reg_mem_use_reg      := rrd_mem_use_reg
     ex1_reg_inst2_use_reg    := rrd_inst2_use_reg
     ex1_reg_inst3_use_reg    := rrd_inst3_use_reg
     ex1_reg_fw_en            := rrd_fw_en_next
     map2(ex1_reg_inst_id, rrd_reg_inst_id)(_ := _)
-    ex1_reg_is_valid_inst    := rrd_reg_is_valid_inst && !rrd_stall
+    ex1_reg_valid            := rrd_reg_valid && !rrd_stall
+    ex1_reg_exe_sel          := Mux(rrd_stall, EXE_ALU, rrd_reg_exe_sel)
     ex1_reg_rf_wen           := Mux(rrd_stall, REN_X, rrd_reg_rf_wen)
-    ex1_reg_wb_sel           := Mux(rrd_stall, WB_X, rrd_reg_wb_sel)
-    ex1_reg_is_mret          := !rrd_stall && (rrd_reg_exe_fun === CMD_MRET && rrd_reg_mem_w === MW_CSR)
-    ex1_reg_is_br            := Mux(rrd_stall, false.B, rrd_reg_is_br)
-    ex1_reg_is_j             := Mux(rrd_stall, false.B, (rrd_reg_wb_sel === WB_PC))
+    // ex1_reg_wb_sel           := Mux(rrd_stall, WB_X, rrd_reg_wb_sel)
+    // ex1_reg_is_mret          := !rrd_stall && (rrd_reg_exe_fun === CMD_MRET && rrd_reg_mem_w === MW_CSR)
+    // ex1_reg_is_br            := Mux(rrd_stall, false.B, rrd_reg_is_br)
+    // ex1_reg_is_j             := Mux(rrd_stall, false.B, (rrd_reg_wb_sel === WB_PC))
     ex1_reg_bp.redirected    := Mux(rrd_stall, false.B, rrd_reg_bp.redirected)
     ex1_reg_bp.bpfailed      := Mux(rrd_stall, false.B, rrd_reg_bp.bpfailed)
-    ex1_reg_is_trap          := Mux(rrd_stall, false.B, rrd_reg_is_trap)
+    // ex1_reg_is_trap          := Mux(rrd_stall, false.B, rrd_reg_is_trap)
   }
   when (ex2_reg_is_br && !ex1_reg_upd_pc_stalled) {
-    ex1_reg_is_valid_inst := false.B
+    ex1_reg_valid         := false.B
     ex1_reg_rf_wen        := REN_X
-    ex1_reg_wb_sel        := WB_X
-    ex1_reg_is_mret       := false.B
-    ex1_reg_is_br         := false.B
-    ex1_reg_is_j          := false.B
+    // ex1_reg_wb_sel        := WB_X
+    // ex1_reg_is_mret       := false.B
+    // ex1_reg_is_br         := false.B
+    // ex1_reg_is_j          := false.B
     ex1_reg_bp.redirected := false.B
     ex1_reg_bp.bpfailed   := false.B
-    ex1_reg_is_trap       := false.B
+    // ex1_reg_is_trap       := false.B
   }
 
   //**********************************
   // Execute (EX1) Stage
 
-  val ex1_add_out = ex1_reg_op1_data + ex1_reg_op2_data
-  val ex1_sign = Mux(ex1_reg_imm_len(4), ex1_reg_op1_data(15), ex1_reg_op1_data(7))
+  val ex1_add_out = Mux(
+    PAT_BR.matches(ex1_reg_exe_fun),
+    ex1_reg_pc.pc_to_word + ex1_reg_imm_data.signed_extend(PC_LEN).pc_to_word,
+    ex1_reg_op1_data + ex1_reg_op2_data
+  )
+  val ex1_sign = Mux(ex1_reg_imm_data(10), ex1_reg_op1_data(15), ex1_reg_op1_data(7))
   val ex1_is_lt = Mux(
-    ex1_reg_op2op === OP2OP_SIGNED,
+    ex1_reg_sop === SOP_SGN,
     ex1_reg_op1_data.asSInt < ex1_reg_op2_data.asSInt,
     ex1_reg_op1_data < ex1_reg_op2_data,
   )
   val ex1_is_eq = Mux(
-    ex1_reg_op2op === OP2OP_NOP,
+    ex1_reg_sop === SOP_NOP,
      (ex1_reg_op1_data === ex1_reg_op2_data),
     !(ex1_reg_op1_data === ex1_reg_op2_data)
   )
 
   val ex1_alu_out = MuxCase(0.U(WORD_LEN.W), Seq(
-    (ex1_reg_exe_fun === ALU_ADD)     -> ((ex1_reg_op1_data << ex1_reg_csr_cmd_or_shamt)(WORD_LEN-1, 0) + ex1_reg_op2_data),
-    (ex1_reg_exe_fun === ALU_SUB)     -> (ex1_reg_op1_data - Mux(ex1_reg_op2op === OP2OP_NOP, ex1_reg_op2_data, 0.U(WORD_LEN.W))),
-    (ex1_reg_exe_fun === ALU_XOR)     -> (ex1_reg_op1_data ^ Mux(ex1_reg_op2op === OP2OP_NOP, ex1_reg_op2_data, ~ex1_reg_op2_data)),
-    (ex1_reg_exe_fun === ALU_AND)     -> (ex1_reg_op1_data & Mux(ex1_reg_op2op === OP2OP_NOP, ex1_reg_op2_data, ~ex1_reg_op2_data)),
-    (ex1_reg_exe_fun === ALU_OR)      -> (ex1_reg_op1_data | Mux(ex1_reg_op2op === OP2OP_NOP, ex1_reg_op2_data, ~ex1_reg_op2_data)),
+    (ex1_reg_exe_fun === ALU_ADD)     -> ((ex1_reg_op1_data << ex1_reg_imm_data(1, 0))(WORD_LEN-1, 0) + ex1_reg_op2_data),
+    (ex1_reg_exe_fun === ALU_SUB)     -> (ex1_reg_op1_data - Mux(ex1_reg_sop === SOP_NOP, ex1_reg_op2_data, 0.U(WORD_LEN.W))),
+    (ex1_reg_exe_fun === ALU_XOR)     -> (ex1_reg_op1_data ^ Mux(ex1_reg_sop === SOP_NOP, ex1_reg_op2_data, ~ex1_reg_op2_data)),
+    (ex1_reg_exe_fun === ALU_AND)     -> (ex1_reg_op1_data & Mux(ex1_reg_sop === SOP_NOP, ex1_reg_op2_data, ~ex1_reg_op2_data)),
+    (ex1_reg_exe_fun === ALU_OR)      -> (ex1_reg_op1_data | Mux(ex1_reg_sop === SOP_NOP, ex1_reg_op2_data, ~ex1_reg_op2_data)),
     (ex1_reg_exe_fun === ALU_FSL)     -> (Cat(ex1_reg_op1_data, ex1_reg_op3_data(WORD_LEN-1, 1)) >> (~ex1_reg_op2_data)(4, 0))(WORD_LEN-1, 0),
     (ex1_reg_exe_fun === ALU_FSR)     -> (Cat(ex1_reg_op3_data(WORD_LEN-2, 0), ex1_reg_op1_data) >> ex1_reg_op2_data(4, 0))(WORD_LEN-1, 0),
     (ex1_reg_exe_fun === ALU_CMOV)    -> Mux(0.U(WORD_LEN.W) < ex1_reg_op2_data, ex1_reg_op1_data, ex1_reg_op3_data),
     (ex1_reg_exe_fun === ALU_SLT)     -> ex1_is_lt.asUInt,
     (ex1_reg_exe_fun === ALU_SEQ)     -> ex1_is_eq.asUInt,
     (ex1_reg_exe_fun === ALU_SZEXT)   -> Cat((0 until WORD_LEN).reverse.map(bit => Mux(
-      bit.U(4, 3) < Cat(ex1_reg_imm_len(4), ~ex1_reg_imm_len(4)),
+      bit.U(4, 3) < Cat(ex1_reg_imm_data(10), ~ex1_reg_imm_data(10)),
       ex1_reg_op1_data(bit),
-      Mux(ex1_reg_op2op === OP2OP_SEXT, ex1_sign, 0.U(1.W)),
+      Mux(ex1_reg_sop === SOP_SEXT, ex1_sign, 0.U(1.W)),
     ))),
     (ex1_reg_exe_fun === ALU_MIN)     -> Mux(ex1_is_lt, ex1_reg_op1_data, ex1_reg_op2_data),
     (ex1_reg_exe_fun === ALU_MAX)     -> Mux(ex1_is_lt, ex1_reg_op2_data, ex1_reg_op1_data),
-    (ex1_reg_exe_fun === ALU_BCLR)    -> (ex1_reg_op1_data & ~((1.U(WORD_LEN.W) << ex1_reg_op2_data(4, 0))(WORD_LEN-1, 0))),
-    (ex1_reg_exe_fun === ALU_BSET)    -> (ex1_reg_op1_data | (1.U(WORD_LEN.W) << ex1_reg_op2_data(4, 0))(WORD_LEN-1, 0)),
-    (ex1_reg_exe_fun === ALU_BEXT)    -> Cat(Fill(WORD_LEN-1, 0.U(1.W)), (ex1_reg_op1_data >> ex1_reg_op2_data(4, 0))(0)),
+    (ex1_reg_exe_fun === ALU_BCLR)    -> (ex1_reg_op1_data & ~("x_80000000".U(WORD_LEN.W) >> ~ex1_reg_op2_data(4, 0))),
+    (ex1_reg_exe_fun === ALU_BSET)    -> (ex1_reg_op1_data |  ("x_80000000".U(WORD_LEN.W) >> ~ex1_reg_op2_data(4, 0))),
+    (ex1_reg_exe_fun === ALU_BEXT)    -> 0.U((WORD_LEN-1).W) ## (ex1_reg_op1_data >> ex1_reg_op2_data(4, 0))(0),
   ))
 
-  val ex1_mul_op1_data = Mux(ex1_reg_exe_fun.take(2) === ALU_MULH.take(2) || ex1_reg_exe_fun.take(2) === ALU_MULHSU.take(2),
+  val ex1_mul_op1_data = Mux(PAT_MULHS1.matches(ex1_reg_exe_fun),
     ex1_reg_op1_data.asSInt.sext,
     ex1_reg_op1_data.zext,
   )
-  val ex1_mul_op2_data = Mux(ex1_reg_exe_fun(1) === ALU_MULH(1),
+  val ex1_mul_op2_data = Mux(PAT_MULHS2.matches(ex1_reg_exe_fun),
     ex1_reg_op2_data.asSInt.sext,
     ex1_reg_op2_data.zext,
   )
@@ -642,7 +682,8 @@ class Core(
     }
   }
 
-  val ex1_mask_len = Mux(ex1_reg_is_bflen, ex1_reg_imm_len, ex1_reg_op2_data(10, 6))
+  // val ex1_mask_len = Mux(ex1_reg_is_bflen, ex1_reg_imm_len, ex1_reg_op2_data(10, 6))
+  val ex1_mask_len = ex1_reg_op2_data(10, 6)
   val ex1_imm_mask = Mux(ex1_mask_len === 0.U,
     Fill(WORD_LEN, 1.U(1.W)),
     Cat((0 until WORD_LEN).reverse.map(bit => (bit.U < ex1_mask_len).asUInt)),
@@ -658,32 +699,27 @@ class Core(
     Cat((0 until WORD_LEN).reverse.map(bit => (bit.U < ex1_mask_len).asUInt)),
   )
 
-  val ex1_next_pc = Mux(ex1_reg_is_half, ex1_reg_pc + 1.U(PC_LEN.W), ex1_reg_pc + 2.U(PC_LEN.W))
+  val ex1_next_pc   = Mux(ex1_reg_is_half, ex1_reg_pc + 1.U(PC_LEN.W), ex1_reg_pc + 2.U(PC_LEN.W))
   val ex1_latter_pc = Mux(ex1_reg_is_half, ex1_reg_pc, ex1_reg_pc + 1.U(PC_LEN.W))
-  val ex1_pc_bit_out = MuxCase(0.U(WORD_LEN.W), Seq(
-    (ex1_reg_exe_fun === ALU_ADD /*&& ex1_reg_wb_sel === WB_PC*/)
-                                    -> Cat(ex1_next_pc, 0.U(1.W)),
-    (ex1_reg_exe_fun === ALU_CPOP)  -> PopCount(ex1_reg_op1_data),
-    (ex1_reg_exe_fun === ALU_CLZ)   -> PriorityEncoder(Cat(1.U(1.W), Reverse(ex1_reg_op1_data))),
-    (ex1_reg_exe_fun === ALU_CTZ)   -> PriorityEncoder(Cat(1.U(1.W), ex1_reg_op1_data)),
-    (ex1_reg_exe_fun === ALU_REV8)  -> Cat(ex1_reg_op1_data(7, 0), ex1_reg_op1_data(15, 8), ex1_reg_op1_data(23, 16), ex1_reg_op1_data(31, 24)),
-    (ex1_reg_exe_fun === ALU_BSCTH) -> Cat((0 until 16).reverse.map(bit => scatter_bit(ex1_reg_op1_data, ex1_reg_op2_data, bit))),
-    (ex1_reg_exe_fun === ALU_BFM || ex1_reg_exe_fun === ALU_BFP)
+  val ex1_blu_out   = MuxCase(ex1_next_pc.pc_to_word, Seq(
+    (ex1_reg_exe_fun === BLU_CPOP)  -> PopCount(ex1_reg_op1_data),
+    (ex1_reg_exe_fun === BLU_CLZ)   -> PriorityEncoder(Cat(1.U(1.W), Reverse(ex1_reg_op1_data))),
+    (ex1_reg_exe_fun === BLU_CTZ)   -> PriorityEncoder(Cat(1.U(1.W), ex1_reg_op1_data)),
+    (ex1_reg_exe_fun === BLU_REV8)  -> Cat(ex1_reg_op1_data(7, 0), ex1_reg_op1_data(15, 8), ex1_reg_op1_data(23, 16), ex1_reg_op1_data(31, 24)),
+    (ex1_reg_exe_fun === BLU_BSCTH) -> Cat((0 until 16).reverse.map(bit => scatter_bit(ex1_reg_op1_data, ex1_reg_op2_data, bit))),
+    PAT_BFM_BFP.matches(ex1_reg_exe_fun)
                                     -> (ex1_imm_mask << ex1_reg_op2_data(4, 0))(WORD_LEN-1, 0),
-    (ex1_reg_exe_fun === ALU_BFX)   -> ex1_bfx_mask,
-    (ex1_reg_exe_fun === ALU_GORC)  -> nested_shift_or(ex1_reg_op1_data, ex1_reg_op2_data, 4),
-    (ex1_reg_exe_fun === ALU_BINV)  -> (ex1_reg_op1_data ^ (1.U(WORD_LEN.W) << ex1_reg_op2_data(4, 0))(WORD_LEN-1, 0)),
+    PAT_BFX.matches(ex1_reg_exe_fun)
+                                    -> ex1_bfx_mask,
+    (ex1_reg_exe_fun === BLU_GORC)  -> nested_shift_or(ex1_reg_op1_data, ex1_reg_op2_data, 4),
+    (ex1_reg_exe_fun === BLU_BINV)  -> (ex1_reg_op1_data ^ ("x_80000000".U(WORD_LEN.W) >> ~ex1_reg_op2_data(4, 0))),
   ))
 
   val ex1_fun_sel = MuxCase(EX2_ALU, Seq(
-    (
-      (ex1_reg_wb_sel === WB_PC || ex1_reg_wb_sel === WB_BIT) &&
-      (ex1_reg_exe_fun === ALU_BFM || ex1_reg_exe_fun === ALU_BFP ||
-       ex1_reg_exe_fun === ALU_BFX || ex1_reg_exe_fun === ALU_BF_)
-    )                                                          -> EX2_MASK,
-    (ex1_reg_wb_sel === WB_PC || ex1_reg_wb_sel === WB_BIT)    -> EX2_BIT,
-    (ex1_reg_wb_sel === WB_CSR || ex1_reg_wb_sel === WB_FENCE) -> EX2_CSR,
-    (ex1_reg_wb_sel === WB_MD)                                 -> EX2_MD,
+    (ex1_reg_exe_sel === EXE_BLU && PAT_BF.matches(ex1_reg_exe_fun)) -> EX2_MASK,
+    (ex1_reg_exe_sel === EXE_BLU || ex1_reg_exe_sel === EXE_JB)      -> EX2_BLU,
+    (ex1_reg_exe_sel === EXE_CSR)                                    -> EX2_CSR,
+    (ex1_reg_exe_sel === EXE_MD)                                     -> EX2_MD,
   ))
 
   val ex1_divrem = WireDefault(false.B)
@@ -694,8 +730,8 @@ class Core(
   val ex1_divisor = WireDefault(0.U(WORD_LEN.W))
   val ex1_orig_dividend = Wire(UInt(WORD_LEN.W))
 
-  when (ex1_reg_exe_fun === ALU_DIV || ex1_reg_exe_fun === ALU_REM) {
-    ex1_divrem := ex1_reg_wb_sel === WB_MD
+  when (ex1_reg_exe_fun === MD_DIV || ex1_reg_exe_fun === MD_REM) {
+    ex1_divrem := ex1_reg_exe_sel === EXE_MD
     when (ex1_reg_op1_data(WORD_LEN-1) === 1.U) {
       ex1_dividend := Cat(Fill(5, 0.U(1.W)), (~ex1_reg_op1_data + 1.U)(WORD_LEN-1, 0))
     }.otherwise {
@@ -709,8 +745,8 @@ class Core(
       ex1_divisor := ex1_reg_op2_data
       ex1_sign_op12 := (ex1_sign_op1 === 1.U)
     }
-  }.elsewhen (ex1_reg_exe_fun === ALU_DIVU || ex1_reg_exe_fun === ALU_REMU) {
-    ex1_divrem := ex1_reg_wb_sel === WB_MD
+  }.elsewhen (ex1_reg_exe_fun === MD_DIVU || ex1_reg_exe_fun === MD_REMU) {
+    ex1_divrem := ex1_reg_exe_sel === EXE_MD
     ex1_dividend := Cat(Fill(5, 0.U(1.W)), ex1_reg_op1_data(WORD_LEN-1, 0))
     ex1_sign_op1 := 0.U
     ex1_divisor := ex1_reg_op2_data
@@ -721,23 +757,26 @@ class Core(
 
   // branch and jump
   val ex1_maybe_br_taken = Wire(Bool())
-  val ex1_is_br        = ex1_reg_is_br
-  val ex1_is_uncond_br = ex1_reg_is_j
+  val ex1_is_br = ex1_reg_exe_sel === EXE_JB &&  PAT_BR.matches(ex1_reg_exe_fun)
+  val ex1_is_j  = ex1_reg_exe_sel === EXE_JB && !PAT_BR.matches(ex1_reg_exe_fun)
   ex1_maybe_br_taken := Lookup(ex1_reg_exe_fun, false.B, Seq(
     PAT_BEQ -> ex1_is_eq,
     PAT_BLT -> ex1_is_lt,
     PAT_BGE -> !ex1_is_lt,
   ))
-  val ex1_is_br_taken = ex1_maybe_br_taken && ex1_is_br
-  val ex1_fetch_pc = Mux(ex1_is_uncond_br, ex1_add_out(WORD_LEN-1, WORD_LEN-PC_LEN), ex1_reg_direct_jbr_pc)
-  val ex1_csr_fetch_pc = MuxCase(ex1_next_pc, Seq(
-    csr_is_br                             -> csr_br_pc,
-    (ex1_is_br_taken || ex1_is_uncond_br) -> ex1_fetch_pc,
-  ))
+  val ex1_is_br_taken  = ex1_maybe_br_taken && ex1_is_br
+  val ex1_fetch_pc = Mux(ex1_is_br_taken || ex1_is_j, ex1_add_out.word_to_pc, ex1_next_pc)
+  val ex1_csr_fetch_pc = Mux(csr_is_br, csr_br_pc, ex1_fetch_pc)
   val ex1_predict_pc = Mux(ex1_reg_bp.redirected, fetch_unit.io.redir_read.fp_entry.target, ex1_next_pc)
-  val ex1_bp_failure = ex1_csr_fetch_pc =/= ex1_predict_pc
+  val ex1_bp_failure = ex1_fetch_pc =/= ex1_predict_pc
+  val ex1_actual_attr = MuxCase(BTB_ATTR_INVAL, Seq(
+    (ex1_reg_exe_sel === EXE_JB && PAT_BR.matches(ex1_reg_exe_fun)) -> BTB_ATTR_BR,
+    (ex1_reg_exe_sel === EXE_JB && ex1_reg_exe_fun === JB_DJUMP)    -> ex1_reg_exe_fun.take(2),
+    (ex1_reg_exe_sel === EXE_JB && ex1_reg_exe_fun === JB_DCALL)    -> ex1_reg_exe_fun.take(2),
+  ))
+  val ex1_actual_is_ret = (ex1_reg_exe_sel === EXE_JB && ex1_reg_exe_fun === JB_RET)
 
-  ex1_fetch_pc_en := ex1_bp_failure && !ex2_reg_is_br
+  ex1_fetch_pc_en := ex1_en && ex1_bp_failure && !ex2_reg_is_br
 
   when (ex1_en && ex1_is_br) {
     when (ex1_reg_bp.bp_entry.lcnt(0) && (ex1_reg_bp.bp_entry.gcnt === 2.U(2.W))) {
@@ -764,12 +803,13 @@ class Core(
   fetch_unit.io.cr.fp_hit   := ex1_reg_bp.redirected
   fetch_unit.io.cr.mispred  := ex1_bp_failure && !ex2_reg_is_br
   fetch_unit.io.cr.br_taken := ex1_is_br_taken
-  fetch_unit.io.cr.attr     := ex1_reg_actual_attr
-  fetch_unit.io.cr.is_ret   := ex1_reg_actual_is_ret
+  fetch_unit.io.cr.attr     := ex1_actual_attr
+  fetch_unit.io.cr.is_ret   := ex1_actual_is_ret
   fetch_unit.io.cr.target   := ex1_fetch_pc
   fetch_unit.io.cr.next_pc  := ex1_next_pc
 
-  fetch_unit.io.redir_deq.en := ex1_en && ex1_reg_bp.redirected && !ex2_reg_is_br
+  val ex1_redir_deq_en = ex1_en && ex1_reg_bp.redirected && !ex2_reg_is_br
+  fetch_unit.io.redir_deq.en := ex1_redir_deq_en
 
   // // if taken:
   // //  (strongly not-taken) 10 => 00
@@ -851,7 +891,7 @@ class Core(
   }
 
   val ex1_hazard = (ex1_reg_rf_wen === REN_S) && (ex1_reg_wb_addr =/= 0.U) && ex1_en
-  val ex1_fw_en_next = ex1_hazard && (ex1_reg_wb_sel =/= WB_MD) && (ex1_reg_wb_sel =/= WB_LD)
+  val ex1_fw_en_next = ex1_hazard && (ex1_reg_exe_sel =/= EXE_MD) && (ex1_reg_exe_sel =/= EXE_LD)
 
   io.pipeline_probe.foreach(_.ex1_valid := ex1_en)
   map2(io.pipeline_probe, ex1_reg_inst_id)(_.ex1_inst_id := _)
@@ -875,15 +915,18 @@ class Core(
       ((csr_mie_fw_en && csr_mie_mtie_fw) || (!csr_mie_fw_en && csr_reg_mie_mtie))
   )
 
-  val csr_is_valid_inst = ex1_reg_is_valid_inst && (!ex2_reg_is_br || ex1_reg_upd_pc_stalled)
-  val csr_is_meintr = csr_reg_is_meintr && csr_is_valid_inst
-  val csr_is_mtintr = csr_reg_is_mtintr && csr_is_valid_inst
-  ex1_en := csr_is_valid_inst && !csr_is_meintr && !csr_is_mtintr
-  val csr_is_trap = ex1_en && ex1_reg_is_trap
-  val ex1_is_valid_inst = ex1_en && !ex1_reg_is_trap
-  val csr_is_mret = ex1_en && ex1_reg_is_mret
+  val csr_valid = ex1_reg_valid && (!ex2_reg_is_br || ex1_reg_upd_pc_stalled)
+  val csr_is_meintr = csr_reg_is_meintr && csr_valid
+  val csr_is_mtintr = csr_reg_is_mtintr && csr_valid
+  ex1_en := csr_valid && !csr_is_meintr && !csr_is_mtintr
+  val ex1_is_ecall = ex1_reg_exe_sel === EXE_CSR && ex1_reg_exe_fun === CSR_ECALL
+  val ex1_is_mret  = ex1_reg_exe_sel === EXE_CSR && ex1_reg_exe_fun === CSR_MRET
+  val csr_is_ecall = ex1_en && ex1_is_ecall
+  val ex1_valid   = ex1_en && !ex1_is_ecall
+  val csr_is_mret = ex1_en && ex1_is_mret
+  val ex1_csr_addr = ex1_reg_imm_data
 
-  val csr_rdata = MuxLookup(ex1_reg_csr_addr, 0.U(WORD_LEN.W))(Seq(
+  val csr_rdata = MuxLookup(ex1_csr_addr, 0.U(WORD_LEN.W))(Seq(
     CSR_ADDR_MTVEC    -> Cat(csr_reg_trap_vector, 0.U((WORD_LEN-PC_LEN).W)),
     CSR_ADDR_TIME     -> mtimer.io.mtime(31, 0),
     CSR_ADDR_CYCLE    -> cycle_counter.io.value(31, 0),
@@ -901,78 +944,85 @@ class Core(
   ))
 
   val csr_wdata = MuxCase(0.U(WORD_LEN.W), Seq(
-    (ex1_reg_csr_cmd_or_shamt === CSR_W) -> ex1_reg_op1_data,
-    (ex1_reg_csr_cmd_or_shamt === CSR_S) -> (csr_rdata | ex1_reg_op1_data),
-    (ex1_reg_csr_cmd_or_shamt === CSR_C) -> (csr_rdata & ~ex1_reg_op1_data),
+    (ex1_reg_exe_fun === CSR_W) -> ex1_reg_op1_data,
+    (ex1_reg_exe_fun === CSR_S) -> (csr_rdata | ex1_reg_op1_data),
+    (ex1_reg_exe_fun === CSR_C) -> (csr_rdata & ~ex1_reg_op1_data),
   ))
 
-  when (ex1_en && ex1_reg_wb_sel === WB_CSR) {
-    when (ex1_reg_csr_addr === CSR_ADDR_MTVEC) {
-      csr_reg_trap_vector := csr_wdata(WORD_LEN-1, WORD_LEN-PC_LEN)
-    }.elsewhen (ex1_reg_csr_addr === CSR_ADDR_MEPC) {
-      csr_reg_mepc := csr_wdata(WORD_LEN-1, WORD_LEN-PC_LEN)
-    }.elsewhen (ex1_reg_csr_addr === CSR_ADDR_MSTATUS) {
+  when (ex1_en && ex1_reg_exe_sel === EXE_CSR) {
+    when (ex1_csr_addr === CSR_ADDR_MTVEC) {
+      csr_reg_trap_vector   := csr_wdata(WORD_LEN-1, WORD_LEN-PC_LEN)
+    }.elsewhen (ex1_csr_addr === CSR_ADDR_MEPC) {
+      csr_reg_mepc          := csr_wdata(WORD_LEN-1, WORD_LEN-PC_LEN)
+    }.elsewhen (ex1_csr_addr === CSR_ADDR_MSTATUS) {
       csr_reg_mstatus_mie   := csr_wdata(3)
       csr_reg_mstatus_mpie  := csr_wdata(7)
       csr_mstatus_mie_fw_en := true.B
       csr_mstatus_mie_fw    := csr_wdata(3)
-    }.elsewhen (ex1_reg_csr_addr === CSR_ADDR_MSCRATCH) {
-      csr_reg_mscratch := csr_wdata
-    }.elsewhen (ex1_reg_csr_addr === CSR_ADDR_MIE) {
-      csr_reg_mie_meie := csr_wdata(11)
-      csr_reg_mie_mtie := csr_wdata(7)
-      csr_mie_fw_en    := true.B
-      csr_mie_meie_fw  := csr_wdata(11)
-      csr_mie_mtie_fw  := csr_wdata(7)
+    }.elsewhen (ex1_csr_addr === CSR_ADDR_MSCRATCH) {
+      csr_reg_mscratch      := csr_wdata
+    }.elsewhen (ex1_csr_addr === CSR_ADDR_MIE) {
+      csr_reg_mie_meie      := csr_wdata(11)
+      csr_reg_mie_mtie      := csr_wdata(7)
+      csr_mie_fw_en         := true.B
+      csr_mie_meie_fw       := csr_wdata(11)
+      csr_mie_mtie_fw       := csr_wdata(7)
     }
   }
 
   // csr_mip := Cat(csr_mip(31, 12), io.intr.asUInt, csr_mip(10, 8), mtimer.io.intr.asUInt, csr_mip(6, 0))
 
   when (csr_is_meintr) {
-    csr_reg_mcause       := CSR_MCAUSE_MEI
-    // csr_mtval         := 0.U(WORD_LEN.W)
-    csr_reg_mepc         := ex1_reg_pc
-    csr_reg_mstatus_mpie := csr_reg_mstatus_mie
-    csr_reg_mstatus_mie  := false.B
-    csr_mstatus_mie_fw_en:= true.B
-    csr_mstatus_mie_fw   := false.B
-    csr_is_br            := true.B
-    csr_br_pc            := csr_reg_trap_vector
+    csr_reg_mcause        := CSR_MCAUSE_MEI
+    // csr_mtval          := 0.U(WORD_LEN.W)
+    csr_reg_mepc          := ex1_reg_pc
+    csr_reg_mstatus_mpie  := csr_reg_mstatus_mie
+    csr_reg_mstatus_mie   := false.B
+    csr_mstatus_mie_fw_en := true.B
+    csr_mstatus_mie_fw    := false.B
+    csr_is_br             := true.B
+    csr_br_pc             := csr_reg_trap_vector
   }.elsewhen (csr_is_mtintr) {
-    csr_reg_mcause       := CSR_MCAUSE_MTI
-    // csr_mtval         := 0.U(WORD_LEN.W)
-    csr_reg_mepc         := ex1_reg_pc
-    csr_reg_mstatus_mpie := csr_reg_mstatus_mie
-    csr_reg_mstatus_mie  := false.B
-    csr_mstatus_mie_fw_en:= true.B
-    csr_mstatus_mie_fw   := false.B
-    csr_is_br            := true.B
-    csr_br_pc            := csr_reg_trap_vector
-  }.elsewhen (csr_is_trap) {
-    csr_reg_mcause       := CSR_MCAUSE_ECALL_M // ex1_reg_mcause
-    // csr_mtval         := ex1_reg_mtval
-    csr_reg_mepc         := ex1_reg_pc
-    csr_reg_mstatus_mpie := csr_reg_mstatus_mie
-    csr_reg_mstatus_mie  := false.B
-    csr_mstatus_mie_fw_en:= true.B
-    csr_mstatus_mie_fw   := false.B
-    csr_is_br            := true.B
-    csr_br_pc            := csr_reg_trap_vector
+    csr_reg_mcause        := CSR_MCAUSE_MTI
+    // csr_mtval          := 0.U(WORD_LEN.W)
+    csr_reg_mepc          := ex1_reg_pc
+    csr_reg_mstatus_mpie  := csr_reg_mstatus_mie
+    csr_reg_mstatus_mie   := false.B
+    csr_mstatus_mie_fw_en := true.B
+    csr_mstatus_mie_fw    := false.B
+    csr_is_br             := true.B
+    csr_br_pc             := csr_reg_trap_vector
+  }.elsewhen (csr_is_ecall) {
+    csr_reg_mcause        := CSR_MCAUSE_ECALL_M // ex1_reg_mcause
+    // csr_mtval          := ex1_reg_mtval
+    csr_reg_mepc          := ex1_reg_pc
+    csr_reg_mstatus_mpie  := csr_reg_mstatus_mie
+    csr_reg_mstatus_mie   := false.B
+    csr_mstatus_mie_fw_en := true.B
+    csr_mstatus_mie_fw    := false.B
+    csr_is_br             := true.B
+    csr_br_pc             := csr_reg_trap_vector
   }.elsewhen (csr_is_mret) {
-    csr_reg_mstatus_mpie := true.B
-    csr_reg_mstatus_mie  := csr_reg_mstatus_mpie
-    csr_mstatus_mie_fw_en:= true.B
-    csr_mstatus_mie_fw   := csr_reg_mstatus_mpie
-    csr_is_br            := true.B
-    csr_br_pc            := csr_reg_mepc
+    csr_reg_mstatus_mpie  := true.B
+    csr_reg_mstatus_mie   := csr_reg_mstatus_mpie
+    csr_mstatus_mie_fw_en := true.B
+    csr_mstatus_mie_fw    := csr_reg_mstatus_mpie
+    csr_is_br             := true.B
+    csr_br_pc             := csr_reg_mepc
   }.otherwise {
-    csr_is_br            := false.B
-    csr_br_pc            := DontCare
+    csr_is_br             := false.B
+    csr_br_pc             := csr_reg_trap_vector
   }
 
   ex2_reg_is_br := ex1_fetch_pc_en || csr_is_br
   ex2_reg_br_pc := ex1_csr_fetch_pc
+
+  val ex1_no_mem = (
+    ex1_reg_exe_sel =/= EXE_LD &&
+    ex1_reg_exe_sel =/= EXE_ST &&
+    (ex1_reg_exe_sel =/= EXE_CSR || !PAT_FENCE.matches(ex1_reg_exe_fun)) &&
+    ex1_en
+  )
 
   ex1_reg_upd_pc_stalled := false.B
   when (ex2_stall) {
@@ -988,14 +1038,13 @@ class Core(
     ex2_reg_alu_out    := ex1_alu_out
     ex2_reg_mull       := ex1_mull
     ex2_reg_mulh       := ex1_mulh
-    ex2_reg_pc_bit_out := ex1_pc_bit_out
+    ex2_reg_blu_out    := ex1_blu_out
     ex2_reg_csr_rdata  := csr_rdata
     ex2_reg_exe_fun    := ex1_reg_exe_fun
-    ex2_reg_rf_wen     := Mux(ex1_en, ex1_reg_rf_wen, REN_X)
+    ex2_reg_rf_wen     := Mux(ex1_en && ex1_no_mem, ex1_reg_rf_wen, REN_X)
     ex2_reg_fun_sel    := ex1_fun_sel
-    ex2_reg_op3_data   := Mux(ex1_reg_exe_fun === ALU_BFX && ex1_reg_op2op === OP2OP_SEXT, ex1_bfx_sext, ex1_reg_op3_data)
-    ex2_reg_no_mem     := (ex1_reg_wb_sel =/= WB_LD && ex1_reg_wb_sel =/= WB_ST && ex1_reg_wb_sel =/= WB_FENCE) && ex1_en
-    ex2_reg_is_valid_inst := ex1_is_valid_inst
+    ex2_reg_op3_data   := Mux(ex1_reg_exe_fun === BLU_BFX && ex1_reg_sop === SOP_SEXT, ex1_bfx_sext, ex1_reg_op3_data)
+    ex2_reg_valid      := ex1_valid && ex1_no_mem
     ex2_reg_divrem            := ex1_divrem && ex1_en
     ex2_reg_div_stall         := ex2_div_stall_next ||
       (ex1_divrem && ex1_en && (ex2_reg_divrem_state === DivremState.Idle || ex2_reg_divrem_state === DivremState.Finished))
@@ -1017,7 +1066,7 @@ class Core(
     // ALU/BIT/MD/CSR/JBRのEX2ステージを実行中にメモリストールがあってもWBに進むので、2回実行しないようにEX2を空にする
     ex2_reg_rf_wen        := REN_X
     ex2_reg_divrem        := false.B
-    ex2_reg_is_valid_inst := false.B
+    ex2_reg_valid         := false.B
     ex2_reg_inst3_use_reg := false.B
   }
 
@@ -1040,14 +1089,14 @@ class Core(
       Fill(40 - w, value(w - 1)) ## value(w - 1, 0)
   }
 
-  val ex2_alu_muldiv_out = MuxCase(0.U(WORD_LEN.W), Seq(
-    (ex2_reg_exe_fun === ALU_MUL)    -> (ex2_reg_mull.take(WORD_LEN) + (ex2_reg_mulh.take(8) << 24)),
-    (ex2_reg_exe_fun === ALU_MULH || ex2_reg_exe_fun === ALU_MULHU || ex2_reg_exe_fun === ALU_MULHSU)
+  val ex2_md_out = MuxCase(0.U(WORD_LEN.W), Seq(
+    (ex2_reg_exe_fun === MD_MUL)    -> (ex2_reg_mull.take(WORD_LEN) + (ex2_reg_mulh.take(8) << 24)),
+    (ex2_reg_exe_fun === MD_MULH || ex2_reg_exe_fun === MD_MULHU || ex2_reg_exe_fun === MD_MULHSU)
                                      -> (signExtend40(ex2_reg_mull(33+24-1, 24), 33) + ex2_reg_mulh.take(40))(39, 8),
-    (ex2_reg_exe_fun === ALU_DIV)    -> ex2_reg_quotient,
-    (ex2_reg_exe_fun === ALU_DIVU)   -> ex2_reg_quotient,
-    (ex2_reg_exe_fun === ALU_REM)    -> ex2_reg_reminder,
-    (ex2_reg_exe_fun === ALU_REMU)   -> ex2_reg_reminder,
+    (ex2_reg_exe_fun === MD_DIV)    -> ex2_reg_quotient,
+    (ex2_reg_exe_fun === MD_DIVU)   -> ex2_reg_quotient,
+    (ex2_reg_exe_fun === MD_REM)    -> ex2_reg_reminder,
+    (ex2_reg_exe_fun === MD_REMU)   -> ex2_reg_reminder,
   ))
 
   // ex2_quotient := ex2_reg_quotient
@@ -1190,58 +1239,64 @@ class Core(
 
   //**********************************
   // EX2 Stage
-  val ex2_mask_out = Cat((0 until WORD_LEN).reverse.map(bit => Mux(ex2_reg_pc_bit_out(bit), ex2_reg_alu_out(bit), ex2_reg_op3_data(bit))))
+  val ex2_mask_out = Cat((0 until WORD_LEN).reverse.map(bit => Mux(ex2_reg_blu_out(bit), ex2_reg_alu_out(bit), ex2_reg_op3_data(bit))))
 
   ex2_wb_data := MuxCase(ex2_reg_alu_out, Seq(
-    (ex2_reg_fun_sel === EX2_MASK) -> ex2_mask_out,
-    (ex2_reg_fun_sel === EX2_BIT)  -> ex2_reg_pc_bit_out,
-    (ex2_reg_fun_sel === EX2_CSR || ex2_reg_fun_sel === EX2_CSR1) -> ex2_reg_csr_rdata,
-    (ex2_reg_fun_sel === EX2_MD || ex2_reg_fun_sel === EX2_MD1)   -> ex2_alu_muldiv_out,
+    (ex2_reg_fun_sel === EX2_MASK)       -> ex2_mask_out,
+    (ex2_reg_fun_sel === EX2_BLU)        -> ex2_reg_blu_out,
+    PAT_EX2_CSR.matches(ex2_reg_fun_sel) -> ex2_reg_csr_rdata,
+    PAT_EX2_MD.matches(ex2_reg_fun_sel)  -> ex2_md_out,
   ))
 
   ex2_fw_data := MuxCase(ex2_reg_alu_out, Seq(
-    (ex2_reg_fun_sel === EX2_MASK || ex2_reg_fun_sel === EX2_CSR) -> ex2_mask_out,
-    (ex2_reg_fun_sel === EX2_BIT || ex2_reg_fun_sel === EX2_CSR1) -> ex2_reg_pc_bit_out,
+    PAT_EX2_MASK.matches(ex2_reg_fun_sel) -> ex2_mask_out,
+    PAT_EX2_BLU.matches(ex2_reg_fun_sel)  -> ex2_reg_blu_out,
   ))
   when (ex2_reg_inst3_use_reg && !ex2_div_stall) {
     scoreboard(ex2_reg_wb_addr) := false.B
   }
 
-  ex2_reg_is_retired := ex2_reg_is_valid_inst && !ex2_div_stall && ex2_reg_no_mem
+  ex2_reg_is_retired := ex2_reg_valid && !ex2_div_stall
 
-  when (!ex2_reg_div_stall && ex2_reg_rf_wen === REN_S && ex2_reg_no_mem) {
+  when (!ex2_reg_div_stall && ex2_reg_rf_wen === REN_S) {
     regfile(ex2_reg_wb_addr) := ex2_wb_data
   }
 
-  io.pipeline_probe.foreach(_.ex2_valid := ex2_reg_no_mem)
+  io.pipeline_probe.foreach(_.ex2_valid := ex2_reg_valid)
   map2(io.pipeline_probe, ex2_reg_inst_id)(_.ex2_inst_id := _)
-  io.pipeline_probe.foreach(_.ex2_retired := !ex2_reg_div_stall && ex2_reg_no_mem)
+  io.pipeline_probe.foreach(_.ex2_retired := !ex2_reg_div_stall && ex2_reg_valid)
 
   //**********************************
   // EX1/MEM1 register
   val dram_addr_bits: Int = log2Ceil(dram_length)
 
   when (!ex2_stall) {
+    mem1_reg_addr          := ex1_add_out
+    val mem1_mem_w = ex1_reg_exe_fun.take(MW_LEN)
     mem1_reg_mem_wstrb     := (MuxCase("b1111".U, Seq(
-      (ex1_reg_mem_w === MW_B || ex1_reg_mem_w === MW_BU) -> "b0001".U,
-      (ex1_reg_mem_w === MW_H || ex1_reg_mem_w === MW_HU) -> "b0011".U,
-      //(ex1_reg_mem_w === MW_W) -> "b1111".U,
+      (mem1_mem_w === MW_B || mem1_mem_w === MW_BU) -> "b0001".U,
+      (mem1_mem_w === MW_H || mem1_mem_w === MW_HU) -> "b0011".U,
+      //(mem1_mem_w === MW_W) -> "b1111".U,
     )) << (ex1_add_out(1, 0)))(6, 0)
     mem1_reg_unaligned     := MuxCase(ex1_add_out(1, 0) =/= "b00".U, Seq(
-      (ex1_reg_mem_w === MW_B || ex1_reg_mem_w === MW_BU) -> false.B,
-      (ex1_reg_mem_w === MW_H || ex1_reg_mem_w === MW_HU) -> (ex1_add_out(1, 0) === "b11".U),
-    )) && (ex1_reg_wb_sel === WB_LD || ex1_reg_wb_sel === WB_ST) && ex1_en
-    mem1_reg_wdata         := (Cat(ex1_reg_op3_data, ex1_reg_op3_data(31, 8)) << (8.U * ex1_add_out(1, 0)))(WORD_LEN+23, WORD_LEN-8)
-    mem1_reg_mem_w         := ex1_reg_mem_w
+      (mem1_mem_w === MW_B || mem1_mem_w === MW_BU) -> false.B,
+      (mem1_mem_w === MW_H || mem1_mem_w === MW_HU) -> (ex1_add_out(1, 0) === "b11".U),
+    )) && (ex1_reg_exe_sel === EXE_LD || ex1_reg_exe_sel === EXE_ST) && ex1_en
+    mem1_reg_wdata         := ((ex1_reg_op3_data ## ex1_reg_op3_data(31, 8)) << (8.U * ex1_add_out(1, 0)))(WORD_LEN+23, WORD_LEN-8)
+    mem1_reg_mem_w         := mem1_mem_w
     mem1_reg_mem_use_reg   := ex1_reg_mem_use_reg && ex1_en
     val mem1_is_dram       = ex1_add_out(WORD_LEN-1, dram_addr_bits) === dram_start.U(WORD_LEN-1, dram_addr_bits)
     mem1_reg_is_dram       := mem1_is_dram
-    mem1_reg_is_mem_load   := !mem1_is_dram && (ex1_reg_wb_sel === WB_LD) && ex1_en
-    mem1_reg_is_mem_store  := !mem1_is_dram && (ex1_reg_wb_sel === WB_ST) && ex1_en
-    mem1_reg_is_dram_load  := mem1_is_dram && (ex1_reg_wb_sel === WB_LD) && ex1_en
-    mem1_reg_is_dram_store := mem1_is_dram && (ex1_reg_wb_sel === WB_ST) && ex1_en
-    mem1_reg_is_dram_fence := (ex1_reg_wb_sel === WB_FENCE) && ex1_en
-    mem1_reg_is_valid_inst := (ex1_reg_wb_sel === WB_LD || ex1_reg_wb_sel === WB_ST || ex1_reg_wb_sel === WB_FENCE) && ex1_en
+    mem1_reg_is_mem_load   := !mem1_is_dram && (ex1_reg_exe_sel === EXE_LD) && ex1_en
+    mem1_reg_is_mem_store  := !mem1_is_dram && (ex1_reg_exe_sel === EXE_ST) && ex1_en
+    mem1_reg_is_dram_load  := mem1_is_dram && (ex1_reg_exe_sel === EXE_LD) && ex1_en
+    mem1_reg_is_dram_store := mem1_is_dram && (ex1_reg_exe_sel === EXE_ST) && ex1_en
+    mem1_reg_is_dram_fence := (ex1_reg_exe_sel === EXE_CSR && PAT_FENCE.matches(ex1_reg_exe_fun)) && ex1_en
+    mem1_reg_valid         := (
+      ex1_reg_exe_sel === EXE_LD ||
+      ex1_reg_exe_sel === EXE_ST ||
+      (ex1_reg_exe_sel === EXE_CSR && PAT_FENCE.matches(ex1_reg_exe_fun))
+     ) && ex1_en
     map2(mem1_reg_inst_id, ex1_reg_inst_id)(_ := _)
   }
 
@@ -1249,10 +1304,10 @@ class Core(
   // Memory Access Stage 1 (MEM1)
 
   when (!mem1_mem_stall && !mem1_dram_stall && mem1_reg_unaligned) {
-    mem1_reg_unaligned       := false.B
+    mem1_reg_unaligned := false.B
   }
 
-  val mem_addr  = Mux(mem1_reg_unaligned, ex2_reg_alu_out + 4.U, ex2_reg_alu_out)
+  val mem_addr  = Mux(mem1_reg_unaligned, mem1_reg_addr + 4.U, mem1_reg_addr)
   val mem_wstrb = Mux(mem1_reg_unaligned, Cat(0.U(1.W), mem1_reg_mem_wstrb(6, 4)), mem1_reg_mem_wstrb(3, 0))
   io.dmem.raddr := mem_addr
   io.dmem.waddr := mem_addr
@@ -1276,19 +1331,19 @@ class Core(
 
   mem_stall := mem1_mem_stall || mem1_dram_stall || mem1_reg_unaligned || mem2_stall
 
-  io.pipeline_probe.foreach(_.mem1_valid := mem1_reg_is_valid_inst)
+  io.pipeline_probe.foreach(_.mem1_valid := mem1_reg_valid)
   map2(io.pipeline_probe, mem1_reg_inst_id)(_.mem1_inst_id := _)
 
   //**********************************
   // MEM1/MEM2 regsiter
   when (!mem2_stall) {
-    mem2_reg_wb_byte_offset := ex2_reg_alu_out(1, 0)
+    mem2_reg_wb_byte_offset := mem1_reg_addr(1, 0)
     mem2_reg_mem_w          := mem1_reg_mem_w
     // mem2_reg_dmem_rdata     := io.dmem.rdata
     mem2_reg_wb_addr        := ex2_reg_wb_addr
     mem2_reg_is_valid_load  := (!mem1_mem_stall && mem1_reg_is_mem_load) || (!mem1_dram_stall && mem1_reg_is_dram_load)
     mem2_reg_mem_use_reg    := !mem1_mem_stall && !mem1_dram_stall && mem1_reg_mem_use_reg
-    mem2_reg_is_valid_inst  := !mem1_mem_stall && !mem1_dram_stall && mem1_reg_is_valid_inst
+    mem2_reg_valid          := !mem1_mem_stall && !mem1_dram_stall && mem1_reg_valid
     mem2_reg_is_mem_load    := !mem1_mem_stall && mem1_reg_is_mem_load
     mem2_reg_is_dram_load   := !mem1_dram_stall && mem1_reg_is_dram_load
     mem2_reg_unaligned      := mem1_reg_unaligned
@@ -1301,7 +1356,7 @@ class Core(
   val mem2_dram_stall = (mem2_reg_is_dram_load && !io.cache.rvalid)
   mem2_stall := mem2_mem_stall || mem2_dram_stall
 
-  io.pipeline_probe.foreach(_.mem2_valid := !mem2_reg_unaligned && mem2_reg_is_valid_inst)
+  io.pipeline_probe.foreach(_.mem2_valid := !mem2_reg_unaligned && mem2_reg_valid)
   map2(io.pipeline_probe, mem2_reg_inst_id)(_.mem2_inst_id := _)
 
   val mem2_is_valid_load = !mem2_stall && !mem2_reg_unaligned && mem2_reg_is_valid_load
@@ -1321,7 +1376,7 @@ class Core(
   mem3_reg_wb_addr        := mem2_reg_wb_addr
   mem3_reg_is_valid_load  := !mem2_stall && !mem2_reg_unaligned && mem2_is_valid_load
   // mem3_reg_mem_use_reg    := !mem2_dram_stall && mem2_reg_mem_use_reg
-  mem3_reg_is_valid_inst  := !mem2_stall && !mem2_reg_unaligned && mem2_reg_is_valid_inst
+  mem3_reg_valid          := !mem2_stall && !mem2_reg_unaligned && mem2_reg_valid
   mem3_reg_fw_en          := mem2_fw_en_next
   mem3_reg_unaligned      := mem2_reg_unaligned
   mem3_reg_is_aligned_lw  := mem2_is_aligned_lw
@@ -1355,7 +1410,7 @@ class Core(
   when (mem3_reg_is_valid_load && !mem3_reg_is_aligned_lw) {
     scoreboard(mem3_reg_wb_addr) := false.B
   }
-  mem3_reg_is_retired := mem3_reg_is_valid_inst
+  mem3_reg_is_retired := mem3_reg_valid
 
   when (ex2_reg_is_retired && mem3_reg_is_retired) {
     instret := instret + 2.U
@@ -1363,19 +1418,19 @@ class Core(
     instret := instret + 1.U
   }
 
-  io.pipeline_probe.foreach(_.mem3_valid := mem3_reg_is_valid_inst)
+  io.pipeline_probe.foreach(_.mem3_valid := mem3_reg_valid)
   map2(io.pipeline_probe, mem3_reg_inst_id)(_.mem3_inst_id := _)
-  io.pipeline_probe.foreach(_.mem3_retired := mem3_reg_is_valid_inst)
+  io.pipeline_probe.foreach(_.mem3_retired := mem3_reg_valid)
 
   // Debug signals
   io.debug_signal.cycle_counter       := cycle_counter.io.value(47, 0)
   // io.debug_signal.csr_rdata        := csr_rdata
-  // io.debug_signal.ex1_reg_csr_addr := ex1_reg_csr_addr
+  // io.debug_signal.ex1_reg_csr_addr := ex1_csr_addr
   io.debug_signal.ex2_reg_pc          := Cat(ex2_reg_pc, 0.U((WORD_LEN-PC_LEN).W))
-  io.debug_signal.ex2_is_valid_inst   := ex2_reg_is_valid_inst
+  io.debug_signal.ex2_is_valid_inst   := ex2_reg_valid
   io.debug_signal.me_intr             := csr_is_meintr
   io.debug_signal.mt_intr             := csr_is_mtintr
-  io.debug_signal.trap                := csr_is_trap
+  io.debug_signal.trap                := csr_is_ecall
   io.debug_signal.id_pc               := id_stage.io.debug_signals.id_pc
   io.debug_signal.id_inst             := id_stage.io.debug_signals.id_inst
   io.debug_signal.mem3_rdata          := mem3_reg_dmem_rdata
@@ -1390,9 +1445,13 @@ class Core(
   // IO & Debug
   if (enable_sim_probe) {
     io.sim_probe.foreach(_.gp := regfile(3))
-    val exit = ex1_reg_is_trap && (ex1_reg_mcause_code === CSR_MCAUSE_CODE_ECALL_M) && (regfile(17) === 93.U(WORD_LEN.W))
+    val exit = csr_is_ecall && /*(ex1_reg_mcause_code === CSR_MCAUSE_CODE_ECALL_M) &&*/ (regfile(17) === 93.U(WORD_LEN.W))
     val do_exit = RegNext(exit)
     io.sim_probe.foreach(_.exit := RegNext(do_exit).asUInt)
+    printf(cf"csr_is_ecall        : ${csr_is_ecall}\n")
+    printf(cf"regfile(17)         : 0x${regfile(17)}%x\n")
+    printf(cf"exit                : ${exit}\n")
+    printf(cf"do_exit             : ${do_exit}\n")
   }
 
   // printf(cf"ic_addr_out      : 0x${Cat(ic_addr_out, 0.U(1.W))}%x\n")
@@ -1412,38 +1471,40 @@ class Core(
   printf(cf"id_reg_inst      : 0x${id_stage.io.debug_signals.id_inst}%x\n")
   printf(cf"id_reg_bp_taken  : ${id_reg_bp_taken}%d\n")
   printf(cf"id_reg_bp_target : 0x${Cat(id_reg_bp_target, 0.U(1.W))}%x\n")
-  printf(cf"id_is_valid_inst : ${id_stage.io.pipeline_probe.id_valid.getOrElse(false.B)}%d\n")
+  printf(cf"id_valid         : ${id_stage.io.pipeline_probe.id_valid.getOrElse(false.B)}%d\n")
   printf(cf"id_reg_stall     : ${id_reg_stall}%d\n")
   // printf(cf"id_rs1_data      : 0x${id_rs1_data}%x\n")
   // printf(cf"id_rs2_data      : 0x${id_rs2_data}%x\n")
   // printf(cf"id_wb_addr       : 0x${id_wb_addr}%x\n")
   printf(cf"rrd_reg_pc       : 0x${Cat(rrd_reg_pc, 0.U(1.W))}%x\n")
-  printf(cf"rrd_reg_is_valid_: ${rrd_reg_is_valid_inst}%d\n")
+  printf(cf"rrd_reg_valid    : ${rrd_reg_valid}%d\n")
   printf(cf"rrd_stall        : ${rrd_stall}%d\n")
   // printf(cf"rrd_reg_rs1_addr : 0x${rrd_reg_rs1_addr}%x\n")
   // printf(cf"rrd_reg_rs2_addr : 0x${rrd_reg_rs2_addr}%x\n")
   printf(cf"rrd_op1_data     : 0x${rrd_op1_data}%x\n")
   printf(cf"rrd_op2_data     : 0x${rrd_op2_data}%x\n")
   printf(cf"rrd_op3_data     : 0x${rrd_op3_data}%x\n")
+  printf(cf"rrd_reg_imm_data : 0x${rrd_reg_imm_data}%x\n")
   printf(cf"rrd_reg_op1_sel  : 0x${rrd_reg_op1_sel}%x\n")
   // printf(cf"ex1_reg_fw_en    : ${ex1_reg_fw_en}%d\n")
   printf(cf"rrd_reg_rs1_addr : 0x${rrd_reg_rs1_addr}%x\n")
   printf(cf"rrd_reg_wb_addr  : 0x${rrd_reg_wb_addr}%x\n")
   printf(cf"rrd_reg_rf_wen   : 0x${rrd_reg_rf_wen}%x\n")
-  printf(cf"rrd_reg_wb_sel   : 0x${rrd_reg_wb_sel}%x\n")
-  printf(cf"rrd_reg_is_br    : 0x${rrd_reg_is_br}%x\n")
-  printf(cf"scoreboard       : 0x${Cat((0 until 32).map(i => scoreboard(i).asUInt))}%x\n")
+  // printf(cf"rrd_reg_wb_sel   : 0x${rrd_reg_wb_sel}%x\n")
+  // printf(cf"rrd_reg_is_br    : 0x${rrd_reg_is_br}%x\n")
+  printf(cf"scoreboard       : 0x${Cat((0 until 32).map(i => scoreboard(i).asUInt).reverse)}%x\n")
   printf(cf"ex1_fw_data      : 0x${ex1_fw_data}%x\n")
   printf(cf"ex1_reg_pc       : 0x${Cat(ex1_reg_pc, 0.U(1.W))}%x\n")
-  printf(cf"ex1_reg_is_valid_: ${ex1_reg_is_valid_inst}%d\n")
+  printf(cf"ex1_reg_valid    : ${ex1_reg_valid}%d\n")
   printf(cf"ex1_reg_op1_data : 0x${ex1_reg_op1_data}%x\n")
   printf(cf"ex1_reg_op2_data : 0x${ex1_reg_op2_data}%x\n")
   printf(cf"ex1_reg_op3_data : 0x${ex1_reg_op3_data}%x\n")
+  printf(cf"ex1_reg_imm_data : 0x${ex1_reg_imm_data}%x\n")
   printf(cf"ex1_alu_out      : 0x${ex1_alu_out}%x\n")
-  printf(cf"ex1_pc_bit_out   : 0x${ex1_pc_bit_out}%x\n")
+  printf(cf"ex1_blu_out      : 0x${ex1_blu_out}%x\n")
+  printf(cf"ex1_reg_exe_sel  : 0x${ex1_reg_exe_sel}%x\n")
   printf(cf"ex1_reg_exe_fun  : 0x${ex1_reg_exe_fun}%x\n")
-  // printf(cf"ex1_reg_op2op    : 0x${ex1_reg_op2op}%x\n")
-  printf(cf"ex1_reg_wb_sel   : 0x${ex1_reg_wb_sel}%x\n")
+  // printf(cf"ex1_reg_sop    : 0x${ex1_reg_sop}%x\n")
   printf(cf"ex1_reg_wb_addr  : 0x${ex1_reg_wb_addr}%x\n")
   printf(cf"ex1_reg_bp_redir : ${ex1_reg_bp.redirected}%d\n")
   printf(cf"ex1_reg_bp_target: 0x${fetch_unit.io.redir_read.fp_entry.target.pc_to_word}%x\n")
@@ -1451,31 +1512,35 @@ class Core(
   printf(cf"ex1_reg_bp_lcnt  : 0x${ex1_reg_bp.bp_entry.lcnt}%x\n")
   printf(cf"ex1_reg_bp_gcnt  : 0x${ex1_reg_bp.bp_entry.gcnt}%x\n")
   printf(cf"ex1_reg_bp_rasind: 0x${fetch_unit.io.redir_read.fp_entry.ras_index}%x\n")
-  printf(cf"ex1_reg_actual_at: 0x${ex1_reg_actual_attr}%x\n")
+  printf(cf"ex1_reg_bp_attr  : 0x${fetch_unit.io.redir_read.fp_entry.attr}%x\n")
+  printf(cf"ex1_reg_is_half  : ${ex1_reg_is_half}\n")
+  printf(cf"ex1_reg_actual_at: 0x${ex1_actual_attr}%x\n")
+  printf(cf"ex1_redir_deq_en : ${ex1_redir_deq_en}\n")
   // printf(cf"ex1_bfx_sext     : 0x${ex1_bfx_sext}%x\n")
   // printf(cf"ex1_bfx_sign_shif: 0x${ex1_bfx_sign_shift}%x\n")
   printf(cf"ex2_reg_is_br    : ${ex2_reg_is_br}%d\n")
   printf(cf"ex2_reg_br_pc    : 0x${Cat(ex2_reg_br_pc, 0.U(1.W))}%x\n")
   printf(cf"ex2_reg_pc       : 0x${Cat(ex2_reg_pc, 0.U(1.W))}%x\n")
-  printf(cf"ex2_reg_is_valid_: ${ex2_reg_is_valid_inst}%d\n")
+  printf(cf"ex2_reg_valid    : ${ex2_reg_valid}%d\n")
   printf(cf"ex2_stall        : ${ex2_stall}%d\n")
   printf(cf"ex2_reg_op3_data : 0x${ex2_reg_op3_data}%x\n")
   printf(cf"ex2_wb_data      : 0x${ex2_wb_data}%x\n")
-  printf(cf"ex2_alu_muldiv_ou: 0x${ex2_alu_muldiv_out}%x\n")
+  printf(cf"ex2_md_out       : 0x${ex2_md_out}%x\n")
   printf(cf"ex2_reg_wb_addr  : 0x${ex2_reg_wb_addr}%x\n")
   // printf(cf"ex1_reg_upd_pc_st: ${ex1_reg_upd_pc_stalled}%d\n")
   // printf(cf"ex2_reg_rf_wen   : ${ex2_reg_rf_wen}%d\n")
+  printf(cf"mem1_reg_addr    : 0x${mem1_reg_addr}%x\n")
   // printf(cf"mem1_reg_mem_w   : 0x${mem1_reg_mem_w}%x\n")
   printf(cf"mem1_reg_wdata   : 0x${mem1_reg_wdata}%x\n")
   printf(cf"mem1_mem_stall   : ${mem1_mem_stall}%d\n")
   printf(cf"mem1_dram_stall  : ${mem1_dram_stall}%d\n")
   printf(cf"mem1_reg_unaligne: ${mem1_reg_unaligned}%d\n")
-  printf(cf"mem1_is_valid_ins: ${mem1_reg_is_valid_inst}%d\n")
+  printf(cf"mem1_reg_valid   : ${mem1_reg_valid}%d\n")
   printf(cf"mem2_mem_stall   : ${mem2_mem_stall}%d\n")
   printf(cf"mem2_dram_stall  : ${mem2_dram_stall}%d\n")
   // printf(cf"mem2_reg_dmem_rda: 0x${mem2_reg_dmem_rdata}%x\n")
   // printf(cf"mem2_reg_mem_use_: 0x${mem2_reg_mem_use_reg}%x\n")
-  printf(cf"mem2_reg_is_valid: ${mem2_reg_is_valid_inst}%d\n")
+  printf(cf"mem2_reg_valid   : ${mem2_reg_valid}%d\n")
   printf(cf"mem2_reg_is_mem_l: ${mem2_reg_is_mem_load}%d\n")
   printf(cf"mem2_reg_is_dram_: ${mem2_reg_is_dram_load}%d\n")
   printf(cf"mem2_reg_unaligne: ${mem2_reg_unaligned}%d\n")
@@ -1485,12 +1550,12 @@ class Core(
   printf(cf"mem3_wb_data_load: 0x${mem3_wb_data_load}%x\n")
   printf(cf"mem3_reg_unaligne: ${mem3_reg_unaligned}%d\n")
   printf(cf"mem3_reg_is_align: ${mem3_reg_is_aligned_lw}%d\n")
-  printf(cf"mem3_reg_is_valid: ${mem3_reg_is_valid_inst}%d\n")
+  printf(cf"mem3_reg_valid   : ${mem3_reg_valid}%d\n")
   printf(cf"mem3_reg_wb_addr : 0x${mem3_reg_wb_addr}%x\n")
   // printf(cf"mem3_reg_mem_use_: 0x${mem3_reg_mem_use_reg}%x\n")
   printf(cf"csr_is_meintr    : ${csr_is_meintr}\n")
   printf(cf"csr_is_mtintr    : ${csr_is_mtintr}\n")
-  printf(cf"csr_is_trap      : ${csr_is_trap}\n")
+  printf(cf"csr_is_ecall     : ${csr_is_ecall}\n")
   // printf(cf"csr_reg_mepc     : 0x${csr_reg_mepc}%x\n")
   printf(cf"csr_is_br        : ${csr_is_br}\n")
   // printf(cf"csr_wdata        : 0x${csr_wdata}%x\n")

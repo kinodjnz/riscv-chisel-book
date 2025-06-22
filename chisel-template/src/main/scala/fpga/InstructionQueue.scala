@@ -80,6 +80,7 @@ class InstructionQueue[Initial <: Data, Decoded <: Data](iq_buffer_size: Int, ge
     val space  = enq - deq_first
     val ready1 = !space(iq_id_len)
     val ready2 = ready1 && !space.take(iq_id_len).andR
+    // val ready2 = ready1 && space =/= Fill(iq_id_len, 1.U(1.W))
 
     val enq2 = enq + 1.U
     io.enq1.ready := ready1

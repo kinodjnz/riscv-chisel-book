@@ -71,6 +71,8 @@ class FetchRedirectBuffer(redirect_buffer_size: Int, pht_history_len: Int, ras_e
   when (io.enq.flush_en) {
     deq_ptr := enq_ptr
   }
+  printf(cf"redir enq_ptr = ${enq_ptr}\n")
+  printf(cf"redir deq_ptr = ${deq_ptr}\n")
 
   when (io.upd.en) {
     buf(io.upd.ptr).attr      := io.upd.attr
