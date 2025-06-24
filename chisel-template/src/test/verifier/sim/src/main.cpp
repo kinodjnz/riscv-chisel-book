@@ -343,14 +343,14 @@ const uint32_t INST_TRACE_SIZE = 256;
 
 instruction_trace inst_traces[INST_TRACE_SIZE];
 
-struct mem_log {
+struct mem_log_t {
     uint32_t pc;
     uint32_t inst;
-    uint32_t reg;
-    uint32_t data;
+    bool is_load;
 };
 
 void sim_loop() {
+    std::deque<mem_log_t> mem_log;
     try {
         uint64_t retired = 0;
         uint64_t cycles = 0;
@@ -391,58 +391,52 @@ void sim_loop() {
                         uint32_t index = top->io_pipeline_probe_ex2_inst_id % INST_TRACE_SIZE;
                         uint32_t inst_id = inst_traces[index].inst_id;
                         uint32_t pc;
+                        uint32_t inst;
                         if (inst_id != top->io_pipeline_probe_ex2_inst_id) {
                             printf("retired ex2: unknown inst_id=%u\n", top->io_pipeline_probe_ex2_inst_id);
                             failure();
                         } else {
                             pc = inst_traces[index].pc;
-                            uint32_t inst = inst_traces[index].inst;
+                            inst = inst_traces[index].inst;
                             printf("retired ex2: pc=0x%08x, inst=0x%08x inst_id=%08x\n", pc, inst, inst_id);
                         }
-                        uint32_t spike_pc = state->pc;
-                        spike_step();
-                        // last_commit_pc = pc;
-                        assertEq("MISSMATCH PC", pc, spike_pc);
-                        for (auto item : state->log_reg_write) {
-                            if (item.first == 0)
-                                continue;
-
-                            int rd = item.first >> 4;
-//                                    printf("**************************************************\n");
-//                                    printf("PC: %lx\t inst: %lx\t type: %d\t REF@: %d\t DUT@: %d\t REF_data: %lx\t DUT_data: %lx\n", last_commit_pc, state->last_inst.bits(), (u32)(item.first & 0xf), rd, whitebox->robCtx[robId].csrAddress,  item.second.v[0], whitebox->robCtx[robId].csrWriteData);
-                            switch (item.first & 0xf) {
-                            case 0: { //integer
-                                // assertTrue("INTEGER WRITE MISSING", whitebox->robCtx[robId].integerWriteValid);
-                                // assertEq("INTEGER WRITE DATA", whitebox->robCtx[robId].integerWriteData, item.second.v[0]);
-                            } break;
-                            case 4:{ //CSR
-                                uint32_t inst = state->last_inst.bits();
-                                switch(inst){
-                                case 0x30200073: //MRET
-                                case 0x10200073: //SRET
-                                case 0x00200073: //URET
-                                    break;
-                                default:
-//                                            printf("PC: %lx\t inst: %lx\t type: %d\t REF@: %ld\t DUT@: %ld\t REF_data: %x\t DUT_data: %x\n", last_commit_pc, inst, item.first & 0xf, rd, whitebox->robCtx[robId].csrAddress,  item.second.v[0], whitebox->robCtx[robId].csrWriteData);
-                                    // if((inst & 0x7F) == 0x73 && (inst & 0x3000) != 0){
-
-                                    //     assertTrue("CSR WRITE MISSING", whitebox->robCtx[robId].csrWriteDone);
-
-                                    //     if((inst >> 20)==CSR_FCSR || (inst >> 20)==CSR_FRM || (inst >> 20)==CSR_FFLAGS){
-                                    //         if(rd!=CSR_MSTATUS){
-                                    //             assertEq("CSR WRITE ADDRESS", whitebox->robCtx[robId].csrAddress & 0xCFF, rd & 0xCFF);
-                                    //         }
-                                    //         break;
-                                    //     }
-                                    //     assertEq("CSR WRITE ADDRESS", whitebox->robCtx[robId].csrAddress & 0xCFF, rd & 0xCFF);
-                                        break;
-                                    // }
+                        bool do_next_step = true;
+                        while (do_next_step) {
+                            uint32_t spike_pc = state->pc;
+                            spike_step();
+                            // last_commit_pc = pc;
+                            bool is_load = (
+                                (state->last_inst.bits() & 0x7f) == 0x03 ||     // lw
+                                (state->last_inst.bits() & 0xe003) == 0x4000 || // c.lw
+                                (state->last_inst.bits() & 0xe003) == 0x4002 || // c.lwsp
+                                (state->last_inst.bits() & 0xa003) == 0x2002 || // c.lb, c.lbu
+                                (state->last_inst.bits() & 0xf003) == 0x2002    // c.lh, c.lhu
+                            );
+                            bool is_store = (
+                                (state->last_inst.bits() & 0x7f) == 0x23 ||     // sw
+                                (state->last_inst.bits() & 0xe003) == 0xc000 || // c.sw
+                                (state->last_inst.bits() & 0xe003) == 0xc002 || // c.lwsp
+                                (state->last_inst.bits() & 0xf003) == 0x3002 || // c.sh, c.s?0
+                                (state->last_inst.bits() & 0xe003) == 0x6002    // c.sb
+                            );
+                            if (!is_load && !is_store) {
+                                assertEq("pc unmatch", pc, spike_pc);
+                                do_next_step = false;
+                            }
+                            if (is_store || is_load) {
+                                mem_log.push_back(mem_log_t(spike_pc, inst, is_load));
+                            }
+                            for (auto item : state->log_reg_write) {
+                                if (item.first != 0) {
+                                    uint32_t wb_addr = item.first >> 4;
+                                    uint32_t wb_data = item.second.v[0];
+                                    if ((item.first & 0xf) == 0) {
+                                        assertEq("integer reg write addr unmatch", top->io_pipeline_probe_ex2_wb_addr, wb_addr);
+                                        assertEq("integer reg write data unmatch", top->io_pipeline_probe_ex2_wb_data, wb_data);
+                                    } else {
+                                        printf("??? unknown spike trace %llx\n", item.first & 0xf);
+                                    }
                                 }
-                            } break;
-                            default: {
-                                printf("??? unknown spike trace %llx\n", item.first & 0xf);
-                                failure();
-                            } break;
                             }
                         }
                     }
@@ -450,12 +444,35 @@ void sim_loop() {
                         ++retired;
                         uint32_t index = top->io_pipeline_probe_mem3_inst_id % INST_TRACE_SIZE;
                         uint32_t inst_id = inst_traces[index].inst_id;
+                        uint32_t pc;
+                        uint32_t inst;
                         if (inst_id != top->io_pipeline_probe_mem3_inst_id) {
-                            // printf("retired mem: unknown inst_id=%u\n", inst_id);
+                            printf("retired mem: unknown inst_id=%u\n", top->io_pipeline_probe_mem3_inst_id);
+                            failure();
                         } else {
-                            uint32_t pc = inst_traces[index].pc;
-                            uint32_t inst = inst_traces[index].inst;
+                            pc = inst_traces[index].pc;
+                            inst = inst_traces[index].inst;
                             // printf("retired mem: pc=0x%08x, inst=0x%08x\n", pc, inst);
+                        }
+                        if (mem_log.empty()) {
+                            uint32_t spike_pc = state->pc;
+                            spike_step();
+                            assertEq("load pc unmatch", pc, spike_pc);
+                            for (auto item : state->log_reg_write) {
+                                if (item.first != 0) {
+                                    uint32_t wb_addr = item.first >> 4;
+                                    uint32_t wb_data = item.second.v[0];
+                                    if ((item.first & 0xf) == 0) {
+                                        assertEq("load reg write addr unmatch", top->io_pipeline_probe_mem3_wb_addr, wb_addr);
+                                        assertEq("load reg write data unmatch", top->io_pipeline_probe_mem3_wb_data, wb_data);
+                                    } else {
+                                        printf("??? unknown spike trace %llx\n", item.first & 0xf);
+                                    }
+                                }
+                            }
+                        } else {
+                            assertEq("load pc unmatch log", pc, mem_log.front().pc);
+                            mem_log.pop_front();
                         }
                     }
                 }

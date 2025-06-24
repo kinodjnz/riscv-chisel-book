@@ -96,6 +96,8 @@ class PipelineProbe extends Bundle {
   val ex2_valid    = Output(Bool())
   val ex2_inst_id  = Output(UInt(INST_ID_LEN.W))
   val ex2_retired  = Output(Bool())
+  val ex2_wb_addr  = Output(UInt(ADDR_LEN.W))
+  val ex2_wb_data  = Output(UInt(WORD_LEN.W))
   val mem1_valid   = Output(Bool())
   val mem1_inst_id = Output(UInt(INST_ID_LEN.W))
   val mem2_valid   = Output(Bool())
@@ -103,6 +105,8 @@ class PipelineProbe extends Bundle {
   val mem3_valid   = Output(Bool())
   val mem3_inst_id = Output(UInt(INST_ID_LEN.W))
   val mem3_retired = Output(Bool())
+  val mem3_wb_addr = Output(UInt(ADDR_LEN.W))
+  val mem3_wb_data = Output(UInt(WORD_LEN.W))
 }
 
 class Core(
@@ -1264,7 +1268,9 @@ class Core(
 
   io.pipeline_probe.foreach(_.ex2_valid := ex2_reg_valid)
   map2(io.pipeline_probe, ex2_reg_inst_id)(_.ex2_inst_id := _)
-  io.pipeline_probe.foreach(_.ex2_retired := !ex2_reg_div_stall && ex2_reg_valid)
+  io.pipeline_probe.foreach(_.ex2_retired := ex2_reg_valid && !ex2_div_stall)
+  io.pipeline_probe.foreach(_.ex2_wb_addr := Mux(ex2_reg_rf_wen === REN_S, ex2_reg_wb_addr, 0.U(ADDR_LEN.W)))
+  io.pipeline_probe.foreach(_.ex2_wb_data := ex2_wb_data)
 
   //**********************************
   // EX1/MEM1 register
@@ -1421,6 +1427,8 @@ class Core(
   io.pipeline_probe.foreach(_.mem3_valid := mem3_reg_valid)
   map2(io.pipeline_probe, mem3_reg_inst_id)(_.mem3_inst_id := _)
   io.pipeline_probe.foreach(_.mem3_retired := mem3_reg_valid)
+  io.pipeline_probe.foreach(_.mem3_wb_addr := Mux(mem3_reg_is_valid_load, mem3_reg_wb_addr, 0.U(ADDR_LEN.W)))
+  io.pipeline_probe.foreach(_.mem3_wb_data := mem3_wb_data_load)
 
   // Debug signals
   io.debug_signal.cycle_counter       := cycle_counter.io.value(47, 0)
