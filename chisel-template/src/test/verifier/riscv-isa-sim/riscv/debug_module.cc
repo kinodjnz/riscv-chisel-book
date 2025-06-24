@@ -7,8 +7,8 @@
 #include "opcodes.h"
 #include "mmu.h"
 
-#include "debug_rom/debug_rom.h"
-#include "debug_rom_defines.h"
+// #include "debug_rom/debug_rom.h"
+// #include "debug_rom_defines.h"
 
 #if 0
 #  define D(x) x
@@ -126,21 +126,21 @@ bool debug_module_t::load(reg_t addr, size_t len, uint8_t* bytes)
 {
   addr = DEBUG_START + addr;
 
-  if (addr >= DEBUG_ROM_ENTRY &&
-      (addr + len) <= (DEBUG_ROM_ENTRY + debug_rom_raw_len)) {
-    memcpy(bytes, debug_rom_raw + addr - DEBUG_ROM_ENTRY, len);
-    return true;
-  }
+  // if (addr >= DEBUG_ROM_ENTRY &&
+  //     (addr + len) <= (DEBUG_ROM_ENTRY + debug_rom_raw_len)) {
+  //   memcpy(bytes, debug_rom_raw + addr - DEBUG_ROM_ENTRY, len);
+  //   return true;
+  // }
 
-  if (addr >= DEBUG_ROM_WHERETO && (addr + len) <= (DEBUG_ROM_WHERETO + 4)) {
-    memcpy(bytes, debug_rom_whereto + addr - DEBUG_ROM_WHERETO, len);
-    return true;
-  }
+  // if (addr >= DEBUG_ROM_WHERETO && (addr + len) <= (DEBUG_ROM_WHERETO + 4)) {
+  //   memcpy(bytes, debug_rom_whereto + addr - DEBUG_ROM_WHERETO, len);
+  //   return true;
+  // }
 
-  if (addr >= DEBUG_ROM_FLAGS && ((addr + len) <= DEBUG_ROM_FLAGS + 1024)) {
-    memcpy(bytes, debug_rom_flags + addr - DEBUG_ROM_FLAGS, len);
-    return true;
-  }
+  // if (addr >= DEBUG_ROM_FLAGS && ((addr + len) <= DEBUG_ROM_FLAGS + 1024)) {
+  //   memcpy(bytes, debug_rom_flags + addr - DEBUG_ROM_FLAGS, len);
+  //   return true;
+  // }
 
   if (addr >= debug_abstract_start && ((addr + len) <= (debug_abstract_start + sizeof(debug_abstract)))) {
     memcpy(bytes, debug_abstract + addr - debug_abstract_start, len);

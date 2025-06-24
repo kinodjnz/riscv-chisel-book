@@ -144,8 +144,8 @@ static std::string dtc_compile(const std::string& dtc_input, bool compile)
     close(dtc_input_pipe[1]);
     close(dtc_output_pipe[0]);
     close(dtc_output_pipe[1]);
-    execlp(DTC, DTC, "-O", output_type, "-I", input_type, nullptr);
-    std::cerr << "Failed to run " DTC ": " << strerror(errno) << std::endl;
+    // execlp(DTC, DTC, "-O", output_type, "-I", input_type, nullptr);
+    std::cerr << "Failed to run  DTC : " << strerror(errno) << std::endl;
     exit(1);
   }
 

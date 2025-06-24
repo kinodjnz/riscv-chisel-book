@@ -15,6 +15,18 @@ ADDCFLAGS += -CFLAGS -Isim/obj_dir
 ADDCFLAGS += -CFLAGS -g
 ADDCFLAGS += -CFLAGS -rdynamic
 
+# spike
+ADDCFLAGS += -CFLAGS -I$(realpath riscv-isa-sim/riscv)
+# ADDCFLAGS += -CFLAGS -I riscv-isa-sim/fesvr
+# ADDCFLAGS += -CFLAGS -I riscv-isa-sim/fdt
+# ADDCFLAGS += -CFLAGS -I riscv-isa-sim
+
+CXXFLAGS += -I riscv-isa-sim/riscv
+CXXFLAGS += -I riscv-isa-sim/fesvr
+CXXFLAGS += -I riscv-isa-sim/fdt
+CXXFLAGS += -I riscv-isa-sim/softfloat
+CXXFLAGS += -I riscv-isa-sim
+
 FLAGS += --autoflush
 FLAGS += --output-split 5000
 FLAGS += --output-split-cfuncs 500
@@ -23,14 +35,31 @@ FLAGS +=  --x-assign unique
 
 ADDCFLAGS += -O2 -CFLAGS -O2
 
+SPIKE_DIR = $(realpath riscv-isa-sim)
+SPIKE_RISCV_SRCS = $(filter-out $(SPIKE_DIR)/riscv/insn_template.cc $(SPIKE_DIR)/riscv/check-opcode-overlap.t.cc,$(wildcard $(SPIKE_DIR)/riscv/*.cc))
+SPIKE_FESVR_SRCS = $(filter-out $(SPIKE_DIR)/fesvr/elf2hex.cc,$(wildcard $(SPIKE_DIR)/fesvr/*.cc))
+SPIKE_CC_SRCS = $(SPIKE_RISCV_SRCS) $(SPIKE_FESVR_SRCS) $(wildcard $(SPIKE_DIR)/disasm/*.cc)
+SPIKE_CC_OBJS = $(subst riscv-isa-sim/,riscv-isa-sim/obj_dir/,$(patsubst %.cc,%.o,$(SPIKE_CC_SRCS)))
+SPIKE_C_SRCS = $(wildcard $(SPIKE_DIR)/fdt/*.c $(SPIKE_DIR)/softfloat/*.c)
+SPIKE_C_OBJS = $(subst riscv-isa-sim/,riscv-isa-sim/obj_dir/,$(patsubst %.c,%.o,$(SPIKE_C_SRCS)))
+
+SPIKE_SUBDIRS = riscv fesvr fdt disasm softfloat
+SPIKE_OBJDIRS = $(patsubst %,$(SPIKE_DIR)/obj_dir/%,$(SPIKE_SUBDIRS))
+
 SIM_NAME = riscv
 SIM_VERILOG ?= $(CRAMP_GEN_DIR)/$(SIM_NAME).v
 SIM_DIR = sim
-SIM_SRCS = $(SIM_DIR)/src/main.cpp
+SIM_SRCS = $(SIM_DIR)/src/main.cpp $(SPIKE_CC_OBJS) $(SPIKE_C_OBJS)
+
+.PHONY: aaa
+aaa: # $(SPIKE_OBJS)
+	echo $(SPIKE_OBJDIRS)
 
 CXX = c++
 GCC_CXX = g++
 GCC_CXXFLAGS_NO_UNUSED = -faligned-new -fcf-protection=none -Wno-bool-operation -Wno-c++11-narrowing -Wno-constant-logical-operand -Wno-non-pod-varargs -Wno-parentheses-equality -Wno-shadow -Wno-sign-compare -Wno-tautological-bitwise-compare -Wno-tautological-compare -Wno-uninitialized -Wno-unused-but-set-parameter -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable
+CC = cc
+GCC_CC = gcc
 
 OBJ_DIR = obj_dir
 VERILATOR_OBJ_POSTFIXES = .cpp .h .mk
@@ -44,6 +73,8 @@ RISCV_TESTS=$(wildcard $(RISCV_TESTS_DIR)/*.binhex)
 RISCV_TESTS_EXCLUDES=hash8 opened_hash
 RISCV_TESTS_DO=$(filter-out $(patsubst %,$(RISCV_TESTS_DIR)/%.binhex,$(RISCV_TESTS_EXCLUDES)),$(RISCV_TESTS))
 RISCV_TESTS_TARGETS=$(patsubst %.binhex,%.target,$(RISCV_TESTS_DO))
+
+# SPIKE_SRCS=
 
 TIMEOUT_OVERRIDES = \
     fizzbuzz:10000 \
@@ -83,7 +114,7 @@ $(SIM_DIR)/$(OBJ_DIR)/V$(SIM_NAME): sim-verilate $(SIM_SRCS)
 
 sim-verilate: $(SIM_VERILATOR_OBJS)
 
-$(SIM_VERILATOR_OBJS): $(SIM_VERILOG)
+$(SIM_VERILATOR_OBJS): $(SIM_VERILOG) $(SIM_SRCS)
 	verilator -cc --Mdir $(SIM_DIR)/$(OBJ_DIR) $(SIM_VERILOG) -CFLAGS -std=c++23 -LDFLAGS -pthread $(ADDCFLAGS) $(FLAGS) --gdbbt $(VERILATOR_ARGS) -Wno-UNOPTFLAT -Wno-WIDTH --x-initial 0 --x-assign unique --exe $(SIM_SRCS)
 
 UT_VERILATOR_OBJS = $(foreach postfixes,.mk,$(foreach ut_name,$(UT_DIRS),$(ut_name)/$(OBJ_DIR)/V$(ut_name)$(postfixes)))
@@ -123,6 +154,24 @@ clean-ut: $(CLEAN_UT_TARGET)
 
 $(CLEAN_UT_TARGET):
 	rm -rf $(subst clean-ut-,,$@)/$(OBJ_DIR)
+
+$(SPIKE_DIR)/obj_dir: $(SPIKE_OBJDIRS)
+
+$(SPIKE_OBJDIRS):
+	mkdir -p $@
+
+$(SPIKE_CC_OBJS): %.o: $$(subst /obj_dir/,/,%.cc) $(SPIKE_DIR)/obj_dir
+	$(CXX) -std=c++23 $(CXXFLAGS) -DPREFIX=\"$(SPIKE_DIR)/obj_dir\" -c -o $@ $<
+
+$(SPIKE_C_OBJS): %.o: $$(subst /obj_dir/,/,%.c) $(SPIKE_DIR)/obj_dir
+	$(CC) $(CXXFLAGS) -c -o $@ $<
+
+.PHONY: gen_srcs
+gen_srcs: $(SPIKE_DIR)/riscv/insn_list.h
+	make -C $(dir $<) -f riscv.mk $@ src_dir=$(SPIKE_DIR)
+
+$(SPIKE_DIR)/riscv/insn_list.h: $(SPIKE_DIR)/riscv/riscv.mk
+	make -C $(dir $<) -f riscv.mk $(notdir $@) src_dir=$(SPIKE_DIR)
 
 .PHONY: help
 help:
