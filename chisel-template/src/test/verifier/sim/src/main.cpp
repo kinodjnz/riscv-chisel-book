@@ -5,6 +5,8 @@
 #include <execinfo.h>
 #include <signal.h>
 #include <getopt.h>
+#include "processor.h"
+#include "simif.h"
 
 void handler_crash(int sig) {
   void *array[10];
@@ -19,6 +21,88 @@ void handler_crash(int sig) {
   exit(1);
 }
 
+#define assertEq(message, actual, expected) do { \
+    if (actual != expected) { \
+    	printf("\n*** %s actual=%x expected=%x ***\n\n", message, actual, expected); \
+	    failure(); \
+    } \
+} while (false)
+
+class sim_wrap: public simif_t {
+public:
+    uint8_t imem[16384];
+    uint8_t dmem[16384];
+    // queue<IoAccess> mmioDut;
+    
+    // Configuration and Harts
+    const cfg_t * const cfg;
+    const std::map<size_t, processor_t*> harts;
+
+    sim_wrap(const cfg_t *config): cfg(config) {}
+
+    // should return NULL for MMIO addresses
+    virtual char* addr_to_mem(reg_t addr) override {
+        if (0 <= addr && addr < 16384) {
+            return (char *)&imem[addr];
+        }
+        return NULL;
+    }
+    // used for MMIO addresses
+    virtual bool mmio_load(reg_t addr, size_t len, uint8_t* bytes) override {
+//        printf("mmio_load %lx %ld\n", addr, len);
+        if ((addr & 0xffff0000) != 0x30000000) return false;
+        return true;
+        // assertTrue("missing mmio\n", !mmioDut.empty());
+        // auto dut = mmioDut.front();
+        // assertEq("mmio write\n", dut.write, false);
+        // assertEq("mmio address\n", dut.addr, addr);
+        // assertEq("mmio len\n", dut.len, len);
+        // memcpy(bytes, dut.data, len);
+        // mmioDut.pop();
+        // return !dut.error;
+    }
+    virtual bool mmio_store(reg_t addr, size_t len, const uint8_t* bytes) override {
+//        printf("mmio_store %lx %ld\n", addr, len);
+        if ((addr & 0xffff0000) != 0x30000000) return false;
+        return true;
+        // assertTrue("missing mmio\n", !mmioDut.empty());
+        // auto dut = mmioDut.front();
+        // assertEq("mmio write\n", dut.write, true);
+        // assertEq("mmio address\n", dut.addr, addr);
+        // assertEq("mmio len\n", dut.len, len);
+        // assertTrue("mmio data\n", !memcmp(dut.data, bytes, len));
+        // mmioDut.pop();
+        // return !dut.error;
+    }
+
+    virtual bool mmio_fetch(reg_t addr, size_t len, uint8_t* bytes) override {
+        return mmio_load(addr, len, bytes);
+    }
+
+
+    // virtual bool mmio_mmu(reg_t addr, size_t len, uint8_t* bytes) override {
+    //     return mmio_load(addr, len, bytes);
+    // }
+
+    // Callback for processors to let the simulation know they were reset.
+    virtual void proc_reset(unsigned id) override {
+//        printf("proc_reset %d\n", id);
+    }
+
+    virtual const cfg_t& get_cfg() const override {
+        return *cfg;
+    }
+
+    virtual const std::map<size_t, processor_t*>& get_harts() const override {
+        return harts;
+    }
+
+    virtual const char* get_symbol(uint64_t addr) override {
+//        printf("get_symbol %lx\n", addr);
+        return NULL;
+    }
+};
+
 std::string sim_name = "???";
 vluint64_t main_time = 0;
 vluint64_t timeout = -1;
@@ -29,6 +113,10 @@ std::string fst_name;
 VerilatedFstC* tfp = nullptr;
 // uint64_t load_bin_address;
 Vriscv *top = nullptr;
+sim_wrap *wrap;
+processor_t *proc;
+state_t *state;
+cfg_t cfg;
 
 class success_exception : public std::exception { };
 #define failure() throw std::exception();
@@ -112,6 +200,64 @@ void verilator_init(int argc, char** argv) {
     Verilated::commandArgs(argc, argv);
 }
 
+void load_hex(std::string path, uint8_t *buf) {
+    std::ifstream fs(path.c_str());
+    std::string str;
+    uint8_t *p = buf;
+    while (fs >> str) {
+        long x = strtol(str.c_str(), NULL, 16);
+        std::size_t bytes = str.size() / 2;
+        for (std::size_t i = 0; i < bytes; i++) {
+            *p++ = (x & 255);
+            x >>= 8;
+        }
+    }
+    fs.close();
+}
+
+void spike_init() {
+    std::string isa;
+    std::string priv;
+
+    FILE *fptr = stdout; //trace_ref ? fopen((outputDir + "/spike.log").c_str(),"w") : NULL;
+    std::ofstream outfile("/dev/null", std::ofstream::binary);
+
+    isa += "RV32I";
+    isa += "MA";
+    isa += "C";
+    isa += "_smrnmi";
+    priv = "MS";
+
+    // Initialization of the config class
+    cfg.isa = isa.c_str();
+    cfg.priv = priv.c_str();
+    cfg.misaligned = false;
+    cfg.pmpregions = 0;
+    cfg.hartids.push_back(0);
+
+    // Instantiation
+    wrap = new sim_wrap(&cfg);
+    proc = new processor_t(isa.c_str(), "MSU", &cfg, wrap, 0, false, fptr, outfile);
+    // proc->set_impl(IMPL_MMU_SV32, XLEN == 32);
+    // proc->set_impl(IMPL_MMU_SV39, XLEN == 64);
+    // proc->set_impl(IMPL_MMU_SV48, false);
+    // proc->set_impl(IMPL_MMU, true);
+    // if(spike_debug) proc->debug = true;
+    proc->debug = true;
+    proc->set_pmp_num(1);
+    state = proc->get_state();
+    state->pc = 0;
+    // for(int i = 0;i < 32;i++){
+    //     float128_t tmp;
+    //     tmp.v[0] = -1;
+    //     tmp.v[1] = -1;
+    //     state->FPR.write(i, tmp);
+    // }
+    if (load_bin) {
+        load_hex(load_bin_name, wrap->imem);
+    }
+}
+
 void rtl_init() {
     top = new Vriscv;
     if (load_bin) {
@@ -134,6 +280,59 @@ void rtl_init() {
     #endif
 }
 
+void spike_step(/*RobCtx & robCtx*/){
+    //Sync some CSR
+//     state->mip->unlogged_write_with_mask(-1, 0);
+//     u64 backup;
+//     if(robCtx.csrReadDone){
+//         switch(robCtx.csrAddress){
+//         case MIP:
+//         case SIP:
+//         case UIP:
+//             backup = state->mie->read();
+//             state->mip->unlogged_write_with_mask(-1, robCtx.csrReadData);
+//             state->mie->unlogged_write_with_mask(MIE_MTIE | MIE_MEIE |  MIE_MSIE | MIE_SEIE, 0);
+// //                                cout << main_time << " " << hex << robCtx.csrReadData << " " << state->mip->read()  << " " << state->csrmap[robCtx.csrAddress]->read() << dec << endl;
+//             break;
+//         case CSR_MCYCLE:
+//         case CSR_UCYCLE:
+//             backup = state->minstret->read();
+//             state->minstret->unlogged_write(robCtx.csrReadData+1); //+1 patch a spike internal workaround XD
+//             break;
+//         case CSR_MCYCLEH:
+//         case CSR_UCYCLEH:
+//             backup = state->minstret->read();
+//             state->minstret->unlogged_write((((u64)robCtx.csrReadData) << 32)+1);
+//             break;
+//         default:
+//             if(robCtx.csrAddress >= CSR_MHPMCOUNTER3 && robCtx.csrAddress <= CSR_MHPMCOUNTER31){
+//                 state->csrmap[robCtx.csrAddress]->unlogged_write(robCtx.csrReadData);
+//             }
+//             break;
+//         }
+//     }
+
+    //Run spike for one commit or trap
+    proc->step(1);
+    // state->mip->unlogged_write_with_mask(-1, 0);
+
+    //Sync back some CSR
+    // if(robCtx.csrReadDone){
+    //     switch(robCtx.csrAddress){
+    //     case MIP:
+    //     case SIP:
+    //     case UIP:
+    //         state->mie->unlogged_write_with_mask(MIE_MTIE | MIE_MEIE |  MIE_MSIE | MIE_SEIE, backup);
+    //         break;
+    //     case CSR_MCYCLE:
+    //     case CSR_MCYCLEH:
+    //         state->minstret->unlogged_write(backup+2);
+    //         break;
+    //         break;
+    //     }
+    // }
+}
+
 struct instruction_trace {
     uint32_t inst_id;
     uint32_t pc;
@@ -143,6 +342,13 @@ struct instruction_trace {
 const uint32_t INST_TRACE_SIZE = 256;
 
 instruction_trace inst_traces[INST_TRACE_SIZE];
+
+struct mem_log {
+    uint32_t pc;
+    uint32_t inst;
+    uint32_t reg;
+    uint32_t data;
+};
 
 void sim_loop() {
     try {
@@ -178,17 +384,66 @@ void sim_loop() {
                         inst_traces[index].inst_id = top->io_pipeline_probe_if2_inst_id;
                         inst_traces[index].pc = top->io_pipeline_probe_if2_pc;
                         inst_traces[index].inst = top->io_pipeline_probe_if2_inst;
+                        printf("if2 valid: inst_id=%u pc=%x\n", top->io_pipeline_probe_if2_inst_id, top->io_pipeline_probe_if2_pc);
                     }
                     if (top->io_pipeline_probe_ex2_retired) {
                         ++retired;
                         uint32_t index = top->io_pipeline_probe_ex2_inst_id % INST_TRACE_SIZE;
                         uint32_t inst_id = inst_traces[index].inst_id;
+                        uint32_t pc;
                         if (inst_id != top->io_pipeline_probe_ex2_inst_id) {
-                            // printf("retired ex2: unknown inst_id=%u\n", inst_id);
+                            printf("retired ex2: unknown inst_id=%u\n", top->io_pipeline_probe_ex2_inst_id);
+                            failure();
                         } else {
-                            uint32_t pc = inst_traces[index].pc;
+                            pc = inst_traces[index].pc;
                             uint32_t inst = inst_traces[index].inst;
-                            // printf("retired ex2: pc=0x%08x, inst=0x%08x\n", pc, inst);
+                            printf("retired ex2: pc=0x%08x, inst=0x%08x inst_id=%08x\n", pc, inst, inst_id);
+                        }
+                        uint32_t spike_pc = state->pc;
+                        spike_step();
+                        // last_commit_pc = pc;
+                        assertEq("MISSMATCH PC", pc, spike_pc);
+                        for (auto item : state->log_reg_write) {
+                            if (item.first == 0)
+                                continue;
+
+                            int rd = item.first >> 4;
+//                                    printf("**************************************************\n");
+//                                    printf("PC: %lx\t inst: %lx\t type: %d\t REF@: %d\t DUT@: %d\t REF_data: %lx\t DUT_data: %lx\n", last_commit_pc, state->last_inst.bits(), (u32)(item.first & 0xf), rd, whitebox->robCtx[robId].csrAddress,  item.second.v[0], whitebox->robCtx[robId].csrWriteData);
+                            switch (item.first & 0xf) {
+                            case 0: { //integer
+                                // assertTrue("INTEGER WRITE MISSING", whitebox->robCtx[robId].integerWriteValid);
+                                // assertEq("INTEGER WRITE DATA", whitebox->robCtx[robId].integerWriteData, item.second.v[0]);
+                            } break;
+                            case 4:{ //CSR
+                                uint32_t inst = state->last_inst.bits();
+                                switch(inst){
+                                case 0x30200073: //MRET
+                                case 0x10200073: //SRET
+                                case 0x00200073: //URET
+                                    break;
+                                default:
+//                                            printf("PC: %lx\t inst: %lx\t type: %d\t REF@: %ld\t DUT@: %ld\t REF_data: %x\t DUT_data: %x\n", last_commit_pc, inst, item.first & 0xf, rd, whitebox->robCtx[robId].csrAddress,  item.second.v[0], whitebox->robCtx[robId].csrWriteData);
+                                    // if((inst & 0x7F) == 0x73 && (inst & 0x3000) != 0){
+
+                                    //     assertTrue("CSR WRITE MISSING", whitebox->robCtx[robId].csrWriteDone);
+
+                                    //     if((inst >> 20)==CSR_FCSR || (inst >> 20)==CSR_FRM || (inst >> 20)==CSR_FFLAGS){
+                                    //         if(rd!=CSR_MSTATUS){
+                                    //             assertEq("CSR WRITE ADDRESS", whitebox->robCtx[robId].csrAddress & 0xCFF, rd & 0xCFF);
+                                    //         }
+                                    //         break;
+                                    //     }
+                                    //     assertEq("CSR WRITE ADDRESS", whitebox->robCtx[robId].csrAddress & 0xCFF, rd & 0xCFF);
+                                        break;
+                                    // }
+                                }
+                            } break;
+                            default: {
+                                printf("??? unknown spike trace %llx\n", item.first & 0xf);
+                                failure();
+                            } break;
+                            }
                         }
                     }
                     if (top->io_pipeline_probe_mem3_retired) {
@@ -247,6 +502,7 @@ int main(int argc, char** argv, char** env) {
         parse_args_before_init(argc, argv);
         verilator_init(argc, argv);
         rtl_init();
+        spike_init();
         parse_args_after_init(argc, argv);
         sim_loop();
     } catch (const std::exception &e) {
