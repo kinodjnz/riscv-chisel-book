@@ -151,6 +151,10 @@ do { \
               if (rm > 4) throw trap_illegal_instruction(insn.bits()); \
               rm; })
 
+#define BFI5_MASK ((1ULL << insn.mask_len5_imm()) - 1)
+#define BFI3_MASK ((1ULL << insn.mask_len3_imm()) - 1)
+#define RS2_MASK ((1ULL << (((RS2 >> 6) & 31) == 0 ? 32 : ((RS2 >> 6) & 31))) - 1)
+
 static inline bool is_aligned(const unsigned val, const unsigned pos)
 {
   return pos ? (val & (pos - 1)) == 0 : true;

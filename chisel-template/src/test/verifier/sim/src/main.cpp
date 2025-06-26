@@ -225,6 +225,9 @@ void spike_init() {
     isa += "RV32I";
     isa += "MA";
     isa += "C";
+    isa += "_Zba";
+    isa += "_Zbb";
+    isa += "_Zbs";
     isa += "_smrnmi";
     priv = "MS";
 
@@ -245,6 +248,7 @@ void spike_init() {
     // if(spike_debug) proc->debug = true;
     proc->debug = true;
     proc->set_pmp_num(1);
+    proc->enable_log_commits();
     state = proc->get_state();
     state->pc = 0;
     // for(int i = 0;i < 32;i++){
@@ -347,6 +351,8 @@ struct mem_log_t {
     uint32_t pc;
     uint32_t inst;
     bool is_load;
+    uint32_t wb_addr;
+    uint32_t wb_data;
 };
 
 void sim_loop() {
@@ -423,16 +429,20 @@ void sim_loop() {
                                 assertEq("pc unmatch", pc, spike_pc);
                                 do_next_step = false;
                             }
-                            if (is_store || is_load) {
-                                mem_log.push_back(mem_log_t(spike_pc, inst, is_load));
+                            if (is_store) {
+                                mem_log.push_back(mem_log_t(spike_pc, inst, false, 0, 0));
                             }
                             for (auto item : state->log_reg_write) {
                                 if (item.first != 0) {
                                     uint32_t wb_addr = item.first >> 4;
                                     uint32_t wb_data = item.second.v[0];
                                     if ((item.first & 0xf) == 0) {
-                                        assertEq("integer reg write addr unmatch", top->io_pipeline_probe_ex2_wb_addr, wb_addr);
-                                        assertEq("integer reg write data unmatch", top->io_pipeline_probe_ex2_wb_data, wb_data);
+                                        if (is_load) {
+                                            mem_log.push_back(mem_log_t(spike_pc, inst, true, wb_addr, wb_data));
+                                        } else {
+                                            assertEq("integer reg write addr unmatch", top->io_pipeline_probe_ex2_wb_addr, wb_addr);
+                                            assertEq("integer reg write data unmatch", top->io_pipeline_probe_ex2_wb_data, wb_data);
+                                        }
                                     } else {
                                         printf("??? unknown spike trace %llx\n", item.first & 0xf);
                                     }
@@ -472,6 +482,8 @@ void sim_loop() {
                             }
                         } else {
                             assertEq("load pc unmatch log", pc, mem_log.front().pc);
+                            assertEq("load reg write addr unmatch log", top->io_pipeline_probe_mem3_wb_addr, mem_log.front().wb_addr);
+                            assertEq("load reg write data unmatch log", top->io_pipeline_probe_mem3_wb_data, mem_log.front().wb_data);
                             mem_log.pop_front();
                         }
                     }
