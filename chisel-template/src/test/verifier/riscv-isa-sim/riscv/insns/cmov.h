@@ -1,0 +1,1 @@
+WRITE_RD(RS2 != 0 ? RS1 : RS3);

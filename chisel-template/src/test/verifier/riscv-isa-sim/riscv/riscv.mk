@@ -1103,6 +1103,10 @@ riscv_insn_ext_zvk = \
 	$(riscv_insn_ext_zvksh) \
 
 riscv_insn_xcramp = \
+	cmov \
+	fsl \
+	fsr \
+	fsri \
 	bfx \
 	bfs \
 	bff \
