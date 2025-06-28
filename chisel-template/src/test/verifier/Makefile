@@ -64,7 +64,7 @@ GCC_CC = gcc
 OBJ_DIR = obj_dir
 VERILATOR_OBJ_POSTFIXES = .cpp .h .mk
 
-UT_DIRS = $(filter-out $(SIM_DIR),$(patsubst %/,%,$(wildcard */)))
+UT_DIRS = $(filter-out riscv-isa-sim,$(filter-out $(SIM_DIR),$(patsubst %/,%,$(wildcard */))))
 
 SIM_VERILATOR_OBJ_NAMES=V$(SIM_NAME).cpp V$(SIM_NAME).h V$(SIM_NAME).mk
 SIM_VERILATOR_OBJS=$(patsubst %,$(SIM_DIR)/$(OBJ_DIR)/%,$(SIM_VERILATOR_OBJ_NAMES))

@@ -188,15 +188,20 @@ class FetchPredictor(
     io.btb.lu.pc := io.pr.iaddr
     io.pht.lu.pc := io.pr.iaddr
 
-    val br_taken = VecInit.tabulate(4)(i => (i.U(2.W) >= ibpos) && io.btb.lu.result(i).br && io.pht.lu.taken(i))
-    val is_jump  = VecInit.tabulate(4)(i => (i.U(2.W) >= ibpos) && io.btb.lu.result(i).jump)
-    val is_ret   = VecInit.tabulate(4)(i => (i.U(2.W) >= ibpos) && io.btb.lu.result(i).is_ret)
+    val redirected = VecInit.tabulate(4)(i => (i.U(2.W) >= ibpos) && (
+      (io.btb.lu.result(i).br && io.pht.lu.taken(i)) ||
+      io.btb.lu.result(i).jump ||
+      io.btb.lu.result(i).is_ret
+    ))
+    val br_taken = VecInit.tabulate(4)(i => io.btb.lu.result(i).br && io.pht.lu.taken(i))
+    // val is_jump  = VecInit.tabulate(4)(i => io.btb.lu.result(i).jump)
+    // val is_ret   = VecInit.tabulate(4)(i => io.btb.lu.result(i).is_ret)
     val attr = VecInit.tabulate(4)(i => io.btb.lu.result(i).attr)
     val bp1_pos = MuxCase(3.U(IALIGN_PTR_LEN.W),
-      Seq.tabulate(3)(i => (br_taken(i) || is_jump(i) || is_ret(i)) -> i.U(IALIGN_PTR_LEN.W))
+      Seq.tabulate(3)(i => redirected(i) -> i.U(IALIGN_PTR_LEN.W))
     )
-    val bp1_target = Mux(is_ret(bp1_pos), io.ras.top.ret_pc, io.btb.lu.result(bp1_pos).target)
-    val bp1_en = reg_iaddr_en && (br_taken.asUInt.orR || is_jump.asUInt.orR || is_ret.asUInt.orR)
+    val bp1_target = Mux(io.btb.lu.result(bp1_pos).is_ret, io.ras.top.ret_pc, io.btb.lu.result(bp1_pos).target)
+    val bp1_en = reg_iaddr_en && redirected.asUInt.orR
     io.pr.bp1_en   := bp1_en
     io.pr.bp1_pos  := bp1_pos
     io.pr.bp1_addr := bp1_target
@@ -204,7 +209,7 @@ class FetchPredictor(
     io.ru.en        := bp1_en
     io.ru.ptr       := reg_fp_ptr
     io.ru.attr      := attr(bp1_pos)
-    io.ru.is_ret    := is_ret(bp1_pos)
+    io.ru.is_ret    := io.btb.lu.result(bp1_pos).is_ret
     io.ru.ras_index := io.ras.top.index
     io.ru.target    := bp1_target
 
@@ -224,21 +229,21 @@ class FetchPredictor(
 
     // Clear zbtb by btb prediction
     val bp0_index = reg_iaddr_index.take(zbtb_index_len)
-    io.zbtb.inv.en := !io.pr.flush_en && bp0_en && !br_taken(bp0_pos) && !is_jump(bp0_pos) && bp0_pos <= bp1_pos
+    io.zbtb.inv.en := !io.pr.flush_en && bp0_en && !br_taken(bp0_pos) && !io.btb.lu.result(bp0_pos).jump && bp0_pos <= bp1_pos
     io.zbtb.inv.pc := bp0_index.replace_lsbits(2, bp0_pos)
 
     // Update RAS by btb prediction
-    io.ras.ret1.en      := !io.pr.flush_en && reg_iaddr_en && is_ret(bp1_pos)
+    io.ras.ret1.en      := !io.pr.flush_en && reg_iaddr_en && io.btb.lu.result(bp1_pos).is_ret
     io.ras.ret1.index   := io.ras.top.index - 1.U(ras_index_len.W)
     io.ras.call1.en     := !io.pr.flush_en && reg_iaddr_en && (attr(bp1_pos) === BTB_ATTR_DCALL)
     io.ras.call1.index  := io.ras.top.index + 1.U(ras_index_len.W)
-    val bcall_pos = MuxCase(3.U(IALIGN_PTR_LEN.W),
-      Seq.tabulate(3)(i => is_jump(i) -> i.U(IALIGN_PTR_LEN.W))
-    )
+    // val bcall_pos = MuxCase(3.U(IALIGN_PTR_LEN.W),
+    //   Seq.tabulate(3)(i => (i.U(2.W) >= ibpos) && io.btb.lu.result(i).jump -> i.U(IALIGN_PTR_LEN.W))
+    // )
     io.ras.call1.ret_pc := Mux(
-      bcall_pos === 3.U,
+      bp1_pos === 3.U,
       reg_iaddr_index.clear_lsbits(2) + 4.U,
-      reg_iaddr_index.replace_lsbits(2, bcall_pos + 1.U),
+      reg_iaddr_index.replace_lsbits(2, bp1_pos + 1.U),
     )
 
     // Update PHT history by btb prediction
