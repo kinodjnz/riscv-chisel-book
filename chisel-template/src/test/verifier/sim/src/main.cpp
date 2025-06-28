@@ -381,6 +381,7 @@ struct mem_log_t {
     uint32_t pc;
     uint32_t inst;
     bool is_load;
+    bool is_store;
     uint32_t wb_addr;
     uint32_t addr;
     uint32_t data;
@@ -457,13 +458,19 @@ void sim_loop() {
                                 (state->last_inst.bits() & 0xf003) == 0x3002 || // c.sh, c.s?0
                                 (state->last_inst.bits() & 0xe003) == 0x6002    // c.sb
                             );
-                            if (!is_load && !is_store) {
+                            bool is_fence_i = (
+                                state->last_inst.bits() == 0x0000100f           // fence.i
+                            );
+                            if (!is_load && !is_store && !is_fence_i) {
                                 assertEq("pc unmatch", pc, spike_pc);
                                 do_next_step = false;
                             }
                             if (is_store) {
                                 assertEq("memory write", (uint32_t)state->log_mem_write.size(), 1);
-                                mem_log.push_back(mem_log_t(spike_pc, inst, false, 0, std::get<0>(state->log_mem_write[0]), std::get<1>(state->log_mem_write[0]), std::get<2>(state->log_mem_write[0])));
+                                mem_log.push_back(mem_log_t(spike_pc, inst, false, true, 0, std::get<0>(state->log_mem_write[0]), std::get<1>(state->log_mem_write[0]), std::get<2>(state->log_mem_write[0])));
+                            }
+                            if (is_fence_i) {
+                                mem_log.push_back(mem_log_t(spike_pc, inst, false, false, 0, 0, 0, 0));
                             }
                             for (auto item : state->log_reg_write) {
                                 if (item.first != 0) {
@@ -471,7 +478,7 @@ void sim_loop() {
                                     uint32_t wb_data = item.second.v[0];
                                     if ((item.first & 0xf) == 0) {
                                         if (is_load) {
-                                            mem_log.push_back(mem_log_t(spike_pc, inst, true, wb_addr, 0, wb_data, 0));
+                                            mem_log.push_back(mem_log_t(spike_pc, inst, true, false, wb_addr, 0, wb_data, 0));
                                         } else {
                                             assertEq("integer reg write addr unmatch", top->io_pipeline_probe_ex2_wb_addr, wb_addr);
                                             assertEq("integer reg write data unmatch", top->io_pipeline_probe_ex2_wb_data, wb_data);
