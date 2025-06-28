@@ -568,7 +568,7 @@ class wide_counter_csr_t: public csr_t {
   // Always returns full 64-bit value
   virtual reg_t read() const noexcept override;
   void bump(const reg_t howmuch) noexcept;
- protected:
+//  protected:
   virtual bool unlogged_write(const reg_t val) noexcept override;
  private:
   bool is_counting_enabled() const noexcept;

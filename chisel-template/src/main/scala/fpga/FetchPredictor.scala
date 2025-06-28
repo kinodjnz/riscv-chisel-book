@@ -653,13 +653,13 @@ class RAS(index_len: Int) extends Module {
 
   when (io.ret1.en) {
     index := io.ret1.index
-    printf(cf"RAS ret1 index=${io.ret1.index} pc=0x${Cat(ras(index), 0.U(1.W))}%x\n")
+    printf(cf"RAS ret1 index=${index}=>${io.ret1.index} pc=0x${Cat(ras(index), 0.U(1.W))}%x\n")
   }
 
   when (io.call1.en && !io.call2.en) {
     index := io.call1.index
     ras(io.call1.index) := io.call1.ret_pc
-    printf(cf"RAS call index=${io.call1.index} pc=0x${Cat(io.call1.ret_pc, 0.U(1.W))}%x\n")
+    printf(cf"RAS call1 index=${io.call1.index} pc=0x${Cat(io.call1.ret_pc, 0.U(1.W))}%x\n")
   }
 
   when (io.up.en) {
@@ -669,12 +669,12 @@ class RAS(index_len: Int) extends Module {
 
   when (io.ret2.en) {
     index := io.ret2.index
-    printf(cf"RAS ret index=${io.ret2.index} pc=0x${Cat(ras(index), 0.U(1.W))}%x\n")
+    printf(cf"RAS ret2 index=${io.ret2.index}\n")
   }
 
   when (io.call2.en) {
     index := io.call2.index
     ras(io.call2.index) := io.call2.ret_pc
-    printf(cf"RAS call index=${io.call2.index} pc=0x${Cat(io.call2.ret_pc, 0.U(1.W))}%x\n")
+    printf(cf"RAS call2 index=${io.call2.index} pc=0x${Cat(io.call2.ret_pc, 0.U(1.W))}%x\n")
   }
 }

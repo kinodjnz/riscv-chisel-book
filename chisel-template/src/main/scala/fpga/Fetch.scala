@@ -254,6 +254,7 @@ class Fetcher(
       fetch_buf(bp_ptr).end_of_iblock := Mux(io.pr.bp1_en, io.pr.bp1_pos, 3.U)
       fetch_buf(bp_ptr).bp_entries    := io.pr.bp_entries
       fetch_buf(bp_ptr).fp_ptr        := io.pr.fp_ptr
+      printf(cf"fb(${bp_ptr}).fp_ptr=${io.pr.fp_ptr}\n")
     }
 
     when (io.ft.imem.valid || io.ft.icache.idata_valid) {

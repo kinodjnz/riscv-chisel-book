@@ -120,6 +120,7 @@ public:
   uint64_t rvc_rs2() { return x(2, 5); }
   uint64_t rvc_rs1s() { return 8 + x(7, 3); }
   uint64_t rvc_rs2s() { return 8 + x(2, 3); }
+  uint64_t rvc_rs3s() { return 8 + x(10, 3); }
 
   uint64_t rvc_lbimm() { return (x(5, 1) << 1) + x(6, 1); }
   uint64_t rvc_lhimm() { return (x(5, 1) << 1); }
@@ -130,6 +131,16 @@ public:
   uint64_t rvc_spimm() { return x(2, 2) << 4; }
 
   uint64_t rvc_index() { return x(2, 8); }
+
+  int64_t xcc_b2_imm() { return (x(5, 2) << 1) + (x(10, 2) << 3) + (xs(12, 1) << 5); }
+  int64_t xcc_a2w_imm() { return (x(6, 1) << 2) + (x(10, 2) << 3) + (x(5, 1) << 5) + (xs(12, 1) << 6); }
+  int64_t xcc_a2b_imm() { return x(10, 2) + (xs(12, 1) << 2); }
+  uint64_t xcc_u_imm() { return x(5, 8) << 12; }
+  uint64_t xcc_lsb_imm() { return x(12, 1) + (x(5, 2) << 1) + (x(10, 2) << 3); }
+  uint64_t xcc_lsh_imm() { return (x(5, 2) << 1) + (x(10, 1) << 3); }
+  uint64_t xcc_sw0_imm() { return (x(6, 1) << 2) + (x(10, 1) << 3) + (x(3, 3) << 4); }
+  uint64_t xcc_sh0_imm() { return (x(5, 2) << 1) + (x(10, 1) << 3) + (x(4, 1) << 4); }
+  uint64_t xcc_sb0_imm() { return x(4, 3) + (x(10, 1) << 3); }
 
   uint64_t v_vm() { return x(25, 1); }
   uint64_t v_wd() { return x(26, 1); }

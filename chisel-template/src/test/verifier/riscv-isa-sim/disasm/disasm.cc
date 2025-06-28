@@ -29,15 +29,33 @@ struct : public arg_t {
 
 struct : public arg_t {
   std::string to_string(insn_t insn) const {
-    return std::to_string((int)insn.rvc_lbimm()) + '(' + xpr_name[insn.rvc_rs1s()] + ')';
+    return std::to_string((int)insn.xcc_lsb_imm()) + '(' + xpr_name[insn.rvc_rs1s()] + ')';
   }
 } rvb_b_address;
 
 struct : public arg_t {
   std::string to_string(insn_t insn) const {
-    return std::to_string((int)insn.rvc_lhimm()) + '(' + xpr_name[insn.rvc_rs1s()] + ')';
+    return std::to_string((int)insn.xcc_lsh_imm()) + '(' + xpr_name[insn.rvc_rs1s()] + ')';
   }
 } rvb_h_address;
+
+struct : public arg_t {
+  std::string to_string(insn_t insn) const {
+    return std::to_string((int)insn.xcc_sw0_imm()) + '(' + xpr_name[insn.rvc_rs1s()] + ')';
+  }
+} rvb_sw0_address;
+
+struct : public arg_t {
+  std::string to_string(insn_t insn) const {
+    return std::to_string((int)insn.xcc_sh0_imm()) + '(' + xpr_name[insn.rvc_rs1s()] + ')';
+  }
+} rvb_sh0_address;
+
+struct : public arg_t {
+  std::string to_string(insn_t insn) const {
+    return std::to_string((int)insn.xcc_sb0_imm()) + '(' + xpr_name[insn.rvc_rs1s()] + ')';
+  }
+} rvb_sb0_address;
 
 struct : public arg_t {
   std::string to_string(insn_t insn) const {
@@ -301,6 +319,12 @@ struct : public arg_t {
     return fpr_name[insn.rvc_rs2s()];
   }
 } rvc_fp_rs2s;
+
+struct : public arg_t {
+  std::string to_string(insn_t UNUSED insn) const {
+    return xpr_name[0];
+  }
+} rvc_zero;
 
 struct : public arg_t {
   std::string to_string(insn_t UNUSED insn) const {
@@ -1461,34 +1485,34 @@ void disassembler_t::add_instructions(const isa_parser_t* isa, bool strict)
     if (xlen_eq_strict(32)) {
       DISASM_INSN("c.jal", c_jal, 0, {&rvc_jump_target});
     } else {
-      DISASM_INSN("c.addiw", c_addiw, 0, {&xrd, &rvc_imm});
+      // DISASM_INSN("c.addiw", c_addiw, 0, {&xrd, &rvc_imm});
     }
 
     if (xlen_eq(64)) {
-      DISASM_INSN("c.addw", c_addw, 0, {&rvc_rs1s, &rvc_rs2s});
-      DISASM_INSN("c.subw", c_subw, 0, {&rvc_rs1s, &rvc_rs2s});
+      // DISASM_INSN("c.addw", c_addw, 0, {&rvc_rs1s, &rvc_rs2s});
+      // DISASM_INSN("c.subw", c_subw, 0, {&rvc_rs1s, &rvc_rs2s});
     }
 
     if (xlen_eq_strict(64) || ext_enabled_strict(EXT_ZCLSD)) {
-      DISASM_INSN("c.ld", c_ld, 0, {&rvc_rs2s, &rvc_ld_address});
-      DISASM_INSN("c.ldsp", c_ldsp, 0, {&xrd, &rvc_ldsp_address});
-      DISASM_INSN("c.sd", c_sd, 0, {&rvc_rs2s, &rvc_ld_address});
-      DISASM_INSN("c.sdsp", c_sdsp, 0, {&rvc_rs2, &rvc_sdsp_address});
+      // DISASM_INSN("c.ld", c_ld, 0, {&rvc_rs2s, &rvc_ld_address});
+      // DISASM_INSN("c.ldsp", c_ldsp, 0, {&xrd, &rvc_ldsp_address});
+      // DISASM_INSN("c.sd", c_sd, 0, {&rvc_rs2s, &rvc_ld_address});
+      // DISASM_INSN("c.sdsp", c_sdsp, 0, {&rvc_rs2, &rvc_sdsp_address});
     }
   }
 
   if (ext_enabled(EXT_ZCD)) {
-    DISASM_INSN("c.fld", c_fld, 0, {&rvc_fp_rs2s, &rvc_ld_address});
-    DISASM_INSN("c.fldsp", c_fldsp, 0, {&frd, &rvc_ldsp_address});
-    DISASM_INSN("c.fsd", c_fsd, 0, {&rvc_fp_rs2s, &rvc_ld_address});
-    DISASM_INSN("c.fsdsp", c_fsdsp, 0, {&rvc_fp_rs2, &rvc_sdsp_address});
+    // DISASM_INSN("c.fld", c_fld, 0, {&rvc_fp_rs2s, &rvc_ld_address});
+    // DISASM_INSN("c.fldsp", c_fldsp, 0, {&frd, &rvc_ldsp_address});
+    // DISASM_INSN("c.fsd", c_fsd, 0, {&rvc_fp_rs2s, &rvc_ld_address});
+    // DISASM_INSN("c.fsdsp", c_fsdsp, 0, {&rvc_fp_rs2, &rvc_sdsp_address});
   }
 
   if (ext_enabled(EXT_ZCF)) {
-    DISASM_INSN("c.flw", c_flw, 0, {&rvc_fp_rs2s, &rvc_lw_address});
-    DISASM_INSN("c.flwsp", c_flwsp, 0, {&frd, &rvc_lwsp_address});
-    DISASM_INSN("c.fsw", c_fsw, 0, {&rvc_fp_rs2s, &rvc_lw_address});
-    DISASM_INSN("c.fswsp", c_fswsp, 0, {&rvc_fp_rs2, &rvc_swsp_address});
+    // DISASM_INSN("c.flw", c_flw, 0, {&rvc_fp_rs2s, &rvc_lw_address});
+    // DISASM_INSN("c.flwsp", c_flwsp, 0, {&frd, &rvc_lwsp_address});
+    // DISASM_INSN("c.fsw", c_fsw, 0, {&rvc_fp_rs2s, &rvc_lw_address});
+    // DISASM_INSN("c.fswsp", c_fswsp, 0, {&rvc_fp_rs2, &rvc_swsp_address});
   }
 
   if (ext_enabled(EXT_ZCB)) {
@@ -1497,15 +1521,22 @@ void disassembler_t::add_instructions(const isa_parser_t* isa, bool strict)
     DISASM_INSN("c.zext.h", c_zext_h, 0, {&rvc_rs1s});
     DISASM_INSN("c.sext.h", c_sext_h, 0, {&rvc_rs1s});
     if (xlen_eq(64)) {
-      DISASM_INSN("c.zext.w", c_zext_w, 0, {&rvc_rs1s});
+      // DISASM_INSN("c.zext.w", c_zext_w, 0, {&rvc_rs1s});
     }
     DISASM_INSN("c.not", c_not, 0, {&rvc_rs1s});
+    DISASM_INSN("c.neg", c_neg, 0, {&rvc_rs1s});
     DISASM_INSN("c.mul", c_mul, 0, {&rvc_rs1s, &rvc_rs2s});
+    DISASM_INSN("c.mulh", c_mulh, 0, {&rvc_rs1s, &rvc_rs2s});
+    DISASM_INSN("c.mulhu", c_mulhu, 0, {&rvc_rs1s, &rvc_rs2s});
+    DISASM_INSN("c.lb", c_lb, 0, {&rvc_rs2s, &rvb_b_address});
     DISASM_INSN("c.lbu", c_lbu, 0, {&rvc_rs2s, &rvb_b_address});
     DISASM_INSN("c.lhu", c_lhu, 0, {&rvc_rs2s, &rvb_h_address});
     DISASM_INSN("c.lh", c_lh, 0, {&rvc_rs2s, &rvb_h_address});
     DISASM_INSN("c.sb", c_sb, 0, {&rvc_rs2s, &rvb_b_address});
     DISASM_INSN("c.sh", c_sh, 0, {&rvc_rs2s, &rvb_h_address});
+    DISASM_INSN("c.sw0", c_sw0, 0, {&rvc_zero, &rvb_sw0_address});
+    DISASM_INSN("c.sh0", c_sh0, 0, {&rvc_zero, &rvb_sh0_address});
+    DISASM_INSN("c.sb0", c_sb0, 0, {&rvc_zero, &rvb_sb0_address});
   }
 
   if (ext_enabled(EXT_ZCMP)) {

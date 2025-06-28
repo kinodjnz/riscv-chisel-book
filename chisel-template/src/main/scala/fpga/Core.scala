@@ -93,6 +93,9 @@ class PipelineProbe extends Bundle {
   val rrd_inst_id  = Output(UInt(INST_ID_LEN.W))
   val ex1_valid    = Output(Bool())
   val ex1_inst_id  = Output(UInt(INST_ID_LEN.W))
+  val csr_read     = Output(Bool())
+  val csr_addr     = Output(UInt(CSR_ADDR_LEN.W))
+  val csr_data     = Output(UInt(WORD_LEN.W))
   val ex2_valid    = Output(Bool())
   val ex2_inst_id  = Output(UInt(INST_ID_LEN.W))
   val ex2_retired  = Output(Bool())
@@ -340,6 +343,7 @@ class Core(
   val mem1_reg_inst_id     = Option.when(enable_pipeline_probe)(RegInit(0.U(INST_ID_LEN.W)))
   val mem2_reg_inst_id     = Option.when(enable_pipeline_probe)(RegInit(0.U(INST_ID_LEN.W)))
   val mem3_reg_inst_id     = Option.when(enable_pipeline_probe)(RegInit(0.U(INST_ID_LEN.W)))
+  val ex2_reg_csr_addr     = Option.when(enable_pipeline_probe)(RegInit(0.U(CSR_ADDR_LEN.W)))
 
   //**********************************
   // Instruction Fetch And Branch Prediction
@@ -771,7 +775,7 @@ class Core(
   val ex1_is_br_taken  = ex1_maybe_br_taken && ex1_is_br
   val ex1_fetch_pc = Mux(ex1_is_br_taken || ex1_is_j, ex1_add_out.word_to_pc, ex1_next_pc)
   val ex1_csr_fetch_pc = Mux(csr_is_br, csr_br_pc, ex1_fetch_pc)
-  val ex1_predict_pc = Mux(ex1_reg_bp.redirected, fetch_unit.io.redir_read.fp_entry.target, ex1_next_pc)
+  val ex1_predict_pc = Mux(ex1_reg_bp.redirected, ex1_reg_fp_entry.target, ex1_next_pc)
   val ex1_bp_failure = ex1_fetch_pc =/= ex1_predict_pc
   val ex1_actual_attr = MuxCase(BTB_ATTR_INVAL, Seq(
     (ex1_reg_exe_sel === EXE_JB && PAT_BR.matches(ex1_reg_exe_fun)) -> BTB_ATTR_BR,
@@ -1044,6 +1048,7 @@ class Core(
     ex2_reg_mulh       := ex1_mulh
     ex2_reg_blu_out    := ex1_blu_out
     ex2_reg_csr_rdata  := csr_rdata
+    ex2_reg_csr_addr.foreach(_ :=  ex1_csr_addr)
     ex2_reg_exe_fun    := ex1_reg_exe_fun
     ex2_reg_rf_wen     := Mux(ex1_en && ex1_no_mem, ex1_reg_rf_wen, REN_X)
     ex2_reg_fun_sel    := ex1_fun_sel
@@ -1271,6 +1276,9 @@ class Core(
   io.pipeline_probe.foreach(_.ex2_retired := ex2_reg_valid && !ex2_div_stall)
   io.pipeline_probe.foreach(_.ex2_wb_addr := Mux(ex2_reg_rf_wen === REN_S, ex2_reg_wb_addr, 0.U(ADDR_LEN.W)))
   io.pipeline_probe.foreach(_.ex2_wb_data := ex2_wb_data)
+  io.pipeline_probe.foreach(_.csr_read := ex2_reg_valid && PAT_EX2_CSR.matches(ex2_reg_fun_sel) && !ex2_reg_div_stall && ex2_reg_rf_wen === REN_S)
+  map2(io.pipeline_probe, ex2_reg_csr_addr)(_.csr_addr := _)
+  io.pipeline_probe.foreach(_.csr_data := ex2_reg_csr_rdata)
 
   //**********************************
   // EX1/MEM1 register
@@ -1489,6 +1497,7 @@ class Core(
   printf(cf"rrd_reg_valid    : ${rrd_reg_valid}%d\n")
   printf(cf"rrd_reg_inst_id  : ${rrd_reg_inst_id.getOrElse(0)}%d\n")
   printf(cf"rrd_stall        : ${rrd_stall}%d\n")
+  printf(cf"rrd_reg_bp.fp_ptr: 0x${rrd_reg_bp.fp_ptr}%x\n")
   // printf(cf"rrd_reg_rs1_addr : 0x${rrd_reg_rs1_addr}%x\n")
   // printf(cf"rrd_reg_rs2_addr : 0x${rrd_reg_rs2_addr}%x\n")
   printf(cf"rrd_op1_data     : 0x${rrd_op1_data}%x\n")
@@ -1519,6 +1528,8 @@ class Core(
   printf(cf"ex1_reg_wb_addr  : 0x${ex1_reg_wb_addr}%x\n")
   printf(cf"ex1_reg_bp_redir : ${ex1_reg_bp.redirected}%d\n")
   printf(cf"ex1_reg_bp_target: 0x${fetch_unit.io.redir_read.fp_entry.target.pc_to_word}%x\n")
+  printf(cf"ex1_fetch_pc     : 0x${ex1_fetch_pc.pc_to_word}%x\n")
+  printf(cf"ex1_predict_pc   : 0x${ex1_predict_pc.pc_to_word}%x\n")
   printf(cf"ex1_fetch_pc_en  : ${ex1_fetch_pc_en}%d\n")
   printf(cf"ex1_reg_bp_lcnt  : 0x${ex1_reg_bp.bp_entry.lcnt}%x\n")
   printf(cf"ex1_reg_bp_gcnt  : 0x${ex1_reg_bp.bp_entry.gcnt}%x\n")

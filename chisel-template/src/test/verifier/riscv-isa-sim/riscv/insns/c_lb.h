@@ -1,0 +1,2 @@
+require_extension(EXT_ZCB);
+WRITE_RVC_RS2S(MMU.load<int8_t>(RVC_RS1S + insn.xcc_lsb_imm()));

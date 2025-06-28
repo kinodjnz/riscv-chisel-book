@@ -115,7 +115,7 @@ $(SIM_DIR)/$(OBJ_DIR)/V$(SIM_NAME): sim-verilate $(SIM_SRCS)
 sim-verilate: $(SIM_VERILATOR_OBJS)
 
 $(SIM_VERILATOR_OBJS): $(SIM_VERILOG) $(SIM_SRCS)
-	verilator -cc --Mdir $(SIM_DIR)/$(OBJ_DIR) $(SIM_VERILOG) -CFLAGS -std=c++23 -LDFLAGS -pthread $(ADDCFLAGS) $(FLAGS) --gdbbt $(VERILATOR_ARGS) -Wno-UNOPTFLAT -Wno-WIDTH --x-initial 0 --x-assign unique --exe $(SIM_SRCS)
+	@verilator -cc --Mdir $(SIM_DIR)/$(OBJ_DIR) $(SIM_VERILOG) -CFLAGS -std=c++23 -LDFLAGS -pthread $(ADDCFLAGS) $(FLAGS) --gdbbt $(VERILATOR_ARGS) -Wno-UNOPTFLAT -Wno-WIDTH --x-initial 0 --x-assign unique --exe $(SIM_SRCS)
 
 UT_VERILATOR_OBJS = $(foreach postfixes,.mk,$(foreach ut_name,$(UT_DIRS),$(ut_name)/$(OBJ_DIR)/V$(ut_name)$(postfixes)))
 UT_EXECUTABLES = $(foreach ut_name,$(UT_DIRS),$(ut_name)/$(OBJ_DIR)/V$(ut_name))

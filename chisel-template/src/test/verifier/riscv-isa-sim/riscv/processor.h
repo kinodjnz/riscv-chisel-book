@@ -343,7 +343,7 @@ public:
   FILE *get_log_file() { return log_file; }
 
   void register_base_insn(insn_desc_t insn) {
-    fprintf(stderr, "base insn match:%llx mask:%llx\n", insn.match, insn.mask);
+    // fprintf(stderr, "base insn match:%llx mask:%llx\n", insn.match, insn.mask);
     register_insn(insn, false /* is_custom */);
   }
   void register_custom_insn(insn_desc_t insn) {

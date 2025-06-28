@@ -6,26 +6,26 @@
 #define DECODE_MACRO_USAGE_LOGGED 0
 
 #define PROLOGUE \
-  reg_t npc = sext_xlen(pc + insn_length( MATCH_C_FLW))
+  reg_t npc = sext_xlen(pc + insn_length( MATCH_C_ZEXT_W))
 
 #define EPILOGUE \
-  trace_opcode(p,  MATCH_C_FLW, insn); \
+  trace_opcode(p,  MATCH_C_ZEXT_W, insn); \
   return npc
 
-reg_t fast_rv32i_c_flw(processor_t* p, insn_t insn, reg_t pc)
+reg_t fast_rv32i_c_zext_w(processor_t* p, insn_t insn, reg_t pc)
 {
   #define xlen 32
   PROLOGUE;
-  #include "insns/c_flw.h"
+  #include "insns/c_zext_w.h"
   EPILOGUE;
   #undef xlen
 }
 
-reg_t fast_rv64i_c_flw(processor_t* p, insn_t insn, reg_t pc)
+reg_t fast_rv64i_c_zext_w(processor_t* p, insn_t insn, reg_t pc)
 {
   #define xlen 64
   PROLOGUE;
-  #include "insns/c_flw.h"
+  #include "insns/c_zext_w.h"
   EPILOGUE;
   #undef xlen
 }
@@ -33,20 +33,20 @@ reg_t fast_rv64i_c_flw(processor_t* p, insn_t insn, reg_t pc)
 #undef DECODE_MACRO_USAGE_LOGGED
 #define DECODE_MACRO_USAGE_LOGGED 1
 
-reg_t logged_rv32i_c_flw(processor_t* p, insn_t insn, reg_t pc)
+reg_t logged_rv32i_c_zext_w(processor_t* p, insn_t insn, reg_t pc)
 {
   #define xlen 32
   PROLOGUE;
-  #include "insns/c_flw.h"
+  #include "insns/c_zext_w.h"
   EPILOGUE;
   #undef xlen
 }
 
-reg_t logged_rv64i_c_flw(processor_t* p, insn_t insn, reg_t pc)
+reg_t logged_rv64i_c_zext_w(processor_t* p, insn_t insn, reg_t pc)
 {
   #define xlen 64
   PROLOGUE;
-  #include "insns/c_flw.h"
+  #include "insns/c_zext_w.h"
   EPILOGUE;
   #undef xlen
 }
@@ -57,20 +57,20 @@ reg_t logged_rv64i_c_flw(processor_t* p, insn_t insn, reg_t pc)
 #undef DECODE_MACRO_USAGE_LOGGED
 #define DECODE_MACRO_USAGE_LOGGED 0
 
-reg_t fast_rv32e_c_flw(processor_t* p, insn_t insn, reg_t pc)
+reg_t fast_rv32e_c_zext_w(processor_t* p, insn_t insn, reg_t pc)
 {
   #define xlen 32
   PROLOGUE;
-  #include "insns/c_flw.h"
+  #include "insns/c_zext_w.h"
   EPILOGUE;
   #undef xlen
 }
 
-reg_t fast_rv64e_c_flw(processor_t* p, insn_t insn, reg_t pc)
+reg_t fast_rv64e_c_zext_w(processor_t* p, insn_t insn, reg_t pc)
 {
   #define xlen 64
   PROLOGUE;
-  #include "insns/c_flw.h"
+  #include "insns/c_zext_w.h"
   EPILOGUE;
   #undef xlen
 }
@@ -78,20 +78,20 @@ reg_t fast_rv64e_c_flw(processor_t* p, insn_t insn, reg_t pc)
 #undef DECODE_MACRO_USAGE_LOGGED
 #define DECODE_MACRO_USAGE_LOGGED 1
 
-reg_t logged_rv32e_c_flw(processor_t* p, insn_t insn, reg_t pc)
+reg_t logged_rv32e_c_zext_w(processor_t* p, insn_t insn, reg_t pc)
 {
   #define xlen 32
   PROLOGUE;
-  #include "insns/c_flw.h"
+  #include "insns/c_zext_w.h"
   EPILOGUE;
   #undef xlen
 }
 
-reg_t logged_rv64e_c_flw(processor_t* p, insn_t insn, reg_t pc)
+reg_t logged_rv64e_c_zext_w(processor_t* p, insn_t insn, reg_t pc)
 {
   #define xlen 64
   PROLOGUE;
-  #include "insns/c_flw.h"
+  #include "insns/c_zext_w.h"
   EPILOGUE;
   #undef xlen
 }

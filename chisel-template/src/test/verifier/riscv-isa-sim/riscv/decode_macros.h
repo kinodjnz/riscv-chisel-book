@@ -60,6 +60,7 @@
 #define RVC_RS2 READ_REG(insn.rvc_rs2())
 #define RVC_RS1S READ_REG(insn.rvc_rs1s())
 #define RVC_RS2S READ_REG(insn.rvc_rs2s())
+#define RVC_RS3S READ_REG(insn.rvc_rs3s())
 #define RVC_FRS2 READ_FREG(insn.rvc_rs2())
 #define RVC_FRS2S READ_FREG(insn.rvc_rs2s())
 #define RVC_SP READ_REG(X_SP)

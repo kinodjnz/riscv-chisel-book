@@ -38,12 +38,18 @@ public:
     const cfg_t * const cfg;
     const std::map<size_t, processor_t*> harts;
 
-    sim_wrap(const cfg_t *config): cfg(config) {}
+    sim_wrap(const cfg_t *config): cfg(config) {
+        memset(imem, 0, sizeof(imem));
+        memset(dmem, 0, sizeof(dmem));
+    }
 
     // should return NULL for MMIO addresses
     virtual char* addr_to_mem(reg_t addr) override {
         if (0 <= addr && addr < 16384) {
             return (char *)&imem[addr];
+        }
+        if (0x20000000 <= addr && addr < 0x20000000 + 16384) {
+            return (char *)&dmem[addr - 0x20000000];
         }
         return NULL;
     }
@@ -228,13 +234,15 @@ void spike_init() {
     isa += "_Zba";
     isa += "_Zbb";
     isa += "_Zbs";
+    isa += "_Zcb";
+    isa += "_Zicntr";
     isa += "_smrnmi";
     priv = "MS";
 
     // Initialization of the config class
     cfg.isa = isa.c_str();
     cfg.priv = priv.c_str();
-    cfg.misaligned = false;
+    cfg.misaligned = true;
     cfg.pmpregions = 0;
     cfg.hartids.push_back(0);
 
@@ -284,10 +292,23 @@ void rtl_init() {
     #endif
 }
 
-void spike_step(/*RobCtx & robCtx*/){
+void spike_step() {
     //Sync some CSR
 //     state->mip->unlogged_write_with_mask(-1, 0);
-//     u64 backup;
+    uint64_t backup;
+    if (top->io_pipeline_probe_csr_read) {
+        // printf("read csr: %x %x\n", top->io_pipeline_probe_csr_addr, top->io_pipeline_probe_csr_data);
+        switch (top->io_pipeline_probe_csr_addr) {
+        case CSR_CYCLE:
+            backup = state->mcycle->read();
+            state->mcycle->unlogged_write(top->io_pipeline_probe_csr_data);
+            break;
+        case CSR_CYCLEH:
+            backup = state->mcycle->read();
+            state->mcycle->unlogged_write((((uint64_t)top->io_pipeline_probe_csr_data) << 32));
+            break;
+        }
+    }
 //     if(robCtx.csrReadDone){
 //         switch(robCtx.csrAddress){
 //         case MIP:
@@ -319,6 +340,15 @@ void spike_step(/*RobCtx & robCtx*/){
     //Run spike for one commit or trap
     proc->step(1);
     // state->mip->unlogged_write_with_mask(-1, 0);
+
+    if (top->io_pipeline_probe_csr_read) {
+        switch (top->io_pipeline_probe_csr_addr) {
+        case CSR_CYCLE:
+        case CSR_CYCLEH:
+            state->mcycle->unlogged_write(backup+2);
+            break;
+        }
+    }
 
     //Sync back some CSR
     // if(robCtx.csrReadDone){
@@ -352,7 +382,9 @@ struct mem_log_t {
     uint32_t inst;
     bool is_load;
     uint32_t wb_addr;
-    uint32_t wb_data;
+    uint32_t addr;
+    uint32_t data;
+    uint32_t size;
 };
 
 void sim_loop() {
@@ -390,7 +422,7 @@ void sim_loop() {
                         inst_traces[index].inst_id = top->io_pipeline_probe_if2_inst_id;
                         inst_traces[index].pc = top->io_pipeline_probe_if2_pc;
                         inst_traces[index].inst = top->io_pipeline_probe_if2_inst;
-                        printf("if2 valid: inst_id=%u pc=%x\n", top->io_pipeline_probe_if2_inst_id, top->io_pipeline_probe_if2_pc);
+                        fprintf(stderr, "if2 valid: inst_id=%u pc=%x\n", top->io_pipeline_probe_if2_inst_id, top->io_pipeline_probe_if2_pc);
                     }
                     if (top->io_pipeline_probe_ex2_retired) {
                         ++retired;
@@ -399,12 +431,12 @@ void sim_loop() {
                         uint32_t pc;
                         uint32_t inst;
                         if (inst_id != top->io_pipeline_probe_ex2_inst_id) {
-                            printf("retired ex2: unknown inst_id=%u\n", top->io_pipeline_probe_ex2_inst_id);
+                            fprintf(stderr, "retired ex2: unknown inst_id=%u\n", top->io_pipeline_probe_ex2_inst_id);
                             failure();
                         } else {
                             pc = inst_traces[index].pc;
                             inst = inst_traces[index].inst;
-                            printf("retired ex2: pc=0x%08x, inst=0x%08x inst_id=%08x\n", pc, inst, inst_id);
+                            fprintf(stderr, "retired ex2: pc=0x%08x, inst=0x%08x inst_id=%08x\n", pc, inst, inst_id);
                         }
                         bool do_next_step = true;
                         while (do_next_step) {
@@ -415,7 +447,7 @@ void sim_loop() {
                                 (state->last_inst.bits() & 0x7f) == 0x03 ||     // lw
                                 (state->last_inst.bits() & 0xe003) == 0x4000 || // c.lw
                                 (state->last_inst.bits() & 0xe003) == 0x4002 || // c.lwsp
-                                (state->last_inst.bits() & 0xa003) == 0x2002 || // c.lb, c.lbu
+                                (state->last_inst.bits() & 0xa003) == 0x2000 || // c.lb, c.lbu
                                 (state->last_inst.bits() & 0xf003) == 0x2002    // c.lh, c.lhu
                             );
                             bool is_store = (
@@ -430,7 +462,8 @@ void sim_loop() {
                                 do_next_step = false;
                             }
                             if (is_store) {
-                                mem_log.push_back(mem_log_t(spike_pc, inst, false, 0, 0));
+                                assertEq("memory write", (uint32_t)state->log_mem_write.size(), 1);
+                                mem_log.push_back(mem_log_t(spike_pc, inst, false, 0, std::get<0>(state->log_mem_write[0]), std::get<1>(state->log_mem_write[0]), std::get<2>(state->log_mem_write[0])));
                             }
                             for (auto item : state->log_reg_write) {
                                 if (item.first != 0) {
@@ -438,13 +471,14 @@ void sim_loop() {
                                     uint32_t wb_data = item.second.v[0];
                                     if ((item.first & 0xf) == 0) {
                                         if (is_load) {
-                                            mem_log.push_back(mem_log_t(spike_pc, inst, true, wb_addr, wb_data));
+                                            mem_log.push_back(mem_log_t(spike_pc, inst, true, wb_addr, 0, wb_data, 0));
                                         } else {
                                             assertEq("integer reg write addr unmatch", top->io_pipeline_probe_ex2_wb_addr, wb_addr);
                                             assertEq("integer reg write data unmatch", top->io_pipeline_probe_ex2_wb_data, wb_data);
                                         }
                                     } else {
-                                        printf("??? unknown spike trace %llx\n", item.first & 0xf);
+                                        fprintf(stderr, "??? unknown spike trace %llx, addr=%llx\n", item.first & 0xf, item.first >> 4);
+                                        // failure();
                                     }
                                 }
                             }
@@ -457,7 +491,7 @@ void sim_loop() {
                         uint32_t pc;
                         uint32_t inst;
                         if (inst_id != top->io_pipeline_probe_mem3_inst_id) {
-                            printf("retired mem: unknown inst_id=%u\n", top->io_pipeline_probe_mem3_inst_id);
+                            fprintf(stderr, "retired mem: unknown inst_id=%u\n", top->io_pipeline_probe_mem3_inst_id);
                             failure();
                         } else {
                             pc = inst_traces[index].pc;
@@ -476,14 +510,16 @@ void sim_loop() {
                                         assertEq("load reg write addr unmatch", top->io_pipeline_probe_mem3_wb_addr, wb_addr);
                                         assertEq("load reg write data unmatch", top->io_pipeline_probe_mem3_wb_data, wb_data);
                                     } else {
-                                        printf("??? unknown spike trace %llx\n", item.first & 0xf);
+                                        fprintf(stderr, "??? unknown spike trace %llx addr=%llx pc=%x\n", item.first & 0xf, item.first >> 4, spike_pc);
                                     }
                                 }
                             }
                         } else {
                             assertEq("load pc unmatch log", pc, mem_log.front().pc);
-                            assertEq("load reg write addr unmatch log", top->io_pipeline_probe_mem3_wb_addr, mem_log.front().wb_addr);
-                            assertEq("load reg write data unmatch log", top->io_pipeline_probe_mem3_wb_data, mem_log.front().wb_data);
+                            if (mem_log.front().is_load) {
+                                assertEq("load reg write addr unmatch log", top->io_pipeline_probe_mem3_wb_addr, mem_log.front().wb_addr);
+                                assertEq("load reg write data unmatch log", top->io_pipeline_probe_mem3_wb_data, mem_log.front().data);
+                            }
                             mem_log.pop_front();
                         }
                     }
@@ -500,7 +536,7 @@ void sim_loop() {
     } catch (const std::exception& e) {
         ++main_time;
         printf("TIME=%llu\n", main_time);
-        printf("FAILURE %s\n", sim_name.c_str());
+        printf("\033[31mFAILURE %s\033[39m\n", sim_name.c_str());
     }
 }
 
