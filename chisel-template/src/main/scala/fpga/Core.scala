@@ -83,12 +83,18 @@ class SimProbe extends Bundle {
 }
 
 class PipelineProbe extends Bundle {
-  val if2_valid    = Output(Bool())
-  val if2_inst_id  = Output(UInt(INST_ID_LEN.W))
-  val if2_pc       = Output(UInt(INST_ID_LEN.W))
-  val if2_inst     = Output(UInt(INST_ID_LEN.W))
-  val id_valid     = Output(Bool())
-  val id_inst_id   = Output(UInt(INST_ID_LEN.W))
+  val if2_valid1   = Output(Bool())
+  val if2_inst_id1 = Output(UInt(INST_ID_LEN.W))
+  val if2_pc1      = Output(UInt(INST_ID_LEN.W))
+  val if2_inst1    = Output(UInt(INST_ID_LEN.W))
+  val if2_valid2   = Output(Bool())
+  val if2_inst_id2 = Output(UInt(INST_ID_LEN.W))
+  val if2_pc2      = Output(UInt(INST_ID_LEN.W))
+  val if2_inst2    = Output(UInt(INST_ID_LEN.W))
+  val ida_valid    = Output(Bool())
+  val ida_inst_id  = Output(UInt(INST_ID_LEN.W))
+  val idb_valid    = Output(Bool())
+  val idb_inst_id  = Output(UInt(INST_ID_LEN.W))
   val rrd_valid    = Output(Bool())
   val rrd_inst_id  = Output(UInt(INST_ID_LEN.W))
   val ex1_valid    = Output(Bool())
@@ -160,7 +166,7 @@ class Core(
 
   // val if2_zbp_taken = Wire(Bool())
 
-  val id_reg_stall        = Wire(Bool())
+  // val id_reg_stall        = Wire(Bool())
   val id_reg_bp_taken     = RegInit(true.B) // jump start_address when first time
   val id_reg_bp_target    = RegInit((start_address >> (WORD_LEN-PC_LEN)).U(PC_LEN.W))
   val id_reg_bp_not_taken = RegInit(false.B)
@@ -302,7 +308,7 @@ class Core(
 
   // val id_reg_is_bp_fail    = RegInit(true.B) // jump start_address when first time
   // val id_reg_br_pc         = RegInit((start_address >> (WORD_LEN-PC_LEN)).U(PC_LEN.W))
-  val id_flush             = Wire(Bool())
+  // val id_flush             = Wire(Bool())
   // val id_stall             = Wire(Bool())
   val rrd_stall            = Wire(Bool())
   val ex2_stall            = Wire(Bool())
@@ -336,7 +342,6 @@ class Core(
   val ex2_wb_data          = Wire(UInt(WORD_LEN.W))
 
   val if2_reg_inst_id      = Option.when(enable_pipeline_probe)(RegInit(0.U(INST_ID_LEN.W)))
-  val id_reg_inst_id_delay = Option.when(enable_pipeline_probe)(RegInit(0.U(INST_ID_LEN.W)))
   val rrd_reg_inst_id      = Option.when(enable_pipeline_probe)(RegInit(0.U(INST_ID_LEN.W)))
   val ex1_reg_inst_id      = Option.when(enable_pipeline_probe)(RegInit(0.U(INST_ID_LEN.W)))
   val ex2_reg_inst_id      = Option.when(enable_pipeline_probe)(RegInit(0.U(INST_ID_LEN.W)))
@@ -357,39 +362,49 @@ class Core(
     RAS_ENTRIES,
     REDIRECT_BUFFER_SIZE,
   ))
+  val id_stage = Module(new InstructionDecoderUnit(REDIRECT_BUFFER_SIZE, enable_pipeline_probe))
+
   fetch_unit.io.ft.flush_en := ex2_reg_is_br
   fetch_unit.io.ft.flush_iaddr := ex2_reg_br_pc
   fetch_unit.io.ft.imem <> io.imem
   fetch_unit.io.ft.icache <> io.icache
-  fetch_unit.io.ft.inst1.ready := !id_reg_stall
-  fetch_unit.io.ft.inst2.ready := false.B
+  fetch_unit.io.ft.inst1.ready := id_stage.io.in1.ready
+  fetch_unit.io.ft.inst2.ready := id_stage.io.in2.ready
   fetch_unit.io.pht_lmem <> io.pht_lmem
   fetch_unit.io.pht_gmem <> io.pht_gmem
 
   //**********************************
   // Instruction Fetch (IF) 2 Stage
 
-  val if2_valid = fetch_unit.io.ft.inst1.valid
-  val if2_pc    = fetch_unit.io.ft.inst1.addr
-  val if2_inst  = MuxCase(BUBBLE, Seq(
+  val if2_probe_valid1 = id_stage.io.in1.ready && fetch_unit.io.ft.inst1.valid
+  val if2_probe_valid2 = id_stage.io.in2.ready && fetch_unit.io.ft.inst2.valid
+  val if2_inst1 = MuxCase(BUBBLE, Seq(
     fetch_unit.io.ft.inst1.valid    -> fetch_unit.io.ft.inst1.data,
     fetch_unit.io.ft.inst1.bpfailed -> BPFAILURE,
   ))
-  val if2_redirected = fetch_unit.io.ft.inst1.redirected && fetch_unit.io.ft.inst1.valid
-
-  val if2_probe_valid_inst = !id_reg_stall && if2_valid
-  val if2_inst_id = if2_reg_inst_id.map(_ + Mux(if2_probe_valid_inst, 1.U, 0.U))
-  map2(if2_reg_inst_id, if2_inst_id)(_ := _)
-  io.pipeline_probe.foreach(_.if2_valid := if2_probe_valid_inst)
-  map2(io.pipeline_probe, if2_reg_inst_id)(_.if2_inst_id := _)
-  io.pipeline_probe.foreach(_.if2_pc    := Cat(if2_pc, 0.U(1.W)))
-  io.pipeline_probe.foreach(_.if2_inst  := if2_inst)
+  val if2_inst2 = MuxCase(BUBBLE, Seq(
+    fetch_unit.io.ft.inst2.valid    -> fetch_unit.io.ft.inst2.data,
+  ))
+  if2_reg_inst_id.foreach(reg => reg := reg + MuxCase(0.U, Seq(
+    if2_probe_valid2 -> 2.U,
+    if2_probe_valid1 -> 1.U,
+  )))
+  io.pipeline_probe.foreach(_.if2_valid1 := if2_probe_valid1)
+  map2(io.pipeline_probe, if2_reg_inst_id)(_.if2_inst_id1 := _)
+  io.pipeline_probe.foreach(_.if2_pc1    := fetch_unit.io.ft.inst1.addr ## 0.U(1.W))
+  io.pipeline_probe.foreach(_.if2_inst1  := if2_inst1)
+  io.pipeline_probe.foreach(_.if2_valid2 := if2_probe_valid2)
+  map2(io.pipeline_probe, if2_reg_inst_id)(_.if2_inst_id2 := _ + 1.U)
+  io.pipeline_probe.foreach(_.if2_pc2    := fetch_unit.io.ft.inst2.addr ## 0.U(1.W))
+  io.pipeline_probe.foreach(_.if2_inst2  := if2_inst2)
   
   // printf(cf"ic_addr_out: 0x${Cat(ic_addr_out, 0.U(1.W))}%x\n")
-  printf(cf"ic_reg_addr_out: 0x${Cat(fetch_unit.io.ft.inst1.addr, 0.U(1.W))}%x, ic_data_out: 0x${fetch_unit.io.ft.inst1.data}%x\n")
+  // printf(cf"ic_reg_addr_out: 0x${Cat(fetch_unit.io.ft.inst1.addr, 0.U(1.W))}%x, ic_data_out: 0x${fetch_unit.io.ft.inst1.data}%x\n")
   // printf(cf"ic_imem_addr_4: 0x${ic_imem_addr_4 ## 0.U(1.W)}%x ic_read_en4: ${ic_read_en4} ic_read_en2: ${ic_read_en2}")
   // printf(cf"inst: 0x${if2_inst}%x, ic_read_rdy: ${ic_read_rdy}, ic_state: ${ic_state.asUInt}, ic_addr_en: ${ic_addr_en.asUInt}\n")
-  printf(cf"inst: 0x${if2_inst}%x, flush_en: ${fetch_unit.io.ft.flush_en.asUInt}, flush_iaddr: 0x${fetch_unit.io.ft.flush_iaddr ## 0.U(1.W)}%x\n")
+  printf(cf"if2_valid1: ${if2_probe_valid1} pc: 0x${fetch_unit.io.ft.inst1.addr ## 0.U(1.W)}%x inst: 0x${if2_inst1}%x\n")
+  printf(cf"if2_valid2: ${if2_probe_valid2} pc: 0x${fetch_unit.io.ft.inst2.addr ## 0.U(1.W)}%x inst: 0x${if2_inst2}%x\n")
+  printf(cf"flush_en: ${fetch_unit.io.ft.flush_en.asUInt}, flush_iaddr: 0x${fetch_unit.io.ft.flush_iaddr ## 0.U(1.W)}%x\n")
 
   //**********************************
   // IF2/ID Register
@@ -397,23 +412,31 @@ class Core(
   //**********************************
   // Instruction Decode (ID) Stage
 
-  val id_stage = Module(new InstructionDecoderUnit(REDIRECT_BUFFER_SIZE, enable_pipeline_probe))
+  id_stage.io.in1.valid         := fetch_unit.io.ft.inst1.valid
+  id_stage.io.in1.inst          := if2_inst1
+  id_stage.io.in1.pc            := fetch_unit.io.ft.inst1.addr
+  id_stage.io.in1.bp.redirected := fetch_unit.io.ft.inst1.valid && fetch_unit.io.ft.inst1.redirected
+  id_stage.io.in1.bp.bpfailed   := fetch_unit.io.ft.inst1.valid && fetch_unit.io.ft.inst1.bpfailed
+  id_stage.io.in1.bp.bp_entry   := fetch_unit.io.ft.inst1.bp_entry
+  id_stage.io.in1.bp.fp_ptr     := fetch_unit.io.ft.inst1.fp_ptr
+  id_stage.io.in2.valid         := fetch_unit.io.ft.inst2.valid
+  id_stage.io.in2.inst          := if2_inst2
+  id_stage.io.in2.pc            := fetch_unit.io.ft.inst2.addr
+  id_stage.io.in2.bp.redirected := fetch_unit.io.ft.inst2.valid && fetch_unit.io.ft.inst2.redirected
+  id_stage.io.in2.bp.bpfailed   := fetch_unit.io.ft.inst2.valid && fetch_unit.io.ft.inst2.bpfailed
+  id_stage.io.in2.bp.bp_entry   := fetch_unit.io.ft.inst2.bp_entry
+  id_stage.io.in2.bp.fp_ptr     := fetch_unit.io.ft.inst2.fp_ptr
 
-  id_stage.io.in.valid         := if2_valid
-  id_stage.io.in.inst          := if2_inst
-  id_stage.io.in.pc            := if2_pc
-  id_stage.io.in.bp.redirected := if2_redirected
-  id_stage.io.in.bp.bpfailed   := fetch_unit.io.ft.inst1.bpfailed && fetch_unit.io.ft.inst1.valid
-  id_stage.io.in.bp.bp_entry   := fetch_unit.io.ft.inst1.bp_entry
-  id_stage.io.in.bp.fp_ptr     := fetch_unit.io.ft.inst1.fp_ptr
+  map2(id_stage.io.in1.inst_id, if2_reg_inst_id)(_ := _)
+  map2(id_stage.io.in2.inst_id, if2_reg_inst_id)(_ := _ + 1.U)
 
-  map2(id_stage.io.in.inst_id, if2_reg_inst_id)(_ := _)
+  // id_reg_stall := !id_stage.io.in1.ready
+  // id_flush     := id_stage.io.in.flush
 
-  id_reg_stall := !id_stage.io.in.ready
-  id_flush     := id_stage.io.in.flush
-
-  map2(io.pipeline_probe, id_stage.io.pipeline_probe.id_valid)(_.id_valid := _)
-  map2(io.pipeline_probe, id_stage.io.pipeline_probe.id_inst_id)(_.id_inst_id := _)
+  map2(io.pipeline_probe, id_stage.io.pipeline_probe.ida_valid)(_.ida_valid := _)
+  map2(io.pipeline_probe, id_stage.io.pipeline_probe.ida_inst_id)(_.ida_inst_id := _)
+  map2(io.pipeline_probe, id_stage.io.pipeline_probe.idb_valid)(_.idb_valid := _)
+  map2(io.pipeline_probe, id_stage.io.pipeline_probe.idb_inst_id)(_.idb_inst_id := _)
 
   //**********************************
   // ID/RRD register
@@ -443,7 +466,7 @@ class Core(
     map2(rrd_reg_inst_id, id_stage.io.out.initial.inst_id)(_ := _)
   }
   when (id_rrd_flush || id_rrd_ready) {
-    rrd_reg_valid            := id_stage.io.out.valid
+    rrd_reg_valid            := id_stage.io.out.valid && id_rrd_ready
     rrd_reg_exe_sel          := id_stage.io.out.decoded.exe_sel
     rrd_reg_op1_sel          := id_stage.io.out.decoded.op1_sel
     rrd_reg_op2_sel          := id_stage.io.out.decoded.op2_sel
@@ -1447,8 +1470,8 @@ class Core(
   io.debug_signal.me_intr             := csr_is_meintr
   io.debug_signal.mt_intr             := csr_is_mtintr
   io.debug_signal.trap                := csr_is_ecall
-  io.debug_signal.id_pc               := id_stage.io.debug_signals.id_pc
-  io.debug_signal.id_inst             := id_stage.io.debug_signals.id_inst
+  io.debug_signal.id_pc               := id_stage.io.debug_signals.id_pc1
+  io.debug_signal.id_inst             := id_stage.io.debug_signals.id_inst1
   io.debug_signal.mem3_rdata          := mem3_reg_dmem_rdata
   io.debug_signal.mem3_rvalid         := mem3_reg_is_valid_load
   io.debug_signal.rwaddr              := ex2_wb_data
@@ -1472,10 +1495,14 @@ class Core(
 
   // printf(cf"ic_addr_out      : 0x${Cat(ic_addr_out, 0.U(1.W))}%x\n")
   //printf(cf"if1_reg_pc       : 0x${if1_reg_pc}%x\n")
-  printf(cf"if2_pc           : 0x${Cat(if2_pc, 0.U(1.W))}%x\n")
-  printf(cf"if2_valid        : ${if2_valid}%d\n")
-  printf(cf"if2_reg_inst_id  : ${if2_reg_inst_id.getOrElse(0)}%d\n")
-  printf(cf"if2_inst         : 0x${if2_inst}%x\n")
+  printf(cf"if2_valid1       : ${if2_probe_valid1}%d\n")
+  printf(cf"if2_pc1          : 0x${fetch_unit.io.ft.inst1.addr ## 0.U(1.W)}%x\n")
+  printf(cf"if2_reg_inst_id1 : ${if2_reg_inst_id.getOrElse(0)}%d\n")
+  printf(cf"if2_inst1        : 0x${if2_inst2}%x\n")
+  printf(cf"if2_valid2       : ${if2_probe_valid2}%d\n")
+  printf(cf"if2_pc2          : 0x${fetch_unit.io.ft.inst2.addr ## 0.U(1.W)}%x\n")
+  printf(cf"if2_reg_inst_id2 : ${if2_reg_inst_id.map(_ + 1.U).getOrElse(0)}%d\n")
+  printf(cf"if2_inst2        : 0x${if2_inst2}%x\n")
   // printf(cf"if2_zbp_taken    : ${if2_zbp_taken}%d\n")
   // printf(cf"ic_zbp_target    : 0x${Cat(ic_zbp_target, 0.U(1.W))}%x\n")
   // printf(cf"ic_bp_taken      : ${ic_bp.taken}%d\n")
@@ -1484,12 +1511,16 @@ class Core(
   // printf(cf"ic_bp_target     : 0x${Cat(ic_bp.target, 0.U(1.W))}%x\n")
   // printf(cf"ic_bp_cnt        : 0x${ic_bp.cnt}%x\n")
   // printf(cf"ic_bp_gcnt       : 0x${ic_bp.gcnt}%x\n")
-  printf(cf"id_reg_pc        : 0x${id_stage.io.debug_signals.id_pc}%x\n")
-  printf(cf"id_reg_inst      : 0x${id_stage.io.debug_signals.id_inst}%x\n")
+  printf(cf"id_valid         : ${id_stage.io.pipeline_probe.ida_valid.getOrElse(false.B)}%d\n")
+  printf(cf"id_reg_pc        : 0x${id_stage.io.debug_signals.id_pc1 ## 0.U(1.W)}%x\n")
+  printf(cf"id_reg_inst      : 0x${id_stage.io.debug_signals.id_inst1}%x\n")
+  when (id_stage.io.pipeline_probe.idb_valid.getOrElse(false.B)) {
+    printf(cf"id_reg_pc2       : 0x${id_stage.io.debug_signals.id_pc2 ## 0.U(1.W)}%x\n")
+    printf(cf"id_reg_inst2     : 0x${id_stage.io.debug_signals.id_inst2}%x\n")
+  }
   printf(cf"id_reg_bp_taken  : ${id_reg_bp_taken}%d\n")
   printf(cf"id_reg_bp_target : 0x${Cat(id_reg_bp_target, 0.U(1.W))}%x\n")
-  printf(cf"id_valid         : ${id_stage.io.pipeline_probe.id_valid.getOrElse(false.B)}%d\n")
-  printf(cf"id_reg_stall     : ${id_reg_stall}%d\n")
+  printf(cf"id_stall         : ${!id_stage.io.in1.ready}%d\n")
   // printf(cf"id_rs1_data      : 0x${id_rs1_data}%x\n")
   // printf(cf"id_rs2_data      : 0x${id_rs2_data}%x\n")
   // printf(cf"id_wb_addr       : 0x${id_wb_addr}%x\n")
@@ -1540,12 +1571,12 @@ class Core(
   printf(cf"ex1_redir_deq_en : ${ex1_redir_deq_en}\n")
   // printf(cf"ex1_bfx_sext     : 0x${ex1_bfx_sext}%x\n")
   // printf(cf"ex1_bfx_sign_shif: 0x${ex1_bfx_sign_shift}%x\n")
-  printf(cf"ex2_reg_is_br    : ${ex2_reg_is_br}%d\n")
-  printf(cf"ex2_reg_br_pc    : 0x${Cat(ex2_reg_br_pc, 0.U(1.W))}%x\n")
   printf(cf"ex2_reg_pc       : 0x${Cat(ex2_reg_pc, 0.U(1.W))}%x\n")
   printf(cf"ex2_reg_valid    : ${ex2_reg_valid}%d\n")
-  printf(cf"ex2_reg_inst_id  : ${ex2_reg_inst_id.getOrElse(0)}%d\n")
   printf(cf"ex2_stall        : ${ex2_stall}%d\n")
+  printf(cf"ex2_reg_is_br    : ${ex2_reg_is_br}%d\n")
+  printf(cf"ex2_reg_br_pc    : 0x${Cat(ex2_reg_br_pc, 0.U(1.W))}%x\n")
+  printf(cf"ex2_reg_inst_id  : ${ex2_reg_inst_id.getOrElse(0)}%d\n")
   printf(cf"ex2_reg_op3_data : 0x${ex2_reg_op3_data}%x\n")
   printf(cf"ex2_wb_data      : 0x${ex2_wb_data}%x\n")
   printf(cf"ex2_md_out       : 0x${ex2_md_out}%x\n")

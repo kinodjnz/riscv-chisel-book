@@ -63,15 +63,19 @@ class InstructionQueue[Initial <: Data, Decoded <: Data](iq_buffer_size: Int, ge
   val io = IO(new Bundle {
     val enq1    = new InstructionQueueEnqueue(iq_id_len, genInitial)
     val enq2    = new InstructionQueueEnqueue(iq_id_len, genInitial)
-    val read1   = new InstructionQueueReadInitial(iq_id_len, genInitial)
-    val put     = new InstructionQueuePutDecoded(iq_id_len, genDecoded)
+    // val read1   = new InstructionQueueReadInitial(iq_id_len, genInitial)
+    val put1    = new InstructionQueuePutDecoded(iq_id_len, genDecoded)
+    val put2    = new InstructionQueuePutDecoded(iq_id_len, genDecoded)
     val range   = new InstructionQueueDequeueRange(iq_id_len)
     val upd_deq = new InstructionQueueUpdateDequeuePtr(iq_id_len)
     val peek    = new InstructionQueuePeek(iq_id_len, genInitial, genDecoded)
     val flush   = Input(Bool())
   })
 
-  val iq_buf    = Mem(iq_buffer_size, new InstructionQueueEntry(genInitial, genDecoded))
+  val iq_buf_initial_0 = Mem(iq_buffer_size/2, genInitial)
+  val iq_buf_initial_1 = Mem(iq_buffer_size/2, genInitial)
+  val iq_buf_decoded_0 = Mem(iq_buffer_size/2, genDecoded)
+  val iq_buf_decoded_1 = Mem(iq_buffer_size/2, genDecoded)
   val deq_first = RegInit(0.U(iq_id_ptr_len.W))
   val deq_last  = RegInit(0.U(iq_id_ptr_len.W))
   val enq       = RegInit(0.U(iq_id_ptr_len.W))
@@ -87,11 +91,15 @@ class InstructionQueue[Initial <: Data, Decoded <: Data](iq_buffer_size: Int, ge
     io.enq1.iq_id := enq
     io.enq2.ready := ready2
     io.enq2.iq_id := enq2
-    when (ready1) {
-      iq_buf(enq.take(iq_id_len)).initial := io.enq1.initial
+    val addr0 = Mux(enq(0), enq2.take(iq_id_len), enq.take(iq_id_len)) >> 1
+    val addr1 = Mux(enq(0), enq.take(iq_id_len), enq2.take(iq_id_len)) >> 1
+    val data0 = Mux(enq(0), io.enq2.initial, io.enq1.initial)
+    val data1 = Mux(enq(0), io.enq1.initial, io.enq2.initial)
+    when (!enq(0) && ready1 || enq(0) && ready2) {
+      iq_buf_initial_0(addr0) := data0
     }
-    when (ready2) {
-      iq_buf(enq2.take(iq_id_len)).initial := io.enq1.initial
+    when (enq(0) && ready1 || !enq(0) && ready2) {
+      iq_buf_initial_1(addr1) := data1
     }
     when (ready2 && io.enq2.en) {
       enq := enq + 2.U
@@ -103,14 +111,26 @@ class InstructionQueue[Initial <: Data, Decoded <: Data](iq_buffer_size: Int, ge
     }
   }
 
-  def read: Unit = {
-    io.read1.initial := iq_buf(io.read1.iq_id.take(iq_id_len)).initial
-  }
+  // def read: Unit = {
+  //   io.read1.initial := iq_buf(io.read1.iq_id.take(iq_id_len)).initial
+  // }
 
   def put_decoded: Unit = {
-    when (io.put.en) {
-      iq_buf(io.put.iq_id.take(iq_id_len)).decoded := io.put.decoded
-      deq_last := io.put.iq_id + 1.U
+    val addr0 = Mux(io.put1.iq_id(0), io.put2.iq_id.take(iq_id_len), io.put1.iq_id.take(iq_id_len)) >> 1
+    val addr1 = Mux(io.put1.iq_id(0), io.put1.iq_id.take(iq_id_len), io.put2.iq_id.take(iq_id_len)) >> 1
+    val data0 = Mux(io.put1.iq_id(0), io.put2.decoded, io.put1.decoded)
+    val data1 = Mux(io.put1.iq_id(0), io.put1.decoded, io.put2.decoded)
+    when (!io.put1.iq_id(0) && io.put1.en || io.put1.iq_id(0) && io.put2.en) {
+      iq_buf_decoded_0(addr0) := data0
+    }
+    when (io.put1.iq_id(0) && io.put1.en || !io.put1.iq_id(0) && io.put2.en) {
+      iq_buf_decoded_1(addr1) := data1
+    }
+    when (io.put1.en) {
+      deq_last := io.put1.iq_id + 1.U
+    }
+    when (io.put2.en) {
+      deq_last := io.put1.iq_id + 2.U
     }
   }
 
@@ -127,12 +147,18 @@ class InstructionQueue[Initial <: Data, Decoded <: Data](iq_buffer_size: Int, ge
     }
 
     io.peek.valid   := (io.peek.iq_id - deq_last)(iq_id_len)
-    io.peek.initial := iq_buf(io.peek.iq_id.take(iq_id_len)).initial
-    io.peek.decoded := iq_buf(io.peek.iq_id.take(iq_id_len)).decoded
+    io.peek.initial := Mux(io.peek.iq_id(0),
+      iq_buf_initial_1(io.peek.iq_id.take(iq_id_len) >> 1),
+      iq_buf_initial_0(io.peek.iq_id.take(iq_id_len) >> 1),
+    )
+    io.peek.decoded := Mux(io.peek.iq_id(0),
+      iq_buf_decoded_1(io.peek.iq_id.take(iq_id_len) >> 1),
+      iq_buf_decoded_0(io.peek.iq_id.take(iq_id_len) >> 1),
+    )
   }
 
   enqueue
-  read
+  // read
   put_decoded
   dequeue
 }

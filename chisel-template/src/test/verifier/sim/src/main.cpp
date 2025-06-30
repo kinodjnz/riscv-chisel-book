@@ -418,12 +418,19 @@ void sim_loop() {
                         }
                     }
                     ++cycles;
-                    if (top->io_pipeline_probe_if2_valid) {
-                        uint32_t index = top->io_pipeline_probe_if2_inst_id % INST_TRACE_SIZE;
-                        inst_traces[index].inst_id = top->io_pipeline_probe_if2_inst_id;
-                        inst_traces[index].pc = top->io_pipeline_probe_if2_pc;
-                        inst_traces[index].inst = top->io_pipeline_probe_if2_inst;
-                        fprintf(stderr, "if2 valid: inst_id=%u pc=%x\n", top->io_pipeline_probe_if2_inst_id, top->io_pipeline_probe_if2_pc);
+                    if (top->io_pipeline_probe_if2_valid1) {
+                        uint32_t index = top->io_pipeline_probe_if2_inst_id1 % INST_TRACE_SIZE;
+                        inst_traces[index].inst_id = top->io_pipeline_probe_if2_inst_id1;
+                        inst_traces[index].pc = top->io_pipeline_probe_if2_pc1;
+                        inst_traces[index].inst = top->io_pipeline_probe_if2_inst1;
+                        fprintf(stderr, "if2 valid: inst_id=%u pc=%x\n", top->io_pipeline_probe_if2_inst_id1, top->io_pipeline_probe_if2_pc1);
+                    }
+                    if (top->io_pipeline_probe_if2_valid2) {
+                        uint32_t index = top->io_pipeline_probe_if2_inst_id2 % INST_TRACE_SIZE;
+                        inst_traces[index].inst_id = top->io_pipeline_probe_if2_inst_id2;
+                        inst_traces[index].pc = top->io_pipeline_probe_if2_pc2;
+                        inst_traces[index].inst = top->io_pipeline_probe_if2_inst2;
+                        fprintf(stderr, "if2 valid: inst_id=%u pc=%x\n", top->io_pipeline_probe_if2_inst_id2, top->io_pipeline_probe_if2_pc2);
                     }
                     if (top->io_pipeline_probe_ex2_retired) {
                         ++retired;

@@ -303,7 +303,7 @@ class Fetcher(
     val inst1_past = Mux(inst1_half, i1, i2)
     val inst1_end  = Mux(inst1_half, i0, i1)
     val inst2_half = Mux(inst1_half, is_halfs(i1), is_halfs(i2))
-    val inst2_past = inst1_past + Mux(inst1_half, 1.U, 2.U)
+    val inst2_past = inst1_past + Mux(inst2_half, 1.U, 2.U)
     val inst2_end = Mux(inst1_half,
       Mux(is_halfs(i1), i1, i2),
       Mux(is_halfs(i2), i2, i3),
