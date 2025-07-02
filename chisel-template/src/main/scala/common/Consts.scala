@@ -221,11 +221,6 @@ object Consts {
 
   val IMM_DATA_LEN = 12
 
-  // val OP2_IMM_I = 0.U(ADDR_LEN.W)
-  // val OP2_IMM_U = 1.U(ADDR_LEN.W)
-  // val OP2_IMM_J = 2.U(ADDR_LEN.W)
-  // val OP2_IMM_B = 3.U(ADDR_LEN.W)
-
   val OPI_LEN     = 7
   val OPI_X       =  0.U(OPI_LEN.W)
   val OPI_IMI     =  0.U(OPI_LEN.W)
@@ -262,19 +257,6 @@ object Consts {
   val OPI_C_EXTH  = 22.U(OPI_LEN.W)
   val OPI_C_EXTB  = 23.U(OPI_LEN.W)
 
-  /*
-  val M_OP2_LEN = 2
-  val M_OP2_Z   = 0.U(M_OP2_LEN.W)
-  val M_OP2_IMM = 1.U(M_OP2_LEN.W)
-  val M_OP2_RS  = 2.U(M_OP2_LEN.W)
-
-  val M_OP3_LEN = 2
-  val M_OP3_Z   = 0.U(M_OP3_LEN.W)
-  val M_OP3_MSB = 1.U(M_OP3_LEN.W)
-  val M_OP3_RS  = 2.U(M_OP3_LEN.W)
-  val M_OP3_OP1 = 3.U(M_OP3_LEN.W)
-  */
-
   val REN_LEN = 1
   val REN_X   = 0.U(REN_LEN.W)
   val REN_S   = 1.U(REN_LEN.W)
@@ -285,37 +267,11 @@ object Consts {
   val WBA_CP1 = 2.U(WBA_LEN.W)
   val WBA_CP2 = 3.U(WBA_LEN.W)
   val WBA_RA  = 4.U(WBA_LEN.W)
-  // val WBA_CBR = 6.U(WBA_LEN.W)
-  // val WBA_CB2 = 7.U(WBA_LEN.W)
 
-  /*
-  val WB_SEL_LEN = 3
-  val WB_X       = 0.U(WB_SEL_LEN.W)
-  val WB_ALU     = 0.U(WB_SEL_LEN.W)
-  val WB_MD      = 1.U(WB_SEL_LEN.W)
-  val WB_PC      = 2.U(WB_SEL_LEN.W)
-  val WB_CSR     = 3.U(WB_SEL_LEN.W)
-  val WB_ST      = 4.U(WB_SEL_LEN.W)
-  val WB_LD      = 5.U(WB_SEL_LEN.W)
-  val WB_BIT     = 6.U(WB_SEL_LEN.W)
-  val WB_FENCE   = 7.U(WB_SEL_LEN.W)
-
-  // val MW_LEN = 3
-  // val MW_X   = 0.U(MW_LEN.W)
-  // val MW_W   = 0.U(MW_LEN.W)
-  // val MW_BR  = 1.U(MW_LEN.W)
-  // val MW_CSR = 3.U(MW_LEN.W)
-  // val MW_H   = 4.U(MW_LEN.W)
-  // val MW_B   = 5.U(MW_LEN.W)
-  // val MW_HU  = 6.U(MW_LEN.W)
-  // val MW_BU  = 7.U(MW_LEN.W)
-
-  val CSR_LEN = 2
-  val CSR_X   = 0.U(CSR_LEN.W)
-  val CSR_W   = 1.U(CSR_LEN.W)
-  val CSR_S   = 2.U(CSR_LEN.W)
-  val CSR_C   = 3.U(CSR_LEN.W)
-  */
+  val MEM_OP_LEN = 2
+  val MEM_OP_ST    = 0.U(MEM_OP_LEN.W)
+  val MEM_OP_LD    = 1.U(MEM_OP_LEN.W)
+  val MEM_OP_FENCE = 3.U(MEM_OP_LEN.W)
 
   val CSR_ADDR_MSTATUS  = 0x300.U(CSR_ADDR_LEN.W)
   val CSR_ADDR_MIE      = 0x304.U(CSR_ADDR_LEN.W)
