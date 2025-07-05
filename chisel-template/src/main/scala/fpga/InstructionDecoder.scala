@@ -504,6 +504,7 @@ class InstructionDecoderUnit(
     io.out.initial := iq.io.peek.initial
     io.out.decoded := iq.io.peek.decoded
 
+    /*
     when (io.out.flush || !iq.io.peek.valid) {
       io.out.decoded.exe_sel       := EXE_ALU
       io.out.decoded.op1_sel       := OP1_SEL_Z(1) ## iq.io.peek.decoded.op1_sel(0)
@@ -513,6 +514,7 @@ class InstructionDecoderUnit(
       io.out.initial.bp.redirected := false.B
       io.out.initial.bp.bpfailed   := false.B
     }
+    */
 
     // printf(cf"decoder ready      = ${io.out.ready}\n")
     // printf(cf"decoder peek valid = ${iq.io.peek.valid}\n")
