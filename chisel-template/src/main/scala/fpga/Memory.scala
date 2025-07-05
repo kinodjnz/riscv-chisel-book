@@ -174,72 +174,72 @@ object DCacheSnoopStatus extends ChiselEnum {
 
 class Memory() extends Module {
   val io = IO(new Bundle {
-    val imem = new CachedImemPort()
-    val cache = new CachePort()
+    val imem         = new CachedImemPort()
+    val cache        = new CachePort()
     // val dmem = new DmemPortIo()
-    val dramPort = Flipped(new DramIo())
+    val dramPort     = Flipped(new DramIo())
     val cache_array1 = Flipped(new DCacheSramPort())
     val cache_array2 = Flipped(new DCacheSramPort())
-    val icache_sram = Flipped(new ICacheSramPort())
+    val icache_sram  = Flipped(new ICacheSramPort())
     val icache_valid = Flipped(new ICacheValidPort())
     val icache_state = Output(UInt(3.W))
-    val dram_state = Output(UInt(3.W))
+    val dram_state   = Output(UInt(3.W))
   })
 
-  val dram_i_busy  = Wire(Bool())
-  val dram_i_ren   = Wire(Bool())
-  val dram_i_addr  = Wire(UInt((WORD_LEN-CACHE_LINE_BITS).W))
+  val dram_i_busy        = Wire(Bool())
+  val dram_i_ren         = Wire(Bool())
+  val dram_i_addr        = Wire(UInt((WORD_LEN-CACHE_LINE_BITS).W))
   val dram_i_rdata_valid = Wire(Bool())
-  val dram_d_busy  = Wire(Bool())
-  val dram_d_ren   = Wire(Bool())
-  val dram_d_wen   = Wire(Bool())
-  val dram_d_addr  = Wire(UInt((WORD_LEN-CACHE_LINE_BITS).W))
-  val dram_d_wdata = Wire(UInt(CACHE_LINE_LEN.W))
+  val dram_d_busy        = Wire(Bool())
+  val dram_d_ren         = Wire(Bool())
+  val dram_d_wen         = Wire(Bool())
+  val dram_d_addr        = Wire(UInt((WORD_LEN-CACHE_LINE_BITS).W))
+  val dram_d_wdata       = Wire(UInt(CACHE_LINE_LEN.W))
   val dram_d_rdata_valid = Wire(Bool())
-  val dram_rdata   = Wire(UInt(CACHE_LINE_LEN.W))
-  val reg_dram_state = RegInit(DramState.Ready)
-  val reg_dram_addr  = RegInit(0.U((WORD_LEN-CACHE_LINE_BITS).W))
-  val reg_dram_wdata = RegInit(0.U((CACHE_LINE_LEN/2).W))
-  val reg_dram_rdata = RegInit(0.U((CACHE_LINE_LEN/2).W))
-  val reg_dram_di = RegInit(CacheDataOrInst.Inst)
+  val dram_rdata         = Wire(UInt(CACHE_LINE_LEN.W))
+  val reg_dram_state     = RegInit(DramState.Ready)
+  val reg_dram_addr      = RegInit(0.U((WORD_LEN-CACHE_LINE_BITS).W))
+  val reg_dram_wdata     = RegInit(0.U((CACHE_LINE_LEN/2).W))
+  val reg_dram_rdata     = RegInit(0.U((CACHE_LINE_LEN/2).W))
+  val reg_dram_di        = RegInit(CacheDataOrInst.Inst)
 
   io.dramPort.ren := false.B
   io.dramPort.wen := false.B
-  io.dramPort.addr := DontCare
-  io.dramPort.wdata := DontCare
+  io.dramPort.addr := reg_dram_addr ## 8.U(4.W)
+  io.dramPort.wdata := reg_dram_wdata
   io.dramPort.wmask := 0.U
   io.dramPort.user_busy := false.B
 
+  when (io.dramPort.rdata_valid) {
+    reg_dram_rdata := io.dramPort.rdata
+  }
+  dram_rdata := io.dramPort.rdata ## reg_dram_rdata
+  reg_dram_addr := Mux(dram_i_ren, dram_i_addr, dram_d_addr)
+
   dram_i_busy      := true.B
   dram_d_busy      := true.B
-  dram_rdata       := DontCare
   dram_i_rdata_valid := false.B
   dram_d_rdata_valid := false.B
   switch (reg_dram_state) {
     is (DramState.Ready) {
+      io.dramPort.addr := Mux(dram_i_ren, dram_i_addr, dram_d_addr) ## 0.U(4.W)
+      io.dramPort.wdata := dram_d_wdata.asTypeOf(new LineBundle()).line_l
+      reg_dram_wdata := dram_d_wdata.asTypeOf(new LineBundle()).line_u
       when (io.dramPort.init_calib_complete && !io.dramPort.busy) {
         dram_i_busy := false.B
         when (dram_i_ren) {
           io.dramPort.ren := true.B
-          io.dramPort.addr := Cat(dram_i_addr, 0.U(4.W))
-          reg_dram_addr := dram_i_addr
           reg_dram_di := CacheDataOrInst.Inst
           reg_dram_state := DramState.Read2
         }.otherwise {
           dram_d_busy := false.B
           when (dram_d_wen) {
             io.dramPort.wen := true.B
-            io.dramPort.addr := Cat(dram_d_addr, 0.U(4.W))
-            io.dramPort.wdata := dram_d_wdata.asTypeOf(new LineBundle()).line_l
             io.dramPort.wmask := 0.U
-            reg_dram_addr := dram_d_addr
-            reg_dram_wdata := dram_d_wdata.asTypeOf(new LineBundle()).line_u
             reg_dram_di := CacheDataOrInst.Data
             reg_dram_state := DramState.Write2
           }.elsewhen (dram_d_ren) {
             io.dramPort.ren := true.B
-            io.dramPort.addr := Cat(dram_d_addr, 0.U(4.W))
-            reg_dram_addr := dram_d_addr
             reg_dram_di := CacheDataOrInst.Data
             reg_dram_state := DramState.Read2
           }
@@ -247,39 +247,36 @@ class Memory() extends Module {
       }
     }
     is (DramState.Write2) {
+      // io.dramPort.addr  := reg_dram_addr ## 8.U(4.W)
+      // io.dramPort.wdata := reg_dram_wdata
+      io.dramPort.wmask := 0.U
       when (!io.dramPort.busy) {
         io.dramPort.wen := true.B
-        io.dramPort.addr := Cat(reg_dram_addr, 8.U(4.W))
-        io.dramPort.wdata := reg_dram_wdata
-        io.dramPort.wmask := 0.U
         reg_dram_state := DramState.Ready
       }
     }
     is (DramState.Read2) {
+      // io.dramPort.addr := reg_dram_addr ## 8.U(4.W)
       when (!io.dramPort.busy) {
         io.dramPort.ren := true.B
-        io.dramPort.addr := Cat(reg_dram_addr, 8.U(4.W))
         when (io.dramPort.rdata_valid) {
-          reg_dram_rdata := io.dramPort.rdata
           reg_dram_state := DramState.WaitingRead2
         }.otherwise {
           reg_dram_state := DramState.WaitingRead1
         }
       }.elsewhen (io.dramPort.rdata_valid) {
-        reg_dram_rdata := io.dramPort.rdata
         reg_dram_state := DramState.Read2AfterReceiving1
       }
     }
     is (DramState.Read2AfterReceiving1) {
+      // io.dramPort.addr := reg_dram_addr ## 8.U(4.W)
       when (!io.dramPort.busy) {
         io.dramPort.ren := true.B
-        io.dramPort.addr := Cat(reg_dram_addr, 8.U(4.W))
         reg_dram_state := DramState.WaitingRead2
       }
     }
     is (DramState.WaitingRead1) {
       when (io.dramPort.rdata_valid) {
-        reg_dram_rdata := io.dramPort.rdata
         reg_dram_state := DramState.WaitingRead2
       }
     }
@@ -287,7 +284,6 @@ class Memory() extends Module {
       when (io.dramPort.rdata_valid) {
         //dram_i_busy := (reg_dram_di =/= CacheDataOrInst.Inst)
         //dram_d_busy := (reg_dram_di =/= CacheDataOrInst.Data)
-        dram_rdata := Cat(io.dramPort.rdata, reg_dram_rdata)
         dram_i_rdata_valid := (reg_dram_di === CacheDataOrInst.Inst)
         dram_d_rdata_valid := (reg_dram_di === CacheDataOrInst.Data)
         reg_dram_state := DramState.Ready
