@@ -388,8 +388,16 @@ struct mem_log_t {
     uint32_t size;
 };
 
+struct div_log_t {
+    uint32_t pc;
+    uint32_t inst;
+    uint32_t wb_addr;
+    uint32_t data;
+};
+
 void sim_loop() {
     std::deque<mem_log_t> mem_log;
+    std::deque<div_log_t> div_log;
     try {
         uint64_t retired = 0;
         uint64_t cycles = 0;
@@ -446,53 +454,68 @@ void sim_loop() {
                             inst = inst_traces[index].inst;
                             fprintf(stderr, "retired ex2: pc=0x%08x, inst=0x%08x inst_id=%08x\n", pc, inst, inst_id);
                         }
-                        bool do_next_step = true;
-                        while (do_next_step) {
-                            uint32_t spike_pc = state->pc;
-                            spike_step();
-                            // last_commit_pc = pc;
-                            bool is_load = (
-                                (state->last_inst.bits() & 0x7f) == 0x03 ||     // lw
-                                (state->last_inst.bits() & 0xe003) == 0x4000 || // c.lw
-                                (state->last_inst.bits() & 0xe003) == 0x4002 || // c.lwsp
-                                (state->last_inst.bits() & 0xa003) == 0x2000 || // c.lb, c.lbu
-                                (state->last_inst.bits() & 0xf003) == 0x2002    // c.lh, c.lhu
-                            );
-                            bool is_store = (
-                                (state->last_inst.bits() & 0x7f) == 0x23 ||     // sw
-                                (state->last_inst.bits() & 0xe003) == 0xc000 || // c.sw
-                                (state->last_inst.bits() & 0xe003) == 0xc002 || // c.lwsp
-                                (state->last_inst.bits() & 0xf003) == 0x3002 || // c.sh, c.s?0
-                                (state->last_inst.bits() & 0xe003) == 0x6002    // c.sb
-                            );
-                            bool is_fence_i = (
-                                state->last_inst.bits() == 0x0000100f           // fence.i
-                            );
-                            if (!is_load && !is_store && !is_fence_i) {
-                                assertEq("pc unmatch", pc, spike_pc);
-                                do_next_step = false;
-                            }
-                            if (is_store) {
-                                assertEq("memory write", (uint32_t)state->log_mem_write.size(), 1);
-                                mem_log.push_back(mem_log_t(spike_pc, inst, false, true, 0, std::get<0>(state->log_mem_write[0]), std::get<1>(state->log_mem_write[0]), std::get<2>(state->log_mem_write[0])));
-                            }
-                            if (is_fence_i) {
-                                mem_log.push_back(mem_log_t(spike_pc, inst, false, false, 0, 0, 0, 0));
-                            }
-                            for (auto item : state->log_reg_write) {
-                                if (item.first != 0) {
-                                    uint32_t wb_addr = item.first >> 4;
-                                    uint32_t wb_data = item.second.v[0];
-                                    if ((item.first & 0xf) == 0) {
-                                        if (is_load) {
-                                            mem_log.push_back(mem_log_t(spike_pc, inst, true, false, wb_addr, 0, wb_data, 0));
+                        bool actual_is_divrem = (
+                            (inst & 0xfe00007f) == 0x02000033 // div, divu, rem, remu
+                        );
+                        if (actual_is_divrem && !div_log.empty()) {
+                            assertEq("divrem pc unmatch log", pc, div_log.front().pc);
+                            assertEq("divrem reg write addr unmatch", top->io_pipeline_probe_ex2_wb_addr, div_log.front().wb_addr);
+                            assertEq("divrem reg write data unmatch", top->io_pipeline_probe_ex2_wb_data, div_log.front().data);
+                            div_log.pop_front();
+                        } else {
+                            bool do_next_step = true;
+                            while (do_next_step) {
+                                uint32_t spike_pc = state->pc;
+                                spike_step();
+                                // last_commit_pc = pc;
+                                bool is_load = (
+                                    (state->last_inst.bits() & 0x7f) == 0x03 ||     // lw
+                                    (state->last_inst.bits() & 0xe003) == 0x4000 || // c.lw
+                                    (state->last_inst.bits() & 0xe003) == 0x4002 || // c.lwsp
+                                    (state->last_inst.bits() & 0xa003) == 0x2000 || // c.lb, c.lbu
+                                    (state->last_inst.bits() & 0xf003) == 0x2002    // c.lh, c.lhu
+                                );
+                                bool is_store = (
+                                    (state->last_inst.bits() & 0x7f) == 0x23 ||     // sw
+                                    (state->last_inst.bits() & 0xe003) == 0xc000 || // c.sw
+                                    (state->last_inst.bits() & 0xe003) == 0xc002 || // c.lwsp
+                                    (state->last_inst.bits() & 0xf003) == 0x3002 || // c.sh, c.s?0
+                                    (state->last_inst.bits() & 0xe003) == 0x6002    // c.sb
+                                );
+                                bool is_fence_i = (
+                                    state->last_inst.bits() == 0x0000100f           // fence.i
+                                );
+                                bool is_divrem = (
+                                    (state->last_inst.bits() & 0xfe00007f) == 0x02000033 // div, divu, rem, remu
+                                );
+                                if (!is_load && !is_store && !is_fence_i && !is_divrem) {
+                                    assertEq("pc unmatch", pc, spike_pc);
+                                    do_next_step = false;
+                                }
+                                if (is_store) {
+                                    assertEq("memory write", (uint32_t)state->log_mem_write.size(), 1);
+                                    mem_log.push_back(mem_log_t(spike_pc, state->last_inst.bits(), false, true, 0, std::get<0>(state->log_mem_write[0]), std::get<1>(state->log_mem_write[0]), std::get<2>(state->log_mem_write[0])));
+                                }
+                                if (is_fence_i) {
+                                    mem_log.push_back(mem_log_t(spike_pc, state->last_inst.bits(), false, false, 0, 0, 0, 0));
+                                }
+                                for (auto item : state->log_reg_write) {
+                                    if (item.first != 0) {
+                                        uint32_t wb_addr = item.first >> 4;
+                                        uint32_t wb_data = item.second.v[0];
+                                        if ((item.first & 0xf) == 0) {
+                                            if (is_load) {
+                                                mem_log.push_back(mem_log_t(spike_pc, state->last_inst.bits(), true, false, wb_addr, 0, wb_data, 0));
+                                            } else if (is_divrem) {
+                                                div_log.push_back(div_log_t(spike_pc, state->last_inst.bits(), wb_addr, wb_data));
+                                            } else {
+                                                assertEq("integer reg write addr unmatch", top->io_pipeline_probe_ex2_wb_addr, wb_addr);
+                                                assertEq("integer reg write data unmatch", top->io_pipeline_probe_ex2_wb_data, wb_data);
+                                            }
                                         } else {
-                                            assertEq("integer reg write addr unmatch", top->io_pipeline_probe_ex2_wb_addr, wb_addr);
-                                            assertEq("integer reg write data unmatch", top->io_pipeline_probe_ex2_wb_data, wb_data);
+                                            fprintf(stderr, "??? unknown spike trace %llx, addr=%llx\n", item.first & 0xf, item.first >> 4);
+                                            // failure();
                                         }
-                                    } else {
-                                        fprintf(stderr, "??? unknown spike trace %llx, addr=%llx\n", item.first & 0xf, item.first >> 4);
-                                        // failure();
                                     }
                                 }
                             }

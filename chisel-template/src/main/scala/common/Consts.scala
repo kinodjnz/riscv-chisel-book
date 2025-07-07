@@ -88,8 +88,11 @@ object Consts {
   val MD_DIVU    = 14.U(EXE_FUN_LEN.W)
   val MD_REMU    = 15.U(EXE_FUN_LEN.W)
 
-  val PAT_MULHS1 = BitPat("b???1")
-  val PAT_MULHS2 = BitPat("b??0?")
+  val PAT_MULHS1       = BitPat("b???1")
+  val PAT_MULHS2       = BitPat("b??0?")
+  val PAT_DIVREM       = BitPat("b?1??")
+  val PAT_DIV_SIGNED   = BitPat("b??0?")
+  val PAT_DIV_UNSIGNED = BitPat("b??1?")
 
   val CSR_W      =  1.U(EXE_FUN_LEN.W)
   val CSR_S      =  2.U(EXE_FUN_LEN.W)

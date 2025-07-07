@@ -125,21 +125,19 @@ class Core(
   enable_sim_probe: Boolean = false,
   enable_pipeline_probe: Boolean = false,
 ) extends Module {
-  val io = IO(
-    new Bundle {
-      val imem = Flipped(new ImemPortIo())
-      val dmem = Flipped(new DmemPortIo())
-      val icache = Flipped(new CachedImemPort())
-      val cache = Flipped(new CachePort())
-      val pht_lmem = Flipped(new PHTMemIo(PHT_INDEX_LEN))
-      val pht_gmem = Flipped(new PHTMemIo(PHT_INDEX_LEN))
-      val mtimer_mem = new DmemPortIo()
-      val intr = Input(Bool())
-      val debug_signal = new CoreDebugSignals()
-      val sim_probe = Option.when(enable_sim_probe)(new SimProbe())
-      val pipeline_probe = Option.when(enable_pipeline_probe)(new PipelineProbe())
-    }
-  )
+  val io = IO(new Bundle {
+    val imem = Flipped(new ImemPortIo())
+    val dmem = Flipped(new DmemPortIo())
+    val icache = Flipped(new CachedImemPort())
+    val cache = Flipped(new CachePort())
+    val pht_lmem = Flipped(new PHTMemIo(PHT_INDEX_LEN))
+    val pht_gmem = Flipped(new PHTMemIo(PHT_INDEX_LEN))
+    val mtimer_mem = new DmemPortIo()
+    val intr = Input(Bool())
+    val debug_signal = new CoreDebugSignals()
+    val sim_probe = Option.when(enable_sim_probe)(new SimProbe())
+    val pipeline_probe = Option.when(enable_pipeline_probe)(new PipelineProbe())
+  })
 
   val regfile = Mem(32, UInt(WORD_LEN.W))
   //val csr_regfile = Mem(4096, UInt(WORD_LEN.W)) 
@@ -222,14 +220,19 @@ class Core(
   val ex2_reg_csr_rdata     = RegInit(0.U(WORD_LEN.W))
   val ex2_reg_op3_data      = RegInit(0.U(WORD_LEN.W))
   val ex2_reg_valid         = RegInit(false.B)
-  val ex2_reg_divrem        = RegInit(false.B)
-  val ex2_reg_sign_op1      = RegInit(0.U(1.W))
-  val ex2_reg_sign_op12     = RegInit(0.U(1.W))
-  val ex2_reg_zero_op2      = RegInit(false.B)
-  val ex2_reg_init_dividend = RegInit(0.U((WORD_LEN+5).W))
-  val ex2_reg_init_divisor  = RegInit(0.U(WORD_LEN.W))
-  val ex2_reg_orig_dividend = RegInit(0.U(WORD_LEN.W))
   val ex2_reg_inst3_use_reg = RegInit(false.B)
+
+  // val div_reg_divrem        = RegInit(false.B)
+  // val div_reg_init_dividend = RegInit(0.U((WORD_LEN+5).W))
+  val div_divrem_in_use = Wire(Bool())
+  val div_divrem_rrd_wb = Wire(Bool())
+  val div_divrem_ex1_wb = Wire(Bool())
+  val div_reg_pc        = RegInit(0.U(PC_LEN.W))
+  val div_reg_is_div    = RegInit(false.B)
+  val div_reg_en        = RegInit(false.B)
+  val div_reg_wb_addr   = RegInit(0.U(ADDR_LEN.W))
+  val div_reg_reminder  = RegInit(0.U(WORD_LEN.W))
+  val div_reg_quotient  = RegInit(0.U(WORD_LEN.W))
 
   val rrd_stall            = Wire(Bool())
   val ex2_stall            = Wire(Bool())
@@ -242,10 +245,9 @@ class Core(
   val mem3_reg_fw_en       = RegInit(false.B)
   val mem3_fw_wb_addr      = Wire(UInt(ADDR_LEN.W))
   val mem3_fw_data         = Wire(UInt(WORD_LEN.W))
-  val ex2_div_stall_next   = Wire(Bool())
+  // val ex2_div_stall_next   = Wire(Bool())
   val ex2_reg_div_stall    = RegInit(false.B)
-  val ex2_div_stall        = Wire(Bool())
-  val ex2_reg_divrem_state = RegInit(DivremState.Idle)
+  // val ex2_div_stall        = Wire(Bool())
   val ex2_reg_is_br        = RegInit(true.B) // jump start_address when first time
   val ex2_reg_br_pc        = RegInit((start_address >> (WORD_LEN-PC_LEN)).U(PC_LEN.W))
   val ex1_reg_upd_pc_stalled = RegInit(false.B)
@@ -262,6 +264,7 @@ class Core(
   val if2_reg_inst_id      = Option.when(enable_pipeline_probe)(RegInit(0.U(INST_ID_LEN.W)))
   val rrd_reg_inst_id      = Option.when(enable_pipeline_probe)(Wire(UInt(INST_ID_LEN.W))) // (RegInit(0.U(INST_ID_LEN.W)))
   val ex1_reg_inst_id      = Option.when(enable_pipeline_probe)(RegInit(0.U(INST_ID_LEN.W)))
+  val div_reg_inst_id      = Option.when(enable_pipeline_probe)(RegInit(0.U(INST_ID_LEN.W)))
   val ex2_reg_inst_id      = Option.when(enable_pipeline_probe)(RegInit(0.U(INST_ID_LEN.W)))
   val mem1_reg_inst_id     = Option.when(enable_pipeline_probe)(RegInit(0.U(INST_ID_LEN.W)))
   val mem2_reg_inst_id     = Option.when(enable_pipeline_probe)(RegInit(0.U(INST_ID_LEN.W)))
@@ -393,12 +396,16 @@ class Core(
   // Register read (RRD) Stage
 
   rrd_stall :=
-    !ex2_reg_is_br && (
+    !ex2_reg_is_br && ((
       ((rrd_reg_op1_sel    === OP1_SEL_RS)    && scoreboard(rrd_reg_rs1_addr)) ||
       ((rrd_reg_op2_sel(1) === OP2_SEL_RS(1)) && scoreboard(rrd_reg_rs2_addr)) ||
       ((rrd_reg_op3_sel(1) === OP3_SEL_RS(1)) && scoreboard(rrd_reg_rs3_addr)) ||
       ((rrd_reg_rf_wen     === REN_S)         && scoreboard(rrd_reg_wb_addr))
-    )
+    ) || (
+      rrd_reg_exe_sel === EXE_MD && PAT_DIVREM.matches(rrd_reg_exe_fun) && div_divrem_in_use
+    ) || (
+      div_divrem_rrd_wb
+    ))
 
   def mix(op2_sel: UInt, imm_data: UInt, rs_data: UInt): UInt = {
     // Mux(op2_sel(0) === OP2_SEL_MIX(0), 0.U(1.W) ## imm_data(11, 7) ## rs_data(5, 0), rs_data)
@@ -486,7 +493,8 @@ class Core(
       scoreboard(rrd_reg_wb_addr) := rrd_reg_exe_sel =/= EXE_ALU
       rrd_mem_use_reg   := (rrd_reg_exe_sel === EXE_LD  || rrd_reg_exe_sel === EXE_ST)
       rrd_inst2_use_reg := (rrd_reg_exe_sel === EXE_BLU || rrd_reg_exe_sel === EXE_JB)
-      rrd_inst3_use_reg := (rrd_reg_exe_sel === EXE_MD  || rrd_reg_exe_sel === EXE_CSR)
+      rrd_inst3_use_reg := ((rrd_reg_exe_sel === EXE_MD && !PAT_DIVREM.matches(rrd_reg_exe_fun))
+                                                        || rrd_reg_exe_sel === EXE_CSR)
   }
 
   fetch_unit.io.redir_read.ptr := rrd_reg_bp.fp_ptr
@@ -519,12 +527,14 @@ class Core(
     ex1_reg_rf_wen           := Mux(!rrd_reg_valid || rrd_stall, REN_X, rrd_reg_rf_wen)
     ex1_reg_bp.redirected    := Mux(!rrd_reg_valid || rrd_stall, false.B, rrd_reg_bp.redirected)
     ex1_reg_bp.bpfailed      := Mux(!rrd_reg_valid || rrd_stall, false.B, rrd_reg_bp.bpfailed)
+    div_reg_en               := rrd_reg_valid && !rrd_stall && PAT_DIVREM.matches(rrd_reg_exe_fun) && rrd_reg_exe_sel === EXE_MD
   }
   when (ex2_reg_is_br && !ex1_reg_upd_pc_stalled) {
     ex1_reg_valid         := false.B
     ex1_reg_rf_wen        := REN_X
     ex1_reg_bp.redirected := false.B
     ex1_reg_bp.bpfailed   := false.B
+    div_reg_en            := false.B
   }
 
   //**********************************
@@ -641,38 +651,24 @@ class Core(
     (ex1_reg_exe_sel === EXE_MD)                                     -> EX2_MD,
   ))
 
-  val ex1_divrem = WireDefault(false.B)
-  val ex1_sign_op1 = WireDefault(0.U(1.W))
-  val ex1_sign_op12 = WireDefault(0.U(1.W))
-  val ex1_zero_op2 = Wire(Bool())
-  val ex1_dividend = WireDefault(0.U((WORD_LEN+5).W))
-  val ex1_divisor = WireDefault(0.U(WORD_LEN.W))
-  val ex1_orig_dividend = Wire(UInt(WORD_LEN.W))
+  val div_pc       = WireDefault(ex1_reg_pc)
+  val div_op1_data = WireDefault(ex1_reg_op1_data)
+  val div_op2_data = WireDefault(ex1_reg_op2_data)
+  val div_en       = Wire(Bool())
+  val div_signed   = Wire(Bool())
+  val div_unsigned = Wire(Bool())
+  val div_is_div   = Wire(Bool())
+  val div_wen      = Wire(Bool())
+  val div_wb_addr  = Wire(UInt(ADDR_LEN.W))
+  val div_inst_id  = Option.when(enable_pipeline_probe)(Wire(UInt(INST_ID_LEN.W)))
 
-  when (ex1_reg_exe_fun === MD_DIV || ex1_reg_exe_fun === MD_REM) {
-    ex1_divrem := ex1_reg_exe_sel === EXE_MD
-    when (ex1_reg_op1_data(WORD_LEN-1) === 1.U) {
-      ex1_dividend := Cat(Fill(5, 0.U(1.W)), (~ex1_reg_op1_data + 1.U)(WORD_LEN-1, 0))
-    }.otherwise {
-      ex1_dividend := Cat(Fill(5, 0.U(1.W)), ex1_reg_op1_data(WORD_LEN-1, 0))
-    }
-    ex1_sign_op1 := ex1_reg_op1_data(WORD_LEN-1)
-    when (ex1_reg_op2_data(WORD_LEN-1) === 1.U) {
-      ex1_divisor := (~ex1_reg_op2_data + 1.U)(WORD_LEN-1, 0)
-      ex1_sign_op12 := (ex1_sign_op1 === 0.U)
-    }.otherwise {
-      ex1_divisor := ex1_reg_op2_data
-      ex1_sign_op12 := (ex1_sign_op1 === 1.U)
-    }
-  }.elsewhen (ex1_reg_exe_fun === MD_DIVU || ex1_reg_exe_fun === MD_REMU) {
-    ex1_divrem := ex1_reg_exe_sel === EXE_MD
-    ex1_dividend := Cat(Fill(5, 0.U(1.W)), ex1_reg_op1_data(WORD_LEN-1, 0))
-    ex1_sign_op1 := 0.U
-    ex1_divisor := ex1_reg_op2_data
-    ex1_sign_op12 := 0.U
-  }
-  ex1_zero_op2 := (ex1_reg_op2_data === 0.U)
-  ex1_orig_dividend := ex1_reg_op1_data
+  div_en       := div_reg_en && ex1_en
+  div_signed   := PAT_DIV_SIGNED.matches(ex1_reg_exe_fun)
+  div_unsigned := PAT_DIV_UNSIGNED.matches(ex1_reg_exe_fun)
+  div_is_div   := ex1_reg_exe_fun === MD_DIV || ex1_reg_exe_fun === MD_DIVU
+  div_wen      := Mux(ex1_reg_rf_wen === REN_S && ex1_en, REN_S, REN_X)
+  div_wb_addr  := ex1_reg_wb_addr
+  map2(div_inst_id, ex1_reg_inst_id)(_ := _)
 
   // branch and jump
   val ex1_maybe_br_taken = Wire(Bool())
@@ -886,59 +882,50 @@ class Core(
 
   //**********************************
   // EX1/EX2 register
-  when (!ex2_stall) {
-    ex2_reg_pc                := ex1_reg_pc
-    ex2_reg_wb_addr           := ex1_reg_wb_addr
+  // when (!ex2_stall) {
+    ex2_reg_pc                := Mux(div_divrem_ex1_wb, div_reg_pc, ex1_reg_pc)
+    ex2_reg_wb_addr           := Mux(div_divrem_ex1_wb, div_reg_wb_addr, ex1_reg_wb_addr) // Ignore the case of writing back to x0
     ex2_reg_alu_out           := ex1_alu_out
     ex2_reg_mull              := ex1_mull
     ex2_reg_mulh              := ex1_mulh
     ex2_reg_blu_out           := ex1_blu_out
     ex2_reg_csr_rdata         := csr_rdata
     ex2_reg_csr_addr.foreach(_ :=  ex1_csr_addr)
-    ex2_reg_exe_fun           := ex1_reg_exe_fun
-    ex2_reg_rf_wen            := Mux(ex1_en && ex1_no_mem, ex1_reg_rf_wen, REN_X)
-    ex2_reg_fun_sel           := ex1_fun_sel
+    ex2_reg_exe_fun           := Mux(div_divrem_ex1_wb, Mux(div_reg_is_div, MD_DIV, MD_REM), ex1_reg_exe_fun)
+    ex2_reg_rf_wen            := Mux(div_divrem_ex1_wb, REN_S, Mux(ex1_en && ex1_no_mem, ex1_reg_rf_wen, REN_X))
+    ex2_reg_fun_sel           := Mux(div_divrem_ex1_wb, EXE_MD, ex1_fun_sel)
     ex2_reg_op3_data          := Mux(ex1_reg_exe_fun === BLU_BFX && ex1_reg_sop === SOP_SEXT, ex1_bfx_sext, ex1_reg_op3_data)
-    ex2_reg_valid             := ex1_valid && ex1_no_mem
-    ex2_reg_divrem            := ex1_divrem && ex1_en
-    ex2_reg_div_stall         := ex2_div_stall_next ||
-      (ex1_divrem && ex1_en && (ex2_reg_divrem_state === DivremState.Idle || ex2_reg_divrem_state === DivremState.Finished))
-    ex2_reg_sign_op1          := ex1_sign_op1
-    ex2_reg_sign_op12         := ex1_sign_op12
-    ex2_reg_zero_op2          := ex1_zero_op2
-    ex2_reg_init_dividend     := ex1_dividend
-    ex2_reg_init_divisor      := ex1_divisor
-    ex2_reg_orig_dividend     := ex1_orig_dividend
-    ex2_reg_inst3_use_reg     := ex1_reg_inst3_use_reg && ex1_en
+    ex2_reg_valid             := ex1_valid && ex1_no_mem && !(ex1_reg_exe_sel === EXE_MD && PAT_DIVREM.matches(ex1_reg_exe_fun)) || div_divrem_ex1_wb
+    ex2_reg_inst3_use_reg     := Mux(div_divrem_ex1_wb, true.B, ex1_reg_inst3_use_reg && ex1_en)
     ex2_reg_fw_en             := ex1_fw_en_next
-    map2(ex2_reg_inst_id, ex1_reg_inst_id)(_ := _)
-  }.otherwise {
-    ex2_reg_div_stall := ex2_div_stall_next ||
-      (ex2_reg_divrem && (ex2_reg_divrem_state === DivremState.Idle || ex2_reg_divrem_state === DivremState.Finished))
-  }
-  ex2_div_stall := ex2_reg_div_stall
+    map3(ex2_reg_inst_id, ex1_reg_inst_id, div_reg_inst_id)(_ := Mux(!div_divrem_ex1_wb, _, _))
+    // ex2_reg_divrem_in_use     := ex1_reg_divrem_in_use
+    // div_reg_divrem            := ex1_divrem && ex1_en
+    // ex2_reg_div_stall         := ex2_div_stall_next ||
+    //   (ex1_divrem && ex1_en && (div_reg_divrem_state === DivremState.Idle || div_reg_divrem_state === DivremState.Finished))
+    // when (ex1_divrem && ex1_en) {
+      // div_reg_sign_op1          := ex1_sign_op1
+      // div_reg_sign_op12         := ex1_sign_op12
+      // div_reg_zero_op2          := ex1_zero_op2
+      // div_reg_init_divisor      := ex1_divisor
+    // }
+  // }.otherwise {
+    // ex2_reg_div_stall := ex2_div_stall_next ||
+    //   (div_reg_divrem && (div_reg_divrem_state === DivremState.Idle || div_reg_divrem_state === DivremState.Finished))
+  // }
+  // ex2_div_stall := ex2_reg_div_stall
   when (mem2_stall && !ex2_reg_div_stall) {
     // ALU/BIT/MD/CSR/JBRのEX2ステージを実行中にメモリストールがあってもWBに進むので、2回実行しないようにEX2を空にする
     ex2_reg_rf_wen        := REN_X
-    ex2_reg_divrem        := false.B
     ex2_reg_valid         := false.B
     ex2_reg_inst3_use_reg := false.B
+    // div_reg_divrem        := false.B
   }
 
-  ex2_stall := mem_stall || ex2_div_stall
+  ex2_stall := mem_stall /*|| ex2_div_stall*/
 
   //**********************************
   // EX2 MUL/DIV Stage
-
-  val ex2_reg_dividend     = RegInit(0.S((WORD_LEN+5).W))
-  val ex2_reg_divisor      = RegInit(0.U((WORD_LEN+4).W))
-  val ex2_reg_p_divisor    = RegInit(0.U((WORD_LEN*2).W))
-  val ex2_reg_divrem_count = RegInit(0.U(5.W))
-  val ex2_reg_rem_shift    = RegInit(0.U(5.W))
-  val ex2_reg_extra_shift  = RegInit(false.B)
-  val ex2_reg_d            = RegInit(0.U(3.W))
-  val ex2_reg_reminder     = RegInit(0.U(WORD_LEN.W))
-  val ex2_reg_quotient     = RegInit(0.U(WORD_LEN.W))
 
   def signExtend40(value: UInt, w: Int): UInt = {
       Fill(40 - w, value(w - 1)) ## value(w - 1, 0)
@@ -948,65 +935,115 @@ class Core(
     (ex2_reg_exe_fun === MD_MUL)    -> (ex2_reg_mull.take(WORD_LEN) + (ex2_reg_mulh.take(8) << 24)),
     (ex2_reg_exe_fun === MD_MULH || ex2_reg_exe_fun === MD_MULHU || ex2_reg_exe_fun === MD_MULHSU)
                                      -> (signExtend40(ex2_reg_mull(33+24-1, 24), 33) + ex2_reg_mulh.take(40))(39, 8),
-    (ex2_reg_exe_fun === MD_DIV)    -> ex2_reg_quotient,
-    (ex2_reg_exe_fun === MD_DIVU)   -> ex2_reg_quotient,
-    (ex2_reg_exe_fun === MD_REM)    -> ex2_reg_reminder,
-    (ex2_reg_exe_fun === MD_REMU)   -> ex2_reg_reminder,
+    (ex2_reg_exe_fun === MD_DIV)    -> div_reg_quotient,
+    (ex2_reg_exe_fun === MD_DIVU)   -> div_reg_quotient,
+    (ex2_reg_exe_fun === MD_REM)    -> div_reg_reminder,
+    (ex2_reg_exe_fun === MD_REMU)   -> div_reg_reminder,
   ))
 
-  // ex2_quotient := ex2_reg_quotient
-  // ex2_reminder := ex2_reg_reminder
-  ex2_div_stall_next := false.B
+  // ex2_quotient := div_reg_quotient
+  // ex2_reminder := div_reg_reminder
+  // ex2_div_stall_next := false.B
 
-  switch (ex2_reg_divrem_state) {
+  val div_reg_divrem_state  = RegInit(DivremState.Idle)
+  val div_reg_init_divisor  = RegInit(0.U(WORD_LEN.W))
+  val div_reg_orig_dividend = RegInit(0.U(WORD_LEN.W))
+  val div_reg_sign_op1      = RegInit(0.U(1.W))
+  val div_reg_sign_op12     = RegInit(0.U(1.W))
+  val div_reg_zero_op2      = RegInit(false.B)
+  val div_reg_dividend      = RegInit(0.S((WORD_LEN+5).W))
+  val div_reg_divisor       = RegInit(0.U((WORD_LEN+4).W))
+  val div_reg_p_divisor     = RegInit(0.U((WORD_LEN*2).W))
+  val div_reg_divrem_count  = RegInit(0.U(5.W))
+  val div_reg_rem_shift     = RegInit(0.U(5.W))
+  val div_reg_extra_shift   = RegInit(false.B)
+  val div_reg_d             = RegInit(0.U(3.W))
+
+  div_divrem_in_use := div_reg_divrem_state =/= DivremState.Idle || div_reg_en
+  div_divrem_rrd_wb := false.B
+  div_divrem_ex1_wb := false.B
+
+  switch (div_reg_divrem_state) {
     is (DivremState.Idle) {
-      when (ex2_reg_divrem) {
-        when (ex2_reg_init_divisor(WORD_LEN-1, 2) === 0.U) {
-          ex2_reg_divrem_state := DivremState.Dividing
+      val div_dividend = Wire(UInt((WORD_LEN+5).W))
+      val div_divisor = Wire(UInt(WORD_LEN.W))
+
+      when (div_signed) {
+        when (div_op1_data(WORD_LEN-1) === 1.U) {
+          div_dividend := 0.U(5.W) ## (~div_op1_data + 1.U)(WORD_LEN-1, 0)
         }.otherwise {
-          ex2_reg_divrem_state := DivremState.Placing
+          div_dividend := 0.U(5.W) ## div_op1_data(WORD_LEN-1, 0)
+        }
+        val sign_op1 = div_op1_data(WORD_LEN-1)
+        div_reg_sign_op1 := sign_op1
+        when (div_op2_data(WORD_LEN-1) === 1.U) {
+          div_divisor   := (~div_op2_data + 1.U)(WORD_LEN-1, 0)
+          div_reg_sign_op12 := (sign_op1 === 0.U)
+        }.otherwise {
+          div_divisor   := div_op2_data
+          div_reg_sign_op12 := (sign_op1 === 1.U)
+        }
+      }.otherwise { // elsewhen (div_unsigned) {
+        div_dividend  := 0.U(5.W) ## div_op1_data(WORD_LEN-1, 0)
+        div_reg_sign_op1  := 0.U
+        div_divisor   := div_op2_data
+        div_reg_sign_op12 := 0.U
+      }
+      div_reg_zero_op2      := (div_op2_data === 0.U)
+      div_reg_orig_dividend := div_op1_data
+      div_reg_init_divisor  := div_divisor
+      div_reg_is_div        := div_is_div
+
+      when (div_en) {
+        when (div_divisor(WORD_LEN-1, 2) === 0.U) {
+          div_reg_divrem_state := DivremState.Dividing
+        }.otherwise {
+          div_reg_divrem_state := DivremState.Placing
         }
         //ex2_div_stall        := true.B
       }
-      ex2_reg_dividend     := ex2_reg_init_dividend.asSInt
-      ex2_reg_divisor      := Cat(ex2_reg_init_divisor(3, 0), 0.U(32.W))
-      ex2_reg_p_divisor    := Cat(ex2_reg_init_divisor, 0.U(32.W))
-      ex2_reg_divrem_count := 0.U
-      ex2_reg_rem_shift    := 0.U
-      ex2_reg_quotient     := 0.U
-      when (ex2_reg_init_divisor(1) === 0.U) {
-        ex2_reg_extra_shift := false.B
-        ex2_reg_d           := 0.U(3.W)
+      div_reg_dividend     := div_dividend.asSInt
+      div_reg_divisor      := div_divisor(3, 0) ## 0.U(32.W)
+      div_reg_p_divisor    := div_divisor ## 0.U(32.W)
+      div_reg_divrem_count := 0.U
+      div_reg_rem_shift    := 0.U
+      div_reg_quotient     := 0.U
+      when (div_divisor(1) === 0.U) {
+        div_reg_extra_shift := false.B
+        div_reg_d           := 0.U(3.W)
       }.otherwise {
-        ex2_reg_extra_shift := true.B
-        ex2_reg_d           := Cat(ex2_reg_init_divisor(0), 0.U(2.W))
+        div_reg_extra_shift := true.B
+        div_reg_d           := div_divisor(0) ## 0.U(2.W)
       }
+      div_reg_pc            := div_pc
+      div_reg_wb_addr       := div_wb_addr
+      map2(div_reg_inst_id, div_inst_id)(_ := _)
     }
     is (DivremState.Placing) {
-      when (ex2_reg_p_divisor(WORD_LEN*2-1, WORD_LEN+4) === 0.U) {
-        ex2_reg_divrem_state := DivremState.Dividing
+      when (div_reg_p_divisor(WORD_LEN*2-1, WORD_LEN+4) === 0.U) {
+        div_reg_divrem_state := DivremState.Dividing
       }
-      ex2_reg_p_divisor    := ex2_reg_p_divisor >> 2
-      ex2_reg_divisor      := (ex2_reg_p_divisor >> 2)(WORD_LEN+3, 0)
-      ex2_reg_divrem_count := ex2_reg_divrem_count + 1.U
-      when (ex2_reg_p_divisor(WORD_LEN+3) === 0.U) {
-        ex2_reg_extra_shift := false.B
-        ex2_reg_d           := ex2_reg_p_divisor(WORD_LEN+1, WORD_LEN-1)
+      div_reg_p_divisor    := div_reg_p_divisor >> 2
+      div_reg_divisor      := (div_reg_p_divisor >> 2)(WORD_LEN+3, 0)
+      div_reg_divrem_count := div_reg_divrem_count + 1.U
+      when (div_reg_p_divisor(WORD_LEN+3) === 0.U) {
+        div_reg_extra_shift := false.B
+        div_reg_d           := div_reg_p_divisor(WORD_LEN+1, WORD_LEN-1)
       }.otherwise {
-        ex2_reg_extra_shift := true.B
-        ex2_reg_d           := ex2_reg_p_divisor(WORD_LEN+2, WORD_LEN)
+        div_reg_extra_shift := true.B
+        div_reg_d           := div_reg_p_divisor(WORD_LEN+2, WORD_LEN)
       }
-      ex2_div_stall_next    := true.B
+      // ex2_div_stall_next    := true.B
     }
     is (DivremState.Dividing) {
-      val p = Mux(ex2_reg_extra_shift,
-        Mux(ex2_reg_dividend(WORD_LEN+4) === 0.U,
-          ex2_reg_dividend(WORD_LEN+3, WORD_LEN-1),
-          ~ex2_reg_dividend(WORD_LEN+3, WORD_LEN-1),
+      val p = Mux(div_reg_extra_shift,
+        Mux(div_reg_dividend(WORD_LEN+4) === 0.U,
+          div_reg_dividend(WORD_LEN+3, WORD_LEN-1),
+          ~div_reg_dividend(WORD_LEN+3, WORD_LEN-1),
         ),
-        Mux(ex2_reg_dividend(WORD_LEN+4) === 0.U,
-          ex2_reg_dividend(WORD_LEN+2, WORD_LEN-2),
-          ~ex2_reg_dividend(WORD_LEN+2, WORD_LEN-2),
+        Mux(div_reg_dividend(WORD_LEN+4) === 0.U,
+          div_reg_dividend(WORD_LEN+2, WORD_LEN-2),
+          ~div_reg_dividend(WORD_LEN+2, WORD_LEN-2),
         ),
       )
       val div_table = Seq(
@@ -1019,78 +1056,80 @@ class Core(
           Seq(0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2),
           Seq(0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2),
       )
-      val ex2_q = MuxLookup(ex2_reg_d, 0.U(2.W))(
+      val div_q = MuxLookup(div_reg_d, 0.U(2.W))(
         div_table.zipWithIndex.map{
           case (v, i) => i.U -> MuxLookup(p, 0.U(2.W))(v.zipWithIndex.map { case (x, i) => i.U -> x.U })
         }
       )
 
-      when (ex2_reg_dividend(WORD_LEN+4) === 0.U) {
-        ex2_reg_dividend := MuxCase(ex2_reg_dividend << 2, Seq(
-          (ex2_q(0) === 1.U) -> ((ex2_reg_dividend - Cat(0.U(1.W), ex2_reg_divisor).asSInt) << 2),
-          (ex2_q(1) === 1.U) -> ((ex2_reg_dividend - Cat(ex2_reg_divisor, 0.U(1.W)).asSInt) << 2),
+      when (div_reg_dividend(WORD_LEN+4) === 0.U) {
+        div_reg_dividend := MuxCase(div_reg_dividend << 2, Seq(
+          (div_q(0) === 1.U) -> ((div_reg_dividend - Cat(0.U(1.W), div_reg_divisor).asSInt) << 2),
+          (div_q(1) === 1.U) -> ((div_reg_dividend - Cat(div_reg_divisor, 0.U(1.W)).asSInt) << 2),
         ))
-        ex2_reg_quotient := MuxCase(ex2_reg_quotient << 2, Seq(
-          (ex2_q(0) === 1.U) -> ((ex2_reg_quotient << 2) + 1.U),
-          (ex2_q(1) === 1.U) -> ((ex2_reg_quotient << 2) + 2.U),
+        div_reg_quotient := MuxCase(div_reg_quotient << 2, Seq(
+          (div_q(0) === 1.U) -> ((div_reg_quotient << 2) + 1.U),
+          (div_q(1) === 1.U) -> ((div_reg_quotient << 2) + 2.U),
         ))
       }.otherwise {
-        ex2_reg_dividend := MuxCase(ex2_reg_dividend << 2, Seq(
-          (ex2_q(0) === 1.U) -> ((ex2_reg_dividend + Cat(0.U(1.W), ex2_reg_divisor).asSInt) << 2),
-          (ex2_q(1) === 1.U) -> ((ex2_reg_dividend + Cat(ex2_reg_divisor, 0.U(1.W)).asSInt) << 2),
+        div_reg_dividend := MuxCase(div_reg_dividend << 2, Seq(
+          (div_q(0) === 1.U) -> ((div_reg_dividend + Cat(0.U(1.W), div_reg_divisor).asSInt) << 2),
+          (div_q(1) === 1.U) -> ((div_reg_dividend + Cat(div_reg_divisor, 0.U(1.W)).asSInt) << 2),
         ))
-        ex2_reg_quotient := MuxCase(ex2_reg_quotient << 2, Seq(
-          (ex2_q(0) === 1.U) -> ((ex2_reg_quotient << 2) - 1.U),
-          (ex2_q(1) === 1.U) -> ((ex2_reg_quotient << 2) - 2.U),
+        div_reg_quotient := MuxCase(div_reg_quotient << 2, Seq(
+          (div_q(0) === 1.U) -> ((div_reg_quotient << 2) - 1.U),
+          (div_q(1) === 1.U) -> ((div_reg_quotient << 2) - 2.U),
         ))
       }
-      ex2_reg_rem_shift := ex2_reg_rem_shift + 1.U
-      ex2_reg_divrem_count := ex2_reg_divrem_count + 1.U
-      when (ex2_reg_divrem_count === 16.U) {
-        ex2_reg_divrem_state := DivremState.Shifting
+      div_reg_rem_shift := div_reg_rem_shift + 1.U
+      div_reg_divrem_count := div_reg_divrem_count + 1.U
+      when (div_reg_divrem_count === 16.U) {
+        div_reg_divrem_state := DivremState.Shifting
       }
-      ex2_div_stall_next := true.B
+      // ex2_div_stall_next := true.B
     }
     is (DivremState.Shifting) {
-      ex2_reg_reminder := (ex2_reg_dividend >> Cat(ex2_reg_rem_shift, 0.U(1.W)))(WORD_LEN-1, 0)
-      ex2_reg_divrem_state := DivremState.Correction
-      ex2_div_stall_next := true.B
+      div_reg_reminder := (div_reg_dividend >> Cat(div_reg_rem_shift, 0.U(1.W)))(WORD_LEN-1, 0)
+      div_reg_divrem_state := DivremState.Correction
+      // ex2_div_stall_next := true.B
+      div_divrem_rrd_wb := true.B
     }
     is (DivremState.Correction) {
-      val reminder = Mux(ex2_reg_dividend(WORD_LEN+4) === 1.U,
-        ex2_reg_reminder + ex2_reg_init_divisor(WORD_LEN-1, 0),
-        ex2_reg_reminder,
+      val reminder = Mux(div_reg_dividend(WORD_LEN+4) === 1.U,
+        div_reg_reminder + div_reg_init_divisor(WORD_LEN-1, 0),
+        div_reg_reminder,
       )
-      ex2_reg_reminder := Mux(ex2_reg_zero_op2,
-        ex2_reg_orig_dividend,
-        Mux(ex2_reg_sign_op1 === 0.U,
+      div_reg_reminder := Mux(div_reg_zero_op2,
+        div_reg_orig_dividend,
+        Mux(div_reg_sign_op1 === 0.U,
           reminder,
           ~reminder + 1.U,
         ),
       )
-      val quotient = Mux(ex2_reg_dividend(WORD_LEN+4) === 1.U,
-        ex2_reg_quotient - 1.U,
-        ex2_reg_quotient,
+      val quotient = Mux(div_reg_dividend(WORD_LEN+4) === 1.U,
+        div_reg_quotient - 1.U,
+        div_reg_quotient,
       )
-      ex2_reg_quotient := Mux(ex2_reg_zero_op2,
+      div_reg_quotient := Mux(div_reg_zero_op2,
         0xFFFF_FFFFL.U,
-        Mux(ex2_reg_sign_op12 === 0.U,
+        Mux(div_reg_sign_op12 === 0.U,
           quotient,
           ~quotient + 1.U,
         ),
       )
-      ex2_reg_divrem_state := DivremState.Finished
+      div_reg_divrem_state := DivremState.Finished
+      div_divrem_ex1_wb := true.B
       //ex2_div_stall := true.B
     }
     is (DivremState.Finished) {
-      ex2_reg_divrem_state := DivremState.Idle
+      div_reg_divrem_state := DivremState.Idle
     }
   }
-  // printf(cf"ex2_reg_divrem_state : 0x${ex2_reg_divrem_state.asUInt}%x\n")
-  // printf(cf"ex2_reg_dividend     : 0x${ex2_reg_dividend}%x\n")
-  // printf(cf"ex2_reg_divisor      : 0x${ex2_reg_divisor}%x\n")
-  // printf(cf"ex2_reg_divrem_count : 0x${ex2_reg_divrem_count}%x\n")
-  // printf(cf"ex2_reg_rem_shift    : 0x${ex2_reg_rem_shift}%x\n")
+  // printf(cf"div_reg_divrem_state : 0x${div_reg_divrem_state.asUInt}%x\n")
+  // printf(cf"div_reg_dividend     : 0x${div_reg_dividend}%x\n")
+  // printf(cf"div_reg_divisor      : 0x${div_reg_divisor}%x\n")
+  // printf(cf"div_reg_divrem_count : 0x${div_reg_divrem_count}%x\n")
+  // printf(cf"div_reg_rem_shift    : 0x${div_reg_rem_shift}%x\n")
 
   //**********************************
   // EX2 Stage
@@ -1107,11 +1146,11 @@ class Core(
     PAT_EX2_MASK.matches(ex2_reg_fun_sel) -> ex2_mask_out,
     PAT_EX2_BLU.matches(ex2_reg_fun_sel)  -> ex2_reg_blu_out,
   ))
-  when (ex2_reg_inst3_use_reg && !ex2_div_stall) {
+  when (ex2_reg_inst3_use_reg /*&& !ex2_div_stall*/) {
     scoreboard(ex2_reg_wb_addr) := false.B
   }
 
-  ex2_reg_is_retired := ex2_reg_valid && !ex2_div_stall
+  ex2_reg_is_retired := ex2_reg_valid // && !ex2_div_stall
 
   when (!ex2_reg_div_stall && ex2_reg_rf_wen === REN_S) {
     regfile(ex2_reg_wb_addr) := ex2_wb_data
@@ -1119,7 +1158,7 @@ class Core(
 
   io.pipeline_probe.foreach(_.ex2_valid := ex2_reg_valid)
   map2(io.pipeline_probe, ex2_reg_inst_id)(_.ex2_inst_id := _)
-  io.pipeline_probe.foreach(_.ex2_retired := ex2_reg_valid && !ex2_div_stall)
+  io.pipeline_probe.foreach(_.ex2_retired := ex2_reg_valid /*&& !ex2_div_stall*/)
   io.pipeline_probe.foreach(_.ex2_wb_addr := Mux(ex2_reg_rf_wen === REN_S, ex2_reg_wb_addr, 0.U(ADDR_LEN.W)))
   io.pipeline_probe.foreach(_.ex2_wb_data := ex2_wb_data)
   io.pipeline_probe.foreach(_.csr_read := ex2_reg_valid && PAT_EX2_CSR.matches(ex2_reg_fun_sel) && !ex2_reg_div_stall && ex2_reg_rf_wen === REN_S)
@@ -1128,7 +1167,7 @@ class Core(
 
   val lsu = Module(new LoadStoreUnit(enable_pipeline_probe, dram_start, dram_length))
 
-  lsu.io.in.valid   := !ex2_div_stall && ex1_en && (
+  lsu.io.in.valid   := /*!ex2_div_stall &&*/ ex1_en && (
     (ex1_reg_exe_sel === EXE_LD) ||
     (ex1_reg_exe_sel === EXE_ST) ||
     (ex1_reg_exe_sel === EXE_CSR && PAT_FENCE.matches(ex1_reg_exe_fun))
