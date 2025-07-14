@@ -455,7 +455,7 @@ void sim_loop() {
                             fprintf(stderr, "retired ex2: pc=0x%08x, inst=0x%08x inst_id=%08x\n", pc, inst, inst_id);
                         }
                         bool actual_is_divrem = (
-                            (inst & 0xfe00007f) == 0x02000033 // div, divu, rem, remu
+                            (inst & 0xfe00407f) == 0x02004033 // div, divu, rem, remu
                         );
                         if (actual_is_divrem && !div_log.empty()) {
                             assertEq("divrem pc unmatch log", pc, div_log.front().pc);
@@ -486,7 +486,7 @@ void sim_loop() {
                                     state->last_inst.bits() == 0x0000100f           // fence.i
                                 );
                                 bool is_divrem = (
-                                    (state->last_inst.bits() & 0xfe00007f) == 0x02000033 // div, divu, rem, remu
+                                    (state->last_inst.bits() & 0xfe00407f) == 0x02004033 // div, divu, rem, remu
                                 );
                                 if (!is_load && !is_store && !is_fence_i && !is_divrem) {
                                     assertEq("pc unmatch", pc, spike_pc);
@@ -514,8 +514,19 @@ void sim_loop() {
                                             }
                                         } else {
                                             fprintf(stderr, "??? unknown spike trace %llx, addr=%llx\n", item.first & 0xf, item.first >> 4);
-                                            // failure();
+                                            if (state->mcause->read() == 2) {
+                                                failure();
+                                            }
                                         }
+                                    }
+                                }
+                                if (actual_is_divrem && !div_log.empty()) {
+                                    assertEq("divrem pc unmatch log", pc, div_log.front().pc);
+                                    assertEq("divrem reg write addr unmatch", top->io_pipeline_probe_ex2_wb_addr, div_log.front().wb_addr);
+                                    assertEq("divrem reg write data unmatch", top->io_pipeline_probe_ex2_wb_data, div_log.front().data);
+                                    div_log.pop_front();
+                                    if (div_log.empty()) {
+                                        do_next_step = false;
                                     }
                                 }
                             }
@@ -533,7 +544,8 @@ void sim_loop() {
                         } else {
                             pc = inst_traces[index].pc;
                             inst = inst_traces[index].inst;
-                            // printf("retired mem: pc=0x%08x, inst=0x%08x\n", pc, inst);
+                            printf("retired mem: pc=0x%08x, inst=0x%08x\n", pc, inst);
+                            printf("retired cycles=%llu, retired=%llu\n", cycles, retired);
                         }
                         if (mem_log.empty()) {
                             uint32_t spike_pc = state->pc;
@@ -548,6 +560,9 @@ void sim_loop() {
                                         assertEq("load reg write data unmatch", top->io_pipeline_probe_mem3_wb_data, wb_data);
                                     } else {
                                         fprintf(stderr, "??? unknown spike trace %llx addr=%llx pc=%x\n", item.first & 0xf, item.first >> 4, spike_pc);
+                                        if (state->mcause->read() == 2) {
+                                            failure();
+                                        }
                                     }
                                 }
                             }
