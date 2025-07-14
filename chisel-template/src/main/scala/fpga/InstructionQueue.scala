@@ -26,11 +26,16 @@ class InstructionQueuePutDecoded[Decoded <: Data](iq_id_len: Int, genDecoded: De
   val decoded = Input(genDecoded)
 }
 
-class InstructionQueueReadInitial[Initial <: Data](iq_id_len: Int, genInitial: Initial) extends Bundle {
-  val iq_id_ptr_len = iq_id_len + 1
+// class InstructionQueueReadInitial[Initial <: Data](iq_id_len: Int, genInitial: Initial) extends Bundle {
+//   val iq_id_ptr_len = iq_id_len + 1
 
-  val iq_id   = Input(UInt(iq_id_ptr_len.W))
-  val initial = Output(genInitial)
+//   val iq_id   = Input(UInt(iq_id_ptr_len.W))
+//   val initial = Output(genInitial)
+// }
+
+class InstructionQueueReadDecoded[Decoded <: Data](genDecoded: Decoded) extends Bundle {
+  val valid   = Output(Bool())
+  val decoded = Output(genDecoded)
 }
 
 class InstructionQueueDequeueRange(iq_id_len: Int) extends Bundle {
@@ -40,6 +45,11 @@ class InstructionQueueDequeueRange(iq_id_len: Int) extends Bundle {
   val deq_last  = Output(UInt(iq_id_ptr_len.W))
 }
 
+class InstructionQueuePutLsq[Lsq <: Data](genLsq: Lsq) extends Bundle {
+  val en      = Input(Bool())
+  val lsq     = Input(genLsq)
+}
+
 class InstructionQueueUpdateDequeuePtr(iq_id_len: Int) extends Bundle {
   val iq_id_ptr_len = iq_id_len + 1
 
@@ -47,16 +57,27 @@ class InstructionQueueUpdateDequeuePtr(iq_id_len: Int) extends Bundle {
   val deq = Input(UInt(iq_id_ptr_len.W))
 }
 
-class InstructionQueuePeek[Initial <: Data, Decoded <: Data](iq_id_len: Int, genInitial: Initial, genDecoded: Decoded) extends Bundle {
+class InstructionQueuePeek[Initial <: Data, Decoded <: Data, Lsq <: Data](
+  iq_id_len: Int,
+  genInitial: Initial,
+  genDecoded: Decoded,
+  genLsq: Lsq,
+) extends Bundle {
   val iq_id_ptr_len = iq_id_len + 1
 
   val iq_id   = Input(UInt(iq_id_ptr_len.W))
   val valid   = Output(Bool())
   val initial = Output(genInitial)
   val decoded = Output(genDecoded)
+  val lsq     = Output(genLsq)
 }
 
-class InstructionQueue[Initial <: Data, Decoded <: Data](iq_buffer_size: Int, genInitial: Initial, genDecoded: Decoded) extends Module {
+class InstructionQueue[Initial <: Data, Decoded <: Data, Lsq <: Data](
+  iq_buffer_size: Int,
+  genInitial: Initial,
+  genDecoded: Decoded,
+  genLsq: Lsq,
+) extends Module {
   val iq_id_len = log2Ceil(iq_buffer_size)
   val iq_id_ptr_len = iq_id_len + 1
 
@@ -66,9 +87,13 @@ class InstructionQueue[Initial <: Data, Decoded <: Data](iq_buffer_size: Int, ge
     // val read1   = new InstructionQueueReadInitial(iq_id_len, genInitial)
     val put1    = new InstructionQueuePutDecoded(iq_id_len, genDecoded)
     val put2    = new InstructionQueuePutDecoded(iq_id_len, genDecoded)
+    val read1   = new InstructionQueueReadDecoded(genDecoded)
+    val read2   = new InstructionQueueReadDecoded(genDecoded)
+    val lsq1    = new InstructionQueuePutLsq(genLsq)
+    val lsq2    = new InstructionQueuePutLsq(genLsq)
     val range   = new InstructionQueueDequeueRange(iq_id_len)
     val upd_deq = new InstructionQueueUpdateDequeuePtr(iq_id_len)
-    val peek    = new InstructionQueuePeek(iq_id_len, genInitial, genDecoded)
+    val peek    = new InstructionQueuePeek(iq_id_len, genInitial, genDecoded, genLsq)
     val flush   = Input(Bool())
   })
 
@@ -76,12 +101,15 @@ class InstructionQueue[Initial <: Data, Decoded <: Data](iq_buffer_size: Int, ge
   val iq_buf_initial_1 = Mem(iq_buffer_size/2, genInitial)
   val iq_buf_decoded_0 = Mem(iq_buffer_size/2, genDecoded)
   val iq_buf_decoded_1 = Mem(iq_buffer_size/2, genDecoded)
-  val deq_first = RegInit(0.U(iq_id_ptr_len.W))
-  val deq_last  = RegInit(0.U(iq_id_ptr_len.W))
-  val enq       = RegInit(0.U(iq_id_ptr_len.W))
+  val iq_buf_lsq_0     = Mem(iq_buffer_size/2, genLsq)
+  val iq_buf_lsq_1     = Mem(iq_buffer_size/2, genLsq)
+  val deq         = RegInit(0.U(iq_id_ptr_len.W))
+  val lsq_ptr     = RegInit(0.U(iq_id_ptr_len.W))
+  val decoded_ptr = RegInit(0.U(iq_id_ptr_len.W))
+  val enq         = RegInit(0.U(iq_id_ptr_len.W))
 
   def enqueue: Unit = {
-    val space  = enq - deq_first
+    val space  = enq - deq
     val ready1 = !space(iq_id_len)
     val ready2 = ready1 && !space.take(iq_id_len).andR
     // val ready2 = ready1 && space =/= Fill(iq_id_len, 1.U(1.W))
@@ -111,10 +139,6 @@ class InstructionQueue[Initial <: Data, Decoded <: Data](iq_buffer_size: Int, ge
     }
   }
 
-  // def read: Unit = {
-  //   io.read1.initial := iq_buf(io.read1.iq_id.take(iq_id_len)).initial
-  // }
-
   def put_decoded: Unit = {
     val addr0 = Mux(io.put1.iq_id(0), io.put2.iq_id.take(iq_id_len), io.put1.iq_id.take(iq_id_len)) >> 1
     val addr1 = Mux(io.put1.iq_id(0), io.put1.iq_id.take(iq_id_len), io.put2.iq_id.take(iq_id_len)) >> 1
@@ -127,26 +151,64 @@ class InstructionQueue[Initial <: Data, Decoded <: Data](iq_buffer_size: Int, ge
       iq_buf_decoded_1(addr1) := data1
     }
     when (io.put1.en) {
-      deq_last := io.put1.iq_id + 1.U
+      decoded_ptr := io.put1.iq_id + 1.U
     }
     when (io.put2.en) {
-      deq_last := io.put1.iq_id + 2.U
+      decoded_ptr := io.put1.iq_id + 2.U
+    }
+  }
+
+  def read_decoded: Unit = {
+    val ncount = lsq_ptr - decoded_ptr
+    val valid0 = ncount(iq_id_len)
+    val valid1 = valid0 && !ncount.take(iq_id_len).andR
+    val iq_id1 = lsq_ptr.take(iq_id_len)
+    val iq_id2 = lsq_ptr.take(iq_id_len) + 1.U
+    val addr0 = Mux(iq_id1(0), iq_id2, iq_id1) >> 1
+    val addr1 = Mux(iq_id1(0), iq_id1, iq_id2) >> 1
+    val data0 = iq_buf_decoded_0(addr0)
+    val data1 = iq_buf_decoded_1(addr1)
+    io.read1.valid   := valid0
+    io.read2.valid   := valid1
+    io.read1.decoded := Mux(iq_id1(0), data1, data0)
+    io.read2.decoded := Mux(iq_id1(0), data0, data1)
+  }
+
+  def put_lsq: Unit = {
+    val lsq_ptr0 = lsq_ptr.take(iq_id_len)
+    val lsq_ptr1 = lsq_ptr.take(iq_id_len) + 1.U
+    val addr0 = Mux(lsq_ptr0(0), lsq_ptr1, lsq_ptr0) >> 1
+    val addr1 = Mux(lsq_ptr0(0), lsq_ptr0, lsq_ptr1) >> 1
+    val data0 = Mux(lsq_ptr0(0), io.lsq2.lsq, io.lsq1.lsq)
+    val data1 = Mux(lsq_ptr0(0), io.lsq1.lsq, io.lsq2.lsq)
+    when (!lsq_ptr0(0) && io.lsq1.en || lsq_ptr0(0) && io.lsq2.en) {
+      iq_buf_lsq_0(addr0) := data0
+    }
+    when (lsq_ptr0(0) && io.lsq1.en || !lsq_ptr0(0) && io.lsq2.en) {
+      iq_buf_lsq_1(addr1) := data1
+    }
+    when (io.lsq1.en) {
+      lsq_ptr := lsq_ptr + 1.U
+    }
+    when (io.lsq2.en) {
+      lsq_ptr := lsq_ptr + 2.U
     }
   }
 
   def dequeue: Unit = {
-    io.range.deq_first := deq_first
-    io.range.deq_last  := deq_last
+    io.range.deq_first := deq
+    io.range.deq_last  := lsq_ptr
 
     when (io.upd_deq.en) {
-      deq_first := io.upd_deq.deq
+      deq := io.upd_deq.deq
     }
     when (io.flush) {
-      deq_first := enq
-      deq_last := enq
+      deq         := enq
+      decoded_ptr := enq
+      lsq_ptr     := enq
     }
 
-    io.peek.valid   := (io.peek.iq_id - deq_last)(iq_id_len)
+    io.peek.valid   := (io.peek.iq_id - lsq_ptr)(iq_id_len)
     io.peek.initial := Mux(io.peek.iq_id(0),
       iq_buf_initial_1(io.peek.iq_id.take(iq_id_len) >> 1),
       iq_buf_initial_0(io.peek.iq_id.take(iq_id_len) >> 1),
@@ -155,10 +217,15 @@ class InstructionQueue[Initial <: Data, Decoded <: Data](iq_buffer_size: Int, ge
       iq_buf_decoded_1(io.peek.iq_id.take(iq_id_len) >> 1),
       iq_buf_decoded_0(io.peek.iq_id.take(iq_id_len) >> 1),
     )
+    io.peek.lsq := Mux(io.peek.iq_id(0),
+      iq_buf_lsq_1(io.peek.iq_id.take(iq_id_len) >> 1),
+      iq_buf_lsq_0(io.peek.iq_id.take(iq_id_len) >> 1),
+    )
   }
 
   enqueue
-  // read
   put_decoded
+  read_decoded
+  put_lsq
   dequeue
 }

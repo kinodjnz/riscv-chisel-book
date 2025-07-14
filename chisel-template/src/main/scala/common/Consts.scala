@@ -19,6 +19,8 @@ object Consts {
   val INST_ID_LEN     = 32
   val IQ_ENTRIES      = 16
   val IQ_ID_LEN       = log2Ceil(IQ_ENTRIES)
+  val LSQ_ENTRIES     = 4
+  val LSQ_ID_LEN      = log2Ceil(LSQ_ENTRIES)
 
   val EXE_SEL_LEN = 3
   val EXE_ALU = 0.U(EXE_SEL_LEN.W)
