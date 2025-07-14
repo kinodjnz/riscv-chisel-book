@@ -228,9 +228,9 @@ class FetchPredictor(
     }
 
     // Clear zbtb by btb prediction
-    val bp0_index = reg_iaddr_index.take(zbtb_index_len)
+    // val bp0_index = reg_iaddr_index.take(zbtb_index_len)
     io.zbtb.inv.en := !io.pr.flush_en && bp0_en && !br_taken(bp0_pos) && !io.btb.lu.result(bp0_pos).jump && bp0_pos <= bp1_pos
-    io.zbtb.inv.pc := bp0_index.replace_lsbits(2, bp0_pos)
+    io.zbtb.inv.pc := reg_iaddr_index.replace_lsbits(2, bp0_pos)
 
     // Update RAS by btb prediction
     io.ras.ret1.en      := !io.pr.flush_en && reg_iaddr_en && io.btb.lu.result(bp1_pos).is_ret
@@ -391,9 +391,9 @@ class ZBTB(
 
   val io = IO(new ZBTBIo(target_len))
 
-  val zbtb_mem = List.fill(4)(Mem(zbtb_entries / 4, new ZeroBranchTargetBuffer(tag_len, target_len)))
+  val zbtb_mem = List.fill(2)(Mem(zbtb_entries / 2, new ZeroBranchTargetBuffer(tag_len, target_len)))
 
-  val zbtb_entry = zbtb_mem.map(mem => mem(io.lu.pc(index_len - 1, 2)))
+  val zbtb_entry = Seq.tabulate(4)(i => zbtb_mem(i % 2)(io.lu.pc(index_len - 1, 2) ## (i / 2).U))
 
   val matches = zbtb_entry.map(e => e.en && (e.tag === io.lu.pc(tag_len - 1 + index_len, index_len)))
   val target  = zbtb_entry.map(e => e.target)
@@ -401,21 +401,26 @@ class ZBTB(
   io.lu.matches := RegNext(VecInit(matches), VecInit.fill(4)(false.B))
   io.lu.target  := RegNext(VecInit(target), VecInit.fill(4)(0.U(target_len.W)))
 
-  for (i <- 0 until 4) {
-    when (io.inv.en && io.inv.pc(1, 0) === i.U(2.W)) {
-      zbtb_mem(i)(io.inv.pc(index_len - 1, 2)).en := false.B
-      printf(cf"zbtb(${i})(0x${Cat(io.inv.pc, 0.U(1.W))}%x) inv\n")
-    }
-  }
-
   val entry = Wire(new ZeroBranchTargetBuffer(tag_len, target_len))
   entry.en     := true.B
   entry.tag    := io.up.pc(tag_len - 1 + index_len, index_len)
   entry.target := io.up.target
+
+  val addr = Mux(io.up.en, io.up.pc(index_len - 1, 0), io.inv.pc(index_len - 1, 0))
+
   for (i <- 0 until 4) {
-    when (io.up.en && io.up.pc(1, 0) === i.U(2.W)) {
-      zbtb_mem(i)(io.up.pc(index_len - 1, 2)) := entry
-      printf(cf"zbtb(${i})(0x${Cat(io.up.pc, 0.U(1.W))}%x) := 0x${Cat(io.up.target, 0.U(1.W))}%x\n")
+    when (addr(1, 0) === i.U(2.W)) {
+      when (io.inv.en || io.up.en) {
+        zbtb_mem(i % 2)(addr(index_len - 1, 2) ## (i / 2).U).en := io.up.en
+        when (io.inv.en && !io.up.en) {
+          printf(cf"zbtb(${i})(0x${io.inv.pc.pc_to_word}%x) inv\n")
+        }
+      }
+      when (io.up.en) {
+        zbtb_mem(i % 2)(io.up.pc(index_len - 1, 2) ## (i / 2).U).tag    := entry.tag
+        zbtb_mem(i % 2)(io.up.pc(index_len - 1, 2) ## (i / 2).U).target := entry.target
+        printf(cf"zbtb(${i})(0x${io.up.pc.pc_to_word}%x) := 0x${io.up.target.pc_to_word}%x\n")
+      }
     }
   }
 }
