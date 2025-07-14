@@ -7,19 +7,7 @@ import common.Consts._
 import common.UIntExtension._
 import common.OptionExtension._
 
-// class LoadStoreInput(enable_pipeline_probe: Boolean) extends Bundle {
-//   val valid       = Input(Bool())
-//   val memop       = Input(UInt(MEM_OP_LEN.W))
-//   val addr        = Input(UInt(PC_LEN.W))
-//   val memw        = Input(UInt(MW_LEN.W))
-//   val wdata       = Input(UInt(WORD_LEN.W))
-//   val wb_addr     = Input(UInt(ADDR_LEN.W))
-//   val inst_id     = Option.when(enable_pipeline_probe)(Input(UInt(INST_ID_LEN.W)))
-// }
-
 class LoadStoreOutput extends Bundle {
-  // val mem_stall   = Output(Bool())
-  // val mem2_stall  = Output(Bool())
   val fw_en_next  = Output(Bool())
   val fw_wb_addr  = Output(UInt(ADDR_LEN.W))
   val fw_data     = Output(UInt(WORD_LEN.W))
@@ -31,7 +19,6 @@ class LoadStoreOutput extends Bundle {
 }
 
 class LoadStoreQueueEntry(enable_pipeline_probe: Boolean) extends Bundle {
-  // val memop   = UInt(MEM_OP_LEN.W)
   val addr          = UInt((WORD_LEN - 2).W)
   val wstrb         = UInt(7.W)
   val unaligned     = Bool()
@@ -98,13 +85,12 @@ class LoadStorePipelineProbe extends Bundle {
   val mem3_wb_data = Output(UInt(WORD_LEN.W))
 }
 
-class LoadStoreUnit(enable_pipeline_probe: Boolean, dram_start: BigInt, dram_length: BigInt, lsq_entries: Int) extends Module {
+class LoadStoreUnit(enable_pipeline_probe: Boolean, dram_start: BigInt, dram_length: BigInt, lsq_entries: Int, enable_sim_unaligned: Boolean = false) extends Module {
   val dram_addr_bits: Int = log2Ceil(dram_length)
   val lsq_id_len: Int = log2Ceil(lsq_entries)
   val lsq_id_ptr_len = lsq_id_len + 1
 
   val io = IO(new Bundle {
-    // val in             = new LoadStoreInput(enable_pipeline_probe)
     val out            = new LoadStoreOutput
     val flush          = new LoadStoreQueueFlush(lsq_id_len)
     val alloc1         = new LoadStoreQueueAlloc(lsq_id_len)
@@ -121,14 +107,7 @@ class LoadStoreUnit(enable_pipeline_probe: Boolean, dram_start: BigInt, dram_len
   val deq   = RegInit(0.U(lsq_id_ptr_len.W))
   val filled = Mem(lsq_entries, UInt(1.W))
 
-  val mem1_mem_busy  = Wire(Bool())
-  val mem1_dram_busy = Wire(Bool())
-  val mem1_unaligned = Wire(Bool())
-  val mem2_stall     = Wire(Bool())
-  val mem_stall      = Wire(Bool())
-
-  mem_stall        := mem1_mem_busy || mem1_dram_busy || mem1_unaligned || mem2_stall
-  // io.out.mem_stall := mem_stall
+  val mem2_stall = Wire(Bool())
 
   def alloc = {
     val space = enq - deq
@@ -169,7 +148,6 @@ class LoadStoreUnit(enable_pipeline_probe: Boolean, dram_start: BigInt, dram_len
       (io.put.memw === MW_B || io.put.memw === MW_BU) -> false.B,
       (io.put.memw === MW_H || io.put.memw === MW_HU) -> (io.put.addr(1, 0) === "b11".U),
     )) && (io.put.memop === MEM_OP_LD || io.put.memop === MEM_OP_ST)
-    // entry.wb_addr       := io.put.wb_addr
     val wdata = ((io.put.wdata ## io.put.wdata(31, 8)) << (8.U * io.put.addr(1, 0)))(WORD_LEN+23, WORD_LEN-8)
     entry.data          := Mux(io.put.memop === MEM_OP_LD,
       io.put.memw(2) ## aligned_lw ## io.put.addr(1, 0) ## wdata(27, 5) ## io.put.wb_addr,
@@ -196,44 +174,16 @@ class LoadStoreUnit(enable_pipeline_probe: Boolean, dram_start: BigInt, dram_len
   }
   flush
 
-  // class Mem1Input(enable_pipeline_probe: Boolean) extends Bundle {
-  //   val valid       = Bool()
-  //   val memop       = UInt(MEM_OP_LEN.W)
-  //   val addr        = UInt(WORD_LEN.W)
-  //   val memw        = UInt(MW_LEN.W)
-  //   val wdata       = UInt(WORD_LEN.W)
-  //   val wb_addr     = UInt(ADDR_LEN.W)
-  //   val inst_id     = Option.when(enable_pipeline_probe)(Input(UInt(INST_ID_LEN.W)))
-  // }
-
-  // val mem1_in = Wire(new Mem1Input(enable_pipeline_probe))
-  // mem1_in.valid   := io.in.valid
-  // mem1_in.memop   := io.in.memop
-  // mem1_in.addr    := io.in.addr
-  // mem1_in.memw    := io.in.memw
-  // mem1_in.wdata   := io.in.wdata
-  // mem1_in.wb_addr := io.in.wb_addr
-  // map2(mem1_in.inst_id, io.in.inst_id)(_ := _)
-
   def mem1: Mem2Input = {
-    // val reg_valid         = RegInit(false.B)
-    // val reg_memop         = RegInit(0.U(MEM_OP_LEN.W))
-    // val reg_addr          = RegInit(0.U(WORD_LEN.W))
-    // val reg_unaligned     = RegInit(false.B)
-    // val reg_memw          = RegInit(MW_X)
-    // val reg_wstrb         = RegInit(0.U(7.W))
-    // val reg_wdata         = RegInit(0.U(WORD_LEN.W))
-    // val reg_wb_addr       = RegInit(0.U(ADDR_LEN.W))
-    // val reg_is_mem_load   = RegInit(false.B)
-    // val reg_is_mem_store  = RegInit(false.B)
-    // val reg_is_dram_load  = RegInit(false.B)
-    // val reg_is_dram_store = RegInit(false.B)
-    // val reg_is_dram_fence = RegInit(false.B)
-    // val reg_inst_id       = Option.when(enable_pipeline_probe)(RegInit(0.U(INST_ID_LEN.W)))
     val reg_first_cycle = RegInit(true.B)
+    val mem1_mem_busy  = Wire(Bool())
+    val mem1_dram_busy = Wire(Bool())
+    val mem1_unaligned = Wire(Bool())
 
     val entry = queue(deq)
     val valid = (deq - enq)(lsq_id_len) && filled(deq).asBool
+
+    val mem_stall = mem1_mem_busy || mem1_dram_busy || mem1_unaligned || mem2_stall
 
     when (!mem_stall) {
       when (valid) {
@@ -243,15 +193,12 @@ class LoadStoreUnit(enable_pipeline_probe: Boolean, dram_start: BigInt, dram_len
     }
     val in_addr       = entry.addr ## 0.U(2.W)
     val unaligned     = entry.unaligned && valid && reg_first_cycle
-    // val wb_addr       = entry.wb_addr
     val wdata         = entry.data
-    // mem1_reg_is_dram       := mem1_is_dram
     val is_mem_load   = entry.is_mem_load   && valid
     val is_mem_store  = entry.is_mem_store  && valid
     val is_dram_load  = entry.is_dram_load  && valid
     val is_dram_store = entry.is_dram_store && valid
     val is_dram_fence = entry.is_dram_fence && valid
-    // map2(reg_inst_id, in.inst_id)(_ := _)
 
     when (!mem1_mem_busy && !mem1_dram_busy && unaligned) {
       reg_first_cycle := false.B
@@ -259,8 +206,8 @@ class LoadStoreUnit(enable_pipeline_probe: Boolean, dram_start: BigInt, dram_len
 
     val addr  = Mux(unaligned, in_addr + 4.U, in_addr)
     val wstrb = Mux(unaligned, 0.U(1.W) ## entry.wstrb(6, 4), entry.wstrb(3, 0))
-    io.dmem.raddr        := addr
-    io.dmem.waddr        := addr
+    io.dmem.raddr        := (if (enable_sim_unaligned) addr else in_addr)
+    io.dmem.waddr        := (if (enable_sim_unaligned) addr else in_addr)
     io.dmem.ren          := is_mem_load
     io.dmem.wen          := is_mem_store
     io.dmem.wstrb        := wstrb
@@ -334,7 +281,6 @@ class LoadStoreUnit(enable_pipeline_probe: Boolean, dram_start: BigInt, dram_len
     val reg_wb_byte_offset = RegInit(0.U(2.W))
     val reg_memw           = RegInit(0.U(MW_LEN.W))
     val reg_wb_addr        = RegInit(0.U(ADDR_LEN.W))
-    // val reg_is_valid_load  = RegInit(false.B)
     val reg_is_mem_load    = RegInit(false.B)
     val reg_is_dram_load   = RegInit(false.B)
     val reg_unaligned      = RegInit(false.B)
@@ -345,7 +291,6 @@ class LoadStoreUnit(enable_pipeline_probe: Boolean, dram_start: BigInt, dram_len
       reg_wb_byte_offset := in.wb_byte_offset
       reg_memw           := in.memw
       reg_wb_addr        := in.wb_addr
-      // reg_is_valid_load  := (!in.mem_stall && in.is_mem_load) || (!in.dram_stall && in.is_dram_load)
       reg_valid          := !in.mem_busy && !in.dram_busy && in.valid
       reg_is_mem_load    := !in.mem_busy && in.is_mem_load
       reg_is_dram_load   := !in.dram_busy && in.is_dram_load
@@ -356,7 +301,6 @@ class LoadStoreUnit(enable_pipeline_probe: Boolean, dram_start: BigInt, dram_len
     val mem2_mem_busy = (reg_is_mem_load && !io.dmem.rvalid)
     val mem2_dram_busy = (reg_is_dram_load && !io.cache.rvalid)
     mem2_stall := mem2_mem_busy || mem2_dram_busy
-    // io.out.mem2_stall := mem2_stall
 
     io.pipeline_probe.foreach(_.mem2_valid := !reg_unaligned && reg_valid)
     map2(io.pipeline_probe, reg_inst_id)(_.mem2_inst_id := _)

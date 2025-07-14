@@ -17,7 +17,7 @@ class SimTop(memoryPath: String, with_sdc: Boolean, enable_pipeline_probe: Boole
     val sim_probe = new SimProbe()
     val pipeline_probe = new PipelineProbe()
   })
-  val core = Module(new Core(startAddress, 0x2000_0000L, 0x1000_0000L, true, enable_pipeline_probe))
+  val core = Module(new Core(startAddress, 0x2000_0000L, 0x1000_0000L, true, enable_pipeline_probe, true))
   val memory = Module(new Memory())
   val boot_rom = Module(new BootRom(memoryPath, imemSizeInBytes, true, true))
 
