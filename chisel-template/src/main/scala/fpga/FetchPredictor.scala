@@ -408,17 +408,17 @@ class ZBTB(
 
   val addr = Mux(io.up.en, io.up.pc(index_len - 1, 0), io.inv.pc(index_len - 1, 0))
 
-  for (i <- 0 until 4) {
-    when (addr(1, 0) === i.U(2.W)) {
+  for (i <- 0 until 2) {
+    when (addr(0) === i.U(1.W)) {
       when (io.inv.en || io.up.en) {
-        zbtb_mem(i % 2)(addr(index_len - 1, 2) ## (i / 2).U).en := io.up.en
+        zbtb_mem(i)(addr(index_len - 1, 1)).en := io.up.en
         when (io.inv.en && !io.up.en) {
           printf(cf"zbtb(${i})(0x${io.inv.pc.pc_to_word}%x) inv\n")
         }
       }
       when (io.up.en) {
-        zbtb_mem(i % 2)(io.up.pc(index_len - 1, 2) ## (i / 2).U).tag    := entry.tag
-        zbtb_mem(i % 2)(io.up.pc(index_len - 1, 2) ## (i / 2).U).target := entry.target
+        zbtb_mem(i)(io.up.pc(index_len - 1, 1)).tag    := entry.tag
+        zbtb_mem(i)(io.up.pc(index_len - 1, 1)).target := entry.target
         printf(cf"zbtb(${i})(0x${io.up.pc.pc_to_word}%x) := 0x${io.up.target.pc_to_word}%x\n")
       }
     }
@@ -668,7 +668,6 @@ class RAS(index_len: Int) extends Module {
 
   when (io.call1.en && !io.call2.en) {
     index := io.call1.index
-    ras(io.call1.index) := io.call1.ret_pc
     printf(cf"RAS call1 index=${io.call1.index} pc=0x${Cat(io.call1.ret_pc, 0.U(1.W))}%x\n")
   }
 
@@ -684,7 +683,10 @@ class RAS(index_len: Int) extends Module {
 
   when (io.call2.en) {
     index := io.call2.index
-    ras(io.call2.index) := io.call2.ret_pc
     printf(cf"RAS call2 index=${io.call2.index} pc=0x${Cat(io.call2.ret_pc, 0.U(1.W))}%x\n")
+  }
+
+  when (io.call1.en || io.call2.en) {
+    ras(Mux(io.call2.en, io.call2.index, io.call1.index)) := Mux(io.call2.en, io.call2.ret_pc, io.call1.ret_pc)
   }
 }
