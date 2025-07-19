@@ -109,6 +109,14 @@ public:
     }
 };
 
+struct inst_log_t {
+    uint32_t pc;
+    uint32_t inst;
+    uint64_t cycles;
+    uint32_t wb_addr;
+    uint32_t data;
+};
+
 std::string sim_name = "???";
 vluint64_t main_time = 0;
 vluint64_t timeout = -1;
@@ -123,6 +131,9 @@ sim_wrap *wrap;
 processor_t *proc;
 state_t *state;
 cfg_t cfg;
+std::deque<inst_log_t> inst_log;
+const size_t max_inst_log = 10;
+const uint64_t max_drift_cycles = 30;
 
 class success_exception : public std::exception { };
 #define failure() throw std::exception();
@@ -309,6 +320,7 @@ void spike_step() {
             break;
         }
     }
+
 //     if(robCtx.csrReadDone){
 //         switch(robCtx.csrAddress){
 //         case MIP:
@@ -395,9 +407,73 @@ struct div_log_t {
     uint32_t data;
 };
 
+uint32_t mask_rvc(uint32_t inst) {
+    return (inst & 3) == 3 ? inst : inst & 0xffff;
+}
+
+void spike_next(uint32_t index, uint32_t inst_id, uint32_t pc, uint32_t inst, uint64_t cycles, uint32_t wb_addr, uint32_t wb_data) {
+    bool found = false;
+    for (auto &&it = inst_log.begin(); it != inst_log.end(); ++it) {
+        if (it->pc == pc) {
+            assertEq("inst unmatch", mask_rvc(inst), (uint32_t) it->inst);
+            if (it->wb_addr != 0) {
+                assertEq("reg write addr unmatch", wb_addr, it->wb_addr);
+                assertEq("reg write data unmatch", wb_data, it->data);
+            }
+            inst_log.erase(it);
+            found = true;
+            break;
+        }
+    }
+    while (!found && inst_log.size() < max_inst_log) {
+        bool skip_log = false;
+        uint32_t spike_pc = state->pc;
+        spike_step();
+        uint32_t spike_wb_addr = 0;
+        uint32_t spike_wb_data = 0;
+        for (auto item : state->log_reg_write) {
+            if (item.first != 0) {
+                if ((item.first & 0xf) == 0) {
+                    spike_wb_addr = item.first >> 4;
+                    spike_wb_data = item.second.v[0];
+                } else {
+                    fprintf(stderr, "??? unknown spike trace %llx, addr=%llx, pc=%08x\n", item.first & 0xf, item.first >> 4, spike_pc);
+                    if (state->mcause->read() == 2) {
+                        failure();
+                    }
+                    if ((item.first & 0xf) == 4 && (item.first >> 4) == 0x342) {
+                        skip_log = true;
+                    }
+                }
+            }
+        }
+        if (spike_pc == pc) {
+            assertEq("inst unmatch", mask_rvc(inst), (uint32_t) state->last_inst.bits());
+            if (spike_wb_addr != 0) {
+                // fprintf(stderr, "pc=%08x\n", pc);
+                // fprintf(stderr, "inst=%08x\n", inst);
+                // fprintf(stderr, "addr=%08x\n", wb_addr);
+                // fprintf(stderr, "data=%08x (actual)\n", wb_data);
+                // fprintf(stderr, "data=%08x (expected)\n", spike_wb_data);
+                assertEq("reg write addr unmatch", wb_addr, spike_wb_addr);
+                assertEq("reg write data unmatch", wb_data, spike_wb_data);
+            }
+            found = true;
+            break;
+        } else if (!skip_log) {
+            inst_log.push_back(inst_log_t(spike_pc, state->last_inst.bits(), cycles, spike_wb_addr, spike_wb_data));
+        }
+    }
+    if (!found) {
+        fprintf(stderr, "pc not found: %08x\n", pc);
+        fprintf(stderr, "inst: %08x\n", inst);
+        failure();
+    }
+}
+
 void sim_loop() {
-    std::deque<mem_log_t> mem_log;
-    std::deque<div_log_t> div_log;
+    // std::deque<mem_log_t> mem_log;
+    // std::deque<div_log_t> div_log;
     try {
         uint64_t retired = 0;
         uint64_t cycles = 0;
@@ -440,6 +516,22 @@ void sim_loop() {
                         inst_traces[index].inst = top->io_pipeline_probe_if2_inst2;
                         fprintf(stderr, "if2 valid: inst_id=%u pc=%x\n", top->io_pipeline_probe_if2_inst_id2, top->io_pipeline_probe_if2_pc2);
                     }
+                    if (top->io_pipeline_probe_ex1_i2_retired) {
+                        ++retired;
+                        uint32_t index = top->io_pipeline_probe_ex1_i2_inst_id % INST_TRACE_SIZE;
+                        uint32_t inst_id = inst_traces[index].inst_id;
+                        uint32_t pc;
+                        uint32_t inst;
+                        if (inst_id != top->io_pipeline_probe_ex1_i2_inst_id) {
+                            fprintf(stderr, "retired ex2: unknown inst_id=%u\n", top->io_pipeline_probe_ex1_i2_inst_id);
+                            failure();
+                        } else {
+                            pc = inst_traces[index].pc;
+                            inst = inst_traces[index].inst;
+                            fprintf(stderr, "retired ex1: pc=0x%08x, inst=0x%08x inst_id=%08x\n", pc, inst, inst_id);
+                        }
+                        spike_next(index, inst_id, pc, inst, cycles, top->io_pipeline_probe_ex1_i2_wb_addr, top->io_pipeline_probe_ex1_i2_wb_data);
+                    }
                     if (top->io_pipeline_probe_ex2_retired) {
                         ++retired;
                         uint32_t index = top->io_pipeline_probe_ex2_inst_id % INST_TRACE_SIZE;
@@ -454,83 +546,85 @@ void sim_loop() {
                             inst = inst_traces[index].inst;
                             fprintf(stderr, "retired ex2: pc=0x%08x, inst=0x%08x inst_id=%08x\n", pc, inst, inst_id);
                         }
-                        bool actual_is_divrem = (
-                            (inst & 0xfe00407f) == 0x02004033 // div, divu, rem, remu
-                        );
-                        if (actual_is_divrem && !div_log.empty()) {
-                            assertEq("divrem pc unmatch log", pc, div_log.front().pc);
-                            assertEq("divrem reg write addr unmatch", top->io_pipeline_probe_ex2_wb_addr, div_log.front().wb_addr);
-                            assertEq("divrem reg write data unmatch", top->io_pipeline_probe_ex2_wb_data, div_log.front().data);
-                            div_log.pop_front();
-                        } else {
-                            bool do_next_step = true;
-                            while (do_next_step) {
-                                uint32_t spike_pc = state->pc;
-                                spike_step();
-                                // last_commit_pc = pc;
-                                bool is_load = (
-                                    (state->last_inst.bits() & 0x7f) == 0x03 ||     // lw
-                                    (state->last_inst.bits() & 0xe003) == 0x4000 || // c.lw
-                                    (state->last_inst.bits() & 0xe003) == 0x4002 || // c.lwsp
-                                    (state->last_inst.bits() & 0xa003) == 0x2000 || // c.lb, c.lbu
-                                    (state->last_inst.bits() & 0xf003) == 0x2002    // c.lh, c.lhu
-                                );
-                                bool is_store = (
-                                    (state->last_inst.bits() & 0x7f) == 0x23 ||     // sw
-                                    (state->last_inst.bits() & 0xe003) == 0xc000 || // c.sw
-                                    (state->last_inst.bits() & 0xe003) == 0xc002 || // c.lwsp
-                                    (state->last_inst.bits() & 0xf003) == 0x3002 || // c.sh, c.s?0
-                                    (state->last_inst.bits() & 0xe003) == 0x6002    // c.sb
-                                );
-                                bool is_fence_i = (
-                                    state->last_inst.bits() == 0x0000100f           // fence.i
-                                );
-                                bool is_divrem = (
-                                    (state->last_inst.bits() & 0xfe00407f) == 0x02004033 // div, divu, rem, remu
-                                );
-                                if (!is_load && !is_store && !is_fence_i && !is_divrem) {
-                                    assertEq("pc unmatch", pc, spike_pc);
-                                    do_next_step = false;
-                                }
-                                if (is_store) {
-                                    assertEq("memory write", (uint32_t)state->log_mem_write.size(), 1);
-                                    mem_log.push_back(mem_log_t(spike_pc, state->last_inst.bits(), false, true, 0, std::get<0>(state->log_mem_write[0]), std::get<1>(state->log_mem_write[0]), std::get<2>(state->log_mem_write[0])));
-                                }
-                                if (is_fence_i) {
-                                    mem_log.push_back(mem_log_t(spike_pc, state->last_inst.bits(), false, false, 0, 0, 0, 0));
-                                }
-                                for (auto item : state->log_reg_write) {
-                                    if (item.first != 0) {
-                                        uint32_t wb_addr = item.first >> 4;
-                                        uint32_t wb_data = item.second.v[0];
-                                        if ((item.first & 0xf) == 0) {
-                                            if (is_load) {
-                                                mem_log.push_back(mem_log_t(spike_pc, state->last_inst.bits(), true, false, wb_addr, 0, wb_data, 0));
-                                            } else if (is_divrem) {
-                                                div_log.push_back(div_log_t(spike_pc, state->last_inst.bits(), wb_addr, wb_data));
-                                            } else {
-                                                assertEq("integer reg write addr unmatch", top->io_pipeline_probe_ex2_wb_addr, wb_addr);
-                                                assertEq("integer reg write data unmatch", top->io_pipeline_probe_ex2_wb_data, wb_data);
-                                            }
-                                        } else {
-                                            fprintf(stderr, "??? unknown spike trace %llx, addr=%llx\n", item.first & 0xf, item.first >> 4);
-                                            if (state->mcause->read() == 2) {
-                                                failure();
-                                            }
-                                        }
-                                    }
-                                }
-                                if (actual_is_divrem && !div_log.empty()) {
-                                    assertEq("divrem pc unmatch log", pc, div_log.front().pc);
-                                    assertEq("divrem reg write addr unmatch", top->io_pipeline_probe_ex2_wb_addr, div_log.front().wb_addr);
-                                    assertEq("divrem reg write data unmatch", top->io_pipeline_probe_ex2_wb_data, div_log.front().data);
-                                    div_log.pop_front();
-                                    if (div_log.empty()) {
-                                        do_next_step = false;
-                                    }
-                                }
-                            }
-                        }
+                        spike_next(index, inst_id, pc, inst, cycles, top->io_pipeline_probe_ex2_wb_addr, top->io_pipeline_probe_ex2_wb_data);
+
+                        // bool actual_is_divrem = (
+                        //     (inst & 0xfe00407f) == 0x02004033 // div, divu, rem, remu
+                        // );
+                        // if (actual_is_divrem && !div_log.empty()) {
+                        //     assertEq("divrem pc unmatch log", pc, div_log.front().pc);
+                        //     assertEq("divrem reg write addr unmatch", top->io_pipeline_probe_ex2_wb_addr, div_log.front().wb_addr);
+                        //     assertEq("divrem reg write data unmatch", top->io_pipeline_probe_ex2_wb_data, div_log.front().data);
+                        //     div_log.pop_front();
+                        // } else {
+                        //     bool do_next_step = true;
+                        //     while (do_next_step) {
+                        //         uint32_t spike_pc = state->pc;
+                        //         spike_step();
+                        //         // last_commit_pc = pc;
+                        //         bool is_load = (
+                        //             (state->last_inst.bits() & 0x7f) == 0x03 ||     // lw
+                        //             (state->last_inst.bits() & 0xe003) == 0x4000 || // c.lw
+                        //             (state->last_inst.bits() & 0xe003) == 0x4002 || // c.lwsp
+                        //             (state->last_inst.bits() & 0xa003) == 0x2000 || // c.lb, c.lbu
+                        //             (state->last_inst.bits() & 0xf003) == 0x2002    // c.lh, c.lhu
+                        //         );
+                        //         bool is_store = (
+                        //             (state->last_inst.bits() & 0x7f) == 0x23 ||     // sw
+                        //             (state->last_inst.bits() & 0xe003) == 0xc000 || // c.sw
+                        //             (state->last_inst.bits() & 0xe003) == 0xc002 || // c.lwsp
+                        //             (state->last_inst.bits() & 0xf003) == 0x3002 || // c.sh, c.s?0
+                        //             (state->last_inst.bits() & 0xe003) == 0x6002    // c.sb
+                        //         );
+                        //         bool is_fence_i = (
+                        //             state->last_inst.bits() == 0x0000100f           // fence.i
+                        //         );
+                        //         bool is_divrem = (
+                        //             (state->last_inst.bits() & 0xfe00407f) == 0x02004033 // div, divu, rem, remu
+                        //         );
+                        //         if (!is_load && !is_store && !is_fence_i && !is_divrem) {
+                        //             assertEq("pc unmatch", pc, spike_pc);
+                        //             do_next_step = false;
+                        //         }
+                        //         if (is_store) {
+                        //             assertEq("memory write", (uint32_t)state->log_mem_write.size(), 1);
+                        //             mem_log.push_back(mem_log_t(spike_pc, state->last_inst.bits(), false, true, 0, std::get<0>(state->log_mem_write[0]), std::get<1>(state->log_mem_write[0]), std::get<2>(state->log_mem_write[0])));
+                        //         }
+                        //         if (is_fence_i) {
+                        //             mem_log.push_back(mem_log_t(spike_pc, state->last_inst.bits(), false, false, 0, 0, 0, 0));
+                        //         }
+                        //         for (auto item : state->log_reg_write) {
+                        //             if (item.first != 0) {
+                        //                 uint32_t wb_addr = item.first >> 4;
+                        //                 uint32_t wb_data = item.second.v[0];
+                        //                 if ((item.first & 0xf) == 0) {
+                        //                     if (is_load) {
+                        //                         mem_log.push_back(mem_log_t(spike_pc, state->last_inst.bits(), true, false, wb_addr, 0, wb_data, 0));
+                        //                     } else if (is_divrem) {
+                        //                         div_log.push_back(div_log_t(spike_pc, state->last_inst.bits(), wb_addr, wb_data));
+                        //                     } else {
+                        //                         assertEq("integer reg write addr unmatch", top->io_pipeline_probe_ex2_wb_addr, wb_addr);
+                        //                         assertEq("integer reg write data unmatch", top->io_pipeline_probe_ex2_wb_data, wb_data);
+                        //                     }
+                        //                 } else {
+                        //                     fprintf(stderr, "??? unknown spike trace %llx, addr=%llx\n", item.first & 0xf, item.first >> 4);
+                        //                     if (state->mcause->read() == 2) {
+                        //                         failure();
+                        //                     }
+                        //                 }
+                        //             }
+                        //         }
+                        //         if (actual_is_divrem && !div_log.empty()) {
+                        //             assertEq("divrem pc unmatch log", pc, div_log.front().pc);
+                        //             assertEq("divrem reg write addr unmatch", top->io_pipeline_probe_ex2_wb_addr, div_log.front().wb_addr);
+                        //             assertEq("divrem reg write data unmatch", top->io_pipeline_probe_ex2_wb_data, div_log.front().data);
+                        //             div_log.pop_front();
+                        //             if (div_log.empty()) {
+                        //                 do_next_step = false;
+                        //             }
+                        //         }
+                        //     }
+                        // }
                     }
                     if (top->io_pipeline_probe_mem3_retired) {
                         ++retired;
@@ -547,33 +641,40 @@ void sim_loop() {
                             printf("retired mem: pc=0x%08x, inst=0x%08x\n", pc, inst);
                             printf("retired cycles=%llu, retired=%llu\n", cycles, retired);
                         }
-                        if (mem_log.empty()) {
-                            uint32_t spike_pc = state->pc;
-                            spike_step();
-                            assertEq("load pc unmatch", pc, spike_pc);
-                            for (auto item : state->log_reg_write) {
-                                if (item.first != 0) {
-                                    uint32_t wb_addr = item.first >> 4;
-                                    uint32_t wb_data = item.second.v[0];
-                                    if ((item.first & 0xf) == 0) {
-                                        assertEq("load reg write addr unmatch", top->io_pipeline_probe_mem3_wb_addr, wb_addr);
-                                        assertEq("load reg write data unmatch", top->io_pipeline_probe_mem3_wb_data, wb_data);
-                                    } else {
-                                        fprintf(stderr, "??? unknown spike trace %llx addr=%llx pc=%x\n", item.first & 0xf, item.first >> 4, spike_pc);
-                                        if (state->mcause->read() == 2) {
-                                            failure();
-                                        }
-                                    }
-                                }
-                            }
-                        } else {
-                            assertEq("load pc unmatch log", pc, mem_log.front().pc);
-                            if (mem_log.front().is_load) {
-                                assertEq("load reg write addr unmatch log", top->io_pipeline_probe_mem3_wb_addr, mem_log.front().wb_addr);
-                                assertEq("load reg write data unmatch log", top->io_pipeline_probe_mem3_wb_data, mem_log.front().data);
-                            }
-                            mem_log.pop_front();
-                        }
+                        spike_next(index, inst_id, pc, inst, cycles, top->io_pipeline_probe_mem3_wb_addr, top->io_pipeline_probe_mem3_wb_data);
+                        // if (mem_log.empty()) {
+                        //     uint32_t spike_pc = state->pc;
+                        //     spike_step();
+                        //     assertEq("load pc unmatch", pc, spike_pc);
+                        //     for (auto item : state->log_reg_write) {
+                        //         if (item.first != 0) {
+                        //             uint32_t wb_addr = item.first >> 4;
+                        //             uint32_t wb_data = item.second.v[0];
+                        //             if ((item.first & 0xf) == 0) {
+                        //                 assertEq("load reg write addr unmatch", top->io_pipeline_probe_mem3_wb_addr, wb_addr);
+                        //                 assertEq("load reg write data unmatch", top->io_pipeline_probe_mem3_wb_data, wb_data);
+                        //             } else {
+                        //                 fprintf(stderr, "??? unknown spike trace %llx addr=%llx pc=%x\n", item.first & 0xf, item.first >> 4, spike_pc);
+                        //                 if (state->mcause->read() == 2) {
+                        //                     failure();
+                        //                 }
+                        //             }
+                        //         }
+                        //     }
+                        // } else {
+                        //     assertEq("load pc unmatch log", pc, mem_log.front().pc);
+                        //     if (mem_log.front().is_load) {
+                        //         assertEq("load reg write addr unmatch log", top->io_pipeline_probe_mem3_wb_addr, mem_log.front().wb_addr);
+                        //         assertEq("load reg write data unmatch log", top->io_pipeline_probe_mem3_wb_data, mem_log.front().data);
+                        //     }
+                        //     mem_log.pop_front();
+                        // }
+                    }
+                }
+                if (!inst_log.empty()) {
+                    if (inst_log[0].cycles + max_drift_cycles < cycles) {
+                        fprintf(stderr, "not retired pc=%08x\n", inst_log[0].pc);
+                        failure();
                     }
                 }
                 top->eval();

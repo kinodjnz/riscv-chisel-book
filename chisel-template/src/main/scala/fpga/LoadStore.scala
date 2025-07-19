@@ -8,14 +8,16 @@ import common.UIntExtension._
 import common.OptionExtension._
 
 class LoadStoreOutput extends Bundle {
-  val fw_en_next  = Output(Bool())
-  val fw_wb_addr  = Output(UInt(ADDR_LEN.W))
-  val fw_data     = Output(UInt(WORD_LEN.W))
-  val wb_en       = Output(Bool())
-  val wb_nofw     = Output(Bool())
-  val wb_addr     = Output(UInt(ADDR_LEN.W))
-  val wb_data     = Output(UInt(WORD_LEN.W))
-  val is_retired  = Output(Bool())
+  val fw_en_next   = Output(Bool())
+  val fw_wb_addr   = Output(UInt(ADDR_LEN.W))
+  val fw_data      = Output(UInt(WORD_LEN.W))
+  val wb_next      = Output(Bool())
+  val wb_en        = Output(Bool())
+  val wb_nofw      = Output(Bool())
+  val wb_addr_next = Output(UInt(ADDR_LEN.W))
+  val wb_addr      = Output(UInt(ADDR_LEN.W))
+  val wb_data      = Output(UInt(WORD_LEN.W))
+  val is_retired   = Output(Bool())
 }
 
 class LoadStoreQueueEntry(enable_pipeline_probe: Boolean) extends Bundle {
@@ -307,8 +309,10 @@ class LoadStoreUnit(enable_pipeline_probe: Boolean, dram_start: BigInt, dram_len
 
     val is_valid_load = !mem2_stall && !reg_unaligned && (reg_is_mem_load || reg_is_dram_load)
     val is_aligned_lw = !mem2_stall && (reg_is_mem_load || reg_is_dram_load) && reg_aligned_lw
-    io.out.fw_en_next := is_aligned_lw
-    io.out.fw_wb_addr := reg_wb_addr
+    io.out.fw_en_next   := is_aligned_lw
+    io.out.fw_wb_addr   := reg_wb_addr
+    io.out.wb_next      := is_valid_load
+    io.out.wb_addr_next := reg_wb_addr
 
     printf(cf"mem2_mem_busy    : ${mem2_mem_busy}%d\n")
     printf(cf"mem2_dram_busy   : ${mem2_dram_busy}%d\n")

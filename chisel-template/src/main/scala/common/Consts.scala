@@ -29,7 +29,7 @@ object Consts {
   val EXE_CSR = 3.U(EXE_SEL_LEN.W)
   val EXE_ST  = 4.U(EXE_SEL_LEN.W)
   val EXE_LD  = 5.U(EXE_SEL_LEN.W)
-  val EXE_JB  = 6.U(EXE_SEL_LEN.W)
+  val EXE_JB  = 7.U(EXE_SEL_LEN.W)
 
   val EXE_FUN_LEN = 4
 
@@ -41,13 +41,13 @@ object Consts {
   val ALU_FSL   =  4.U(EXE_FUN_LEN.W)
   val ALU_FSR   =  5.U(EXE_FUN_LEN.W)
   val ALU_SUB   =  6.U(EXE_FUN_LEN.W)
-  val ALU_SZEXT =  7.U(EXE_FUN_LEN.W)
+  val ALU_SZEXT = 13.U(EXE_FUN_LEN.W)
   val ALU_SLT   =  8.U(EXE_FUN_LEN.W)
   val ALU_SEQ   =  9.U(EXE_FUN_LEN.W)
   val ALU_MIN   = 10.U(EXE_FUN_LEN.W)
   val ALU_MAX   = 11.U(EXE_FUN_LEN.W)
   val ALU_BEXT  = 12.U(EXE_FUN_LEN.W)
-  val ALU_CMOV  = 13.U(EXE_FUN_LEN.W)
+  val ALU_CMOV  =  7.U(EXE_FUN_LEN.W)
   val ALU_BCLR  = 14.U(EXE_FUN_LEN.W)
   val ALU_BSET  = 15.U(EXE_FUN_LEN.W)
 
@@ -66,6 +66,8 @@ object Consts {
   val PAT_BFM_BFP = BitPat("b01?0")
   val PAT_BFX     = BitPat("b01?1")
   val PAT_BF      = BitPat("b01??")
+
+  val PAT_CLU_FUN = BitPat("b0???")
 
   val JB_OTHER    =  0.U(EXE_FUN_LEN.W)
   val JB_DJUMP    =  2.U(EXE_FUN_LEN.W)
@@ -163,10 +165,10 @@ object Consts {
   val OP2_IMM_U = 2.U(ADDR_LEN.W)
   val OP2_IMM_J = 3.U(ADDR_LEN.W)
 
-  val PAT_OP2_IMI = BitPat("b???00")
-  val PAT_OP2_IMU = BitPat("b???01")
-  val PAT_OP2_IMJ = BitPat("b???10")
-  val PAT_OP2_IMB = BitPat("b???11")
+  // val PAT_OP2_IMI = BitPat("b???00")
+  // val PAT_OP2_IMU = BitPat("b???01")
+  // val PAT_OP2_IMJ = BitPat("b???10")
+  // val PAT_OP2_IMB = BitPat("b???11")
 
   val OP3_SEL_LEN = 2
   val OP3_SEL_RS   = 0.U

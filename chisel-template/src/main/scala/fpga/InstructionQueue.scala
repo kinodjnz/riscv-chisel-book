@@ -93,7 +93,8 @@ class InstructionQueue[Initial <: Data, Decoded <: Data, Lsq <: Data](
     val lsq2    = new InstructionQueuePutLsq(genLsq)
     val range   = new InstructionQueueDequeueRange(iq_id_len)
     val upd_deq = new InstructionQueueUpdateDequeuePtr(iq_id_len)
-    val peek    = new InstructionQueuePeek(iq_id_len, genInitial, genDecoded, genLsq)
+    val peek1   = new InstructionQueuePeek(iq_id_len, genInitial, genDecoded, genLsq)
+    val peek2   = new InstructionQueuePeek(iq_id_len, genInitial, genDecoded, genLsq)
     val flush   = Input(Bool())
   })
 
@@ -208,19 +209,20 @@ class InstructionQueue[Initial <: Data, Decoded <: Data, Lsq <: Data](
       lsq_ptr     := enq
     }
 
-    io.peek.valid   := (io.peek.iq_id - lsq_ptr)(iq_id_len)
-    io.peek.initial := Mux(io.peek.iq_id(0),
-      iq_buf_initial_1(io.peek.iq_id.take(iq_id_len) >> 1),
-      iq_buf_initial_0(io.peek.iq_id.take(iq_id_len) >> 1),
-    )
-    io.peek.decoded := Mux(io.peek.iq_id(0),
-      iq_buf_decoded_1(io.peek.iq_id.take(iq_id_len) >> 1),
-      iq_buf_decoded_0(io.peek.iq_id.take(iq_id_len) >> 1),
-    )
-    io.peek.lsq := Mux(io.peek.iq_id(0),
-      iq_buf_lsq_1(io.peek.iq_id.take(iq_id_len) >> 1),
-      iq_buf_lsq_0(io.peek.iq_id.take(iq_id_len) >> 1),
-    )
+    io.peek1.valid   := (io.peek1.iq_id - lsq_ptr)(iq_id_len)
+    io.peek2.valid   := (io.peek2.iq_id - lsq_ptr)(iq_id_len)
+    val initial0 = iq_buf_initial_0(Mux(io.peek1.iq_id(0), io.peek2.iq_id, io.peek1.iq_id).take(iq_id_len) >> 1)
+    val initial1 = iq_buf_initial_1(Mux(io.peek1.iq_id(0), io.peek1.iq_id, io.peek2.iq_id).take(iq_id_len) >> 1)
+    io.peek1.initial := Mux(io.peek1.iq_id(0), initial1, initial0)
+    io.peek2.initial := Mux(io.peek1.iq_id(0), initial0, initial1)
+    val decoded0 = iq_buf_decoded_0(Mux(io.peek1.iq_id(0), io.peek2.iq_id, io.peek1.iq_id).take(iq_id_len) >> 1)
+    val decoded1 = iq_buf_decoded_1(Mux(io.peek1.iq_id(0), io.peek1.iq_id, io.peek2.iq_id).take(iq_id_len) >> 1)
+    io.peek1.decoded := Mux(io.peek1.iq_id(0), decoded1, decoded0)
+    io.peek2.decoded := Mux(io.peek1.iq_id(0), decoded0, decoded1)
+    val lsq0 = iq_buf_lsq_0(Mux(io.peek1.iq_id(0), io.peek2.iq_id, io.peek1.iq_id).take(iq_id_len) >> 1)
+    val lsq1 = iq_buf_lsq_1(Mux(io.peek1.iq_id(0), io.peek1.iq_id, io.peek2.iq_id).take(iq_id_len) >> 1)
+    io.peek1.lsq := Mux(io.peek1.iq_id(0), lsq1, lsq0)
+    io.peek2.lsq := Mux(io.peek1.iq_id(0), lsq0, lsq1)
   }
 
   enqueue
