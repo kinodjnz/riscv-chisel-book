@@ -282,6 +282,7 @@ class InstructionDecoder(enable_pipeline_probe: Boolean) extends Module {
   val c_rd2p_addr = 1.U(2.W) ## inst(4, 2)
 
   val m_op1_sel = op1_sel(3, 2)
+  // val m_op1_sel = Mux(op1_sel === OP1_RS1 && rs1_addr === 0.U, OP1_SEL_Z, op1_sel(3, 2))
 
   val m_rs1_addr = MuxCase(rs1_addr, Seq(
     (op1_sel === OP1_C_RS1)  -> c_rs1_addr,

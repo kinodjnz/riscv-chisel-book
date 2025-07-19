@@ -147,7 +147,19 @@ class Core(
     val pipeline_probe = Option.when(enable_pipeline_probe)(new PipelineProbe())
   })
 
-  val regfile = Mem(32, UInt(WORD_LEN.W))
+  val regsel = Mem(32, UInt(1.W))
+  val regfile1a = Mem(32, UInt(WORD_LEN.W))
+  val regfile1b = Mem(32, UInt(WORD_LEN.W))
+  val regfile2a = Mem(32, UInt(WORD_LEN.W))
+  val regfile2b = Mem(32, UInt(WORD_LEN.W))
+
+  def read_regfile_a(addr: UInt): UInt = {
+    Mux(regsel(addr) === 0.U, regfile1a(addr), regfile2a(addr))
+  }
+  def read_regfile_b(addr: UInt): UInt = {
+    Mux(regsel(addr) === 0.U, regfile1b(addr), regfile2b(addr))
+  }
+
   //val csr_regfile = Mem(4096, UInt(WORD_LEN.W)) 
   val cycle_counter = Module(new LongCounter(8, 8)) // 64-bit cycle counter for CYCLE[H] CSR
   val mtimer = Module(new MachineTimer)
@@ -225,7 +237,7 @@ class Core(
   val ex1_reg_fp_entry         = RegInit(0.U.asTypeOf(new FetchPredictionEntry(PHT_HISTORY_LEN, RAS_ENTRIES)))
   val ex1_reg_i2_pc            = RegInit(0.U(PC_LEN.W))
   val ex1_reg_i2_exe_fun       = RegInit(0.U(EXE_FUN_LEN.W))
-  val ex1_reg_i2_sop           = RegInit(0.U(SOP_LEN.W))
+  // val ex1_reg_i2_sop           = RegInit(0.U(SOP_LEN.W))
   val ex1_reg_i2_op1_data      = RegInit(0.U(WORD_LEN.W))
   val ex1_reg_i2_op2_data      = RegInit(0.U(WORD_LEN.W))
   val ex1_reg_i2_rf_wen        = RegInit(0.U(REN_LEN.W))
@@ -445,7 +457,6 @@ class Core(
     rrd_i2_exe_sel === EXE_ALU && PAT_CLU_FUN.matches(rrd_i2_exe_fun) && rrd_i2_sop === SOP_NOP &&
     !rrd_reg_bp.redirected && rrd_reg_exe_sel =/= EXE_JB && rrd_reg_exe_sel =/= EXE_CSR &&
     !lsu.io.out.wb_next &&
-    (rrd_i2_op2_sel(1) =/= OP2_SEL_RS(1) || rrd_reg_op2_sel(1) =/= OP2_SEL_RS(1) || rrd_reg_op3_sel(1) =/= OP3_SEL_RS(1)) &&
     rrd_i2_op3_sel(1) =/= OP3_SEL_RS(1) && !(
       ((rrd_i2_op1_sel    === OP1_SEL_RS)    && (scoreboard(rrd_i2_rs1_addr) || rrd_i2_rs1_addr === rrd_i1_wb_addr)) ||
       ((rrd_i2_op2_sel(1) === OP2_SEL_RS(1)) && (scoreboard(rrd_i2_rs2_addr) || rrd_i2_rs2_addr === rrd_i1_wb_addr)) ||
@@ -470,11 +481,10 @@ class Core(
     (ex2_reg_fw_en &&
       (rrd_reg_op1_sel === OP1_SEL_RS) &&
       (rrd_reg_rs1_addr === ex2_reg_wb_addr)) -> ex2_fw_data,
-    (rrd_reg_op1_sel === OP1_SEL_RS)  -> regfile(rrd_reg_rs1_addr),
+    (rrd_reg_op1_sel === OP1_SEL_RS)  -> read_regfile_a(rrd_reg_rs1_addr),
     (rrd_reg_op1_sel === OP1_SEL_PC)  -> rrd_reg_pc.pc_to_word,
     (rrd_reg_op1_sel === OP1_SEL_IMR) -> 0.U((WORD_LEN-ADDR_LEN).W) ## rrd_reg_rs1_addr,
   ))
-  val rrd_rs2_i2_rs2_data = regfile(Mux(rrd_reg_op2_sel(1) === OP2_SEL_RS(1), rrd_reg_rs2_addr, rrd_i2_rs2_addr))
   val rrd_op2_data = MuxCase(0.U(WORD_LEN.W), Seq(
     (ex1_reg_fw_en &&
       (rrd_reg_op2_sel(1) === OP2_SEL_RS(1)) &&
@@ -485,7 +495,7 @@ class Core(
     (ex2_reg_fw_en &&
       (rrd_reg_op2_sel(1) === OP2_SEL_RS(1)) &&
       (rrd_reg_rs2_addr === ex2_reg_wb_addr)) -> mix(rrd_reg_op2_sel, rrd_reg_imm_data, ex2_fw_data),
-    (rrd_reg_op2_sel(1) === OP2_SEL_RS(1)) -> mix(rrd_reg_op2_sel, rrd_reg_imm_data, rrd_rs2_i2_rs2_data),
+    (rrd_reg_op2_sel(1) === OP2_SEL_RS(1)) -> mix(rrd_reg_op2_sel, rrd_reg_imm_data, read_regfile_a(rrd_reg_rs2_addr)),
     (rrd_reg_op2_sel === OP2_SEL_IMM &&
       rrd_reg_rs2_addr(1, 0) === OP2_IMM_I) -> rrd_reg_imm_data.signed_extend(WORD_LEN),
     (rrd_reg_op2_sel === OP2_SEL_IMM &&
@@ -499,7 +509,6 @@ class Core(
     (rrd_reg_op2_sel === OP2_SEL_IMM &&
       rrd_reg_rs2_addr(1, 0) === OP2_IMM_J) -> (rrd_reg_imm_data(11) ## rrd_reg_rs1_addr ## rrd_reg_rs3_addr(2, 0) ## rrd_reg_imm_data(0) ## rrd_reg_imm_data(10, 1) ## 0.U(1.W)).signed_extend(WORD_LEN),
   ))
-  val rrd_rs3_i2_rs2_data = regfile(Mux(rrd_reg_op3_sel(1) === OP3_SEL_RS(1), rrd_reg_rs3_addr, rrd_i2_rs2_addr))
   val rrd_op3_data = MuxCase(0.U(WORD_LEN.W), Seq(
     (ex1_reg_fw_en &&
       (rrd_reg_op3_sel(1) === OP3_SEL_RS(1)) &&
@@ -510,7 +519,7 @@ class Core(
     (ex2_reg_fw_en &&
       (rrd_reg_op3_sel(1) === OP3_SEL_RS(1)) &&
       (rrd_reg_rs3_addr === ex2_reg_wb_addr))  -> rmsb(rrd_reg_op3_sel, ex2_fw_data),
-    (rrd_reg_op3_sel(1) === OP3_SEL_RS(1))     -> rmsb(rrd_reg_op3_sel, rrd_rs3_i2_rs2_data),
+    (rrd_reg_op3_sel(1) === OP3_SEL_RS(1))     -> rmsb(rrd_reg_op3_sel, read_regfile_a(rrd_reg_rs3_addr)),
   ))
 
   val rrd_imm_data = MuxCase(rrd_reg_imm_data, Seq(
@@ -535,7 +544,7 @@ class Core(
     (ex2_reg_fw_en &&
       (rrd_i2_op1_sel === OP1_SEL_RS) &&
       (rrd_i2_rs1_addr === ex2_reg_wb_addr)) -> ex2_fw_data,
-    (rrd_i2_op1_sel === OP1_SEL_RS)  -> regfile(rrd_i2_rs1_addr),
+    (rrd_i2_op1_sel === OP1_SEL_RS)  -> read_regfile_b(rrd_i2_rs1_addr),
     (rrd_i2_op1_sel === OP1_SEL_PC)  -> rrd_i2_pc.pc_to_word,
   ))
   val rrd_i2_op2_data = MuxCase(0.U(WORD_LEN.W), Seq(
@@ -548,7 +557,7 @@ class Core(
     (ex2_reg_fw_en &&
       (rrd_i2_op2_sel(1) === OP2_SEL_RS(1)) &&
       (rrd_i2_rs2_addr === ex2_reg_wb_addr)) -> ex2_fw_data,
-    (rrd_i2_op2_sel(1) === OP2_SEL_RS(1)) -> Mux(rrd_reg_op3_sel(1) === OP3_SEL_RS(1), rrd_rs2_i2_rs2_data, rrd_rs3_i2_rs2_data),
+    (rrd_i2_op2_sel(1) === OP2_SEL_RS(1)) -> read_regfile_b(rrd_i2_rs2_addr),
     (rrd_i2_op2_sel === OP2_SEL_IMM &&
       rrd_i2_rs2_addr(1, 0) === OP2_IMM_I) -> rrd_i2_imm_data.signed_extend(WORD_LEN),
     (rrd_i2_op2_sel === OP2_SEL_IMM &&
@@ -675,18 +684,14 @@ class Core(
   ))
 
   val ex1_clu_out = MuxCase(0.U(WORD_LEN.W), Seq(
-    (ex1_reg_i2_exe_fun === ALU_ADD) -> (ex1_reg_i2_op1_data + ex1_reg_i2_op2_data),
-    (ex1_reg_i2_exe_fun === ALU_SUB) -> (ex1_reg_i2_op1_data - ex1_reg_i2_op2_data),
-    (ex1_reg_i2_exe_fun === ALU_XOR) -> (ex1_reg_i2_op1_data ^ ex1_reg_i2_op2_data),
-    (ex1_reg_i2_exe_fun === ALU_AND) -> (ex1_reg_i2_op1_data & ex1_reg_i2_op2_data),
-    (ex1_reg_i2_exe_fun === ALU_OR)  -> (ex1_reg_i2_op1_data | ex1_reg_i2_op2_data),
-    (ex1_reg_i2_exe_fun === ALU_FSL) -> (ex1_reg_i2_op1_data << ex1_reg_i2_op2_data(4, 0))(WORD_LEN-1, 0),
-    (ex1_reg_i2_exe_fun === ALU_FSR) -> (ex1_reg_i2_op1_data >> ex1_reg_i2_op2_data(4, 0))(WORD_LEN-1, 0),
-    (ex1_reg_i2_exe_fun === ALU_SLT) -> Mux(
-      ex1_reg_i2_sop === SOP_SGN,
-      ex1_reg_i2_op1_data.asSInt < ex1_reg_i2_op2_data.asSInt,
-      ex1_reg_i2_op1_data < ex1_reg_i2_op2_data,
-    ).asUInt,
+    (ex1_reg_i2_exe_fun(2, 0) === ALU_ADD(2, 0)) -> (ex1_reg_i2_op1_data + ex1_reg_i2_op2_data),
+    (ex1_reg_i2_exe_fun(2, 0) === ALU_SUB(2, 0)) -> (ex1_reg_i2_op1_data - ex1_reg_i2_op2_data),
+    (ex1_reg_i2_exe_fun(2, 0) === ALU_XOR(2, 0)) -> (ex1_reg_i2_op1_data ^ ex1_reg_i2_op2_data),
+    (ex1_reg_i2_exe_fun(2, 0) === ALU_AND(2, 0)) -> (ex1_reg_i2_op1_data & ex1_reg_i2_op2_data),
+    (ex1_reg_i2_exe_fun(2, 0) === ALU_OR(2, 0))  -> (ex1_reg_i2_op1_data | ex1_reg_i2_op2_data),
+    (ex1_reg_i2_exe_fun(2, 0) === ALU_FSL(2, 0)) -> (ex1_reg_i2_op1_data << ex1_reg_i2_op2_data(4, 0))(WORD_LEN-1, 0),
+    (ex1_reg_i2_exe_fun(2, 0) === ALU_FSR(2, 0)) -> (ex1_reg_i2_op1_data >> ex1_reg_i2_op2_data(4, 0))(WORD_LEN-1, 0),
+    (ex1_reg_i2_exe_fun(2, 0) === ALU_SLT(2, 0)) -> (ex1_reg_i2_op1_data < ex1_reg_i2_op2_data).asUInt,
   ))
 
   ex1_fw2_data := Mux(ex1_reg_i2_rf_wen === REN_S, ex1_clu_out, lsu.io.out.fw_data)
@@ -694,7 +699,9 @@ class Core(
   val ex1_i2_wb_data = Mux(ex1_reg_i2_rf_wen === REN_S, ex1_clu_out, lsu.io.out.wb_data)
 
   when ((ex1_reg_i2_rf_wen === REN_S && !ex2_reg_is_br) || lsu.io.out.wb_en) {
-    regfile(ex1_reg_i2_wb_addr) := ex1_i2_wb_data
+    regsel(ex1_reg_i2_wb_addr) := 1.U
+    regfile2a(ex1_reg_i2_wb_addr) := ex1_i2_wb_data
+    regfile2b(ex1_reg_i2_wb_addr) := ex1_i2_wb_data
   }
 
   val ex1_mul_op1_data = Mux(PAT_MULHS1.matches(ex1_reg_exe_fun),
@@ -1250,7 +1257,9 @@ class Core(
 
   // In case where ex1_i2 and ex2 write to the same register at the same time, ex1_i2 has priority.
   when (ex2_reg_rf_wen === REN_S && !(ex1_reg_i2_rf_wen === REN_S && !ex2_reg_is_br && (ex1_reg_i2_wb_addr === ex2_reg_wb_addr))) {
-    regfile(ex2_reg_wb_addr) := ex2_wb_data
+    regsel(ex2_reg_wb_addr) := 0.U
+    regfile1a(ex2_reg_wb_addr) := ex2_wb_data
+    regfile1b(ex2_reg_wb_addr) := ex2_wb_data
   }
 
   io.pipeline_probe.foreach(_.ex2_valid := ex2_reg_valid)
@@ -1324,8 +1333,8 @@ class Core(
   //**********************************
   // IO & Debug
   if (enable_sim_probe) {
-    io.sim_probe.foreach(_.gp := regfile(3))
-    val gp = MuxCase(regfile(17), Seq(
+    io.sim_probe.foreach(_.gp := read_regfile_a(3.U))
+    val gp = MuxCase(read_regfile_a(17.U), Seq(
       (ex1_reg_fw_en  && (ex1_reg_wb_addr === 17.U))    -> ex1_fw_data,
       (ex1_reg_fw2_en && (ex1_reg_i2_wb_addr === 17.U)) -> ex1_fw2_data,
       (ex2_reg_fw_en  && (ex2_reg_wb_addr === 17.U))    -> ex2_fw_data,
@@ -1334,7 +1343,7 @@ class Core(
     val do_exit = RegNext(exit)
     io.sim_probe.foreach(_.exit := RegNext(do_exit).asUInt)
     printf(cf"csr_is_ecall        : ${csr_is_ecall}\n")
-    printf(cf"regfile(17)         : 0x${regfile(17)}%x\n")
+    printf(cf"regfile(17)         : 0x${read_regfile_a(17.U)}%x\n")
     printf(cf"exit                : ${exit}\n")
     printf(cf"do_exit             : ${do_exit}\n")
   }
