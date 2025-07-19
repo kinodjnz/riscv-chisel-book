@@ -1,15 +1,27 @@
 [
   {
     "class":"firrtl.transforms.DedupedResult",
+    "original":"~SimTop|InstructionDecoder",
+    "duplicate":"~SimTop|SimTop/core:Core/idu:InstructionDecoderUnit/decoder1:InstructionDecoder",
+    "index":0.39285714285714285
+  },
+  {
+    "class":"firrtl.transforms.DedupedResult",
+    "original":"~SimTop|InstructionDecoder_1",
+    "duplicate":"~SimTop|SimTop/core:Core/idu:InstructionDecoderUnit/decoder2:InstructionDecoder",
+    "index":0.42857142857142855
+  },
+  {
+    "class":"firrtl.transforms.DedupedResult",
     "original":"~SimTop|MockPHTMem",
     "duplicate":"~SimTop|SimTop/pht_lmem:MockPHTMem",
-    "index":0.9230769230769231
+    "index":0.9285714285714286
   },
   {
     "class":"firrtl.transforms.DedupedResult",
     "original":"~SimTop|MockPHTMem_1",
     "duplicate":"~SimTop|SimTop/pht_gmem:MockPHTMem",
-    "index":0.9615384615384616
+    "index":0.9642857142857143
   },
   {
     "class":"firrtl.EmitCircuitAnnotation",
@@ -117,14 +129,6 @@
   },
   {
     "class":"chisel3.experimental.EnumAnnotations$EnumDefAnnotation",
-    "typeName":"fpga.DmemState",
-    "definition":{
-      "Idle":0,
-      "Reading":1
-    }
-  },
-  {
-    "class":"chisel3.experimental.EnumAnnotations$EnumDefAnnotation",
     "typeName":"fpga.DivremState",
     "definition":{
       "Finished":5,
@@ -137,8 +141,16 @@
   },
   {
     "class":"chisel3.experimental.EnumAnnotations$EnumComponentAnnotation",
-    "target":"SimTop.Core.ex2_reg_divrem_state",
+    "target":"SimTop.Core.div_reg_divrem_state",
     "enumTypeName":"fpga.DivremState"
+  },
+  {
+    "class":"chisel3.experimental.EnumAnnotations$EnumDefAnnotation",
+    "typeName":"fpga.DmemState",
+    "definition":{
+      "Idle":0,
+      "Reading":1
+    }
   },
   {
     "class":"firrtl.transforms.BlackBoxTargetDirAnno",
