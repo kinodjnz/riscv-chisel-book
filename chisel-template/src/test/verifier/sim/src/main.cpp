@@ -124,6 +124,9 @@ bool load_bin = false;
 std::string load_bin_name;
 bool trace_fst = false;
 std::string fst_name;
+bool trace_kanata = false;
+std::string kanata_name;
+FILE *kanata_fp = nullptr;
 VerilatedFstC* tfp = nullptr;
 // uint64_t load_bin_address;
 Vriscv *top = nullptr;
@@ -145,6 +148,7 @@ enum ARG
     ARG_LOAD_BOOT_BIN = 1,
     ARG_TIMEOUT,
     ARG_TRACE_FST,
+    ARG_TRACE_KANATA,
     ARG_HELP = 'h',
 };
 
@@ -154,6 +158,7 @@ static const struct option long_options[] =
     { "load-boot-bin", required_argument, 0, ARG_LOAD_BOOT_BIN },
     { "timeout", required_argument, 0, ARG_TIMEOUT },
     { "trace-fst", required_argument, 0, ARG_TRACE_FST },
+    { "trace-kanata", required_argument, 0, ARG_TRACE_KANATA },
 };
 
 std::string help_string = R"(
@@ -163,6 +168,7 @@ Simulation setup
 --load-boot-bin=FILE    : Load a binary file in the simulation bootrom memory.
 --timeout=INT           : Simulation time before failure (~number of cycles x 2)
 --trace-fst=FILE        : Dump trace to fst file.
+--trace-kanata=FILE     : Output pipeline log in Kanata format.
 )";
 
 void parse_args_before_init(int argc, char** argv) {
@@ -190,6 +196,10 @@ void parse_args_before_init(int argc, char** argv) {
             case ARG_TRACE_FST: {
                 trace_fst = true;
                 fst_name = std::string(optarg);
+            } break;
+            case ARG_TRACE_KANATA: {
+                trace_kanata = true;
+                kanata_name = std::string(optarg);
             } break;
             default: {
                 printf("Unknown argument\n");
@@ -301,6 +311,13 @@ void rtl_init() {
         tfp->open(fst_name.c_str());
     }
     #endif
+    if (trace_kanata) {
+        kanata_fp = fopen(kanata_name.c_str(), "w");
+        if (kanata_fp == nullptr) {
+            throw std::runtime_error("Open kanata file failed");
+        }
+        fprintf(kanata_fp, "Kanata\t0004\n");
+    }
 }
 
 void spike_step() {
@@ -389,24 +406,6 @@ const uint32_t INST_TRACE_SIZE = 256;
 
 instruction_trace inst_traces[INST_TRACE_SIZE];
 
-struct mem_log_t {
-    uint32_t pc;
-    uint32_t inst;
-    bool is_load;
-    bool is_store;
-    uint32_t wb_addr;
-    uint32_t addr;
-    uint32_t data;
-    uint32_t size;
-};
-
-struct div_log_t {
-    uint32_t pc;
-    uint32_t inst;
-    uint32_t wb_addr;
-    uint32_t data;
-};
-
 uint32_t mask_rvc(uint32_t inst) {
     return (inst & 3) == 3 ? inst : inst & 0xffff;
 }
@@ -471,9 +470,101 @@ void spike_next(uint32_t index, uint32_t inst_id, uint32_t pc, uint32_t inst, ui
     }
 }
 
+void trace_kanata_log() {
+    if (top->io_pipeline_probe_if2_valid1) {
+        uint32_t inst_id = top->io_pipeline_probe_if2_inst_id1;
+        fprintf(kanata_fp, "I\t%d\t%d\t0\n", inst_id, inst_id);
+        fprintf(kanata_fp, "L\t%d\t0\t%08x %08x\n", inst_id, top->io_pipeline_probe_if2_pc1, top->io_pipeline_probe_if2_inst1);
+        fprintf(kanata_fp, "S\t%d\t0\tIF\n", inst_id);
+    }
+    if (top->io_pipeline_probe_if2_valid2) {
+        uint32_t inst_id = top->io_pipeline_probe_if2_inst_id2;
+        fprintf(kanata_fp, "I\t%d\t%d\t0\n", inst_id, inst_id);
+        fprintf(kanata_fp, "L\t%d\t0\t%08x %08x\n", inst_id, top->io_pipeline_probe_if2_pc2, top->io_pipeline_probe_if2_inst2);
+        fprintf(kanata_fp, "S\t%d\t0\tIF\n", inst_id);
+    }
+    if (top->io_pipeline_probe_ida_valid) {
+        fprintf(kanata_fp, "S\t%d\t0\tID\n", top->io_pipeline_probe_ida_inst_id);
+    }
+    if (top->io_pipeline_probe_idb_valid) {
+        fprintf(kanata_fp, "S\t%d\t0\tID\n", top->io_pipeline_probe_idb_inst_id);
+    }
+    if (top->io_pipeline_probe_rrd_valid) {
+        fprintf(kanata_fp, "S\t%d\t0\tRRD\n", top->io_pipeline_probe_rrd_inst_id);
+    }
+    if (top->io_pipeline_probe_rrd_i2_valid) {
+        fprintf(kanata_fp, "S\t%d\t0\tRRD\n", top->io_pipeline_probe_rrd_i2_inst_id);
+    }
+    if (top->io_pipeline_probe_ex1_valid) {
+        fprintf(kanata_fp, "S\t%d\t0\tEX1\n", top->io_pipeline_probe_ex1_inst_id);
+    }
+    if (top->io_pipeline_probe_ex1_i2_valid) {
+        fprintf(kanata_fp, "S\t%d\t0\tEX1\n", top->io_pipeline_probe_ex1_i2_inst_id);
+    }
+    if (top->io_pipeline_probe_ex2_valid) {
+        fprintf(kanata_fp, "S\t%d\t0\tEX2\n", top->io_pipeline_probe_ex2_inst_id);
+    }
+    if (top->io_pipeline_probe_mem1_valid) {
+        fprintf(kanata_fp, "S\t%d\t0\tMEM1\n", top->io_pipeline_probe_mem1_inst_id);
+    }
+    if (top->io_pipeline_probe_mem2_valid) {
+        fprintf(kanata_fp, "S\t%d\t0\tMEM2\n", top->io_pipeline_probe_mem2_inst_id);
+    }
+    if (top->io_pipeline_probe_mem3_valid) {
+        fprintf(kanata_fp, "S\t%d\t0\tMEM3\n", top->io_pipeline_probe_mem3_inst_id);
+    }
+    fprintf(kanata_fp, "C\t1\n");
+    if (top->io_pipeline_probe_if2_valid1) {
+        fprintf(kanata_fp, "E\t%d\t0\tIF\n", top->io_pipeline_probe_if2_inst_id1);
+    }
+    if (top->io_pipeline_probe_if2_valid2) {
+        fprintf(kanata_fp, "E\t%d\t0\tIF\n", top->io_pipeline_probe_if2_inst_id2);
+    }
+    if (top->io_pipeline_probe_ida_valid) {
+        fprintf(kanata_fp, "E\t%d\t0\tID\n", top->io_pipeline_probe_ida_inst_id);
+    }
+    if (top->io_pipeline_probe_idb_valid) {
+        fprintf(kanata_fp, "E\t%d\t0\tID\n", top->io_pipeline_probe_idb_inst_id);
+    }
+    if (top->io_pipeline_probe_rrd_valid) {
+        fprintf(kanata_fp, "E\t%d\t0\tRRD\n", top->io_pipeline_probe_rrd_inst_id);
+    }
+    if (top->io_pipeline_probe_rrd_i2_valid) {
+        fprintf(kanata_fp, "E\t%d\t0\tRRD\n", top->io_pipeline_probe_rrd_i2_inst_id);
+    }
+    if (top->io_pipeline_probe_ex1_valid) {
+        fprintf(kanata_fp, "E\t%d\t0\tEX1\n", top->io_pipeline_probe_ex1_inst_id);
+    }
+    if (top->io_pipeline_probe_ex1_i2_valid) {
+        fprintf(kanata_fp, "E\t%d\t0\tEX1\n", top->io_pipeline_probe_ex1_i2_inst_id);
+    }
+    if (top->io_pipeline_probe_ex1_i2_retired) {
+        uint32_t inst_id = top->io_pipeline_probe_ex1_i2_inst_id;
+        fprintf(kanata_fp, "R\t%d\t%d\t0\n", inst_id, inst_id);
+    }
+    if (top->io_pipeline_probe_ex2_valid) {
+        fprintf(kanata_fp, "E\t%d\t0\tEX2\n", top->io_pipeline_probe_ex2_inst_id);
+    }
+    if (top->io_pipeline_probe_ex2_retired) {
+        uint32_t inst_id = top->io_pipeline_probe_ex2_inst_id;
+        fprintf(kanata_fp, "R\t%d\t%d\t0\n", inst_id, inst_id);
+    }
+    if (top->io_pipeline_probe_mem1_valid) {
+        fprintf(kanata_fp, "E\t%d\t0\tMEM1\n", top->io_pipeline_probe_mem1_inst_id);
+    }
+    if (top->io_pipeline_probe_mem2_valid) {
+        fprintf(kanata_fp, "E\t%d\t0\tMEM2\n", top->io_pipeline_probe_mem2_inst_id);
+    }
+    if (top->io_pipeline_probe_mem3_valid) {
+        fprintf(kanata_fp, "E\t%d\t0\tMEM3\n", top->io_pipeline_probe_mem3_inst_id);
+    }
+    if (top->io_pipeline_probe_mem3_retired) {
+        uint32_t inst_id = top->io_pipeline_probe_mem3_inst_id;
+        fprintf(kanata_fp, "R\t%d\t%d\t0\n", inst_id, inst_id);
+    }
+}
+
 void sim_loop() {
-    // std::deque<mem_log_t> mem_log;
-    // std::deque<div_log_t> div_log;
     try {
         uint64_t retired = 0;
         uint64_t cycles = 0;
@@ -502,16 +593,21 @@ void sim_loop() {
                         }
                     }
                     ++cycles;
+                    if (trace_kanata) {
+                        trace_kanata_log();
+                    }
                     if (top->io_pipeline_probe_if2_valid1) {
                         uint32_t index = top->io_pipeline_probe_if2_inst_id1 % INST_TRACE_SIZE;
-                        inst_traces[index].inst_id = top->io_pipeline_probe_if2_inst_id1;
+                        uint32_t inst_id = top->io_pipeline_probe_if2_inst_id1;
+                        inst_traces[index].inst_id = inst_id;
                         inst_traces[index].pc = top->io_pipeline_probe_if2_pc1;
                         inst_traces[index].inst = top->io_pipeline_probe_if2_inst1;
                         fprintf(stderr, "if2 valid: inst_id=%u pc=%x\n", top->io_pipeline_probe_if2_inst_id1, top->io_pipeline_probe_if2_pc1);
                     }
                     if (top->io_pipeline_probe_if2_valid2) {
                         uint32_t index = top->io_pipeline_probe_if2_inst_id2 % INST_TRACE_SIZE;
-                        inst_traces[index].inst_id = top->io_pipeline_probe_if2_inst_id2;
+                        uint32_t inst_id = top->io_pipeline_probe_if2_inst_id2;
+                        inst_traces[index].inst_id = inst_id;
                         inst_traces[index].pc = top->io_pipeline_probe_if2_pc2;
                         inst_traces[index].inst = top->io_pipeline_probe_if2_inst2;
                         fprintf(stderr, "if2 valid: inst_id=%u pc=%x\n", top->io_pipeline_probe_if2_inst_id2, top->io_pipeline_probe_if2_pc2);
@@ -547,84 +643,6 @@ void sim_loop() {
                             fprintf(stderr, "retired ex2: pc=0x%08x, inst=0x%08x inst_id=%08x\n", pc, inst, inst_id);
                         }
                         spike_next(index, inst_id, pc, inst, cycles, top->io_pipeline_probe_ex2_wb_addr, top->io_pipeline_probe_ex2_wb_data);
-
-                        // bool actual_is_divrem = (
-                        //     (inst & 0xfe00407f) == 0x02004033 // div, divu, rem, remu
-                        // );
-                        // if (actual_is_divrem && !div_log.empty()) {
-                        //     assertEq("divrem pc unmatch log", pc, div_log.front().pc);
-                        //     assertEq("divrem reg write addr unmatch", top->io_pipeline_probe_ex2_wb_addr, div_log.front().wb_addr);
-                        //     assertEq("divrem reg write data unmatch", top->io_pipeline_probe_ex2_wb_data, div_log.front().data);
-                        //     div_log.pop_front();
-                        // } else {
-                        //     bool do_next_step = true;
-                        //     while (do_next_step) {
-                        //         uint32_t spike_pc = state->pc;
-                        //         spike_step();
-                        //         // last_commit_pc = pc;
-                        //         bool is_load = (
-                        //             (state->last_inst.bits() & 0x7f) == 0x03 ||     // lw
-                        //             (state->last_inst.bits() & 0xe003) == 0x4000 || // c.lw
-                        //             (state->last_inst.bits() & 0xe003) == 0x4002 || // c.lwsp
-                        //             (state->last_inst.bits() & 0xa003) == 0x2000 || // c.lb, c.lbu
-                        //             (state->last_inst.bits() & 0xf003) == 0x2002    // c.lh, c.lhu
-                        //         );
-                        //         bool is_store = (
-                        //             (state->last_inst.bits() & 0x7f) == 0x23 ||     // sw
-                        //             (state->last_inst.bits() & 0xe003) == 0xc000 || // c.sw
-                        //             (state->last_inst.bits() & 0xe003) == 0xc002 || // c.lwsp
-                        //             (state->last_inst.bits() & 0xf003) == 0x3002 || // c.sh, c.s?0
-                        //             (state->last_inst.bits() & 0xe003) == 0x6002    // c.sb
-                        //         );
-                        //         bool is_fence_i = (
-                        //             state->last_inst.bits() == 0x0000100f           // fence.i
-                        //         );
-                        //         bool is_divrem = (
-                        //             (state->last_inst.bits() & 0xfe00407f) == 0x02004033 // div, divu, rem, remu
-                        //         );
-                        //         if (!is_load && !is_store && !is_fence_i && !is_divrem) {
-                        //             assertEq("pc unmatch", pc, spike_pc);
-                        //             do_next_step = false;
-                        //         }
-                        //         if (is_store) {
-                        //             assertEq("memory write", (uint32_t)state->log_mem_write.size(), 1);
-                        //             mem_log.push_back(mem_log_t(spike_pc, state->last_inst.bits(), false, true, 0, std::get<0>(state->log_mem_write[0]), std::get<1>(state->log_mem_write[0]), std::get<2>(state->log_mem_write[0])));
-                        //         }
-                        //         if (is_fence_i) {
-                        //             mem_log.push_back(mem_log_t(spike_pc, state->last_inst.bits(), false, false, 0, 0, 0, 0));
-                        //         }
-                        //         for (auto item : state->log_reg_write) {
-                        //             if (item.first != 0) {
-                        //                 uint32_t wb_addr = item.first >> 4;
-                        //                 uint32_t wb_data = item.second.v[0];
-                        //                 if ((item.first & 0xf) == 0) {
-                        //                     if (is_load) {
-                        //                         mem_log.push_back(mem_log_t(spike_pc, state->last_inst.bits(), true, false, wb_addr, 0, wb_data, 0));
-                        //                     } else if (is_divrem) {
-                        //                         div_log.push_back(div_log_t(spike_pc, state->last_inst.bits(), wb_addr, wb_data));
-                        //                     } else {
-                        //                         assertEq("integer reg write addr unmatch", top->io_pipeline_probe_ex2_wb_addr, wb_addr);
-                        //                         assertEq("integer reg write data unmatch", top->io_pipeline_probe_ex2_wb_data, wb_data);
-                        //                     }
-                        //                 } else {
-                        //                     fprintf(stderr, "??? unknown spike trace %llx, addr=%llx\n", item.first & 0xf, item.first >> 4);
-                        //                     if (state->mcause->read() == 2) {
-                        //                         failure();
-                        //                     }
-                        //                 }
-                        //             }
-                        //         }
-                        //         if (actual_is_divrem && !div_log.empty()) {
-                        //             assertEq("divrem pc unmatch log", pc, div_log.front().pc);
-                        //             assertEq("divrem reg write addr unmatch", top->io_pipeline_probe_ex2_wb_addr, div_log.front().wb_addr);
-                        //             assertEq("divrem reg write data unmatch", top->io_pipeline_probe_ex2_wb_data, div_log.front().data);
-                        //             div_log.pop_front();
-                        //             if (div_log.empty()) {
-                        //                 do_next_step = false;
-                        //             }
-                        //         }
-                        //     }
-                        // }
                     }
                     if (top->io_pipeline_probe_mem3_retired) {
                         ++retired;
@@ -642,33 +660,6 @@ void sim_loop() {
                             printf("retired cycles=%llu, retired=%llu\n", cycles, retired);
                         }
                         spike_next(index, inst_id, pc, inst, cycles, top->io_pipeline_probe_mem3_wb_addr, top->io_pipeline_probe_mem3_wb_data);
-                        // if (mem_log.empty()) {
-                        //     uint32_t spike_pc = state->pc;
-                        //     spike_step();
-                        //     assertEq("load pc unmatch", pc, spike_pc);
-                        //     for (auto item : state->log_reg_write) {
-                        //         if (item.first != 0) {
-                        //             uint32_t wb_addr = item.first >> 4;
-                        //             uint32_t wb_data = item.second.v[0];
-                        //             if ((item.first & 0xf) == 0) {
-                        //                 assertEq("load reg write addr unmatch", top->io_pipeline_probe_mem3_wb_addr, wb_addr);
-                        //                 assertEq("load reg write data unmatch", top->io_pipeline_probe_mem3_wb_data, wb_data);
-                        //             } else {
-                        //                 fprintf(stderr, "??? unknown spike trace %llx addr=%llx pc=%x\n", item.first & 0xf, item.first >> 4, spike_pc);
-                        //                 if (state->mcause->read() == 2) {
-                        //                     failure();
-                        //                 }
-                        //             }
-                        //         }
-                        //     }
-                        // } else {
-                        //     assertEq("load pc unmatch log", pc, mem_log.front().pc);
-                        //     if (mem_log.front().is_load) {
-                        //         assertEq("load reg write addr unmatch log", top->io_pipeline_probe_mem3_wb_addr, mem_log.front().wb_addr);
-                        //         assertEq("load reg write data unmatch log", top->io_pipeline_probe_mem3_wb_data, mem_log.front().data);
-                        //     }
-                        //     mem_log.pop_front();
-                        // }
                     }
                 }
                 if (!inst_log.empty()) {
@@ -698,6 +689,11 @@ void cleanup() {
     //     fflush(fptr);
     //     fclose(fptr);
     // }
+
+    if (kanata_fp != nullptr) {
+        fclose(kanata_fp);
+        kanata_fp = nullptr;
+    }
 
     if (top != nullptr) {
         top->final();

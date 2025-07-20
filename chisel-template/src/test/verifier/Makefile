@@ -105,7 +105,7 @@ all-tests: sim-compile $(RISCV_TESTS_TARGETS)
 
 test-%: sim-compile $(RISCV_TESTS_DIR)/%.binhex
 	$(eval TIMEOUT_OVERRIDE=$(call find_timeout,$(patsubst test-%,%,$@),$(TIMEOUT_OVERRIDES)))
-	$(SIM_DIR)/$(OBJ_DIR)/V$(SIM_NAME) --load-boot-bin $(word 2,$?) --timeout $(if $(TIMEOUT_OVERRIDE),$(TIMEOUT_OVERRIDE),$(TIMEOUT)) --trace-fst $(SIM_DIR)/logs/$@.fst
+	$(SIM_DIR)/$(OBJ_DIR)/V$(SIM_NAME) --load-boot-bin $(word 2,$?) --timeout $(if $(TIMEOUT_OVERRIDE),$(TIMEOUT_OVERRIDE),$(TIMEOUT)) --trace-fst $(SIM_DIR)/logs/$@.fst --trace-kanata $(SIM_DIR)/logs/$@.kanata
 
 sim-compile: $(SIM_DIR)/$(OBJ_DIR)/V$(SIM_NAME)
 
