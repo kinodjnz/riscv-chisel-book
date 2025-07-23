@@ -58,7 +58,7 @@ ADDRESS_COMMENT = ./address_comment.rb
 HEXDUMP ?= hexdump -e '"%08x\n"' -v
 
 # RUN_TYPE = 
-RUN_TYPE = -DTOTAL_DATA_SIZE=320 -DPROFILE_RUN=1
+RUN_TYPE = -DTOTAL_DATA_SIZE=360 -DPROFILE_RUN=1
 
 OPT = -O2
 

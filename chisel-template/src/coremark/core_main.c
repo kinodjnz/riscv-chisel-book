@@ -38,7 +38,7 @@ static ee_u16 list_known_crc[]   = { (ee_u16)0xd4b0,
                                    (ee_u16)0x6a79,
                                    (ee_u16)0xe714,
                                    (ee_u16)0xe3c1,
-                                   (ee_u16)0x10ce };
+                                   (ee_u16)0x69a7 };
 static ee_u16 matrix_known_crc[] = { (ee_u16)0xbe52,
                                      (ee_u16)0x1199,
                                      (ee_u16)0x5608,
@@ -50,7 +50,7 @@ static ee_u16 state_known_crc[]  = { (ee_u16)0x5e47,
                                     (ee_u16)0xe5a4,
                                     (ee_u16)0x8e3a,
                                     (ee_u16)0x8d84,
-                                    (ee_u16)0x0 };
+                                    (ee_u16)0x54a3 };
 void *
 iterate(void *pres)
 {
@@ -318,7 +318,7 @@ for (i = 0; i < MULTITHREAD; i++)
             known_id = 4;
             ee_printf("2K validation run parameters for coremark.\n");
             break;
-        case 0x2e2c: /* TOTAL_DATA_SIZE=320 profile run */
+        case 0x8e20: /* TOTAL_DATA_SIZE=360 profile run */
             known_id = 5;
             ee_printf("Small profile run parameters.\n");
             break;
