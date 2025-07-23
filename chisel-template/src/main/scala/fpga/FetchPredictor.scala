@@ -9,6 +9,7 @@ class RedirectEnqueuePort(redirect_buffer_size: Int, pht_history_len: Int) exten
   val fp_ptr_len = log2Ceil(redirect_buffer_size)
 
   val en       = Input(Bool())
+  val correct  = Input(Bool())
   val flush_en = Input(Bool())
   val history  = Input(UInt(pht_history_len.W))
   val ptr      = Output(UInt(fp_ptr_len.W))
@@ -30,8 +31,11 @@ class RedirectUpdatePort(redirect_buffer_size: Int, pht_history_len: Int, ras_en
 
 }
 
-class RedirectDequeuePort extends Bundle {
+class RedirectDequeuePort(enable_debug: Boolean, redirect_buffer_size: Int) extends Bundle {
+  val fp_ptr_len = log2Ceil(redirect_buffer_size)
+
   val en = Input(Bool())
+  val ptr = Option.when(enable_debug)(Input(UInt(fp_ptr_len.W)))
 }
 
 class RedirectReadPort(redirect_buffer_size: Int, pht_history_len: Int, ras_entries: Int) extends Bundle {
@@ -41,13 +45,13 @@ class RedirectReadPort(redirect_buffer_size: Int, pht_history_len: Int, ras_entr
   val fp_entry = Output(new FetchPredictionEntry(pht_history_len, ras_entries))
 }
 
-class FetchRedirectBuffer(redirect_buffer_size: Int, pht_history_len: Int, ras_entries: Int) extends Module {
+class FetchRedirectBuffer(redirect_buffer_size: Int, pht_history_len: Int, ras_entries: Int, enable_debug: Boolean) extends Module {
   val fp_ptr_len = log2Ceil(redirect_buffer_size)
 
   val io = IO(new Bundle {
     val enq  = new RedirectEnqueuePort(redirect_buffer_size, pht_history_len)
     val upd  = new RedirectUpdatePort(redirect_buffer_size, pht_history_len, ras_entries)
-    val deq  = new RedirectDequeuePort
+    val deq  = new RedirectDequeuePort(enable_debug, redirect_buffer_size)
     val read = new RedirectReadPort(redirect_buffer_size, pht_history_len, ras_entries)
   })
 
@@ -62,11 +66,23 @@ class FetchRedirectBuffer(redirect_buffer_size: Int, pht_history_len: Int, ras_e
   when (ready || io.enq.flush_en) {
     buf(enq_ptr).history := io.enq.history
   }
-  when (io.enq.en) {
+  when ((io.enq.en && !io.enq.correct) || io.enq.flush_en) {
     enq_ptr := enq_ptr + 1.U
+  }
+  when (io.enq.en && io.enq.correct) {
+    enq_ptr := enq_ptr
+  }
+  when (!io.enq.en && io.enq.correct) {
+    enq_ptr := enq_ptr - 1.U
   }
   when (io.deq.en) {
     deq_ptr := deq_ptr + 1.U
+    printf(cf"fp deq_ptr=${deq_ptr}\n")
+    io.deq.ptr.map(ptr =>
+      when (deq_ptr.take(fp_ptr_len) =/= ptr) {
+        printf(cf"fp deq_ptr mismatch deq_ptr=${deq_ptr} io.deq.ptr=${ptr}\n")
+      }
+    )
   }
   when (io.enq.flush_en) {
     deq_ptr := enq_ptr
@@ -110,6 +126,7 @@ class FetchPredictionPort(redirect_buffer_size: Int) extends Bundle {
   val iaddr          = Input(UInt(PC_LEN.W))
   val flush_en       = Input(Bool())
   val redirect_en    = Input(Bool())
+  val correct_enq    = Input(Bool())
   val redirect_ready = Output(Bool())
   val bp0_en         = Output(Bool())
   val bp0_pos        = Output(UInt(IALIGN_PTR_LEN.W)) // needed?
@@ -167,6 +184,7 @@ class FetchPredictor(
     val reg_iaddr_en    = RegNext(io.pr.iaddr_en)
     val reg_iaddr_index = RegInit(0.U(PC_LEN.W))
     val reg_redirect_en = RegNext(io.pr.redirect_en)
+    val reg_correct_enq = RegNext(io.pr.correct_enq)
     val reg_flush_en    = RegNext(io.pr.flush_en)
     val reg_fp_ptr      = RegInit(io.re.ptr)
 
@@ -213,16 +231,22 @@ class FetchPredictor(
     io.ru.ras_index := io.ras.top.index
     io.ru.target    := bp1_target
 
+    when (bp1_en) {
+      printf(cf"fp(${reg_fp_ptr}).target := 0x${bp1_target.pc_to_word}%x, pc=0x${reg_iaddr_index.pc_to_word}%x\n")
+      printf(cf"bp1_pos = ${bp1_pos} XXXXXXXXX\n")
+    }
+
     for (i <- 0 until 4) {
       io.pr.bp_entries(i).lcnt := io.pht.lu.lcnt(i)
       io.pr.bp_entries(i).gcnt := Mux(attr(i) === BTB_ATTR_BR, io.pht.lu.gcnt(i), GCNT_NOT_BRANCH)
     }
 
     io.re.en       := !io.pr.flush_en && reg_redirect_en
+    io.re.correct  := io.pr.correct_enq
     io.re.flush_en := reg_flush_en
     io.re.history  := io.pht.history
     io.pr.fp_ptr   := reg_fp_ptr
-    when (!io.pr.flush_en && reg_redirect_en) {
+    when ((!io.pr.flush_en && (reg_redirect_en && !io.pr.correct_enq)) || reg_flush_en) {
       reg_fp_ptr   := io.re.ptr
       io.pr.fp_ptr := io.re.ptr
     }

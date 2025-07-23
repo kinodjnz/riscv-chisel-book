@@ -15,11 +15,12 @@ class FetchSim() extends Module {
   val ras_entries = RAS_ENTRIES
   val redirect_buffer_size = REDIRECT_BUFFER_SIZE
   val ras_index_len  = log2Ceil(ras_entries)
+  val enable_debug = false
 
   val io = IO(new Bundle {
     val ft         = new FetchPort(redirect_buffer_size)
     val cr         = new BranchCorrectionPort(pht_history_len, ras_entries)
-    val redir_deq  = new RedirectDequeuePort
+    val redir_deq  = new RedirectDequeuePort(enable_debug, redirect_buffer_size)
     val redir_read = new RedirectReadPort(redirect_buffer_size, pht_history_len, ras_entries)
     val zbtb       = Flipped(new ZBTBIo(ZBTB_TARGET_LEN))
     val btb        = Flipped(new BTBIo)
@@ -30,7 +31,7 @@ class FetchSim() extends Module {
   })
   val reg_ft         = Reg(Input(new FetchPort(redirect_buffer_size)))
   val reg_cr         = Reg(Input(new BranchCorrectionPort(pht_history_len, ras_entries)))
-  val reg_redir_deq  = Reg(Input(new RedirectDequeuePort))
+  val reg_redir_deq  = Reg(Input(new RedirectDequeuePort(enable_debug, redirect_buffer_size)))
   val reg_redir_read = Reg(Input(new RedirectReadPort(redirect_buffer_size, pht_history_len, ras_entries)))
   val reg_zbtb       = Reg(Flipped(Output(new ZBTBIo(ZBTB_TARGET_LEN))))
   val reg_btb        = Reg(Flipped(Output(new BTBIo)))
@@ -42,7 +43,7 @@ class FetchSim() extends Module {
 
   val fetcher = Module(new Fetcher(dram_config, pht_history_len, redirect_buffer_size))
   val fp = Module(new FetchPredictor(zbtb_entries, btb_entries, pht_index_len, pht_history_len, ras_entries, redirect_buffer_size))
-  val rb = Module(new FetchRedirectBuffer(redirect_buffer_size, pht_history_len, ras_entries))
+  val rb = Module(new FetchRedirectBuffer(redirect_buffer_size, pht_history_len, ras_entries, enable_debug))
 
   fetcher.reset := reset.asBool | reg_reset
   fp.reset := reset.asBool | reg_reset

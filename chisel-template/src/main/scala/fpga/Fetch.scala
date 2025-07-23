@@ -44,13 +44,14 @@ class FetchUnit(
   pht_history_len: Int,
   ras_entries: Int,
   redirect_buffer_size: Int,
+  enable_debug: Boolean = false,
 ) extends Module {
   val ras_index_len  = log2Ceil(ras_entries)
 
   val io = IO(new Bundle {
     val ft         = new FetchPort(redirect_buffer_size)
     val cr         = new BranchCorrectionPort(pht_history_len, ras_entries)
-    val redir_deq  = new RedirectDequeuePort
+    val redir_deq  = new RedirectDequeuePort(enable_debug, redirect_buffer_size)
     val redir_read = new RedirectReadPort(redirect_buffer_size, pht_history_len, ras_entries)
     val pht_lmem   = Flipped(new PHTMemIo(pht_index_len))
     val pht_gmem   = Flipped(new PHTMemIo(pht_index_len))
@@ -58,7 +59,7 @@ class FetchUnit(
 
   val fetcher = Module(new Fetcher(dram_config, pht_history_len, redirect_buffer_size))
   val fp = Module(new FetchPredictor(zbtb_entries, btb_entries, pht_index_len, pht_history_len, ras_entries, redirect_buffer_size))
-  val rb = Module(new FetchRedirectBuffer(redirect_buffer_size, pht_history_len, ras_entries))
+  val rb = Module(new FetchRedirectBuffer(redirect_buffer_size, pht_history_len, ras_entries, enable_debug))
   val zbtb = Module(new ZBTB(zbtb_entries))
   val btb  = Module(new BTB(btb_entries))
   val pht  = Module(new PHT(pht_index_len, pht_history_len, PHT_HISTORY_SHIFT))
@@ -128,6 +129,8 @@ class Fetcher(
     val iaddr             = Wire(UInt(PC_LEN.W))
     val fix_zbp_miss      = Wire(Bool())
     val reg_fix_zbp_miss  = RegInit(false.B)
+    val reg_bp1_redirect_en  = RegInit(false.B)
+    val reg_bp1_cancel_redir = RegInit(false.B)
     val reg_fix_addr      = RegInit(0.U(PC_LEN.W))
     val reg_discard_enq   = RegInit(0.U(DISCARD_PTR_LEN.W))
     val reg_is_dram       = RegInit(false.B)
@@ -142,6 +145,14 @@ class Fetcher(
         (!io.pr.bp0_en && io.pr.bp1_en) ||
         (io.pr.bp0_en && io.pr.bp1_en && (io.pr.bp0_addr(7, 0) =/= io.pr.bp1_addr(7, 0) || io.pr.bp0_pos =/= io.pr.bp1_pos))
       )
+    val bp1_redirect_en   =
+      !invalidate && (
+        (!io.pr.bp0_en && io.pr.bp1_en)
+      )
+    val bp1_cancel_redir  =
+      !invalidate && (
+        (io.pr.bp0_en && !io.pr.bp1_en)
+      )
 
     iaddr := MuxCase(reg_next_iaddr, Seq(
       io.ft.flush_en   -> io.ft.flush_iaddr,
@@ -153,6 +164,8 @@ class Fetcher(
     val fix_addr = Mux(io.pr.bp1_en, io.pr.bp1_addr, reg_next_iaddr)
     reg_fix_addr := fix_addr
     reg_fix_zbp_miss := fix_zbp_miss
+    reg_bp1_redirect_en := !io.ft.flush_en && bp1_redirect_en
+    reg_bp1_cancel_redir := !io.ft.flush_en && bp1_cancel_redir
 
     val count = addressing_ptr - read_ptr
     val has_space = (~count(FETCH_PTR_LEN)).asBool
@@ -174,7 +187,8 @@ class Fetcher(
     io.ft.icache.addr    := iaddr.clear_lsbits(IALIGN_PTR_LEN).pc_to_word
     io.ft.icache.addr_en := ((has_space && redirect_ready) || io.ft.flush_en) && is_dram
     io.pr.flush_en       := io.ft.flush_en
-    io.pr.redirect_en    := io.ft.flush_en || reg_fix_zbp_miss || io.pr.bp0_en
+    io.pr.redirect_en    := io.ft.flush_en || reg_bp1_redirect_en || (io.pr.bp0_en && !reg_bp1_cancel_redir)
+    io.pr.correct_enq    := reg_bp1_cancel_redir
     io.pr.iaddr          := iaddr
     when ((!(has_space && redirect_ready) && !io.ft.flush_en) || wait_for_dram || (is_dram && !io.ft.icache.addr_ready)) {
       reg_next_iaddr   := iaddr
@@ -190,7 +204,7 @@ class Fetcher(
         addressing_ptr := addressing_ptr + 1.U
       }
 
-      printf(cf"fb(${addressing_ptr}%x): 0x${Cat(iaddr, 0.U(1.W))}%x addressed\n")
+      printf(cf"fb(${addressing_ptr}%x): 0x${iaddr.pc_to_word}%x addressed\n")
     }
 
     when (io.ft.flush_en) {
@@ -220,13 +234,17 @@ class Fetcher(
     forward_discard_ptr := reg_discard_enq
     forward_discard     := invalidate || io.ft.flush_en
 
-    printf(cf"iaddr=${iaddr ## 0.U(1.W)}%x\n")
-    printf(cf"reg_next_iaddr=${reg_next_iaddr ## 0.U(1.W)}%x\n")
-    printf(cf"io.ft.imem.addr=${io.ft.imem.addr}%x\n")
-    printf(cf"io.ft.imem.en=${io.ft.imem.en}\n")
-    printf(cf"fix_zbp_miss=${fix_zbp_miss}\n")
-    printf(cf"reg_fix_zbp_miss=${reg_fix_zbp_miss}\n")
-    printf(cf"addressing=${addressing_ptr.take(FETCH_PTR_LEN)}\n")
+    printf(cf"iaddr             : ${iaddr ## 0.U(1.W)}%x\n")
+    printf(cf"reg_next_iaddr    : ${reg_next_iaddr ## 0.U(1.W)}%x\n")
+    printf(cf"io.ft.imem.addr   : ${io.ft.imem.addr}%x\n")
+    printf(cf"io.ft.imem.en     : ${io.ft.imem.en}\n")
+    printf(cf"io.ft.flush_en    : ${io.ft.flush_en}\n")
+    printf(cf"io.pr.bp0_en      : ${io.pr.bp0_en}\n")
+    printf(cf"fix_zbp_miss      : ${fix_zbp_miss}\n")
+    printf(cf"reg_fix_zbp_miss  : ${reg_fix_zbp_miss}\n")
+    printf(cf"io.pr.redirect_en : ${io.pr.redirect_en}\n")
+    printf(cf"io.pr.correct_enq : ${io.pr.correct_enq}\n")
+    printf(cf"addressing        : ${addressing_ptr.take(FETCH_PTR_LEN)}\n")
     printf(cf"fb(0).iaddr=${fetch_buf(0.U).iaddr ## 0.U(1.W)}%x\n")
     printf(cf"fb(1).iaddr=${fetch_buf(1.U).iaddr ## 0.U(1.W)}%x\n")
     printf(cf"fb(2).iaddr=${fetch_buf(2.U).iaddr ## 0.U(1.W)}%x\n")
@@ -361,6 +379,7 @@ class Fetcher(
       reg_reset_i0 := true.B
     }.otherwise {
       reg_i0 := inst_past.take(IALIGN_PTR_LEN)
+      reg_reset_i0 := false.B
     }
 
     when (io.ft.flush_en) {

@@ -123,6 +123,7 @@ class PipelineProbe extends Bundle {
   val mem3_retired   = Output(Bool())
   val mem3_wb_addr   = Output(UInt(ADDR_LEN.W))
   val mem3_wb_data   = Output(UInt(WORD_LEN.W))
+  val flush_pipeline = Output(Bool())
 }
 
 class Core(
@@ -316,6 +317,7 @@ class Core(
     PHT_HISTORY_LEN,
     RAS_ENTRIES,
     REDIRECT_BUFFER_SIZE,
+    enable_pipeline_probe,
   ))
   val idu = Module(new InstructionDecoderUnit(REDIRECT_BUFFER_SIZE, enable_pipeline_probe))
   val lsu = Module(new LoadStoreUnit(enable_pipeline_probe, dram_start, dram_length, LSQ_ENTRIES, enable_sim_unaligned))
@@ -859,6 +861,7 @@ class Core(
 
   val ex1_redir_deq_en = ex1_en && ex1_reg_bp.redirected && !ex2_reg_is_br
   fetch_unit.io.redir_deq.en := ex1_redir_deq_en
+  fetch_unit.io.redir_deq.ptr.map(_ := ex1_reg_bp.fp_ptr)
 
   ex1_fw_data := ex1_alu_out
 
@@ -1311,6 +1314,8 @@ class Core(
   map2(io.pipeline_probe, lsu.io.pipeline_probe)(_.mem3_wb_addr := _.mem3_wb_addr)
   map2(io.pipeline_probe, lsu.io.pipeline_probe)(_.mem3_wb_data := _.mem3_wb_data)
 
+  io.pipeline_probe.map(_.flush_pipeline := ex2_reg_is_br)
+
   // Debug signals
   io.debug_signal.cycle_counter       := cycle_counter.io.value(47, 0)
   // io.debug_signal.csr_rdata        := csr_rdata
@@ -1436,11 +1441,14 @@ class Core(
   printf(cf"ex1_clu_out         : 0x${ex1_clu_out}%x\n")
   printf(cf"ex1_reg_i2_rf_wen   : ${ex1_reg_i2_rf_wen}\n")
   printf(cf"ex1_reg_i2_wb_addr  : 0x${ex1_reg_i2_wb_addr}%x\n")
+  printf(cf"ex1_maybe_br_take: ${ex1_maybe_br_taken}%d\n")
+  printf(cf"ex1_is_br        : ${ex1_is_br}%d\n")
   printf(cf"ex1_reg_bp_redir : ${ex1_reg_bp.redirected}%d\n")
-  printf(cf"ex1_reg_bp_target: 0x${fetch_unit.io.redir_read.fp_entry.target.pc_to_word}%x\n")
+  printf(cf"ex1_reg_bp_target: 0x${ex1_reg_fp_entry.target.pc_to_word}%x\n")
   printf(cf"ex1_fetch_pc     : 0x${ex1_fetch_pc.pc_to_word}%x\n")
   printf(cf"ex1_predict_pc   : 0x${ex1_predict_pc.pc_to_word}%x\n")
   printf(cf"ex1_fetch_pc_en  : ${ex1_fetch_pc_en}%d\n")
+  printf(cf"ex1_reg_bp_fp_ptr: 0x${ex1_reg_bp.fp_ptr}%x\n")
   printf(cf"ex1_reg_bp_lcnt  : 0x${ex1_reg_bp.bp_entry.lcnt}%x\n")
   printf(cf"ex1_reg_bp_gcnt  : 0x${ex1_reg_bp.bp_entry.gcnt}%x\n")
   printf(cf"ex1_reg_bp_rasind: 0x${fetch_unit.io.redir_read.fp_entry.ras_index}%x\n")
