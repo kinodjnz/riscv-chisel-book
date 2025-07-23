@@ -935,3 +935,75 @@ TEST_CASE("rvc bp flush, 32bit fetch, icache variable delays", "[fetch]") {
 
     runner.run(sut);
 }
+
+static const std::vector<uint64_t> imem_zbp_miss_insts = {
+    0x00000013'00000003,
+    0x00000000'00000022,
+    0x00330000'00000000,
+    0x00530000'00430102,
+    0x00820072'00620202,
+    0x000000a3'00000093,
+    0x000000c3'000000b3,
+    0x000000e3'000000d3,
+};
+static const std::vector<bp_cell> bp_zbp_miss = {
+    /*00^*/ bp_cell(std::nullopt, std::nullopt, 0, false),
+    /*01v*/ bp_cell(std::nullopt, std::nullopt, 0, false),
+    /*02^*/ bp_cell(std::nullopt, std::nullopt, 0, false),
+    /*03v*/ bp_cell(std::nullopt, std::nullopt, 0, false),
+    /*04 */ bp_cell(std::make_optional(0x0400000b), std::make_optional(inst_attr::DJUMP), 0x0400000b, false),
+    /*05 */ bp_cell(std::nullopt, std::nullopt, 0, false),
+    /*06 */ bp_cell(std::nullopt, std::nullopt, 0, false),
+    /*07 */ bp_cell(std::nullopt, std::nullopt, 0, false),
+    /*08 */ bp_cell(std::nullopt, std::nullopt, 0, false),
+    /*09 */ bp_cell(std::nullopt, std::nullopt, 0, false),
+    /*0a */ bp_cell(std::nullopt, std::nullopt, 0, false),
+    /*0b^*/ bp_cell(std::nullopt, std::nullopt, 0, false),
+    /*0cv*/ bp_cell(std::nullopt, std::nullopt, 0, false),
+    /*0d^*/ bp_cell(std::nullopt, std::nullopt, 0, false),
+    /*0ev*/ bp_cell(std::make_optional(0x04000018), std::nullopt, 0, false),
+    /*0f^*/ bp_cell(std::nullopt, std::nullopt, 0, false),
+    /*10v*/ bp_cell(std::nullopt, std::nullopt, 0, false),
+    /*11 */ bp_cell(std::nullopt, std::nullopt, 0, false),
+    /*12 */ bp_cell(std::nullopt, std::nullopt, 0, false),
+    /*13 */ bp_cell(std::make_optional(0x0400001c), std::make_optional(inst_attr::DJUMP), 0x0400001c, false),
+    /*14^*/ bp_cell(std::nullopt, std::nullopt, 0, false),
+    /*15v*/ bp_cell(std::nullopt, std::nullopt, 0, false),
+    /*16^*/ bp_cell(std::nullopt, std::nullopt, 0, false),
+    /*17v*/ bp_cell(std::nullopt, std::nullopt, 0, false),
+    /*18^*/ bp_cell(std::nullopt, std::nullopt, 0, false),
+    /*19v*/ bp_cell(std::nullopt, std::nullopt, 0, false),
+    /*1a^*/ bp_cell(std::nullopt, std::nullopt, 0, false),
+    /*1bv*/ bp_cell(std::nullopt, std::nullopt, 0, false),
+    /*1c^*/ bp_cell(std::nullopt, std::nullopt, 0, false),
+    /*1dv*/ bp_cell(std::nullopt, std::nullopt, 0, false),
+    /*1e^*/ bp_cell(std::nullopt, std::nullopt, 0, false),
+    /*1fv*/ bp_cell(std::nullopt, std::nullopt, 0, false),
+};
+
+static const std::vector<addr_data> expected_zbp_miss_insts = {
+    addr_data(0x04000000, 0x00000003),
+    addr_data(0x04000002, 0x00000013),
+    addr_data(0x04000004, 0x00000022),
+    addr_data(0x0400000b, 0x01020033),
+    addr_data(0x0400000d, 0x00000043),
+    addr_data(0x0400000f, 0x02020053),
+    addr_data(0x04000011, 0x00000062),
+    addr_data(0x04000012, 0x00000072),
+    addr_data(0x04000013, 0x00000082),
+    addr_data(0x0400001c, 0x000000d3),
+    addr_data(0x0400001e, 0x000000e3),
+};
+
+TEST_CASE("rvc zbp miss", "[fetch]") {
+    task_runner runner(90);
+    verilated_ptr<Vfetch> sut(new Vfetch{runner.vcontext()}, "fetch/logs/rvc_zbp_miss.fst");
+    context *ctx = runner.ctx();
+
+    runner.start_task(std::make_shared<task>("input", [&sut, &ctx]() { return input_task(&*sut, ctx); }, false));
+    runner.start_task(std::make_shared<task>("imem",  [&sut, &ctx]() { return imem_mock_task(&*sut, ctx, imem_zbp_miss_insts); }, false));
+    runner.start_task(std::make_shared<task>("bp",    [&sut, &ctx]() { return bp_mock_task(&*sut, ctx, bp_zbp_miss); }, false));
+    runner.start_task(std::make_shared<task>("prove", [&sut, &ctx]() { return probe_fetch_task(&*sut, ctx, fixed64bit_ready_counts, expected_zbp_miss_insts); }));
+
+    runner.run(sut);
+}

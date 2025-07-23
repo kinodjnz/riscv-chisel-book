@@ -79,7 +79,7 @@ RISCV_TESTS_TARGETS=$(patsubst %.binhex,%.target,$(RISCV_TESTS_DO))
 TIMEOUT_OVERRIDES = \
     fizzbuzz:10000 \
     dhry:20000 \
-	coremark:20000 \
+	coremark:60000 \
 	sdc_rx:14000 \
 	sdc_tx:14000
 

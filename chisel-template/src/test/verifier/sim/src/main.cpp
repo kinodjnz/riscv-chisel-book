@@ -330,10 +330,12 @@ void spike_step() {
         case CSR_CYCLE:
             backup = state->mcycle->read();
             state->mcycle->unlogged_write(top->io_pipeline_probe_csr_data);
+            state->mcycle->bump(0);
             break;
         case CSR_CYCLEH:
             backup = state->mcycle->read();
             state->mcycle->unlogged_write((((uint64_t)top->io_pipeline_probe_csr_data) << 32));
+            state->mcycle->bump(0);
             break;
         }
     }
@@ -375,6 +377,7 @@ void spike_step() {
         case CSR_CYCLE:
         case CSR_CYCLEH:
             state->mcycle->unlogged_write(backup+2);
+            state->mcycle->bump(0);
             break;
         }
     }
@@ -466,9 +469,14 @@ void spike_next(uint32_t index, uint32_t inst_id, uint32_t pc, uint32_t inst, ui
     if (!found) {
         fprintf(stderr, "pc not found: %08x\n", pc);
         fprintf(stderr, "inst: %08x\n", inst);
+        for (auto &log: inst_log) {
+            fprintf(stderr, " log.pc %08x\n", log.pc);
+        }
         failure();
     }
 }
+
+std::deque<uint32_t> kanata_insts;
 
 void trace_kanata_log() {
     if (top->io_pipeline_probe_if2_valid1) {
@@ -476,12 +484,14 @@ void trace_kanata_log() {
         fprintf(kanata_fp, "I\t%d\t%d\t0\n", inst_id, inst_id);
         fprintf(kanata_fp, "L\t%d\t0\t%08x %08x\n", inst_id, top->io_pipeline_probe_if2_pc1, top->io_pipeline_probe_if2_inst1);
         fprintf(kanata_fp, "S\t%d\t0\tIF\n", inst_id);
+        kanata_insts.push_back(inst_id);
     }
     if (top->io_pipeline_probe_if2_valid2) {
         uint32_t inst_id = top->io_pipeline_probe_if2_inst_id2;
         fprintf(kanata_fp, "I\t%d\t%d\t0\n", inst_id, inst_id);
         fprintf(kanata_fp, "L\t%d\t0\t%08x %08x\n", inst_id, top->io_pipeline_probe_if2_pc2, top->io_pipeline_probe_if2_inst2);
         fprintf(kanata_fp, "S\t%d\t0\tIF\n", inst_id);
+        kanata_insts.push_back(inst_id);
     }
     if (top->io_pipeline_probe_ida_valid) {
         fprintf(kanata_fp, "S\t%d\t0\tID\n", top->io_pipeline_probe_ida_inst_id);
@@ -514,53 +524,74 @@ void trace_kanata_log() {
         fprintf(kanata_fp, "S\t%d\t0\tMEM3\n", top->io_pipeline_probe_mem3_inst_id);
     }
     fprintf(kanata_fp, "C\t1\n");
-    if (top->io_pipeline_probe_if2_valid1) {
-        fprintf(kanata_fp, "E\t%d\t0\tIF\n", top->io_pipeline_probe_if2_inst_id1);
-    }
-    if (top->io_pipeline_probe_if2_valid2) {
-        fprintf(kanata_fp, "E\t%d\t0\tIF\n", top->io_pipeline_probe_if2_inst_id2);
-    }
-    if (top->io_pipeline_probe_ida_valid) {
-        fprintf(kanata_fp, "E\t%d\t0\tID\n", top->io_pipeline_probe_ida_inst_id);
-    }
-    if (top->io_pipeline_probe_idb_valid) {
-        fprintf(kanata_fp, "E\t%d\t0\tID\n", top->io_pipeline_probe_idb_inst_id);
-    }
-    if (top->io_pipeline_probe_rrd_valid) {
-        fprintf(kanata_fp, "E\t%d\t0\tRRD\n", top->io_pipeline_probe_rrd_inst_id);
-    }
-    if (top->io_pipeline_probe_rrd_i2_valid) {
-        fprintf(kanata_fp, "E\t%d\t0\tRRD\n", top->io_pipeline_probe_rrd_i2_inst_id);
-    }
-    if (top->io_pipeline_probe_ex1_valid) {
-        fprintf(kanata_fp, "E\t%d\t0\tEX1\n", top->io_pipeline_probe_ex1_inst_id);
-    }
-    if (top->io_pipeline_probe_ex1_i2_valid) {
-        fprintf(kanata_fp, "E\t%d\t0\tEX1\n", top->io_pipeline_probe_ex1_i2_inst_id);
-    }
+    // if (top->io_pipeline_probe_if2_valid1) {
+    //     fprintf(kanata_fp, "E\t%d\t0\tIF\n", top->io_pipeline_probe_if2_inst_id1);
+    // }
+    // if (top->io_pipeline_probe_if2_valid2) {
+    //     fprintf(kanata_fp, "E\t%d\t0\tIF\n", top->io_pipeline_probe_if2_inst_id2);
+    // }
+    // if (top->io_pipeline_probe_ida_valid) {
+    //     fprintf(kanata_fp, "E\t%d\t0\tID\n", top->io_pipeline_probe_ida_inst_id);
+    // }
+    // if (top->io_pipeline_probe_idb_valid) {
+    //     fprintf(kanata_fp, "E\t%d\t0\tID\n", top->io_pipeline_probe_idb_inst_id);
+    // }
+    // if (top->io_pipeline_probe_rrd_valid) {
+    //     fprintf(kanata_fp, "E\t%d\t0\tRRD\n", top->io_pipeline_probe_rrd_inst_id);
+    // }
+    // if (top->io_pipeline_probe_rrd_i2_valid) {
+    //     fprintf(kanata_fp, "E\t%d\t0\tRRD\n", top->io_pipeline_probe_rrd_i2_inst_id);
+    // }
+    // if (top->io_pipeline_probe_ex1_valid) {
+    //     fprintf(kanata_fp, "E\t%d\t0\tEX1\n", top->io_pipeline_probe_ex1_inst_id);
+    // }
+    // if (top->io_pipeline_probe_ex1_i2_valid) {
+    //     fprintf(kanata_fp, "E\t%d\t0\tEX1\n", top->io_pipeline_probe_ex1_i2_inst_id);
+    // }
     if (top->io_pipeline_probe_ex1_i2_retired) {
         uint32_t inst_id = top->io_pipeline_probe_ex1_i2_inst_id;
         fprintf(kanata_fp, "R\t%d\t%d\t0\n", inst_id, inst_id);
+        auto range = std::equal_range(kanata_insts.begin(), kanata_insts.end(), inst_id);
+        for (auto it = std::get<0>(range); it != std::get<1>(range); ++it) {
+            kanata_insts.erase(it);
+            break;
+        }
     }
-    if (top->io_pipeline_probe_ex2_valid) {
-        fprintf(kanata_fp, "E\t%d\t0\tEX2\n", top->io_pipeline_probe_ex2_inst_id);
-    }
+    // if (top->io_pipeline_probe_ex2_valid) {
+    //     fprintf(kanata_fp, "E\t%d\t0\tEX2\n", top->io_pipeline_probe_ex2_inst_id);
+    // }
     if (top->io_pipeline_probe_ex2_retired) {
         uint32_t inst_id = top->io_pipeline_probe_ex2_inst_id;
         fprintf(kanata_fp, "R\t%d\t%d\t0\n", inst_id, inst_id);
+        auto range = std::equal_range(kanata_insts.begin(), kanata_insts.end(), inst_id);
+        for (auto it = std::get<0>(range); it != std::get<1>(range); ++it) {
+            kanata_insts.erase(it);
+            break;
+        }
     }
-    if (top->io_pipeline_probe_mem1_valid) {
-        fprintf(kanata_fp, "E\t%d\t0\tMEM1\n", top->io_pipeline_probe_mem1_inst_id);
-    }
-    if (top->io_pipeline_probe_mem2_valid) {
-        fprintf(kanata_fp, "E\t%d\t0\tMEM2\n", top->io_pipeline_probe_mem2_inst_id);
-    }
-    if (top->io_pipeline_probe_mem3_valid) {
-        fprintf(kanata_fp, "E\t%d\t0\tMEM3\n", top->io_pipeline_probe_mem3_inst_id);
-    }
+    // if (top->io_pipeline_probe_mem1_valid) {
+    //     fprintf(kanata_fp, "E\t%d\t0\tMEM1\n", top->io_pipeline_probe_mem1_inst_id);
+    // }
+    // if (top->io_pipeline_probe_mem2_valid) {
+    //     fprintf(kanata_fp, "E\t%d\t0\tMEM2\n", top->io_pipeline_probe_mem2_inst_id);
+    // }
+    // if (top->io_pipeline_probe_mem3_valid) {
+    //     fprintf(kanata_fp, "E\t%d\t0\tMEM3\n", top->io_pipeline_probe_mem3_inst_id);
+    // }
     if (top->io_pipeline_probe_mem3_retired) {
         uint32_t inst_id = top->io_pipeline_probe_mem3_inst_id;
         fprintf(kanata_fp, "R\t%d\t%d\t0\n", inst_id, inst_id);
+        auto range = std::equal_range(kanata_insts.begin(), kanata_insts.end(), inst_id);
+        for (auto it = std::get<0>(range); it != std::get<1>(range); ++it) {
+            kanata_insts.erase(it);
+            break;
+        }
+    }
+    if (top->io_pipeline_probe_flush_pipeline) {
+        for (auto &&inst_id: kanata_insts) {
+            fprintf(kanata_fp, "R\t%d\t%d\t1\n", inst_id, inst_id);
+        }
+        kanata_insts.clear();
     }
 }
 

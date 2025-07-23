@@ -348,6 +348,7 @@ src/rust/bootrom/rust-toolchain
 obj_dir
 src/test/verifier/*/logs/*.json
 src/test/verifier/*/logs/*.fst
+src/test/verifier/*/logs/*.kanata
 
 # Make env file
 .env.mk
