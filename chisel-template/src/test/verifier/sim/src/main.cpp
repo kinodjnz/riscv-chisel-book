@@ -6,6 +6,7 @@
 #include <signal.h>
 #include <getopt.h>
 #include "processor.h"
+#include "disasm.h"
 #include "simif.h"
 
 void handler_crash(int sig) {
@@ -476,28 +477,88 @@ void spike_next(uint32_t index, uint32_t inst_id, uint32_t pc, uint32_t inst, ui
     }
 }
 
+const char *attr_to_str(uint32_t attr, bool is_ret) {
+    switch (attr) {
+    case 0:
+        return (is_ret ? "ret" : "unknown");
+    case 1:
+        return "br";
+    case 2:
+        return "djump";
+    case 3:
+        return "dcall";
+    }
+    return "unexpected";
+}
+
+const char *lcnt_to_str(uint32_t lcnt) {
+    switch (lcnt) {
+    case 2:
+        return "strongly not-taken";
+    case 0:
+        return "weakly not-taken";
+    case 1:
+        return "weakly taken";
+    case 3:
+        return "strongly taken";
+    }
+    return "unexpected";
+}
+
+const char *gcnt_to_str(uint32_t gcnt) {
+    switch (gcnt) {
+    case 2:
+        return "not-taken";
+    case 0:
+        return "neutral";
+    case 3:
+        return "taken";
+    case 1:
+        return "not branch";
+    }
+    return "unexpected";
+}
+
 std::deque<uint32_t> kanata_insts;
 
 void trace_kanata_log() {
     if (top->io_pipeline_probe_if2_valid1) {
         uint32_t inst_id = top->io_pipeline_probe_if2_inst_id1;
         fprintf(kanata_fp, "I\t%d\t%d\t0\n", inst_id, inst_id);
-        fprintf(kanata_fp, "L\t%d\t0\t%08x %08x\n", inst_id, top->io_pipeline_probe_if2_pc1, top->io_pipeline_probe_if2_inst1);
+        fprintf(kanata_fp,
+            "L\t%d\t0\t%08x %s\n",
+            inst_id,
+            top->io_pipeline_probe_if2_pc1,
+            proc->get_disassembler()->disassemble(top->io_pipeline_probe_if2_inst1).c_str()
+        );
+        fprintf(kanata_fp, "L\t%d\t1\t%08x\n", inst_id, mask_rvc(top->io_pipeline_probe_if2_inst1));
         fprintf(kanata_fp, "S\t%d\t0\tIF\n", inst_id);
         kanata_insts.push_back(inst_id);
     }
     if (top->io_pipeline_probe_if2_valid2) {
         uint32_t inst_id = top->io_pipeline_probe_if2_inst_id2;
         fprintf(kanata_fp, "I\t%d\t%d\t0\n", inst_id, inst_id);
-        fprintf(kanata_fp, "L\t%d\t0\t%08x %08x\n", inst_id, top->io_pipeline_probe_if2_pc2, top->io_pipeline_probe_if2_inst2);
+        fprintf(kanata_fp,
+            "L\t%d\t0\t%08x %s\n",
+            inst_id,
+            top->io_pipeline_probe_if2_pc2,
+            proc->get_disassembler()->disassemble(top->io_pipeline_probe_if2_inst2).c_str()
+        );
+        fprintf(kanata_fp, "L\t%d\t1\t%08x\n", inst_id, mask_rvc(top->io_pipeline_probe_if2_inst2));
         fprintf(kanata_fp, "S\t%d\t0\tIF\n", inst_id);
         kanata_insts.push_back(inst_id);
     }
-    if (top->io_pipeline_probe_ida_valid) {
-        fprintf(kanata_fp, "S\t%d\t0\tID\n", top->io_pipeline_probe_ida_inst_id);
+    if (top->io_pipeline_probe_id1a_valid) {
+        fprintf(kanata_fp, "S\t%d\t0\tID\n", top->io_pipeline_probe_id1a_inst_id);
     }
-    if (top->io_pipeline_probe_idb_valid) {
-        fprintf(kanata_fp, "S\t%d\t0\tID\n", top->io_pipeline_probe_idb_inst_id);
+    if (top->io_pipeline_probe_id1b_valid) {
+        fprintf(kanata_fp, "S\t%d\t0\tID\n", top->io_pipeline_probe_id1b_inst_id);
+    }
+    if (top->io_pipeline_probe_id2a_valid) {
+        fprintf(kanata_fp, "S\t%d\t0\tID\n", top->io_pipeline_probe_id2a_inst_id);
+    }
+    if (top->io_pipeline_probe_id2b_valid) {
+        fprintf(kanata_fp, "S\t%d\t0\tID\n", top->io_pipeline_probe_id2b_inst_id);
     }
     if (top->io_pipeline_probe_rrd_valid) {
         fprintf(kanata_fp, "S\t%d\t0\tRRD\n", top->io_pipeline_probe_rrd_inst_id);
@@ -507,6 +568,22 @@ void trace_kanata_log() {
     }
     if (top->io_pipeline_probe_ex1_valid) {
         fprintf(kanata_fp, "S\t%d\t0\tEX1\n", top->io_pipeline_probe_ex1_inst_id);
+        if (top->io_pipeline_probe_ex1_predict_redirected) {
+            fprintf(kanata_fp, "L\t%d\t1\t\\npredict redirected\n", top->io_pipeline_probe_ex1_inst_id);
+            fprintf(kanata_fp, "L\t%d\t1\t\\n  %s\n", top->io_pipeline_probe_ex1_inst_id, attr_to_str(top->io_pipeline_probe_ex1_predict_attr, top->io_pipeline_probe_ex1_predict_is_ret));
+            fprintf(kanata_fp, "L\t%d\t1\t\\n  target: %08x\n", top->io_pipeline_probe_ex1_inst_id, top->io_pipeline_probe_ex1_predict_target_pc << 1);
+        }
+        if (top->io_pipeline_probe_ex1_predict_bpfailed) {
+            fprintf(kanata_fp, "L\t%d\t1\t\\nbp failed\n", top->io_pipeline_probe_ex1_inst_id);
+        }
+        fprintf(kanata_fp, "L\t%d\t1\t\\nhistory: %02x\n", top->io_pipeline_probe_ex1_inst_id, top->io_pipeline_probe_ex1_history);
+        fprintf(kanata_fp, "L\t%d\t1\t\\nlcnt: %s\n", top->io_pipeline_probe_ex1_inst_id, lcnt_to_str(top->io_pipeline_probe_ex1_lcnt));
+        fprintf(kanata_fp, "L\t%d\t1\t\\ngcnt: %s\n", top->io_pipeline_probe_ex1_inst_id, gcnt_to_str(top->io_pipeline_probe_ex1_gcnt));
+        if (top->io_pipeline_probe_ex1_actual_redirected) {
+            fprintf(kanata_fp, "L\t%d\t1\t\\nactual redirected\n", top->io_pipeline_probe_ex1_inst_id);
+            fprintf(kanata_fp, "L\t%d\t1\t\\n  %s\n", top->io_pipeline_probe_ex1_inst_id, attr_to_str(top->io_pipeline_probe_ex1_actual_attr, top->io_pipeline_probe_ex1_actual_is_ret));
+            fprintf(kanata_fp, "L\t%d\t1\t\\n  target: %08x\n", top->io_pipeline_probe_ex1_inst_id, top->io_pipeline_probe_ex1_actual_target_pc << 1);
+        }
     }
     if (top->io_pipeline_probe_ex1_i2_valid) {
         fprintf(kanata_fp, "S\t%d\t0\tEX1\n", top->io_pipeline_probe_ex1_i2_inst_id);
@@ -724,6 +801,7 @@ void cleanup() {
     if (kanata_fp != nullptr) {
         fclose(kanata_fp);
         kanata_fp = nullptr;
+        system(("gzip -f " + kanata_name).c_str());
     }
 
     if (top != nullptr) {
