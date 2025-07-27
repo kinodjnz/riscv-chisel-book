@@ -77,10 +77,14 @@ class InstructionDecoderDebugSignals extends Bundle {
 }
 
 class InstructionDecoderPipelineProbe(enable_pipeline_probe: Boolean) extends Bundle {
-  val ida_valid    = Option.when(enable_pipeline_probe)(Output(Bool()))
-  val ida_inst_id  = Option.when(enable_pipeline_probe)(Output(UInt(32.W)))
-  val idb_valid    = Option.when(enable_pipeline_probe)(Output(Bool()))
-  val idb_inst_id  = Option.when(enable_pipeline_probe)(Output(UInt(32.W)))
+  val id1a_valid    = Option.when(enable_pipeline_probe)(Output(Bool()))
+  val id1a_inst_id  = Option.when(enable_pipeline_probe)(Output(UInt(32.W)))
+  val id1b_valid    = Option.when(enable_pipeline_probe)(Output(Bool()))
+  val id1b_inst_id  = Option.when(enable_pipeline_probe)(Output(UInt(32.W)))
+  val id2a_valid    = Option.when(enable_pipeline_probe)(Output(Bool()))
+  val id2a_inst_id  = Option.when(enable_pipeline_probe)(Output(UInt(32.W)))
+  val id2b_valid    = Option.when(enable_pipeline_probe)(Output(Bool()))
+  val id2b_inst_id  = Option.when(enable_pipeline_probe)(Output(UInt(32.W)))
 }
 
 class InstructionDecoder(enable_pipeline_probe: Boolean) extends Module {
@@ -472,10 +476,10 @@ class InstructionDecoderUnit(
 
     // iq.io.read1.iq_id := reg_in1.iq_id
 
-    io.pipeline_probe.ida_valid.foreach(_ := reg_in1.valid)
-    map2(io.pipeline_probe.ida_inst_id, reg_in1.inst_id)(_ := _)
-    io.pipeline_probe.idb_valid.foreach(_ := reg_in2.valid)
-    map2(io.pipeline_probe.idb_inst_id, reg_in2.inst_id)(_ := _)
+    io.pipeline_probe.id1a_valid.foreach(_ := reg_in1.valid)
+    map2(io.pipeline_probe.id1a_inst_id, reg_in1.inst_id)(_ := _)
+    io.pipeline_probe.id1b_valid.foreach(_ := reg_in2.valid)
+    map2(io.pipeline_probe.id1b_inst_id, reg_in2.inst_id)(_ := _)
 
     io.debug_signals.id_pc1   := reg_in1.pc
     io.debug_signals.id_inst1 := reg_in1.inst
@@ -561,6 +565,11 @@ class InstructionDecoderUnit(
       }
     }
     iq.io.lsq2.lsq.lsq_id := io.lsa2.lsq_id
+
+    io.pipeline_probe.id2a_valid.foreach(_ := iq.io.read1.valid)
+    map2(io.pipeline_probe.id2a_inst_id, iq.io.read1.decoded.inst_id)(_ := _)
+    io.pipeline_probe.id2b_valid.foreach(_ := iq.io.read2.valid)
+    map2(io.pipeline_probe.id2b_inst_id, iq.io.read2.decoded.inst_id)(_ := _)
   }
 
   id2

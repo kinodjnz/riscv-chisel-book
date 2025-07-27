@@ -325,12 +325,12 @@ object Consts {
   val BTB_ATTR_DJUMP    = 2.U(BTB_ATTR_LEN.W)
   val BTB_ATTR_DCALL    = 3.U(BTB_ATTR_LEN.W)
   // val BTB_ENTRY_LEN     = BTB_TAG_LEN + BTB_ATTR_LEN + PC_LEN
-  val PHT_HISTORY_LEN   = 6
-  val PHT_HISTORY_SHIFT = 2
+  val PHT_HISTORY_LEN   = 8
+  val PHT_HISTORY_SHIFT = 3
   val PHT_INDEX_LEN     = 13
-  // val PHT_HISTORY_BITS  = 36
-  // val PHT_HISTORY_SHIFT = 12
-  // val PHT_INDEX_LEN     = 36+6
+  // val PHT_HISTORY_LEN   = 15
+  // val PHT_HISTORY_SHIFT = 2
+  // val PHT_INDEX_LEN     = 15+5
   val RAS_INDEX_LEN     = 2
   val RAS_ENTRIES       = (1 << RAS_INDEX_LEN)
   val GCNT_NOT_BRANCH   = 1.U(2.W)

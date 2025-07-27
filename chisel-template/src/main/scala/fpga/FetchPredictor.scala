@@ -69,12 +69,9 @@ class FetchRedirectBuffer(redirect_buffer_size: Int, pht_history_len: Int, ras_e
   when ((io.enq.en && !io.enq.correct) || io.enq.flush_en) {
     enq_ptr := enq_ptr + 1.U
   }
-  when (io.enq.en && io.enq.correct) {
-    enq_ptr := enq_ptr
-  }
-  when (!io.enq.en && io.enq.correct) {
-    enq_ptr := enq_ptr - 1.U
-  }
+  // when (!io.enq.en && !io.enq.flush_en && io.enq.correct) {
+  //   enq_ptr := enq_ptr - 1.U
+  // }
   when (io.deq.en) {
     deq_ptr := deq_ptr + 1.U
     printf(cf"fp deq_ptr=${deq_ptr}\n")
@@ -125,8 +122,10 @@ class FetchPredictionPort(redirect_buffer_size: Int) extends Bundle {
   val iaddr_en       = Input(Bool())
   val iaddr          = Input(UInt(PC_LEN.W))
   val flush_en       = Input(Bool())
+  val invalidate     = Input(Bool())
   val redirect_en    = Input(Bool())
   val correct_enq    = Input(Bool())
+  val target_changed = Input(Bool())
   val redirect_ready = Output(Bool())
   val bp0_en         = Output(Bool())
   val bp0_pos        = Output(UInt(IALIGN_PTR_LEN.W)) // needed?
@@ -162,6 +161,7 @@ class FetchPredictor(
 ) extends Module {
   val zbtb_index_len = log2Ceil(zbtb_entries)
   val ras_index_len  = log2Ceil(ras_entries)
+  val fp_ptr_len     = log2Ceil(redirect_buffer_size)
 
   val io = IO(new Bundle {
     val pr = new FetchPredictionPort(pht_history_len)
@@ -182,14 +182,17 @@ class FetchPredictor(
 
   def prediction_cycle: Unit = {
     val reg_iaddr_en    = RegNext(io.pr.iaddr_en)
+    val reg_invalidate  = RegNext(io.pr.invalidate)
     val reg_iaddr_index = RegInit(0.U(PC_LEN.W))
     val reg_redirect_en = RegNext(io.pr.redirect_en)
     val reg_correct_enq = RegNext(io.pr.correct_enq)
+    val reg_target_changed = RegNext(io.pr.target_changed)
     val reg_flush_en    = RegNext(io.pr.flush_en)
     val reg_fp_ptr      = RegInit(io.re.ptr)
+    val cur_fp_ptr      = Wire(UInt(fp_ptr_len.W))
 
     reg_iaddr_index := io.pr.iaddr
-    io.pr.redirect_ready := io.re.ready && (!io.re.left1 || !reg_redirect_en)
+    io.pr.redirect_ready := io.re.ready && (!io.re.left1 || !io.pr.redirect_en)
 
     io.zbtb.lu.pc := io.pr.iaddr
 
@@ -198,10 +201,15 @@ class FetchPredictor(
     val bp0_pos = MuxCase(3.U(IALIGN_PTR_LEN.W),
       Seq.tabulate(3)(i => ((i.U(2.W) >= ibpos) && io.zbtb.lu.matches(i)) -> i.U(IALIGN_PTR_LEN.W))
     )
-    val bp0_en = reg_iaddr_en && VecInit.tabulate(4)(i => (i.U(2.W) >= ibpos) && io.zbtb.lu.matches(i)).asUInt.orR
+    val bp0_en = reg_iaddr_en && !reg_invalidate && VecInit.tabulate(4)(i => (i.U(2.W) >= ibpos) && io.zbtb.lu.matches(i)).asUInt.orR
     io.pr.bp0_en   := bp0_en
     io.pr.bp0_pos  := bp0_pos
     io.pr.bp0_addr := io.zbtb.lu.target(bp0_pos)
+
+    when (bp0_en) {
+      printf(cf"fp(${io.pr.fp_ptr}).target := 0x${io.zbtb.lu.target(bp0_pos).pc_to_word}%x, pc=0x${reg_iaddr_index.pc_to_word}%x\n")
+      printf(cf"bp0_pos = ${bp0_pos}\n")
+    }
 
     io.btb.lu.pc := io.pr.iaddr
     io.pht.lu.pc := io.pr.iaddr
@@ -218,22 +226,22 @@ class FetchPredictor(
     val bp1_pos = MuxCase(3.U(IALIGN_PTR_LEN.W),
       Seq.tabulate(3)(i => redirected(i) -> i.U(IALIGN_PTR_LEN.W))
     )
-    val bp1_target = Mux(io.btb.lu.result(bp1_pos).is_ret, io.ras.top.ret_pc, io.btb.lu.result(bp1_pos).target)
-    val bp1_en = reg_iaddr_en && redirected.asUInt.orR
+    val bp1_target = Mux(io.btb.lu.result(bp1_pos).attr === BTB_ATTR_INVAL, io.ras.top.ret_pc, io.btb.lu.result(bp1_pos).target)
+    val bp1_en = reg_iaddr_en && !reg_invalidate && redirected.asUInt.orR
     io.pr.bp1_en   := bp1_en
     io.pr.bp1_pos  := bp1_pos
     io.pr.bp1_addr := bp1_target
 
-    io.ru.en        := bp1_en
-    io.ru.ptr       := reg_fp_ptr
+    io.ru.en        := bp1_en && !io.pr.invalidate
+    io.ru.ptr       := cur_fp_ptr
     io.ru.attr      := attr(bp1_pos)
     io.ru.is_ret    := io.btb.lu.result(bp1_pos).is_ret
-    io.ru.ras_index := io.ras.top.index
+    io.ru.ras_index := 0.U // io.ras.top.index
     io.ru.target    := bp1_target
 
-    when (bp1_en) {
-      printf(cf"fp(${reg_fp_ptr}).target := 0x${bp1_target.pc_to_word}%x, pc=0x${reg_iaddr_index.pc_to_word}%x\n")
-      printf(cf"bp1_pos = ${bp1_pos} XXXXXXXXX\n")
+    when (bp1_en && !io.pr.invalidate) {
+      printf(cf"fp(${io.pr.fp_ptr}).target := 0x${bp1_target.pc_to_word}%x, pc=0x${reg_iaddr_index.pc_to_word}%x\n")
+      printf(cf"bp1_pos = ${bp1_pos}\n")
     }
 
     for (i <- 0 until 4) {
@@ -242,13 +250,17 @@ class FetchPredictor(
     }
 
     io.re.en       := !io.pr.flush_en && reg_redirect_en
-    io.re.correct  := io.pr.correct_enq
+    io.re.correct  := reg_correct_enq
     io.re.flush_en := reg_flush_en
     io.re.history  := io.pht.history
-    io.pr.fp_ptr   := reg_fp_ptr
-    when ((!io.pr.flush_en && (reg_redirect_en && !io.pr.correct_enq)) || reg_flush_en) {
-      reg_fp_ptr   := io.re.ptr
-      io.pr.fp_ptr := io.re.ptr
+    io.pr.fp_ptr   := cur_fp_ptr
+    cur_fp_ptr     := reg_fp_ptr
+    when ((!io.pr.flush_en && (
+      (reg_redirect_en && !reg_correct_enq && !io.pr.target_changed) ||
+      reg_target_changed
+    )) || reg_flush_en) {
+      reg_fp_ptr := io.re.ptr
+      cur_fp_ptr := io.re.ptr
     }
 
     // Clear zbtb by btb prediction
@@ -257,10 +269,10 @@ class FetchPredictor(
     io.zbtb.inv.pc := reg_iaddr_index.replace_lsbits(2, bp0_pos)
 
     // Update RAS by btb prediction
-    io.ras.ret1.en      := !io.pr.flush_en && reg_iaddr_en && io.btb.lu.result(bp1_pos).is_ret
-    io.ras.ret1.index   := io.ras.top.index - 1.U(ras_index_len.W)
-    io.ras.call1.en     := !io.pr.flush_en && reg_iaddr_en && (attr(bp1_pos) === BTB_ATTR_DCALL)
-    io.ras.call1.index  := io.ras.top.index + 1.U(ras_index_len.W)
+    io.ras.ret1.en      := !io.pr.flush_en && reg_iaddr_en && !reg_invalidate && io.btb.lu.result(bp1_pos).is_ret
+    // io.ras.ret1.index   := io.ras.top.index - 1.U(ras_index_len.W)
+    io.ras.call1.en     := !io.pr.flush_en && reg_iaddr_en && !reg_invalidate && (attr(bp1_pos) === BTB_ATTR_DCALL)
+    // io.ras.call1.index  := io.ras.top.index + 1.U(ras_index_len.W)
     // val bcall_pos = MuxCase(3.U(IALIGN_PTR_LEN.W),
     //   Seq.tabulate(3)(i => (i.U(2.W) >= ibpos) && io.btb.lu.result(i).jump -> i.U(IALIGN_PTR_LEN.W))
     // )
@@ -272,7 +284,7 @@ class FetchPredictor(
 
     // Update PHT history by btb prediction
     val pht_pc_index = reg_iaddr_index.take(pht_history_len)
-    io.pht.br.en := !io.pr.flush_en && reg_iaddr_en && br_taken(bp1_pos)
+    io.pht.br.en := !io.pr.flush_en && reg_iaddr_en && !reg_invalidate && br_taken(bp1_pos)
     io.pht.br.pc := pht_pc_index.replace_lsbits(2, bp1_pos)
   }
 
@@ -300,7 +312,7 @@ class FetchPredictor(
       //  (not-taken) 10 => 00
       //  (neutral)   00 => 11
       //  (taken)     11 => 11
-      val gcnt_if_taken = (gcnt(0) ^ !gcnt(1)) ## (gcnt(0) ^ !gcnt(1))
+      val gcnt_if_taken = (gcnt(1) ^ !gcnt(0)) ## (gcnt(1) ^ !gcnt(0))
 
       // if not-taken:
       //  (not-taken) 10 => 10
@@ -360,16 +372,21 @@ class FetchPredictor(
 
     // Rollback RAS index if pc redirect prediction fails.
     io.ras.up.en    := /*io.cr.en &&*/ io.cr.mispred
-    io.ras.up.index := io.cr.fp_entry.ras_index
+    // io.ras.up.index := io.cr.fp_entry.ras_index
 
-    // Pop RAS if ret prediction fails.
-    io.ras.ret2.en      := io.cr.en && io.cr.is_ret && (!io.cr.fp_hit || !io.cr.fp_entry.is_ret)
-    io.ras.ret2.index   := io.cr.fp_entry.ras_index - 1.U(ras_index_len.W)
+    // // Pop RAS if ret prediction fails.
+    // io.ras.ret2.en      := io.cr.en && io.cr.is_ret && (!io.cr.fp_hit || !io.cr.fp_entry.is_ret)
+    // io.ras.ret2.index   := io.cr.fp_entry.ras_index - 1.U(ras_index_len.W)
+    // Pop RAS
+    io.ras.ret2.en      := io.cr.en && io.cr.is_ret
 
-    // Push return address to RAS if call prediction fails.
-    io.ras.call2.en     := io.cr.en && (io.cr.attr === BTB_ATTR_DCALL) &&
-                             (!io.cr.fp_hit || io.cr.fp_entry.attr =/= BTB_ATTR_DCALL)
-    io.ras.call2.index  := io.cr.fp_entry.ras_index + 1.U(ras_index_len.W)
+    // // Push return address to RAS if call prediction fails.
+    // io.ras.call2.en     := io.cr.en && (io.cr.attr === BTB_ATTR_DCALL) &&
+    //                          (!io.cr.fp_hit || io.cr.fp_entry.attr =/= BTB_ATTR_DCALL)
+    // io.ras.call2.index  := io.cr.fp_entry.ras_index + 1.U(ras_index_len.W)
+    // io.ras.call2.ret_pc := io.cr.next_pc
+    // Push return address to RAS
+    io.ras.call2.en     := io.cr.en && (io.cr.attr === BTB_ATTR_DCALL)
     io.ras.call2.ret_pc := io.cr.next_pc
   }
 
@@ -430,7 +447,7 @@ class ZBTB(
   entry.tag    := io.up.pc(tag_len - 1 + index_len, index_len)
   entry.target := io.up.target
 
-  val addr = Mux(io.up.en, io.up.pc(index_len - 1, 0), io.inv.pc(index_len - 1, 0))
+  val addr = Mux(io.up.en, io.up.pc.take(index_len), io.inv.pc.take(index_len))
 
   for (i <- 0 until 2) {
     when (addr(0) === i.U(1.W)) {
@@ -517,6 +534,9 @@ class BTB(btb_entries: Int, tag_ignore: Int = BTB_TAG_IGNORE) extends Module {
     result(i).target := entry(i).shared ## entry(i).target
     io.lu.result(i)  := result(i)
   }
+  for (i <- 0 until 4) {
+    printf(cf"read btb(0x${((RegNext(io.lu.pc).take(PC_LEN).replace_lsbits(2, i.U(2.W))).pc_to_word)}%x) = attr:${entry(i).attr} target:0x${(entry(i).shared ## entry(i).target).pc_to_word}%x\n")
+  }
 
   val up_pc = (io.up.pc(tag_len + index_len - 1, 2)).asTypeOf(new BTBPC(tag_len, index_len))
   val target = Cat(
@@ -526,6 +546,7 @@ class BTB(btb_entries: Int, tag_ignore: Int = BTB_TAG_IGNORE) extends Module {
   for (i <- 0 until 4) {
     when (io.up.en && io.up.pc(1, 0) === i.U(2.W)) {
       btb_mem(i).write(up_pc.index, up_pc.tag ## io.up.attr ## target)
+      printf(cf"update btb(0x${up_pc.index}%x) := attr:${io.up.attr} target:0x${target}%x\n")
     }
   }
 }
@@ -642,23 +663,23 @@ class PHT(index_len: Int, history_len: Int, history_shift: Int) extends Module {
 
 class RASTop(index_len: Int) extends Bundle {
   val ret_pc = Output(UInt(PC_LEN.W))
-  val index  = Output(UInt(index_len.W))
+  // val index  = Output(UInt(index_len.W))
 }
 
 class RASRet(index_len: Int) extends Bundle {
   val en    = Input(Bool())
-  val index = Input(UInt(index_len.W))
+  // val index = Input(UInt(index_len.W))
 }
 
 class RASCall(index_len: Int) extends Bundle {
   val en     = Input(Bool())
-  val index  = Input(UInt(index_len.W))
+  // val index  = Input(UInt(index_len.W))
   val ret_pc = Input(UInt(PC_LEN.W))
 }
 
 class RASUpdate(index_len: Int) extends Bundle {
   val en    = Input(Bool())
-  val index = Input(UInt(index_len.W))
+  // val index = Input(UInt(index_len.W))
 }
 
 class RASIo(index_len: Int) extends Bundle {
@@ -675,42 +696,56 @@ class RAS(index_len: Int) extends Module {
 
   val io = IO(new RASIo(index_len))
 
-  val ras   = Mem(ras_entries, UInt(PC_LEN.W))
-  val index = RegInit(0.U(index_len.W))
+  val ras1   = Mem(ras_entries, UInt(PC_LEN.W))
+  val ras2   = Mem(ras_entries, UInt(PC_LEN.W))
+  val index1 = RegInit(0.U(index_len.W))
+  val index2 = RegInit(0.U(index_len.W))
+  val merged_index = RegInit(0.U(index_len.W))
+  val updated_index2 = WireDefault(index2)
 
-  val ret_pc    = RegInit(0.U(PC_LEN.W))
-  val ret_index = RegNext(index, 0.U(index_len.W))
+  val ret_pc     = RegInit(0.U(PC_LEN.W))
+  // val ret_index = RegNext(index1, 0.U(index_len.W))
 
-  ret_pc := ras(index)
+  ret_pc := Mux(index1 === merged_index, ras2(index1), ras1(index1))
   io.top.ret_pc := ret_pc
-  io.top.index  := ret_index
+  // io.top.index  := ret_index
 
   when (io.ret1.en) {
-    index := io.ret1.index
-    printf(cf"RAS ret1 index=${index}=>${io.ret1.index} pc=0x${Cat(ras(index), 0.U(1.W))}%x\n")
+    val ret_index = index1 - 1.U
+    index1 := ret_index
+    when (index1 === merged_index) {
+      merged_index := ret_index
+    }
+    printf(cf"RAS ret1 index=${index1}=>${ret_index} pc=0x${ras1(index1).pc_to_word}%x\n")
   }
 
-  when (io.call1.en && !io.call2.en) {
-    index := io.call1.index
-    printf(cf"RAS call1 index=${io.call1.index} pc=0x${Cat(io.call1.ret_pc, 0.U(1.W))}%x\n")
+  when (io.call1.en) {
+    val call_index = index1 + 1.U
+    index1 := call_index
+    ras1(call_index) := io.call1.ret_pc
+    when (call_index === merged_index) {
+      merged_index := call_index + 1.U
+    }
+    printf(cf"RAS call1 index=${call_index} pc=0x${io.call1.ret_pc.pc_to_word}%x\n")
   }
 
   when (io.up.en) {
-    index := io.up.index
-    printf(cf"RAS reset index=${io.up.index}\n")
+    // index := io.up.index
+    index1 := updated_index2
+    merged_index := updated_index2
+    printf(cf"RAS reset index=${updated_index2}\n")
   }
 
   when (io.ret2.en) {
-    index := io.ret2.index
-    printf(cf"RAS ret2 index=${io.ret2.index}\n")
+    updated_index2 := index2 - 1.U
+    index2 := updated_index2
+    printf(cf"RAS ret2 index=${updated_index2}\n")
   }
 
   when (io.call2.en) {
-    index := io.call2.index
-    printf(cf"RAS call2 index=${io.call2.index} pc=0x${Cat(io.call2.ret_pc, 0.U(1.W))}%x\n")
-  }
-
-  when (io.call1.en || io.call2.en) {
-    ras(Mux(io.call2.en, io.call2.index, io.call1.index)) := Mux(io.call2.en, io.call2.ret_pc, io.call1.ret_pc)
+    updated_index2 := index2 + 1.U
+    index2 := updated_index2
+    ras2(updated_index2) := io.call2.ret_pc
+    printf(cf"RAS call2 index=${updated_index2} pc=0x${io.call2.ret_pc.pc_to_word}%x\n")
   }
 }

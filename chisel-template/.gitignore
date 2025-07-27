@@ -349,6 +349,7 @@ obj_dir
 src/test/verifier/*/logs/*.json
 src/test/verifier/*/logs/*.fst
 src/test/verifier/*/logs/*.kanata
+src/test/verifier/*/logs/*.kanata.gz
 
 # Make env file
 .env.mk

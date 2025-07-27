@@ -131,6 +131,7 @@ class Fetcher(
     val reg_fix_zbp_miss  = RegInit(false.B)
     val reg_bp1_redirect_en  = RegInit(false.B)
     val reg_bp1_cancel_redir = RegInit(false.B)
+    val reg_bp1_target_changed = RegInit(false.B)
     val reg_fix_addr      = RegInit(0.U(PC_LEN.W))
     val reg_discard_enq   = RegInit(0.U(DISCARD_PTR_LEN.W))
     val reg_is_dram       = RegInit(false.B)
@@ -139,12 +140,6 @@ class Fetcher(
 
     val invalidate        = reg_fix_zbp_miss && reg_addressed
     reg_discard_enq := discard_enq
-    val zbp_miss          =
-      !invalidate && (
-        (io.pr.bp0_en && !io.pr.bp1_en) ||
-        (!io.pr.bp0_en && io.pr.bp1_en) ||
-        (io.pr.bp0_en && io.pr.bp1_en && (io.pr.bp0_addr(7, 0) =/= io.pr.bp1_addr(7, 0) || io.pr.bp0_pos =/= io.pr.bp1_pos))
-      )
     val bp1_redirect_en   =
       !invalidate && (
         (!io.pr.bp0_en && io.pr.bp1_en)
@@ -153,6 +148,16 @@ class Fetcher(
       !invalidate && (
         (io.pr.bp0_en && !io.pr.bp1_en)
       )
+    val bp1_target_changed =
+      !invalidate && (
+        (io.pr.bp0_en && io.pr.bp1_en && (io.pr.bp0_addr(7, 0) =/= io.pr.bp1_addr(7, 0) || io.pr.bp0_pos =/= io.pr.bp1_pos))
+      )
+    val zbp_miss = bp1_redirect_en || bp1_cancel_redir || bp1_target_changed
+      // !invalidate && (
+      //   (io.pr.bp0_en && !io.pr.bp1_en) ||
+      //   (!io.pr.bp0_en && io.pr.bp1_en) ||
+      //   (io.pr.bp0_en && io.pr.bp1_en && (io.pr.bp0_addr(7, 0) =/= io.pr.bp1_addr(7, 0) || io.pr.bp0_pos =/= io.pr.bp1_pos))
+      // )
 
     iaddr := MuxCase(reg_next_iaddr, Seq(
       io.ft.flush_en   -> io.ft.flush_iaddr,
@@ -166,6 +171,7 @@ class Fetcher(
     reg_fix_zbp_miss := fix_zbp_miss
     reg_bp1_redirect_en := !io.ft.flush_en && bp1_redirect_en
     reg_bp1_cancel_redir := !io.ft.flush_en && bp1_cancel_redir
+    reg_bp1_target_changed := !io.ft.flush_en && bp1_target_changed
 
     val count = addressing_ptr - read_ptr
     val has_space = (~count(FETCH_PTR_LEN)).asBool
@@ -187,8 +193,10 @@ class Fetcher(
     io.ft.icache.addr    := iaddr.clear_lsbits(IALIGN_PTR_LEN).pc_to_word
     io.ft.icache.addr_en := ((has_space && redirect_ready) || io.ft.flush_en) && is_dram
     io.pr.flush_en       := io.ft.flush_en
-    io.pr.redirect_en    := io.ft.flush_en || reg_bp1_redirect_en || (io.pr.bp0_en && !reg_bp1_cancel_redir)
-    io.pr.correct_enq    := reg_bp1_cancel_redir
+    io.pr.invalidate     := invalidate
+    io.pr.redirect_en    := io.ft.flush_en || reg_bp1_redirect_en || (io.pr.bp0_en && !invalidate/*reg_bp1_cancel_redir*/)
+    io.pr.correct_enq    := bp1_cancel_redir
+    io.pr.target_changed := bp1_target_changed
     io.pr.iaddr          := iaddr
     when ((!(has_space && redirect_ready) && !io.ft.flush_en) || wait_for_dram || (is_dram && !io.ft.icache.addr_ready)) {
       reg_next_iaddr   := iaddr
@@ -240,10 +248,13 @@ class Fetcher(
     printf(cf"io.ft.imem.en     : ${io.ft.imem.en}\n")
     printf(cf"io.ft.flush_en    : ${io.ft.flush_en}\n")
     printf(cf"io.pr.bp0_en      : ${io.pr.bp0_en}\n")
+    printf(cf"io.pr.bp1_en      : ${io.pr.bp1_en}\n")
     printf(cf"fix_zbp_miss      : ${fix_zbp_miss}\n")
     printf(cf"reg_fix_zbp_miss  : ${reg_fix_zbp_miss}\n")
+    printf(cf"io.pr.invalidate  : ${io.pr.invalidate}\n")
     printf(cf"io.pr.redirect_en : ${io.pr.redirect_en}\n")
     printf(cf"io.pr.correct_enq : ${io.pr.correct_enq}\n")
+    printf(cf"io.pr.target_chang: ${io.pr.target_changed}\n")
     printf(cf"addressing        : ${addressing_ptr.take(FETCH_PTR_LEN)}\n")
     printf(cf"fb(0).iaddr=${fetch_buf(0.U).iaddr ## 0.U(1.W)}%x\n")
     printf(cf"fb(1).iaddr=${fetch_buf(1.U).iaddr ## 0.U(1.W)}%x\n")
@@ -272,6 +283,7 @@ class Fetcher(
       fetch_buf(bp_ptr).end_of_iblock := Mux(io.pr.bp1_en, io.pr.bp1_pos, 3.U)
       fetch_buf(bp_ptr).bp_entries    := io.pr.bp_entries
       fetch_buf(bp_ptr).fp_ptr        := io.pr.fp_ptr
+      printf(cf"fb(${bp_ptr}).end_of_iblock=${Mux(io.pr.bp1_en, io.pr.bp1_pos, 3.U)}\n")
       printf(cf"fb(${bp_ptr}).fp_ptr=${io.pr.fp_ptr}\n")
     }
 
@@ -388,10 +400,11 @@ class Fetcher(
     }
 
     when (inst1_valid) {
-      printf(cf"fb(${read_ptr}%x): 0x${Cat(iaddrs(0), 0.U(1.W))}%x: 0x${idatas(1) ## idatas(0)}%x ${io.ft.inst1.ready} read\n")
+      printf(cf"redir_oh: 0x${redir_oh}%x  inst1_end: ${inst1_end}  redirected: ${io.ft.inst1.redirected}\n")
+      printf(cf"fb(${read_ptr}%x): 0x${iaddr0.pc_to_word}%x: 0x${idatas(1) ## idatas(0)}%x ${io.ft.inst1.ready} read\n")
     }
     when (inst2_valid) {
-      printf(cf"fb(${read_ptr}%x): 0x${Cat(io.ft.inst2.addr, 0.U(1.W))}%x: 0x${io.ft.inst2.data}%x ${io.ft.inst2.ready} read\n")
+      printf(cf"fb(${read_ptr}%x): 0x${io.ft.inst2.addr.pc_to_word}%x: 0x${io.ft.inst2.data}%x ${io.ft.inst2.ready} read\n")
     }
   }
 
