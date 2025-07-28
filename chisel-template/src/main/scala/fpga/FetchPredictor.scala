@@ -10,6 +10,7 @@ class RedirectEnqueuePort(redirect_buffer_size: Int, pht_history_len: Int) exten
 
   val en       = Input(Bool())
   val correct  = Input(Bool())
+  val target_changed = Input(Bool())
   val flush_en = Input(Bool())
   val history  = Input(UInt(pht_history_len.W))
   val ptr      = Output(UInt(fp_ptr_len.W))
@@ -17,18 +18,14 @@ class RedirectEnqueuePort(redirect_buffer_size: Int, pht_history_len: Int) exten
   val left1    = Output(Bool())
 }
 
-class RedirectUpdatePort(redirect_buffer_size: Int, pht_history_len: Int, ras_entries: Int) extends Bundle {
+class RedirectUpdatePort(redirect_buffer_size: Int, pht_history_len: Int) extends Bundle {
   val fp_ptr_len = log2Ceil(redirect_buffer_size)
-  val ras_index_len = log2Ceil(ras_entries)
 
   val en       = Input(Bool())
   val ptr      = Input(UInt(fp_ptr_len.W))
-  // val fp_entry = Input(new FetchPredictionEntry(pht_history_len, ras_entries))
   val attr      = Input(UInt(BTB_ATTR_LEN.W))
   val is_ret    = Input(Bool())
-  val ras_index = Input(UInt(ras_index_len.W))
   val target    = Input(UInt(PC_LEN.W))
-
 }
 
 class RedirectDequeuePort(enable_debug: Boolean, redirect_buffer_size: Int) extends Bundle {
@@ -38,24 +35,24 @@ class RedirectDequeuePort(enable_debug: Boolean, redirect_buffer_size: Int) exte
   val ptr = Option.when(enable_debug)(Input(UInt(fp_ptr_len.W)))
 }
 
-class RedirectReadPort(redirect_buffer_size: Int, pht_history_len: Int, ras_entries: Int) extends Bundle {
+class RedirectReadPort(redirect_buffer_size: Int, pht_history_len: Int) extends Bundle {
   val fp_ptr_len = log2Ceil(redirect_buffer_size)
 
   val ptr      = Input(UInt(fp_ptr_len.W))
-  val fp_entry = Output(new FetchPredictionEntry(pht_history_len, ras_entries))
+  val fp_entry = Output(new FetchPredictionEntry(pht_history_len))
 }
 
-class FetchRedirectBuffer(redirect_buffer_size: Int, pht_history_len: Int, ras_entries: Int, enable_debug: Boolean) extends Module {
+class FetchRedirectBuffer(redirect_buffer_size: Int, pht_history_len: Int, enable_debug: Boolean) extends Module {
   val fp_ptr_len = log2Ceil(redirect_buffer_size)
 
   val io = IO(new Bundle {
     val enq  = new RedirectEnqueuePort(redirect_buffer_size, pht_history_len)
-    val upd  = new RedirectUpdatePort(redirect_buffer_size, pht_history_len, ras_entries)
+    val upd  = new RedirectUpdatePort(redirect_buffer_size, pht_history_len)
     val deq  = new RedirectDequeuePort(enable_debug, redirect_buffer_size)
-    val read = new RedirectReadPort(redirect_buffer_size, pht_history_len, ras_entries)
+    val read = new RedirectReadPort(redirect_buffer_size, pht_history_len)
   })
 
-  val buf = Mem(redirect_buffer_size, new FetchPredictionEntry(pht_history_len, ras_entries))
+  val buf = Mem(redirect_buffer_size, new FetchPredictionEntry(pht_history_len))
   val enq_ptr = RegInit(0.U((fp_ptr_len + 1).W))
   val deq_ptr = RegInit(0.U((fp_ptr_len + 1).W))
 
@@ -66,12 +63,9 @@ class FetchRedirectBuffer(redirect_buffer_size: Int, pht_history_len: Int, ras_e
   when (ready || io.enq.flush_en) {
     buf(enq_ptr).history := io.enq.history
   }
-  when ((io.enq.en && !io.enq.correct) || io.enq.flush_en) {
+  when ((io.enq.en && !io.enq.correct && !io.enq.target_changed) || io.enq.flush_en) {
     enq_ptr := enq_ptr + 1.U
   }
-  // when (!io.enq.en && !io.enq.flush_en && io.enq.correct) {
-  //   enq_ptr := enq_ptr - 1.U
-  // }
   when (io.deq.en) {
     deq_ptr := deq_ptr + 1.U
     printf(cf"fp deq_ptr=${deq_ptr}\n")
@@ -90,14 +84,12 @@ class FetchRedirectBuffer(redirect_buffer_size: Int, pht_history_len: Int, ras_e
   when (io.upd.en) {
     buf(io.upd.ptr).attr      := io.upd.attr
     buf(io.upd.ptr).is_ret    := io.upd.is_ret
-    buf(io.upd.ptr).ras_index := io.upd.ras_index
     buf(io.upd.ptr).target    := io.upd.target
   }
 
   io.read.fp_entry.attr      := buf(io.read.ptr).attr
   io.read.fp_entry.is_ret    := buf(io.read.ptr).is_ret
   io.read.fp_entry.history   := buf(io.read.ptr).history
-  io.read.fp_entry.ras_index := buf(io.read.ptr).ras_index
   io.read.fp_entry.target    := buf(io.read.ptr).target
 }
 
@@ -106,13 +98,10 @@ class BranchPredictionEntry extends Bundle {
   val gcnt  = UInt(2.W) // gcnt === 0b01 means the instruction is not a branch
 }
 
-class FetchPredictionEntry(pht_history_len: Int, ras_entries: Int) extends Bundle {
-  val ras_index_len = log2Ceil(ras_entries)
-
+class FetchPredictionEntry(pht_history_len: Int) extends Bundle {
   val attr      = UInt(BTB_ATTR_LEN.W)
   val is_ret    = Bool()
   val history   = UInt(pht_history_len.W)
-  val ras_index = UInt(ras_index_len.W)
   val target    = UInt(PC_LEN.W)
 }
 
@@ -137,11 +126,11 @@ class FetchPredictionPort(redirect_buffer_size: Int) extends Bundle {
   val fp_ptr         = Output(UInt(fp_ptr_len.W))
 }
 
-class BranchCorrectionPort(pht_history_len: Int, ras_entries: Int) extends Bundle {
+class BranchCorrectionPort(pht_history_len: Int) extends Bundle {
   val en       = Input(Bool())
   val pc       = Input(UInt(PC_LEN.W))
   val bp_entry = Input(new BranchPredictionEntry())
-  val fp_entry = Input(new FetchPredictionEntry(pht_history_len, ras_entries))
+  val fp_entry = Input(new FetchPredictionEntry(pht_history_len))
   val fp_hit   = Input(Bool())
   val mispred  = Input(Bool())
   val br_taken = Input(Bool())
@@ -165,9 +154,9 @@ class FetchPredictor(
 
   val io = IO(new Bundle {
     val pr = new FetchPredictionPort(pht_history_len)
-    val cr = new BranchCorrectionPort(pht_history_len, ras_entries)
+    val cr = new BranchCorrectionPort(pht_history_len)
     val re = Flipped(new RedirectEnqueuePort(redirect_buffer_size, pht_history_len))
-    val ru = Flipped(new RedirectUpdatePort(redirect_buffer_size, pht_history_len, ras_entries))
+    val ru = Flipped(new RedirectUpdatePort(redirect_buffer_size, pht_history_len))
     val zbtb = Flipped(new ZBTBIo(ZBTB_TARGET_LEN))
     val btb = Flipped(new BTBIo)
     val pht = Flipped(new PHTIo(pht_index_len, pht_history_len))
@@ -236,7 +225,6 @@ class FetchPredictor(
     io.ru.ptr       := cur_fp_ptr
     io.ru.attr      := attr(bp1_pos)
     io.ru.is_ret    := io.btb.lu.result(bp1_pos).is_ret
-    io.ru.ras_index := 0.U // io.ras.top.index
     io.ru.target    := bp1_target
 
     when (bp1_en && !io.pr.invalidate) {
@@ -249,8 +237,9 @@ class FetchPredictor(
       io.pr.bp_entries(i).gcnt := Mux(attr(i) === BTB_ATTR_BR, io.pht.lu.gcnt(i), GCNT_NOT_BRANCH)
     }
 
-    io.re.en       := !io.pr.flush_en && reg_redirect_en
+    io.re.en       := !io.pr.flush_en && (reg_redirect_en || reg_target_changed)
     io.re.correct  := reg_correct_enq
+    io.re.target_changed := io.pr.target_changed
     io.re.flush_en := reg_flush_en
     io.re.history  := io.pht.history
     io.pr.fp_ptr   := cur_fp_ptr
@@ -270,12 +259,7 @@ class FetchPredictor(
 
     // Update RAS by btb prediction
     io.ras.ret1.en      := !io.pr.flush_en && reg_iaddr_en && !reg_invalidate && io.btb.lu.result(bp1_pos).is_ret
-    // io.ras.ret1.index   := io.ras.top.index - 1.U(ras_index_len.W)
     io.ras.call1.en     := !io.pr.flush_en && reg_iaddr_en && !reg_invalidate && (attr(bp1_pos) === BTB_ATTR_DCALL)
-    // io.ras.call1.index  := io.ras.top.index + 1.U(ras_index_len.W)
-    // val bcall_pos = MuxCase(3.U(IALIGN_PTR_LEN.W),
-    //   Seq.tabulate(3)(i => (i.U(2.W) >= ibpos) && io.btb.lu.result(i).jump -> i.U(IALIGN_PTR_LEN.W))
-    // )
     io.ras.call1.ret_pc := Mux(
       bp1_pos === 3.U,
       reg_iaddr_index.clear_lsbits(2) + 4.U,
@@ -372,20 +356,11 @@ class FetchPredictor(
 
     // Rollback RAS index if pc redirect prediction fails.
     io.ras.up.en    := /*io.cr.en &&*/ io.cr.mispred
-    // io.ras.up.index := io.cr.fp_entry.ras_index
 
-    // // Pop RAS if ret prediction fails.
-    // io.ras.ret2.en      := io.cr.en && io.cr.is_ret && (!io.cr.fp_hit || !io.cr.fp_entry.is_ret)
-    // io.ras.ret2.index   := io.cr.fp_entry.ras_index - 1.U(ras_index_len.W)
-    // Pop RAS
+    // Pop RAS after execution stage
     io.ras.ret2.en      := io.cr.en && io.cr.is_ret
 
-    // // Push return address to RAS if call prediction fails.
-    // io.ras.call2.en     := io.cr.en && (io.cr.attr === BTB_ATTR_DCALL) &&
-    //                          (!io.cr.fp_hit || io.cr.fp_entry.attr =/= BTB_ATTR_DCALL)
-    // io.ras.call2.index  := io.cr.fp_entry.ras_index + 1.U(ras_index_len.W)
-    // io.ras.call2.ret_pc := io.cr.next_pc
-    // Push return address to RAS
+    // Push return address to RAS after execution stage
     io.ras.call2.en     := io.cr.en && (io.cr.attr === BTB_ATTR_DCALL)
     io.ras.call2.ret_pc := io.cr.next_pc
   }
@@ -663,23 +638,19 @@ class PHT(index_len: Int, history_len: Int, history_shift: Int) extends Module {
 
 class RASTop(index_len: Int) extends Bundle {
   val ret_pc = Output(UInt(PC_LEN.W))
-  // val index  = Output(UInt(index_len.W))
 }
 
 class RASRet(index_len: Int) extends Bundle {
   val en    = Input(Bool())
-  // val index = Input(UInt(index_len.W))
 }
 
 class RASCall(index_len: Int) extends Bundle {
   val en     = Input(Bool())
-  // val index  = Input(UInt(index_len.W))
   val ret_pc = Input(UInt(PC_LEN.W))
 }
 
 class RASUpdate(index_len: Int) extends Bundle {
   val en    = Input(Bool())
-  // val index = Input(UInt(index_len.W))
 }
 
 class RASIo(index_len: Int) extends Bundle {
@@ -704,11 +675,9 @@ class RAS(index_len: Int) extends Module {
   val updated_index2 = WireDefault(index2)
 
   val ret_pc     = RegInit(0.U(PC_LEN.W))
-  // val ret_index = RegNext(index1, 0.U(index_len.W))
 
   ret_pc := Mux(index1 === merged_index, ras2(index1), ras1(index1))
   io.top.ret_pc := ret_pc
-  // io.top.index  := ret_index
 
   when (io.ret1.en) {
     val ret_index = index1 - 1.U
@@ -730,7 +699,6 @@ class RAS(index_len: Int) extends Module {
   }
 
   when (io.up.en) {
-    // index := io.up.index
     index1 := updated_index2
     merged_index := updated_index2
     printf(cf"RAS reset index=${updated_index2}\n")

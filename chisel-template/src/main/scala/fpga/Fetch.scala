@@ -50,16 +50,16 @@ class FetchUnit(
 
   val io = IO(new Bundle {
     val ft         = new FetchPort(redirect_buffer_size)
-    val cr         = new BranchCorrectionPort(pht_history_len, ras_entries)
+    val cr         = new BranchCorrectionPort(pht_history_len)
     val redir_deq  = new RedirectDequeuePort(enable_debug, redirect_buffer_size)
-    val redir_read = new RedirectReadPort(redirect_buffer_size, pht_history_len, ras_entries)
+    val redir_read = new RedirectReadPort(redirect_buffer_size, pht_history_len)
     val pht_lmem   = Flipped(new PHTMemIo(pht_index_len))
     val pht_gmem   = Flipped(new PHTMemIo(pht_index_len))
   })
 
   val fetcher = Module(new Fetcher(dram_config, pht_history_len, redirect_buffer_size))
   val fp = Module(new FetchPredictor(zbtb_entries, btb_entries, pht_index_len, pht_history_len, ras_entries, redirect_buffer_size))
-  val rb = Module(new FetchRedirectBuffer(redirect_buffer_size, pht_history_len, ras_entries, enable_debug))
+  val rb = Module(new FetchRedirectBuffer(redirect_buffer_size, pht_history_len, enable_debug))
   val zbtb = Module(new ZBTB(zbtb_entries))
   val btb  = Module(new BTB(btb_entries))
   val pht  = Module(new PHT(pht_index_len, pht_history_len, PHT_HISTORY_SHIFT))
@@ -125,20 +125,21 @@ class Fetcher(
   val reg_addressed = RegInit(false.B)
 
   def if0: Unit = {
-    val reg_next_iaddr    = RegInit(0x0000fff0.U(PC_LEN.W))
-    val iaddr             = Wire(UInt(PC_LEN.W))
-    val fix_zbp_miss      = Wire(Bool())
-    val reg_fix_zbp_miss  = RegInit(false.B)
-    val reg_bp1_redirect_en  = RegInit(false.B)
-    val reg_bp1_cancel_redir = RegInit(false.B)
+    val reg_next_iaddr         = RegInit(0x0000fff0.U(PC_LEN.W))
+    val iaddr                  = Wire(UInt(PC_LEN.W))
+    val fix_zbp_miss1          = Wire(Bool())
+    val fix_zbp_miss2          = Wire(Bool())
+    val reg_fix_zbp_miss1      = RegInit(false.B)
+    val reg_fix_zbp_miss2      = RegInit(false.B)
+    val reg_bp1_redirect_en    = RegInit(false.B)
     val reg_bp1_target_changed = RegInit(false.B)
-    val reg_fix_addr      = RegInit(0.U(PC_LEN.W))
-    val reg_discard_enq   = RegInit(0.U(DISCARD_PTR_LEN.W))
-    val reg_is_dram       = RegInit(false.B)
-    val reg_wait_for_dram = RegInit(false.B)
-    val wait_for_dram     = WireDefault(false.B)
+    val reg_fix_addr           = RegInit(0.U(PC_LEN.W))
+    val reg_discard_enq        = RegInit(0.U(DISCARD_PTR_LEN.W))
+    val reg_is_dram            = RegInit(false.B)
+    val reg_wait_for_dram      = RegInit(false.B)
+    val wait_for_dram          = WireDefault(false.B)
 
-    val invalidate        = reg_fix_zbp_miss && reg_addressed
+    val invalidate        = (reg_fix_zbp_miss1 || reg_fix_zbp_miss2) && reg_addressed
     reg_discard_enq := discard_enq
     val bp1_redirect_en   =
       !invalidate && (
@@ -152,33 +153,29 @@ class Fetcher(
       !invalidate && (
         (io.pr.bp0_en && io.pr.bp1_en && (io.pr.bp0_addr(7, 0) =/= io.pr.bp1_addr(7, 0) || io.pr.bp0_pos =/= io.pr.bp1_pos))
       )
-    val zbp_miss = bp1_redirect_en || bp1_cancel_redir || bp1_target_changed
-      // !invalidate && (
-      //   (io.pr.bp0_en && !io.pr.bp1_en) ||
-      //   (!io.pr.bp0_en && io.pr.bp1_en) ||
-      //   (io.pr.bp0_en && io.pr.bp1_en && (io.pr.bp0_addr(7, 0) =/= io.pr.bp1_addr(7, 0) || io.pr.bp0_pos =/= io.pr.bp1_pos))
-      // )
+    val zbp_miss1 = bp1_redirect_en || bp1_cancel_redir
 
     iaddr := MuxCase(reg_next_iaddr, Seq(
       io.ft.flush_en   -> io.ft.flush_iaddr,
-      reg_fix_zbp_miss -> reg_fix_addr,
+      (reg_fix_zbp_miss1 || reg_fix_zbp_miss2) -> reg_fix_addr,
       io.pr.bp0_en     -> io.pr.bp0_addr,
     ))
     reg_next_iaddr := iaddr.clear_lsbits(IALIGN_PTR_LEN) + (1 << IALIGN_PTR_LEN).U(PC_LEN.W)
-    fix_zbp_miss := !io.ft.flush_en && zbp_miss
+    fix_zbp_miss1 := !io.ft.flush_en && zbp_miss1
+    fix_zbp_miss2 := !io.ft.flush_en && bp1_target_changed
     val fix_addr = Mux(io.pr.bp1_en, io.pr.bp1_addr, reg_next_iaddr)
     reg_fix_addr := fix_addr
-    reg_fix_zbp_miss := fix_zbp_miss
+    reg_fix_zbp_miss1 := fix_zbp_miss1
+    reg_fix_zbp_miss2 := fix_zbp_miss2
     reg_bp1_redirect_en := !io.ft.flush_en && bp1_redirect_en
-    reg_bp1_cancel_redir := !io.ft.flush_en && bp1_cancel_redir
-    reg_bp1_target_changed := !io.ft.flush_en && bp1_target_changed
+    reg_bp1_target_changed := fix_zbp_miss2
 
     val count = addressing_ptr - read_ptr
     val has_space = (~count(FETCH_PTR_LEN)).asBool
     // val has_space = count < 3.U
     val is_dram = dram_config.is_dram(iaddr.pc_to_word)
     reg_is_dram := is_dram
-    val redirect_ready = !(reg_fix_zbp_miss || io.pr.bp0_en) || io.pr.redirect_ready
+    val redirect_ready = !(reg_fix_zbp_miss1 || reg_fix_zbp_miss2 || io.pr.bp0_en) || io.pr.redirect_ready
 
     when (invalidate && !io.ft.flush_en) {
       addressing_ptr := addressing_ptr - 1.U
@@ -194,9 +191,9 @@ class Fetcher(
     io.ft.icache.addr_en := ((has_space && redirect_ready) || io.ft.flush_en) && is_dram
     io.pr.flush_en       := io.ft.flush_en
     io.pr.invalidate     := invalidate
-    io.pr.redirect_en    := io.ft.flush_en || reg_bp1_redirect_en || (io.pr.bp0_en && !invalidate/*reg_bp1_cancel_redir*/)
+    io.pr.redirect_en    := io.ft.flush_en || reg_bp1_redirect_en || (io.pr.bp0_en && !invalidate)
     io.pr.correct_enq    := bp1_cancel_redir
-    io.pr.target_changed := bp1_target_changed
+    io.pr.target_changed := reg_bp1_target_changed
     io.pr.iaddr          := iaddr
     when ((!(has_space && redirect_ready) && !io.ft.flush_en) || wait_for_dram || (is_dram && !io.ft.icache.addr_ready)) {
       reg_next_iaddr   := iaddr
@@ -249,8 +246,8 @@ class Fetcher(
     printf(cf"io.ft.flush_en    : ${io.ft.flush_en}\n")
     printf(cf"io.pr.bp0_en      : ${io.pr.bp0_en}\n")
     printf(cf"io.pr.bp1_en      : ${io.pr.bp1_en}\n")
-    printf(cf"fix_zbp_miss      : ${fix_zbp_miss}\n")
-    printf(cf"reg_fix_zbp_miss  : ${reg_fix_zbp_miss}\n")
+    printf(cf"fix_zbp_miss      : ${fix_zbp_miss1 || fix_zbp_miss2}\n")
+    printf(cf"reg_fix_zbp_miss  : ${reg_fix_zbp_miss1 || reg_fix_zbp_miss2}\n")
     printf(cf"io.pr.invalidate  : ${io.pr.invalidate}\n")
     printf(cf"io.pr.redirect_en : ${io.pr.redirect_en}\n")
     printf(cf"io.pr.correct_enq : ${io.pr.correct_enq}\n")
