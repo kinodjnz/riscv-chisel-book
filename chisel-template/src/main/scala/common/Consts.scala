@@ -315,7 +315,7 @@ object Consts {
   val ZBTB_ENTRIES      = 32
   val ZBTB_TAG_LEN      = 8
   val ZBTB_TARGET_LEN   = PC_LEN
-  val BTB_INDEX_LEN     = 10
+  val BTB_INDEX_LEN     = 11
   val BTB_ENTRIES       = 1 << BTB_INDEX_LEN
   val BTB_TAG_IGNORE    = 4 // ignore leading 4 bits of pc
   // val BTB_TAG_LEN       = PC_LEN - BTB_TAG_IGNORE - BTB_INDEX_LEN
