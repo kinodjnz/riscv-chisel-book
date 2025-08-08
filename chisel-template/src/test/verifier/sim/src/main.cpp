@@ -110,13 +110,13 @@ public:
     }
 };
 
-struct inst_log_t {
-    uint32_t pc;
-    uint32_t inst;
-    uint64_t cycles;
-    uint32_t wb_addr;
-    uint32_t data;
-};
+// struct inst_log_t {
+//     uint32_t pc;
+//     uint32_t inst;
+//     uint64_t cycles;
+//     uint32_t wb_addr;
+//     uint32_t data;
+// };
 
 std::string sim_name = "???";
 vluint64_t main_time = 0;
@@ -135,9 +135,10 @@ sim_wrap *wrap;
 processor_t *proc;
 state_t *state;
 cfg_t cfg;
-std::deque<inst_log_t> inst_log;
-const size_t max_inst_log = 10;
-const uint64_t max_drift_cycles = 30;
+const uint64_t max_uncommitted_cycles = 40;
+// std::deque<inst_log_t> inst_log;
+// const size_t max_inst_log = 10;
+// const uint64_t max_drift_cycles = 30;
 
 class success_exception : public std::exception { };
 #define failure() throw std::exception();
@@ -326,7 +327,7 @@ void spike_step() {
 //     state->mip->unlogged_write_with_mask(-1, 0);
     uint64_t backup;
     if (top->io_pipeline_probe_csr_read) {
-        // printf("read csr: %x %x\n", top->io_pipeline_probe_csr_addr, top->io_pipeline_probe_csr_data);
+        printf("read csr: %x %x\n", top->io_pipeline_probe_csr_addr, top->io_pipeline_probe_csr_data);
         switch (top->io_pipeline_probe_csr_addr) {
         case CSR_CYCLE:
             backup = state->mcycle->read();
@@ -416,20 +417,20 @@ uint32_t mask_rvc(uint32_t inst) {
 
 void spike_next(uint32_t index, uint32_t inst_id, uint32_t pc, uint32_t inst, uint64_t cycles, uint32_t wb_addr, uint32_t wb_data) {
     bool found = false;
-    for (auto &&it = inst_log.begin(); it != inst_log.end(); ++it) {
-        if (it->pc == pc) {
-            assertEq("inst unmatch", mask_rvc(inst), (uint32_t) it->inst);
-            if (it->wb_addr != 0) {
-                assertEq("reg write addr unmatch", wb_addr, it->wb_addr);
-                assertEq("reg write data unmatch", wb_data, it->data);
-            }
-            inst_log.erase(it);
-            found = true;
-            break;
-        }
-    }
-    while (!found && inst_log.size() < max_inst_log) {
-        bool skip_log = false;
+    // for (auto &&it = inst_log.begin(); it != inst_log.end(); ++it) {
+    //     if (it->pc == pc) {
+    //         assertEq("inst unmatch", mask_rvc(inst), (uint32_t) it->inst);
+    //         if (it->wb_addr != 0) {
+    //             assertEq("reg write addr unmatch", wb_addr, it->wb_addr);
+    //             assertEq("reg write data unmatch", wb_data, it->data);
+    //         }
+    //         inst_log.erase(it);
+    //         found = true;
+    //         break;
+    //     }
+    // }
+    // while (!found && inst_log.size() < max_inst_log) {
+        // bool skip_log = false;
         uint32_t spike_pc = state->pc;
         spike_step();
         uint32_t spike_wb_addr = 0;
@@ -444,37 +445,37 @@ void spike_next(uint32_t index, uint32_t inst_id, uint32_t pc, uint32_t inst, ui
                     if (state->mcause->read() == 2) {
                         failure();
                     }
-                    if ((item.first & 0xf) == 4 && (item.first >> 4) == 0x342) {
-                        skip_log = true;
-                    }
+                    // if ((item.first & 0xf) == 4 && (item.first >> 4) == 0x342) {
+                    //     skip_log = true;
+                    // }
                 }
             }
         }
-        if (spike_pc == pc) {
-            assertEq("inst unmatch", mask_rvc(inst), (uint32_t) state->last_inst.bits());
-            if (spike_wb_addr != 0) {
-                // fprintf(stderr, "pc=%08x\n", pc);
-                // fprintf(stderr, "inst=%08x\n", inst);
-                // fprintf(stderr, "addr=%08x\n", wb_addr);
-                // fprintf(stderr, "data=%08x (actual)\n", wb_data);
-                // fprintf(stderr, "data=%08x (expected)\n", spike_wb_data);
-                assertEq("reg write addr unmatch", wb_addr, spike_wb_addr);
-                assertEq("reg write data unmatch", wb_data, spike_wb_data);
-            }
-            found = true;
-            break;
-        } else if (!skip_log) {
-            inst_log.push_back(inst_log_t(spike_pc, state->last_inst.bits(), cycles, spike_wb_addr, spike_wb_data));
+        assertEq("pc unmatch", spike_pc, pc);
+        assertEq("inst unmatch", mask_rvc(inst), (uint32_t) state->last_inst.bits());
+        if (spike_wb_addr != 0) {
+            // fprintf(stderr, "pc=%08x\n", pc);
+            // fprintf(stderr, "inst=%08x\n", inst);
+            // fprintf(stderr, "addr=%08x\n", wb_addr);
+            // fprintf(stderr, "data=%08x (actual)\n", wb_data);
+            // fprintf(stderr, "data=%08x (expected)\n", spike_wb_data);
+            assertEq("reg write addr unmatch", wb_addr, spike_wb_addr);
+            assertEq("reg write data unmatch", wb_data, spike_wb_data);
         }
-    }
-    if (!found) {
-        fprintf(stderr, "pc not found: %08x\n", pc);
-        fprintf(stderr, "inst: %08x\n", inst);
-        for (auto &log: inst_log) {
-            fprintf(stderr, " log.pc %08x\n", log.pc);
-        }
-        failure();
-    }
+    //         found = true;
+    //         break;
+    //     } else if (!skip_log) {
+    //         inst_log.push_back(inst_log_t(spike_pc, state->last_inst.bits(), cycles, spike_wb_addr, spike_wb_data));
+    //     }
+    // }
+    // if (!found) {
+    //     fprintf(stderr, "pc not found: %08x\n", pc);
+    //     fprintf(stderr, "inst: %08x\n", inst);
+    //     for (auto &log: inst_log) {
+    //         fprintf(stderr, " log.pc %08x\n", log.pc);
+    //     }
+    //     failure();
+    // }
 }
 
 const char *attr_to_str(uint32_t attr, bool is_ret) {
@@ -600,33 +601,17 @@ void trace_kanata_log() {
     if (top->io_pipeline_probe_mem3_valid) {
         fprintf(kanata_fp, "S\t%d\t0\tMEM3\n", top->io_pipeline_probe_mem3_inst_id);
     }
+    if (top->io_pipeline_probe_retire1_valid) {
+        uint32_t inst_id = top->io_pipeline_probe_retire1_inst_id;
+        fprintf(kanata_fp, "S\t%d\t0\tCM\n", inst_id);
+    }
+    if (top->io_pipeline_probe_retire2_valid) {
+        uint32_t inst_id = top->io_pipeline_probe_retire2_inst_id;
+        fprintf(kanata_fp, "S\t%d\t0\tCM\n", inst_id);
+    }
     fprintf(kanata_fp, "C\t1\n");
-    // if (top->io_pipeline_probe_if2_valid1) {
-    //     fprintf(kanata_fp, "E\t%d\t0\tIF\n", top->io_pipeline_probe_if2_inst_id1);
-    // }
-    // if (top->io_pipeline_probe_if2_valid2) {
-    //     fprintf(kanata_fp, "E\t%d\t0\tIF\n", top->io_pipeline_probe_if2_inst_id2);
-    // }
-    // if (top->io_pipeline_probe_ida_valid) {
-    //     fprintf(kanata_fp, "E\t%d\t0\tID\n", top->io_pipeline_probe_ida_inst_id);
-    // }
-    // if (top->io_pipeline_probe_idb_valid) {
-    //     fprintf(kanata_fp, "E\t%d\t0\tID\n", top->io_pipeline_probe_idb_inst_id);
-    // }
-    // if (top->io_pipeline_probe_rrd_valid) {
-    //     fprintf(kanata_fp, "E\t%d\t0\tRRD\n", top->io_pipeline_probe_rrd_inst_id);
-    // }
-    // if (top->io_pipeline_probe_rrd_i2_valid) {
-    //     fprintf(kanata_fp, "E\t%d\t0\tRRD\n", top->io_pipeline_probe_rrd_i2_inst_id);
-    // }
-    // if (top->io_pipeline_probe_ex1_valid) {
-    //     fprintf(kanata_fp, "E\t%d\t0\tEX1\n", top->io_pipeline_probe_ex1_inst_id);
-    // }
-    // if (top->io_pipeline_probe_ex1_i2_valid) {
-    //     fprintf(kanata_fp, "E\t%d\t0\tEX1\n", top->io_pipeline_probe_ex1_i2_inst_id);
-    // }
-    if (top->io_pipeline_probe_ex1_i2_retired) {
-        uint32_t inst_id = top->io_pipeline_probe_ex1_i2_inst_id;
+    if (top->io_pipeline_probe_retire1_valid) {
+        uint32_t inst_id = top->io_pipeline_probe_retire1_inst_id;
         fprintf(kanata_fp, "R\t%d\t%d\t0\n", inst_id, inst_id);
         auto range = std::equal_range(kanata_insts.begin(), kanata_insts.end(), inst_id);
         for (auto it = std::get<0>(range); it != std::get<1>(range); ++it) {
@@ -634,29 +619,8 @@ void trace_kanata_log() {
             break;
         }
     }
-    // if (top->io_pipeline_probe_ex2_valid) {
-    //     fprintf(kanata_fp, "E\t%d\t0\tEX2\n", top->io_pipeline_probe_ex2_inst_id);
-    // }
-    if (top->io_pipeline_probe_ex2_retired) {
-        uint32_t inst_id = top->io_pipeline_probe_ex2_inst_id;
-        fprintf(kanata_fp, "R\t%d\t%d\t0\n", inst_id, inst_id);
-        auto range = std::equal_range(kanata_insts.begin(), kanata_insts.end(), inst_id);
-        for (auto it = std::get<0>(range); it != std::get<1>(range); ++it) {
-            kanata_insts.erase(it);
-            break;
-        }
-    }
-    // if (top->io_pipeline_probe_mem1_valid) {
-    //     fprintf(kanata_fp, "E\t%d\t0\tMEM1\n", top->io_pipeline_probe_mem1_inst_id);
-    // }
-    // if (top->io_pipeline_probe_mem2_valid) {
-    //     fprintf(kanata_fp, "E\t%d\t0\tMEM2\n", top->io_pipeline_probe_mem2_inst_id);
-    // }
-    // if (top->io_pipeline_probe_mem3_valid) {
-    //     fprintf(kanata_fp, "E\t%d\t0\tMEM3\n", top->io_pipeline_probe_mem3_inst_id);
-    // }
-    if (top->io_pipeline_probe_mem3_retired) {
-        uint32_t inst_id = top->io_pipeline_probe_mem3_inst_id;
+    if (top->io_pipeline_probe_retire2_valid) {
+        uint32_t inst_id = top->io_pipeline_probe_retire2_inst_id;
         fprintf(kanata_fp, "R\t%d\t%d\t0\n", inst_id, inst_id);
         auto range = std::equal_range(kanata_insts.begin(), kanata_insts.end(), inst_id);
         for (auto it = std::get<0>(range); it != std::get<1>(range); ++it) {
@@ -676,6 +640,7 @@ void sim_loop() {
     try {
         uint64_t retired = 0;
         uint64_t cycles = 0;
+        uint64_t uncommitted_cycles = 0;
         top->clock = 0;
         while (!Verilated::gotFinish()) {
             ++main_time;
@@ -720,62 +685,68 @@ void sim_loop() {
                         inst_traces[index].inst = top->io_pipeline_probe_if2_inst2;
                         fprintf(stderr, "if2 valid: inst_id=%u pc=%x\n", top->io_pipeline_probe_if2_inst_id2, top->io_pipeline_probe_if2_pc2);
                     }
-                    if (top->io_pipeline_probe_ex1_i2_retired) {
+                    uncommitted_cycles++;
+                    if (top->io_pipeline_probe_retire1_valid) {
+                        uncommitted_cycles = 0;
                         ++retired;
-                        uint32_t index = top->io_pipeline_probe_ex1_i2_inst_id % INST_TRACE_SIZE;
+                        uint32_t index = top->io_pipeline_probe_retire1_inst_id % INST_TRACE_SIZE;
                         uint32_t inst_id = inst_traces[index].inst_id;
                         uint32_t pc;
                         uint32_t inst;
-                        if (inst_id != top->io_pipeline_probe_ex1_i2_inst_id) {
-                            fprintf(stderr, "retired ex2: unknown inst_id=%u\n", top->io_pipeline_probe_ex1_i2_inst_id);
+                        if (inst_id != top->io_pipeline_probe_retire1_inst_id) {
+                            fprintf(stderr, "retired ex1: unknown inst_id=%u\n", top->io_pipeline_probe_retire1_inst_id);
                             failure();
                         } else {
                             pc = inst_traces[index].pc;
                             inst = inst_traces[index].inst;
                             fprintf(stderr, "retired ex1: pc=0x%08x, inst=0x%08x inst_id=%08x\n", pc, inst, inst_id);
                         }
-                        spike_next(index, inst_id, pc, inst, cycles, top->io_pipeline_probe_ex1_i2_wb_addr, top->io_pipeline_probe_ex1_i2_wb_data);
+                        spike_next(index, inst_id, pc, inst, cycles, top->io_pipeline_probe_retire1_wb_addr, top->io_pipeline_probe_retire1_wb_data);
                     }
-                    if (top->io_pipeline_probe_ex2_retired) {
+                    if (top->io_pipeline_probe_retire2_valid) {
                         ++retired;
-                        uint32_t index = top->io_pipeline_probe_ex2_inst_id % INST_TRACE_SIZE;
+                        uint32_t index = top->io_pipeline_probe_retire2_inst_id % INST_TRACE_SIZE;
                         uint32_t inst_id = inst_traces[index].inst_id;
                         uint32_t pc;
                         uint32_t inst;
-                        if (inst_id != top->io_pipeline_probe_ex2_inst_id) {
-                            fprintf(stderr, "retired ex2: unknown inst_id=%u\n", top->io_pipeline_probe_ex2_inst_id);
+                        if (inst_id != top->io_pipeline_probe_retire2_inst_id) {
+                            fprintf(stderr, "retired ex2: unknown inst_id=%u\n", top->io_pipeline_probe_retire2_inst_id);
                             failure();
                         } else {
                             pc = inst_traces[index].pc;
                             inst = inst_traces[index].inst;
                             fprintf(stderr, "retired ex2: pc=0x%08x, inst=0x%08x inst_id=%08x\n", pc, inst, inst_id);
                         }
-                        spike_next(index, inst_id, pc, inst, cycles, top->io_pipeline_probe_ex2_wb_addr, top->io_pipeline_probe_ex2_wb_data);
+                        spike_next(index, inst_id, pc, inst, cycles, top->io_pipeline_probe_retire2_wb_addr, top->io_pipeline_probe_retire2_wb_data);
                     }
-                    if (top->io_pipeline_probe_mem3_retired) {
-                        ++retired;
-                        uint32_t index = top->io_pipeline_probe_mem3_inst_id % INST_TRACE_SIZE;
-                        uint32_t inst_id = inst_traces[index].inst_id;
-                        uint32_t pc;
-                        uint32_t inst;
-                        if (inst_id != top->io_pipeline_probe_mem3_inst_id) {
-                            fprintf(stderr, "retired mem: unknown inst_id=%u\n", top->io_pipeline_probe_mem3_inst_id);
-                            failure();
-                        } else {
-                            pc = inst_traces[index].pc;
-                            inst = inst_traces[index].inst;
-                            printf("retired mem: pc=0x%08x, inst=0x%08x\n", pc, inst);
-                            printf("retired cycles=%llu, retired=%llu\n", cycles, retired);
-                        }
-                        spike_next(index, inst_id, pc, inst, cycles, top->io_pipeline_probe_mem3_wb_addr, top->io_pipeline_probe_mem3_wb_data);
-                    }
+                    // if (top->io_pipeline_probe_mem3_retired) {
+                    //     ++retired;
+                    //     uint32_t index = top->io_pipeline_probe_mem3_inst_id % INST_TRACE_SIZE;
+                    //     uint32_t inst_id = inst_traces[index].inst_id;
+                    //     uint32_t pc;
+                    //     uint32_t inst;
+                    //     if (inst_id != top->io_pipeline_probe_mem3_inst_id) {
+                    //         fprintf(stderr, "retired mem: unknown inst_id=%u\n", top->io_pipeline_probe_mem3_inst_id);
+                    //         failure();
+                    //     } else {
+                    //         pc = inst_traces[index].pc;
+                    //         inst = inst_traces[index].inst;
+                    //         printf("retired mem: pc=0x%08x, inst=0x%08x\n", pc, inst);
+                    //         printf("retired cycles=%llu, retired=%llu\n", cycles, retired);
+                    //     }
+                    //     spike_next(index, inst_id, pc, inst, cycles, top->io_pipeline_probe_mem3_wb_addr, top->io_pipeline_probe_mem3_wb_data);
+                    // }
                 }
-                if (!inst_log.empty()) {
-                    if (inst_log[0].cycles + max_drift_cycles < cycles) {
-                        fprintf(stderr, "not retired pc=%08x\n", inst_log[0].pc);
-                        failure();
-                    }
+                if (uncommitted_cycles > max_uncommitted_cycles) {
+                    fprintf(stderr, "no commits during %llu cycles\n", max_uncommitted_cycles);
+                    failure();
                 }
+                // if (!inst_log.empty()) {
+                //     if (inst_log[0].cycles + max_drift_cycles < cycles) {
+                //         fprintf(stderr, "not retired pc=%08x\n", inst_log[0].pc);
+                //         failure();
+                //     }
+                // }
                 top->eval();
                 if (trace_fst) {
                     tfp->dump(cycles);

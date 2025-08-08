@@ -38,11 +38,18 @@ class InstructionQueueReadDecoded[Decoded <: Data](genDecoded: Decoded) extends 
   val decoded = Output(genDecoded)
 }
 
-class InstructionQueueDequeueRange(iq_id_len: Int) extends Bundle {
+class InstructionQueuePeekRange(iq_id_len: Int) extends Bundle {
   val iq_id_ptr_len = iq_id_len + 1
 
-  val deq_first = Output(UInt(iq_id_ptr_len.W))
-  val deq_last  = Output(UInt(iq_id_ptr_len.W))
+  val first = Output(UInt(iq_id_ptr_len.W))
+  val last  = Output(UInt(iq_id_ptr_len.W))
+}
+
+class InstructionQueueUpdatePeekPtr(iq_id_len: Int) extends Bundle {
+   val iq_id_ptr_len = iq_id_len + 1
+
+  val en  = Input(Bool())
+  val ptr = Input(UInt(iq_id_ptr_len.W))
 }
 
 class InstructionQueuePutLsq[Lsq <: Data](genLsq: Lsq) extends Bundle {
@@ -50,11 +57,22 @@ class InstructionQueuePutLsq[Lsq <: Data](genLsq: Lsq) extends Bundle {
   val lsq     = Input(genLsq)
 }
 
-class InstructionQueueUpdateDequeuePtr(iq_id_len: Int) extends Bundle {
+class InstructionQueueRobRange(iq_id_len: Int) extends Bundle {
+  val iq_id_ptr_len = iq_id_len + 1
+
+  val first = Output(UInt(iq_id_ptr_len.W))
+  val last  = Output(UInt(iq_id_ptr_len.W))
+}
+
+class InstructionQueueUpdateRobPtr(iq_id_len: Int) extends Bundle {
   val iq_id_ptr_len = iq_id_len + 1
 
   val en  = Input(Bool())
-  val deq = Input(UInt(iq_id_ptr_len.W))
+  val ptr = Input(UInt(iq_id_ptr_len.W))
+}
+
+class InstructionQueueDequeue extends Bundle {
+  val en  = Input(Bool())
 }
 
 class InstructionQueuePeek[Initial <: Data, Decoded <: Data, Lsq <: Data](
@@ -91,10 +109,14 @@ class InstructionQueue[Initial <: Data, Decoded <: Data, Lsq <: Data](
     val read2   = new InstructionQueueReadDecoded(genDecoded)
     val lsq1    = new InstructionQueuePutLsq(genLsq)
     val lsq2    = new InstructionQueuePutLsq(genLsq)
-    val range   = new InstructionQueueDequeueRange(iq_id_len)
-    val upd_deq = new InstructionQueueUpdateDequeuePtr(iq_id_len)
+    val peek_range = new InstructionQueuePeekRange(iq_id_len)
+    val upd_peek   = new InstructionQueueUpdatePeekPtr(iq_id_len)
     val peek1   = new InstructionQueuePeek(iq_id_len, genInitial, genDecoded, genLsq)
     val peek2   = new InstructionQueuePeek(iq_id_len, genInitial, genDecoded, genLsq)
+    val rob_range = new InstructionQueueRobRange(iq_id_len)
+    val upd_rob   = new InstructionQueueUpdateRobPtr(iq_id_len)
+    val deq1    = new InstructionQueueDequeue
+    val deq2    = new InstructionQueueDequeue
     val flush   = Input(Bool())
   })
 
@@ -104,10 +126,12 @@ class InstructionQueue[Initial <: Data, Decoded <: Data, Lsq <: Data](
   val iq_buf_decoded_1 = Mem(iq_buffer_size/2, genDecoded)
   val iq_buf_lsq_0     = Mem(iq_buffer_size/2, genLsq)
   val iq_buf_lsq_1     = Mem(iq_buffer_size/2, genLsq)
-  val deq         = RegInit(0.U(iq_id_ptr_len.W))
-  val lsq_ptr     = RegInit(0.U(iq_id_ptr_len.W))
-  val decoded_ptr = RegInit(0.U(iq_id_ptr_len.W))
   val enq         = RegInit(0.U(iq_id_ptr_len.W))
+  val decoded_ptr = RegInit(0.U(iq_id_ptr_len.W))
+  val lsq_ptr     = RegInit(0.U(iq_id_ptr_len.W))
+  val peek_ptr    = RegInit(0.U(iq_id_ptr_len.W))
+  val rob_ptr    = RegInit(0.U(iq_id_ptr_len.W))
+  val deq         = RegInit(0.U(iq_id_ptr_len.W))
 
   def enqueue: Unit = {
     val space  = enq - deq
@@ -196,15 +220,15 @@ class InstructionQueue[Initial <: Data, Decoded <: Data, Lsq <: Data](
     }
   }
 
-  def dequeue: Unit = {
-    io.range.deq_first := deq
-    io.range.deq_last  := lsq_ptr
+  def peek: Unit = {
+    io.peek_range.first := peek_ptr
+    io.peek_range.last  := lsq_ptr
 
-    when (io.upd_deq.en) {
-      deq := io.upd_deq.deq
+    when (io.upd_peek.en) {
+      peek_ptr := io.upd_peek.ptr
     }
     when (io.flush) {
-      deq         := enq
+      peek_ptr    := enq
       decoded_ptr := enq
       lsq_ptr     := enq
     }
@@ -225,9 +249,42 @@ class InstructionQueue[Initial <: Data, Decoded <: Data, Lsq <: Data](
     io.peek2.lsq := Mux(io.peek1.iq_id(0), lsq0, lsq1)
   }
 
+  def rob: Unit = {
+    io.rob_range.first := rob_ptr
+    io.rob_range.last  := deq
+
+    when (io.upd_rob.en) {
+      rob_ptr := io.upd_rob.ptr
+    }
+    when (io.flush) {
+      rob_ptr := enq
+    }
+  }
+
+  def dequeue: Unit = {
+    when (io.deq1.en) {
+      deq := deq + 1.U
+    }
+    when (io.deq2.en) {
+      deq := deq + 2.U
+    }
+    when (io.flush) {
+      deq := enq
+    }
+  }
+
+  printf(cf"iq enq         = ${enq}\n")
+  printf(cf"iq decoded_ptr = ${decoded_ptr}\n")
+  printf(cf"iq lsq_ptr     = ${lsq_ptr}\n")
+  printf(cf"iq peek_ptr    = ${peek_ptr}\n")
+  printf(cf"iq rob_ptr     = ${rob_ptr}\n")
+  printf(cf"iq deq         = ${deq}\n")
+
   enqueue
   put_decoded
   read_decoded
   put_lsq
+  peek
+  rob
   dequeue
 }

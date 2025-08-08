@@ -7,7 +7,9 @@ import common.Consts._
 import common.UIntExtension._
 import common.OptionExtension._
 
-class LoadStoreOutput extends Bundle {
+class LoadStoreOutput(rob_id_len: Int) extends Bundle {
+  val rob_id_ptr_len = rob_id_len + 1
+
   val fw_en_next   = Output(Bool())
   val fw_wb_addr   = Output(UInt(ADDR_LEN.W))
   val fw_data      = Output(UInt(WORD_LEN.W))
@@ -18,9 +20,12 @@ class LoadStoreOutput extends Bundle {
   val wb_addr      = Output(UInt(ADDR_LEN.W))
   val wb_data      = Output(UInt(WORD_LEN.W))
   val is_retired   = Output(Bool())
+  val rob_id       = Output(UInt(rob_id_ptr_len.W))
 }
 
-class LoadStoreQueueEntry(enable_pipeline_probe: Boolean) extends Bundle {
+class LoadStoreQueueEntry(rob_id_len: Int, enable_pipeline_probe: Boolean) extends Bundle {
+  val rob_id_ptr_len = rob_id_len + 1
+
   val addr          = UInt((WORD_LEN - 2).W)
   val wstrb         = UInt(7.W)
   val unaligned     = Bool()
@@ -31,6 +36,7 @@ class LoadStoreQueueEntry(enable_pipeline_probe: Boolean) extends Bundle {
   val is_dram_store = Bool()
   val is_dram_fence = Bool()
   val data          = UInt(WORD_LEN.W)
+  val rob_id        = UInt(rob_id_ptr_len.W)
   val inst_id       = Option.when(enable_pipeline_probe)(UInt(INST_ID_LEN.W))
 }
 
@@ -57,8 +63,9 @@ class LoadStoreQueueAlloc(lsq_id_len: Int) extends Bundle {
   val lsq_id = Output(UInt(lsq_id_ptr_len.W))
 }
 
-class LoadStoreQueuePut(enable_pipeline_probe: Boolean, lsq_id_len: Int) extends Bundle {
+class LoadStoreQueuePut(enable_pipeline_probe: Boolean, lsq_id_len: Int, rob_id_len: Int) extends Bundle {
   val lsq_id_ptr_len = lsq_id_len + 1
+  val rob_id_ptr_len = rob_id_len + 1
 
   val en            = Input(Bool())
   val lsq_id        = Input(UInt(lsq_id_ptr_len.W))
@@ -67,6 +74,7 @@ class LoadStoreQueuePut(enable_pipeline_probe: Boolean, lsq_id_len: Int) extends
   val memw          = Input(UInt(MW_LEN.W))
   val wdata         = Input(UInt(WORD_LEN.W))
   val wb_addr       = Input(UInt(ADDR_LEN.W))
+  val rob_id        = Input(UInt(rob_id_ptr_len.W))
   val inst_id       = Option.when(enable_pipeline_probe)(Input(UInt(INST_ID_LEN.W)))
 }
 
@@ -82,29 +90,30 @@ class LoadStorePipelineProbe extends Bundle {
   val mem2_inst_id = Output(UInt(INST_ID_LEN.W))
   val mem3_valid   = Output(Bool())
   val mem3_inst_id = Output(UInt(INST_ID_LEN.W))
-  val mem3_retired = Output(Bool())
+  // val mem3_retired = Output(Bool())
   val mem3_wb_addr = Output(UInt(ADDR_LEN.W))
   val mem3_wb_data = Output(UInt(WORD_LEN.W))
 }
 
-class LoadStoreUnit(enable_pipeline_probe: Boolean, dram_start: BigInt, dram_length: BigInt, lsq_entries: Int, enable_sim_unaligned: Boolean = false) extends Module {
+class LoadStoreUnit(enable_pipeline_probe: Boolean, dram_start: BigInt, dram_length: BigInt, lsq_entries: Int, rob_id_len: Int, enable_sim_unaligned: Boolean = false) extends Module {
   val dram_addr_bits: Int = log2Ceil(dram_length)
   val lsq_id_len: Int = log2Ceil(lsq_entries)
   val lsq_id_ptr_len = lsq_id_len + 1
+  val rob_id_ptr_len = rob_id_len + 1
 
   val io = IO(new Bundle {
-    val out            = new LoadStoreOutput
+    val out            = new LoadStoreOutput(rob_id_len)
     val flush          = new LoadStoreQueueFlush(lsq_id_len)
     val alloc1         = new LoadStoreQueueAlloc(lsq_id_len)
     val alloc2         = new LoadStoreQueueAlloc(lsq_id_len)
-    val put            = new LoadStoreQueuePut(enable_pipeline_probe, lsq_id_len)
+    val put            = new LoadStoreQueuePut(enable_pipeline_probe, lsq_id_len, rob_id_len)
     val dmem           = Flipped(new DmemPortIo)
     val cache          = Flipped(new CachePort)
     val debug_signals  = new LoadStoreDebugSignals
     val pipeline_probe = Option.when(enable_pipeline_probe)(new LoadStorePipelineProbe)
   })
 
-  val queue = Mem(lsq_entries, new LoadStoreQueueEntry(enable_pipeline_probe))
+  val queue = Mem(lsq_entries, new LoadStoreQueueEntry(rob_id_len, enable_pipeline_probe))
   val enq   = RegInit(0.U(lsq_id_ptr_len.W))
   val deq   = RegInit(0.U(lsq_id_ptr_len.W))
   val filled = Mem(lsq_entries, UInt(1.W))
@@ -140,7 +149,7 @@ class LoadStoreUnit(enable_pipeline_probe: Boolean, dram_start: BigInt, dram_len
     val aligned_lw = io.put.addr(1, 0) === "b00".U &&
       io.put.memw =/= MW_B && io.put.memw =/= MW_BU &&
       io.put.memw =/= MW_H && io.put.memw =/= MW_HU
-    val entry = Wire(new LoadStoreQueueEntry(enable_pipeline_probe))
+    val entry = Wire(new LoadStoreQueueEntry(rob_id_len, enable_pipeline_probe))
     entry.addr          := io.put.addr(WORD_LEN-1, 2)
     entry.wstrb         := (MuxCase("b1111".U, Seq(
       (io.put.memw === MW_B || io.put.memw === MW_BU) -> "b0001".U,
@@ -161,6 +170,7 @@ class LoadStoreUnit(enable_pipeline_probe: Boolean, dram_start: BigInt, dram_len
     entry.is_dram_load  :=  is_dram && (io.put.memop === MEM_OP_LD)
     entry.is_dram_store :=  is_dram && (io.put.memop === MEM_OP_ST)
     entry.is_dram_fence := (io.put.memop === MEM_OP_FENCE)
+    entry.rob_id        := io.put.rob_id
     map2(entry.inst_id, io.put.inst_id)(_ := _)
     when (io.put.en) {
       queue(io.put.lsq_id.take(lsq_id_len))  := entry
@@ -237,6 +247,15 @@ class LoadStoreUnit(enable_pipeline_probe: Boolean, dram_start: BigInt, dram_len
     printf(cf"lsq_filled       : 0x${Cat((0 until LSQ_ENTRIES).map(i => filled(i).asUInt).reverse)}%x\n")
     printf(cf"lsq_enq          : ${enq}\n")
     printf(cf"lsq_deq          : ${deq}\n")
+    for (i <- 0 until 4) {
+      when (i.U < enq - deq) {
+        val e = queue((deq + i.U).take(lsq_id_len))
+        printf(cf"q(${deq+i.U}).addr      : 0x${e.addr ## 0.U(2.W)}%x\n")
+        printf(cf"q(${deq+i.U}).memw      : 0x${e.data.asTypeOf(new LoadData).unsigned ## e.memwl}%x\n")
+        printf(cf"q(${deq+i.U}).wdata     : 0x${e.data}%x\n")
+        printf(cf"q(${deq+i.U}).unaligned : 0x${e.unaligned}%x\n")
+      }
+    }
     printf(cf"mem1_reg_addr    : 0x${addr}%x\n")
     printf(cf"mem1_reg_memw    : 0x${loads.unsigned ## entry.memwl}%x\n")
     printf(cf"mem1_reg_wdata   : 0x${wdata}%x\n")
@@ -246,7 +265,7 @@ class LoadStoreUnit(enable_pipeline_probe: Boolean, dram_start: BigInt, dram_len
     printf(cf"mem1_reg_unaligne: ${unaligned}%d\n")
     printf(cf"mem1_reg_valid   : ${valid}%d\n")
 
-    val out = Wire(new Mem2Input(enable_pipeline_probe))
+    val out = Wire(new Mem2Input(rob_id_len, enable_pipeline_probe))
     out.valid          := valid
     out.aligned_lw     := loads.aligned_lw
     out.memw           := loads.unsigned ## entry.memwl
@@ -257,13 +276,16 @@ class LoadStoreUnit(enable_pipeline_probe: Boolean, dram_start: BigInt, dram_len
     out.is_mem_load    := is_mem_load
     out.is_dram_load   := is_dram_load
     out.unaligned      := unaligned
+    out.rob_id         := entry.rob_id
     map2(out.inst_id, entry.inst_id)(_ := _)
     out
   }
 
   val mem2_in = mem1
 
-  class Mem2Input(enable_pipeline_probe: Boolean) extends Bundle {
+  class Mem2Input(rob_id_len: Int, enable_pipeline_probe: Boolean) extends Bundle {
+    val rob_id_ptr_len = rob_id_len + 1
+
     val valid          = Bool()
     val aligned_lw     = Bool()
     val wb_byte_offset = UInt(2.W)
@@ -274,6 +296,7 @@ class LoadStoreUnit(enable_pipeline_probe: Boolean, dram_start: BigInt, dram_len
     val is_mem_load    = Bool()
     val is_dram_load   = Bool()
     val unaligned      = Bool()
+    val rob_id         = UInt(rob_id_ptr_len.W)
     val inst_id        = Option.when(enable_pipeline_probe)(UInt(INST_ID_LEN.W))
   }
 
@@ -286,6 +309,7 @@ class LoadStoreUnit(enable_pipeline_probe: Boolean, dram_start: BigInt, dram_len
     val reg_is_mem_load    = RegInit(false.B)
     val reg_is_dram_load   = RegInit(false.B)
     val reg_unaligned      = RegInit(false.B)
+    val reg_rob_id         = RegInit(0.U(rob_id_ptr_len.W))
     val reg_inst_id        = Option.when(enable_pipeline_probe)(RegInit(0.U(INST_ID_LEN.W)))
 
     when (!mem2_stall) {
@@ -297,6 +321,7 @@ class LoadStoreUnit(enable_pipeline_probe: Boolean, dram_start: BigInt, dram_len
       reg_is_mem_load    := !in.mem_busy && in.is_mem_load
       reg_is_dram_load   := !in.dram_busy && in.is_dram_load
       reg_unaligned      := in.unaligned
+      reg_rob_id         := in.rob_id
       map2(reg_inst_id, in.inst_id)(_ := _)
     }
 
@@ -323,7 +348,7 @@ class LoadStoreUnit(enable_pipeline_probe: Boolean, dram_start: BigInt, dram_len
     printf(cf"mem2_is_aligned_l: ${is_aligned_lw}%d\n")
     printf(cf"mem2_reg_wb_addr : 0x${reg_wb_addr}%x\n")
 
-    val out = Wire(new Mem3Input(enable_pipeline_probe))
+    val out = Wire(new Mem3Input(rob_id_len, enable_pipeline_probe))
     out.wb_byte_offset := reg_wb_byte_offset
     out.memw           := reg_memw
     out.dmem_rdata     := Mux(reg_is_dram_load, io.cache.rdata, io.dmem.rdata)
@@ -332,13 +357,16 @@ class LoadStoreUnit(enable_pipeline_probe: Boolean, dram_start: BigInt, dram_len
     out.valid          := !mem2_stall && !reg_unaligned && reg_valid
     out.unaligned      := reg_unaligned
     out.is_aligned_lw  := is_aligned_lw
+    out.rob_id         := reg_rob_id
     map2(out.inst_id, reg_inst_id)(_ := _)
     out
   }
 
   val mem3_in = mem2(mem2_in)
 
-  class Mem3Input(enable_pipeline_probe: Boolean) extends Bundle {
+  class Mem3Input(rob_id_len: Int, enable_pipeline_probe: Boolean) extends Bundle {
+    val rob_id_ptr_len = rob_id_len + 1
+
     val wb_byte_offset = UInt(2.W)
     val memw           = UInt(MW_LEN.W)
     val dmem_rdata     = UInt(WORD_LEN.W)
@@ -347,6 +375,7 @@ class LoadStoreUnit(enable_pipeline_probe: Boolean, dram_start: BigInt, dram_len
     val valid          = Bool()
     val unaligned      = Bool()
     val is_aligned_lw  = Bool()
+    val rob_id         = UInt(rob_id_ptr_len.W)
     val inst_id        = Option.when(enable_pipeline_probe)(UInt(INST_ID_LEN.W))
   }
 
@@ -360,6 +389,7 @@ class LoadStoreUnit(enable_pipeline_probe: Boolean, dram_start: BigInt, dram_len
     val reg_unaligned      = RegInit(false.B)
     val reg_is_aligned_lw  = RegInit(false.B)
     val reg_rdata_high     = RegInit(0.U(24.W))
+    val reg_rob_id         = RegInit(0.U(rob_id_ptr_len.W))
     val reg_inst_id        = Option.when(enable_pipeline_probe)(RegInit(0.U(INST_ID_LEN.W)))
 
     reg_wb_byte_offset := in.wb_byte_offset
@@ -370,6 +400,7 @@ class LoadStoreUnit(enable_pipeline_probe: Boolean, dram_start: BigInt, dram_len
     reg_valid          := in.valid
     reg_unaligned      := in.unaligned
     reg_is_aligned_lw  := in.is_aligned_lw
+    reg_rob_id         := in.rob_id
     map2(reg_inst_id, in.inst_id)(_ := _)
 
     def signExtend(value: UInt, w: Int) = {
@@ -395,13 +426,14 @@ class LoadStoreUnit(enable_pipeline_probe: Boolean, dram_start: BigInt, dram_len
     io.out.wb_nofw    := reg_is_valid_load && !reg_is_aligned_lw
     io.out.wb_addr    := reg_wb_addr
     io.out.is_retired := reg_valid
+    io.out.rob_id     := reg_rob_id
 
     io.debug_signals.mem3_rdata  := reg_dmem_rdata
     io.debug_signals.mem3_rvalid := reg_is_valid_load
 
     io.pipeline_probe.foreach(_.mem3_valid := reg_valid)
     map2(io.pipeline_probe, reg_inst_id)(_.mem3_inst_id := _)
-    io.pipeline_probe.foreach(_.mem3_retired := reg_valid)
+    // io.pipeline_probe.foreach(_.mem3_retired := reg_valid)
     io.pipeline_probe.foreach(_.mem3_wb_addr := Mux(reg_is_valid_load, reg_wb_addr, 0.U(ADDR_LEN.W)))
     io.pipeline_probe.foreach(_.mem3_wb_data := wb_data_load)
 

@@ -48,12 +48,15 @@ class InstructionQueueEntryLsq(lsq_id_len: Int) extends Bundle {
   val lsq_id = UInt(lsq_id_ptr_len.W)
 }
 
-class InstructionDecoderOutput(redirect_buffer_size: Int, enable_pipeline_probe: Boolean, lsq_id_len: Int) extends Bundle {
+class InstructionDecoderOutput(redirect_buffer_size: Int, enable_pipeline_probe: Boolean, lsq_id_len: Int, rob_id_len: Int) extends Bundle {
+  val rob_id_ptr_len = rob_id_len + 1
+
   val ready   = Input(Bool())
   val valid   = Output(Bool())
   val initial = Output(new InstructionQueueEntryInitial(redirect_buffer_size, enable_pipeline_probe))
   val decoded = Output(new InstructionQueueEntryDecoded(enable_pipeline_probe))
   val lsq     = Output(new InstructionQueueEntryLsq(lsq_id_len))
+  val rob_id  = Output(UInt(rob_id_ptr_len.W))
 }
 
 class InstructionDecoderInput(
@@ -406,10 +409,17 @@ class InstructionDecoderUnit(
     val in1   = new InstructionDecoderInput(redirect_buffer_size, enable_pipeline_probe)
     val in2   = new InstructionDecoderInput(redirect_buffer_size, enable_pipeline_probe)
     val flush = Input(Bool())
-    val out1  = new InstructionDecoderOutput(redirect_buffer_size, enable_pipeline_probe, lsq_id_len)
-    val out2  = new InstructionDecoderOutput(redirect_buffer_size, enable_pipeline_probe, lsq_id_len)
+    val stall = Input(Bool())
+    val out1  = new InstructionDecoderOutput(redirect_buffer_size, enable_pipeline_probe, lsq_id_len, iq_id_len)
+    val out2  = new InstructionDecoderOutput(redirect_buffer_size, enable_pipeline_probe, lsq_id_len, iq_id_len)
     val lsa1  = Flipped(new LoadStoreQueueAlloc(lsq_id_len))
     val lsa2  = Flipped(new LoadStoreQueueAlloc(lsq_id_len))
+    val rob   = new Bundle {
+      val range = new InstructionQueueRobRange(iq_id_len)
+      val upd   = new InstructionQueueUpdateRobPtr(iq_id_len)
+      val deq1  = new InstructionQueueDequeue
+      val deq2  = new InstructionQueueDequeue
+    }
     val debug_signals = new InstructionDecoderDebugSignals()
     val pipeline_probe = new InstructionDecoderPipelineProbe(enable_pipeline_probe)
   })
@@ -428,17 +438,22 @@ class InstructionDecoderUnit(
 
   iq.io.flush := io.flush
 
-  iq.io.enq1.en              := io.in1.valid && !io.flush
+  iq.io.enq1.en              := io.in1.valid && (!io.flush && !io.stall)
   iq.io.enq1.initial.pc      := io.in1.pc
   iq.io.enq1.initial.bp      := io.in1.bp
   iq.io.enq1.initial.is_half := (io.in1.inst(1, 0) =/= 3.U)
   map2(iq.io.enq1.initial.inst_id, io.in1.inst_id)(_ := _)
 
-  iq.io.enq2.en              := io.in2.valid && !io.flush
+  iq.io.enq2.en              := io.in2.valid && (!io.flush && !io.stall)
   iq.io.enq2.initial.pc      := io.in2.pc
   iq.io.enq2.initial.bp      := io.in2.bp
   iq.io.enq2.initial.is_half := (io.in2.inst(1, 0) =/= 3.U)
   map2(iq.io.enq2.initial.inst_id, io.in2.inst_id)(_ := _)
+
+  iq.io.rob_range <> io.rob.range
+  iq.io.upd_rob   <> io.rob.upd
+  iq.io.deq1      <> io.rob.deq1
+  iq.io.deq2      <> io.rob.deq2
 
   class Id1Input(iq_id_len: Int) extends Bundle {
     val iq_id_ptr_len = iq_id_len + 1
@@ -512,13 +527,13 @@ class InstructionDecoderUnit(
   }
 
   val id1_in1 = Wire(new Id1Input(iq_id_len))
-  id1_in1.valid := io.in1.valid && iq.io.enq1.ready && !io.flush
+  id1_in1.valid := io.in1.valid && iq.io.enq1.ready && (!io.flush && !io.stall)
   id1_in1.pc    := io.in1.pc
   id1_in1.inst  := io.in1.inst
   id1_in1.iq_id := iq.io.enq1.iq_id
   map2(id1_in1.inst_id, io.in1.inst_id)(_ := _)
   val id1_in2 = Wire(new Id1Input(iq_id_len))
-  id1_in2.valid := io.in2.valid && iq.io.enq2.ready && !io.flush
+  id1_in2.valid := io.in2.valid && iq.io.enq2.ready && (!io.flush && !io.stall)
   id1_in2.pc    := io.in2.pc
   id1_in2.inst  := io.in2.inst
   id1_in2.iq_id := iq.io.enq2.iq_id
@@ -534,7 +549,7 @@ class InstructionDecoderUnit(
         (iq.io.read1.decoded.exe_sel === EXE_ST || iq.io.read1.decoded.exe_sel === EXE_LD) ||
         (iq.io.read1.decoded.exe_sel === EXE_CSR && PAT_FENCE.matches(iq.io.read1.decoded.exe_fun))
       ) {
-        io.lsa1.en := !io.flush
+        io.lsa1.en := (!io.flush && !io.stall)
         when (io.lsa1.valid) {
           printf(cf"iq lsq alloc1, exe_sel=${iq.io.read1.decoded.exe_sel} exe_fun=${iq.io.read1.decoded.exe_fun} lsq_id=${io.lsa1.lsq_id}\n")
           printf(cf"iq lsq inst_id=0x${iq.io.read1.decoded.inst_id.getOrElse(0)}%x\n")
@@ -554,7 +569,7 @@ class InstructionDecoderUnit(
         (iq.io.read2.decoded.exe_sel === EXE_ST || iq.io.read2.decoded.exe_sel === EXE_LD) ||
         (iq.io.read2.decoded.exe_sel === EXE_CSR && PAT_FENCE.matches(iq.io.read2.decoded.exe_fun))
       ) {
-        io.lsa2.en := !io.flush
+        io.lsa2.en := (!io.flush && !io.stall)
         when (io.lsa2.valid) {
           printf(cf"iq lsq alloc2, exe_sel=${iq.io.read2.decoded.exe_sel} exe_fun=${iq.io.read2.decoded.exe_fun} lsq_id=${io.lsa2.lsq_id}\n")
           printf(cf"iq lsq inst_id=0x${iq.io.read2.decoded.inst_id.getOrElse(0)}%x\n")
@@ -575,26 +590,28 @@ class InstructionDecoderUnit(
   id2
 
   def id3: Unit = {
-    iq.io.peek1.iq_id := iq.io.range.deq_first
-    iq.io.peek2.iq_id := iq.io.range.deq_first + 1.U
+    iq.io.peek1.iq_id := iq.io.peek_range.first
+    iq.io.peek2.iq_id := iq.io.peek_range.first + 1.U
 
-    iq.io.upd_deq.en  := iq.io.peek1.valid && io.out1.ready
-    iq.io.upd_deq.deq := iq.io.range.deq_first + Mux(iq.io.peek2.valid && io.out2.ready, 2.U, 1.U)
+    iq.io.upd_peek.en  := iq.io.peek1.valid && io.out1.ready
+    iq.io.upd_peek.ptr := iq.io.peek_range.first + Mux(iq.io.peek2.valid && io.out2.ready, 2.U, 1.U)
 
-    io.out1.valid   := iq.io.peek1.valid && !io.flush
+    io.out1.valid   := iq.io.peek1.valid && (!io.flush && !io.stall)
     io.out1.initial := iq.io.peek1.initial
     io.out1.decoded := iq.io.peek1.decoded
     io.out1.lsq     := iq.io.peek1.lsq
-    io.out2.valid   := iq.io.peek2.valid && !io.flush
+    io.out1.rob_id  := iq.io.peek_range.first
+    io.out2.valid   := iq.io.peek2.valid && (!io.flush && !io.stall)
     io.out2.initial := iq.io.peek2.initial
     io.out2.decoded := iq.io.peek2.decoded
     io.out2.lsq     := iq.io.peek2.lsq
+    io.out2.rob_id  := iq.io.peek_range.first + 1.U
 
     // printf(cf"decoder ready      = ${io.out.ready}\n")
     // printf(cf"decoder peek valid = ${iq.io.peek.valid}\n")
-    // printf(cf"decoder deq        = 0x${iq.io.range.deq_first + 1.U}%x\n")
-    // printf(cf"decoder deq first  = 0x${iq.io.range.deq_first}%x\n")
-    // printf(cf"decoder deq last   = 0x${iq.io.range.deq_last}%x\n")
+    // printf(cf"decoder deq        = 0x${iq.io.peek_range.first + 1.U}%x\n")
+    // printf(cf"decoder deq first  = 0x${iq.io.peek_range.first}%x\n")
+    // printf(cf"decoder deq last   = 0x${iq.io.peek_range.last}%x\n")
   }
 
   id3
