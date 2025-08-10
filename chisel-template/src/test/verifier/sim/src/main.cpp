@@ -451,7 +451,7 @@ void spike_next(uint32_t index, uint32_t inst_id, uint32_t pc, uint32_t inst, ui
                 }
             }
         }
-        assertEq("pc unmatch", spike_pc, pc);
+        assertEq("pc unmatch", pc, spike_pc);
         assertEq("inst unmatch", mask_rvc(inst), (uint32_t) state->last_inst.bits());
         if (spike_wb_addr != 0) {
             // fprintf(stderr, "pc=%08x\n", pc);

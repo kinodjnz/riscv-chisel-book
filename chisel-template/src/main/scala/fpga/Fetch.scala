@@ -401,6 +401,7 @@ class Fetcher(
       printf(cf"fb(${read_ptr}%x): 0x${iaddr0.pc_to_word}%x: 0x${idatas(1) ## idatas(0)}%x ${io.ft.inst1.ready} read\n")
     }
     when (inst2_valid) {
+      printf(cf"redir_oh: 0x${redir_oh}%x  inst2_end: ${inst2_end}  redirected: ${io.ft.inst2.redirected}\n")
       printf(cf"fb(${read_ptr}%x): 0x${io.ft.inst2.addr.pc_to_word}%x: 0x${io.ft.inst2.data}%x ${io.ft.inst2.ready} read\n")
     }
   }

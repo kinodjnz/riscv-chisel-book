@@ -85,6 +85,7 @@ class FetchRedirectBuffer(redirect_buffer_size: Int, pht_history_len: Int, enabl
     buf(io.upd.ptr).attr      := io.upd.attr
     buf(io.upd.ptr).is_ret    := io.upd.is_ret
     buf(io.upd.ptr).target    := io.upd.target
+    printf(cf"fp(${io.upd.ptr}).target := 0x${io.upd.target.pc_to_word}%x\n")
   }
 
   io.read.fp_entry.attr      := buf(io.read.ptr).attr
@@ -196,8 +197,7 @@ class FetchPredictor(
     io.pr.bp0_addr := io.zbtb.lu.target(bp0_pos)
 
     when (bp0_en) {
-      printf(cf"fp(${io.pr.fp_ptr}).target := 0x${io.zbtb.lu.target(bp0_pos).pc_to_word}%x, pc=0x${reg_iaddr_index.pc_to_word}%x\n")
-      printf(cf"bp0_pos = ${bp0_pos}\n")
+      printf(cf"fp(${io.pr.fp_ptr}).target := 0x${io.zbtb.lu.target(bp0_pos).pc_to_word}%x, pc=0x${reg_iaddr_index.pc_to_word}%x bp0_pos = ${bp0_pos}\n")
     }
 
     io.btb.lu.pc := io.pr.iaddr
@@ -228,8 +228,7 @@ class FetchPredictor(
     io.ru.target    := bp1_target
 
     when (bp1_en && !io.pr.invalidate) {
-      printf(cf"fp(${io.pr.fp_ptr}).target := 0x${bp1_target.pc_to_word}%x, pc=0x${reg_iaddr_index.pc_to_word}%x\n")
-      printf(cf"bp1_pos = ${bp1_pos}\n")
+      printf(cf"fp(${io.pr.fp_ptr}).target := 0x${bp1_target.pc_to_word}%x, pc=0x${reg_iaddr_index.pc_to_word}%x bp1_pos = ${bp1_pos}\n")
     }
 
     for (i <- 0 until 4) {
@@ -410,9 +409,10 @@ class ZBTB(
   val zbtb_mem = List.fill(2)(Mem(zbtb_entries / 2, new ZeroBranchTargetBuffer(tag_len, target_len)))
 
   val zbtb_entry = Seq.tabulate(4)(i => zbtb_mem(i % 2)(io.lu.pc(index_len - 1, 2) ## (i / 2).U))
+  val zbtb_sel_up    = Seq.tabulate(4)(i => io.up.en && io.up.pc.take(index_len) === (io.lu.pc(index_len - 1, 2) ## i.U(2.W)))
 
-  val matches = zbtb_entry.map(e => e.en && (e.tag === io.lu.pc(tag_len - 1 + index_len, index_len)))
-  val target  = zbtb_entry.map(e => e.target)
+  val matches = zbtb_entry.zip(zbtb_sel_up).map { case (e, sel_up) => e.en && (e.tag === io.lu.pc(tag_len - 1 + index_len, index_len)) || sel_up }
+  val target  = zbtb_entry.zip(zbtb_sel_up).map { case (e, sel_up) => Mux(sel_up, io.up.target, e.target) }
 
   io.lu.matches := RegNext(VecInit(matches), VecInit.fill(4)(false.B))
   io.lu.target  := RegNext(VecInit(target), VecInit.fill(4)(0.U(target_len.W)))
@@ -490,6 +490,8 @@ class BTB(btb_entries: Int, tag_ignore: Int = BTB_TAG_IGNORE) extends Module {
 
   val reg_entry = RegInit(VecInit.fill(4)(0.U(entry_len.W)))
 
+  val up_entry = Wire(UInt(entry_len.W))
+
   val lu_pc = (io.lu.pc(PC_LEN-1-tag_ignore, 2)).asTypeOf(new BTBPC(tag_len, index_len))
   val reg_lu_pc_tag = RegNext(lu_pc.tag, 0.U(tag_len.W))
 
@@ -497,9 +499,12 @@ class BTB(btb_entries: Int, tag_ignore: Int = BTB_TAG_IGNORE) extends Module {
     reg_entry(i) := btb_mem(i).read(lu_pc.index)
   }
 
-  val entry = reg_entry.map(e => e.asTypeOf(new BTBEntry(tag_len)))
+  val btb_sel_up = Seq.tabulate(4)(i => io.up.en && io.up.pc.take(tag_len + index_len) === (io.lu.pc(tag_len + index_len - 1, 2) ## i.U(2.W)))
 
-  val tag_match = entry.map(e => (e.tag === reg_lu_pc_tag))
+  val mem_entry = reg_entry.map(e => e.asTypeOf(new BTBEntry(tag_len)))
+  val entry = reg_entry.zip(btb_sel_up).map { case (e, sel_up) => Mux(sel_up, up_entry, e).asTypeOf(new BTBEntry(tag_len)) }
+
+  val tag_match = mem_entry.zip(btb_sel_up).map { case (e, sel_up) => (e.tag === reg_lu_pc_tag) || sel_up }
   val result = Wire(Vec(4, new BTBResult))
   for (i <- 0 until 4) {
     result(i).jump   := tag_match(i) && (entry(i).attr === BTB_ATTR_DJUMP || entry(i).attr === BTB_ATTR_DCALL)
@@ -518,9 +523,10 @@ class BTB(btb_entries: Int, tag_ignore: Int = BTB_TAG_IGNORE) extends Module {
     Mux(io.up.attr === BTB_ATTR_INVAL, io.up.is_ret, io.up.target(PC_LEN - 1)),
     io.up.target(PC_LEN - 2, 0)
   )
+  up_entry := up_pc.tag ## io.up.attr ## target
   for (i <- 0 until 4) {
     when (io.up.en && io.up.pc(1, 0) === i.U(2.W)) {
-      btb_mem(i).write(up_pc.index, up_pc.tag ## io.up.attr ## target)
+      btb_mem(i).write(up_pc.index, up_entry)
       printf(cf"update btb(0x${up_pc.index}%x) := attr:${io.up.attr} target:0x${target}%x\n")
     }
   }

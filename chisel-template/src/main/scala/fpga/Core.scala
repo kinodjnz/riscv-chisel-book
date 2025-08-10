@@ -245,6 +245,7 @@ class Core(
   val rrd_i2_rf_wen            = Wire(UInt(REN_LEN.W))
   val rrd_i2_wb_addr           = Wire(UInt(ADDR_LEN.W))
   val rrd_i2_is_half           = Wire(Bool())
+  val rrd_i2_redirected        = Wire(Bool())
 
   // RRD/EX1 State
   val ex1_reg_pc               = RegInit(0.U(PC_LEN.W))
@@ -291,9 +292,10 @@ class Core(
   val ex2_reg_valid         = RegInit(false.B)
   val ex2_reg_rob_id        = RegInit(0.U(rob_id_ptr_len.W))
   val ex2_reg_processed     = RegInit(false.B)
-  val ex2_reg_redirect      = RegInit(false.B)
-  val ex2_reg_target_pc     = RegInit(0.U(PC_LEN.W))
+  // val ex2_reg_redirect      = RegInit(false.B)
+  // val ex2_reg_target_pc     = RegInit(0.U(PC_LEN.W))
   val ex2_reg_inst3_use_reg = RegInit(false.B)
+  // val ex2_reg_correction    = RegInit(0.U.asTypeOf(new BranchCorrection(PHT_HISTORY_LEN)))
 
   val div_divrem_in_use = Wire(Bool())
   val div_divrem_rrd_wb = Wire(Bool())
@@ -360,7 +362,7 @@ class Core(
   ))
   val idu = Module(new InstructionDecoderUnit(REDIRECT_BUFFER_SIZE, enable_pipeline_probe))
   val lsu = Module(new LoadStoreUnit(enable_pipeline_probe, dram_start, dram_length, LSQ_ENTRIES, rob_id_len, enable_sim_unaligned))
-  val rob = Module(new ReorderBuffer(start_address, IQ_ENTRIES, enable_pipeline_probe))
+  val rob = Module(new ReorderBuffer(start_address, IQ_ENTRIES, PHT_HISTORY_LEN, enable_pipeline_probe))
 
   idu.io.rob.range <> rob.io.iq_rob_range
   idu.io.rob.upd   <> rob.io.iq_upd_rob
@@ -491,6 +493,7 @@ class Core(
   rrd_i2_rf_wen            := idu.io.out2.decoded.rf_wen
   rrd_i2_wb_addr           := idu.io.out2.decoded.wb_addr
   rrd_i2_is_half           := idu.io.out2.initial.is_half
+  rrd_i2_redirected        := idu.io.out2.initial.bp.redirected
 
   //**********************************
   // Register read (RRD) Stage
@@ -512,6 +515,7 @@ class Core(
   rrd_ready2 := !rrd_stall &&
     rrd_i2_exe_sel === EXE_ALU && PAT_CLU_FUN.matches(rrd_i2_exe_fun) && rrd_i2_sop === SOP_NOP &&
     !rrd_reg_bp.redirected && rrd_reg_exe_sel =/= EXE_JB && rrd_reg_exe_sel =/= EXE_CSR &&
+    !rrd_i2_redirected &&
     !lsu.io.out.wb_next &&
     rrd_i2_op3_sel(1) =/= OP3_SEL_RS(1) && !(
       ((rrd_i2_op1_sel    === OP1_SEL_RS)    && (scoreboard(rrd_i2_rs1_addr) || rrd_i2_rs1_addr === rrd_i1_wb_addr)) ||
@@ -903,17 +907,32 @@ class Core(
 
   // fetch_unit.io.redir_read.ptr := ex1_reg_bp.fp_ptr
 
-  fetch_unit.io.cr.en       := ex1_en && (!reg_flush && !ex2_reg_stall)
-  fetch_unit.io.cr.pc       := ex1_latter_pc
-  fetch_unit.io.cr.bp_entry := ex1_reg_bp.bp_entry
-  fetch_unit.io.cr.fp_entry := ex1_reg_fp_entry // fetch_unit.io.redir_read.fp_entry
-  fetch_unit.io.cr.fp_hit   := ex1_reg_bp.redirected
-  fetch_unit.io.cr.mispred  := ex1_bp_failure && (!reg_flush && !ex2_reg_stall)
-  fetch_unit.io.cr.br_taken := ex1_is_br_taken
-  fetch_unit.io.cr.attr     := ex1_actual_attr
-  fetch_unit.io.cr.is_ret   := ex1_actual_is_ret
-  fetch_unit.io.cr.target   := ex1_fetch_pc
-  fetch_unit.io.cr.next_pc  := ex1_next_pc
+  // fetch_unit.io.cr.en       := ex1_en && (!reg_flush && !ex2_reg_stall)
+  // fetch_unit.io.cr.pc       := ex1_latter_pc
+  // fetch_unit.io.cr.bp_entry := ex1_reg_bp.bp_entry
+  // fetch_unit.io.cr.fp_entry := ex1_reg_fp_entry // fetch_unit.io.redir_read.fp_entry
+  // fetch_unit.io.cr.fp_hit   := ex1_reg_bp.redirected
+  // fetch_unit.io.cr.mispred  := ex1_bp_failure && (!reg_flush && !ex2_reg_stall)
+  // fetch_unit.io.cr.br_taken := ex1_is_br_taken
+  // fetch_unit.io.cr.attr     := ex1_actual_attr
+  // fetch_unit.io.cr.is_ret   := ex1_actual_is_ret
+  // fetch_unit.io.cr.target   := ex1_fetch_pc
+  // fetch_unit.io.cr.next_pc  := ex1_next_pc
+
+  rob.io.redir.en                  := ex1_fetch_pc_en || csr_is_br
+  rob.io.redir.target_pc           := ex1_csr_fetch_pc
+  rob.io.redir.rob_id              := ex1_reg_rob_id
+  rob.io.redir.correction.en       := ex1_en && (!reg_flush && !ex2_reg_stall)
+  rob.io.redir.correction.pc       := ex1_latter_pc
+  rob.io.redir.correction.bp_entry := ex1_reg_bp.bp_entry
+  rob.io.redir.correction.fp_entry := ex1_reg_fp_entry
+  rob.io.redir.correction.fp_hit   := ex1_reg_bp.redirected
+  rob.io.redir.correction.mispred  := ex1_bp_failure && (!reg_flush && !ex2_reg_stall)
+  rob.io.redir.correction.br_taken := ex1_is_br_taken
+  rob.io.redir.correction.attr     := ex1_actual_attr
+  rob.io.redir.correction.is_ret   := ex1_actual_is_ret
+  rob.io.redir.correction.target   := ex1_fetch_pc
+  rob.io.redir.correction.next_pc  := ex1_next_pc
 
   lsu.io.flush.en     := ex1_fetch_pc_en || csr_is_br
   lsu.io.flush.lsq_id := ex1_reg_lsq_id + Mux(
@@ -1130,11 +1149,22 @@ class Core(
   ex2_reg_op3_data          := Mux(ex1_reg_exe_fun === BLU_BFX && ex1_reg_sop === SOP_SEXT, ex1_bfx_sext, ex1_reg_op3_data)
   ex2_reg_valid             := ex1_valid && ex1_no_mem && !(ex1_reg_exe_sel === EXE_MD && PAT_DIVREM.matches(ex1_reg_exe_fun)) || div_divrem_ex1_wb
   ex2_reg_processed         := csr_valid && ex1_no_mem && !(ex1_reg_exe_sel === EXE_MD && PAT_DIVREM.matches(ex1_reg_exe_fun)) || div_divrem_ex1_wb
-  ex2_reg_redirect          := ex1_fetch_pc_en || csr_is_br
-  ex2_reg_target_pc         := ex1_csr_fetch_pc
+  // ex2_reg_redirect          := ex1_fetch_pc_en || csr_is_br
+  // ex2_reg_target_pc         := ex1_csr_fetch_pc
   ex2_reg_inst3_use_reg     := Mux(div_divrem_ex1_wb, true.B, ex1_reg_inst3_use_reg && ex1_en)
   ex2_reg_fw_en             := ex1_fw_en_next
   map3(ex2_reg_inst_id, ex1_reg_inst_id, div_reg_inst_id)(_ := Mux(!div_divrem_ex1_wb, _, _))
+  // ex2_reg_correction.en       := ex1_en && (!reg_flush && !ex2_reg_stall)
+  // ex2_reg_correction.pc       := ex1_latter_pc
+  // ex2_reg_correction.bp_entry := ex1_reg_bp.bp_entry
+  // ex2_reg_correction.fp_entry := ex1_reg_fp_entry
+  // ex2_reg_correction.fp_hit   := ex1_reg_bp.redirected
+  // ex2_reg_correction.mispred  := ex1_bp_failure && (!reg_flush && !ex2_reg_stall)
+  // ex2_reg_correction.br_taken := ex1_is_br_taken
+  // ex2_reg_correction.attr     := ex1_actual_attr
+  // ex2_reg_correction.is_ret   := ex1_actual_is_ret
+  // ex2_reg_correction.target   := ex1_fetch_pc
+  // ex2_reg_correction.next_pc  := ex1_next_pc
 
   //**********************************
   // EX2 MUL/DIV Stage
@@ -1365,13 +1395,24 @@ class Core(
 
   rob.io.fin2.en        := ex2_reg_processed
   rob.io.fin2.rob_id    := ex2_reg_rob_id
-  rob.io.fin2.redirect  := ex2_reg_redirect
-  rob.io.fin2.target_pc := ex2_reg_target_pc
+  // rob.io.fin2.redirect  := ex2_reg_redirect
+  // rob.io.fin2.target_pc := ex2_reg_target_pc
   rob.io.fin2.wb_addr.foreach(_ := Mux(ex2_reg_rf_wen === REN_S, ex2_reg_wb_addr, 0.U(ADDR_LEN.W)))
   rob.io.fin2.wb_data.foreach(_ := ex2_wb_data)
   rob.io.fin2.csr_read.foreach(_ := ex2_reg_valid && PAT_EX2_CSR.matches(ex2_reg_fun_sel) && ex2_reg_rf_wen === REN_S)
   map2(rob.io.fin2.csr_addr, ex2_reg_csr_addr)(_ := _)
   rob.io.fin2.csr_data.foreach(_ := ex2_reg_csr_rdata)
+  // rob.io.fin2.correction.en       := ex2_reg_correction.en
+  // rob.io.fin2.correction.pc       := ex2_reg_correction.pc
+  // rob.io.fin2.correction.bp_entry := ex2_reg_correction.bp_entry
+  // rob.io.fin2.correction.fp_entry := ex2_reg_correction.fp_entry
+  // rob.io.fin2.correction.fp_hit   := ex2_reg_correction.fp_hit
+  // rob.io.fin2.correction.mispred  := ex2_reg_correction.mispred
+  // rob.io.fin2.correction.br_taken := ex2_reg_correction.br_taken
+  // rob.io.fin2.correction.attr     := ex2_reg_correction.attr
+  // rob.io.fin2.correction.is_ret   := ex2_reg_correction.is_ret
+  // rob.io.fin2.correction.target   := ex2_reg_correction.target
+  // rob.io.fin2.correction.next_pc  := ex2_reg_correction.next_pc
 
   io.pipeline_probe.foreach(_.ex2_valid := ex2_reg_valid)
   map2(io.pipeline_probe, ex2_reg_inst_id)(_.ex2_inst_id := _)
@@ -1415,6 +1456,18 @@ class Core(
   rob.io.fin3.rob_id := lsu.io.out.rob_id
   map2(rob.io.fin3.wb_addr, lsu.io.pipeline_probe)(_ := _.mem3_wb_addr)
   map2(rob.io.fin3.wb_data, lsu.io.pipeline_probe)(_ := _.mem3_wb_data)
+
+  fetch_unit.io.cr.en       := rob.io.correction.en
+  fetch_unit.io.cr.pc       := rob.io.correction.pc
+  fetch_unit.io.cr.bp_entry := rob.io.correction.bp_entry
+  fetch_unit.io.cr.fp_entry := rob.io.correction.fp_entry
+  fetch_unit.io.cr.fp_hit   := rob.io.correction.fp_hit
+  fetch_unit.io.cr.mispred  := rob.io.correction.mispred
+  fetch_unit.io.cr.br_taken := rob.io.correction.br_taken
+  fetch_unit.io.cr.attr     := rob.io.correction.attr
+  fetch_unit.io.cr.is_ret   := rob.io.correction.is_ret
+  fetch_unit.io.cr.target   := rob.io.correction.target
+  fetch_unit.io.cr.next_pc  := rob.io.correction.next_pc
 
   instret := instret + PopCount(Seq(ex1_reg_is_retired, ex2_reg_is_retired, lsu.io.out.is_retired))
 
@@ -1598,7 +1651,12 @@ class Core(
   printf(cf"ex2_md_out       : 0x${ex2_md_out}%x\n")
   printf(cf"ex2_reg_wb_addr  : 0x${ex2_reg_wb_addr}%x\n")
   printf(cf"ex2_reg_rf_wen   : ${ex2_reg_rf_wen}%d\n")
-  printf(cf"ex2_reg_stall    : ${ex2_reg_stall}%d\n")
+  // printf(cf"ex2_reg_cr_mispre: ${ex2_reg_correction.mispred}%d\n")
+  // printf(cf"ex2_reg_redirect : ${ex2_reg_redirect}%d\n")
+  printf(cf"retire1_valid    : ${rob.io.retire1.valid}%d\n")
+  printf(cf"retire1_inst_id  : ${rob.io.retire1.inst_id.getOrElse(0)}%d\n")
+  printf(cf"retire2_valid    : ${rob.io.retire2.valid}%d\n")
+  printf(cf"retire2_inst_id  : ${rob.io.retire2.inst_id.getOrElse(0)}%d\n")
   printf(cf"rob.io.flush     : ${rob.io.flush}%d\n")
   printf(cf"rob.io.target_pc : 0x${rob.io.target_pc.pc_to_word}%x\n")
   printf(cf"reg_flush        : ${reg_flush}%d\n")
