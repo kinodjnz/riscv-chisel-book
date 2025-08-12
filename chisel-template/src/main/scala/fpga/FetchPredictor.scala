@@ -180,18 +180,25 @@ class FetchPredictor(
     val reg_flush_en    = RegNext(io.pr.flush_en)
     val reg_fp_ptr      = RegInit(io.re.ptr)
     val cur_fp_ptr      = Wire(UInt(fp_ptr_len.W))
+    val reg_ibmask      = RegInit(0.U(4.W))
 
     reg_iaddr_index := io.pr.iaddr
     io.pr.redirect_ready := io.re.ready && (!io.re.left1 || !io.pr.redirect_en)
 
     io.zbtb.lu.pc := io.pr.iaddr
 
-    val ibpos = reg_iaddr_index.take(2)
+    // val ibpos = reg_iaddr_index.take(2)
+    val ibpos = io.pr.iaddr.take(2)
+    reg_ibmask := MuxLookup(ibpos, "b1000".U(4.W))(Seq(
+      0.U -> "b1111".U(4.W),
+      1.U -> "b1110".U(4.W),
+      2.U -> "b1100".U(4.W),
+    ))
 
     val bp0_pos = MuxCase(3.U(IALIGN_PTR_LEN.W),
-      Seq.tabulate(3)(i => ((i.U(2.W) >= ibpos) && io.zbtb.lu.matches(i)) -> i.U(IALIGN_PTR_LEN.W))
+      Seq.tabulate(3)(i => (reg_ibmask(i) && io.zbtb.lu.matches(i)) -> i.U(IALIGN_PTR_LEN.W))
     )
-    val bp0_en = reg_iaddr_en && !reg_invalidate && VecInit.tabulate(4)(i => (i.U(2.W) >= ibpos) && io.zbtb.lu.matches(i)).asUInt.orR
+    val bp0_en = reg_iaddr_en && !reg_invalidate && VecInit.tabulate(4)(i => reg_ibmask(i) && io.zbtb.lu.matches(i)).asUInt.orR
     io.pr.bp0_en   := bp0_en
     io.pr.bp0_pos  := bp0_pos
     io.pr.bp0_addr := io.zbtb.lu.target(bp0_pos)
@@ -203,7 +210,7 @@ class FetchPredictor(
     io.btb.lu.pc := io.pr.iaddr
     io.pht.lu.pc := io.pr.iaddr
 
-    val redirected = VecInit.tabulate(4)(i => (i.U(2.W) >= ibpos) && (
+    val redirected = VecInit.tabulate(4)(i => reg_ibmask(i) && (
       (io.btb.lu.result(i).br && io.pht.lu.taken(i)) ||
       io.btb.lu.result(i).jump ||
       io.btb.lu.result(i).is_ret
@@ -409,10 +416,9 @@ class ZBTB(
   val zbtb_mem = List.fill(2)(Mem(zbtb_entries / 2, new ZeroBranchTargetBuffer(tag_len, target_len)))
 
   val zbtb_entry = Seq.tabulate(4)(i => zbtb_mem(i % 2)(io.lu.pc(index_len - 1, 2) ## (i / 2).U))
-  val zbtb_sel_up    = Seq.tabulate(4)(i => io.up.en && io.up.pc.take(index_len) === (io.lu.pc(index_len - 1, 2) ## i.U(2.W)))
 
-  val matches = zbtb_entry.zip(zbtb_sel_up).map { case (e, sel_up) => e.en && (e.tag === io.lu.pc(tag_len - 1 + index_len, index_len)) || sel_up }
-  val target  = zbtb_entry.zip(zbtb_sel_up).map { case (e, sel_up) => Mux(sel_up, io.up.target, e.target) }
+  val matches = zbtb_entry.map(e => e.en && (e.tag === io.lu.pc(tag_len - 1 + index_len, index_len)))
+  val target  = zbtb_entry.map(e => e.target)
 
   io.lu.matches := RegNext(VecInit(matches), VecInit.fill(4)(false.B))
   io.lu.target  := RegNext(VecInit(target), VecInit.fill(4)(0.U(target_len.W)))
@@ -499,12 +505,9 @@ class BTB(btb_entries: Int, tag_ignore: Int = BTB_TAG_IGNORE) extends Module {
     reg_entry(i) := btb_mem(i).read(lu_pc.index)
   }
 
-  val btb_sel_up = Seq.tabulate(4)(i => io.up.en && io.up.pc.take(tag_len + index_len) === (io.lu.pc(tag_len + index_len - 1, 2) ## i.U(2.W)))
+  val entry = reg_entry.map(e => e.asTypeOf(new BTBEntry(tag_len)))
 
-  val mem_entry = reg_entry.map(e => e.asTypeOf(new BTBEntry(tag_len)))
-  val entry = reg_entry.zip(btb_sel_up).map { case (e, sel_up) => Mux(sel_up, up_entry, e).asTypeOf(new BTBEntry(tag_len)) }
-
-  val tag_match = mem_entry.zip(btb_sel_up).map { case (e, sel_up) => (e.tag === reg_lu_pc_tag) || sel_up }
+  val tag_match = entry.map(e => (e.tag === reg_lu_pc_tag))
   val result = Wire(Vec(4, new BTBResult))
   for (i <- 0 until 4) {
     result(i).jump   := tag_match(i) && (entry(i).attr === BTB_ATTR_DJUMP || entry(i).attr === BTB_ATTR_DCALL)

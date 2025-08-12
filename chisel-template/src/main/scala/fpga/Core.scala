@@ -905,20 +905,6 @@ class Core(
     }
   }
 
-  // fetch_unit.io.redir_read.ptr := ex1_reg_bp.fp_ptr
-
-  // fetch_unit.io.cr.en       := ex1_en && (!reg_flush && !ex2_reg_stall)
-  // fetch_unit.io.cr.pc       := ex1_latter_pc
-  // fetch_unit.io.cr.bp_entry := ex1_reg_bp.bp_entry
-  // fetch_unit.io.cr.fp_entry := ex1_reg_fp_entry // fetch_unit.io.redir_read.fp_entry
-  // fetch_unit.io.cr.fp_hit   := ex1_reg_bp.redirected
-  // fetch_unit.io.cr.mispred  := ex1_bp_failure && (!reg_flush && !ex2_reg_stall)
-  // fetch_unit.io.cr.br_taken := ex1_is_br_taken
-  // fetch_unit.io.cr.attr     := ex1_actual_attr
-  // fetch_unit.io.cr.is_ret   := ex1_actual_is_ret
-  // fetch_unit.io.cr.target   := ex1_fetch_pc
-  // fetch_unit.io.cr.next_pc  := ex1_next_pc
-
   rob.io.redir.en                  := ex1_fetch_pc_en || csr_is_br
   rob.io.redir.target_pc           := ex1_csr_fetch_pc
   rob.io.redir.rob_id              := ex1_reg_rob_id
@@ -969,9 +955,6 @@ class Core(
   io.pipeline_probe.foreach(_.ex1_i2_valid := ex1_i2_valid)
   map2(io.pipeline_probe, ex1_reg_inst_id)(_.ex1_inst_id := _)
   map2(io.pipeline_probe, ex1_reg_i2_inst_id)(_.ex1_i2_inst_id := _)
-  // io.pipeline_probe.foreach(_.ex1_i2_retired := ex1_i2_valid)
-  // io.pipeline_probe.foreach(_.ex1_i2_wb_addr := Mux(ex1_reg_i2_rf_wen === REN_S, ex1_reg_i2_wb_addr, 0.U(ADDR_LEN.W)))
-  // io.pipeline_probe.foreach(_.ex1_i2_wb_data := ex1_clu_out)
 
   io.pipeline_probe.foreach(_.ex1_predict_redirected := ex1_reg_bp.redirected)
   io.pipeline_probe.foreach(_.ex1_predict_bpfailed   := ex1_reg_bp.bpfailed)
@@ -1112,15 +1095,7 @@ class Core(
     csr_br_pc             := csr_reg_trap_vector
   }
 
-  // ex2_reg_is_br := ex1_fetch_pc_en || csr_is_br
   ex2_reg_stall := (ex1_fetch_pc_en || csr_is_br) || (ex2_reg_stall && !reg_flush)
-  // ex2_reg_br_pc := ex1_csr_fetch_pc
-  // rob.io.fin2.en        := csr_valid
-  // rob.io.fin2.rob_id    := ex1_reg_rob_id
-  // rob.io.fin2.redirect  := ex1_fetch_pc_en || csr_is_br
-  // rob.io.fin2.target_pc := ex1_csr_fetch_pc
-  // rob.io.fin2.wb_addr.foreach(_ := Mux(ex2_reg_rf_wen === REN_S, ex2_reg_wb_addr, 0.U(ADDR_LEN.W)))
-  // rob.io.fin2.wb_data.foreach(_ := ex2_wb_data)
 
   reg_flush     := rob.io.flush
   reg_target_pc := rob.io.target_pc
@@ -1149,22 +1124,9 @@ class Core(
   ex2_reg_op3_data          := Mux(ex1_reg_exe_fun === BLU_BFX && ex1_reg_sop === SOP_SEXT, ex1_bfx_sext, ex1_reg_op3_data)
   ex2_reg_valid             := ex1_valid && ex1_no_mem && !(ex1_reg_exe_sel === EXE_MD && PAT_DIVREM.matches(ex1_reg_exe_fun)) || div_divrem_ex1_wb
   ex2_reg_processed         := csr_valid && ex1_no_mem && !(ex1_reg_exe_sel === EXE_MD && PAT_DIVREM.matches(ex1_reg_exe_fun)) || div_divrem_ex1_wb
-  // ex2_reg_redirect          := ex1_fetch_pc_en || csr_is_br
-  // ex2_reg_target_pc         := ex1_csr_fetch_pc
   ex2_reg_inst3_use_reg     := Mux(div_divrem_ex1_wb, true.B, ex1_reg_inst3_use_reg && ex1_en)
   ex2_reg_fw_en             := ex1_fw_en_next
   map3(ex2_reg_inst_id, ex1_reg_inst_id, div_reg_inst_id)(_ := Mux(!div_divrem_ex1_wb, _, _))
-  // ex2_reg_correction.en       := ex1_en && (!reg_flush && !ex2_reg_stall)
-  // ex2_reg_correction.pc       := ex1_latter_pc
-  // ex2_reg_correction.bp_entry := ex1_reg_bp.bp_entry
-  // ex2_reg_correction.fp_entry := ex1_reg_fp_entry
-  // ex2_reg_correction.fp_hit   := ex1_reg_bp.redirected
-  // ex2_reg_correction.mispred  := ex1_bp_failure && (!reg_flush && !ex2_reg_stall)
-  // ex2_reg_correction.br_taken := ex1_is_br_taken
-  // ex2_reg_correction.attr     := ex1_actual_attr
-  // ex2_reg_correction.is_ret   := ex1_actual_is_ret
-  // ex2_reg_correction.target   := ex1_fetch_pc
-  // ex2_reg_correction.next_pc  := ex1_next_pc
 
   //**********************************
   // EX2 MUL/DIV Stage
@@ -1395,33 +1357,14 @@ class Core(
 
   rob.io.fin2.en        := ex2_reg_processed
   rob.io.fin2.rob_id    := ex2_reg_rob_id
-  // rob.io.fin2.redirect  := ex2_reg_redirect
-  // rob.io.fin2.target_pc := ex2_reg_target_pc
   rob.io.fin2.wb_addr.foreach(_ := Mux(ex2_reg_rf_wen === REN_S, ex2_reg_wb_addr, 0.U(ADDR_LEN.W)))
   rob.io.fin2.wb_data.foreach(_ := ex2_wb_data)
   rob.io.fin2.csr_read.foreach(_ := ex2_reg_valid && PAT_EX2_CSR.matches(ex2_reg_fun_sel) && ex2_reg_rf_wen === REN_S)
   map2(rob.io.fin2.csr_addr, ex2_reg_csr_addr)(_ := _)
   rob.io.fin2.csr_data.foreach(_ := ex2_reg_csr_rdata)
-  // rob.io.fin2.correction.en       := ex2_reg_correction.en
-  // rob.io.fin2.correction.pc       := ex2_reg_correction.pc
-  // rob.io.fin2.correction.bp_entry := ex2_reg_correction.bp_entry
-  // rob.io.fin2.correction.fp_entry := ex2_reg_correction.fp_entry
-  // rob.io.fin2.correction.fp_hit   := ex2_reg_correction.fp_hit
-  // rob.io.fin2.correction.mispred  := ex2_reg_correction.mispred
-  // rob.io.fin2.correction.br_taken := ex2_reg_correction.br_taken
-  // rob.io.fin2.correction.attr     := ex2_reg_correction.attr
-  // rob.io.fin2.correction.is_ret   := ex2_reg_correction.is_ret
-  // rob.io.fin2.correction.target   := ex2_reg_correction.target
-  // rob.io.fin2.correction.next_pc  := ex2_reg_correction.next_pc
 
   io.pipeline_probe.foreach(_.ex2_valid := ex2_reg_valid)
   map2(io.pipeline_probe, ex2_reg_inst_id)(_.ex2_inst_id := _)
-  // io.pipeline_probe.foreach(_.ex2_retired := ex2_reg_valid)
-  // io.pipeline_probe.foreach(_.ex2_wb_addr := Mux(ex2_reg_rf_wen === REN_S, ex2_reg_wb_addr, 0.U(ADDR_LEN.W)))
-  // io.pipeline_probe.foreach(_.ex2_wb_data := ex2_wb_data)
-  // io.pipeline_probe.foreach(_.csr_read := ex2_reg_valid && PAT_EX2_CSR.matches(ex2_reg_fun_sel) && ex2_reg_rf_wen === REN_S)
-  // map2(io.pipeline_probe, ex2_reg_csr_addr)(_.csr_addr := _)
-  // io.pipeline_probe.foreach(_.csr_data := ex2_reg_csr_rdata)
 
   lsu.io.put.en     := ex1_en && (
     (ex1_reg_exe_sel === EXE_LD) ||
@@ -1477,9 +1420,6 @@ class Core(
   map2(io.pipeline_probe, lsu.io.pipeline_probe)(_.mem2_inst_id := _.mem2_inst_id)
   map2(io.pipeline_probe, lsu.io.pipeline_probe)(_.mem3_valid   := _.mem3_valid)
   map2(io.pipeline_probe, lsu.io.pipeline_probe)(_.mem3_inst_id := _.mem3_inst_id)
-  // map2(io.pipeline_probe, lsu.io.pipeline_probe)(_.mem3_retired := _.mem3_retired)
-  // map2(io.pipeline_probe, lsu.io.pipeline_probe)(_.mem3_wb_addr := _.mem3_wb_addr)
-  // map2(io.pipeline_probe, lsu.io.pipeline_probe)(_.mem3_wb_data := _.mem3_wb_data)
 
   io.pipeline_probe.map(_.retire1_valid := rob.io.retire1.valid)
   map2(io.pipeline_probe, rob.io.retire1.inst_id)(_.retire1_inst_id := _)
