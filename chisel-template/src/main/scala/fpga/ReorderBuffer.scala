@@ -183,6 +183,7 @@ class ReorderBuffer(start_address: BigInt, rob_entries: Int, pht_history_len: In
     io.flush           := RegNext(flush, true.B)
     io.target_pc       := RegNext(target_pc, start_address.U(WORD_LEN.W).word_to_pc)
     io.correction      := correction
+    io.correction.en   := correction.en && flush
     io.retire1.valid   := valid1
     io.retire1.rob_id  := rob_id1
     map2(io.retire1.inst_id, rob_buf(rob_id1).inst_id)(_ := _)

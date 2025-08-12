@@ -338,7 +338,7 @@ class FetchPredictor(
     io.btb.up.target  := io.cr.target
 
     // Rollback pattern history if pc redirect prediction fails.
-    io.pht.res.en      := /*io.cr.en &&*/ io.cr.mispred
+    io.pht.res.en      := io.cr.en && io.cr.mispred
     io.pht.res.history := io.cr.fp_entry.history
 
     // Update bimodal counter if the instruction is branch.
@@ -361,7 +361,7 @@ class FetchPredictor(
     io.zbtb.up.target := io.cr.target
 
     // Rollback RAS index if pc redirect prediction fails.
-    io.ras.up.en    := /*io.cr.en &&*/ io.cr.mispred
+    io.ras.up.en    := io.cr.en && io.cr.mispred
 
     // Pop RAS after execution stage
     io.ras.ret2.en      := io.cr.en && io.cr.is_ret
