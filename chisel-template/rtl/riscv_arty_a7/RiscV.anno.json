@@ -3,37 +3,37 @@
     "class":"firrtl.transforms.DedupedResult",
     "original":"~RiscV|InstructionDecoder",
     "duplicate":"~RiscV|RiscV/core:Core/idu:InstructionDecoderUnit/decoder1:InstructionDecoder",
-    "index":0.3333333333333333
+    "index":0.3235294117647059
   },
   {
     "class":"firrtl.transforms.DedupedResult",
     "original":"~RiscV|InstructionDecoder_1",
     "duplicate":"~RiscV|RiscV/core:Core/idu:InstructionDecoderUnit/decoder2:InstructionDecoder",
-    "index":0.36363636363636365
+    "index":0.35294117647058826
   },
   {
     "class":"firrtl.transforms.DedupedResult",
     "original":"~RiscV|DCacheSram",
     "duplicate":"~RiscV|RiscV/dcache1:DCacheSram",
-    "index":0.5454545454545454
+    "index":0.5588235294117647
   },
   {
     "class":"firrtl.transforms.DedupedResult",
     "original":"~RiscV|DCacheSram_1",
     "duplicate":"~RiscV|RiscV/dcache2:DCacheSram",
-    "index":0.5757575757575758
+    "index":0.5882352941176471
   },
   {
     "class":"firrtl.transforms.DedupedResult",
     "original":"~RiscV|PHTMem",
     "duplicate":"~RiscV|RiscV/pht_lmem:PHTMem",
-    "index":0.6666666666666666
+    "index":0.6764705882352942
   },
   {
     "class":"firrtl.transforms.DedupedResult",
     "original":"~RiscV|PHTMem_1",
     "duplicate":"~RiscV|RiscV/pht_gmem:PHTMem",
-    "index":0.696969696969697
+    "index":0.7058823529411765
   },
   {
     "class":"firrtl.EmitCircuitAnnotation",

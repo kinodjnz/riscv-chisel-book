@@ -3,25 +3,25 @@
     "class":"firrtl.transforms.DedupedResult",
     "original":"~SimTop|InstructionDecoder",
     "duplicate":"~SimTop|SimTop/core:Core/idu:InstructionDecoderUnit/decoder1:InstructionDecoder",
-    "index":0.39285714285714285
+    "index":0.3793103448275862
   },
   {
     "class":"firrtl.transforms.DedupedResult",
     "original":"~SimTop|InstructionDecoder_1",
     "duplicate":"~SimTop|SimTop/core:Core/idu:InstructionDecoderUnit/decoder2:InstructionDecoder",
-    "index":0.42857142857142855
+    "index":0.41379310344827586
   },
   {
     "class":"firrtl.transforms.DedupedResult",
     "original":"~SimTop|MockPHTMem",
     "duplicate":"~SimTop|SimTop/pht_lmem:MockPHTMem",
-    "index":0.9285714285714286
+    "index":0.9310344827586207
   },
   {
     "class":"firrtl.transforms.DedupedResult",
     "original":"~SimTop|MockPHTMem_1",
     "duplicate":"~SimTop|SimTop/pht_gmem:MockPHTMem",
-    "index":0.9642857142857143
+    "index":0.9655172413793104
   },
   {
     "class":"firrtl.EmitCircuitAnnotation",

@@ -1200,104 +1200,104 @@ module Fetcher(
   reg [2:0] discard_enq; // @[src/main/scala/fpga/Fetch.scala 114:28]
   reg [2:0] discard_deq; // @[src/main/scala/fpga/Fetch.scala 115:28]
   reg  reg_addressed; // @[src/main/scala/fpga/Fetch.scala 125:30]
-  reg [30:0] reg_next_iaddr; // @[src/main/scala/fpga/Fetch.scala 128:36]
-  reg  reg_fix_zbp_miss1; // @[src/main/scala/fpga/Fetch.scala 132:36]
-  reg  reg_fix_zbp_miss2; // @[src/main/scala/fpga/Fetch.scala 133:36]
-  reg  reg_bp1_redirect_en; // @[src/main/scala/fpga/Fetch.scala 134:39]
-  reg  reg_bp1_target_changed; // @[src/main/scala/fpga/Fetch.scala 136:41]
-  reg [30:0] reg_fix_addr; // @[src/main/scala/fpga/Fetch.scala 137:36]
-  reg [2:0] reg_discard_enq; // @[src/main/scala/fpga/Fetch.scala 138:36]
-  reg  reg_is_dram; // @[src/main/scala/fpga/Fetch.scala 139:36]
-  wire  _invalidate_T = reg_fix_zbp_miss1 | reg_fix_zbp_miss2; // @[src/main/scala/fpga/Fetch.scala 143:48]
-  wire  invalidate = (reg_fix_zbp_miss1 | reg_fix_zbp_miss2) & reg_addressed; // @[src/main/scala/fpga/Fetch.scala 143:70]
-  wire  _bp1_redirect_en_T = ~invalidate; // @[src/main/scala/fpga/Fetch.scala 146:7]
-  wire  _bp1_redirect_en_T_2 = ~io_pr_bp0_en & io_pr_bp1_en; // @[src/main/scala/fpga/Fetch.scala 147:24]
-  wire  bp1_redirect_en = ~invalidate & _bp1_redirect_en_T_2; // @[src/main/scala/fpga/Fetch.scala 146:19]
-  wire  _bp1_cancel_redir_T_2 = io_pr_bp0_en & ~io_pr_bp1_en; // @[src/main/scala/fpga/Fetch.scala 151:23]
-  wire  bp1_cancel_redir = _bp1_redirect_en_T & _bp1_cancel_redir_T_2; // @[src/main/scala/fpga/Fetch.scala 150:19]
+  reg [30:0] reg_next_iaddr; // @[src/main/scala/fpga/Fetch.scala 128:41]
+  reg  reg_fix_zbp_miss1; // @[src/main/scala/fpga/Fetch.scala 132:41]
+  reg  reg_fix_zbp_miss2; // @[src/main/scala/fpga/Fetch.scala 133:41]
+  reg  reg_bp1_redirect_en; // @[src/main/scala/fpga/Fetch.scala 134:41]
+  reg  reg_bp1_target_changed; // @[src/main/scala/fpga/Fetch.scala 135:41]
+  reg [30:0] reg_fix_addr; // @[src/main/scala/fpga/Fetch.scala 136:41]
+  reg [2:0] reg_discard_enq; // @[src/main/scala/fpga/Fetch.scala 137:41]
+  reg  reg_is_dram; // @[src/main/scala/fpga/Fetch.scala 138:41]
+  wire  _invalidate_T = reg_fix_zbp_miss1 | reg_fix_zbp_miss2; // @[src/main/scala/fpga/Fetch.scala 142:48]
+  wire  invalidate = (reg_fix_zbp_miss1 | reg_fix_zbp_miss2) & reg_addressed; // @[src/main/scala/fpga/Fetch.scala 142:70]
+  wire  _bp1_redirect_en_T = ~invalidate; // @[src/main/scala/fpga/Fetch.scala 145:7]
+  wire  _bp1_redirect_en_T_2 = ~io_pr_bp0_en & io_pr_bp1_en; // @[src/main/scala/fpga/Fetch.scala 146:24]
+  wire  bp1_redirect_en = ~invalidate & _bp1_redirect_en_T_2; // @[src/main/scala/fpga/Fetch.scala 145:19]
+  wire  _bp1_cancel_redir_T_2 = io_pr_bp0_en & ~io_pr_bp1_en; // @[src/main/scala/fpga/Fetch.scala 150:23]
+  wire  bp1_cancel_redir = _bp1_redirect_en_T & _bp1_cancel_redir_T_2; // @[src/main/scala/fpga/Fetch.scala 149:19]
   wire  _bp1_target_changed_T_7 = io_pr_bp0_en & io_pr_bp1_en & (io_pr_bp0_addr[7:0] != io_pr_bp1_addr[7:0] |
-    io_pr_bp0_pos != io_pr_bp1_pos); // @[src/main/scala/fpga/Fetch.scala 155:39]
-  wire  bp1_target_changed = _bp1_redirect_en_T & _bp1_target_changed_T_7; // @[src/main/scala/fpga/Fetch.scala 154:19]
-  wire  zbp_miss1 = bp1_redirect_en | bp1_cancel_redir; // @[src/main/scala/fpga/Fetch.scala 157:37]
+    io_pr_bp0_pos != io_pr_bp1_pos); // @[src/main/scala/fpga/Fetch.scala 154:39]
+  wire  bp1_target_changed = _bp1_redirect_en_T & _bp1_target_changed_T_7; // @[src/main/scala/fpga/Fetch.scala 153:19]
+  wire  zbp_miss1 = bp1_redirect_en | bp1_cancel_redir; // @[src/main/scala/fpga/Fetch.scala 156:37]
   wire [30:0] _iaddr_T_1 = io_pr_bp0_en ? io_pr_bp0_addr : reg_next_iaddr; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
   wire [30:0] _iaddr_T_2 = _invalidate_T ? reg_fix_addr : _iaddr_T_1; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
   wire [30:0] iaddr = io_ft_flush_en ? io_ft_flush_iaddr : _iaddr_T_2; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
   wire [30:0] _reg_next_iaddr_T_1 = {iaddr[30:2],2'h0}; // @[src/main/scala/common/UIntExtension.scala 12:73]
-  wire [30:0] _reg_next_iaddr_T_3 = _reg_next_iaddr_T_1 + 31'h4; // @[src/main/scala/fpga/Fetch.scala 169:58]
-  wire  _fix_zbp_miss1_T = ~io_ft_flush_en; // @[src/main/scala/fpga/Fetch.scala 170:22]
-  wire  fix_zbp_miss1 = ~io_ft_flush_en & zbp_miss1; // @[src/main/scala/fpga/Fetch.scala 170:38]
-  wire  fix_zbp_miss2 = _fix_zbp_miss1_T & bp1_target_changed; // @[src/main/scala/fpga/Fetch.scala 171:38]
-  wire [2:0] count = addressing_ptr - read_ptr; // @[src/main/scala/fpga/Fetch.scala 180:32]
-  wire  has_space = ~count[2]; // @[src/main/scala/fpga/Fetch.scala 181:22]
+  wire [30:0] _reg_next_iaddr_T_3 = _reg_next_iaddr_T_1 + 31'h4; // @[src/main/scala/fpga/Fetch.scala 163:58]
+  wire  _fix_zbp_miss1_T = ~io_ft_flush_en; // @[src/main/scala/fpga/Fetch.scala 164:22]
+  wire  fix_zbp_miss1 = ~io_ft_flush_en & zbp_miss1; // @[src/main/scala/fpga/Fetch.scala 164:38]
+  wire  fix_zbp_miss2 = _fix_zbp_miss1_T & bp1_target_changed; // @[src/main/scala/fpga/Fetch.scala 165:38]
+  wire [2:0] count = addressing_ptr - read_ptr; // @[src/main/scala/fpga/Fetch.scala 173:32]
+  wire  has_space = ~count[2]; // @[src/main/scala/fpga/Fetch.scala 174:22]
   wire [31:0] _is_dram_T = {iaddr,1'h0}; // @[src/main/scala/common/UIntExtension.scala 10:33]
   wire  is_dram = _is_dram_T[31:28] == 4'h2; // @[src/main/scala/fpga/Fetch.scala 13:68]
-  wire  redirect_ready = ~(_invalidate_T | io_pr_bp0_en) | io_pr_redirect_ready; // @[src/main/scala/fpga/Fetch.scala 185:84]
-  wire  _T_1 = invalidate & _fix_zbp_miss1_T; // @[src/main/scala/fpga/Fetch.scala 187:22]
-  wire [2:0] _addressing_ptr_T_1 = addressing_ptr - 3'h1; // @[src/main/scala/fpga/Fetch.scala 188:40]
-  wire  _T_2 = ~is_dram; // @[src/main/scala/fpga/Fetch.scala 190:26]
-  wire  wait_for_dram = reg_is_dram & ~is_dram & discard_enq != discard_deq; // @[src/main/scala/fpga/Fetch.scala 190:35]
-  wire  _GEN_2 = wait_for_dram | is_dram; // @[src/main/scala/fpga/Fetch.scala 184:17 190:67 192:19]
-  wire  _io_ft_imem_en_T = has_space & redirect_ready; // @[src/main/scala/fpga/Fetch.scala 196:41]
-  wire  _io_ft_imem_en_T_1 = has_space & redirect_ready | io_ft_flush_en; // @[src/main/scala/fpga/Fetch.scala 196:60]
-  wire  _T_13 = ~_io_ft_imem_en_T & _fix_zbp_miss1_T | wait_for_dram | is_dram & ~io_ft_icache_addr_ready; // @[src/main/scala/fpga/Fetch.scala 205:80]
-  wire [2:0] _discard_enq_T_1 = discard_enq + 3'h1; // @[src/main/scala/fpga/Fetch.scala 212:38]
-  wire [2:0] _addressing_ptr_T_3 = addressing_ptr + 3'h1; // @[src/main/scala/fpga/Fetch.scala 216:42]
-  wire  _T_18 = ~reset; // @[src/main/scala/fpga/Fetch.scala 219:13]
-  wire [1:0] _T_21 = addressing_ptr[1:0] - 2'h1; // @[src/main/scala/fpga/Fetch.scala 223:52]
-  wire  _GEN_13 = io_ft_flush_en | discard_buf_0; // @[src/main/scala/fpga/Fetch.scala 222:27 225:24 113:28]
-  wire  _GEN_14 = io_ft_flush_en | discard_buf_1; // @[src/main/scala/fpga/Fetch.scala 222:27 225:24 113:28]
-  wire  _GEN_15 = io_ft_flush_en | discard_buf_2; // @[src/main/scala/fpga/Fetch.scala 222:27 225:24 113:28]
-  wire  _GEN_16 = io_ft_flush_en | discard_buf_3; // @[src/main/scala/fpga/Fetch.scala 222:27 225:24 113:28]
-  wire  _GEN_17 = io_ft_flush_en | discard_buf_4; // @[src/main/scala/fpga/Fetch.scala 222:27 225:24 113:28]
-  wire  _GEN_18 = io_ft_flush_en | discard_buf_5; // @[src/main/scala/fpga/Fetch.scala 222:27 225:24 113:28]
-  wire  _GEN_19 = io_ft_flush_en | discard_buf_6; // @[src/main/scala/fpga/Fetch.scala 222:27 225:24 113:28]
-  wire  _GEN_20 = io_ft_flush_en | discard_buf_7; // @[src/main/scala/fpga/Fetch.scala 222:27 225:24 113:28]
-  wire [1:0] ptr = _T_1 ? _addressing_ptr_T_1[1:0] : addressing_ptr[1:0]; // @[src/main/scala/fpga/Fetch.scala 229:18]
+  wire  redirect_ready = ~(_invalidate_T | io_pr_bp0_en) | io_pr_redirect_ready; // @[src/main/scala/fpga/Fetch.scala 178:84]
+  wire  _T_1 = invalidate & _fix_zbp_miss1_T; // @[src/main/scala/fpga/Fetch.scala 180:22]
+  wire [2:0] _addressing_ptr_T_1 = addressing_ptr - 3'h1; // @[src/main/scala/fpga/Fetch.scala 181:40]
+  wire  _T_2 = ~is_dram; // @[src/main/scala/fpga/Fetch.scala 183:26]
+  wire  wait_for_dram = reg_is_dram & ~is_dram & discard_enq != discard_deq; // @[src/main/scala/fpga/Fetch.scala 183:35]
+  wire  _GEN_2 = wait_for_dram | is_dram; // @[src/main/scala/fpga/Fetch.scala 177:17 183:67 185:19]
+  wire  _io_ft_imem_en_T = has_space & redirect_ready; // @[src/main/scala/fpga/Fetch.scala 189:41]
+  wire  _io_ft_imem_en_T_1 = has_space & redirect_ready | io_ft_flush_en; // @[src/main/scala/fpga/Fetch.scala 189:60]
+  wire  _T_13 = ~_io_ft_imem_en_T & _fix_zbp_miss1_T | wait_for_dram | is_dram & ~io_ft_icache_addr_ready; // @[src/main/scala/fpga/Fetch.scala 198:80]
+  wire [2:0] _discard_enq_T_1 = discard_enq + 3'h1; // @[src/main/scala/fpga/Fetch.scala 205:38]
+  wire [2:0] _addressing_ptr_T_3 = addressing_ptr + 3'h1; // @[src/main/scala/fpga/Fetch.scala 209:42]
+  wire  _T_18 = ~reset; // @[src/main/scala/fpga/Fetch.scala 212:13]
+  wire [1:0] _T_21 = addressing_ptr[1:0] - 2'h1; // @[src/main/scala/fpga/Fetch.scala 216:52]
+  wire  _GEN_13 = io_ft_flush_en | discard_buf_0; // @[src/main/scala/fpga/Fetch.scala 215:27 218:24 113:28]
+  wire  _GEN_14 = io_ft_flush_en | discard_buf_1; // @[src/main/scala/fpga/Fetch.scala 215:27 218:24 113:28]
+  wire  _GEN_15 = io_ft_flush_en | discard_buf_2; // @[src/main/scala/fpga/Fetch.scala 215:27 218:24 113:28]
+  wire  _GEN_16 = io_ft_flush_en | discard_buf_3; // @[src/main/scala/fpga/Fetch.scala 215:27 218:24 113:28]
+  wire  _GEN_17 = io_ft_flush_en | discard_buf_4; // @[src/main/scala/fpga/Fetch.scala 215:27 218:24 113:28]
+  wire  _GEN_18 = io_ft_flush_en | discard_buf_5; // @[src/main/scala/fpga/Fetch.scala 215:27 218:24 113:28]
+  wire  _GEN_19 = io_ft_flush_en | discard_buf_6; // @[src/main/scala/fpga/Fetch.scala 215:27 218:24 113:28]
+  wire  _GEN_20 = io_ft_flush_en | discard_buf_7; // @[src/main/scala/fpga/Fetch.scala 215:27 218:24 113:28]
+  wire [1:0] ptr = _T_1 ? _addressing_ptr_T_1[1:0] : addressing_ptr[1:0]; // @[src/main/scala/fpga/Fetch.scala 222:18]
   wire [1:0] forward_i0 = iaddr[1:0]; // @[src/main/scala/common/UIntExtension.scala 14:34]
-  wire  _discard_buf_T = invalidate | io_ft_flush_en; // @[src/main/scala/fpga/Fetch.scala 243:50]
-  wire  _GEN_27 = 3'h0 == reg_discard_enq ? invalidate | io_ft_flush_en : _GEN_13; // @[src/main/scala/fpga/Fetch.scala 243:{36,36}]
-  wire  _GEN_28 = 3'h1 == reg_discard_enq ? invalidate | io_ft_flush_en : _GEN_14; // @[src/main/scala/fpga/Fetch.scala 243:{36,36}]
-  wire  _GEN_29 = 3'h2 == reg_discard_enq ? invalidate | io_ft_flush_en : _GEN_15; // @[src/main/scala/fpga/Fetch.scala 243:{36,36}]
-  wire  _GEN_30 = 3'h3 == reg_discard_enq ? invalidate | io_ft_flush_en : _GEN_16; // @[src/main/scala/fpga/Fetch.scala 243:{36,36}]
-  wire  _GEN_31 = 3'h4 == reg_discard_enq ? invalidate | io_ft_flush_en : _GEN_17; // @[src/main/scala/fpga/Fetch.scala 243:{36,36}]
-  wire  _GEN_32 = 3'h5 == reg_discard_enq ? invalidate | io_ft_flush_en : _GEN_18; // @[src/main/scala/fpga/Fetch.scala 243:{36,36}]
-  wire  _GEN_33 = 3'h6 == reg_discard_enq ? invalidate | io_ft_flush_en : _GEN_19; // @[src/main/scala/fpga/Fetch.scala 243:{36,36}]
-  wire  _GEN_34 = 3'h7 == reg_discard_enq ? invalidate | io_ft_flush_en : _GEN_20; // @[src/main/scala/fpga/Fetch.scala 243:{36,36}]
-  wire  _GEN_35 = reg_addressed ? _GEN_27 : _GEN_13; // @[src/main/scala/fpga/Fetch.scala 242:26]
-  wire  _GEN_36 = reg_addressed ? _GEN_28 : _GEN_14; // @[src/main/scala/fpga/Fetch.scala 242:26]
-  wire  _GEN_37 = reg_addressed ? _GEN_29 : _GEN_15; // @[src/main/scala/fpga/Fetch.scala 242:26]
-  wire  _GEN_38 = reg_addressed ? _GEN_30 : _GEN_16; // @[src/main/scala/fpga/Fetch.scala 242:26]
-  wire  _GEN_39 = reg_addressed ? _GEN_31 : _GEN_17; // @[src/main/scala/fpga/Fetch.scala 242:26]
-  wire  _GEN_40 = reg_addressed ? _GEN_32 : _GEN_18; // @[src/main/scala/fpga/Fetch.scala 242:26]
-  wire  _GEN_41 = reg_addressed ? _GEN_33 : _GEN_19; // @[src/main/scala/fpga/Fetch.scala 242:26]
-  wire  _GEN_42 = reg_addressed ? _GEN_34 : _GEN_20; // @[src/main/scala/fpga/Fetch.scala 242:26]
-  wire [63:0] idata = io_ft_imem_valid ? io_ft_imem_inst : io_ft_icache_idata; // @[src/main/scala/fpga/Fetch.scala 271:20]
-  wire  _discard_T_1 = reg_addressed & reg_discard_enq == discard_deq; // @[src/main/scala/fpga/Fetch.scala 278:26]
-  wire  _GEN_51 = 3'h1 == discard_deq ? discard_buf_1 : discard_buf_0; // @[src/main/scala/fpga/Fetch.scala 277:{22,22}]
-  wire  _GEN_52 = 3'h2 == discard_deq ? discard_buf_2 : _GEN_51; // @[src/main/scala/fpga/Fetch.scala 277:{22,22}]
-  wire  _GEN_53 = 3'h3 == discard_deq ? discard_buf_3 : _GEN_52; // @[src/main/scala/fpga/Fetch.scala 277:{22,22}]
-  wire  _GEN_54 = 3'h4 == discard_deq ? discard_buf_4 : _GEN_53; // @[src/main/scala/fpga/Fetch.scala 277:{22,22}]
-  wire  _GEN_55 = 3'h5 == discard_deq ? discard_buf_5 : _GEN_54; // @[src/main/scala/fpga/Fetch.scala 277:{22,22}]
-  wire  _GEN_56 = 3'h6 == discard_deq ? discard_buf_6 : _GEN_55; // @[src/main/scala/fpga/Fetch.scala 277:{22,22}]
-  wire  _GEN_57 = 3'h7 == discard_deq ? discard_buf_7 : _GEN_56; // @[src/main/scala/fpga/Fetch.scala 277:{22,22}]
-  wire  discard = _discard_T_1 ? _discard_buf_T : _GEN_57; // @[src/main/scala/fpga/Fetch.scala 277:22]
-  wire  _T_70 = ~discard; // @[src/main/scala/fpga/Fetch.scala 284:29]
-  wire  _T_71 = io_pr_bp1_en & ~discard; // @[src/main/scala/fpga/Fetch.scala 284:26]
-  wire [1:0] _T_72 = io_pr_bp1_en ? io_pr_bp1_pos : 2'h3; // @[src/main/scala/fpga/Fetch.scala 287:45]
-  wire  _T_78 = io_ft_imem_valid | io_ft_icache_idata_valid; // @[src/main/scala/fpga/Fetch.scala 294:28]
-  wire [2:0] _discard_deq_T_1 = discard_deq + 3'h1; // @[src/main/scala/fpga/Fetch.scala 295:34]
-  wire [2:0] _fetch_ptr_T_1 = fetch_ptr + 3'h1; // @[src/main/scala/fpga/Fetch.scala 297:32]
-  wire [31:0] _T_83 = {fetch_buf_iaddr_MPORT_12_data,1'h0}; // @[src/main/scala/fpga/Fetch.scala 301:21]
-  wire  _GEN_90 = (io_ft_imem_valid | io_ft_icache_idata_valid) & _T_70; // @[src/main/scala/fpga/Fetch.scala 108:22 294:57]
-  reg [1:0] reg_i0; // @[src/main/scala/fpga/Fetch.scala 312:25]
-  reg  reg_reset_i0; // @[src/main/scala/fpga/Fetch.scala 313:31]
-  wire [2:0] count_1 = fetch_ptr - read_ptr; // @[src/main/scala/fpga/Fetch.scala 315:27]
-  wire [1:0] sat_count = count_1 < 3'h2 ? count_1[1:0] : 2'h2; // @[src/main/scala/fpga/Fetch.scala 316:24]
-  wire [2:0] _end_of_iblocks_T_1 = {{1'd0}, read_ptr[1:0]}; // @[src/main/scala/fpga/Fetch.scala 318:86]
-  wire [2:0] _end_of_iblock_T = {1'h1,fetch_buf_end_of_iblock_end_of_iblocks_MPORT_1_data}; // @[src/main/scala/fpga/Fetch.scala 320:51]
-  wire [2:0] _end_of_iblock_T_1 = {1'h0,fetch_buf_end_of_iblock_end_of_iblocks_MPORT_data}; // @[src/main/scala/fpga/Fetch.scala 320:82]
-  wire [2:0] end_of_iblock = fetch_buf_iblock_cont_iblock_cont_MPORT_data ? _end_of_iblock_T : _end_of_iblock_T_1; // @[src/main/scala/fpga/Fetch.scala 320:28]
-  wire [111:0] _idatas_T_1 = {fetch_buf_idata_idata1_MPORT_data[47:0],fetch_buf_idata_idata0_MPORT_data}; // @[src/main/scala/fpga/Fetch.scala 324:61]
+  wire  _discard_buf_T = invalidate | io_ft_flush_en; // @[src/main/scala/fpga/Fetch.scala 236:50]
+  wire  _GEN_27 = 3'h0 == reg_discard_enq ? invalidate | io_ft_flush_en : _GEN_13; // @[src/main/scala/fpga/Fetch.scala 236:{36,36}]
+  wire  _GEN_28 = 3'h1 == reg_discard_enq ? invalidate | io_ft_flush_en : _GEN_14; // @[src/main/scala/fpga/Fetch.scala 236:{36,36}]
+  wire  _GEN_29 = 3'h2 == reg_discard_enq ? invalidate | io_ft_flush_en : _GEN_15; // @[src/main/scala/fpga/Fetch.scala 236:{36,36}]
+  wire  _GEN_30 = 3'h3 == reg_discard_enq ? invalidate | io_ft_flush_en : _GEN_16; // @[src/main/scala/fpga/Fetch.scala 236:{36,36}]
+  wire  _GEN_31 = 3'h4 == reg_discard_enq ? invalidate | io_ft_flush_en : _GEN_17; // @[src/main/scala/fpga/Fetch.scala 236:{36,36}]
+  wire  _GEN_32 = 3'h5 == reg_discard_enq ? invalidate | io_ft_flush_en : _GEN_18; // @[src/main/scala/fpga/Fetch.scala 236:{36,36}]
+  wire  _GEN_33 = 3'h6 == reg_discard_enq ? invalidate | io_ft_flush_en : _GEN_19; // @[src/main/scala/fpga/Fetch.scala 236:{36,36}]
+  wire  _GEN_34 = 3'h7 == reg_discard_enq ? invalidate | io_ft_flush_en : _GEN_20; // @[src/main/scala/fpga/Fetch.scala 236:{36,36}]
+  wire  _GEN_35 = reg_addressed ? _GEN_27 : _GEN_13; // @[src/main/scala/fpga/Fetch.scala 235:26]
+  wire  _GEN_36 = reg_addressed ? _GEN_28 : _GEN_14; // @[src/main/scala/fpga/Fetch.scala 235:26]
+  wire  _GEN_37 = reg_addressed ? _GEN_29 : _GEN_15; // @[src/main/scala/fpga/Fetch.scala 235:26]
+  wire  _GEN_38 = reg_addressed ? _GEN_30 : _GEN_16; // @[src/main/scala/fpga/Fetch.scala 235:26]
+  wire  _GEN_39 = reg_addressed ? _GEN_31 : _GEN_17; // @[src/main/scala/fpga/Fetch.scala 235:26]
+  wire  _GEN_40 = reg_addressed ? _GEN_32 : _GEN_18; // @[src/main/scala/fpga/Fetch.scala 235:26]
+  wire  _GEN_41 = reg_addressed ? _GEN_33 : _GEN_19; // @[src/main/scala/fpga/Fetch.scala 235:26]
+  wire  _GEN_42 = reg_addressed ? _GEN_34 : _GEN_20; // @[src/main/scala/fpga/Fetch.scala 235:26]
+  wire [63:0] idata = io_ft_imem_valid ? io_ft_imem_inst : io_ft_icache_idata; // @[src/main/scala/fpga/Fetch.scala 264:20]
+  wire  _discard_T_1 = reg_addressed & reg_discard_enq == discard_deq; // @[src/main/scala/fpga/Fetch.scala 271:26]
+  wire  _GEN_51 = 3'h1 == discard_deq ? discard_buf_1 : discard_buf_0; // @[src/main/scala/fpga/Fetch.scala 270:{22,22}]
+  wire  _GEN_52 = 3'h2 == discard_deq ? discard_buf_2 : _GEN_51; // @[src/main/scala/fpga/Fetch.scala 270:{22,22}]
+  wire  _GEN_53 = 3'h3 == discard_deq ? discard_buf_3 : _GEN_52; // @[src/main/scala/fpga/Fetch.scala 270:{22,22}]
+  wire  _GEN_54 = 3'h4 == discard_deq ? discard_buf_4 : _GEN_53; // @[src/main/scala/fpga/Fetch.scala 270:{22,22}]
+  wire  _GEN_55 = 3'h5 == discard_deq ? discard_buf_5 : _GEN_54; // @[src/main/scala/fpga/Fetch.scala 270:{22,22}]
+  wire  _GEN_56 = 3'h6 == discard_deq ? discard_buf_6 : _GEN_55; // @[src/main/scala/fpga/Fetch.scala 270:{22,22}]
+  wire  _GEN_57 = 3'h7 == discard_deq ? discard_buf_7 : _GEN_56; // @[src/main/scala/fpga/Fetch.scala 270:{22,22}]
+  wire  discard = _discard_T_1 ? _discard_buf_T : _GEN_57; // @[src/main/scala/fpga/Fetch.scala 270:22]
+  wire  _T_70 = ~discard; // @[src/main/scala/fpga/Fetch.scala 277:29]
+  wire  _T_71 = io_pr_bp1_en & ~discard; // @[src/main/scala/fpga/Fetch.scala 277:26]
+  wire [1:0] _T_72 = io_pr_bp1_en ? io_pr_bp1_pos : 2'h3; // @[src/main/scala/fpga/Fetch.scala 280:45]
+  wire  _T_78 = io_ft_imem_valid | io_ft_icache_idata_valid; // @[src/main/scala/fpga/Fetch.scala 287:28]
+  wire [2:0] _discard_deq_T_1 = discard_deq + 3'h1; // @[src/main/scala/fpga/Fetch.scala 288:34]
+  wire [2:0] _fetch_ptr_T_1 = fetch_ptr + 3'h1; // @[src/main/scala/fpga/Fetch.scala 290:32]
+  wire [31:0] _T_83 = {fetch_buf_iaddr_MPORT_12_data,1'h0}; // @[src/main/scala/fpga/Fetch.scala 294:21]
+  wire  _GEN_90 = (io_ft_imem_valid | io_ft_icache_idata_valid) & _T_70; // @[src/main/scala/fpga/Fetch.scala 108:22 287:57]
+  reg [1:0] reg_i0; // @[src/main/scala/fpga/Fetch.scala 305:25]
+  reg  reg_reset_i0; // @[src/main/scala/fpga/Fetch.scala 306:31]
+  wire [2:0] count_1 = fetch_ptr - read_ptr; // @[src/main/scala/fpga/Fetch.scala 308:27]
+  wire [1:0] sat_count = count_1 < 3'h2 ? count_1[1:0] : 2'h2; // @[src/main/scala/fpga/Fetch.scala 309:24]
+  wire [2:0] _end_of_iblocks_T_1 = {{1'd0}, read_ptr[1:0]}; // @[src/main/scala/fpga/Fetch.scala 311:86]
+  wire [2:0] _end_of_iblock_T = {1'h1,fetch_buf_end_of_iblock_end_of_iblocks_MPORT_1_data}; // @[src/main/scala/fpga/Fetch.scala 313:51]
+  wire [2:0] _end_of_iblock_T_1 = {1'h0,fetch_buf_end_of_iblock_end_of_iblocks_MPORT_data}; // @[src/main/scala/fpga/Fetch.scala 313:82]
+  wire [2:0] end_of_iblock = fetch_buf_iblock_cont_iblock_cont_MPORT_data ? _end_of_iblock_T : _end_of_iblock_T_1; // @[src/main/scala/fpga/Fetch.scala 313:28]
+  wire [111:0] _idatas_T_1 = {fetch_buf_idata_idata1_MPORT_data[47:0],fetch_buf_idata_idata0_MPORT_data}; // @[src/main/scala/fpga/Fetch.scala 317:61]
   wire [15:0] idatas_0 = _idatas_T_1[15:0]; // @[src/main/scala/common/UIntExtension.scala 16:100]
   wire [15:0] idatas_1 = _idatas_T_1[31:16]; // @[src/main/scala/common/UIntExtension.scala 16:100]
   wire [15:0] idatas_2 = _idatas_T_1[47:32]; // @[src/main/scala/common/UIntExtension.scala 16:100]
@@ -1305,140 +1305,140 @@ module Fetcher(
   wire [15:0] idatas_4 = _idatas_T_1[79:64]; // @[src/main/scala/common/UIntExtension.scala 16:100]
   wire [15:0] idatas_5 = _idatas_T_1[95:80]; // @[src/main/scala/common/UIntExtension.scala 16:100]
   wire [15:0] idatas_6 = _idatas_T_1[111:96]; // @[src/main/scala/common/UIntExtension.scala 16:100]
-  wire  is_halfs_0 = idatas_0[1:0] != 2'h3; // @[src/main/scala/fpga/Fetch.scala 325:62]
-  wire  is_halfs_1 = idatas_1[1:0] != 2'h3; // @[src/main/scala/fpga/Fetch.scala 325:62]
-  wire  is_halfs_2 = idatas_2[1:0] != 2'h3; // @[src/main/scala/fpga/Fetch.scala 325:62]
-  wire  is_halfs_3 = idatas_3[1:0] != 2'h3; // @[src/main/scala/fpga/Fetch.scala 325:62]
-  wire  is_halfs_4 = idatas_4[1:0] != 2'h3; // @[src/main/scala/fpga/Fetch.scala 325:62]
-  wire  is_halfs_5 = idatas_5[1:0] != 2'h3; // @[src/main/scala/fpga/Fetch.scala 325:62]
+  wire  is_halfs_0 = idatas_0[1:0] != 2'h3; // @[src/main/scala/fpga/Fetch.scala 318:62]
+  wire  is_halfs_1 = idatas_1[1:0] != 2'h3; // @[src/main/scala/fpga/Fetch.scala 318:62]
+  wire  is_halfs_2 = idatas_2[1:0] != 2'h3; // @[src/main/scala/fpga/Fetch.scala 318:62]
+  wire  is_halfs_3 = idatas_3[1:0] != 2'h3; // @[src/main/scala/fpga/Fetch.scala 318:62]
+  wire  is_halfs_4 = idatas_4[1:0] != 2'h3; // @[src/main/scala/fpga/Fetch.scala 318:62]
+  wire  is_halfs_5 = idatas_5[1:0] != 2'h3; // @[src/main/scala/fpga/Fetch.scala 318:62]
   wire [3:0] _redir_oh_T = 4'h1 << fetch_buf_end_of_iblock_end_of_iblocks_MPORT_1_data; // @[src/main/scala/chisel3/util/OneHot.scala 58:35]
   wire [3:0] _redir_oh_T_1 = 4'h1 << fetch_buf_end_of_iblock_end_of_iblocks_MPORT_data; // @[src/main/scala/chisel3/util/OneHot.scala 58:35]
-  wire [3:0] _redir_oh_T_2 = fetch_buf_iblock_cont_iblock_cont_MPORT_data ? 4'h0 : _redir_oh_T_1; // @[src/main/scala/fpga/Fetch.scala 330:54]
-  wire [7:0] redir_oh = {_redir_oh_T,_redir_oh_T_2}; // @[src/main/scala/fpga/Fetch.scala 330:48]
-  wire [2:0] i0 = {1'h0,reg_i0}; // @[src/main/scala/fpga/Fetch.scala 332:23]
-  wire [2:0] i1 = i0 + 3'h1; // @[src/main/scala/fpga/Fetch.scala 333:17]
-  wire [2:0] i2 = i0 + 3'h2; // @[src/main/scala/fpga/Fetch.scala 334:17]
-  wire [2:0] i3 = i0 + 3'h3; // @[src/main/scala/fpga/Fetch.scala 335:17]
-  wire  _GEN_93 = 3'h1 == i0 ? is_halfs_1 : is_halfs_0; // @[src/main/scala/fpga/Fetch.scala 337:{25,25}]
-  wire  _GEN_94 = 3'h2 == i0 ? is_halfs_2 : _GEN_93; // @[src/main/scala/fpga/Fetch.scala 337:{25,25}]
-  wire  _GEN_95 = 3'h3 == i0 ? is_halfs_3 : _GEN_94; // @[src/main/scala/fpga/Fetch.scala 337:{25,25}]
-  wire  _GEN_96 = 3'h4 == i0 ? is_halfs_4 : _GEN_95; // @[src/main/scala/fpga/Fetch.scala 337:{25,25}]
-  wire  _GEN_97 = 3'h5 == i0 ? is_halfs_5 : _GEN_96; // @[src/main/scala/fpga/Fetch.scala 337:{25,25}]
-  wire [2:0] inst1_past = _GEN_97 ? i1 : i2; // @[src/main/scala/fpga/Fetch.scala 337:25]
-  wire [2:0] inst1_end = _GEN_97 ? i0 : i1; // @[src/main/scala/fpga/Fetch.scala 338:25]
-  wire  _GEN_99 = 3'h1 == i1 ? is_halfs_1 : is_halfs_0; // @[src/main/scala/fpga/Fetch.scala 339:{25,25}]
-  wire  _GEN_100 = 3'h2 == i1 ? is_halfs_2 : _GEN_99; // @[src/main/scala/fpga/Fetch.scala 339:{25,25}]
-  wire  _GEN_101 = 3'h3 == i1 ? is_halfs_3 : _GEN_100; // @[src/main/scala/fpga/Fetch.scala 339:{25,25}]
-  wire  _GEN_102 = 3'h4 == i1 ? is_halfs_4 : _GEN_101; // @[src/main/scala/fpga/Fetch.scala 339:{25,25}]
-  wire  _GEN_103 = 3'h5 == i1 ? is_halfs_5 : _GEN_102; // @[src/main/scala/fpga/Fetch.scala 339:{25,25}]
-  wire  _GEN_105 = 3'h1 == i2 ? is_halfs_1 : is_halfs_0; // @[src/main/scala/fpga/Fetch.scala 339:{25,25}]
-  wire  _GEN_106 = 3'h2 == i2 ? is_halfs_2 : _GEN_105; // @[src/main/scala/fpga/Fetch.scala 339:{25,25}]
-  wire  _GEN_107 = 3'h3 == i2 ? is_halfs_3 : _GEN_106; // @[src/main/scala/fpga/Fetch.scala 339:{25,25}]
-  wire  _GEN_108 = 3'h4 == i2 ? is_halfs_4 : _GEN_107; // @[src/main/scala/fpga/Fetch.scala 339:{25,25}]
-  wire  _GEN_109 = 3'h5 == i2 ? is_halfs_5 : _GEN_108; // @[src/main/scala/fpga/Fetch.scala 339:{25,25}]
-  wire  inst2_half = _GEN_97 ? _GEN_103 : _GEN_109; // @[src/main/scala/fpga/Fetch.scala 339:25]
-  wire [1:0] _inst2_past_T = inst2_half ? 2'h1 : 2'h2; // @[src/main/scala/fpga/Fetch.scala 340:38]
-  wire [2:0] _GEN_180 = {{1'd0}, _inst2_past_T}; // @[src/main/scala/fpga/Fetch.scala 340:33]
-  wire [2:0] inst2_past = inst1_past + _GEN_180; // @[src/main/scala/fpga/Fetch.scala 340:33]
-  wire [2:0] _inst2_end_T = _GEN_103 ? i1 : i2; // @[src/main/scala/fpga/Fetch.scala 342:10]
-  wire [2:0] _inst2_end_T_1 = _GEN_109 ? i2 : i3; // @[src/main/scala/fpga/Fetch.scala 343:10]
-  wire [2:0] inst2_end = _GEN_97 ? _inst2_end_T : _inst2_end_T_1; // @[src/main/scala/fpga/Fetch.scala 341:24]
-  wire  _inst1_valid_T = inst1_end <= end_of_iblock; // @[src/main/scala/fpga/Fetch.scala 345:41]
-  wire  _inst1_valid_T_2 = io_ft_flush_en | sat_count == 2'h0; // @[src/main/scala/fpga/Fetch.scala 346:23]
-  wire  _inst1_valid_T_3 = sat_count == 2'h1; // @[src/main/scala/fpga/Fetch.scala 347:18]
-  wire [2:0] _GEN_181 = {{1'd0}, fetch_buf_end_of_iblock_end_of_iblocks_MPORT_data}; // @[src/main/scala/fpga/Fetch.scala 347:59]
-  wire  _inst1_valid_T_4 = inst1_end <= _GEN_181; // @[src/main/scala/fpga/Fetch.scala 347:59]
+  wire [3:0] _redir_oh_T_2 = fetch_buf_iblock_cont_iblock_cont_MPORT_data ? 4'h0 : _redir_oh_T_1; // @[src/main/scala/fpga/Fetch.scala 323:54]
+  wire [7:0] redir_oh = {_redir_oh_T,_redir_oh_T_2}; // @[src/main/scala/fpga/Fetch.scala 323:48]
+  wire [2:0] i0 = {1'h0,reg_i0}; // @[src/main/scala/fpga/Fetch.scala 325:23]
+  wire [2:0] i1 = i0 + 3'h1; // @[src/main/scala/fpga/Fetch.scala 326:17]
+  wire [2:0] i2 = i0 + 3'h2; // @[src/main/scala/fpga/Fetch.scala 327:17]
+  wire [2:0] i3 = i0 + 3'h3; // @[src/main/scala/fpga/Fetch.scala 328:17]
+  wire  _GEN_93 = 3'h1 == i0 ? is_halfs_1 : is_halfs_0; // @[src/main/scala/fpga/Fetch.scala 330:{25,25}]
+  wire  _GEN_94 = 3'h2 == i0 ? is_halfs_2 : _GEN_93; // @[src/main/scala/fpga/Fetch.scala 330:{25,25}]
+  wire  _GEN_95 = 3'h3 == i0 ? is_halfs_3 : _GEN_94; // @[src/main/scala/fpga/Fetch.scala 330:{25,25}]
+  wire  _GEN_96 = 3'h4 == i0 ? is_halfs_4 : _GEN_95; // @[src/main/scala/fpga/Fetch.scala 330:{25,25}]
+  wire  _GEN_97 = 3'h5 == i0 ? is_halfs_5 : _GEN_96; // @[src/main/scala/fpga/Fetch.scala 330:{25,25}]
+  wire [2:0] inst1_past = _GEN_97 ? i1 : i2; // @[src/main/scala/fpga/Fetch.scala 330:25]
+  wire [2:0] inst1_end = _GEN_97 ? i0 : i1; // @[src/main/scala/fpga/Fetch.scala 331:25]
+  wire  _GEN_99 = 3'h1 == i1 ? is_halfs_1 : is_halfs_0; // @[src/main/scala/fpga/Fetch.scala 332:{25,25}]
+  wire  _GEN_100 = 3'h2 == i1 ? is_halfs_2 : _GEN_99; // @[src/main/scala/fpga/Fetch.scala 332:{25,25}]
+  wire  _GEN_101 = 3'h3 == i1 ? is_halfs_3 : _GEN_100; // @[src/main/scala/fpga/Fetch.scala 332:{25,25}]
+  wire  _GEN_102 = 3'h4 == i1 ? is_halfs_4 : _GEN_101; // @[src/main/scala/fpga/Fetch.scala 332:{25,25}]
+  wire  _GEN_103 = 3'h5 == i1 ? is_halfs_5 : _GEN_102; // @[src/main/scala/fpga/Fetch.scala 332:{25,25}]
+  wire  _GEN_105 = 3'h1 == i2 ? is_halfs_1 : is_halfs_0; // @[src/main/scala/fpga/Fetch.scala 332:{25,25}]
+  wire  _GEN_106 = 3'h2 == i2 ? is_halfs_2 : _GEN_105; // @[src/main/scala/fpga/Fetch.scala 332:{25,25}]
+  wire  _GEN_107 = 3'h3 == i2 ? is_halfs_3 : _GEN_106; // @[src/main/scala/fpga/Fetch.scala 332:{25,25}]
+  wire  _GEN_108 = 3'h4 == i2 ? is_halfs_4 : _GEN_107; // @[src/main/scala/fpga/Fetch.scala 332:{25,25}]
+  wire  _GEN_109 = 3'h5 == i2 ? is_halfs_5 : _GEN_108; // @[src/main/scala/fpga/Fetch.scala 332:{25,25}]
+  wire  inst2_half = _GEN_97 ? _GEN_103 : _GEN_109; // @[src/main/scala/fpga/Fetch.scala 332:25]
+  wire [1:0] _inst2_past_T = inst2_half ? 2'h1 : 2'h2; // @[src/main/scala/fpga/Fetch.scala 333:38]
+  wire [2:0] _GEN_180 = {{1'd0}, _inst2_past_T}; // @[src/main/scala/fpga/Fetch.scala 333:33]
+  wire [2:0] inst2_past = inst1_past + _GEN_180; // @[src/main/scala/fpga/Fetch.scala 333:33]
+  wire [2:0] _inst2_end_T = _GEN_103 ? i1 : i2; // @[src/main/scala/fpga/Fetch.scala 335:10]
+  wire [2:0] _inst2_end_T_1 = _GEN_109 ? i2 : i3; // @[src/main/scala/fpga/Fetch.scala 336:10]
+  wire [2:0] inst2_end = _GEN_97 ? _inst2_end_T : _inst2_end_T_1; // @[src/main/scala/fpga/Fetch.scala 334:24]
+  wire  _inst1_valid_T = inst1_end <= end_of_iblock; // @[src/main/scala/fpga/Fetch.scala 338:41]
+  wire  _inst1_valid_T_2 = io_ft_flush_en | sat_count == 2'h0; // @[src/main/scala/fpga/Fetch.scala 339:23]
+  wire  _inst1_valid_T_3 = sat_count == 2'h1; // @[src/main/scala/fpga/Fetch.scala 340:18]
+  wire [2:0] _GEN_181 = {{1'd0}, fetch_buf_end_of_iblock_end_of_iblocks_MPORT_data}; // @[src/main/scala/fpga/Fetch.scala 340:59]
+  wire  _inst1_valid_T_4 = inst1_end <= _GEN_181; // @[src/main/scala/fpga/Fetch.scala 340:59]
   wire  _inst1_valid_T_5 = _inst1_valid_T_3 ? _inst1_valid_T_4 : _inst1_valid_T; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
   wire  inst1_valid = _inst1_valid_T_2 ? 1'h0 : _inst1_valid_T_5; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
-  wire  _inst2_valid_T = inst2_end <= end_of_iblock; // @[src/main/scala/fpga/Fetch.scala 349:41]
-  wire  _inst2_valid_T_4 = inst2_end <= _GEN_181; // @[src/main/scala/fpga/Fetch.scala 351:59]
+  wire  _inst2_valid_T = inst2_end <= end_of_iblock; // @[src/main/scala/fpga/Fetch.scala 342:41]
+  wire  _inst2_valid_T_4 = inst2_end <= _GEN_181; // @[src/main/scala/fpga/Fetch.scala 344:59]
   wire  _inst2_valid_T_5 = _inst1_valid_T_3 ? _inst2_valid_T_4 : _inst2_valid_T; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
   wire  inst2_valid = _inst1_valid_T_2 ? 1'h0 : _inst2_valid_T_5; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
   wire [30:0] iaddr0 = {fetch_buf_iaddr_iaddrs_MPORT_data[30:2],reg_i0}; // @[src/main/scala/common/UIntExtension.scala 13:89]
-  wire  inst1_bpfailed = _fix_zbp_miss1_T & sat_count != 2'h0 & ~_GEN_97 & end_of_iblock == i0; // @[src/main/scala/fpga/Fetch.scala 354:78]
-  wire [15:0] _GEN_111 = 3'h1 == i1 ? idatas_1 : idatas_0; // @[src/main/scala/fpga/Fetch.scala 356:{42,42}]
-  wire [15:0] _GEN_112 = 3'h2 == i1 ? idatas_2 : _GEN_111; // @[src/main/scala/fpga/Fetch.scala 356:{42,42}]
-  wire [15:0] _GEN_113 = 3'h3 == i1 ? idatas_3 : _GEN_112; // @[src/main/scala/fpga/Fetch.scala 356:{42,42}]
-  wire [15:0] _GEN_114 = 3'h4 == i1 ? idatas_4 : _GEN_113; // @[src/main/scala/fpga/Fetch.scala 356:{42,42}]
-  wire [15:0] _GEN_115 = 3'h5 == i1 ? idatas_5 : _GEN_114; // @[src/main/scala/fpga/Fetch.scala 356:{42,42}]
-  wire [15:0] _GEN_116 = 3'h6 == i1 ? idatas_6 : _GEN_115; // @[src/main/scala/fpga/Fetch.scala 356:{42,42}]
-  wire [15:0] _GEN_118 = 3'h1 == i0 ? idatas_1 : idatas_0; // @[src/main/scala/fpga/Fetch.scala 356:{42,42}]
-  wire [15:0] _GEN_119 = 3'h2 == i0 ? idatas_2 : _GEN_118; // @[src/main/scala/fpga/Fetch.scala 356:{42,42}]
-  wire [15:0] _GEN_120 = 3'h3 == i0 ? idatas_3 : _GEN_119; // @[src/main/scala/fpga/Fetch.scala 356:{42,42}]
-  wire [15:0] _GEN_121 = 3'h4 == i0 ? idatas_4 : _GEN_120; // @[src/main/scala/fpga/Fetch.scala 356:{42,42}]
-  wire [15:0] _GEN_122 = 3'h5 == i0 ? idatas_5 : _GEN_121; // @[src/main/scala/fpga/Fetch.scala 356:{42,42}]
-  wire [15:0] _GEN_123 = 3'h6 == i0 ? idatas_6 : _GEN_122; // @[src/main/scala/fpga/Fetch.scala 356:{42,42}]
-  wire [7:0] _io_ft_inst1_redirected_T = redir_oh >> inst1_end; // @[src/main/scala/fpga/Fetch.scala 359:39]
-  wire [1:0] bp_entries_0_lcnt = fetch_buf_bp_entries_0_lcnt_bpe0_MPORT_data; // @[src/main/scala/fpga/Fetch.scala 328:{29,29}]
-  wire [1:0] bp_entries_1_lcnt = fetch_buf_bp_entries_1_lcnt_bpe0_MPORT_data; // @[src/main/scala/fpga/Fetch.scala 328:{29,29}]
-  wire [1:0] _GEN_125 = 3'h1 == inst1_end ? bp_entries_1_lcnt : bp_entries_0_lcnt; // @[src/main/scala/fpga/Fetch.scala 360:{28,28}]
-  wire [1:0] bp_entries_2_lcnt = fetch_buf_bp_entries_2_lcnt_bpe0_MPORT_data; // @[src/main/scala/fpga/Fetch.scala 328:{29,29}]
-  wire [1:0] _GEN_126 = 3'h2 == inst1_end ? bp_entries_2_lcnt : _GEN_125; // @[src/main/scala/fpga/Fetch.scala 360:{28,28}]
-  wire [1:0] bp_entries_3_lcnt = fetch_buf_bp_entries_3_lcnt_bpe0_MPORT_data; // @[src/main/scala/fpga/Fetch.scala 328:{29,29}]
-  wire [1:0] _GEN_127 = 3'h3 == inst1_end ? bp_entries_3_lcnt : _GEN_126; // @[src/main/scala/fpga/Fetch.scala 360:{28,28}]
-  wire [1:0] bp_entries_4_lcnt = fetch_buf_bp_entries_0_lcnt_bpe1_MPORT_data; // @[src/main/scala/fpga/Fetch.scala 328:{29,29}]
-  wire [1:0] _GEN_128 = 3'h4 == inst1_end ? bp_entries_4_lcnt : _GEN_127; // @[src/main/scala/fpga/Fetch.scala 360:{28,28}]
-  wire [1:0] bp_entries_5_lcnt = fetch_buf_bp_entries_1_lcnt_bpe1_MPORT_data; // @[src/main/scala/fpga/Fetch.scala 328:{29,29}]
-  wire [1:0] _GEN_129 = 3'h5 == inst1_end ? bp_entries_5_lcnt : _GEN_128; // @[src/main/scala/fpga/Fetch.scala 360:{28,28}]
-  wire [1:0] bp_entries_6_lcnt = fetch_buf_bp_entries_2_lcnt_bpe1_MPORT_data; // @[src/main/scala/fpga/Fetch.scala 328:{29,29}]
-  wire [1:0] bp_entries_0_gcnt = fetch_buf_bp_entries_0_gcnt_bpe0_MPORT_data; // @[src/main/scala/fpga/Fetch.scala 328:{29,29}]
-  wire [1:0] bp_entries_1_gcnt = fetch_buf_bp_entries_1_gcnt_bpe0_MPORT_data; // @[src/main/scala/fpga/Fetch.scala 328:{29,29}]
-  wire [1:0] _GEN_132 = 3'h1 == inst1_end ? bp_entries_1_gcnt : bp_entries_0_gcnt; // @[src/main/scala/fpga/Fetch.scala 360:{28,28}]
-  wire [1:0] bp_entries_2_gcnt = fetch_buf_bp_entries_2_gcnt_bpe0_MPORT_data; // @[src/main/scala/fpga/Fetch.scala 328:{29,29}]
-  wire [1:0] _GEN_133 = 3'h2 == inst1_end ? bp_entries_2_gcnt : _GEN_132; // @[src/main/scala/fpga/Fetch.scala 360:{28,28}]
-  wire [1:0] bp_entries_3_gcnt = fetch_buf_bp_entries_3_gcnt_bpe0_MPORT_data; // @[src/main/scala/fpga/Fetch.scala 328:{29,29}]
-  wire [1:0] _GEN_134 = 3'h3 == inst1_end ? bp_entries_3_gcnt : _GEN_133; // @[src/main/scala/fpga/Fetch.scala 360:{28,28}]
-  wire [1:0] bp_entries_4_gcnt = fetch_buf_bp_entries_0_gcnt_bpe1_MPORT_data; // @[src/main/scala/fpga/Fetch.scala 328:{29,29}]
-  wire [1:0] _GEN_135 = 3'h4 == inst1_end ? bp_entries_4_gcnt : _GEN_134; // @[src/main/scala/fpga/Fetch.scala 360:{28,28}]
-  wire [1:0] bp_entries_5_gcnt = fetch_buf_bp_entries_1_gcnt_bpe1_MPORT_data; // @[src/main/scala/fpga/Fetch.scala 328:{29,29}]
-  wire [1:0] _GEN_136 = 3'h5 == inst1_end ? bp_entries_5_gcnt : _GEN_135; // @[src/main/scala/fpga/Fetch.scala 360:{28,28}]
-  wire [1:0] bp_entries_6_gcnt = fetch_buf_bp_entries_2_gcnt_bpe1_MPORT_data; // @[src/main/scala/fpga/Fetch.scala 328:{29,29}]
-  wire [30:0] _io_ft_inst2_addr_T_1 = inst1_past[2] ? fetch_buf_iaddr_iaddrs_MPORT_1_data : iaddr0; // @[src/main/scala/fpga/Fetch.scala 363:34]
-  wire [15:0] _GEN_139 = 3'h1 == i2 ? idatas_1 : idatas_0; // @[src/main/scala/fpga/Fetch.scala 365:{60,60}]
-  wire [15:0] _GEN_140 = 3'h2 == i2 ? idatas_2 : _GEN_139; // @[src/main/scala/fpga/Fetch.scala 365:{60,60}]
-  wire [15:0] _GEN_141 = 3'h3 == i2 ? idatas_3 : _GEN_140; // @[src/main/scala/fpga/Fetch.scala 365:{60,60}]
-  wire [15:0] _GEN_142 = 3'h4 == i2 ? idatas_4 : _GEN_141; // @[src/main/scala/fpga/Fetch.scala 365:{60,60}]
-  wire [15:0] _GEN_143 = 3'h5 == i2 ? idatas_5 : _GEN_142; // @[src/main/scala/fpga/Fetch.scala 365:{60,60}]
-  wire [15:0] _GEN_144 = 3'h6 == i2 ? idatas_6 : _GEN_143; // @[src/main/scala/fpga/Fetch.scala 365:{60,60}]
-  wire [31:0] _io_ft_inst2_data_T = {_GEN_144,_GEN_116}; // @[src/main/scala/fpga/Fetch.scala 365:60]
-  wire [15:0] _GEN_146 = 3'h1 == i3 ? idatas_1 : idatas_0; // @[src/main/scala/fpga/Fetch.scala 365:{86,86}]
-  wire [15:0] _GEN_147 = 3'h2 == i3 ? idatas_2 : _GEN_146; // @[src/main/scala/fpga/Fetch.scala 365:{86,86}]
-  wire [15:0] _GEN_148 = 3'h3 == i3 ? idatas_3 : _GEN_147; // @[src/main/scala/fpga/Fetch.scala 365:{86,86}]
-  wire [15:0] _GEN_149 = 3'h4 == i3 ? idatas_4 : _GEN_148; // @[src/main/scala/fpga/Fetch.scala 365:{86,86}]
-  wire [15:0] _GEN_150 = 3'h5 == i3 ? idatas_5 : _GEN_149; // @[src/main/scala/fpga/Fetch.scala 365:{86,86}]
-  wire [15:0] _GEN_151 = 3'h6 == i3 ? idatas_6 : _GEN_150; // @[src/main/scala/fpga/Fetch.scala 365:{86,86}]
-  wire [31:0] _io_ft_inst2_data_T_1 = {_GEN_151,_GEN_144}; // @[src/main/scala/fpga/Fetch.scala 365:86]
-  wire [7:0] _io_ft_inst2_redirected_T = redir_oh >> inst2_end; // @[src/main/scala/fpga/Fetch.scala 368:39]
-  wire [1:0] _GEN_153 = 3'h1 == inst2_end ? bp_entries_1_lcnt : bp_entries_0_lcnt; // @[src/main/scala/fpga/Fetch.scala 369:{28,28}]
-  wire [1:0] _GEN_154 = 3'h2 == inst2_end ? bp_entries_2_lcnt : _GEN_153; // @[src/main/scala/fpga/Fetch.scala 369:{28,28}]
-  wire [1:0] _GEN_155 = 3'h3 == inst2_end ? bp_entries_3_lcnt : _GEN_154; // @[src/main/scala/fpga/Fetch.scala 369:{28,28}]
-  wire [1:0] _GEN_156 = 3'h4 == inst2_end ? bp_entries_4_lcnt : _GEN_155; // @[src/main/scala/fpga/Fetch.scala 369:{28,28}]
-  wire [1:0] _GEN_157 = 3'h5 == inst2_end ? bp_entries_5_lcnt : _GEN_156; // @[src/main/scala/fpga/Fetch.scala 369:{28,28}]
-  wire [1:0] _GEN_160 = 3'h1 == inst2_end ? bp_entries_1_gcnt : bp_entries_0_gcnt; // @[src/main/scala/fpga/Fetch.scala 369:{28,28}]
-  wire [1:0] _GEN_161 = 3'h2 == inst2_end ? bp_entries_2_gcnt : _GEN_160; // @[src/main/scala/fpga/Fetch.scala 369:{28,28}]
-  wire [1:0] _GEN_162 = 3'h3 == inst2_end ? bp_entries_3_gcnt : _GEN_161; // @[src/main/scala/fpga/Fetch.scala 369:{28,28}]
-  wire [1:0] _GEN_163 = 3'h4 == inst2_end ? bp_entries_4_gcnt : _GEN_162; // @[src/main/scala/fpga/Fetch.scala 369:{28,28}]
-  wire [1:0] _GEN_164 = 3'h5 == inst2_end ? bp_entries_5_gcnt : _GEN_163; // @[src/main/scala/fpga/Fetch.scala 369:{28,28}]
-  wire  _inst_past_T = io_ft_inst2_ready & inst2_valid; // @[src/main/scala/fpga/Fetch.scala 373:49]
-  wire  _inst_past_T_2 = (io_ft_inst1_ready | io_ft_inst2_ready) & inst1_valid; // @[src/main/scala/fpga/Fetch.scala 374:49]
+  wire  inst1_bpfailed = _fix_zbp_miss1_T & sat_count != 2'h0 & ~_GEN_97 & end_of_iblock == i0; // @[src/main/scala/fpga/Fetch.scala 347:78]
+  wire [15:0] _GEN_111 = 3'h1 == i1 ? idatas_1 : idatas_0; // @[src/main/scala/fpga/Fetch.scala 349:{42,42}]
+  wire [15:0] _GEN_112 = 3'h2 == i1 ? idatas_2 : _GEN_111; // @[src/main/scala/fpga/Fetch.scala 349:{42,42}]
+  wire [15:0] _GEN_113 = 3'h3 == i1 ? idatas_3 : _GEN_112; // @[src/main/scala/fpga/Fetch.scala 349:{42,42}]
+  wire [15:0] _GEN_114 = 3'h4 == i1 ? idatas_4 : _GEN_113; // @[src/main/scala/fpga/Fetch.scala 349:{42,42}]
+  wire [15:0] _GEN_115 = 3'h5 == i1 ? idatas_5 : _GEN_114; // @[src/main/scala/fpga/Fetch.scala 349:{42,42}]
+  wire [15:0] _GEN_116 = 3'h6 == i1 ? idatas_6 : _GEN_115; // @[src/main/scala/fpga/Fetch.scala 349:{42,42}]
+  wire [15:0] _GEN_118 = 3'h1 == i0 ? idatas_1 : idatas_0; // @[src/main/scala/fpga/Fetch.scala 349:{42,42}]
+  wire [15:0] _GEN_119 = 3'h2 == i0 ? idatas_2 : _GEN_118; // @[src/main/scala/fpga/Fetch.scala 349:{42,42}]
+  wire [15:0] _GEN_120 = 3'h3 == i0 ? idatas_3 : _GEN_119; // @[src/main/scala/fpga/Fetch.scala 349:{42,42}]
+  wire [15:0] _GEN_121 = 3'h4 == i0 ? idatas_4 : _GEN_120; // @[src/main/scala/fpga/Fetch.scala 349:{42,42}]
+  wire [15:0] _GEN_122 = 3'h5 == i0 ? idatas_5 : _GEN_121; // @[src/main/scala/fpga/Fetch.scala 349:{42,42}]
+  wire [15:0] _GEN_123 = 3'h6 == i0 ? idatas_6 : _GEN_122; // @[src/main/scala/fpga/Fetch.scala 349:{42,42}]
+  wire [7:0] _io_ft_inst1_redirected_T = redir_oh >> inst1_end; // @[src/main/scala/fpga/Fetch.scala 352:39]
+  wire [1:0] bp_entries_0_lcnt = fetch_buf_bp_entries_0_lcnt_bpe0_MPORT_data; // @[src/main/scala/fpga/Fetch.scala 321:{29,29}]
+  wire [1:0] bp_entries_1_lcnt = fetch_buf_bp_entries_1_lcnt_bpe0_MPORT_data; // @[src/main/scala/fpga/Fetch.scala 321:{29,29}]
+  wire [1:0] _GEN_125 = 3'h1 == inst1_end ? bp_entries_1_lcnt : bp_entries_0_lcnt; // @[src/main/scala/fpga/Fetch.scala 353:{28,28}]
+  wire [1:0] bp_entries_2_lcnt = fetch_buf_bp_entries_2_lcnt_bpe0_MPORT_data; // @[src/main/scala/fpga/Fetch.scala 321:{29,29}]
+  wire [1:0] _GEN_126 = 3'h2 == inst1_end ? bp_entries_2_lcnt : _GEN_125; // @[src/main/scala/fpga/Fetch.scala 353:{28,28}]
+  wire [1:0] bp_entries_3_lcnt = fetch_buf_bp_entries_3_lcnt_bpe0_MPORT_data; // @[src/main/scala/fpga/Fetch.scala 321:{29,29}]
+  wire [1:0] _GEN_127 = 3'h3 == inst1_end ? bp_entries_3_lcnt : _GEN_126; // @[src/main/scala/fpga/Fetch.scala 353:{28,28}]
+  wire [1:0] bp_entries_4_lcnt = fetch_buf_bp_entries_0_lcnt_bpe1_MPORT_data; // @[src/main/scala/fpga/Fetch.scala 321:{29,29}]
+  wire [1:0] _GEN_128 = 3'h4 == inst1_end ? bp_entries_4_lcnt : _GEN_127; // @[src/main/scala/fpga/Fetch.scala 353:{28,28}]
+  wire [1:0] bp_entries_5_lcnt = fetch_buf_bp_entries_1_lcnt_bpe1_MPORT_data; // @[src/main/scala/fpga/Fetch.scala 321:{29,29}]
+  wire [1:0] _GEN_129 = 3'h5 == inst1_end ? bp_entries_5_lcnt : _GEN_128; // @[src/main/scala/fpga/Fetch.scala 353:{28,28}]
+  wire [1:0] bp_entries_6_lcnt = fetch_buf_bp_entries_2_lcnt_bpe1_MPORT_data; // @[src/main/scala/fpga/Fetch.scala 321:{29,29}]
+  wire [1:0] bp_entries_0_gcnt = fetch_buf_bp_entries_0_gcnt_bpe0_MPORT_data; // @[src/main/scala/fpga/Fetch.scala 321:{29,29}]
+  wire [1:0] bp_entries_1_gcnt = fetch_buf_bp_entries_1_gcnt_bpe0_MPORT_data; // @[src/main/scala/fpga/Fetch.scala 321:{29,29}]
+  wire [1:0] _GEN_132 = 3'h1 == inst1_end ? bp_entries_1_gcnt : bp_entries_0_gcnt; // @[src/main/scala/fpga/Fetch.scala 353:{28,28}]
+  wire [1:0] bp_entries_2_gcnt = fetch_buf_bp_entries_2_gcnt_bpe0_MPORT_data; // @[src/main/scala/fpga/Fetch.scala 321:{29,29}]
+  wire [1:0] _GEN_133 = 3'h2 == inst1_end ? bp_entries_2_gcnt : _GEN_132; // @[src/main/scala/fpga/Fetch.scala 353:{28,28}]
+  wire [1:0] bp_entries_3_gcnt = fetch_buf_bp_entries_3_gcnt_bpe0_MPORT_data; // @[src/main/scala/fpga/Fetch.scala 321:{29,29}]
+  wire [1:0] _GEN_134 = 3'h3 == inst1_end ? bp_entries_3_gcnt : _GEN_133; // @[src/main/scala/fpga/Fetch.scala 353:{28,28}]
+  wire [1:0] bp_entries_4_gcnt = fetch_buf_bp_entries_0_gcnt_bpe1_MPORT_data; // @[src/main/scala/fpga/Fetch.scala 321:{29,29}]
+  wire [1:0] _GEN_135 = 3'h4 == inst1_end ? bp_entries_4_gcnt : _GEN_134; // @[src/main/scala/fpga/Fetch.scala 353:{28,28}]
+  wire [1:0] bp_entries_5_gcnt = fetch_buf_bp_entries_1_gcnt_bpe1_MPORT_data; // @[src/main/scala/fpga/Fetch.scala 321:{29,29}]
+  wire [1:0] _GEN_136 = 3'h5 == inst1_end ? bp_entries_5_gcnt : _GEN_135; // @[src/main/scala/fpga/Fetch.scala 353:{28,28}]
+  wire [1:0] bp_entries_6_gcnt = fetch_buf_bp_entries_2_gcnt_bpe1_MPORT_data; // @[src/main/scala/fpga/Fetch.scala 321:{29,29}]
+  wire [30:0] _io_ft_inst2_addr_T_1 = inst1_past[2] ? fetch_buf_iaddr_iaddrs_MPORT_1_data : iaddr0; // @[src/main/scala/fpga/Fetch.scala 356:34]
+  wire [15:0] _GEN_139 = 3'h1 == i2 ? idatas_1 : idatas_0; // @[src/main/scala/fpga/Fetch.scala 358:{60,60}]
+  wire [15:0] _GEN_140 = 3'h2 == i2 ? idatas_2 : _GEN_139; // @[src/main/scala/fpga/Fetch.scala 358:{60,60}]
+  wire [15:0] _GEN_141 = 3'h3 == i2 ? idatas_3 : _GEN_140; // @[src/main/scala/fpga/Fetch.scala 358:{60,60}]
+  wire [15:0] _GEN_142 = 3'h4 == i2 ? idatas_4 : _GEN_141; // @[src/main/scala/fpga/Fetch.scala 358:{60,60}]
+  wire [15:0] _GEN_143 = 3'h5 == i2 ? idatas_5 : _GEN_142; // @[src/main/scala/fpga/Fetch.scala 358:{60,60}]
+  wire [15:0] _GEN_144 = 3'h6 == i2 ? idatas_6 : _GEN_143; // @[src/main/scala/fpga/Fetch.scala 358:{60,60}]
+  wire [31:0] _io_ft_inst2_data_T = {_GEN_144,_GEN_116}; // @[src/main/scala/fpga/Fetch.scala 358:60]
+  wire [15:0] _GEN_146 = 3'h1 == i3 ? idatas_1 : idatas_0; // @[src/main/scala/fpga/Fetch.scala 358:{86,86}]
+  wire [15:0] _GEN_147 = 3'h2 == i3 ? idatas_2 : _GEN_146; // @[src/main/scala/fpga/Fetch.scala 358:{86,86}]
+  wire [15:0] _GEN_148 = 3'h3 == i3 ? idatas_3 : _GEN_147; // @[src/main/scala/fpga/Fetch.scala 358:{86,86}]
+  wire [15:0] _GEN_149 = 3'h4 == i3 ? idatas_4 : _GEN_148; // @[src/main/scala/fpga/Fetch.scala 358:{86,86}]
+  wire [15:0] _GEN_150 = 3'h5 == i3 ? idatas_5 : _GEN_149; // @[src/main/scala/fpga/Fetch.scala 358:{86,86}]
+  wire [15:0] _GEN_151 = 3'h6 == i3 ? idatas_6 : _GEN_150; // @[src/main/scala/fpga/Fetch.scala 358:{86,86}]
+  wire [31:0] _io_ft_inst2_data_T_1 = {_GEN_151,_GEN_144}; // @[src/main/scala/fpga/Fetch.scala 358:86]
+  wire [7:0] _io_ft_inst2_redirected_T = redir_oh >> inst2_end; // @[src/main/scala/fpga/Fetch.scala 361:39]
+  wire [1:0] _GEN_153 = 3'h1 == inst2_end ? bp_entries_1_lcnt : bp_entries_0_lcnt; // @[src/main/scala/fpga/Fetch.scala 362:{28,28}]
+  wire [1:0] _GEN_154 = 3'h2 == inst2_end ? bp_entries_2_lcnt : _GEN_153; // @[src/main/scala/fpga/Fetch.scala 362:{28,28}]
+  wire [1:0] _GEN_155 = 3'h3 == inst2_end ? bp_entries_3_lcnt : _GEN_154; // @[src/main/scala/fpga/Fetch.scala 362:{28,28}]
+  wire [1:0] _GEN_156 = 3'h4 == inst2_end ? bp_entries_4_lcnt : _GEN_155; // @[src/main/scala/fpga/Fetch.scala 362:{28,28}]
+  wire [1:0] _GEN_157 = 3'h5 == inst2_end ? bp_entries_5_lcnt : _GEN_156; // @[src/main/scala/fpga/Fetch.scala 362:{28,28}]
+  wire [1:0] _GEN_160 = 3'h1 == inst2_end ? bp_entries_1_gcnt : bp_entries_0_gcnt; // @[src/main/scala/fpga/Fetch.scala 362:{28,28}]
+  wire [1:0] _GEN_161 = 3'h2 == inst2_end ? bp_entries_2_gcnt : _GEN_160; // @[src/main/scala/fpga/Fetch.scala 362:{28,28}]
+  wire [1:0] _GEN_162 = 3'h3 == inst2_end ? bp_entries_3_gcnt : _GEN_161; // @[src/main/scala/fpga/Fetch.scala 362:{28,28}]
+  wire [1:0] _GEN_163 = 3'h4 == inst2_end ? bp_entries_4_gcnt : _GEN_162; // @[src/main/scala/fpga/Fetch.scala 362:{28,28}]
+  wire [1:0] _GEN_164 = 3'h5 == inst2_end ? bp_entries_5_gcnt : _GEN_163; // @[src/main/scala/fpga/Fetch.scala 362:{28,28}]
+  wire  _inst_past_T = io_ft_inst2_ready & inst2_valid; // @[src/main/scala/fpga/Fetch.scala 366:49]
+  wire  _inst_past_T_2 = (io_ft_inst1_ready | io_ft_inst2_ready) & inst1_valid; // @[src/main/scala/fpga/Fetch.scala 367:49]
   wire [2:0] _inst_past_T_3 = _inst_past_T_2 ? inst1_past : i0; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
   wire [2:0] inst_past = _inst_past_T ? inst2_past : _inst_past_T_3; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
-  wire  _next_read_ptr_T_2 = inst_past > end_of_iblock; // @[src/main/scala/fpga/Fetch.scala 377:66]
-  wire  _next_read_ptr_T_3 = inst1_valid & end_of_iblock[2] & inst_past > end_of_iblock; // @[src/main/scala/fpga/Fetch.scala 377:53]
-  wire  _next_read_ptr_T_7 = inst1_valid & (inst_past[2] | _next_read_ptr_T_2); // @[src/main/scala/fpga/Fetch.scala 378:20]
+  wire  _next_read_ptr_T_2 = inst_past > end_of_iblock; // @[src/main/scala/fpga/Fetch.scala 370:66]
+  wire  _next_read_ptr_T_3 = inst1_valid & end_of_iblock[2] & inst_past > end_of_iblock; // @[src/main/scala/fpga/Fetch.scala 370:53]
+  wire  _next_read_ptr_T_7 = inst1_valid & (inst_past[2] | _next_read_ptr_T_2); // @[src/main/scala/fpga/Fetch.scala 371:20]
   wire [1:0] _next_read_ptr_T_9 = _next_read_ptr_T_3 ? 2'h2 : {{1'd0}, _next_read_ptr_T_7}; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
-  wire [2:0] _GEN_183 = {{1'd0}, _next_read_ptr_T_9}; // @[src/main/scala/fpga/Fetch.scala 376:34]
-  wire [2:0] next_read_ptr = read_ptr + _GEN_183; // @[src/main/scala/fpga/Fetch.scala 376:34]
-  wire  _T_87 = inst1_valid & _next_read_ptr_T_2; // @[src/main/scala/fpga/Fetch.scala 381:23]
+  wire [2:0] _GEN_183 = {{1'd0}, _next_read_ptr_T_9}; // @[src/main/scala/fpga/Fetch.scala 369:34]
+  wire [2:0] next_read_ptr = read_ptr + _GEN_183; // @[src/main/scala/fpga/Fetch.scala 369:34]
+  wire  _T_87 = inst1_valid & _next_read_ptr_T_2; // @[src/main/scala/fpga/Fetch.scala 374:23]
   wire [1:0] ptr_1 = next_read_ptr[1:0]; // @[src/main/scala/common/UIntExtension.scala 14:34]
-  wire  _reg_i0_T_1 = _io_ft_imem_en_T_1 & ptr_1 == ptr; // @[src/main/scala/fpga/Fetch.scala 384:23]
-  wire  _T_89 = ~inst1_valid & reg_reset_i0; // @[src/main/scala/fpga/Fetch.scala 389:30]
-  wire [2:0] _GEN_184 = {{1'd0}, ptr}; // @[src/main/scala/fpga/Fetch.scala 391:36]
-  wire  _reg_i0_T_5 = _io_ft_imem_en_T_1 & read_ptr == _GEN_184; // @[src/main/scala/fpga/Fetch.scala 391:23]
-  wire [1:0] _reg_i0_T_8 = _reg_i0_T_5 ? forward_i0 : fetch_buf_iaddr_reg_i0_MPORT_1_data[1:0]; // @[src/main/scala/fpga/Fetch.scala 390:20]
-  wire  _GEN_174 = inst1_valid & _next_read_ptr_T_2 | _T_89; // @[src/main/scala/fpga/Fetch.scala 381:53 388:20]
+  wire  _reg_i0_T_1 = _io_ft_imem_en_T_1 & ptr_1 == ptr; // @[src/main/scala/fpga/Fetch.scala 377:23]
+  wire  _T_89 = ~inst1_valid & reg_reset_i0; // @[src/main/scala/fpga/Fetch.scala 382:30]
+  wire [2:0] _GEN_184 = {{1'd0}, ptr}; // @[src/main/scala/fpga/Fetch.scala 384:36]
+  wire  _reg_i0_T_5 = _io_ft_imem_en_T_1 & read_ptr == _GEN_184; // @[src/main/scala/fpga/Fetch.scala 384:23]
+  wire [1:0] _reg_i0_T_8 = _reg_i0_T_5 ? forward_i0 : fetch_buf_iaddr_reg_i0_MPORT_1_data[1:0]; // @[src/main/scala/fpga/Fetch.scala 383:20]
+  wire  _GEN_174 = inst1_valid & _next_read_ptr_T_2 | _T_89; // @[src/main/scala/fpga/Fetch.scala 374:53 381:20]
   wire [31:0] _T_92 = {fetch_buf_iaddr_iaddrs_MPORT_data[30:2],reg_i0,1'h0}; // @[src/main/scala/common/UIntExtension.scala 10:33]
-  wire [31:0] _T_96 = {io_ft_inst2_addr,1'h0}; // @[src/main/scala/common/UIntExtension.scala 10:33]
+  wire [31:0] _T_98 = {io_ft_inst2_addr,1'h0}; // @[src/main/scala/common/UIntExtension.scala 10:33]
   assign fetch_buf_iaddr_MPORT_3_en = 1'h1;
   assign fetch_buf_iaddr_MPORT_3_addr = 2'h0;
   assign fetch_buf_iaddr_MPORT_3_data = fetch_buf_iaddr[fetch_buf_iaddr_MPORT_3_addr]; // @[src/main/scala/fpga/Fetch.scala 108:22]
@@ -2662,33 +2662,33 @@ module Fetcher(
   assign fetch_buf_fp_ptr_MPORT_11_addr = addressing_ptr[1:0] - 2'h1;
   assign fetch_buf_fp_ptr_MPORT_11_mask = 1'h1;
   assign fetch_buf_fp_ptr_MPORT_11_en = reg_addressed;
-  assign io_ft_inst1_valid = inst1_valid | inst1_bpfailed; // @[src/main/scala/fpga/Fetch.scala 362:43]
+  assign io_ft_inst1_valid = inst1_valid | inst1_bpfailed; // @[src/main/scala/fpga/Fetch.scala 355:43]
   assign io_ft_inst1_addr = {fetch_buf_iaddr_iaddrs_MPORT_data[30:2],reg_i0}; // @[src/main/scala/common/UIntExtension.scala 13:89]
-  assign io_ft_inst1_data = {_GEN_116,_GEN_123}; // @[src/main/scala/fpga/Fetch.scala 356:42]
-  assign io_ft_inst1_bpfailed = _fix_zbp_miss1_T & sat_count != 2'h0 & ~_GEN_97 & end_of_iblock == i0; // @[src/main/scala/fpga/Fetch.scala 354:78]
-  assign io_ft_inst1_redirected = _io_ft_inst1_redirected_T[0]; // @[src/main/scala/fpga/Fetch.scala 359:39]
-  assign io_ft_inst1_bp_entry_lcnt = 3'h6 == inst1_end ? bp_entries_6_lcnt : _GEN_129; // @[src/main/scala/fpga/Fetch.scala 360:{28,28}]
-  assign io_ft_inst1_bp_entry_gcnt = 3'h6 == inst1_end ? bp_entries_6_gcnt : _GEN_136; // @[src/main/scala/fpga/Fetch.scala 360:{28,28}]
-  assign io_ft_inst1_fp_ptr = fetch_buf_fp_ptr_fp_ptr_MPORT_data; // @[src/main/scala/fpga/Fetch.scala 361:28]
+  assign io_ft_inst1_data = {_GEN_116,_GEN_123}; // @[src/main/scala/fpga/Fetch.scala 349:42]
+  assign io_ft_inst1_bpfailed = _fix_zbp_miss1_T & sat_count != 2'h0 & ~_GEN_97 & end_of_iblock == i0; // @[src/main/scala/fpga/Fetch.scala 347:78]
+  assign io_ft_inst1_redirected = _io_ft_inst1_redirected_T[0]; // @[src/main/scala/fpga/Fetch.scala 352:39]
+  assign io_ft_inst1_bp_entry_lcnt = 3'h6 == inst1_end ? bp_entries_6_lcnt : _GEN_129; // @[src/main/scala/fpga/Fetch.scala 353:{28,28}]
+  assign io_ft_inst1_bp_entry_gcnt = 3'h6 == inst1_end ? bp_entries_6_gcnt : _GEN_136; // @[src/main/scala/fpga/Fetch.scala 353:{28,28}]
+  assign io_ft_inst1_fp_ptr = fetch_buf_fp_ptr_fp_ptr_MPORT_data; // @[src/main/scala/fpga/Fetch.scala 354:28]
   assign io_ft_inst2_valid = _inst1_valid_T_2 ? 1'h0 : _inst2_valid_T_5; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
   assign io_ft_inst2_addr = {_io_ft_inst2_addr_T_1[30:2],inst1_past[1:0]}; // @[src/main/scala/common/UIntExtension.scala 13:89]
-  assign io_ft_inst2_data = _GEN_97 ? _io_ft_inst2_data_T : _io_ft_inst2_data_T_1; // @[src/main/scala/fpga/Fetch.scala 365:34]
-  assign io_ft_inst2_redirected = _io_ft_inst2_redirected_T[0]; // @[src/main/scala/fpga/Fetch.scala 368:39]
-  assign io_ft_inst2_bp_entry_lcnt = 3'h6 == inst2_end ? bp_entries_6_lcnt : _GEN_157; // @[src/main/scala/fpga/Fetch.scala 369:{28,28}]
-  assign io_ft_inst2_bp_entry_gcnt = 3'h6 == inst2_end ? bp_entries_6_gcnt : _GEN_164; // @[src/main/scala/fpga/Fetch.scala 369:{28,28}]
-  assign io_ft_inst2_fp_ptr = fetch_buf_fp_ptr_fp_ptr_MPORT_data; // @[src/main/scala/fpga/Fetch.scala 370:28]
-  assign io_ft_imem_en = (has_space & redirect_ready | io_ft_flush_en) & ~wait_for_dram & _T_2; // @[src/main/scala/fpga/Fetch.scala 196:97]
+  assign io_ft_inst2_data = _GEN_97 ? _io_ft_inst2_data_T : _io_ft_inst2_data_T_1; // @[src/main/scala/fpga/Fetch.scala 358:34]
+  assign io_ft_inst2_redirected = _io_ft_inst2_redirected_T[0]; // @[src/main/scala/fpga/Fetch.scala 361:39]
+  assign io_ft_inst2_bp_entry_lcnt = 3'h6 == inst2_end ? bp_entries_6_lcnt : _GEN_157; // @[src/main/scala/fpga/Fetch.scala 362:{28,28}]
+  assign io_ft_inst2_bp_entry_gcnt = 3'h6 == inst2_end ? bp_entries_6_gcnt : _GEN_164; // @[src/main/scala/fpga/Fetch.scala 362:{28,28}]
+  assign io_ft_inst2_fp_ptr = fetch_buf_fp_ptr_fp_ptr_MPORT_data; // @[src/main/scala/fpga/Fetch.scala 363:28]
+  assign io_ft_imem_en = (has_space & redirect_ready | io_ft_flush_en) & ~wait_for_dram & _T_2; // @[src/main/scala/fpga/Fetch.scala 189:97]
   assign io_ft_imem_addr = {_reg_next_iaddr_T_1,1'h0}; // @[src/main/scala/common/UIntExtension.scala 10:33]
-  assign io_ft_icache_addr_en = _io_ft_imem_en_T_1 & is_dram; // @[src/main/scala/fpga/Fetch.scala 198:79]
+  assign io_ft_icache_addr_en = _io_ft_imem_en_T_1 & is_dram; // @[src/main/scala/fpga/Fetch.scala 191:79]
   assign io_ft_icache_addr = {_reg_next_iaddr_T_1,1'h0}; // @[src/main/scala/common/UIntExtension.scala 10:33]
   assign io_pr_iaddr_en = ~_io_ft_imem_en_T & _fix_zbp_miss1_T | wait_for_dram | is_dram & ~io_ft_icache_addr_ready ? 1'h0
-     : 1'h1; // @[src/main/scala/fpga/Fetch.scala 205:122 207:24 210:23]
+     : 1'h1; // @[src/main/scala/fpga/Fetch.scala 198:122 200:24 203:23]
   assign io_pr_iaddr = io_ft_flush_en ? io_ft_flush_iaddr : _iaddr_T_2; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
-  assign io_pr_flush_en = io_ft_flush_en; // @[src/main/scala/fpga/Fetch.scala 199:26]
-  assign io_pr_invalidate = (reg_fix_zbp_miss1 | reg_fix_zbp_miss2) & reg_addressed; // @[src/main/scala/fpga/Fetch.scala 143:70]
-  assign io_pr_redirect_en = io_ft_flush_en | reg_bp1_redirect_en | io_pr_bp0_en & _bp1_redirect_en_T; // @[src/main/scala/fpga/Fetch.scala 201:67]
-  assign io_pr_correct_enq = _bp1_redirect_en_T & _bp1_cancel_redir_T_2; // @[src/main/scala/fpga/Fetch.scala 150:19]
-  assign io_pr_target_changed = reg_bp1_target_changed; // @[src/main/scala/fpga/Fetch.scala 203:26]
+  assign io_pr_flush_en = io_ft_flush_en; // @[src/main/scala/fpga/Fetch.scala 192:26]
+  assign io_pr_invalidate = (reg_fix_zbp_miss1 | reg_fix_zbp_miss2) & reg_addressed; // @[src/main/scala/fpga/Fetch.scala 142:70]
+  assign io_pr_redirect_en = io_ft_flush_en | reg_bp1_redirect_en | io_pr_bp0_en & _bp1_redirect_en_T; // @[src/main/scala/fpga/Fetch.scala 194:67]
+  assign io_pr_correct_enq = _bp1_redirect_en_T & _bp1_cancel_redir_T_2; // @[src/main/scala/fpga/Fetch.scala 149:19]
+  assign io_pr_target_changed = reg_bp1_target_changed; // @[src/main/scala/fpga/Fetch.scala 196:26]
   always @(posedge clock) begin
     if (fetch_buf_iaddr_MPORT_en & fetch_buf_iaddr_MPORT_mask) begin
       fetch_buf_iaddr[fetch_buf_iaddr_MPORT_addr] <= fetch_buf_iaddr_MPORT_data; // @[src/main/scala/fpga/Fetch.scala 108:22]
@@ -3020,28 +3020,28 @@ module Fetcher(
     end
     if (reset) begin // @[src/main/scala/fpga/Fetch.scala 109:31]
       addressing_ptr <= 3'h0; // @[src/main/scala/fpga/Fetch.scala 109:31]
-    end else if (~_io_ft_imem_en_T & _fix_zbp_miss1_T | wait_for_dram | is_dram & ~io_ft_icache_addr_ready) begin // @[src/main/scala/fpga/Fetch.scala 205:122]
-      if (invalidate & _fix_zbp_miss1_T) begin // @[src/main/scala/fpga/Fetch.scala 187:42]
-        addressing_ptr <= _addressing_ptr_T_1; // @[src/main/scala/fpga/Fetch.scala 188:22]
+    end else if (~_io_ft_imem_en_T & _fix_zbp_miss1_T | wait_for_dram | is_dram & ~io_ft_icache_addr_ready) begin // @[src/main/scala/fpga/Fetch.scala 198:122]
+      if (invalidate & _fix_zbp_miss1_T) begin // @[src/main/scala/fpga/Fetch.scala 180:42]
+        addressing_ptr <= _addressing_ptr_T_1; // @[src/main/scala/fpga/Fetch.scala 181:22]
       end
-    end else if (!(_T_1)) begin // @[src/main/scala/fpga/Fetch.scala 213:44]
-      addressing_ptr <= _addressing_ptr_T_3; // @[src/main/scala/fpga/Fetch.scala 216:24]
+    end else if (!(_T_1)) begin // @[src/main/scala/fpga/Fetch.scala 206:44]
+      addressing_ptr <= _addressing_ptr_T_3; // @[src/main/scala/fpga/Fetch.scala 209:24]
     end
     if (reset) begin // @[src/main/scala/fpga/Fetch.scala 110:31]
       fetch_ptr <= 3'h0; // @[src/main/scala/fpga/Fetch.scala 110:31]
-    end else if (io_ft_flush_en) begin // @[src/main/scala/fpga/Fetch.scala 306:27]
-      fetch_ptr <= addressing_ptr; // @[src/main/scala/fpga/Fetch.scala 307:17]
-    end else if (io_ft_imem_valid | io_ft_icache_idata_valid) begin // @[src/main/scala/fpga/Fetch.scala 294:57]
-      if (_T_70) begin // @[src/main/scala/fpga/Fetch.scala 296:23]
-        fetch_ptr <= _fetch_ptr_T_1; // @[src/main/scala/fpga/Fetch.scala 297:19]
+    end else if (io_ft_flush_en) begin // @[src/main/scala/fpga/Fetch.scala 299:27]
+      fetch_ptr <= addressing_ptr; // @[src/main/scala/fpga/Fetch.scala 300:17]
+    end else if (io_ft_imem_valid | io_ft_icache_idata_valid) begin // @[src/main/scala/fpga/Fetch.scala 287:57]
+      if (_T_70) begin // @[src/main/scala/fpga/Fetch.scala 289:23]
+        fetch_ptr <= _fetch_ptr_T_1; // @[src/main/scala/fpga/Fetch.scala 290:19]
       end
     end
     if (reset) begin // @[src/main/scala/fpga/Fetch.scala 111:31]
       read_ptr <= 3'h0; // @[src/main/scala/fpga/Fetch.scala 111:31]
-    end else if (io_ft_flush_en) begin // @[src/main/scala/fpga/Fetch.scala 401:27]
-      read_ptr <= addressing_ptr; // @[src/main/scala/fpga/Fetch.scala 402:16]
+    end else if (io_ft_flush_en) begin // @[src/main/scala/fpga/Fetch.scala 394:27]
+      read_ptr <= addressing_ptr; // @[src/main/scala/fpga/Fetch.scala 395:16]
     end else begin
-      read_ptr <= next_read_ptr; // @[src/main/scala/fpga/Fetch.scala 380:14]
+      read_ptr <= next_read_ptr; // @[src/main/scala/fpga/Fetch.scala 373:14]
     end
     discard_buf_0 <= reset | _GEN_35; // @[src/main/scala/fpga/Fetch.scala 113:{28,28}]
     discard_buf_1 <= reset | _GEN_36; // @[src/main/scala/fpga/Fetch.scala 113:{28,28}]
@@ -3053,24 +3053,24 @@ module Fetcher(
     discard_buf_7 <= reset | _GEN_42; // @[src/main/scala/fpga/Fetch.scala 113:{28,28}]
     if (reset) begin // @[src/main/scala/fpga/Fetch.scala 114:28]
       discard_enq <= 3'h0; // @[src/main/scala/fpga/Fetch.scala 114:28]
-    end else if (!(~_io_ft_imem_en_T & _fix_zbp_miss1_T | wait_for_dram | is_dram & ~io_ft_icache_addr_ready)) begin // @[src/main/scala/fpga/Fetch.scala 205:122]
-      discard_enq <= _discard_enq_T_1; // @[src/main/scala/fpga/Fetch.scala 212:23]
+    end else if (!(~_io_ft_imem_en_T & _fix_zbp_miss1_T | wait_for_dram | is_dram & ~io_ft_icache_addr_ready)) begin // @[src/main/scala/fpga/Fetch.scala 198:122]
+      discard_enq <= _discard_enq_T_1; // @[src/main/scala/fpga/Fetch.scala 205:23]
     end
     if (reset) begin // @[src/main/scala/fpga/Fetch.scala 115:28]
       discard_deq <= 3'h0; // @[src/main/scala/fpga/Fetch.scala 115:28]
-    end else if (io_ft_imem_valid | io_ft_icache_idata_valid) begin // @[src/main/scala/fpga/Fetch.scala 294:57]
-      discard_deq <= _discard_deq_T_1; // @[src/main/scala/fpga/Fetch.scala 295:19]
+    end else if (io_ft_imem_valid | io_ft_icache_idata_valid) begin // @[src/main/scala/fpga/Fetch.scala 287:57]
+      discard_deq <= _discard_deq_T_1; // @[src/main/scala/fpga/Fetch.scala 288:19]
     end
     if (reset) begin // @[src/main/scala/fpga/Fetch.scala 125:30]
       reg_addressed <= 1'h0; // @[src/main/scala/fpga/Fetch.scala 125:30]
-    end else if (~_io_ft_imem_en_T & _fix_zbp_miss1_T | wait_for_dram | is_dram & ~io_ft_icache_addr_ready) begin // @[src/main/scala/fpga/Fetch.scala 205:122]
-      reg_addressed <= 1'h0; // @[src/main/scala/fpga/Fetch.scala 207:24]
+    end else if (~_io_ft_imem_en_T & _fix_zbp_miss1_T | wait_for_dram | is_dram & ~io_ft_icache_addr_ready) begin // @[src/main/scala/fpga/Fetch.scala 198:122]
+      reg_addressed <= 1'h0; // @[src/main/scala/fpga/Fetch.scala 200:24]
     end else begin
-      reg_addressed <= 1'h1; // @[src/main/scala/fpga/Fetch.scala 210:23]
+      reg_addressed <= 1'h1; // @[src/main/scala/fpga/Fetch.scala 203:23]
     end
-    if (reset) begin // @[src/main/scala/fpga/Fetch.scala 128:36]
-      reg_next_iaddr <= 31'hfff0; // @[src/main/scala/fpga/Fetch.scala 128:36]
-    end else if (~_io_ft_imem_en_T & _fix_zbp_miss1_T | wait_for_dram | is_dram & ~io_ft_icache_addr_ready) begin // @[src/main/scala/fpga/Fetch.scala 205:122]
+    if (reset) begin // @[src/main/scala/fpga/Fetch.scala 128:41]
+      reg_next_iaddr <= 31'hfff0; // @[src/main/scala/fpga/Fetch.scala 128:41]
+    end else if (~_io_ft_imem_en_T & _fix_zbp_miss1_T | wait_for_dram | is_dram & ~io_ft_icache_addr_ready) begin // @[src/main/scala/fpga/Fetch.scala 198:122]
       if (io_ft_flush_en) begin // @[src/main/scala/chisel3/util/Mux.scala 141:16]
         reg_next_iaddr <= io_ft_flush_iaddr;
       end else if (_invalidate_T) begin // @[src/main/scala/chisel3/util/Mux.scala 141:16]
@@ -3079,62 +3079,62 @@ module Fetcher(
         reg_next_iaddr <= _iaddr_T_1;
       end
     end else begin
-      reg_next_iaddr <= _reg_next_iaddr_T_3; // @[src/main/scala/fpga/Fetch.scala 169:20]
+      reg_next_iaddr <= _reg_next_iaddr_T_3; // @[src/main/scala/fpga/Fetch.scala 163:20]
     end
-    if (reset) begin // @[src/main/scala/fpga/Fetch.scala 132:36]
-      reg_fix_zbp_miss1 <= 1'h0; // @[src/main/scala/fpga/Fetch.scala 132:36]
+    if (reset) begin // @[src/main/scala/fpga/Fetch.scala 132:41]
+      reg_fix_zbp_miss1 <= 1'h0; // @[src/main/scala/fpga/Fetch.scala 132:41]
     end else begin
-      reg_fix_zbp_miss1 <= fix_zbp_miss1; // @[src/main/scala/fpga/Fetch.scala 174:23]
+      reg_fix_zbp_miss1 <= fix_zbp_miss1; // @[src/main/scala/fpga/Fetch.scala 168:23]
     end
-    if (reset) begin // @[src/main/scala/fpga/Fetch.scala 133:36]
-      reg_fix_zbp_miss2 <= 1'h0; // @[src/main/scala/fpga/Fetch.scala 133:36]
+    if (reset) begin // @[src/main/scala/fpga/Fetch.scala 133:41]
+      reg_fix_zbp_miss2 <= 1'h0; // @[src/main/scala/fpga/Fetch.scala 133:41]
     end else begin
-      reg_fix_zbp_miss2 <= fix_zbp_miss2; // @[src/main/scala/fpga/Fetch.scala 175:23]
+      reg_fix_zbp_miss2 <= fix_zbp_miss2; // @[src/main/scala/fpga/Fetch.scala 169:23]
     end
-    if (reset) begin // @[src/main/scala/fpga/Fetch.scala 134:39]
-      reg_bp1_redirect_en <= 1'h0; // @[src/main/scala/fpga/Fetch.scala 134:39]
+    if (reset) begin // @[src/main/scala/fpga/Fetch.scala 134:41]
+      reg_bp1_redirect_en <= 1'h0; // @[src/main/scala/fpga/Fetch.scala 134:41]
     end else begin
-      reg_bp1_redirect_en <= _fix_zbp_miss1_T & bp1_redirect_en; // @[src/main/scala/fpga/Fetch.scala 176:25]
+      reg_bp1_redirect_en <= _fix_zbp_miss1_T & bp1_redirect_en; // @[src/main/scala/fpga/Fetch.scala 170:25]
+    end
+    if (reset) begin // @[src/main/scala/fpga/Fetch.scala 135:41]
+      reg_bp1_target_changed <= 1'h0; // @[src/main/scala/fpga/Fetch.scala 135:41]
+    end else begin
+      reg_bp1_target_changed <= fix_zbp_miss2; // @[src/main/scala/fpga/Fetch.scala 171:28]
     end
     if (reset) begin // @[src/main/scala/fpga/Fetch.scala 136:41]
-      reg_bp1_target_changed <= 1'h0; // @[src/main/scala/fpga/Fetch.scala 136:41]
-    end else begin
-      reg_bp1_target_changed <= fix_zbp_miss2; // @[src/main/scala/fpga/Fetch.scala 178:28]
-    end
-    if (reset) begin // @[src/main/scala/fpga/Fetch.scala 137:36]
-      reg_fix_addr <= 31'h0; // @[src/main/scala/fpga/Fetch.scala 137:36]
-    end else if (io_pr_bp1_en) begin // @[src/main/scala/fpga/Fetch.scala 172:23]
+      reg_fix_addr <= 31'h0; // @[src/main/scala/fpga/Fetch.scala 136:41]
+    end else if (io_pr_bp1_en) begin // @[src/main/scala/fpga/Fetch.scala 166:23]
       reg_fix_addr <= io_pr_bp1_addr;
     end else begin
       reg_fix_addr <= reg_next_iaddr;
     end
-    if (reset) begin // @[src/main/scala/fpga/Fetch.scala 138:36]
-      reg_discard_enq <= 3'h0; // @[src/main/scala/fpga/Fetch.scala 138:36]
+    if (reset) begin // @[src/main/scala/fpga/Fetch.scala 137:41]
+      reg_discard_enq <= 3'h0; // @[src/main/scala/fpga/Fetch.scala 137:41]
     end else begin
-      reg_discard_enq <= discard_enq; // @[src/main/scala/fpga/Fetch.scala 144:21]
+      reg_discard_enq <= discard_enq; // @[src/main/scala/fpga/Fetch.scala 143:21]
     end
-    if (reset) begin // @[src/main/scala/fpga/Fetch.scala 139:36]
-      reg_is_dram <= 1'h0; // @[src/main/scala/fpga/Fetch.scala 139:36]
+    if (reset) begin // @[src/main/scala/fpga/Fetch.scala 138:41]
+      reg_is_dram <= 1'h0; // @[src/main/scala/fpga/Fetch.scala 138:41]
     end else begin
       reg_is_dram <= _GEN_2;
     end
-    if (reset) begin // @[src/main/scala/fpga/Fetch.scala 312:25]
-      reg_i0 <= 2'h0; // @[src/main/scala/fpga/Fetch.scala 312:25]
-    end else if (io_ft_flush_en) begin // @[src/main/scala/fpga/Fetch.scala 401:27]
-      reg_i0 <= io_ft_flush_iaddr[1:0]; // @[src/main/scala/fpga/Fetch.scala 403:14]
-    end else if (inst1_valid & _next_read_ptr_T_2) begin // @[src/main/scala/fpga/Fetch.scala 381:53]
-      if (_reg_i0_T_1) begin // @[src/main/scala/fpga/Fetch.scala 383:20]
+    if (reset) begin // @[src/main/scala/fpga/Fetch.scala 305:25]
+      reg_i0 <= 2'h0; // @[src/main/scala/fpga/Fetch.scala 305:25]
+    end else if (io_ft_flush_en) begin // @[src/main/scala/fpga/Fetch.scala 394:27]
+      reg_i0 <= io_ft_flush_iaddr[1:0]; // @[src/main/scala/fpga/Fetch.scala 396:14]
+    end else if (inst1_valid & _next_read_ptr_T_2) begin // @[src/main/scala/fpga/Fetch.scala 374:53]
+      if (_reg_i0_T_1) begin // @[src/main/scala/fpga/Fetch.scala 376:20]
         reg_i0 <= forward_i0;
       end else begin
         reg_i0 <= fetch_buf_iaddr_reg_i0_MPORT_data[1:0];
       end
-    end else if (~inst1_valid & reg_reset_i0) begin // @[src/main/scala/fpga/Fetch.scala 389:47]
-      reg_i0 <= _reg_i0_T_8; // @[src/main/scala/fpga/Fetch.scala 390:14]
+    end else if (~inst1_valid & reg_reset_i0) begin // @[src/main/scala/fpga/Fetch.scala 382:47]
+      reg_i0 <= _reg_i0_T_8; // @[src/main/scala/fpga/Fetch.scala 383:14]
     end else begin
-      reg_i0 <= inst_past[1:0]; // @[src/main/scala/fpga/Fetch.scala 397:14]
+      reg_i0 <= inst_past[1:0]; // @[src/main/scala/fpga/Fetch.scala 390:14]
     end
-    if (reset) begin // @[src/main/scala/fpga/Fetch.scala 313:31]
-      reg_reset_i0 <= 1'h0; // @[src/main/scala/fpga/Fetch.scala 313:31]
+    if (reset) begin // @[src/main/scala/fpga/Fetch.scala 306:31]
+      reg_reset_i0 <= 1'h0; // @[src/main/scala/fpga/Fetch.scala 306:31]
     end else begin
       reg_reset_i0 <= _GEN_174;
     end
@@ -3143,7 +3143,7 @@ module Fetcher(
       if (`PRINTF_COND) begin
     `endif
         if (~_T_13 & ~reset) begin
-          $fwrite(32'h80000002,"fb(%x): 0x%x addressed\n",addressing_ptr,_is_dram_T); // @[src/main/scala/fpga/Fetch.scala 219:13]
+          $fwrite(32'h80000002,"fb(%x): 0x%x addressed\n",addressing_ptr,_is_dram_T); // @[src/main/scala/fpga/Fetch.scala 212:13]
         end
     `ifdef PRINTF_COND
       end
@@ -3154,7 +3154,7 @@ module Fetcher(
       if (`PRINTF_COND) begin
     `endif
         if (_T_18) begin
-          $fwrite(32'h80000002,"iaddr             : %x\n",_is_dram_T); // @[src/main/scala/fpga/Fetch.scala 249:11]
+          $fwrite(32'h80000002,"iaddr             : %x\n",_is_dram_T); // @[src/main/scala/fpga/Fetch.scala 242:11]
         end
     `ifdef PRINTF_COND
       end
@@ -3165,7 +3165,7 @@ module Fetcher(
       if (`PRINTF_COND) begin
     `endif
         if (_T_18) begin
-          $fwrite(32'h80000002,"reg_next_iaddr    : %x\n",{reg_next_iaddr,1'h0}); // @[src/main/scala/fpga/Fetch.scala 250:11]
+          $fwrite(32'h80000002,"reg_next_iaddr    : %x\n",{reg_next_iaddr,1'h0}); // @[src/main/scala/fpga/Fetch.scala 243:11]
         end
     `ifdef PRINTF_COND
       end
@@ -3176,7 +3176,7 @@ module Fetcher(
       if (`PRINTF_COND) begin
     `endif
         if (_T_18) begin
-          $fwrite(32'h80000002,"io.ft.imem.addr   : %x\n",io_ft_imem_addr); // @[src/main/scala/fpga/Fetch.scala 251:11]
+          $fwrite(32'h80000002,"io.ft.imem.addr   : %x\n",io_ft_imem_addr); // @[src/main/scala/fpga/Fetch.scala 244:11]
         end
     `ifdef PRINTF_COND
       end
@@ -3187,7 +3187,7 @@ module Fetcher(
       if (`PRINTF_COND) begin
     `endif
         if (_T_18) begin
-          $fwrite(32'h80000002,"io.ft.imem.en     : %d\n",io_ft_imem_en); // @[src/main/scala/fpga/Fetch.scala 252:11]
+          $fwrite(32'h80000002,"io.ft.imem.en     : %d\n",io_ft_imem_en); // @[src/main/scala/fpga/Fetch.scala 245:11]
         end
     `ifdef PRINTF_COND
       end
@@ -3198,7 +3198,7 @@ module Fetcher(
       if (`PRINTF_COND) begin
     `endif
         if (_T_18) begin
-          $fwrite(32'h80000002,"io.ft.flush_en    : %d\n",io_ft_flush_en); // @[src/main/scala/fpga/Fetch.scala 253:11]
+          $fwrite(32'h80000002,"io.ft.flush_en    : %d\n",io_ft_flush_en); // @[src/main/scala/fpga/Fetch.scala 246:11]
         end
     `ifdef PRINTF_COND
       end
@@ -3209,7 +3209,7 @@ module Fetcher(
       if (`PRINTF_COND) begin
     `endif
         if (_T_18) begin
-          $fwrite(32'h80000002,"io.pr.bp0_en      : %d\n",io_pr_bp0_en); // @[src/main/scala/fpga/Fetch.scala 254:11]
+          $fwrite(32'h80000002,"io.pr.bp0_en      : %d\n",io_pr_bp0_en); // @[src/main/scala/fpga/Fetch.scala 247:11]
         end
     `ifdef PRINTF_COND
       end
@@ -3220,7 +3220,7 @@ module Fetcher(
       if (`PRINTF_COND) begin
     `endif
         if (_T_18) begin
-          $fwrite(32'h80000002,"io.pr.bp1_en      : %d\n",io_pr_bp1_en); // @[src/main/scala/fpga/Fetch.scala 255:11]
+          $fwrite(32'h80000002,"io.pr.bp1_en      : %d\n",io_pr_bp1_en); // @[src/main/scala/fpga/Fetch.scala 248:11]
         end
     `ifdef PRINTF_COND
       end
@@ -3231,7 +3231,7 @@ module Fetcher(
       if (`PRINTF_COND) begin
     `endif
         if (_T_18) begin
-          $fwrite(32'h80000002,"fix_zbp_miss      : %d\n",fix_zbp_miss1 | fix_zbp_miss2); // @[src/main/scala/fpga/Fetch.scala 256:11]
+          $fwrite(32'h80000002,"fix_zbp_miss      : %d\n",fix_zbp_miss1 | fix_zbp_miss2); // @[src/main/scala/fpga/Fetch.scala 249:11]
         end
     `ifdef PRINTF_COND
       end
@@ -3242,7 +3242,7 @@ module Fetcher(
       if (`PRINTF_COND) begin
     `endif
         if (_T_18) begin
-          $fwrite(32'h80000002,"reg_fix_zbp_miss  : %d\n",_invalidate_T); // @[src/main/scala/fpga/Fetch.scala 257:11]
+          $fwrite(32'h80000002,"reg_fix_zbp_miss  : %d\n",_invalidate_T); // @[src/main/scala/fpga/Fetch.scala 250:11]
         end
     `ifdef PRINTF_COND
       end
@@ -3253,7 +3253,7 @@ module Fetcher(
       if (`PRINTF_COND) begin
     `endif
         if (_T_18) begin
-          $fwrite(32'h80000002,"io.pr.invalidate  : %d\n",io_pr_invalidate); // @[src/main/scala/fpga/Fetch.scala 258:11]
+          $fwrite(32'h80000002,"io.pr.invalidate  : %d\n",io_pr_invalidate); // @[src/main/scala/fpga/Fetch.scala 251:11]
         end
     `ifdef PRINTF_COND
       end
@@ -3264,7 +3264,7 @@ module Fetcher(
       if (`PRINTF_COND) begin
     `endif
         if (_T_18) begin
-          $fwrite(32'h80000002,"io.pr.redirect_en : %d\n",io_pr_redirect_en); // @[src/main/scala/fpga/Fetch.scala 259:11]
+          $fwrite(32'h80000002,"io.pr.redirect_en : %d\n",io_pr_redirect_en); // @[src/main/scala/fpga/Fetch.scala 252:11]
         end
     `ifdef PRINTF_COND
       end
@@ -3275,7 +3275,7 @@ module Fetcher(
       if (`PRINTF_COND) begin
     `endif
         if (_T_18) begin
-          $fwrite(32'h80000002,"io.pr.correct_enq : %d\n",io_pr_correct_enq); // @[src/main/scala/fpga/Fetch.scala 260:11]
+          $fwrite(32'h80000002,"io.pr.correct_enq : %d\n",io_pr_correct_enq); // @[src/main/scala/fpga/Fetch.scala 253:11]
         end
     `ifdef PRINTF_COND
       end
@@ -3286,7 +3286,7 @@ module Fetcher(
       if (`PRINTF_COND) begin
     `endif
         if (_T_18) begin
-          $fwrite(32'h80000002,"io.pr.target_chang: %d\n",io_pr_target_changed); // @[src/main/scala/fpga/Fetch.scala 261:11]
+          $fwrite(32'h80000002,"io.pr.target_chang: %d\n",io_pr_target_changed); // @[src/main/scala/fpga/Fetch.scala 254:11]
         end
     `ifdef PRINTF_COND
       end
@@ -3297,7 +3297,7 @@ module Fetcher(
       if (`PRINTF_COND) begin
     `endif
         if (_T_18) begin
-          $fwrite(32'h80000002,"addressing        : %d\n",addressing_ptr[1:0]); // @[src/main/scala/fpga/Fetch.scala 262:11]
+          $fwrite(32'h80000002,"addressing        : %d\n",addressing_ptr[1:0]); // @[src/main/scala/fpga/Fetch.scala 255:11]
         end
     `ifdef PRINTF_COND
       end
@@ -3308,7 +3308,7 @@ module Fetcher(
       if (`PRINTF_COND) begin
     `endif
         if (_T_18) begin
-          $fwrite(32'h80000002,"fb(0).iaddr=%x\n",{fetch_buf_iaddr_MPORT_3_data,1'h0}); // @[src/main/scala/fpga/Fetch.scala 263:11]
+          $fwrite(32'h80000002,"fb(0).iaddr=%x\n",{fetch_buf_iaddr_MPORT_3_data,1'h0}); // @[src/main/scala/fpga/Fetch.scala 256:11]
         end
     `ifdef PRINTF_COND
       end
@@ -3319,7 +3319,7 @@ module Fetcher(
       if (`PRINTF_COND) begin
     `endif
         if (_T_18) begin
-          $fwrite(32'h80000002,"fb(1).iaddr=%x\n",{fetch_buf_iaddr_MPORT_4_data,1'h0}); // @[src/main/scala/fpga/Fetch.scala 264:11]
+          $fwrite(32'h80000002,"fb(1).iaddr=%x\n",{fetch_buf_iaddr_MPORT_4_data,1'h0}); // @[src/main/scala/fpga/Fetch.scala 257:11]
         end
     `ifdef PRINTF_COND
       end
@@ -3330,7 +3330,7 @@ module Fetcher(
       if (`PRINTF_COND) begin
     `endif
         if (_T_18) begin
-          $fwrite(32'h80000002,"fb(2).iaddr=%x\n",{fetch_buf_iaddr_MPORT_5_data,1'h0}); // @[src/main/scala/fpga/Fetch.scala 265:11]
+          $fwrite(32'h80000002,"fb(2).iaddr=%x\n",{fetch_buf_iaddr_MPORT_5_data,1'h0}); // @[src/main/scala/fpga/Fetch.scala 258:11]
         end
     `ifdef PRINTF_COND
       end
@@ -3341,7 +3341,7 @@ module Fetcher(
       if (`PRINTF_COND) begin
     `endif
         if (_T_18) begin
-          $fwrite(32'h80000002,"fb(3).iaddr=%x\n",{fetch_buf_iaddr_MPORT_6_data,1'h0}); // @[src/main/scala/fpga/Fetch.scala 266:11]
+          $fwrite(32'h80000002,"fb(3).iaddr=%x\n",{fetch_buf_iaddr_MPORT_6_data,1'h0}); // @[src/main/scala/fpga/Fetch.scala 259:11]
         end
     `ifdef PRINTF_COND
       end
@@ -3352,7 +3352,7 @@ module Fetcher(
       if (`PRINTF_COND) begin
     `endif
         if (reg_addressed & _T_18) begin
-          $fwrite(32'h80000002,"fb(%d).end_of_iblock=%d\n",_T_21,_T_72); // @[src/main/scala/fpga/Fetch.scala 290:13]
+          $fwrite(32'h80000002,"fb(%d).end_of_iblock=%d\n",_T_21,_T_72); // @[src/main/scala/fpga/Fetch.scala 283:13]
         end
     `ifdef PRINTF_COND
       end
@@ -3363,7 +3363,7 @@ module Fetcher(
       if (`PRINTF_COND) begin
     `endif
         if (reg_addressed & _T_18) begin
-          $fwrite(32'h80000002,"fb(%d).fp_ptr=%d\n",_T_21,io_pr_fp_ptr); // @[src/main/scala/fpga/Fetch.scala 291:13]
+          $fwrite(32'h80000002,"fb(%d).fp_ptr=%d\n",_T_21,io_pr_fp_ptr); // @[src/main/scala/fpga/Fetch.scala 284:13]
         end
     `ifdef PRINTF_COND
       end
@@ -3375,7 +3375,7 @@ module Fetcher(
     `endif
         if (_GEN_90 & _T_18) begin
           $fwrite(32'h80000002,"io.ft.imem.valid=%d io.ft.icache.idata_valid=%d\n",io_ft_imem_valid,
-            io_ft_icache_idata_valid); // @[src/main/scala/fpga/Fetch.scala 299:15]
+            io_ft_icache_idata_valid); // @[src/main/scala/fpga/Fetch.scala 292:15]
         end
     `ifdef PRINTF_COND
       end
@@ -3386,7 +3386,7 @@ module Fetcher(
       if (`PRINTF_COND) begin
     `endif
         if (_GEN_90 & _T_18) begin
-          $fwrite(32'h80000002,"fb(%x): 0x%x: 0x%x fetched\n",fetch_ptr,_T_83,idata); // @[src/main/scala/fpga/Fetch.scala 300:15]
+          $fwrite(32'h80000002,"fb(%x): 0x%x: 0x%x fetched\n",fetch_ptr,_T_83,idata); // @[src/main/scala/fpga/Fetch.scala 293:15]
         end
     `ifdef PRINTF_COND
       end
@@ -3398,7 +3398,7 @@ module Fetcher(
     `endif
         if (inst1_valid & _T_18) begin
           $fwrite(32'h80000002,"redir_oh: 0x%x  inst1_end: %d  redirected: %d\n",redir_oh,inst1_end,
-            io_ft_inst1_redirected); // @[src/main/scala/fpga/Fetch.scala 407:13]
+            io_ft_inst1_redirected); // @[src/main/scala/fpga/Fetch.scala 400:13]
         end
     `ifdef PRINTF_COND
       end
@@ -3409,7 +3409,7 @@ module Fetcher(
       if (`PRINTF_COND) begin
     `endif
         if (inst1_valid & _T_18) begin
-          $fwrite(32'h80000002,"fb(%x): 0x%x: 0x%x %d read\n",read_ptr,_T_92,{idatas_1,idatas_0},io_ft_inst1_ready); // @[src/main/scala/fpga/Fetch.scala 408:13]
+          $fwrite(32'h80000002,"fb(%x): 0x%x: 0x%x %d read\n",read_ptr,_T_92,{idatas_1,idatas_0},io_ft_inst1_ready); // @[src/main/scala/fpga/Fetch.scala 401:13]
         end
     `ifdef PRINTF_COND
       end
@@ -3420,7 +3420,19 @@ module Fetcher(
       if (`PRINTF_COND) begin
     `endif
         if (inst2_valid & _T_18) begin
-          $fwrite(32'h80000002,"fb(%x): 0x%x: 0x%x %d read\n",read_ptr,_T_96,io_ft_inst2_data,io_ft_inst2_ready); // @[src/main/scala/fpga/Fetch.scala 411:13]
+          $fwrite(32'h80000002,"redir_oh: 0x%x  inst2_end: %d  redirected: %d\n",redir_oh,inst2_end,
+            io_ft_inst2_redirected); // @[src/main/scala/fpga/Fetch.scala 404:13]
+        end
+    `ifdef PRINTF_COND
+      end
+    `endif
+    `endif // SYNTHESIS
+    `ifndef SYNTHESIS
+    `ifdef PRINTF_COND
+      if (`PRINTF_COND) begin
+    `endif
+        if (inst2_valid & _T_18) begin
+          $fwrite(32'h80000002,"fb(%x): 0x%x: 0x%x %d read\n",read_ptr,_T_98,io_ft_inst2_data,io_ft_inst2_ready); // @[src/main/scala/fpga/Fetch.scala 405:13]
         end
     `ifdef PRINTF_COND
       end
@@ -3563,153 +3575,153 @@ endmodule
 module FetchPredictor(
   input         clock,
   input         reset,
-  input         io_pr_iaddr_en, // @[src/main/scala/fpga/FetchPredictor.scala 155:14]
-  input  [30:0] io_pr_iaddr, // @[src/main/scala/fpga/FetchPredictor.scala 155:14]
-  input         io_pr_flush_en, // @[src/main/scala/fpga/FetchPredictor.scala 155:14]
-  input         io_pr_invalidate, // @[src/main/scala/fpga/FetchPredictor.scala 155:14]
-  input         io_pr_redirect_en, // @[src/main/scala/fpga/FetchPredictor.scala 155:14]
-  input         io_pr_correct_enq, // @[src/main/scala/fpga/FetchPredictor.scala 155:14]
-  input         io_pr_target_changed, // @[src/main/scala/fpga/FetchPredictor.scala 155:14]
-  output        io_pr_redirect_ready, // @[src/main/scala/fpga/FetchPredictor.scala 155:14]
-  output        io_pr_bp0_en, // @[src/main/scala/fpga/FetchPredictor.scala 155:14]
-  output [1:0]  io_pr_bp0_pos, // @[src/main/scala/fpga/FetchPredictor.scala 155:14]
-  output [30:0] io_pr_bp0_addr, // @[src/main/scala/fpga/FetchPredictor.scala 155:14]
-  output        io_pr_bp1_en, // @[src/main/scala/fpga/FetchPredictor.scala 155:14]
-  output [1:0]  io_pr_bp1_pos, // @[src/main/scala/fpga/FetchPredictor.scala 155:14]
-  output [30:0] io_pr_bp1_addr, // @[src/main/scala/fpga/FetchPredictor.scala 155:14]
-  output [1:0]  io_pr_bp_entries_0_lcnt, // @[src/main/scala/fpga/FetchPredictor.scala 155:14]
-  output [1:0]  io_pr_bp_entries_0_gcnt, // @[src/main/scala/fpga/FetchPredictor.scala 155:14]
-  output [1:0]  io_pr_bp_entries_1_lcnt, // @[src/main/scala/fpga/FetchPredictor.scala 155:14]
-  output [1:0]  io_pr_bp_entries_1_gcnt, // @[src/main/scala/fpga/FetchPredictor.scala 155:14]
-  output [1:0]  io_pr_bp_entries_2_lcnt, // @[src/main/scala/fpga/FetchPredictor.scala 155:14]
-  output [1:0]  io_pr_bp_entries_2_gcnt, // @[src/main/scala/fpga/FetchPredictor.scala 155:14]
-  output [1:0]  io_pr_bp_entries_3_lcnt, // @[src/main/scala/fpga/FetchPredictor.scala 155:14]
-  output [1:0]  io_pr_bp_entries_3_gcnt, // @[src/main/scala/fpga/FetchPredictor.scala 155:14]
-  output [2:0]  io_pr_fp_ptr, // @[src/main/scala/fpga/FetchPredictor.scala 155:14]
-  input         io_cr_en, // @[src/main/scala/fpga/FetchPredictor.scala 155:14]
-  input  [30:0] io_cr_pc, // @[src/main/scala/fpga/FetchPredictor.scala 155:14]
-  input  [1:0]  io_cr_bp_entry_lcnt, // @[src/main/scala/fpga/FetchPredictor.scala 155:14]
-  input  [1:0]  io_cr_bp_entry_gcnt, // @[src/main/scala/fpga/FetchPredictor.scala 155:14]
-  input  [1:0]  io_cr_fp_entry_attr, // @[src/main/scala/fpga/FetchPredictor.scala 155:14]
-  input  [7:0]  io_cr_fp_entry_history, // @[src/main/scala/fpga/FetchPredictor.scala 155:14]
-  input         io_cr_fp_hit, // @[src/main/scala/fpga/FetchPredictor.scala 155:14]
-  input         io_cr_mispred, // @[src/main/scala/fpga/FetchPredictor.scala 155:14]
-  input         io_cr_br_taken, // @[src/main/scala/fpga/FetchPredictor.scala 155:14]
-  input  [1:0]  io_cr_attr, // @[src/main/scala/fpga/FetchPredictor.scala 155:14]
-  input         io_cr_is_ret, // @[src/main/scala/fpga/FetchPredictor.scala 155:14]
-  input  [30:0] io_cr_target, // @[src/main/scala/fpga/FetchPredictor.scala 155:14]
-  input  [30:0] io_cr_next_pc, // @[src/main/scala/fpga/FetchPredictor.scala 155:14]
-  output        io_re_en, // @[src/main/scala/fpga/FetchPredictor.scala 155:14]
-  output        io_re_correct, // @[src/main/scala/fpga/FetchPredictor.scala 155:14]
-  output        io_re_target_changed, // @[src/main/scala/fpga/FetchPredictor.scala 155:14]
-  output        io_re_flush_en, // @[src/main/scala/fpga/FetchPredictor.scala 155:14]
-  output [7:0]  io_re_history, // @[src/main/scala/fpga/FetchPredictor.scala 155:14]
-  input  [1:0]  io_re_ptr, // @[src/main/scala/fpga/FetchPredictor.scala 155:14]
-  input         io_re_ready, // @[src/main/scala/fpga/FetchPredictor.scala 155:14]
-  input         io_re_left1, // @[src/main/scala/fpga/FetchPredictor.scala 155:14]
-  output        io_ru_en, // @[src/main/scala/fpga/FetchPredictor.scala 155:14]
-  output [1:0]  io_ru_ptr, // @[src/main/scala/fpga/FetchPredictor.scala 155:14]
-  output [1:0]  io_ru_attr, // @[src/main/scala/fpga/FetchPredictor.scala 155:14]
-  output        io_ru_is_ret, // @[src/main/scala/fpga/FetchPredictor.scala 155:14]
-  output [30:0] io_ru_target, // @[src/main/scala/fpga/FetchPredictor.scala 155:14]
-  output [30:0] io_zbtb_lu_pc, // @[src/main/scala/fpga/FetchPredictor.scala 155:14]
-  input         io_zbtb_lu_matches_0, // @[src/main/scala/fpga/FetchPredictor.scala 155:14]
-  input         io_zbtb_lu_matches_1, // @[src/main/scala/fpga/FetchPredictor.scala 155:14]
-  input         io_zbtb_lu_matches_2, // @[src/main/scala/fpga/FetchPredictor.scala 155:14]
-  input         io_zbtb_lu_matches_3, // @[src/main/scala/fpga/FetchPredictor.scala 155:14]
-  input  [30:0] io_zbtb_lu_target_0, // @[src/main/scala/fpga/FetchPredictor.scala 155:14]
-  input  [30:0] io_zbtb_lu_target_1, // @[src/main/scala/fpga/FetchPredictor.scala 155:14]
-  input  [30:0] io_zbtb_lu_target_2, // @[src/main/scala/fpga/FetchPredictor.scala 155:14]
-  input  [30:0] io_zbtb_lu_target_3, // @[src/main/scala/fpga/FetchPredictor.scala 155:14]
-  output        io_zbtb_up_en, // @[src/main/scala/fpga/FetchPredictor.scala 155:14]
-  output [30:0] io_zbtb_up_pc, // @[src/main/scala/fpga/FetchPredictor.scala 155:14]
-  output [30:0] io_zbtb_up_target, // @[src/main/scala/fpga/FetchPredictor.scala 155:14]
-  output        io_zbtb_inv_en, // @[src/main/scala/fpga/FetchPredictor.scala 155:14]
-  output [30:0] io_zbtb_inv_pc, // @[src/main/scala/fpga/FetchPredictor.scala 155:14]
-  output [30:0] io_btb_lu_pc, // @[src/main/scala/fpga/FetchPredictor.scala 155:14]
-  input         io_btb_lu_result_0_jump, // @[src/main/scala/fpga/FetchPredictor.scala 155:14]
-  input         io_btb_lu_result_0_br, // @[src/main/scala/fpga/FetchPredictor.scala 155:14]
-  input  [1:0]  io_btb_lu_result_0_attr, // @[src/main/scala/fpga/FetchPredictor.scala 155:14]
-  input         io_btb_lu_result_0_is_ret, // @[src/main/scala/fpga/FetchPredictor.scala 155:14]
-  input  [30:0] io_btb_lu_result_0_target, // @[src/main/scala/fpga/FetchPredictor.scala 155:14]
-  input         io_btb_lu_result_1_jump, // @[src/main/scala/fpga/FetchPredictor.scala 155:14]
-  input         io_btb_lu_result_1_br, // @[src/main/scala/fpga/FetchPredictor.scala 155:14]
-  input  [1:0]  io_btb_lu_result_1_attr, // @[src/main/scala/fpga/FetchPredictor.scala 155:14]
-  input         io_btb_lu_result_1_is_ret, // @[src/main/scala/fpga/FetchPredictor.scala 155:14]
-  input  [30:0] io_btb_lu_result_1_target, // @[src/main/scala/fpga/FetchPredictor.scala 155:14]
-  input         io_btb_lu_result_2_jump, // @[src/main/scala/fpga/FetchPredictor.scala 155:14]
-  input         io_btb_lu_result_2_br, // @[src/main/scala/fpga/FetchPredictor.scala 155:14]
-  input  [1:0]  io_btb_lu_result_2_attr, // @[src/main/scala/fpga/FetchPredictor.scala 155:14]
-  input         io_btb_lu_result_2_is_ret, // @[src/main/scala/fpga/FetchPredictor.scala 155:14]
-  input  [30:0] io_btb_lu_result_2_target, // @[src/main/scala/fpga/FetchPredictor.scala 155:14]
-  input         io_btb_lu_result_3_jump, // @[src/main/scala/fpga/FetchPredictor.scala 155:14]
-  input         io_btb_lu_result_3_br, // @[src/main/scala/fpga/FetchPredictor.scala 155:14]
-  input  [1:0]  io_btb_lu_result_3_attr, // @[src/main/scala/fpga/FetchPredictor.scala 155:14]
-  input         io_btb_lu_result_3_is_ret, // @[src/main/scala/fpga/FetchPredictor.scala 155:14]
-  input  [30:0] io_btb_lu_result_3_target, // @[src/main/scala/fpga/FetchPredictor.scala 155:14]
-  output        io_btb_up_en, // @[src/main/scala/fpga/FetchPredictor.scala 155:14]
-  output [30:0] io_btb_up_pc, // @[src/main/scala/fpga/FetchPredictor.scala 155:14]
-  output [1:0]  io_btb_up_attr, // @[src/main/scala/fpga/FetchPredictor.scala 155:14]
-  output        io_btb_up_is_ret, // @[src/main/scala/fpga/FetchPredictor.scala 155:14]
-  output [30:0] io_btb_up_target, // @[src/main/scala/fpga/FetchPredictor.scala 155:14]
-  output [30:0] io_pht__lu_pc, // @[src/main/scala/fpga/FetchPredictor.scala 155:14]
-  input         io_pht__lu_taken_0, // @[src/main/scala/fpga/FetchPredictor.scala 155:14]
-  input         io_pht__lu_taken_1, // @[src/main/scala/fpga/FetchPredictor.scala 155:14]
-  input         io_pht__lu_taken_2, // @[src/main/scala/fpga/FetchPredictor.scala 155:14]
-  input         io_pht__lu_taken_3, // @[src/main/scala/fpga/FetchPredictor.scala 155:14]
-  input  [1:0]  io_pht__lu_lcnt_0, // @[src/main/scala/fpga/FetchPredictor.scala 155:14]
-  input  [1:0]  io_pht__lu_lcnt_1, // @[src/main/scala/fpga/FetchPredictor.scala 155:14]
-  input  [1:0]  io_pht__lu_lcnt_2, // @[src/main/scala/fpga/FetchPredictor.scala 155:14]
-  input  [1:0]  io_pht__lu_lcnt_3, // @[src/main/scala/fpga/FetchPredictor.scala 155:14]
-  input  [1:0]  io_pht__lu_gcnt_0, // @[src/main/scala/fpga/FetchPredictor.scala 155:14]
-  input  [1:0]  io_pht__lu_gcnt_1, // @[src/main/scala/fpga/FetchPredictor.scala 155:14]
-  input  [1:0]  io_pht__lu_gcnt_2, // @[src/main/scala/fpga/FetchPredictor.scala 155:14]
-  input  [1:0]  io_pht__lu_gcnt_3, // @[src/main/scala/fpga/FetchPredictor.scala 155:14]
-  output        io_pht__up_en, // @[src/main/scala/fpga/FetchPredictor.scala 155:14]
-  output [7:0]  io_pht__up_history, // @[src/main/scala/fpga/FetchPredictor.scala 155:14]
-  output [30:0] io_pht__up_pc, // @[src/main/scala/fpga/FetchPredictor.scala 155:14]
-  output [1:0]  io_pht__up_lcnt, // @[src/main/scala/fpga/FetchPredictor.scala 155:14]
-  output [1:0]  io_pht__up_gcnt, // @[src/main/scala/fpga/FetchPredictor.scala 155:14]
-  input         io_pht__lmem_ren, // @[src/main/scala/fpga/FetchPredictor.scala 155:14]
-  input         io_pht__lmem_wen, // @[src/main/scala/fpga/FetchPredictor.scala 155:14]
-  input  [10:0] io_pht__lmem_raddr, // @[src/main/scala/fpga/FetchPredictor.scala 155:14]
-  output [7:0]  io_pht__lmem_rdata, // @[src/main/scala/fpga/FetchPredictor.scala 155:14]
-  input  [12:0] io_pht__lmem_waddr, // @[src/main/scala/fpga/FetchPredictor.scala 155:14]
-  input  [1:0]  io_pht__lmem_wdata, // @[src/main/scala/fpga/FetchPredictor.scala 155:14]
-  input         io_pht__gmem_ren, // @[src/main/scala/fpga/FetchPredictor.scala 155:14]
-  input         io_pht__gmem_wen, // @[src/main/scala/fpga/FetchPredictor.scala 155:14]
-  input  [10:0] io_pht__gmem_raddr, // @[src/main/scala/fpga/FetchPredictor.scala 155:14]
-  output [7:0]  io_pht__gmem_rdata, // @[src/main/scala/fpga/FetchPredictor.scala 155:14]
-  input  [12:0] io_pht__gmem_waddr, // @[src/main/scala/fpga/FetchPredictor.scala 155:14]
-  input  [1:0]  io_pht__gmem_wdata, // @[src/main/scala/fpga/FetchPredictor.scala 155:14]
-  output        io_pht__br_en, // @[src/main/scala/fpga/FetchPredictor.scala 155:14]
-  output [30:0] io_pht__br_pc, // @[src/main/scala/fpga/FetchPredictor.scala 155:14]
-  output        io_pht__br2_en, // @[src/main/scala/fpga/FetchPredictor.scala 155:14]
-  output [7:0]  io_pht__br2_history, // @[src/main/scala/fpga/FetchPredictor.scala 155:14]
-  output [30:0] io_pht__br2_pc, // @[src/main/scala/fpga/FetchPredictor.scala 155:14]
-  input  [7:0]  io_pht__history, // @[src/main/scala/fpga/FetchPredictor.scala 155:14]
-  output        io_pht__res_en, // @[src/main/scala/fpga/FetchPredictor.scala 155:14]
-  output [7:0]  io_pht__res_history, // @[src/main/scala/fpga/FetchPredictor.scala 155:14]
-  input  [30:0] io_ras_top_ret_pc, // @[src/main/scala/fpga/FetchPredictor.scala 155:14]
-  output        io_ras_ret1_en, // @[src/main/scala/fpga/FetchPredictor.scala 155:14]
-  output        io_ras_call1_en, // @[src/main/scala/fpga/FetchPredictor.scala 155:14]
-  output [30:0] io_ras_call1_ret_pc, // @[src/main/scala/fpga/FetchPredictor.scala 155:14]
-  output        io_ras_up_en, // @[src/main/scala/fpga/FetchPredictor.scala 155:14]
-  output        io_ras_ret2_en, // @[src/main/scala/fpga/FetchPredictor.scala 155:14]
-  output        io_ras_call2_en, // @[src/main/scala/fpga/FetchPredictor.scala 155:14]
-  output [30:0] io_ras_call2_ret_pc, // @[src/main/scala/fpga/FetchPredictor.scala 155:14]
-  output        io_pht_lmem_ren, // @[src/main/scala/fpga/FetchPredictor.scala 155:14]
-  output        io_pht_lmem_wen, // @[src/main/scala/fpga/FetchPredictor.scala 155:14]
-  output [10:0] io_pht_lmem_raddr, // @[src/main/scala/fpga/FetchPredictor.scala 155:14]
-  input  [7:0]  io_pht_lmem_rdata, // @[src/main/scala/fpga/FetchPredictor.scala 155:14]
-  output [12:0] io_pht_lmem_waddr, // @[src/main/scala/fpga/FetchPredictor.scala 155:14]
-  output [1:0]  io_pht_lmem_wdata, // @[src/main/scala/fpga/FetchPredictor.scala 155:14]
-  output        io_pht_gmem_ren, // @[src/main/scala/fpga/FetchPredictor.scala 155:14]
-  output        io_pht_gmem_wen, // @[src/main/scala/fpga/FetchPredictor.scala 155:14]
-  output [10:0] io_pht_gmem_raddr, // @[src/main/scala/fpga/FetchPredictor.scala 155:14]
-  input  [7:0]  io_pht_gmem_rdata, // @[src/main/scala/fpga/FetchPredictor.scala 155:14]
-  output [12:0] io_pht_gmem_waddr, // @[src/main/scala/fpga/FetchPredictor.scala 155:14]
-  output [1:0]  io_pht_gmem_wdata // @[src/main/scala/fpga/FetchPredictor.scala 155:14]
+  input         io_pr_iaddr_en, // @[src/main/scala/fpga/FetchPredictor.scala 156:14]
+  input  [30:0] io_pr_iaddr, // @[src/main/scala/fpga/FetchPredictor.scala 156:14]
+  input         io_pr_flush_en, // @[src/main/scala/fpga/FetchPredictor.scala 156:14]
+  input         io_pr_invalidate, // @[src/main/scala/fpga/FetchPredictor.scala 156:14]
+  input         io_pr_redirect_en, // @[src/main/scala/fpga/FetchPredictor.scala 156:14]
+  input         io_pr_correct_enq, // @[src/main/scala/fpga/FetchPredictor.scala 156:14]
+  input         io_pr_target_changed, // @[src/main/scala/fpga/FetchPredictor.scala 156:14]
+  output        io_pr_redirect_ready, // @[src/main/scala/fpga/FetchPredictor.scala 156:14]
+  output        io_pr_bp0_en, // @[src/main/scala/fpga/FetchPredictor.scala 156:14]
+  output [1:0]  io_pr_bp0_pos, // @[src/main/scala/fpga/FetchPredictor.scala 156:14]
+  output [30:0] io_pr_bp0_addr, // @[src/main/scala/fpga/FetchPredictor.scala 156:14]
+  output        io_pr_bp1_en, // @[src/main/scala/fpga/FetchPredictor.scala 156:14]
+  output [1:0]  io_pr_bp1_pos, // @[src/main/scala/fpga/FetchPredictor.scala 156:14]
+  output [30:0] io_pr_bp1_addr, // @[src/main/scala/fpga/FetchPredictor.scala 156:14]
+  output [1:0]  io_pr_bp_entries_0_lcnt, // @[src/main/scala/fpga/FetchPredictor.scala 156:14]
+  output [1:0]  io_pr_bp_entries_0_gcnt, // @[src/main/scala/fpga/FetchPredictor.scala 156:14]
+  output [1:0]  io_pr_bp_entries_1_lcnt, // @[src/main/scala/fpga/FetchPredictor.scala 156:14]
+  output [1:0]  io_pr_bp_entries_1_gcnt, // @[src/main/scala/fpga/FetchPredictor.scala 156:14]
+  output [1:0]  io_pr_bp_entries_2_lcnt, // @[src/main/scala/fpga/FetchPredictor.scala 156:14]
+  output [1:0]  io_pr_bp_entries_2_gcnt, // @[src/main/scala/fpga/FetchPredictor.scala 156:14]
+  output [1:0]  io_pr_bp_entries_3_lcnt, // @[src/main/scala/fpga/FetchPredictor.scala 156:14]
+  output [1:0]  io_pr_bp_entries_3_gcnt, // @[src/main/scala/fpga/FetchPredictor.scala 156:14]
+  output [2:0]  io_pr_fp_ptr, // @[src/main/scala/fpga/FetchPredictor.scala 156:14]
+  input         io_cr_en, // @[src/main/scala/fpga/FetchPredictor.scala 156:14]
+  input  [30:0] io_cr_pc, // @[src/main/scala/fpga/FetchPredictor.scala 156:14]
+  input  [1:0]  io_cr_bp_entry_lcnt, // @[src/main/scala/fpga/FetchPredictor.scala 156:14]
+  input  [1:0]  io_cr_bp_entry_gcnt, // @[src/main/scala/fpga/FetchPredictor.scala 156:14]
+  input  [1:0]  io_cr_fp_entry_attr, // @[src/main/scala/fpga/FetchPredictor.scala 156:14]
+  input  [7:0]  io_cr_fp_entry_history, // @[src/main/scala/fpga/FetchPredictor.scala 156:14]
+  input         io_cr_fp_hit, // @[src/main/scala/fpga/FetchPredictor.scala 156:14]
+  input         io_cr_mispred, // @[src/main/scala/fpga/FetchPredictor.scala 156:14]
+  input         io_cr_br_taken, // @[src/main/scala/fpga/FetchPredictor.scala 156:14]
+  input  [1:0]  io_cr_attr, // @[src/main/scala/fpga/FetchPredictor.scala 156:14]
+  input         io_cr_is_ret, // @[src/main/scala/fpga/FetchPredictor.scala 156:14]
+  input  [30:0] io_cr_target, // @[src/main/scala/fpga/FetchPredictor.scala 156:14]
+  input  [30:0] io_cr_next_pc, // @[src/main/scala/fpga/FetchPredictor.scala 156:14]
+  output        io_re_en, // @[src/main/scala/fpga/FetchPredictor.scala 156:14]
+  output        io_re_correct, // @[src/main/scala/fpga/FetchPredictor.scala 156:14]
+  output        io_re_target_changed, // @[src/main/scala/fpga/FetchPredictor.scala 156:14]
+  output        io_re_flush_en, // @[src/main/scala/fpga/FetchPredictor.scala 156:14]
+  output [7:0]  io_re_history, // @[src/main/scala/fpga/FetchPredictor.scala 156:14]
+  input  [1:0]  io_re_ptr, // @[src/main/scala/fpga/FetchPredictor.scala 156:14]
+  input         io_re_ready, // @[src/main/scala/fpga/FetchPredictor.scala 156:14]
+  input         io_re_left1, // @[src/main/scala/fpga/FetchPredictor.scala 156:14]
+  output        io_ru_en, // @[src/main/scala/fpga/FetchPredictor.scala 156:14]
+  output [1:0]  io_ru_ptr, // @[src/main/scala/fpga/FetchPredictor.scala 156:14]
+  output [1:0]  io_ru_attr, // @[src/main/scala/fpga/FetchPredictor.scala 156:14]
+  output        io_ru_is_ret, // @[src/main/scala/fpga/FetchPredictor.scala 156:14]
+  output [30:0] io_ru_target, // @[src/main/scala/fpga/FetchPredictor.scala 156:14]
+  output [30:0] io_zbtb_lu_pc, // @[src/main/scala/fpga/FetchPredictor.scala 156:14]
+  input         io_zbtb_lu_matches_0, // @[src/main/scala/fpga/FetchPredictor.scala 156:14]
+  input         io_zbtb_lu_matches_1, // @[src/main/scala/fpga/FetchPredictor.scala 156:14]
+  input         io_zbtb_lu_matches_2, // @[src/main/scala/fpga/FetchPredictor.scala 156:14]
+  input         io_zbtb_lu_matches_3, // @[src/main/scala/fpga/FetchPredictor.scala 156:14]
+  input  [30:0] io_zbtb_lu_target_0, // @[src/main/scala/fpga/FetchPredictor.scala 156:14]
+  input  [30:0] io_zbtb_lu_target_1, // @[src/main/scala/fpga/FetchPredictor.scala 156:14]
+  input  [30:0] io_zbtb_lu_target_2, // @[src/main/scala/fpga/FetchPredictor.scala 156:14]
+  input  [30:0] io_zbtb_lu_target_3, // @[src/main/scala/fpga/FetchPredictor.scala 156:14]
+  output        io_zbtb_up_en, // @[src/main/scala/fpga/FetchPredictor.scala 156:14]
+  output [30:0] io_zbtb_up_pc, // @[src/main/scala/fpga/FetchPredictor.scala 156:14]
+  output [30:0] io_zbtb_up_target, // @[src/main/scala/fpga/FetchPredictor.scala 156:14]
+  output        io_zbtb_inv_en, // @[src/main/scala/fpga/FetchPredictor.scala 156:14]
+  output [30:0] io_zbtb_inv_pc, // @[src/main/scala/fpga/FetchPredictor.scala 156:14]
+  output [30:0] io_btb_lu_pc, // @[src/main/scala/fpga/FetchPredictor.scala 156:14]
+  input         io_btb_lu_result_0_jump, // @[src/main/scala/fpga/FetchPredictor.scala 156:14]
+  input         io_btb_lu_result_0_br, // @[src/main/scala/fpga/FetchPredictor.scala 156:14]
+  input  [1:0]  io_btb_lu_result_0_attr, // @[src/main/scala/fpga/FetchPredictor.scala 156:14]
+  input         io_btb_lu_result_0_is_ret, // @[src/main/scala/fpga/FetchPredictor.scala 156:14]
+  input  [30:0] io_btb_lu_result_0_target, // @[src/main/scala/fpga/FetchPredictor.scala 156:14]
+  input         io_btb_lu_result_1_jump, // @[src/main/scala/fpga/FetchPredictor.scala 156:14]
+  input         io_btb_lu_result_1_br, // @[src/main/scala/fpga/FetchPredictor.scala 156:14]
+  input  [1:0]  io_btb_lu_result_1_attr, // @[src/main/scala/fpga/FetchPredictor.scala 156:14]
+  input         io_btb_lu_result_1_is_ret, // @[src/main/scala/fpga/FetchPredictor.scala 156:14]
+  input  [30:0] io_btb_lu_result_1_target, // @[src/main/scala/fpga/FetchPredictor.scala 156:14]
+  input         io_btb_lu_result_2_jump, // @[src/main/scala/fpga/FetchPredictor.scala 156:14]
+  input         io_btb_lu_result_2_br, // @[src/main/scala/fpga/FetchPredictor.scala 156:14]
+  input  [1:0]  io_btb_lu_result_2_attr, // @[src/main/scala/fpga/FetchPredictor.scala 156:14]
+  input         io_btb_lu_result_2_is_ret, // @[src/main/scala/fpga/FetchPredictor.scala 156:14]
+  input  [30:0] io_btb_lu_result_2_target, // @[src/main/scala/fpga/FetchPredictor.scala 156:14]
+  input         io_btb_lu_result_3_jump, // @[src/main/scala/fpga/FetchPredictor.scala 156:14]
+  input         io_btb_lu_result_3_br, // @[src/main/scala/fpga/FetchPredictor.scala 156:14]
+  input  [1:0]  io_btb_lu_result_3_attr, // @[src/main/scala/fpga/FetchPredictor.scala 156:14]
+  input         io_btb_lu_result_3_is_ret, // @[src/main/scala/fpga/FetchPredictor.scala 156:14]
+  input  [30:0] io_btb_lu_result_3_target, // @[src/main/scala/fpga/FetchPredictor.scala 156:14]
+  output        io_btb_up_en, // @[src/main/scala/fpga/FetchPredictor.scala 156:14]
+  output [30:0] io_btb_up_pc, // @[src/main/scala/fpga/FetchPredictor.scala 156:14]
+  output [1:0]  io_btb_up_attr, // @[src/main/scala/fpga/FetchPredictor.scala 156:14]
+  output        io_btb_up_is_ret, // @[src/main/scala/fpga/FetchPredictor.scala 156:14]
+  output [30:0] io_btb_up_target, // @[src/main/scala/fpga/FetchPredictor.scala 156:14]
+  output [30:0] io_pht__lu_pc, // @[src/main/scala/fpga/FetchPredictor.scala 156:14]
+  input         io_pht__lu_taken_0, // @[src/main/scala/fpga/FetchPredictor.scala 156:14]
+  input         io_pht__lu_taken_1, // @[src/main/scala/fpga/FetchPredictor.scala 156:14]
+  input         io_pht__lu_taken_2, // @[src/main/scala/fpga/FetchPredictor.scala 156:14]
+  input         io_pht__lu_taken_3, // @[src/main/scala/fpga/FetchPredictor.scala 156:14]
+  input  [1:0]  io_pht__lu_lcnt_0, // @[src/main/scala/fpga/FetchPredictor.scala 156:14]
+  input  [1:0]  io_pht__lu_lcnt_1, // @[src/main/scala/fpga/FetchPredictor.scala 156:14]
+  input  [1:0]  io_pht__lu_lcnt_2, // @[src/main/scala/fpga/FetchPredictor.scala 156:14]
+  input  [1:0]  io_pht__lu_lcnt_3, // @[src/main/scala/fpga/FetchPredictor.scala 156:14]
+  input  [1:0]  io_pht__lu_gcnt_0, // @[src/main/scala/fpga/FetchPredictor.scala 156:14]
+  input  [1:0]  io_pht__lu_gcnt_1, // @[src/main/scala/fpga/FetchPredictor.scala 156:14]
+  input  [1:0]  io_pht__lu_gcnt_2, // @[src/main/scala/fpga/FetchPredictor.scala 156:14]
+  input  [1:0]  io_pht__lu_gcnt_3, // @[src/main/scala/fpga/FetchPredictor.scala 156:14]
+  output        io_pht__up_en, // @[src/main/scala/fpga/FetchPredictor.scala 156:14]
+  output [7:0]  io_pht__up_history, // @[src/main/scala/fpga/FetchPredictor.scala 156:14]
+  output [30:0] io_pht__up_pc, // @[src/main/scala/fpga/FetchPredictor.scala 156:14]
+  output [1:0]  io_pht__up_lcnt, // @[src/main/scala/fpga/FetchPredictor.scala 156:14]
+  output [1:0]  io_pht__up_gcnt, // @[src/main/scala/fpga/FetchPredictor.scala 156:14]
+  input         io_pht__lmem_ren, // @[src/main/scala/fpga/FetchPredictor.scala 156:14]
+  input         io_pht__lmem_wen, // @[src/main/scala/fpga/FetchPredictor.scala 156:14]
+  input  [10:0] io_pht__lmem_raddr, // @[src/main/scala/fpga/FetchPredictor.scala 156:14]
+  output [7:0]  io_pht__lmem_rdata, // @[src/main/scala/fpga/FetchPredictor.scala 156:14]
+  input  [12:0] io_pht__lmem_waddr, // @[src/main/scala/fpga/FetchPredictor.scala 156:14]
+  input  [1:0]  io_pht__lmem_wdata, // @[src/main/scala/fpga/FetchPredictor.scala 156:14]
+  input         io_pht__gmem_ren, // @[src/main/scala/fpga/FetchPredictor.scala 156:14]
+  input         io_pht__gmem_wen, // @[src/main/scala/fpga/FetchPredictor.scala 156:14]
+  input  [10:0] io_pht__gmem_raddr, // @[src/main/scala/fpga/FetchPredictor.scala 156:14]
+  output [7:0]  io_pht__gmem_rdata, // @[src/main/scala/fpga/FetchPredictor.scala 156:14]
+  input  [12:0] io_pht__gmem_waddr, // @[src/main/scala/fpga/FetchPredictor.scala 156:14]
+  input  [1:0]  io_pht__gmem_wdata, // @[src/main/scala/fpga/FetchPredictor.scala 156:14]
+  output        io_pht__br_en, // @[src/main/scala/fpga/FetchPredictor.scala 156:14]
+  output [30:0] io_pht__br_pc, // @[src/main/scala/fpga/FetchPredictor.scala 156:14]
+  output        io_pht__br2_en, // @[src/main/scala/fpga/FetchPredictor.scala 156:14]
+  output [7:0]  io_pht__br2_history, // @[src/main/scala/fpga/FetchPredictor.scala 156:14]
+  output [30:0] io_pht__br2_pc, // @[src/main/scala/fpga/FetchPredictor.scala 156:14]
+  input  [7:0]  io_pht__history, // @[src/main/scala/fpga/FetchPredictor.scala 156:14]
+  output        io_pht__res_en, // @[src/main/scala/fpga/FetchPredictor.scala 156:14]
+  output [7:0]  io_pht__res_history, // @[src/main/scala/fpga/FetchPredictor.scala 156:14]
+  input  [30:0] io_ras_top_ret_pc, // @[src/main/scala/fpga/FetchPredictor.scala 156:14]
+  output        io_ras_ret1_en, // @[src/main/scala/fpga/FetchPredictor.scala 156:14]
+  output        io_ras_call1_en, // @[src/main/scala/fpga/FetchPredictor.scala 156:14]
+  output [30:0] io_ras_call1_ret_pc, // @[src/main/scala/fpga/FetchPredictor.scala 156:14]
+  output        io_ras_up_en, // @[src/main/scala/fpga/FetchPredictor.scala 156:14]
+  output        io_ras_ret2_en, // @[src/main/scala/fpga/FetchPredictor.scala 156:14]
+  output        io_ras_call2_en, // @[src/main/scala/fpga/FetchPredictor.scala 156:14]
+  output [30:0] io_ras_call2_ret_pc, // @[src/main/scala/fpga/FetchPredictor.scala 156:14]
+  output        io_pht_lmem_ren, // @[src/main/scala/fpga/FetchPredictor.scala 156:14]
+  output        io_pht_lmem_wen, // @[src/main/scala/fpga/FetchPredictor.scala 156:14]
+  output [10:0] io_pht_lmem_raddr, // @[src/main/scala/fpga/FetchPredictor.scala 156:14]
+  input  [7:0]  io_pht_lmem_rdata, // @[src/main/scala/fpga/FetchPredictor.scala 156:14]
+  output [12:0] io_pht_lmem_waddr, // @[src/main/scala/fpga/FetchPredictor.scala 156:14]
+  output [1:0]  io_pht_lmem_wdata, // @[src/main/scala/fpga/FetchPredictor.scala 156:14]
+  output        io_pht_gmem_ren, // @[src/main/scala/fpga/FetchPredictor.scala 156:14]
+  output        io_pht_gmem_wen, // @[src/main/scala/fpga/FetchPredictor.scala 156:14]
+  output [10:0] io_pht_gmem_raddr, // @[src/main/scala/fpga/FetchPredictor.scala 156:14]
+  input  [7:0]  io_pht_gmem_rdata, // @[src/main/scala/fpga/FetchPredictor.scala 156:14]
+  output [12:0] io_pht_gmem_waddr, // @[src/main/scala/fpga/FetchPredictor.scala 156:14]
+  output [1:0]  io_pht_gmem_wdata // @[src/main/scala/fpga/FetchPredictor.scala 156:14]
 );
 `ifdef RANDOMIZE_REG_INIT
   reg [31:0] _RAND_0;
@@ -3720,208 +3732,209 @@ module FetchPredictor(
   reg [31:0] _RAND_5;
   reg [31:0] _RAND_6;
   reg [31:0] _RAND_7;
+  reg [31:0] _RAND_8;
 `endif // RANDOMIZE_REG_INIT
-  reg  reg_iaddr_en; // @[src/main/scala/fpga/FetchPredictor.scala 173:34]
-  reg  reg_invalidate; // @[src/main/scala/fpga/FetchPredictor.scala 174:34]
-  reg [30:0] reg_iaddr_index; // @[src/main/scala/fpga/FetchPredictor.scala 175:34]
-  reg  reg_redirect_en; // @[src/main/scala/fpga/FetchPredictor.scala 176:34]
-  reg  reg_correct_enq; // @[src/main/scala/fpga/FetchPredictor.scala 177:34]
-  reg  reg_target_changed; // @[src/main/scala/fpga/FetchPredictor.scala 178:37]
-  reg  reg_flush_en; // @[src/main/scala/fpga/FetchPredictor.scala 179:34]
-  reg [1:0] reg_fp_ptr; // @[src/main/scala/fpga/FetchPredictor.scala 180:34]
-  wire [1:0] ibpos = reg_iaddr_index[1:0]; // @[src/main/scala/common/UIntExtension.scala 14:34]
-  wire  _bp0_pos_T = 2'h0 >= ibpos; // @[src/main/scala/fpga/FetchPredictor.scala 191:39]
-  wire  _bp0_pos_T_1 = 2'h0 >= ibpos & io_zbtb_lu_matches_0; // @[src/main/scala/fpga/FetchPredictor.scala 191:49]
-  wire  _bp0_pos_T_2 = 2'h1 >= ibpos; // @[src/main/scala/fpga/FetchPredictor.scala 191:39]
-  wire  _bp0_pos_T_3 = 2'h1 >= ibpos & io_zbtb_lu_matches_1; // @[src/main/scala/fpga/FetchPredictor.scala 191:49]
-  wire  _bp0_pos_T_4 = 2'h2 >= ibpos; // @[src/main/scala/fpga/FetchPredictor.scala 191:39]
-  wire  _bp0_pos_T_5 = 2'h2 >= ibpos & io_zbtb_lu_matches_2; // @[src/main/scala/fpga/FetchPredictor.scala 191:49]
+  reg  reg_iaddr_en; // @[src/main/scala/fpga/FetchPredictor.scala 174:34]
+  reg  reg_invalidate; // @[src/main/scala/fpga/FetchPredictor.scala 175:34]
+  reg [30:0] reg_iaddr_index; // @[src/main/scala/fpga/FetchPredictor.scala 176:34]
+  reg  reg_redirect_en; // @[src/main/scala/fpga/FetchPredictor.scala 177:34]
+  reg  reg_correct_enq; // @[src/main/scala/fpga/FetchPredictor.scala 178:34]
+  reg  reg_target_changed; // @[src/main/scala/fpga/FetchPredictor.scala 179:37]
+  reg  reg_flush_en; // @[src/main/scala/fpga/FetchPredictor.scala 180:34]
+  reg [1:0] reg_fp_ptr; // @[src/main/scala/fpga/FetchPredictor.scala 181:34]
+  reg [3:0] reg_ibmask; // @[src/main/scala/fpga/FetchPredictor.scala 183:34]
+  wire [1:0] ibpos = io_pr_iaddr[1:0]; // @[src/main/scala/common/UIntExtension.scala 14:34]
+  wire  _bp0_pos_T_1 = reg_ibmask[0] & io_zbtb_lu_matches_0; // @[src/main/scala/fpga/FetchPredictor.scala 199:43]
+  wire  _bp0_pos_T_3 = reg_ibmask[1] & io_zbtb_lu_matches_1; // @[src/main/scala/fpga/FetchPredictor.scala 199:43]
+  wire  _bp0_pos_T_5 = reg_ibmask[2] & io_zbtb_lu_matches_2; // @[src/main/scala/fpga/FetchPredictor.scala 199:43]
   wire [1:0] _bp0_pos_T_6 = _bp0_pos_T_5 ? 2'h2 : 2'h3; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
   wire [1:0] _bp0_pos_T_7 = _bp0_pos_T_3 ? 2'h1 : _bp0_pos_T_6; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
   wire [1:0] bp0_pos = _bp0_pos_T_1 ? 2'h0 : _bp0_pos_T_7; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
-  wire  _bp0_en_T = ~reg_invalidate; // @[src/main/scala/fpga/FetchPredictor.scala 193:34]
-  wire  _bp0_en_T_1 = reg_iaddr_en & ~reg_invalidate; // @[src/main/scala/fpga/FetchPredictor.scala 193:31]
-  wire [3:0] _bp0_en_T_10 = {io_zbtb_lu_matches_3,_bp0_pos_T_5,_bp0_pos_T_3,_bp0_pos_T_1}; // @[src/main/scala/fpga/FetchPredictor.scala 193:124]
-  wire  bp0_en = reg_iaddr_en & ~reg_invalidate & |_bp0_en_T_10; // @[src/main/scala/fpga/FetchPredictor.scala 193:50]
-  wire [30:0] _GEN_1 = 2'h1 == bp0_pos ? io_zbtb_lu_target_1 : io_zbtb_lu_target_0; // @[src/main/scala/fpga/FetchPredictor.scala 196:{20,20}]
-  wire [30:0] _GEN_2 = 2'h2 == bp0_pos ? io_zbtb_lu_target_2 : _GEN_1; // @[src/main/scala/fpga/FetchPredictor.scala 196:{20,20}]
-  wire [30:0] _GEN_3 = 2'h3 == bp0_pos ? io_zbtb_lu_target_3 : _GEN_2; // @[src/main/scala/fpga/FetchPredictor.scala 196:{20,20}]
+  wire  _bp0_en_T = ~reg_invalidate; // @[src/main/scala/fpga/FetchPredictor.scala 201:34]
+  wire  _bp0_en_T_1 = reg_iaddr_en & ~reg_invalidate; // @[src/main/scala/fpga/FetchPredictor.scala 201:31]
+  wire  _bp0_en_T_9 = reg_ibmask[3] & io_zbtb_lu_matches_3; // @[src/main/scala/fpga/FetchPredictor.scala 201:92]
+  wire [3:0] _bp0_en_T_10 = {_bp0_en_T_9,_bp0_pos_T_5,_bp0_pos_T_3,_bp0_pos_T_1}; // @[src/main/scala/fpga/FetchPredictor.scala 201:118]
+  wire  bp0_en = reg_iaddr_en & ~reg_invalidate & |_bp0_en_T_10; // @[src/main/scala/fpga/FetchPredictor.scala 201:50]
+  wire [30:0] _GEN_1 = 2'h1 == bp0_pos ? io_zbtb_lu_target_1 : io_zbtb_lu_target_0; // @[src/main/scala/fpga/FetchPredictor.scala 204:{20,20}]
+  wire [30:0] _GEN_2 = 2'h2 == bp0_pos ? io_zbtb_lu_target_2 : _GEN_1; // @[src/main/scala/fpga/FetchPredictor.scala 204:{20,20}]
+  wire [30:0] _GEN_3 = 2'h3 == bp0_pos ? io_zbtb_lu_target_3 : _GEN_2; // @[src/main/scala/fpga/FetchPredictor.scala 204:{20,20}]
   wire [31:0] _T = {_GEN_3,1'h0}; // @[src/main/scala/common/UIntExtension.scala 10:33]
   wire [31:0] _T_1 = {reg_iaddr_index,1'h0}; // @[src/main/scala/common/UIntExtension.scala 10:33]
-  wire  _T_3 = ~reset; // @[src/main/scala/fpga/FetchPredictor.scala 199:13]
-  wire  _redirected_T_1 = io_btb_lu_result_0_br & io_pht__lu_taken_0; // @[src/main/scala/fpga/FetchPredictor.scala 207:31]
-  wire  _redirected_T_2 = io_btb_lu_result_0_br & io_pht__lu_taken_0 | io_btb_lu_result_0_jump; // @[src/main/scala/fpga/FetchPredictor.scala 207:54]
-  wire  _redirected_T_3 = _redirected_T_2 | io_btb_lu_result_0_is_ret; // @[src/main/scala/fpga/FetchPredictor.scala 208:32]
-  wire  redirected_0 = _bp0_pos_T & _redirected_T_3; // @[src/main/scala/fpga/FetchPredictor.scala 206:67]
-  wire  _redirected_T_6 = io_btb_lu_result_1_br & io_pht__lu_taken_1; // @[src/main/scala/fpga/FetchPredictor.scala 207:31]
-  wire  _redirected_T_7 = io_btb_lu_result_1_br & io_pht__lu_taken_1 | io_btb_lu_result_1_jump; // @[src/main/scala/fpga/FetchPredictor.scala 207:54]
-  wire  _redirected_T_8 = _redirected_T_7 | io_btb_lu_result_1_is_ret; // @[src/main/scala/fpga/FetchPredictor.scala 208:32]
-  wire  redirected_1 = _bp0_pos_T_2 & _redirected_T_8; // @[src/main/scala/fpga/FetchPredictor.scala 206:67]
-  wire  _redirected_T_11 = io_btb_lu_result_2_br & io_pht__lu_taken_2; // @[src/main/scala/fpga/FetchPredictor.scala 207:31]
-  wire  _redirected_T_12 = io_btb_lu_result_2_br & io_pht__lu_taken_2 | io_btb_lu_result_2_jump; // @[src/main/scala/fpga/FetchPredictor.scala 207:54]
-  wire  _redirected_T_13 = _redirected_T_12 | io_btb_lu_result_2_is_ret; // @[src/main/scala/fpga/FetchPredictor.scala 208:32]
-  wire  redirected_2 = _bp0_pos_T_4 & _redirected_T_13; // @[src/main/scala/fpga/FetchPredictor.scala 206:67]
-  wire  _redirected_T_16 = io_btb_lu_result_3_br & io_pht__lu_taken_3; // @[src/main/scala/fpga/FetchPredictor.scala 207:31]
-  wire  _redirected_T_17 = io_btb_lu_result_3_br & io_pht__lu_taken_3 | io_btb_lu_result_3_jump; // @[src/main/scala/fpga/FetchPredictor.scala 207:54]
-  wire  redirected_3 = _redirected_T_17 | io_btb_lu_result_3_is_ret; // @[src/main/scala/fpga/FetchPredictor.scala 208:32]
+  wire  _T_3 = ~reset; // @[src/main/scala/fpga/FetchPredictor.scala 207:13]
+  wire  _redirected_T_1 = io_btb_lu_result_0_br & io_pht__lu_taken_0; // @[src/main/scala/fpga/FetchPredictor.scala 214:31]
+  wire  _redirected_T_2 = io_btb_lu_result_0_br & io_pht__lu_taken_0 | io_btb_lu_result_0_jump; // @[src/main/scala/fpga/FetchPredictor.scala 214:54]
+  wire  _redirected_T_3 = _redirected_T_2 | io_btb_lu_result_0_is_ret; // @[src/main/scala/fpga/FetchPredictor.scala 215:32]
+  wire  redirected_0 = reg_ibmask[0] & _redirected_T_3; // @[src/main/scala/fpga/FetchPredictor.scala 213:61]
+  wire  _redirected_T_6 = io_btb_lu_result_1_br & io_pht__lu_taken_1; // @[src/main/scala/fpga/FetchPredictor.scala 214:31]
+  wire  _redirected_T_7 = io_btb_lu_result_1_br & io_pht__lu_taken_1 | io_btb_lu_result_1_jump; // @[src/main/scala/fpga/FetchPredictor.scala 214:54]
+  wire  _redirected_T_8 = _redirected_T_7 | io_btb_lu_result_1_is_ret; // @[src/main/scala/fpga/FetchPredictor.scala 215:32]
+  wire  redirected_1 = reg_ibmask[1] & _redirected_T_8; // @[src/main/scala/fpga/FetchPredictor.scala 213:61]
+  wire  _redirected_T_11 = io_btb_lu_result_2_br & io_pht__lu_taken_2; // @[src/main/scala/fpga/FetchPredictor.scala 214:31]
+  wire  _redirected_T_12 = io_btb_lu_result_2_br & io_pht__lu_taken_2 | io_btb_lu_result_2_jump; // @[src/main/scala/fpga/FetchPredictor.scala 214:54]
+  wire  _redirected_T_13 = _redirected_T_12 | io_btb_lu_result_2_is_ret; // @[src/main/scala/fpga/FetchPredictor.scala 215:32]
+  wire  redirected_2 = reg_ibmask[2] & _redirected_T_13; // @[src/main/scala/fpga/FetchPredictor.scala 213:61]
+  wire  _redirected_T_16 = io_btb_lu_result_3_br & io_pht__lu_taken_3; // @[src/main/scala/fpga/FetchPredictor.scala 214:31]
+  wire  _redirected_T_17 = io_btb_lu_result_3_br & io_pht__lu_taken_3 | io_btb_lu_result_3_jump; // @[src/main/scala/fpga/FetchPredictor.scala 214:54]
+  wire  _redirected_T_18 = _redirected_T_17 | io_btb_lu_result_3_is_ret; // @[src/main/scala/fpga/FetchPredictor.scala 215:32]
+  wire  redirected_3 = reg_ibmask[3] & _redirected_T_18; // @[src/main/scala/fpga/FetchPredictor.scala 213:61]
   wire [1:0] _bp1_pos_T = redirected_2 ? 2'h2 : 2'h3; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
   wire [1:0] _bp1_pos_T_1 = redirected_1 ? 2'h1 : _bp1_pos_T; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
   wire [1:0] bp1_pos = redirected_0 ? 2'h0 : _bp1_pos_T_1; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
-  wire [1:0] _GEN_5 = 2'h1 == bp1_pos ? io_btb_lu_result_1_attr : io_btb_lu_result_0_attr; // @[src/main/scala/fpga/FetchPredictor.scala 218:{57,57}]
-  wire [1:0] _GEN_6 = 2'h2 == bp1_pos ? io_btb_lu_result_2_attr : _GEN_5; // @[src/main/scala/fpga/FetchPredictor.scala 218:{57,57}]
-  wire [1:0] _GEN_7 = 2'h3 == bp1_pos ? io_btb_lu_result_3_attr : _GEN_6; // @[src/main/scala/fpga/FetchPredictor.scala 218:{57,57}]
-  wire [30:0] _GEN_9 = 2'h1 == bp1_pos ? io_btb_lu_result_1_target : io_btb_lu_result_0_target; // @[src/main/scala/fpga/FetchPredictor.scala 218:{25,25}]
-  wire [30:0] _GEN_10 = 2'h2 == bp1_pos ? io_btb_lu_result_2_target : _GEN_9; // @[src/main/scala/fpga/FetchPredictor.scala 218:{25,25}]
-  wire [30:0] _GEN_11 = 2'h3 == bp1_pos ? io_btb_lu_result_3_target : _GEN_10; // @[src/main/scala/fpga/FetchPredictor.scala 218:{25,25}]
-  wire [30:0] bp1_target = _GEN_7 == 2'h0 ? io_ras_top_ret_pc : _GEN_11; // @[src/main/scala/fpga/FetchPredictor.scala 218:25]
-  wire [3:0] _bp1_en_T_2 = {redirected_3,redirected_2,redirected_1,redirected_0}; // @[src/main/scala/fpga/FetchPredictor.scala 219:64]
-  wire  bp1_en = _bp0_en_T_1 & |_bp1_en_T_2; // @[src/main/scala/fpga/FetchPredictor.scala 219:50]
-  wire  _io_ru_en_T_1 = bp1_en & ~io_pr_invalidate; // @[src/main/scala/fpga/FetchPredictor.scala 224:31]
-  wire  _GEN_17 = 2'h1 == bp1_pos ? io_btb_lu_result_1_is_ret : io_btb_lu_result_0_is_ret; // @[src/main/scala/fpga/FetchPredictor.scala 227:{21,21}]
-  wire  _GEN_18 = 2'h2 == bp1_pos ? io_btb_lu_result_2_is_ret : _GEN_17; // @[src/main/scala/fpga/FetchPredictor.scala 227:{21,21}]
-  wire  _GEN_19 = 2'h3 == bp1_pos ? io_btb_lu_result_3_is_ret : _GEN_18; // @[src/main/scala/fpga/FetchPredictor.scala 227:{21,21}]
-  wire [31:0] _T_8 = {bp1_target,1'h0}; // @[src/main/scala/common/UIntExtension.scala 10:33]
-  wire  _io_re_en_T = ~io_pr_flush_en; // @[src/main/scala/fpga/FetchPredictor.scala 240:23]
-  wire  _T_19 = reg_redirect_en & ~reg_correct_enq & ~io_pr_target_changed | reg_target_changed; // @[src/main/scala/fpga/FetchPredictor.scala 248:70]
-  wire  _T_20 = _io_re_en_T & _T_19; // @[src/main/scala/fpga/FetchPredictor.scala 247:28]
-  wire [1:0] cur_fp_ptr = _T_20 | reg_flush_en ? io_re_ptr : reg_fp_ptr; // @[src/main/scala/fpga/FetchPredictor.scala 250:25 251:18 180:34]
-  wire  _GEN_22 = 2'h1 == bp0_pos ? _redirected_T_6 : _redirected_T_1; // @[src/main/scala/fpga/FetchPredictor.scala 257:{52,52}]
-  wire  _GEN_23 = 2'h2 == bp0_pos ? _redirected_T_11 : _GEN_22; // @[src/main/scala/fpga/FetchPredictor.scala 257:{52,52}]
-  wire  _GEN_24 = 2'h3 == bp0_pos ? _redirected_T_16 : _GEN_23; // @[src/main/scala/fpga/FetchPredictor.scala 257:{52,52}]
-  wire  _GEN_26 = 2'h1 == bp0_pos ? io_btb_lu_result_1_jump : io_btb_lu_result_0_jump; // @[src/main/scala/fpga/FetchPredictor.scala 257:{74,74}]
-  wire  _GEN_27 = 2'h2 == bp0_pos ? io_btb_lu_result_2_jump : _GEN_26; // @[src/main/scala/fpga/FetchPredictor.scala 257:{74,74}]
-  wire  _GEN_28 = 2'h3 == bp0_pos ? io_btb_lu_result_3_jump : _GEN_27; // @[src/main/scala/fpga/FetchPredictor.scala 257:{74,74}]
-  wire  _io_ras_ret1_en_T_3 = _io_re_en_T & reg_iaddr_en & _bp0_en_T; // @[src/main/scala/fpga/FetchPredictor.scala 261:60]
-  wire  _io_ras_call1_ret_pc_T = bp1_pos == 2'h3; // @[src/main/scala/fpga/FetchPredictor.scala 264:15]
+  wire [1:0] _GEN_5 = 2'h1 == bp1_pos ? io_btb_lu_result_1_attr : io_btb_lu_result_0_attr; // @[src/main/scala/fpga/FetchPredictor.scala 225:{57,57}]
+  wire [1:0] _GEN_6 = 2'h2 == bp1_pos ? io_btb_lu_result_2_attr : _GEN_5; // @[src/main/scala/fpga/FetchPredictor.scala 225:{57,57}]
+  wire [1:0] _GEN_7 = 2'h3 == bp1_pos ? io_btb_lu_result_3_attr : _GEN_6; // @[src/main/scala/fpga/FetchPredictor.scala 225:{57,57}]
+  wire [30:0] _GEN_9 = 2'h1 == bp1_pos ? io_btb_lu_result_1_target : io_btb_lu_result_0_target; // @[src/main/scala/fpga/FetchPredictor.scala 225:{25,25}]
+  wire [30:0] _GEN_10 = 2'h2 == bp1_pos ? io_btb_lu_result_2_target : _GEN_9; // @[src/main/scala/fpga/FetchPredictor.scala 225:{25,25}]
+  wire [30:0] _GEN_11 = 2'h3 == bp1_pos ? io_btb_lu_result_3_target : _GEN_10; // @[src/main/scala/fpga/FetchPredictor.scala 225:{25,25}]
+  wire [30:0] bp1_target = _GEN_7 == 2'h0 ? io_ras_top_ret_pc : _GEN_11; // @[src/main/scala/fpga/FetchPredictor.scala 225:25]
+  wire [3:0] _bp1_en_T_2 = {redirected_3,redirected_2,redirected_1,redirected_0}; // @[src/main/scala/fpga/FetchPredictor.scala 226:64]
+  wire  bp1_en = _bp0_en_T_1 & |_bp1_en_T_2; // @[src/main/scala/fpga/FetchPredictor.scala 226:50]
+  wire  _io_ru_en_T_1 = bp1_en & ~io_pr_invalidate; // @[src/main/scala/fpga/FetchPredictor.scala 231:31]
+  wire  _GEN_17 = 2'h1 == bp1_pos ? io_btb_lu_result_1_is_ret : io_btb_lu_result_0_is_ret; // @[src/main/scala/fpga/FetchPredictor.scala 234:{21,21}]
+  wire  _GEN_18 = 2'h2 == bp1_pos ? io_btb_lu_result_2_is_ret : _GEN_17; // @[src/main/scala/fpga/FetchPredictor.scala 234:{21,21}]
+  wire  _GEN_19 = 2'h3 == bp1_pos ? io_btb_lu_result_3_is_ret : _GEN_18; // @[src/main/scala/fpga/FetchPredictor.scala 234:{21,21}]
+  wire [31:0] _T_6 = {bp1_target,1'h0}; // @[src/main/scala/common/UIntExtension.scala 10:33]
+  wire  _io_re_en_T = ~io_pr_flush_en; // @[src/main/scala/fpga/FetchPredictor.scala 246:23]
+  wire  _T_15 = reg_redirect_en & ~reg_correct_enq & ~io_pr_target_changed | reg_target_changed; // @[src/main/scala/fpga/FetchPredictor.scala 254:70]
+  wire  _T_16 = _io_re_en_T & _T_15; // @[src/main/scala/fpga/FetchPredictor.scala 253:28]
+  wire [1:0] cur_fp_ptr = _T_16 | reg_flush_en ? io_re_ptr : reg_fp_ptr; // @[src/main/scala/fpga/FetchPredictor.scala 256:25 257:18 181:34]
+  wire  _GEN_22 = 2'h1 == bp0_pos ? _redirected_T_6 : _redirected_T_1; // @[src/main/scala/fpga/FetchPredictor.scala 263:{52,52}]
+  wire  _GEN_23 = 2'h2 == bp0_pos ? _redirected_T_11 : _GEN_22; // @[src/main/scala/fpga/FetchPredictor.scala 263:{52,52}]
+  wire  _GEN_24 = 2'h3 == bp0_pos ? _redirected_T_16 : _GEN_23; // @[src/main/scala/fpga/FetchPredictor.scala 263:{52,52}]
+  wire  _GEN_26 = 2'h1 == bp0_pos ? io_btb_lu_result_1_jump : io_btb_lu_result_0_jump; // @[src/main/scala/fpga/FetchPredictor.scala 263:{74,74}]
+  wire  _GEN_27 = 2'h2 == bp0_pos ? io_btb_lu_result_2_jump : _GEN_26; // @[src/main/scala/fpga/FetchPredictor.scala 263:{74,74}]
+  wire  _GEN_28 = 2'h3 == bp0_pos ? io_btb_lu_result_3_jump : _GEN_27; // @[src/main/scala/fpga/FetchPredictor.scala 263:{74,74}]
+  wire  _io_ras_ret1_en_T_3 = _io_re_en_T & reg_iaddr_en & _bp0_en_T; // @[src/main/scala/fpga/FetchPredictor.scala 267:60]
+  wire  _io_ras_call1_ret_pc_T = bp1_pos == 2'h3; // @[src/main/scala/fpga/FetchPredictor.scala 270:15]
   wire [30:0] _io_ras_call1_ret_pc_T_2 = {reg_iaddr_index[30:2],2'h0}; // @[src/main/scala/common/UIntExtension.scala 12:73]
-  wire [30:0] _io_ras_call1_ret_pc_T_4 = _io_ras_call1_ret_pc_T_2 + 31'h4; // @[src/main/scala/fpga/FetchPredictor.scala 265:39]
-  wire [1:0] _io_ras_call1_ret_pc_T_6 = bp1_pos + 2'h1; // @[src/main/scala/fpga/FetchPredictor.scala 266:49]
+  wire [30:0] _io_ras_call1_ret_pc_T_4 = _io_ras_call1_ret_pc_T_2 + 31'h4; // @[src/main/scala/fpga/FetchPredictor.scala 271:39]
+  wire [1:0] _io_ras_call1_ret_pc_T_6 = bp1_pos + 2'h1; // @[src/main/scala/fpga/FetchPredictor.scala 272:49]
   wire [30:0] _io_ras_call1_ret_pc_T_9 = {reg_iaddr_index[30:2],_io_ras_call1_ret_pc_T_6}; // @[src/main/scala/common/UIntExtension.scala 13:89]
   wire [7:0] pht_pc_index = reg_iaddr_index[7:0]; // @[src/main/scala/common/UIntExtension.scala 14:34]
-  wire  _GEN_30 = 2'h1 == bp1_pos ? _redirected_T_6 : _redirected_T_1; // @[src/main/scala/fpga/FetchPredictor.scala 271:{72,72}]
-  wire  _GEN_31 = 2'h2 == bp1_pos ? _redirected_T_11 : _GEN_30; // @[src/main/scala/fpga/FetchPredictor.scala 271:{72,72}]
-  wire  _GEN_32 = 2'h3 == bp1_pos ? _redirected_T_16 : _GEN_31; // @[src/main/scala/fpga/FetchPredictor.scala 271:{72,72}]
+  wire  _GEN_30 = 2'h1 == bp1_pos ? _redirected_T_6 : _redirected_T_1; // @[src/main/scala/fpga/FetchPredictor.scala 277:{72,72}]
+  wire  _GEN_31 = 2'h2 == bp1_pos ? _redirected_T_11 : _GEN_30; // @[src/main/scala/fpga/FetchPredictor.scala 277:{72,72}]
+  wire  _GEN_32 = 2'h3 == bp1_pos ? _redirected_T_16 : _GEN_31; // @[src/main/scala/fpga/FetchPredictor.scala 277:{72,72}]
   wire [7:0] _io_pht_br_pc_T_2 = {pht_pc_index[7:2],bp1_pos}; // @[src/main/scala/common/UIntExtension.scala 13:89]
-  wire  _io_btb_up_en_T_1 = io_cr_bp_entry_gcnt != 2'h1; // @[src/main/scala/fpga/FetchPredictor.scala 311:12]
-  wire  _io_btb_up_en_T_4 = io_cr_attr == 2'h0 & (io_cr_fp_hit | _io_btb_up_en_T_1) | io_cr_br_taken; // @[src/main/scala/fpga/FetchPredictor.scala 323:98]
-  wire  _io_btb_up_en_T_5 = io_cr_attr == 2'h2; // @[src/main/scala/fpga/FetchPredictor.scala 325:19]
-  wire  _io_btb_up_en_T_6 = _io_btb_up_en_T_4 | _io_btb_up_en_T_5; // @[src/main/scala/fpga/FetchPredictor.scala 324:24]
-  wire  _io_btb_up_en_T_7 = io_cr_attr == 2'h3; // @[src/main/scala/fpga/FetchPredictor.scala 326:19]
-  wire  _io_btb_up_en_T_8 = _io_btb_up_en_T_6 | _io_btb_up_en_T_7; // @[src/main/scala/fpga/FetchPredictor.scala 325:39]
-  wire  _io_btb_up_en_T_9 = _io_btb_up_en_T_8 | io_cr_is_ret; // @[src/main/scala/fpga/FetchPredictor.scala 326:39]
-  wire  _updated_lcnt_lcnt_if_taken_T_4 = ~io_cr_bp_entry_lcnt[1] | io_cr_bp_entry_lcnt[0]; // @[src/main/scala/fpga/FetchPredictor.scala 282:51]
-  wire [1:0] updated_lcnt_lcnt_if_taken = {io_cr_bp_entry_lcnt[0],_updated_lcnt_lcnt_if_taken_T_4}; // @[src/main/scala/fpga/FetchPredictor.scala 282:38]
-  wire  _updated_lcnt_lcnt_unless_taken_T_1 = ~io_cr_bp_entry_lcnt[0]; // @[src/main/scala/fpga/FetchPredictor.scala 289:32]
-  wire  _updated_lcnt_lcnt_unless_taken_T_4 = io_cr_bp_entry_lcnt[1] & io_cr_bp_entry_lcnt[0]; // @[src/main/scala/fpga/FetchPredictor.scala 289:57]
-  wire [1:0] updated_lcnt_lcnt_unless_taken = {_updated_lcnt_lcnt_unless_taken_T_1,_updated_lcnt_lcnt_unless_taken_T_4}; // @[src/main/scala/fpga/FetchPredictor.scala 289:45]
-  wire  _updated_gcnt_gcnt_if_taken_T_2 = ~io_cr_bp_entry_gcnt[0]; // @[src/main/scala/fpga/FetchPredictor.scala 299:38]
-  wire  _updated_gcnt_gcnt_if_taken_T_3 = io_cr_bp_entry_gcnt[1] ^ ~io_cr_bp_entry_gcnt[0]; // @[src/main/scala/fpga/FetchPredictor.scala 299:36]
-  wire [1:0] updated_gcnt_gcnt_if_taken = {_updated_gcnt_gcnt_if_taken_T_3,_updated_gcnt_gcnt_if_taken_T_3}; // @[src/main/scala/fpga/FetchPredictor.scala 299:48]
-  wire [1:0] updated_gcnt_gcnt_unless_taken = {_updated_gcnt_gcnt_if_taken_T_2,1'h0}; // @[src/main/scala/fpga/FetchPredictor.scala 305:42]
-  assign io_pr_redirect_ready = io_re_ready & (~io_re_left1 | ~io_pr_redirect_en); // @[src/main/scala/fpga/FetchPredictor.scala 184:41]
-  assign io_pr_bp0_en = reg_iaddr_en & ~reg_invalidate & |_bp0_en_T_10; // @[src/main/scala/fpga/FetchPredictor.scala 193:50]
+  wire  _io_btb_up_en_T_1 = io_cr_bp_entry_gcnt != 2'h1; // @[src/main/scala/fpga/FetchPredictor.scala 317:12]
+  wire  _io_btb_up_en_T_4 = io_cr_attr == 2'h0 & (io_cr_fp_hit | _io_btb_up_en_T_1) | io_cr_br_taken; // @[src/main/scala/fpga/FetchPredictor.scala 329:98]
+  wire  _io_btb_up_en_T_5 = io_cr_attr == 2'h2; // @[src/main/scala/fpga/FetchPredictor.scala 331:19]
+  wire  _io_btb_up_en_T_6 = _io_btb_up_en_T_4 | _io_btb_up_en_T_5; // @[src/main/scala/fpga/FetchPredictor.scala 330:24]
+  wire  _io_btb_up_en_T_7 = io_cr_attr == 2'h3; // @[src/main/scala/fpga/FetchPredictor.scala 332:19]
+  wire  _io_btb_up_en_T_8 = _io_btb_up_en_T_6 | _io_btb_up_en_T_7; // @[src/main/scala/fpga/FetchPredictor.scala 331:39]
+  wire  _io_btb_up_en_T_9 = _io_btb_up_en_T_8 | io_cr_is_ret; // @[src/main/scala/fpga/FetchPredictor.scala 332:39]
+  wire  _updated_lcnt_lcnt_if_taken_T_4 = ~io_cr_bp_entry_lcnt[1] | io_cr_bp_entry_lcnt[0]; // @[src/main/scala/fpga/FetchPredictor.scala 288:51]
+  wire [1:0] updated_lcnt_lcnt_if_taken = {io_cr_bp_entry_lcnt[0],_updated_lcnt_lcnt_if_taken_T_4}; // @[src/main/scala/fpga/FetchPredictor.scala 288:38]
+  wire  _updated_lcnt_lcnt_unless_taken_T_1 = ~io_cr_bp_entry_lcnt[0]; // @[src/main/scala/fpga/FetchPredictor.scala 295:32]
+  wire  _updated_lcnt_lcnt_unless_taken_T_4 = io_cr_bp_entry_lcnt[1] & io_cr_bp_entry_lcnt[0]; // @[src/main/scala/fpga/FetchPredictor.scala 295:57]
+  wire [1:0] updated_lcnt_lcnt_unless_taken = {_updated_lcnt_lcnt_unless_taken_T_1,_updated_lcnt_lcnt_unless_taken_T_4}; // @[src/main/scala/fpga/FetchPredictor.scala 295:45]
+  wire  _updated_gcnt_gcnt_if_taken_T_2 = ~io_cr_bp_entry_gcnt[0]; // @[src/main/scala/fpga/FetchPredictor.scala 305:38]
+  wire  _updated_gcnt_gcnt_if_taken_T_3 = io_cr_bp_entry_gcnt[1] ^ ~io_cr_bp_entry_gcnt[0]; // @[src/main/scala/fpga/FetchPredictor.scala 305:36]
+  wire [1:0] updated_gcnt_gcnt_if_taken = {_updated_gcnt_gcnt_if_taken_T_3,_updated_gcnt_gcnt_if_taken_T_3}; // @[src/main/scala/fpga/FetchPredictor.scala 305:48]
+  wire [1:0] updated_gcnt_gcnt_unless_taken = {_updated_gcnt_gcnt_if_taken_T_2,1'h0}; // @[src/main/scala/fpga/FetchPredictor.scala 311:42]
+  assign io_pr_redirect_ready = io_re_ready & (~io_re_left1 | ~io_pr_redirect_en); // @[src/main/scala/fpga/FetchPredictor.scala 186:41]
+  assign io_pr_bp0_en = reg_iaddr_en & ~reg_invalidate & |_bp0_en_T_10; // @[src/main/scala/fpga/FetchPredictor.scala 201:50]
   assign io_pr_bp0_pos = _bp0_pos_T_1 ? 2'h0 : _bp0_pos_T_7; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
-  assign io_pr_bp0_addr = 2'h3 == bp0_pos ? io_zbtb_lu_target_3 : _GEN_2; // @[src/main/scala/fpga/FetchPredictor.scala 196:{20,20}]
-  assign io_pr_bp1_en = _bp0_en_T_1 & |_bp1_en_T_2; // @[src/main/scala/fpga/FetchPredictor.scala 219:50]
+  assign io_pr_bp0_addr = 2'h3 == bp0_pos ? io_zbtb_lu_target_3 : _GEN_2; // @[src/main/scala/fpga/FetchPredictor.scala 204:{20,20}]
+  assign io_pr_bp1_en = _bp0_en_T_1 & |_bp1_en_T_2; // @[src/main/scala/fpga/FetchPredictor.scala 226:50]
   assign io_pr_bp1_pos = redirected_0 ? 2'h0 : _bp1_pos_T_1; // @[src/main/scala/chisel3/util/Mux.scala 141:16]
-  assign io_pr_bp1_addr = _GEN_7 == 2'h0 ? io_ras_top_ret_pc : _GEN_11; // @[src/main/scala/fpga/FetchPredictor.scala 218:25]
-  assign io_pr_bp_entries_0_lcnt = io_pht__lu_lcnt_0; // @[src/main/scala/fpga/FetchPredictor.scala 236:32]
-  assign io_pr_bp_entries_0_gcnt = io_btb_lu_result_0_attr == 2'h1 ? io_pht__lu_gcnt_0 : 2'h1; // @[src/main/scala/fpga/FetchPredictor.scala 237:38]
-  assign io_pr_bp_entries_1_lcnt = io_pht__lu_lcnt_1; // @[src/main/scala/fpga/FetchPredictor.scala 236:32]
-  assign io_pr_bp_entries_1_gcnt = io_btb_lu_result_1_attr == 2'h1 ? io_pht__lu_gcnt_1 : 2'h1; // @[src/main/scala/fpga/FetchPredictor.scala 237:38]
-  assign io_pr_bp_entries_2_lcnt = io_pht__lu_lcnt_2; // @[src/main/scala/fpga/FetchPredictor.scala 236:32]
-  assign io_pr_bp_entries_2_gcnt = io_btb_lu_result_2_attr == 2'h1 ? io_pht__lu_gcnt_2 : 2'h1; // @[src/main/scala/fpga/FetchPredictor.scala 237:38]
-  assign io_pr_bp_entries_3_lcnt = io_pht__lu_lcnt_3; // @[src/main/scala/fpga/FetchPredictor.scala 236:32]
-  assign io_pr_bp_entries_3_gcnt = io_btb_lu_result_3_attr == 2'h1 ? io_pht__lu_gcnt_3 : 2'h1; // @[src/main/scala/fpga/FetchPredictor.scala 237:38]
-  assign io_pr_fp_ptr = {{1'd0}, cur_fp_ptr}; // @[src/main/scala/fpga/FetchPredictor.scala 245:20]
-  assign io_re_en = ~io_pr_flush_en & (reg_redirect_en | reg_target_changed); // @[src/main/scala/fpga/FetchPredictor.scala 240:39]
-  assign io_re_correct = reg_correct_enq; // @[src/main/scala/fpga/FetchPredictor.scala 241:20]
-  assign io_re_target_changed = io_pr_target_changed; // @[src/main/scala/fpga/FetchPredictor.scala 242:26]
-  assign io_re_flush_en = reg_flush_en; // @[src/main/scala/fpga/FetchPredictor.scala 243:20]
-  assign io_re_history = io_pht__history; // @[src/main/scala/fpga/FetchPredictor.scala 244:20]
-  assign io_ru_en = bp1_en & ~io_pr_invalidate; // @[src/main/scala/fpga/FetchPredictor.scala 224:31]
-  assign io_ru_ptr = _T_20 | reg_flush_en ? io_re_ptr : reg_fp_ptr; // @[src/main/scala/fpga/FetchPredictor.scala 250:25 251:18 180:34]
-  assign io_ru_attr = 2'h3 == bp1_pos ? io_btb_lu_result_3_attr : _GEN_6; // @[src/main/scala/fpga/FetchPredictor.scala 226:{21,21}]
-  assign io_ru_is_ret = 2'h3 == bp1_pos ? io_btb_lu_result_3_is_ret : _GEN_18; // @[src/main/scala/fpga/FetchPredictor.scala 227:{21,21}]
-  assign io_ru_target = _GEN_7 == 2'h0 ? io_ras_top_ret_pc : _GEN_11; // @[src/main/scala/fpga/FetchPredictor.scala 218:25]
-  assign io_zbtb_lu_pc = io_pr_iaddr; // @[src/main/scala/fpga/FetchPredictor.scala 186:19]
-  assign io_zbtb_up_en = io_cr_en & (io_cr_br_taken | (_io_btb_up_en_T_5 | _io_btb_up_en_T_7)); // @[src/main/scala/fpga/FetchPredictor.scala 353:35]
-  assign io_zbtb_up_pc = io_cr_pc; // @[src/main/scala/fpga/FetchPredictor.scala 354:23]
-  assign io_zbtb_up_target = io_cr_target; // @[src/main/scala/fpga/FetchPredictor.scala 355:23]
-  assign io_zbtb_inv_en = _io_re_en_T & bp0_en & ~_GEN_24 & ~_GEN_28 & bp0_pos <= bp1_pos; // @[src/main/scala/fpga/FetchPredictor.scala 257:106]
+  assign io_pr_bp1_addr = _GEN_7 == 2'h0 ? io_ras_top_ret_pc : _GEN_11; // @[src/main/scala/fpga/FetchPredictor.scala 225:25]
+  assign io_pr_bp_entries_0_lcnt = io_pht__lu_lcnt_0; // @[src/main/scala/fpga/FetchPredictor.scala 242:32]
+  assign io_pr_bp_entries_0_gcnt = io_btb_lu_result_0_attr == 2'h1 ? io_pht__lu_gcnt_0 : 2'h1; // @[src/main/scala/fpga/FetchPredictor.scala 243:38]
+  assign io_pr_bp_entries_1_lcnt = io_pht__lu_lcnt_1; // @[src/main/scala/fpga/FetchPredictor.scala 242:32]
+  assign io_pr_bp_entries_1_gcnt = io_btb_lu_result_1_attr == 2'h1 ? io_pht__lu_gcnt_1 : 2'h1; // @[src/main/scala/fpga/FetchPredictor.scala 243:38]
+  assign io_pr_bp_entries_2_lcnt = io_pht__lu_lcnt_2; // @[src/main/scala/fpga/FetchPredictor.scala 242:32]
+  assign io_pr_bp_entries_2_gcnt = io_btb_lu_result_2_attr == 2'h1 ? io_pht__lu_gcnt_2 : 2'h1; // @[src/main/scala/fpga/FetchPredictor.scala 243:38]
+  assign io_pr_bp_entries_3_lcnt = io_pht__lu_lcnt_3; // @[src/main/scala/fpga/FetchPredictor.scala 242:32]
+  assign io_pr_bp_entries_3_gcnt = io_btb_lu_result_3_attr == 2'h1 ? io_pht__lu_gcnt_3 : 2'h1; // @[src/main/scala/fpga/FetchPredictor.scala 243:38]
+  assign io_pr_fp_ptr = {{1'd0}, cur_fp_ptr}; // @[src/main/scala/fpga/FetchPredictor.scala 251:20]
+  assign io_re_en = ~io_pr_flush_en & (reg_redirect_en | reg_target_changed); // @[src/main/scala/fpga/FetchPredictor.scala 246:39]
+  assign io_re_correct = reg_correct_enq; // @[src/main/scala/fpga/FetchPredictor.scala 247:20]
+  assign io_re_target_changed = io_pr_target_changed; // @[src/main/scala/fpga/FetchPredictor.scala 248:26]
+  assign io_re_flush_en = reg_flush_en; // @[src/main/scala/fpga/FetchPredictor.scala 249:20]
+  assign io_re_history = io_pht__history; // @[src/main/scala/fpga/FetchPredictor.scala 250:20]
+  assign io_ru_en = bp1_en & ~io_pr_invalidate; // @[src/main/scala/fpga/FetchPredictor.scala 231:31]
+  assign io_ru_ptr = _T_16 | reg_flush_en ? io_re_ptr : reg_fp_ptr; // @[src/main/scala/fpga/FetchPredictor.scala 256:25 257:18 181:34]
+  assign io_ru_attr = 2'h3 == bp1_pos ? io_btb_lu_result_3_attr : _GEN_6; // @[src/main/scala/fpga/FetchPredictor.scala 233:{21,21}]
+  assign io_ru_is_ret = 2'h3 == bp1_pos ? io_btb_lu_result_3_is_ret : _GEN_18; // @[src/main/scala/fpga/FetchPredictor.scala 234:{21,21}]
+  assign io_ru_target = _GEN_7 == 2'h0 ? io_ras_top_ret_pc : _GEN_11; // @[src/main/scala/fpga/FetchPredictor.scala 225:25]
+  assign io_zbtb_lu_pc = io_pr_iaddr; // @[src/main/scala/fpga/FetchPredictor.scala 188:19]
+  assign io_zbtb_up_en = io_cr_en & (io_cr_br_taken | (_io_btb_up_en_T_5 | _io_btb_up_en_T_7)); // @[src/main/scala/fpga/FetchPredictor.scala 359:35]
+  assign io_zbtb_up_pc = io_cr_pc; // @[src/main/scala/fpga/FetchPredictor.scala 360:23]
+  assign io_zbtb_up_target = io_cr_target; // @[src/main/scala/fpga/FetchPredictor.scala 361:23]
+  assign io_zbtb_inv_en = _io_re_en_T & bp0_en & ~_GEN_24 & ~_GEN_28 & bp0_pos <= bp1_pos; // @[src/main/scala/fpga/FetchPredictor.scala 263:106]
   assign io_zbtb_inv_pc = {reg_iaddr_index[30:2],bp0_pos}; // @[src/main/scala/common/UIntExtension.scala 13:89]
-  assign io_btb_lu_pc = io_pr_iaddr; // @[src/main/scala/fpga/FetchPredictor.scala 203:18]
-  assign io_btb_up_en = io_cr_en & _io_btb_up_en_T_9; // @[src/main/scala/fpga/FetchPredictor.scala 322:30]
-  assign io_btb_up_pc = io_cr_pc; // @[src/main/scala/fpga/FetchPredictor.scala 331:23]
-  assign io_btb_up_attr = io_cr_attr; // @[src/main/scala/fpga/FetchPredictor.scala 329:23]
-  assign io_btb_up_is_ret = io_cr_is_ret; // @[src/main/scala/fpga/FetchPredictor.scala 330:23]
-  assign io_btb_up_target = io_cr_target; // @[src/main/scala/fpga/FetchPredictor.scala 332:23]
-  assign io_pht__lu_pc = io_pr_iaddr; // @[src/main/scala/fpga/FetchPredictor.scala 204:18]
-  assign io_pht__up_en = io_cr_en & io_cr_attr == 2'h1; // @[src/main/scala/fpga/FetchPredictor.scala 341:35]
-  assign io_pht__up_history = io_cr_fp_entry_history; // @[src/main/scala/fpga/FetchPredictor.scala 342:23]
-  assign io_pht__up_pc = io_cr_pc; // @[src/main/scala/fpga/FetchPredictor.scala 343:23]
-  assign io_pht__up_lcnt = io_cr_br_taken ? updated_lcnt_lcnt_if_taken : updated_lcnt_lcnt_unless_taken; // @[src/main/scala/fpga/FetchPredictor.scala 291:10]
-  assign io_pht__up_gcnt = io_cr_br_taken ? updated_gcnt_gcnt_if_taken : updated_gcnt_gcnt_unless_taken; // @[src/main/scala/fpga/FetchPredictor.scala 307:10]
-  assign io_pht__lmem_rdata = io_pht_lmem_rdata; // @[src/main/scala/fpga/FetchPredictor.scala 169:15]
-  assign io_pht__gmem_rdata = io_pht_gmem_rdata; // @[src/main/scala/fpga/FetchPredictor.scala 170:15]
-  assign io_pht__br_en = _io_ras_ret1_en_T_3 & _GEN_32; // @[src/main/scala/fpga/FetchPredictor.scala 271:72]
-  assign io_pht__br_pc = {{23'd0}, _io_pht_br_pc_T_2}; // @[src/main/scala/fpga/FetchPredictor.scala 272:18]
-  assign io_pht__br2_en = io_cr_en & io_cr_br_taken & (~io_cr_fp_hit | io_cr_fp_entry_attr != 2'h1); // @[src/main/scala/fpga/FetchPredictor.scala 348:54]
-  assign io_pht__br2_history = io_cr_fp_entry_history; // @[src/main/scala/fpga/FetchPredictor.scala 349:24]
-  assign io_pht__br2_pc = io_cr_pc; // @[src/main/scala/fpga/FetchPredictor.scala 350:24]
-  assign io_pht__res_en = io_cr_mispred; // @[src/main/scala/fpga/FetchPredictor.scala 335:24]
-  assign io_pht__res_history = io_cr_fp_entry_history; // @[src/main/scala/fpga/FetchPredictor.scala 336:24]
-  assign io_ras_ret1_en = _io_re_en_T & reg_iaddr_en & _bp0_en_T & _GEN_19; // @[src/main/scala/fpga/FetchPredictor.scala 261:79]
-  assign io_ras_call1_en = _io_ras_ret1_en_T_3 & _GEN_7 == 2'h3; // @[src/main/scala/fpga/FetchPredictor.scala 262:79]
-  assign io_ras_call1_ret_pc = _io_ras_call1_ret_pc_T ? _io_ras_call1_ret_pc_T_4 : _io_ras_call1_ret_pc_T_9; // @[src/main/scala/fpga/FetchPredictor.scala 263:31]
-  assign io_ras_up_en = io_cr_mispred; // @[src/main/scala/fpga/FetchPredictor.scala 358:21]
-  assign io_ras_ret2_en = io_cr_en & io_cr_is_ret; // @[src/main/scala/fpga/FetchPredictor.scala 361:37]
-  assign io_ras_call2_en = io_cr_en & _io_btb_up_en_T_7; // @[src/main/scala/fpga/FetchPredictor.scala 364:37]
-  assign io_ras_call2_ret_pc = io_cr_next_pc; // @[src/main/scala/fpga/FetchPredictor.scala 365:25]
-  assign io_pht_lmem_ren = io_pht__lmem_ren; // @[src/main/scala/fpga/FetchPredictor.scala 169:15]
-  assign io_pht_lmem_wen = io_pht__lmem_wen; // @[src/main/scala/fpga/FetchPredictor.scala 169:15]
-  assign io_pht_lmem_raddr = io_pht__lmem_raddr; // @[src/main/scala/fpga/FetchPredictor.scala 169:15]
-  assign io_pht_lmem_waddr = io_pht__lmem_waddr; // @[src/main/scala/fpga/FetchPredictor.scala 169:15]
-  assign io_pht_lmem_wdata = io_pht__lmem_wdata; // @[src/main/scala/fpga/FetchPredictor.scala 169:15]
-  assign io_pht_gmem_ren = io_pht__gmem_ren; // @[src/main/scala/fpga/FetchPredictor.scala 170:15]
-  assign io_pht_gmem_wen = io_pht__gmem_wen; // @[src/main/scala/fpga/FetchPredictor.scala 170:15]
-  assign io_pht_gmem_raddr = io_pht__gmem_raddr; // @[src/main/scala/fpga/FetchPredictor.scala 170:15]
-  assign io_pht_gmem_waddr = io_pht__gmem_waddr; // @[src/main/scala/fpga/FetchPredictor.scala 170:15]
-  assign io_pht_gmem_wdata = io_pht__gmem_wdata; // @[src/main/scala/fpga/FetchPredictor.scala 170:15]
+  assign io_btb_lu_pc = io_pr_iaddr; // @[src/main/scala/fpga/FetchPredictor.scala 210:18]
+  assign io_btb_up_en = io_cr_en & _io_btb_up_en_T_9; // @[src/main/scala/fpga/FetchPredictor.scala 328:30]
+  assign io_btb_up_pc = io_cr_pc; // @[src/main/scala/fpga/FetchPredictor.scala 337:23]
+  assign io_btb_up_attr = io_cr_attr; // @[src/main/scala/fpga/FetchPredictor.scala 335:23]
+  assign io_btb_up_is_ret = io_cr_is_ret; // @[src/main/scala/fpga/FetchPredictor.scala 336:23]
+  assign io_btb_up_target = io_cr_target; // @[src/main/scala/fpga/FetchPredictor.scala 338:23]
+  assign io_pht__lu_pc = io_pr_iaddr; // @[src/main/scala/fpga/FetchPredictor.scala 211:18]
+  assign io_pht__up_en = io_cr_en & io_cr_attr == 2'h1; // @[src/main/scala/fpga/FetchPredictor.scala 347:35]
+  assign io_pht__up_history = io_cr_fp_entry_history; // @[src/main/scala/fpga/FetchPredictor.scala 348:23]
+  assign io_pht__up_pc = io_cr_pc; // @[src/main/scala/fpga/FetchPredictor.scala 349:23]
+  assign io_pht__up_lcnt = io_cr_br_taken ? updated_lcnt_lcnt_if_taken : updated_lcnt_lcnt_unless_taken; // @[src/main/scala/fpga/FetchPredictor.scala 297:10]
+  assign io_pht__up_gcnt = io_cr_br_taken ? updated_gcnt_gcnt_if_taken : updated_gcnt_gcnt_unless_taken; // @[src/main/scala/fpga/FetchPredictor.scala 313:10]
+  assign io_pht__lmem_rdata = io_pht_lmem_rdata; // @[src/main/scala/fpga/FetchPredictor.scala 170:15]
+  assign io_pht__gmem_rdata = io_pht_gmem_rdata; // @[src/main/scala/fpga/FetchPredictor.scala 171:15]
+  assign io_pht__br_en = _io_ras_ret1_en_T_3 & _GEN_32; // @[src/main/scala/fpga/FetchPredictor.scala 277:72]
+  assign io_pht__br_pc = {{23'd0}, _io_pht_br_pc_T_2}; // @[src/main/scala/fpga/FetchPredictor.scala 278:18]
+  assign io_pht__br2_en = io_cr_en & io_cr_br_taken & (~io_cr_fp_hit | io_cr_fp_entry_attr != 2'h1); // @[src/main/scala/fpga/FetchPredictor.scala 354:54]
+  assign io_pht__br2_history = io_cr_fp_entry_history; // @[src/main/scala/fpga/FetchPredictor.scala 355:24]
+  assign io_pht__br2_pc = io_cr_pc; // @[src/main/scala/fpga/FetchPredictor.scala 356:24]
+  assign io_pht__res_en = io_cr_en & io_cr_mispred; // @[src/main/scala/fpga/FetchPredictor.scala 341:36]
+  assign io_pht__res_history = io_cr_fp_entry_history; // @[src/main/scala/fpga/FetchPredictor.scala 342:24]
+  assign io_ras_ret1_en = _io_re_en_T & reg_iaddr_en & _bp0_en_T & _GEN_19; // @[src/main/scala/fpga/FetchPredictor.scala 267:79]
+  assign io_ras_call1_en = _io_ras_ret1_en_T_3 & _GEN_7 == 2'h3; // @[src/main/scala/fpga/FetchPredictor.scala 268:79]
+  assign io_ras_call1_ret_pc = _io_ras_call1_ret_pc_T ? _io_ras_call1_ret_pc_T_4 : _io_ras_call1_ret_pc_T_9; // @[src/main/scala/fpga/FetchPredictor.scala 269:31]
+  assign io_ras_up_en = io_cr_en & io_cr_mispred; // @[src/main/scala/fpga/FetchPredictor.scala 364:33]
+  assign io_ras_ret2_en = io_cr_en & io_cr_is_ret; // @[src/main/scala/fpga/FetchPredictor.scala 367:37]
+  assign io_ras_call2_en = io_cr_en & _io_btb_up_en_T_7; // @[src/main/scala/fpga/FetchPredictor.scala 370:37]
+  assign io_ras_call2_ret_pc = io_cr_next_pc; // @[src/main/scala/fpga/FetchPredictor.scala 371:25]
+  assign io_pht_lmem_ren = io_pht__lmem_ren; // @[src/main/scala/fpga/FetchPredictor.scala 170:15]
+  assign io_pht_lmem_wen = io_pht__lmem_wen; // @[src/main/scala/fpga/FetchPredictor.scala 170:15]
+  assign io_pht_lmem_raddr = io_pht__lmem_raddr; // @[src/main/scala/fpga/FetchPredictor.scala 170:15]
+  assign io_pht_lmem_waddr = io_pht__lmem_waddr; // @[src/main/scala/fpga/FetchPredictor.scala 170:15]
+  assign io_pht_lmem_wdata = io_pht__lmem_wdata; // @[src/main/scala/fpga/FetchPredictor.scala 170:15]
+  assign io_pht_gmem_ren = io_pht__gmem_ren; // @[src/main/scala/fpga/FetchPredictor.scala 171:15]
+  assign io_pht_gmem_wen = io_pht__gmem_wen; // @[src/main/scala/fpga/FetchPredictor.scala 171:15]
+  assign io_pht_gmem_raddr = io_pht__gmem_raddr; // @[src/main/scala/fpga/FetchPredictor.scala 171:15]
+  assign io_pht_gmem_waddr = io_pht__gmem_waddr; // @[src/main/scala/fpga/FetchPredictor.scala 171:15]
+  assign io_pht_gmem_wdata = io_pht__gmem_wdata; // @[src/main/scala/fpga/FetchPredictor.scala 171:15]
   always @(posedge clock) begin
-    reg_iaddr_en <= io_pr_iaddr_en; // @[src/main/scala/fpga/FetchPredictor.scala 173:34]
-    reg_invalidate <= io_pr_invalidate; // @[src/main/scala/fpga/FetchPredictor.scala 174:34]
-    if (reset) begin // @[src/main/scala/fpga/FetchPredictor.scala 175:34]
-      reg_iaddr_index <= 31'h0; // @[src/main/scala/fpga/FetchPredictor.scala 175:34]
+    reg_iaddr_en <= io_pr_iaddr_en; // @[src/main/scala/fpga/FetchPredictor.scala 174:34]
+    reg_invalidate <= io_pr_invalidate; // @[src/main/scala/fpga/FetchPredictor.scala 175:34]
+    if (reset) begin // @[src/main/scala/fpga/FetchPredictor.scala 176:34]
+      reg_iaddr_index <= 31'h0; // @[src/main/scala/fpga/FetchPredictor.scala 176:34]
     end else begin
-      reg_iaddr_index <= io_pr_iaddr; // @[src/main/scala/fpga/FetchPredictor.scala 183:21]
+      reg_iaddr_index <= io_pr_iaddr; // @[src/main/scala/fpga/FetchPredictor.scala 185:21]
     end
-    reg_redirect_en <= io_pr_redirect_en; // @[src/main/scala/fpga/FetchPredictor.scala 176:34]
-    reg_correct_enq <= io_pr_correct_enq; // @[src/main/scala/fpga/FetchPredictor.scala 177:34]
-    reg_target_changed <= io_pr_target_changed; // @[src/main/scala/fpga/FetchPredictor.scala 178:37]
-    reg_flush_en <= io_pr_flush_en; // @[src/main/scala/fpga/FetchPredictor.scala 179:34]
-    if (reset) begin // @[src/main/scala/fpga/FetchPredictor.scala 180:34]
-      reg_fp_ptr <= io_re_ptr; // @[src/main/scala/fpga/FetchPredictor.scala 180:34]
-    end else if (_T_20 | reg_flush_en) begin // @[src/main/scala/fpga/FetchPredictor.scala 250:25]
-      reg_fp_ptr <= io_re_ptr; // @[src/main/scala/fpga/FetchPredictor.scala 251:18]
+    reg_redirect_en <= io_pr_redirect_en; // @[src/main/scala/fpga/FetchPredictor.scala 177:34]
+    reg_correct_enq <= io_pr_correct_enq; // @[src/main/scala/fpga/FetchPredictor.scala 178:34]
+    reg_target_changed <= io_pr_target_changed; // @[src/main/scala/fpga/FetchPredictor.scala 179:37]
+    reg_flush_en <= io_pr_flush_en; // @[src/main/scala/fpga/FetchPredictor.scala 180:34]
+    if (reset) begin // @[src/main/scala/fpga/FetchPredictor.scala 181:34]
+      reg_fp_ptr <= io_re_ptr; // @[src/main/scala/fpga/FetchPredictor.scala 181:34]
+    end else if (_T_16 | reg_flush_en) begin // @[src/main/scala/fpga/FetchPredictor.scala 256:25]
+      reg_fp_ptr <= io_re_ptr; // @[src/main/scala/fpga/FetchPredictor.scala 257:18]
+    end
+    if (reset) begin // @[src/main/scala/fpga/FetchPredictor.scala 183:34]
+      reg_ibmask <= 4'h0; // @[src/main/scala/fpga/FetchPredictor.scala 183:34]
+    end else if (2'h2 == ibpos) begin // @[src/main/scala/fpga/FetchPredictor.scala 192:51]
+      reg_ibmask <= 4'hc;
+    end else if (2'h1 == ibpos) begin // @[src/main/scala/fpga/FetchPredictor.scala 192:51]
+      reg_ibmask <= 4'he;
+    end else if (2'h0 == ibpos) begin // @[src/main/scala/fpga/FetchPredictor.scala 192:51]
+      reg_ibmask <= 4'hf;
+    end else begin
+      reg_ibmask <= 4'h8;
     end
     `ifndef SYNTHESIS
     `ifdef PRINTF_COND
       if (`PRINTF_COND) begin
     `endif
         if (bp0_en & ~reset) begin
-          $fwrite(32'h80000002,"fp(%d).target := 0x%x, pc=0x%x\n",io_pr_fp_ptr,_T,_T_1); // @[src/main/scala/fpga/FetchPredictor.scala 199:13]
-        end
-    `ifdef PRINTF_COND
-      end
-    `endif
-    `endif // SYNTHESIS
-    `ifndef SYNTHESIS
-    `ifdef PRINTF_COND
-      if (`PRINTF_COND) begin
-    `endif
-        if (bp0_en & _T_3) begin
-          $fwrite(32'h80000002,"bp0_pos = %d\n",bp0_pos); // @[src/main/scala/fpga/FetchPredictor.scala 200:13]
+          $fwrite(32'h80000002,"fp(%d).target := 0x%x, pc=0x%x bp0_pos = %d\n",io_pr_fp_ptr,_T,_T_1,bp0_pos); // @[src/main/scala/fpga/FetchPredictor.scala 207:13]
         end
     `ifdef PRINTF_COND
       end
@@ -3932,18 +3945,7 @@ module FetchPredictor(
       if (`PRINTF_COND) begin
     `endif
         if (_io_ru_en_T_1 & _T_3) begin
-          $fwrite(32'h80000002,"fp(%d).target := 0x%x, pc=0x%x\n",io_pr_fp_ptr,_T_8,_T_1); // @[src/main/scala/fpga/FetchPredictor.scala 231:13]
-        end
-    `ifdef PRINTF_COND
-      end
-    `endif
-    `endif // SYNTHESIS
-    `ifndef SYNTHESIS
-    `ifdef PRINTF_COND
-      if (`PRINTF_COND) begin
-    `endif
-        if (_io_ru_en_T_1 & _T_3) begin
-          $fwrite(32'h80000002,"bp1_pos = %d\n",bp1_pos); // @[src/main/scala/fpga/FetchPredictor.scala 232:13]
+          $fwrite(32'h80000002,"fp(%d).target := 0x%x, pc=0x%x bp1_pos = %d\n",io_pr_fp_ptr,_T_6,_T_1,bp1_pos); // @[src/main/scala/fpga/FetchPredictor.scala 238:13]
         end
     `ifdef PRINTF_COND
       end
@@ -4002,6 +4004,8 @@ initial begin
   reg_flush_en = _RAND_6[0:0];
   _RAND_7 = {1{`RANDOM}};
   reg_fp_ptr = _RAND_7[1:0];
+  _RAND_8 = {1{`RANDOM}};
+  reg_ibmask = _RAND_8[3:0];
 `endif // RANDOMIZE_REG_INIT
   `endif // RANDOMIZE
 end // initial
@@ -4166,6 +4170,7 @@ module FetchRedirectBuffer(
   wire [2:0] _enq_ptr_T_1 = enq_ptr + 3'h1; // @[src/main/scala/fpga/FetchPredictor.scala 67:24]
   wire [2:0] _deq_ptr_T_1 = deq_ptr + 3'h1; // @[src/main/scala/fpga/FetchPredictor.scala 70:24]
   wire  _T_8 = ~reset; // @[src/main/scala/fpga/FetchPredictor.scala 71:11]
+  wire [31:0] _T_13 = {io_upd_target,1'h0}; // @[src/main/scala/common/UIntExtension.scala 10:33]
   assign buf_attr_io_read_fp_entry_attr_MPORT_en = 1'h1;
   assign buf_attr_io_read_fp_entry_attr_MPORT_addr = io_read_ptr;
   assign buf_attr_io_read_fp_entry_attr_MPORT_data = buf_attr[buf_attr_io_read_fp_entry_attr_MPORT_addr]; // @[src/main/scala/fpga/FetchPredictor.scala 55:16]
@@ -4281,10 +4286,10 @@ module FetchRedirectBuffer(
   assign io_enq_ptr = enq_ptr[1:0]; // @[src/main/scala/fpga/FetchPredictor.scala 62:16]
   assign io_enq_ready = ~_ready_T_1[2]; // @[src/main/scala/fpga/FetchPredictor.scala 59:15]
   assign io_enq_left1 = _ready_T_1[1:0] == 2'h3; // @[src/main/scala/fpga/FetchPredictor.scala 61:57]
-  assign io_read_fp_entry_attr = buf_attr_io_read_fp_entry_attr_MPORT_data; // @[src/main/scala/fpga/FetchPredictor.scala 90:30]
-  assign io_read_fp_entry_is_ret = buf_is_ret_io_read_fp_entry_is_ret_MPORT_data; // @[src/main/scala/fpga/FetchPredictor.scala 91:30]
-  assign io_read_fp_entry_history = buf_history_io_read_fp_entry_history_MPORT_data; // @[src/main/scala/fpga/FetchPredictor.scala 92:30]
-  assign io_read_fp_entry_target = buf_target_io_read_fp_entry_target_MPORT_data; // @[src/main/scala/fpga/FetchPredictor.scala 93:30]
+  assign io_read_fp_entry_attr = buf_attr_io_read_fp_entry_attr_MPORT_data; // @[src/main/scala/fpga/FetchPredictor.scala 91:30]
+  assign io_read_fp_entry_is_ret = buf_is_ret_io_read_fp_entry_is_ret_MPORT_data; // @[src/main/scala/fpga/FetchPredictor.scala 92:30]
+  assign io_read_fp_entry_history = buf_history_io_read_fp_entry_history_MPORT_data; // @[src/main/scala/fpga/FetchPredictor.scala 93:30]
+  assign io_read_fp_entry_target = buf_target_io_read_fp_entry_target_MPORT_data; // @[src/main/scala/fpga/FetchPredictor.scala 94:30]
   always @(posedge clock) begin
     if (buf_attr_MPORT_en & buf_attr_MPORT_mask) begin
       buf_attr[buf_attr_MPORT_addr] <= buf_attr_MPORT_data; // @[src/main/scala/fpga/FetchPredictor.scala 55:16]
@@ -4374,6 +4379,17 @@ module FetchRedirectBuffer(
     `endif
         if (_T_8) begin
           $fwrite(32'h80000002,"redir deq_ptr = %d\n",deq_ptr); // @[src/main/scala/fpga/FetchPredictor.scala 82:9]
+        end
+    `ifdef PRINTF_COND
+      end
+    `endif
+    `endif // SYNTHESIS
+    `ifndef SYNTHESIS
+    `ifdef PRINTF_COND
+      if (`PRINTF_COND) begin
+    `endif
+        if (io_upd_en & _T_8) begin
+          $fwrite(32'h80000002,"fp(%d).target := 0x%x\n",io_upd_ptr,_T_13); // @[src/main/scala/fpga/FetchPredictor.scala 88:11]
         end
     `ifdef PRINTF_COND
       end
