@@ -99,9 +99,11 @@ class ReorderBufferRetire(rob_id_len: Int, enable_pipeline_probe: Boolean) exten
 
 class ReorderBufferEntry(rob_id_len: Int, pht_history_len: Int, enable_pipeline_probe: Boolean) extends Bundle {
   val finished     = Bool()
-  // val redirect = Bool()
+  val redirect = Bool()
   val bp_updated   = Bool()
   val bp_upd_entry = new ReorderBufferBranchUpdateEntry(rob_id_len, pht_history_len)
+  val redir_target_pc = UInt(PC_LEN.W)
+  val redir_correction = new BranchCorrection(pht_history_len)
   val inst_id  = Option.when(enable_pipeline_probe)(UInt(INST_ID_LEN.W))
   val wb_addr  = Option.when(enable_pipeline_probe)(UInt(ADDR_LEN.W))
   val wb_data  = Option.when(enable_pipeline_probe)(UInt(WORD_LEN.W))
@@ -138,23 +140,23 @@ class ReorderBuffer(start_address: BigInt, rob_entries: Int, pht_history_len: In
 
   val rob_buf    = Mem(rob_entries, new ReorderBufferEntry(rob_id_len, pht_history_len, enable_pipeline_probe))
   val flush      = Wire(Bool())
-  val redirected = RegInit(false.B)
-  val redir_ptr  = RegInit(0.U(rob_id_ptr_len.W))
-  val target_pc  = RegInit(0.U(PC_LEN.W))
-  val correction = RegInit(0.U.asTypeOf(new BranchCorrection(pht_history_len)))
+  // val redirected = RegInit(false.B)
+  // val redir_ptr  = RegInit(0.U(rob_id_ptr_len.W))
+  // val target_pc  = RegInit(0.U(PC_LEN.W))
+  // val correction = RegInit(0.U.asTypeOf(new BranchCorrection(pht_history_len)))
 
   def enqueue: Unit = {
     io.iq_upd_rob.ptr := io.enq1.rob_id
     when (io.enq1.en) {
       rob_buf(io.enq1.rob_id.take(rob_id_len)).finished := false.B
-      // rob_buf(io.enq1.rob_id.take(rob_id_len)).redirect := false.B
+      rob_buf(io.enq1.rob_id.take(rob_id_len)).redirect := false.B
       rob_buf(io.enq1.rob_id.take(rob_id_len)).bp_updated := false.B
       map2(rob_buf(io.enq1.rob_id.take(rob_id_len)).inst_id, io.enq1.inst_id)(_ := _)
       io.iq_upd_rob.ptr := io.enq1.rob_id + 1.U
     }
     when (io.enq2.en) {
       rob_buf(io.enq2.rob_id.take(rob_id_len)).finished := false.B
-      // rob_buf(io.enq2.rob_id.take(rob_id_len)).redirect := false.B
+      rob_buf(io.enq2.rob_id.take(rob_id_len)).redirect := false.B
       rob_buf(io.enq2.rob_id.take(rob_id_len)).bp_updated := false.B
       map2(rob_buf(io.enq2.rob_id.take(rob_id_len)).inst_id, io.enq2.inst_id)(_ := _)
       io.iq_upd_rob.ptr := io.enq2.rob_id + 1.U
@@ -200,14 +202,16 @@ class ReorderBuffer(start_address: BigInt, rob_entries: Int, pht_history_len: In
       printf(cf"rob_buf(${io.bp_upd.rob_id}).latter_pc := 0x${io.bp_upd.entry.latter_pc.pc_to_word}%x\n")
     }
     when (io.redir.en) {
-      // rob_buf(io.redir.rob_id.take(rob_id_len)).redirect := true.B
-      redirected := true.B
-      when (!redirected || (io.redir.rob_id - redir_ptr)(rob_id_len)) {
-        target_pc  := io.redir.target_pc
-        redir_ptr  := io.redir.rob_id
-        correction := io.redir.correction
-      }
-      printf(cf"io.redir.rob_id=0x${io.redir.rob_id}%x\n")
+      rob_buf(io.redir.rob_id.take(rob_id_len)).redirect := true.B
+      rob_buf(io.redir.rob_id.take(rob_id_len)).redir_target_pc  := io.redir.target_pc
+      rob_buf(io.redir.rob_id.take(rob_id_len)).redir_correction := io.redir.correction
+      // redirected := true.B
+      // when (!redirected || (io.redir.rob_id - redir_ptr)(rob_id_len)) {
+      //   target_pc  := io.redir.target_pc
+      //   redir_ptr  := io.redir.rob_id
+      //   correction := io.redir.correction
+      // }
+      // printf(cf"io.redir.rob_id=0x${io.redir.rob_id}%x\n")
     }
   }
 
@@ -217,17 +221,17 @@ class ReorderBuffer(start_address: BigInt, rob_entries: Int, pht_history_len: In
     val rob_id1 = deq_ptr.take(rob_id_len)
     val rob_id2 = deq_ptr.take(rob_id_len) + 1.U
     val valid1 = ncount(rob_id_len) && rob_buf(rob_id1).finished
-    val valid2 = valid1 && !ncount.take(rob_id_len).andR && rob_buf(rob_id2).finished && !flush && (!redirected || (redir_ptr.take(rob_id_len) =/= rob_id2)) // !rob_buf(rob_id2).redirect
+    val valid2 = valid1 && !ncount.take(rob_id_len).andR && rob_buf(rob_id2).finished && !flush && /*(!redirected || (redir_ptr.take(rob_id_len) =/= rob_id2))*/ !rob_buf(rob_id2).redirect
     val bp_upd = rob_buf(rob_id1).bp_upd_entry
 
     io.iq_read1.iq_id := rob_id1
     io.iq_read2.iq_id := rob_id2
 
-    flush                := valid1 && redirected && (redir_ptr.take(rob_id_len) === rob_id1) // valid1 && rob_buf(rob_id1).redirect
+    flush                := /*valid1 && redirected && (redir_ptr.take(rob_id_len) === rob_id1)*/ valid1 && rob_buf(rob_id1).redirect
     io.flush             := RegNext(flush, true.B)
-    io.target_pc         := RegNext(target_pc, start_address.U(WORD_LEN.W).word_to_pc)
-    io.cr_out            := correction
-    io.cr_out.en         := correction.en && flush
+    io.target_pc         := RegNext(rob_buf(rob_id1).redir_target_pc, start_address.U(WORD_LEN.W).word_to_pc)
+    io.cr_out            := rob_buf(rob_id1).redir_correction
+    io.cr_out.en         := rob_buf(rob_id1).redir_correction.en && flush
     io.upd_out.en        := rob_buf(rob_id1).bp_updated
     io.upd_out.latter_pc := bp_upd.latter_pc
     io.upd_out.bp_entry  := bp_upd.bp_entry
@@ -254,9 +258,9 @@ class ReorderBuffer(start_address: BigInt, rob_entries: Int, pht_history_len: In
     io.retire2.csr_data.map(_ := 0.U)
     io.iq_deq1.en       := valid1
     io.iq_deq2.en       := valid2
-    when (flush) {
-      redirected := false.B
-    }
+    // when (flush) {
+    //   redirected := false.B
+    // }
     printf(cf"io.iq_rob_range.first=0x${io.iq_rob_range.first}%x\n")
     printf(cf"io.iq_rob_range.last =0x${io.iq_rob_range.last}%x\n")
     printf(cf"rob_id1   : 0x${rob_id1}%x\n")
@@ -268,10 +272,10 @@ class ReorderBuffer(start_address: BigInt, rob_entries: Int, pht_history_len: In
     printf(cf"inst_id1  : ${rob_buf(rob_id1).inst_id.getOrElse(0)}\n")
     printf(cf"inst_id2  : ${rob_buf(rob_id2).inst_id.getOrElse(0)}\n")
     printf(cf"latter_pc : 0x${bp_upd.latter_pc.pc_to_word}%x\n")
-    printf(cf"redirected: ${redirected}\n")
-    printf(cf"redir_ptr : 0x${redir_ptr}%x\n")
+    // printf(cf"redirected: ${redirected}\n")
+    // printf(cf"redir_ptr : 0x${redir_ptr}%x\n")
     printf(cf"flush     : ${flush}\n")
-    printf(cf"target_pc : ${target_pc}\n")
+    // printf(cf"target_pc : ${target_pc}\n")
   }
 
   enqueue
