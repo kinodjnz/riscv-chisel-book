@@ -59,10 +59,7 @@ class InstructionDecoderOutput(redirect_buffer_size: Int, enable_pipeline_probe:
   val rob_id  = Output(UInt(rob_id_ptr_len.W))
 }
 
-class InstructionDecoderInput(
-  redirect_buffer_size: Int,
-  enable_pipeline_probe: Boolean
-) extends Bundle {
+class InstructionDecoderInput(redirect_buffer_size: Int, enable_pipeline_probe: Boolean) extends Bundle {
   val ready   = Output(Bool())
   val flush   = Output(Bool())
   val valid   = Input(Bool())
@@ -70,6 +67,15 @@ class InstructionDecoderInput(
   val pc      = Input(UInt(PC_LEN.W))
   val bp      = Input(new BranchPrediction(redirect_buffer_size))
   val inst_id = Option.when(enable_pipeline_probe)(Input(UInt(INST_ID_LEN.W)))
+}
+
+class InstructionQueueRobRead(iq_id_len: Int, enable_pipeline_probe: Boolean) extends Bundle {
+  val iq_id      = Input(UInt(iq_id_len.W))
+  val pc         = Output(UInt(PC_LEN.W))
+  val redirected = Output(Bool())
+  val bpfailed   = Output(Bool())
+  val bp_entry   = Output(new BranchPredictionEntry())
+  val inst_id    = Option.when(enable_pipeline_probe)(Output(UInt(INST_ID_LEN.W)))
 }
 
 class InstructionDecoderDebugSignals extends Bundle {
@@ -417,6 +423,8 @@ class InstructionDecoderUnit(
     val rob   = new Bundle {
       val range = new InstructionQueueRobRange(iq_id_len)
       val upd   = new InstructionQueueUpdateRobPtr(iq_id_len)
+      val read1 = new InstructionQueueRobRead(iq_id_len, enable_pipeline_probe)
+      val read2 = new InstructionQueueRobRead(iq_id_len, enable_pipeline_probe)
       val deq1  = new InstructionQueueDequeue
       val deq2  = new InstructionQueueDequeue
     }
@@ -454,6 +462,19 @@ class InstructionDecoderUnit(
   iq.io.upd_rob   <> io.rob.upd
   iq.io.deq1      <> io.rob.deq1
   iq.io.deq2      <> io.rob.deq2
+
+  iq.io.read1_init.iq_id  := io.rob.read1.iq_id
+  io.rob.read1.pc         := iq.io.read1_init.initial.pc
+  io.rob.read1.redirected := iq.io.read1_init.initial.bp.redirected
+  io.rob.read1.bpfailed   := iq.io.read1_init.initial.bp.bpfailed
+  io.rob.read1.bp_entry   := iq.io.read1_init.initial.bp.bp_entry
+  map2(io.rob.read1.inst_id, iq.io.read1_init.initial.inst_id)(_ := _)
+  iq.io.read2_init.iq_id  := io.rob.read2.iq_id
+  io.rob.read2.pc         := iq.io.read2_init.initial.pc
+  io.rob.read2.redirected := iq.io.read2_init.initial.bp.redirected
+  io.rob.read2.bpfailed   := iq.io.read2_init.initial.bp.bpfailed
+  io.rob.read2.bp_entry   := iq.io.read2_init.initial.bp.bp_entry
+  map2(io.rob.read2.inst_id, iq.io.read2_init.initial.inst_id)(_ := _)
 
   class Id1Input(iq_id_len: Int) extends Bundle {
     val iq_id_ptr_len = iq_id_len + 1

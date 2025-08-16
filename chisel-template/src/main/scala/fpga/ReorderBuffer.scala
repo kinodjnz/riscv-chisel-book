@@ -14,18 +14,44 @@ class ReorderBufferEnqueue(rob_id_len: Int, enable_pipeline_probe: Boolean) exte
   val inst_id = Option.when(enable_pipeline_probe)(Input(UInt(INST_ID_LEN.W)))
 }
 
+// class BranchUpdate extends Bundle {
+//   val en       = Bool()
+//   val pc       = UInt(PC_LEN.W)
+//   val bp_entry = new BranchPredictionEntry()
+//   val history  = UInt(pht_history_len.W)
+//   val br_taken = Bool()
+//   val attr     = UInt(BTB_ATTR_LEN.W)
+//   val is_ret   = Bool()
+// }
+
 class BranchCorrection(pht_history_len: Int) extends Bundle {
   val en       = Bool()
-  val pc       = UInt(PC_LEN.W)
-  val bp_entry = new BranchPredictionEntry()
+  // val pc       = UInt(PC_LEN.W)
+  // val bp_entry = new BranchPredictionEntry()
   val fp_entry = new FetchPredictionEntry(pht_history_len)
   val fp_hit   = Bool()
   val mispred  = Bool()
-  val br_taken = Bool()
-  val attr     = UInt(BTB_ATTR_LEN.W)
-  val is_ret   = Bool()
+  // val br_taken = Bool()
+  // val attr     = UInt(BTB_ATTR_LEN.W)
+  // val is_ret   = Bool()
   val target   = UInt(PC_LEN.W)
-  val next_pc  = UInt(PC_LEN.W)
+  // val next_pc  = UInt(PC_LEN.W)
+}
+
+class ReorderBufferBranchUpdateEntry(rob_id_len: Int, pht_history_len: Int) extends Bundle {
+  val latter_pc = UInt(PC_LEN.W)
+  val bp_entry  = new BranchPredictionEntry()
+  val history   = UInt(pht_history_len.W)
+  val br_taken  = Bool()
+  val attr      = UInt(BTB_ATTR_LEN.W)
+  val is_ret    = Bool()
+  val next_pc   = UInt(PC_LEN.W)
+}
+
+class ReorderBufferBranchUpdate(rob_id_len: Int, pht_history_len: Int) extends Bundle {
+  val en     = Input(Bool())
+  val rob_id = Input(UInt(rob_id_len.W))
+  val entry  = Input(new ReorderBufferBranchUpdateEntry(rob_id_len, pht_history_len))
 }
 
 class ReorderBufferFinish(rob_id_len: Int, enable_pipeline_probe: Boolean) extends Bundle {
@@ -71,9 +97,11 @@ class ReorderBufferRetire(rob_id_len: Int, enable_pipeline_probe: Boolean) exten
   val csr_data = Option.when(enable_pipeline_probe)(Output(UInt(WORD_LEN.W)))
 }
 
-class ReorderBufferEntry(enable_pipeline_probe: Boolean) extends Bundle {
-  val finished = Bool()
+class ReorderBufferEntry(rob_id_len: Int, pht_history_len: Int, enable_pipeline_probe: Boolean) extends Bundle {
+  val finished     = Bool()
   // val redirect = Bool()
+  val bp_updated   = Bool()
+  val bp_upd_entry = new ReorderBufferBranchUpdateEntry(rob_id_len, pht_history_len)
   val inst_id  = Option.when(enable_pipeline_probe)(UInt(INST_ID_LEN.W))
   val wb_addr  = Option.when(enable_pipeline_probe)(UInt(ADDR_LEN.W))
   val wb_data  = Option.when(enable_pipeline_probe)(UInt(WORD_LEN.W))
@@ -89,6 +117,7 @@ class ReorderBuffer(start_address: BigInt, rob_entries: Int, pht_history_len: In
   val io = IO(new Bundle {
     val enq1       = new ReorderBufferEnqueue(rob_id_len, enable_pipeline_probe)
     val enq2       = new ReorderBufferEnqueue(rob_id_len, enable_pipeline_probe)
+    val bp_upd     = new ReorderBufferBranchUpdate(rob_id_len, pht_history_len)
     val fin1       = new ReorderBufferFinish(rob_id_len, enable_pipeline_probe)
     val fin2       = new ReorderBufferFinish2(rob_id_len, enable_pipeline_probe)
     val fin3       = new ReorderBufferFinish(rob_id_len, enable_pipeline_probe)
@@ -97,14 +126,17 @@ class ReorderBuffer(start_address: BigInt, rob_entries: Int, pht_history_len: In
     val retire2    = new ReorderBufferRetire(rob_id_len, enable_pipeline_probe)
     val iq_rob_range = Flipped(new InstructionQueueRobRange(rob_id_len))
     val iq_upd_rob = Flipped(new InstructionQueueUpdateRobPtr(rob_id_len))
+    val iq_read1   = Flipped(new InstructionQueueRobRead(rob_id_len, enable_pipeline_probe))
+    val iq_read2   = Flipped(new InstructionQueueRobRead(rob_id_len, enable_pipeline_probe))
     val iq_deq1    = Flipped(new InstructionQueueDequeue)
     val iq_deq2    = Flipped(new InstructionQueueDequeue)
     val flush      = Output(Bool())
     val target_pc  = Output(UInt(PC_LEN.W))
-    val correction = new BranchCorrection(pht_history_len)
+    val cr_out     = new BranchCorrection(pht_history_len)
+    val upd_out    = Flipped(new BranchUpdatePort(pht_history_len))
   })
 
-  val rob_buf    = Mem(rob_entries, new ReorderBufferEntry(enable_pipeline_probe))
+  val rob_buf    = Mem(rob_entries, new ReorderBufferEntry(rob_id_len, pht_history_len, enable_pipeline_probe))
   val flush      = Wire(Bool())
   val redirected = RegInit(false.B)
   val redir_ptr  = RegInit(0.U(rob_id_ptr_len.W))
@@ -116,12 +148,14 @@ class ReorderBuffer(start_address: BigInt, rob_entries: Int, pht_history_len: In
     when (io.enq1.en) {
       rob_buf(io.enq1.rob_id.take(rob_id_len)).finished := false.B
       // rob_buf(io.enq1.rob_id.take(rob_id_len)).redirect := false.B
+      rob_buf(io.enq1.rob_id.take(rob_id_len)).bp_updated := false.B
       map2(rob_buf(io.enq1.rob_id.take(rob_id_len)).inst_id, io.enq1.inst_id)(_ := _)
       io.iq_upd_rob.ptr := io.enq1.rob_id + 1.U
     }
     when (io.enq2.en) {
       rob_buf(io.enq2.rob_id.take(rob_id_len)).finished := false.B
       // rob_buf(io.enq2.rob_id.take(rob_id_len)).redirect := false.B
+      rob_buf(io.enq2.rob_id.take(rob_id_len)).bp_updated := false.B
       map2(rob_buf(io.enq2.rob_id.take(rob_id_len)).inst_id, io.enq2.inst_id)(_ := _)
       io.iq_upd_rob.ptr := io.enq2.rob_id + 1.U
     }
@@ -160,6 +194,11 @@ class ReorderBuffer(start_address: BigInt, rob_entries: Int, pht_history_len: In
       printf(cf"io.fin3.wb_addr=${io.fin3.wb_addr.getOrElse(0)}\n")
       printf(cf"io.fin3.inst_id=${rob_buf(io.fin3.rob_id.take(rob_id_len)).inst_id.getOrElse(0)}\n")
     }
+    when (io.bp_upd.en) {
+      rob_buf(io.bp_upd.rob_id).bp_upd_entry := io.bp_upd.entry
+      rob_buf(io.bp_upd.rob_id).bp_updated   := true.B
+      printf(cf"rob_buf(${io.bp_upd.rob_id}).latter_pc := 0x${io.bp_upd.entry.latter_pc.pc_to_word}%x\n")
+    }
     when (io.redir.en) {
       // rob_buf(io.redir.rob_id.take(rob_id_len)).redirect := true.B
       redirected := true.B
@@ -179,29 +218,42 @@ class ReorderBuffer(start_address: BigInt, rob_entries: Int, pht_history_len: In
     val rob_id2 = deq_ptr.take(rob_id_len) + 1.U
     val valid1 = ncount(rob_id_len) && rob_buf(rob_id1).finished
     val valid2 = valid1 && !ncount.take(rob_id_len).andR && rob_buf(rob_id2).finished && !flush && (!redirected || (redir_ptr.take(rob_id_len) =/= rob_id2)) // !rob_buf(rob_id2).redirect
-    flush              := valid1 && redirected && (redir_ptr.take(rob_id_len) === rob_id1) // valid1 && rob_buf(rob_id1).redirect
-    io.flush           := RegNext(flush, true.B)
-    io.target_pc       := RegNext(target_pc, start_address.U(WORD_LEN.W).word_to_pc)
-    io.correction      := correction
-    io.correction.en   := correction.en && flush
-    io.retire1.valid   := valid1
-    io.retire1.rob_id  := rob_id1
+    val bp_upd = rob_buf(rob_id1).bp_upd_entry
+
+    io.iq_read1.iq_id := rob_id1
+    io.iq_read2.iq_id := rob_id2
+
+    flush                := valid1 && redirected && (redir_ptr.take(rob_id_len) === rob_id1) // valid1 && rob_buf(rob_id1).redirect
+    io.flush             := RegNext(flush, true.B)
+    io.target_pc         := RegNext(target_pc, start_address.U(WORD_LEN.W).word_to_pc)
+    io.cr_out            := correction
+    io.cr_out.en         := correction.en && flush
+    io.upd_out.en        := rob_buf(rob_id1).bp_updated
+    io.upd_out.latter_pc := bp_upd.latter_pc
+    io.upd_out.bp_entry  := bp_upd.bp_entry
+    io.upd_out.history   := bp_upd.history
+    io.upd_out.br_taken  := bp_upd.br_taken
+    io.upd_out.attr      := bp_upd.attr
+    io.upd_out.is_ret    := bp_upd.is_ret
+    io.upd_out.next_pc   := bp_upd.next_pc
+    io.retire1.valid     := valid1
+    io.retire1.rob_id    := rob_id1
     map2(io.retire1.inst_id, rob_buf(rob_id1).inst_id)(_ := _)
     map2(io.retire1.wb_addr, rob_buf(rob_id1).wb_addr)(_ := _)
     map2(io.retire1.wb_data, rob_buf(rob_id1).wb_data)(_ := _)
     map2(io.retire1.csr_read, rob_buf(rob_id1).csr_read)(_ := _)
     map2(io.retire1.csr_addr, rob_buf(rob_id1).csr_addr)(_ := _)
     map2(io.retire1.csr_data, rob_buf(rob_id1).csr_data)(_ := _)
-    io.retire2.valid   := valid2
-    io.retire2.rob_id  := rob_id2
+    io.retire2.valid    := valid2
+    io.retire2.rob_id   := rob_id2
     map2(io.retire2.inst_id, rob_buf(rob_id2).inst_id)(_ := _)
     map2(io.retire2.wb_addr, rob_buf(rob_id2).wb_addr)(_ := _)
     map2(io.retire2.wb_data, rob_buf(rob_id2).wb_data)(_ := _)
     io.retire2.csr_read.map(_ := false.B)
     io.retire2.csr_addr.map(_ := 0.U)
     io.retire2.csr_data.map(_ := 0.U)
-    io.iq_deq1.en      := valid1
-    io.iq_deq2.en      := valid2
+    io.iq_deq1.en       := valid1
+    io.iq_deq2.en       := valid2
     when (flush) {
       redirected := false.B
     }
@@ -215,6 +267,7 @@ class ReorderBuffer(start_address: BigInt, rob_entries: Int, pht_history_len: In
     printf(cf"valid2    : ${valid2}\n")
     printf(cf"inst_id1  : ${rob_buf(rob_id1).inst_id.getOrElse(0)}\n")
     printf(cf"inst_id2  : ${rob_buf(rob_id2).inst_id.getOrElse(0)}\n")
+    printf(cf"latter_pc : 0x${bp_upd.latter_pc.pc_to_word}%x\n")
     printf(cf"redirected: ${redirected}\n")
     printf(cf"redir_ptr : 0x${redir_ptr}%x\n")
     printf(cf"flush     : ${flush}\n")

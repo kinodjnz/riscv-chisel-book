@@ -14,6 +14,7 @@ class LoadStoreOutput(rob_id_len: Int) extends Bundle {
   val fw_wb_addr   = Output(UInt(ADDR_LEN.W))
   val fw_data      = Output(UInt(WORD_LEN.W))
   val wb_next      = Output(Bool())
+  // val retire_next  = Output(Bool())
   val wb_en        = Output(Bool())
   val wb_nofw      = Output(Bool())
   val wb_addr_next = Output(UInt(ADDR_LEN.W))
@@ -334,9 +335,11 @@ class LoadStoreUnit(enable_pipeline_probe: Boolean, dram_start: BigInt, dram_len
 
     val is_valid_load = !mem2_stall && !reg_unaligned && (reg_is_mem_load || reg_is_dram_load)
     val is_aligned_lw = !mem2_stall && (reg_is_mem_load || reg_is_dram_load) && reg_aligned_lw
+    val valid         = !mem2_stall && !reg_unaligned && reg_valid
     io.out.fw_en_next   := is_aligned_lw
     io.out.fw_wb_addr   := reg_wb_addr
     io.out.wb_next      := is_valid_load
+    // io.out.retire_next  := valid
     io.out.wb_addr_next := reg_wb_addr
 
     printf(cf"mem2_mem_busy    : ${mem2_mem_busy}%d\n")
@@ -354,7 +357,7 @@ class LoadStoreUnit(enable_pipeline_probe: Boolean, dram_start: BigInt, dram_len
     out.dmem_rdata     := Mux(reg_is_dram_load, io.cache.rdata, io.dmem.rdata)
     out.wb_addr        := reg_wb_addr
     out.is_valid_load  := is_valid_load
-    out.valid          := !mem2_stall && !reg_unaligned && reg_valid
+    out.valid          := valid
     out.unaligned      := reg_unaligned
     out.is_aligned_lw  := is_aligned_lw
     out.rob_id         := reg_rob_id

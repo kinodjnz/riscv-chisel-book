@@ -85,6 +85,7 @@ class FetchRedirectBuffer(redirect_buffer_size: Int, pht_history_len: Int, enabl
     buf(io.upd.ptr).attr      := io.upd.attr
     buf(io.upd.ptr).is_ret    := io.upd.is_ret
     buf(io.upd.ptr).target    := io.upd.target
+    printf(cf"fp(${io.upd.ptr}).attr   := ${io.upd.attr}   is_ret := ${io.upd.is_ret}\n")
     printf(cf"fp(${io.upd.ptr}).target := 0x${io.upd.target.pc_to_word}%x\n")
   }
 
@@ -127,18 +128,29 @@ class FetchPredictionPort(redirect_buffer_size: Int) extends Bundle {
   val fp_ptr         = Output(UInt(fp_ptr_len.W))
 }
 
+class BranchUpdatePort(pht_history_len: Int) extends Bundle {
+  val en        = Input(Bool())
+  val latter_pc = Input(UInt(PC_LEN.W))
+  val bp_entry  = Input(new BranchPredictionEntry())
+  val history   = Input(UInt(pht_history_len.W))
+  val br_taken  = Input(Bool())
+  val attr      = Input(UInt(BTB_ATTR_LEN.W))
+  val is_ret    = Input(Bool())
+  val next_pc   = Input(UInt(PC_LEN.W))
+}
+
 class BranchCorrectionPort(pht_history_len: Int) extends Bundle {
   val en       = Input(Bool())
-  val pc       = Input(UInt(PC_LEN.W))
-  val bp_entry = Input(new BranchPredictionEntry())
+  val upd      = new BranchUpdatePort(pht_history_len)
+  // val pc       = Input(UInt(PC_LEN.W))
+  // val bp_entry = Input(new BranchPredictionEntry())
   val fp_entry = Input(new FetchPredictionEntry(pht_history_len))
   val fp_hit   = Input(Bool())
   val mispred  = Input(Bool())
-  val br_taken = Input(Bool())
-  val attr     = Input(UInt(BTB_ATTR_LEN.W))
-  val is_ret   = Input(Bool())
+  // val br_taken = Input(Bool())
+  // val attr     = Input(UInt(BTB_ATTR_LEN.W))
+  // val is_ret   = Input(Bool())
   val target   = Input(UInt(PC_LEN.W))
-  val next_pc  = Input(UInt(PC_LEN.W))
 }
 
 class FetchPredictor(
@@ -279,7 +291,7 @@ class FetchPredictor(
   }
 
   def correction_cycle: Unit = {
-    def update_lcnt(br_taken: Bool, lcnt: UInt): UInt = {
+    def update_lcnt(br_taken: Bool, lcnt: UInt, first_time: Bool): UInt = {
       // if taken:
       //  (strongly not-taken) 10 => 00
       //  (weakly not-taken)   00 => 01
@@ -292,7 +304,7 @@ class FetchPredictor(
       //  (weakly not-taken)   00 => 10
       //  (weakly taken)       01 => 00
       //  (strongly taken)     11 => 01
-      val lcnt_unless_taken = (!lcnt(0, 0)) ## (lcnt(1) & lcnt(0)).asUInt
+      val lcnt_unless_taken = (!lcnt(0) /*& !first_time*/).asUInt ## (lcnt(1) & lcnt(0)).asUInt
 
       Mux(br_taken, lcnt_if_taken, lcnt_unless_taken)
     }
@@ -325,50 +337,51 @@ class FetchPredictor(
     // actual_attr === djump                    => new attr <- djump
     // actual_attr === dcall                    => new attr <- dcall
     // actual_attr === ret                      => new attr <- ret
-    io.btb.up.en := io.cr.en && (
-      ((io.cr.attr === BTB_ATTR_INVAL) && (io.cr.fp_hit || gcnt_is_branch(io.cr.bp_entry.gcnt))) ||
-      (io.cr.br_taken) ||
-      (io.cr.attr === BTB_ATTR_DJUMP) ||
-      (io.cr.attr === BTB_ATTR_DCALL) ||
-      (io.cr.is_ret)
+    io.btb.up.en := io.cr.upd.en && (
+      ((io.cr.upd.attr === BTB_ATTR_INVAL) && ((io.cr.en && io.cr.fp_hit) || gcnt_is_branch(io.cr.upd.bp_entry.gcnt))) ||
+      (io.cr.upd.br_taken) ||
+      (io.cr.upd.attr === BTB_ATTR_DJUMP) ||
+      (io.cr.upd.attr === BTB_ATTR_DCALL) ||
+      (io.cr.upd.is_ret)
     )
-    io.btb.up.attr    := io.cr.attr
-    io.btb.up.is_ret  := io.cr.is_ret
-    io.btb.up.pc      := io.cr.pc
-    io.btb.up.target  := io.cr.target
+    io.btb.up.attr       := io.cr.upd.attr
+    io.btb.up.is_ret     := io.cr.upd.is_ret
+    io.btb.up.pc         := io.cr.upd.latter_pc
+    io.btb.up.upd_target := io.cr.en
+    io.btb.up.target     := io.cr.target
 
     // Rollback pattern history if pc redirect prediction fails.
     io.pht.res.en      := io.cr.en && io.cr.mispred
-    io.pht.res.history := io.cr.fp_entry.history
+    io.pht.res.history := io.cr.upd.history
 
     // Update bimodal counter if the instruction is branch.
-    val updated_lcnt = update_lcnt(io.cr.br_taken, io.cr.bp_entry.lcnt)
-    val updated_gcnt = update_gcnt(io.cr.br_taken, io.cr.bp_entry.gcnt)
-    io.pht.up.en      := io.cr.en && (io.cr.attr === BTB_ATTR_BR)
-    io.pht.up.history := io.cr.fp_entry.history // History before branch taken
-    io.pht.up.pc      := io.cr.pc
+    val updated_lcnt = update_lcnt(io.cr.upd.br_taken, io.cr.upd.bp_entry.lcnt, io.cr.upd.bp_entry.gcnt === GCNT_NOT_BRANCH)
+    val updated_gcnt = update_gcnt(io.cr.upd.br_taken, io.cr.upd.bp_entry.gcnt)
+    io.pht.up.en      := io.cr.upd.en && (io.cr.upd.attr === BTB_ATTR_BR)
+    io.pht.up.history := io.cr.upd.history // History before branch taken
+    io.pht.up.pc      := io.cr.upd.latter_pc
     io.pht.up.lcnt    := updated_lcnt
     io.pht.up.gcnt    := updated_gcnt
 
     // Update pattern history if the branch is taken unlike the prediction.
-    io.pht.br2.en      := io.cr.en && io.cr.br_taken && (!io.cr.fp_hit || io.cr.fp_entry.attr =/= BTB_ATTR_BR)
-    io.pht.br2.history := io.cr.fp_entry.history
-    io.pht.br2.pc      := io.cr.pc
+    io.pht.br2.en      := io.cr.en && io.cr.upd.br_taken && (!io.cr.fp_hit || io.cr.fp_entry.attr =/= BTB_ATTR_BR)
+    io.pht.br2.history := io.cr.upd.history
+    io.pht.br2.pc      := io.cr.upd.latter_pc
 
     // Update zbtb
-    io.zbtb.up.en     := io.cr.en && (io.cr.br_taken || (io.cr.attr === BTB_ATTR_DJUMP || io.cr.attr === BTB_ATTR_DCALL))
-    io.zbtb.up.pc     := io.cr.pc
+    io.zbtb.up.en     := io.cr.en && (io.cr.upd.br_taken || (io.cr.upd.attr === BTB_ATTR_DJUMP || io.cr.upd.attr === BTB_ATTR_DCALL))
+    io.zbtb.up.pc     := io.cr.upd.latter_pc
     io.zbtb.up.target := io.cr.target
 
     // Rollback RAS index if pc redirect prediction fails.
     io.ras.up.en    := io.cr.en && io.cr.mispred
 
     // Pop RAS after execution stage
-    io.ras.ret2.en      := io.cr.en && io.cr.is_ret
+    io.ras.ret2.en      := io.cr.upd.en && io.cr.upd.is_ret
 
     // Push return address to RAS after execution stage
-    io.ras.call2.en     := io.cr.en && (io.cr.attr === BTB_ATTR_DCALL)
-    io.ras.call2.ret_pc := io.cr.next_pc
+    io.ras.call2.en     := io.cr.upd.en && (io.cr.upd.attr === BTB_ATTR_DCALL)
+    io.ras.call2.ret_pc := io.cr.upd.next_pc
   }
 
   prediction_cycle
@@ -461,18 +474,19 @@ class BTBLookup extends Bundle {
 }
 
 class BTBUpdate extends Bundle {
-  val en     = Input(Bool())
-  val pc     = Input(UInt(PC_LEN.W))
-  val attr   = Input(UInt(BTB_ATTR_LEN.W))
-  val is_ret = Input(Bool())
-  val target = Input(UInt(PC_LEN.W))
+  val en         = Input(Bool())
+  val pc         = Input(UInt(PC_LEN.W))
+  val attr       = Input(UInt(BTB_ATTR_LEN.W))
+  val is_ret     = Input(Bool())
+  val upd_target = Input(Bool())
+  val target     = Input(UInt(PC_LEN.W))
 }
 
 class BTBEntry(tag_len: Int) extends Bundle {
   val tag    = UInt(tag_len.W)
   val attr   = UInt(BTB_ATTR_LEN.W)
-  val shared = UInt(1.W)
-  val target = UInt((PC_LEN - 1).W)
+  val is_ret = Bool()
+  // val target = UInt((PC_LEN - 1).W)
 }
 
 class BTBPC(tag_len: Int, index_len: Int) extends Bundle {
@@ -488,13 +502,15 @@ class BTBIo extends Bundle {
 class BTB(btb_entries: Int, tag_ignore: Int = BTB_TAG_IGNORE) extends Module {
   val index_len = log2Ceil(btb_entries)
   val tag_len   = PC_LEN - tag_ignore - index_len
-  val entry_len = tag_len + BTB_ATTR_LEN + PC_LEN
+  val entry_len = tag_len + BTB_ATTR_LEN /*+ PC_LEN*/
 
   val io = IO(new BTBIo)
 
-  val btb_mem = List.fill(4)(Mem(btb_entries / 4, UInt(entry_len.W)))
+  val btb_mem        = List.fill(4)(Mem(btb_entries / 4, UInt(entry_len.W)))
+  val btb_target_mem = List.fill(4)(Mem(btb_entries / 4, UInt(PC_LEN.W)))
 
-  val reg_entry = RegInit(VecInit.fill(4)(0.U(entry_len.W)))
+  val reg_entry   = RegInit(VecInit.fill(4)(0.U(entry_len.W)))
+  val reg_targets = RegInit(VecInit.fill(4)(0.U(PC_LEN.W)))
 
   val up_entry = Wire(UInt(entry_len.W))
 
@@ -502,7 +518,8 @@ class BTB(btb_entries: Int, tag_ignore: Int = BTB_TAG_IGNORE) extends Module {
   val reg_lu_pc_tag = RegNext(lu_pc.tag, 0.U(tag_len.W))
 
   for (i <- 0 until 4) {
-    reg_entry(i) := btb_mem(i).read(lu_pc.index)
+    reg_entry(i)   := btb_mem(i).read(lu_pc.index)
+    reg_targets(i) := btb_target_mem(i).read(lu_pc.index)
   }
 
   val entry = reg_entry.map(e => e.asTypeOf(new BTBEntry(tag_len)))
@@ -513,24 +530,28 @@ class BTB(btb_entries: Int, tag_ignore: Int = BTB_TAG_IGNORE) extends Module {
     result(i).jump   := tag_match(i) && (entry(i).attr === BTB_ATTR_DJUMP || entry(i).attr === BTB_ATTR_DCALL)
     result(i).br     := tag_match(i) && (entry(i).attr === BTB_ATTR_BR)
     result(i).attr   := Mux(tag_match(i), entry(i).attr, BTB_ATTR_INVAL)
-    result(i).is_ret := tag_match(i) && entry(i).shared.asBool && (entry(i).attr === BTB_ATTR_INVAL)
-    result(i).target := entry(i).shared ## entry(i).target
+    result(i).is_ret := tag_match(i) && entry(i).is_ret /*&& (entry(i).attr === BTB_ATTR_INVAL)*/
+    result(i).target := reg_targets(i)
     io.lu.result(i)  := result(i)
   }
   for (i <- 0 until 4) {
-    printf(cf"read btb(0x${((RegNext(io.lu.pc).take(PC_LEN).replace_lsbits(2, i.U(2.W))).pc_to_word)}%x) = attr:${entry(i).attr} target:0x${(entry(i).shared ## entry(i).target).pc_to_word}%x\n")
+    printf(cf"read btb(0x${((RegNext(io.lu.pc).take(PC_LEN).replace_lsbits(2, i.U(2.W))).pc_to_word)}%x) = attr:${entry(i).attr} target:0x${reg_targets(i).pc_to_word}%x\n")
   }
 
   val up_pc = (io.up.pc(tag_len + index_len - 1, 2)).asTypeOf(new BTBPC(tag_len, index_len))
-  val target = Cat(
-    Mux(io.up.attr === BTB_ATTR_INVAL, io.up.is_ret, io.up.target(PC_LEN - 1)),
-    io.up.target(PC_LEN - 2, 0)
-  )
-  up_entry := up_pc.tag ## io.up.attr ## target
+  // val target = Cat(
+  //   Mux(io.up.attr === BTB_ATTR_INVAL, io.up.is_ret, io.up.target(PC_LEN - 1)),
+  //   io.up.target(PC_LEN - 2, 0)
+  // )
+  up_entry := up_pc.tag ## io.up.attr ## io.up.is_ret /*## target*/
   for (i <- 0 until 4) {
     when (io.up.en && io.up.pc(1, 0) === i.U(2.W)) {
       btb_mem(i).write(up_pc.index, up_entry)
-      printf(cf"update btb(0x${up_pc.index}%x) := attr:${io.up.attr} target:0x${target}%x\n")
+      printf(cf"update btb(0x${up_pc.index}%x) := attr:${io.up.attr} is_ret:${io.up.is_ret}\n")
+    }
+    when (io.up.upd_target && io.up.pc(1, 0) === i.U(2.W)) {
+      btb_target_mem(i).write(up_pc.index, io.up.target)
+      printf(cf"update btb(0x${up_pc.index}%x) := target:0x${io.up.target}%x\n")
     }
   }
 }
@@ -637,12 +658,13 @@ class PHT(index_len: Int, history_len: Int, history_shift: Int) extends Module {
   io.gmem.waddr := merge(io.up.history, io.up.pc)(index_len-1, 0)
   io.gmem.wdata := io.up.gcnt
 
-  // printf(cf"io.lu.pc         : 0x${Cat(io.lu.pc, 0.U(1.W))}%x\n")
-  // printf(cf"io.lu.cnt0       : 0x${io.lu.cnt0}%x\n")
-  // printf(cf"io.lu.cnt1       : 0x${io.lu.cnt1}%x\n")
-  // printf(cf"io.up.en         : ${io.up.en}\n")
-  // printf(cf"io.up.pc         : 0x${Cat(io.up.pc, 0.U(1.W))}%x\n")
-  // printf(cf"io.up.lcnt       : 0x${io.up.lcnt}%x\n")
+  printf(cf"io.lu.pc         : 0x${io.lu.pc.pc_to_word}%x\n")
+  printf(cf"io.lu.lcnt       : 0x${lcnt}%x\n")
+  printf(cf"io.lu.gcnt       : 0x${gcnt}%x\n")
+  printf(cf"io.up.en         : ${io.up.en}\n")
+  printf(cf"io.up.pc         : 0x${io.up.pc.pc_to_word}%x\n")
+  printf(cf"io.up.lcnt       : 0x${io.up.lcnt}%x\n")
+  printf(cf"io.up.gcnt       : 0x${io.up.gcnt}%x\n")
 }
 
 class RASTop(index_len: Int) extends Bundle {
