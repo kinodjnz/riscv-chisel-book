@@ -3,37 +3,37 @@
     "class":"firrtl.transforms.DedupedResult",
     "original":"~RiscV|InstructionDecoder",
     "duplicate":"~RiscV|RiscV/core:Core/idu:InstructionDecoderUnit/decoder1:InstructionDecoder",
-    "index":0.3235294117647059
+    "index":0.3142857142857143
   },
   {
     "class":"firrtl.transforms.DedupedResult",
     "original":"~RiscV|InstructionDecoder_1",
     "duplicate":"~RiscV|RiscV/core:Core/idu:InstructionDecoderUnit/decoder2:InstructionDecoder",
-    "index":0.35294117647058826
+    "index":0.34285714285714286
   },
   {
     "class":"firrtl.transforms.DedupedResult",
     "original":"~RiscV|DCacheSram",
     "duplicate":"~RiscV|RiscV/dcache1:DCacheSram",
-    "index":0.5588235294117647
+    "index":0.5714285714285714
   },
   {
     "class":"firrtl.transforms.DedupedResult",
     "original":"~RiscV|DCacheSram_1",
     "duplicate":"~RiscV|RiscV/dcache2:DCacheSram",
-    "index":0.5882352941176471
+    "index":0.6
   },
   {
     "class":"firrtl.transforms.DedupedResult",
     "original":"~RiscV|PHTMem",
     "duplicate":"~RiscV|RiscV/pht_lmem:PHTMem",
-    "index":0.6764705882352942
+    "index":0.6857142857142857
   },
   {
     "class":"firrtl.transforms.DedupedResult",
     "original":"~RiscV|PHTMem_1",
     "duplicate":"~RiscV|RiscV/pht_gmem:PHTMem",
-    "index":0.7058823529411765
+    "index":0.7142857142857143
   },
   {
     "class":"firrtl.EmitCircuitAnnotation",
@@ -149,6 +149,90 @@
   {
     "class":"firrtl.transforms.BlackBoxTargetDirAnno",
     "targetDir":"rtl/riscv_arty_a7"
+  },
+  {
+    "class":"firrtl.annotations.MemoryFileInlineAnnotation",
+    "target":"~RiscV|RegisterFile>free_phys_queue_1",
+    "filename":"free_phys_1.hex",
+    "hexOrBinary":"h"
+  },
+  {
+    "class":"firrtl.annotations.MemoryFileInlineAnnotation",
+    "target":"~RiscV|RegisterFile>free_phys_queue_0",
+    "filename":"free_phys_0.hex",
+    "hexOrBinary":"h"
+  },
+  {
+    "class":"firrtl.annotations.MemoryFileInlineAnnotation",
+    "target":"~RiscV|RegisterFile>mapy2c_arch_to_phys",
+    "filename":"map_arch_to_phys.hex",
+    "hexOrBinary":"h"
+  },
+  {
+    "class":"firrtl.annotations.MemoryFileInlineAnnotation",
+    "target":"~RiscV|RegisterFile>mapx2c_arch_to_phys",
+    "filename":"map_arch_to_phys.hex",
+    "hexOrBinary":"h"
+  },
+  {
+    "class":"firrtl.annotations.MemoryFileInlineAnnotation",
+    "target":"~RiscV|RegisterFile>mapy2b_arch_to_phys",
+    "filename":"map_arch_to_phys.hex",
+    "hexOrBinary":"h"
+  },
+  {
+    "class":"firrtl.annotations.MemoryFileInlineAnnotation",
+    "target":"~RiscV|RegisterFile>mapx2b_arch_to_phys",
+    "filename":"map_arch_to_phys.hex",
+    "hexOrBinary":"h"
+  },
+  {
+    "class":"firrtl.annotations.MemoryFileInlineAnnotation",
+    "target":"~RiscV|RegisterFile>mapy2a_arch_to_phys",
+    "filename":"map_arch_to_phys.hex",
+    "hexOrBinary":"h"
+  },
+  {
+    "class":"firrtl.annotations.MemoryFileInlineAnnotation",
+    "target":"~RiscV|RegisterFile>mapx2a_arch_to_phys",
+    "filename":"map_arch_to_phys.hex",
+    "hexOrBinary":"h"
+  },
+  {
+    "class":"firrtl.annotations.MemoryFileInlineAnnotation",
+    "target":"~RiscV|RegisterFile>mapy1c_arch_to_phys",
+    "filename":"map_arch_to_phys.hex",
+    "hexOrBinary":"h"
+  },
+  {
+    "class":"firrtl.annotations.MemoryFileInlineAnnotation",
+    "target":"~RiscV|RegisterFile>mapx1c_arch_to_phys",
+    "filename":"map_arch_to_phys.hex",
+    "hexOrBinary":"h"
+  },
+  {
+    "class":"firrtl.annotations.MemoryFileInlineAnnotation",
+    "target":"~RiscV|RegisterFile>mapy1b_arch_to_phys",
+    "filename":"map_arch_to_phys.hex",
+    "hexOrBinary":"h"
+  },
+  {
+    "class":"firrtl.annotations.MemoryFileInlineAnnotation",
+    "target":"~RiscV|RegisterFile>mapx1b_arch_to_phys",
+    "filename":"map_arch_to_phys.hex",
+    "hexOrBinary":"h"
+  },
+  {
+    "class":"firrtl.annotations.MemoryFileInlineAnnotation",
+    "target":"~RiscV|RegisterFile>mapy1a_arch_to_phys",
+    "filename":"map_arch_to_phys.hex",
+    "hexOrBinary":"h"
+  },
+  {
+    "class":"firrtl.annotations.MemoryFileInlineAnnotation",
+    "target":"~RiscV|RegisterFile>mapx1a_arch_to_phys",
+    "filename":"map_arch_to_phys.hex",
+    "hexOrBinary":"h"
   },
   {
     "class":"firrtl.annotations.MemoryFileInlineAnnotation",
