@@ -293,8 +293,55 @@ void spike_init() {
     }
 }
 
+void load_regs_init_memory(const std::string &path, Vriscv *top) {
+    VlUnpacked<CData, 32> *mems[] = {
+        &(top->rootp->SimTop__DOT__core__DOT__rf__DOT__mapx1a_arch_to_phys),
+        &(top->rootp->SimTop__DOT__core__DOT__rf__DOT__mapy1a_arch_to_phys),
+        &(top->rootp->SimTop__DOT__core__DOT__rf__DOT__mapx1b_arch_to_phys),
+        &(top->rootp->SimTop__DOT__core__DOT__rf__DOT__mapy1b_arch_to_phys),
+        &(top->rootp->SimTop__DOT__core__DOT__rf__DOT__mapx1c_arch_to_phys),
+        &(top->rootp->SimTop__DOT__core__DOT__rf__DOT__mapy1c_arch_to_phys),
+        &(top->rootp->SimTop__DOT__core__DOT__rf__DOT__mapx2a_arch_to_phys),
+        &(top->rootp->SimTop__DOT__core__DOT__rf__DOT__mapy2a_arch_to_phys),
+        &(top->rootp->SimTop__DOT__core__DOT__rf__DOT__mapx2b_arch_to_phys),
+        &(top->rootp->SimTop__DOT__core__DOT__rf__DOT__mapy2b_arch_to_phys),
+        &(top->rootp->SimTop__DOT__core__DOT__rf__DOT__mapx2c_arch_to_phys),
+        &(top->rootp->SimTop__DOT__core__DOT__rf__DOT__mapy2c_arch_to_phys),
+    };
+    for (auto mem: mems) {
+        VL_READMEM_N(
+            true,
+            6,
+            32,
+            0,
+            path + "/map_arch_to_phys.hex",
+            mem,
+            0,
+            ~0ULL);
+    }
+    VL_READMEM_N(
+        true,
+        6,
+        32,
+        0,
+        path + "/free_phys_0.hex",
+        &(top->rootp->SimTop__DOT__core__DOT__rf__DOT__free_phys_queue_0),
+        0,
+        ~0ULL);
+    VL_READMEM_N(
+        true,
+        6,
+        32,
+        0,
+        path + "/free_phys_1.hex",
+        &(top->rootp->SimTop__DOT__core__DOT__rf__DOT__free_phys_queue_1),
+        0,
+        ~0ULL);
+}
+
 void rtl_init() {
     top = new Vriscv;
+    load_regs_init_memory(std::string("../../../rtl/riscv"), top);
     if (load_bin) {
         VL_READMEM_N(
             true,
@@ -431,6 +478,7 @@ void spike_next(uint32_t index, uint32_t inst_id, uint32_t pc, uint32_t inst, ui
     // }
     // while (!found && inst_log.size() < max_inst_log) {
         // bool skip_log = false;
+        bool machine_trap = false;
         uint32_t spike_pc = state->pc;
         spike_step();
         uint32_t spike_wb_addr = 0;
@@ -441,9 +489,12 @@ void spike_next(uint32_t index, uint32_t inst_id, uint32_t pc, uint32_t inst, ui
                     spike_wb_addr = item.first >> 4;
                     spike_wb_data = item.second.v[0];
                 } else {
-                    fprintf(stderr, "??? unknown spike trace %llx, addr=%llx, pc=%08x\n", item.first & 0xf, item.first >> 4, spike_pc);
+                    fprintf(stderr, "??? unknown spike trace %llx, addr=%llx, data=%llx, pc=%08x\n", item.first & 0xf, item.first >> 4, item.second.v[0], spike_pc);
                     if (state->mcause->read() == 2) {
                         failure();
+                    }
+                    if ((item.first & 0xf) == 4 && (item.first >> 4) == 0x342) {
+                        machine_trap = true;
                     }
                     // if ((item.first & 0xf) == 4 && (item.first >> 4) == 0x342) {
                     //     skip_log = true;
@@ -452,7 +503,9 @@ void spike_next(uint32_t index, uint32_t inst_id, uint32_t pc, uint32_t inst, ui
             }
         }
         assertEq("pc unmatch", pc, spike_pc);
-        assertEq("inst unmatch", mask_rvc(inst), (uint32_t) state->last_inst.bits());
+        if (!machine_trap) {
+            assertEq("inst unmatch", mask_rvc(inst), (uint32_t) state->last_inst.bits());
+        }
         if (spike_wb_addr != 0) {
             // fprintf(stderr, "pc=%08x\n", pc);
             // fprintf(stderr, "inst=%08x\n", inst);

@@ -8,7 +8,7 @@ import fpga._
 import fpga.periferals._
 import common.Consts._
 
-class SimTop(memoryPath: String, with_sdc: Boolean, enable_pipeline_probe: Boolean = false) extends Module {
+class SimTop(memoryPath: String, regsInitMemory: Option[RegisterFileInitMemoryPath], with_sdc: Boolean, enable_pipeline_probe: Boolean = false) extends Module {
   val imemSizeInBytes = 16384
   val dmemSizeInBytes = 16384
   val startAddress = 0x00000000L
@@ -17,7 +17,7 @@ class SimTop(memoryPath: String, with_sdc: Boolean, enable_pipeline_probe: Boole
     val sim_probe = new SimProbe()
     val pipeline_probe = new PipelineProbe()
   })
-  val core = Module(new Core(startAddress, 0x2000_0000L, 0x1000_0000L, true, enable_pipeline_probe, true))
+  val core = Module(new Core(regsInitMemory, startAddress, 0x2000_0000L, 0x1000_0000L, true, enable_pipeline_probe, true))
   val memory = Module(new Memory())
   val boot_rom = Module(new BootRom(memoryPath, imemSizeInBytes, true, true))
 
@@ -83,7 +83,7 @@ class SimTop(memoryPath: String, with_sdc: Boolean, enable_pipeline_probe: Boole
 }
 
 object ElaborateSim extends App {
-  (new ChiselStage).emitVerilog(new SimTop(null, true, true), Array(
+  (new ChiselStage).emitVerilog(new SimTop(null, None, true, true), Array(
     "-o", "riscv.v",
     "--target-dir", "rtl/sim",
     "--throw-on-first-error"

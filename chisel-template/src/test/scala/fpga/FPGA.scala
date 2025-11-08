@@ -133,8 +133,13 @@ class RiscvTest extends FixtureAnyFlatSpec with ChiselScalatestTester with TestD
     ("rv32mi-p-sw-misaligned", 1000),
   )
   for ((code, timeOut) <- tests) {
+    val regsInitMemory = Some(new RegisterFileInitMemoryPath(
+      "rtl/riscv/map_arch_to_phys.hex",
+      "rtl/riscv/free_phys_0.hex",
+      "rtl/riscv/free_phys_1.hex",
+    ))
     it must f"runs ${code}" in { td: TestData =>
-      test(new SimTop(f"../riscv-tests/isa/${code}.binhex", code.startsWith("sdc"), true))
+      test(new SimTop(f"../riscv-tests/isa/${code}.binhex", regsInitMemory, code.startsWith("sdc"), true))
           .withAnnotations(Seq(VerilatorBackendAnnotation)) { c =>
         Using(KanataWriter(s"test_run_dir/${sanitizeFileName(td.name)}/trace.kanata")) { writer =>
           c.clock.setTimeout(timeOut)

@@ -15,6 +15,7 @@ object Consts {
   val UNIMP           = "x_c0001073".U(WORD_LEN.W) // [CSRRW x0, cycle, x0]
   val BPFAILURE       = 0x00100013.U(WORD_LEN.W) // [ADDI x0,x0,1]
   val ADDR_LEN        = 5 // rs1,rs2,wb
+  val PHYS_ADDR_LEN   = 6
   val CSR_ADDR_LEN    = 12
   val INST_ID_LEN     = 32
   val IQ_ENTRIES      = 16
@@ -22,6 +23,8 @@ object Consts {
   val LSQ_ENTRIES     = 4
   val LSQ_ID_LEN      = log2Ceil(LSQ_ENTRIES)
   // val ROB_ENTRIES     = 16
+  val REGQ_ENTRIES    = IQ_ENTRIES
+  val REGQ_LEN        = log2Ceil(REGQ_ENTRIES)
 
   val EXE_SEL_LEN = 3
   val EXE_ALU = 0.U(EXE_SEL_LEN.W)
