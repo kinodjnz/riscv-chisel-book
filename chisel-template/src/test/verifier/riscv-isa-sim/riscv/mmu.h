@@ -35,12 +35,6 @@ const reg_t PGSIZE = 1 << PGSHIFT;
 #define MMU_OBSERVE_STORE(addr, data, length)
 #endif
 
-struct insn_fetch_t
-{
-  insn_func_t func;
-  insn_t insn;
-};
-
 struct icache_entry_t {
   reg_t tag;
   struct icache_entry_t* next;
@@ -329,7 +323,7 @@ public:
       insn |= (insn_bits_t)fetch_insn_parcel(addr + 6) << 48;
     }
 
-    insn_fetch_t fetch = {proc->decode_insn(insn), insn};
+    insn_fetch_t fetch = proc->decode_insn(insn);
     entry->tag = addr;
     entry->next = &icache[icache_index(addr + length)];
     entry->data = fetch;

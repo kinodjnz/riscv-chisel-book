@@ -5,6 +5,7 @@
 #include "mmu.h"
 #include "disasm.h"
 #include "decode_macros.h"
+#include "simif.h"
 #include <cassert>
 
 static void commit_log_reset(processor_t* p)
@@ -209,7 +210,7 @@ bool processor_t::slow_path() const
 }
 
 // fetch/decode/execute loop
-void processor_t::step(size_t n)
+size_t processor_t::step(size_t n, bool at_most)
 {
   mmu_t* _mmu = mmu;
 
@@ -294,7 +295,10 @@ void processor_t::step(size_t n)
           insn_fetch_t fetch = mmu->load_insn(pc);
           if (debug && !state.serialized)
             disasm(fetch.insn);
+          auto pre_pc = pc;
           pc = execute_insn_logged(this, pc, fetch);
+          if (pc != PC_SERIALIZE_BEFORE)
+            sim->decoded(pre_pc, fetch.insn, fetch.timing);
           advance_pc();
 
           // Resume from debug mode in critical error
@@ -314,8 +318,11 @@ void processor_t::step(size_t n)
         // Main simulation loop, fast path.
         for (auto ic_entry = _mmu->access_icache(pc); ; ) {
           auto fetch = ic_entry->data;
+          auto pre_pc = pc;
           pc = execute_insn_fast(this, pc, fetch);
           ic_entry = ic_entry->next;
+          if (pc != PC_SERIALIZE_BEFORE)
+            sim->decoded(pre_pc, fetch.insn, fetch.timing);
           if (unlikely(ic_entry->tag != pc))
             break;
           if (unlikely(instret + 1 == n))
@@ -330,7 +337,8 @@ void processor_t::step(size_t n)
     catch(trap_t& t)
     {
       take_trap(t, pc);
-      n = instret;
+      // n = instret;
+      at_most = true;
 
       // If critical error then enter debug mode critical error trigger enabled
       if (state.critical_error) {
@@ -377,5 +385,9 @@ void processor_t::step(size_t n)
     state.mcycle->bump((state.mcountinhibit->read() & MCOUNTINHIBIT_CY) ? 0 : instret);
 
     n -= instret;
+    if (at_most) {
+      break;
+    }
   }
+  return n;
 }

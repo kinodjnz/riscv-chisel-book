@@ -1141,6 +1141,10 @@ riscv_insn_xcramp = \
 	bfmi \
 	bfpi \
 	bsct_h \
+	seq \
+	sne \
+	seqi \
+	snei
 
 riscv_insn_list = \
 	$(riscv_insn_ext_i) \

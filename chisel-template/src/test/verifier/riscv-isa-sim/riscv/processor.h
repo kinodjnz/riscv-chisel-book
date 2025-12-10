@@ -35,6 +35,7 @@ struct insn_desc_t
 {
   insn_bits_t match;
   insn_bits_t mask;
+  timing_t    timing;
   insn_func_t fast_rv32i;
   insn_func_t fast_rv64i;
   insn_func_t fast_rv32e;
@@ -59,6 +60,13 @@ struct insn_desc_t
   }
 
   static const insn_desc_t illegal_instruction;
+};
+
+struct insn_fetch_t
+{
+  insn_func_t func;
+  insn_t insn;
+  timing_t timing;
 };
 
 // regnum, data
@@ -266,7 +274,7 @@ public:
   void enable_log_commits();
   bool get_log_commits_enabled() const { return log_commits_enabled; }
   void reset();
-  void step(size_t n); // run for n cycles
+  size_t step(size_t n, bool at_most = false); // run for n cycles
   void put_csr(int which, reg_t val);
   uint32_t get_id() const { return id; }
   reg_t get_csr(int which, insn_t insn, bool write, bool peek = 0);
@@ -438,7 +446,7 @@ private:
   void parse_priv_string(const char*);
   void build_opcode_map();
   void register_base_instructions();
-  insn_func_t decode_insn(insn_t insn);
+  insn_fetch_t decode_insn(insn_t insn);
 
   // Track repeated executions for processor_t::disasm()
   uint64_t last_pc, last_bits, executions;

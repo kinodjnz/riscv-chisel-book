@@ -21,6 +21,7 @@ ADDCFLAGS += -CFLAGS -I$(realpath riscv-isa-sim/riscv)
 # ADDCFLAGS += -CFLAGS -I riscv-isa-sim/fdt
 # ADDCFLAGS += -CFLAGS -I riscv-isa-sim
 
+CXXFLAGS += -O2 -flto -g
 CXXFLAGS += -I riscv-isa-sim/riscv
 CXXFLAGS += -I riscv-isa-sim/fesvr
 CXXFLAGS += -I riscv-isa-sim/fdt
@@ -50,6 +51,10 @@ SIM_NAME = riscv
 SIM_VERILOG ?= $(CRAMP_GEN_DIR)/$(SIM_NAME).v
 SIM_DIR = sim
 SIM_SRCS = $(SIM_DIR)/src/main.cpp $(SPIKE_CC_OBJS) $(SPIKE_C_OBJS)
+
+EMU_NAME = cramp
+EMU_DIR = emu
+EMU_SRCS = $(EMU_DIR)/src/main.cpp $(SPIKE_CC_OBJS) $(SPIKE_C_OBJS)
 
 .PHONY: aaa
 aaa: # $(SPIKE_OBJS)
@@ -121,6 +126,12 @@ UT_VERILATOR_OBJS = $(foreach postfixes,.mk,$(foreach ut_name,$(UT_DIRS),$(ut_na
 UT_EXECUTABLES = $(foreach ut_name,$(UT_DIRS),$(ut_name)/$(OBJ_DIR)/V$(ut_name))
 UT_TARGET = $(patsubst %,ut-%,$(UT_DIRS))
 
+$(EMU_DIR)/$(OBJ_DIR)/emu: $(EMU_DIR)/$(OBJ_DIR) $(EMU_SRCS)
+	$(CXX) -std=c++23 $(CXXFLAGS) -o $@ $(wordlist 2,99999,$^)
+
+$(EMU_DIR)/$(OBJ_DIR):
+	mkdir -p $(EMU_DIR)/$(OBJ_DIR)
+
 .PHONY: all-ut
 all-ut: $(UT_TARGET)
 
@@ -144,8 +155,14 @@ $(UT_VERILATOR_OBJS): %.mk: $(CRAMP_GEN_DIR)/$$(firstword $$(subst /, ,%)).v
 	verilator -cc --Mdir $(firstword $(subst /, ,$@))/$(OBJ_DIR) $< -CFLAGS -std=c++23 -LDFLAGS -pthread $(ADDCFLAGS) $(FLAGS) --gdbbt $(VERILATOR_ARGS) -Wno-UNOPTFLAT -Wno-WIDTH --x-initial 0 --x-assign unique --exe $(firstword $(subst /, ,$@))/src/*.cpp
 
 .PHONY: clean
-clean: clean-ut
+clean: clean-ut clean-emu
 	rm -rf $(SIM_DIR)/$(OBJ_DIR)
+
+clean-spike:
+	rm -rf $(SPIKE_DIR)/obj_dir
+
+clean-emu:
+	rm -rf $(EMU_DIR)/$(OBJ_DIR)
 
 CLEAN_UT_TARGET = $(patsubst %,clean-ut-%,$(UT_DIRS))
 

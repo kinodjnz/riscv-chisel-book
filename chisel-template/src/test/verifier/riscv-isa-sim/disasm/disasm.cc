@@ -1138,6 +1138,11 @@ void disassembler_t::add_instructions(const isa_parser_t* isa, bool strict)
   DISASM_INSN("gorci", gorci, 0, {&xrd, &xrs1, &shamt});
   DISASM_INSN("bsct.h", bsct_h, 0, {&xrd, &xrs1, &xrs2});
 
+  DEFINE_RTYPE(seq)
+  DEFINE_RTYPE(sne)
+  DEFINE_ITYPE(seqi)
+  DEFINE_ITYPE(snei)
+
   if (ext_enabled('S')) {
     DEFINE_NOARG(sret);
     DEFINE_SFENCE_TYPE(sfence_vma);
