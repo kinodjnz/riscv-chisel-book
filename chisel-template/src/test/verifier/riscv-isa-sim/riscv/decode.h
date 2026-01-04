@@ -73,6 +73,20 @@ const int NCSR = 4096;
 
 typedef uint32_t timing_t;
 
+struct reg_mask_t
+{
+  uint64_t m;
+  void reset() { m = 0; }
+  void use_wr(reg_t reg) { m |= reg; }
+  void use_rd1(reg_t reg) { m |= reg << 8; }
+  void use_rd2(reg_t reg) { m |= reg << 16; }
+  void use_rd3(reg_t reg) { m |= reg << 24; }
+  reg_t wr() { return m & 255; }
+  reg_t rd1() { return (m >> 8) & 255; }
+  reg_t rd2() { return (m >> 16) & 255; }
+  reg_t rd3() { return (m >> 24) & 255; }
+};
+
 typedef uint64_t insn_bits_t;
 class insn_t
 {

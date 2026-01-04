@@ -209,6 +209,8 @@ struct state_t
 
   elp_t elp;
 
+  reg_mask_t reg_mask;
+
   bool critical_error;
 
  private:

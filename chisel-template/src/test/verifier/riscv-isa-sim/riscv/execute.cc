@@ -160,6 +160,7 @@ inline void processor_t::update_histogram(reg_t pc)
 // These two functions are expected to be inlined by the compiler separately in
 // the processor_t::step() loop. The logged variant is used in the slow path
 static inline reg_t execute_insn_fast(processor_t* p, reg_t pc, insn_fetch_t fetch) {
+  p->get_state()->reg_mask.reset();
   return fetch.func(p, fetch.insn, pc);
 }
 static inline reg_t execute_insn_logged(processor_t* p, reg_t pc, insn_fetch_t fetch)
@@ -172,6 +173,7 @@ static inline reg_t execute_insn_logged(processor_t* p, reg_t pc, insn_fetch_t f
   reg_t npc;
 
   try {
+    p->get_state()->reg_mask.reset();
     npc = fetch.func(p, fetch.insn, pc);
     if (npc != PC_SERIALIZE_BEFORE) {
       p->get_state()->last_inst = fetch.insn;
@@ -298,7 +300,7 @@ size_t processor_t::step(size_t n, bool at_most)
           auto pre_pc = pc;
           pc = execute_insn_logged(this, pc, fetch);
           if (pc != PC_SERIALIZE_BEFORE)
-            sim->decoded(pre_pc, fetch.insn, fetch.timing);
+            sim->decoded(pre_pc, fetch.insn, fetch.timing, get_state()->reg_mask);
           advance_pc();
 
           // Resume from debug mode in critical error
@@ -322,7 +324,7 @@ size_t processor_t::step(size_t n, bool at_most)
           pc = execute_insn_fast(this, pc, fetch);
           ic_entry = ic_entry->next;
           if (pc != PC_SERIALIZE_BEFORE)
-            sim->decoded(pre_pc, fetch.insn, fetch.timing);
+            sim->decoded(pre_pc, fetch.insn, fetch.timing, get_state()->reg_mask);
           if (unlikely(ic_entry->tag != pc))
             break;
           if (unlikely(instret + 1 == n))

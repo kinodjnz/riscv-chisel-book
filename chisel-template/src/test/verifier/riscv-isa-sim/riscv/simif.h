@@ -29,7 +29,7 @@ public:
 
   virtual const char* get_symbol(uint64_t paddr) = 0;
 
-  virtual void decoded(reg_t pc, insn_t insn, timing_t timing) = 0;
+  virtual void decoded(reg_t pc, insn_t insn, timing_t timing, reg_mask_t reg_mask) = 0;
 
   virtual ~simif_t() = default;
 

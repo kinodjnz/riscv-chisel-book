@@ -31,6 +31,7 @@ const uint64_t MAX_STEPS = 256;
 struct instruction_log_t {
     uint32_t pc;
     uint32_t timing;
+    reg_mask_t reg_mask;
     bool     flushed;
     uint64_t started;
     uint64_t decoded;
@@ -66,14 +67,16 @@ class sched_t {
     static const size_t LOG_MASK = LOG_SIZE - 1;
     sched_config_t cfg_;
     instruction_log_t insn_log[LOG_SIZE];
+    uint64_t reg_available[32];
     uint64_t cycles_ = 0;
     size_t iq_begin = 0;
     size_t iq_end   = 0;
     size_t iq_last  = 0;
     size_t iq_flushed = 0;
+    bool iq_full = false;
     uint32_t pred_pc = -1;
     uint64_t last_decoded = 0;
-    uint32_t decode_rest = cfg_.decode_ways;
+    uint32_t decode_rest = 0; // cfg_.decode_ways;
     // uint64_t last_dispatched = 0;
     uint64_t last_retired = 0;
     // uint32_t dispatch_rest = cfg.dispatch_ways;
@@ -81,24 +84,23 @@ class sched_t {
     // uint64_t blu_cycle = 0;
 
 private:
-    uint64_t exec_latency(timing_t timing, uint32_t pc) {
+    uint64_t exec_latency(timing_t timing, bool clu_exec, uint32_t pc) {
         uint64_t latency;
         switch (timing >> 16) {
         case TC_ARITH:
-            latency = 4;
-            // latency = 2; // clu
+            latency = (clu_exec ? 2 : 3);
             break;
         case TC_MUL:
-            latency = 4;
+            latency = 3;
             break;
         case TC_DIV:
             latency = 20;
             break;
         case TC_JB:
-            latency = 4;
+            latency = 3;
             break;
         case TC_CSR:
-            latency = 4;
+            latency = 3;
             break;
         case TC_LD:
             latency = 5;
@@ -113,15 +115,77 @@ private:
         }
         return latency;
     }
+    uint64_t regfwd_latency(timing_t timing, uint32_t pc) {
+        uint64_t latency;
+        switch (timing >> 16) {
+        case TC_ARITH:
+            latency = (((timing & 0xffff) < TTA_BINV) ? 1 : 2);
+            break;
+        case TC_MUL:
+            latency = 3;
+            break;
+        case TC_DIV:
+            latency = 20;
+            break;
+        case TC_JB:
+            latency = 1;
+            break;
+        case TC_CSR:
+            latency = 1;
+            break;
+        case TC_LD:
+            latency = (((timing & 0xffff) < TTL_LW) ? 4 : 3);
+            break;
+        case TC_ST:
+            latency = 0;
+            break;
+        default:
+            printf("pc=%08x unknown timing: %d\n", pc, timing);
+            latency = 10;
+            break;
+        }
+        return latency;
+    }
+    bool clu_executable(timing_t timing) {
+        bool b;
+        switch (timing >> 16) {
+        case TC_ARITH:
+            b = ((timing & 0xffff) < TTA_SRA);
+            break;
+        case TC_MUL:
+            b = false;
+            break;
+        case TC_DIV:
+            b = false;
+            break;
+        case TC_JB:
+            b = false;
+            break;
+        case TC_CSR:
+            b = false;
+            break;
+        case TC_LD:
+            b = false;
+            break;
+        case TC_ST:
+            b = false;
+            break;
+        default:
+            b = false;
+            break;
+        }
+        return b;
+    }
 public:
     explicit sched_t(sched_config_t cfg): cfg_(cfg) {}
     uint64_t cycles() {
         return cycles_;
     }
-    void decoded(reg_t pc, insn_t insn, timing_t timing) {
+    void decoded(reg_t pc, insn_t insn, timing_t timing, reg_mask_t reg_mask) {
         // cycles += 1;
         insn_log[iq_last].pc = pc;
         insn_log[iq_last].timing = timing;
+        insn_log[iq_last].reg_mask = reg_mask;
         insn_log[iq_last].flushed = (pred_pc != pc);
         pred_pc = pc + insn.length();
         iq_last = (iq_last + 1) & LOG_MASK;
@@ -130,33 +194,39 @@ public:
         uint64_t retired = last_retired;
         for (size_t i = iq_begin; i != iq_last; i = (i + 1) & LOG_MASK) {
             uint64_t decoded;
+            uint64_t iq_ready = 0;
             if (insn_log[i].flushed) {
                 iq_flushed = i;
+                iq_full = false;
                 decoded = retired + cfg_.fetch_latency;
-                // printf("pc=%08x decoded=%llu (flushed)\n", insn_log[i].pc, decoded);
-                insn_log[i].decoded = decoded;
-                last_decoded = decoded;
             } else {
-                size_t from_flushed = (i - iq_flushed) & LOG_MASK;
-                size_t iq_dist = std::min(from_flushed, cfg_.iq_size);
-                size_t iq_top = (i - iq_dist) & LOG_MASK;
-                decoded = last_decoded + (decode_rest == 0 ? 1 : 0);
-                // printf("iq_top=%zu iq_flushed=%zu retired=%llu\n", iq_top, iq_flushed, insn_log[iq_top].retired);
-                if (iq_top != iq_flushed) {
-                    if (decoded < insn_log[iq_top].retired + 1) {
-                        decoded = insn_log[iq_top].retired + 1;
-                        decode_rest = 0;
+                if (!iq_full) {
+                    size_t from_flushed = (i - iq_flushed) & LOG_MASK;
+                    if (from_flushed >= cfg_.iq_size) {
+                        size_t iq_top = (i - cfg_.iq_size) & LOG_MASK;
+                        iq_ready = insn_log[iq_top].retired + 1;
+                        iq_full = true;
                     }
                 }
-                if (decode_rest == 0) {
-                    decode_rest = cfg_.decode_ways;
-                }
-                --decode_rest;
-                // printf("pc=%08x decoded=%llu\n", insn_log[i].pc, decoded);
-                insn_log[i].decoded = decoded;
-                last_decoded = decoded;
+                decoded = last_decoded + (decode_rest == 0 || !clu_executable(insn_log[i].timing) ? 1 : 0);
             }
-            retired = decoded + cfg_.decode_latency + exec_latency(insn_log[i].timing, insn_log[i].pc);
+            decoded = std::max(decoded, reg_available[insn_log[i].reg_mask.rd1()]);
+            decoded = std::max(decoded, reg_available[insn_log[i].reg_mask.rd2()]);
+            decoded = std::max(decoded, reg_available[insn_log[i].reg_mask.rd3()]);
+            decoded = std::max(decoded, iq_ready);
+            bool clu_exec = (decoded == last_decoded);
+            if (decoded != last_decoded || decode_rest == 0) {
+                decode_rest = cfg_.decode_ways;
+            }
+            --decode_rest;
+            printf("pc=%08x decoded=%llu decode_rest=%u", insn_log[i].pc, decoded, decode_rest);
+            printf(!iq_full && iq_flushed == i ? " (flushed)\n" : "\n");
+            insn_log[i].decoded = decoded;
+            last_decoded = decoded;
+            if (insn_log[i].reg_mask.wr() != 0) {
+                reg_available[insn_log[i].reg_mask.wr()] = decoded + regfwd_latency(insn_log[i].timing, insn_log[i].pc);
+            }
+            retired = decoded + cfg_.decode_latency + exec_latency(insn_log[i].timing, clu_exec, insn_log[i].pc);
             insn_log[i].retired = retired;
         }
         last_retired = retired;
@@ -166,7 +236,7 @@ public:
 };
 
 sched_config_t sched_cfg = {
-    3, 3, 1, 16
+    3, 3, 2, 16
 };
 
 sched_t sched(sched_cfg);
@@ -263,8 +333,8 @@ public:
         return NULL;
     }
 
-    virtual void decoded(reg_t pc, insn_t insn, timing_t timing) override {
-        sched.decoded(pc, insn, timing);
+    virtual void decoded(reg_t pc, insn_t insn, timing_t timing, reg_mask_t reg_mask) override {
+        sched.decoded(pc, insn, timing, reg_mask);
     }
 };
 

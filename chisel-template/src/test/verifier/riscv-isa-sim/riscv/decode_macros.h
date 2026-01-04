@@ -15,12 +15,12 @@
 #define STATE (*p->get_state())
 #define FLEN (p->get_flen())
 #define CHECK_REG(reg) ((void) 0)
-#define READ_REG(reg) (CHECK_REG(reg), STATE.XPR[reg])
+#define READ_REG(N, reg) (CHECK_REG(reg), STATE.reg_mask.use_rd##N(reg), STATE.XPR[reg])
 #define READ_FREG(reg) STATE.FPR[reg]
-#define RD READ_REG(insn.rd())
-#define RS1 READ_REG(insn.rs1())
-#define RS2 READ_REG(insn.rs2())
-#define RS3 READ_REG(insn.rs3())
+#define RD READ_REG(1, insn.rd())
+#define RS1 READ_REG(1, insn.rs1())
+#define RS2 READ_REG(2, insn.rs2())
+#define RS3 READ_REG(3, insn.rs3())
 #define WRITE_RD(value) WRITE_REG(insn.rd(), value)
 #define CHECK_RD() CHECK_REG(insn.rd())
 
@@ -32,6 +32,7 @@
  */
 #define WRITE_REG(reg, value) ({ \
     CHECK_REG(reg); \
+    STATE.reg_mask.use_wr(reg); \
     reg_t wdata = (value); /* value may have side effects */ \
     if (DECODE_MACRO_USAGE_LOGGED) STATE.log_reg_write[(reg) << 4] = {wdata, 0}; \
     STATE.XPR.write(reg, wdata); \
@@ -56,26 +57,26 @@
 #define WRITE_RVC_RS1S(value) WRITE_REG(insn.rvc_rs1s(), value)
 #define WRITE_RVC_RS2S(value) WRITE_REG(insn.rvc_rs2s(), value)
 #define WRITE_RVC_FRS2S(value) WRITE_FREG(insn.rvc_rs2s(), value)
-#define RVC_RS1 READ_REG(insn.rvc_rs1())
-#define RVC_RS2 READ_REG(insn.rvc_rs2())
-#define RVC_RS1S READ_REG(insn.rvc_rs1s())
-#define RVC_RS2S READ_REG(insn.rvc_rs2s())
-#define RVC_RS3S READ_REG(insn.rvc_rs3s())
+#define RVC_RS1 READ_REG(1, insn.rvc_rs1())
+#define RVC_RS2 READ_REG(2, insn.rvc_rs2())
+#define RVC_RS1S READ_REG(1, insn.rvc_rs1s())
+#define RVC_RS2S READ_REG(2, insn.rvc_rs2s())
+#define RVC_RS3S READ_REG(3, insn.rvc_rs3s())
 #define RVC_FRS2 READ_FREG(insn.rvc_rs2())
 #define RVC_FRS2S READ_FREG(insn.rvc_rs2s())
-#define RVC_SP READ_REG(X_SP)
+#define RVC_SP READ_REG(1, X_SP)
 
 // Zc* macros
 #define RVC_R1S (Sn(insn.rvc_r1sc()))
 #define RVC_R2S (Sn(insn.rvc_r2sc()))
-#define SP READ_REG(X_SP)
-#define RA READ_REG(X_RA)
+#define SP READ_REG(1, X_SP)
+#define RA READ_REG(1, X_RA)
 
 // Zdinx macros
 #define READ_REG_PAIR(reg) ({ \
   require((reg) % 2 == 0); \
   (reg) == 0 ? reg_t(0) : \
-  (READ_REG((reg) + 1) << 32) + zext32(READ_REG(reg)); })
+  (READ_REG(1, (reg) + 1) << 32) + zext32(READ_REG(2, reg)); })
 
 #define RS1_PAIR READ_REG_PAIR(insn.rs1())
 #define RS2_PAIR READ_REG_PAIR(insn.rs2())

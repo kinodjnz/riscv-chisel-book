@@ -11,16 +11,16 @@ uint128_t comp, swap, res;
 if (insn.rd() == 0) {
   comp = 0;
 } else if (MMU.is_target_big_endian()) {
-  comp = READ_REG(insn.rd() + 1) | ((uint128_t)RD << 64);
+  comp = READ_REG(1, insn.rd() + 1) | ((uint128_t)RD << 64);
 } else  {
-  comp = RD | ((uint128_t)READ_REG(insn.rd() + 1) << 64);
+  comp = RD | ((uint128_t)READ_REG(1, insn.rd() + 1) << 64);
 }
 if (insn.rs2() == 0) {
   swap = 0;
 } else if (MMU.is_target_big_endian()) {
-  swap = READ_REG(insn.rs2() + 1) | ((uint128_t)RS2 << 64);
+  swap = READ_REG(2, insn.rs2() + 1) | ((uint128_t)RS2 << 64);
 } else {
-  swap = RS2 | ((uint128_t)READ_REG(insn.rs2() + 1) << 64);
+  swap = RS2 | ((uint128_t)READ_REG(2, insn.rs2() + 1) << 64);
 }
 res = MMU.amo_compare_and_swap<uint128_t>(RS1, comp, swap);
 if (insn.rd() != 0) {

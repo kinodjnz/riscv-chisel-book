@@ -10,16 +10,16 @@ if (xlen == 32) {
   if (insn.rd() == 0) {
     comp = 0;
   } else if (MMU.is_target_big_endian()) {
-    comp = (uint32_t)READ_REG(insn.rd() + 1) | (RD << 32);
+    comp = (uint32_t)READ_REG(1, insn.rd() + 1) | (RD << 32);
   } else {
-    comp = (uint32_t)RD | (READ_REG(insn.rd() + 1) << 32);
+    comp = (uint32_t)RD | (READ_REG(1, insn.rd() + 1) << 32);
   }
   if (insn.rs2() == 0) {
     swap = 0;
   } else if (MMU.is_target_big_endian()) {
-    swap = (uint32_t)READ_REG(insn.rs2() + 1) | (RS2 << 32);
+    swap = (uint32_t)READ_REG(2, insn.rs2() + 1) | (RS2 << 32);
   } else {
-    swap = (uint32_t)RS2 | (READ_REG(insn.rs2() + 1) << 32);
+    swap = (uint32_t)RS2 | (READ_REG(2, insn.rs2() + 1) << 32);
   }
   res = MMU.amo_compare_and_swap<uint64_t>(RS1, comp, swap);
   if (insn.rd() != 0) {
