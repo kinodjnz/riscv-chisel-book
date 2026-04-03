@@ -108,6 +108,9 @@ public:
 //        printf("get_symbol %lx\n", addr);
         return NULL;
     }
+
+    virtual void decoded(reg_t pc, insn_t insn, timing_t timing, reg_mask_t reg_mask) override {
+    }
 };
 
 // struct inst_log_t {

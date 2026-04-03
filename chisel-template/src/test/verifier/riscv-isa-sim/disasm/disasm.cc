@@ -1646,6 +1646,7 @@ void disassembler_t::add_instructions(const isa_parser_t* isa, bool strict)
     // DISASM_INSN("cm.jalt", cm_jalt, 0, {&rvcm_jt_index});
   }
 
+#if 0
   if (isa->has_any_vector() || !strict) {
     DISASM_INSN("vsetivli", vsetivli, 0, {&xrd, &zimm5, &v_vtype});
     DISASM_INSN("vsetvli", vsetvli, 0, {&xrd, &xrs1, &v_vtype});
@@ -2071,6 +2072,7 @@ void disassembler_t::add_instructions(const isa_parser_t* isa, bool strict)
     DEFINE_VECTOR_VV(vfwmaccbf16_vv);
     DEFINE_VECTOR_VF(vfwmaccbf16_vf);
   }
+#endif
 
   if (ext_enabled(EXT_ZMMUL)) {
     DEFINE_RTYPE(mul);
@@ -2241,6 +2243,7 @@ void disassembler_t::add_instructions(const isa_parser_t* isa, bool strict)
     DEFINE_R1TYPE(sm3p1);
   }
 
+#if 0
   if (ext_enabled(EXT_ZVBB)) {
 #define DEFINE_VECTOR_VIU_ZIMM6(code) \
   add_vector_viu_z6_insn(this, #code, match_##code, mask_##code)
@@ -2327,6 +2330,7 @@ void disassembler_t::add_instructions(const isa_parser_t* isa, bool strict)
     DEFINE_VECTOR_VIU(vsm3c_vi);
     DEFINE_VECTOR_VV(vsm3me_vv);
   }
+#endif
 
   if (ext_enabled(EXT_ZALASR)) {
     DEFINE_XLOAD_BASE(lb_aq);
