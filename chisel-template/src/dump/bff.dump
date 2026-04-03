@@ -22,14 +22,14 @@ Disassembly of section .text:
       1c: 12345137     	lui	sp, 0x12345
       20: 67810113     	addi	sp, sp, 0x678
       24: 4821         	li	a6, 0x8
-      26: 2701067b     	bff	a2, sp, a6, 0x4
+      26: 27010657     	bff	a2, sp, a6, 0x4
       2a: 28b01393     	bseti	t2, zero, 0xb
       2e: 02761e63     	bne	a2, t2, 0x6a <.Ltmp1>
       32: 418d         	li	gp, 0x3
       34: 12345137     	lui	sp, 0x12345
       38: 67810113     	addi	sp, sp, 0x678
       3c: 4821         	li	a6, 0x8
-      3e: 0701067b     	bff	a2, sp, a6, 0x0
+      3e: 07010657     	bff	a2, sp, a6, 0x0
       42: 345683b7     	lui	t2, 0x34568
       46: 80038393     	addi	t2, t2, -0x800   # 00000000
       4a: 02761063     	bne	a2, t2, 0x6a <.Ltmp1>
@@ -37,16 +37,14 @@ Disassembly of section .text:
       50: 12345137     	lui	sp, 0x12345
       54: 67810113     	addi	sp, sp, 0x678
       58: 4801         	li	a6, 0x0
-      5a: 4701067b     	bff	a2, sp, a6, 0x8
+      5a: 47010657     	bff	a2, sp, a6, 0x8
       5e: 07800393     	li	t2, 0x78
       62: 00761463     	bne	a2, t2, 0x6a <.Ltmp1>
       66: 02760163     	beq	a2, t2, 0x88 <.Ltmp4>
 
 0000006a <.Ltmp1>:
       6a: 0ff0000f     	fence
-
-0000006e <.Ltmp5>:
-      6e: 00018063     	beqz	gp, 0x6e <.Ltmp5>
+      6e: 00018063     	beqz	gp, 0x6e <.Ltmp1+0x4>
       72: 0186         	slli	gp, gp, 0x1
       74: 0011e193     	ori	gp, gp, 0x1
       78: 05d00893     	li	a7, 0x5d

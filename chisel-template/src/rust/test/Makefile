@@ -1,7 +1,7 @@
 LLVM_PATH ?= ../../rust-lang/rust/build/aarch64-apple-darwin/llvm/bin
 
 ARCH = riscv32
-TARGET = $(ARCH)imc-unknown-none-elf
+TARGET = $(ARCH)imc-cramp-none-elf
 
 AS = $(LLVM_PATH)/llvm-mc
 OBJDUMP = $(LLVM_PATH)/llvm-objdump
