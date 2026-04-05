@@ -107,6 +107,8 @@ public:
   int64_t uj_imm() { return (x(21, 10) << 1) + (x(20, 1) << 11) + (x(12, 8) << 12) + (imm_sign() << 20); }
   int64_t mask_len5_imm() { auto len = x(27, 5); return len == 0 ? 32 : len; }
   int64_t mask_len3_imm() { auto len = (x(25, 2) << 1) + x(14, 1); return len == 7 ? 8 : (len == 0 ? 32 : len); }
+  int64_t b_eq_imm() { auto i = (x(13, 2) << 5) + x(20, 5); return i == 0 ? -1 : i; }
+  int64_t b_lg_imm() { auto i = x(20, 5); return i <= 1 ? 32 + i : i; }
   uint64_t rd() { return x(7, 5); }
   uint64_t rs1() { return x(15, 5); }
   uint64_t rs2() { return x(20, 5); }

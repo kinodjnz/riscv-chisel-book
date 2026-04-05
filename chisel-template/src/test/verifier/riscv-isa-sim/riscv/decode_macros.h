@@ -156,6 +156,8 @@ do { \
 #define BFI5_MASK ((1ULL << insn.mask_len5_imm()) - 1)
 #define BFI3_MASK ((1ULL << insn.mask_len3_imm()) - 1)
 #define RS2_MASK ((1ULL << (((RS2 >> 6) & 31) == 0 ? 32 : ((RS2 >> 6) & 31))) - 1)
+#define IMM_B_EQ (insn.b_eq_imm())
+#define IMM_B_LG (insn.b_lg_imm())
 
 static inline bool is_aligned(const unsigned val, const unsigned pos)
 {

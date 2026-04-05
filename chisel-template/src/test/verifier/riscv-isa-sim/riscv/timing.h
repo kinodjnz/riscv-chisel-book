@@ -1121,5 +1121,11 @@ typedef enum {
 #define TIMING_sne        MKTIMING_ARITH(SEQ)
 #define TIMING_seqi       MKTIMING_ARITH(SEQ)
 #define TIMING_snei       MKTIMING_ARITH(SEQ)
+#define TIMING_beqi       MKTIMING_JB(BCOND)
+#define TIMING_bnei       MKTIMING_JB(BCOND)
+#define TIMING_blti       MKTIMING_JB(BCOND)
+#define TIMING_bgei       MKTIMING_JB(BCOND)
+#define TIMING_bltiu      MKTIMING_JB(BCOND)
+#define TIMING_bgeiu      MKTIMING_JB(BCOND)
 
 #endif

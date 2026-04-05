@@ -1144,7 +1144,13 @@ riscv_insn_xcramp = \
 	seq \
 	sne \
 	seqi \
-	snei
+	snei \
+	beqi \
+	bnei \
+	blti \
+	bgei \
+	bltiu \
+	bgeiu
 
 riscv_insn_list = \
 	$(riscv_insn_ext_i) \

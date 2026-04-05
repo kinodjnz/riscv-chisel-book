@@ -1,0 +1,98 @@
+
+target/bnei.elf.fat:	file format elf32-littleriscv
+
+Disassembly of section .text:
+
+00000000 <_start>:
+       0: 20004137     	lui	sp, 0x20004
+       4: 2811         	jal	0x18 <main>
+       6: 81aa         	mv	gp, a0
+       8: 05d00893     	li	a7, 0x5d
+       c: 0001         	nop
+       e: 0001         	nop
+      10: 0001         	nop
+      12: 0001         	nop
+      14: 00000073     	ecall
+
+00000018 <main>:
+      18: a009         	j	0x1a <.Ltmp0>
+
+0000001a <.Ltmp0>:
+      1a: 4189         	li	gp, 0x2
+      1c: 4619         	li	a2, 0x6
+      1e: 4101         	li	sp, 0x0
+      20: 00011377     	bnei	sp, -0x1, 0x26 <.Ltmp1>
+      24: a011         	j	0x28 <.Ltmp2>
+
+00000026 <.Ltmp1>:
+      26: a011         	j	0x2a <.Ltmp3>
+
+00000028 <.Ltmp2>:
+      28: a881         	j	0x78 <.Ltmp4>
+
+0000002a <.Ltmp3>:
+      2a: 4399         	li	t2, 0x6
+      2c: 04761663     	bne	a2, t2, 0x78 <.Ltmp4>
+      30: 418d         	li	gp, 0x3
+      32: 4621         	li	a2, 0x8
+      34: 20000137     	lui	sp, 0x20000
+      38: 0105         	addi	sp, sp, 0x1
+      3a: 00111377     	bnei	sp, 0x1, 0x40 <.Ltmp6>
+      3e: a011         	j	0x42 <.Ltmp7>
+
+00000040 <.Ltmp6>:
+      40: a011         	j	0x44 <.Ltmp8>
+
+00000042 <.Ltmp7>:
+      42: a81d         	j	0x78 <.Ltmp4>
+
+00000044 <.Ltmp8>:
+      44: 43a1         	li	t2, 0x8
+      46: 02761963     	bne	a2, t2, 0x78 <.Ltmp4>
+      4a: 4191         	li	gp, 0x4
+      4c: 4605         	li	a2, 0x1
+      4e: 07f00113     	li	sp, 0x7f
+      52: 01f17377     	bnei	sp, 0x7f, 0x58 <.Ltmp10>
+      56: a011         	j	0x5a <.Ltmp11>
+
+00000058 <.Ltmp10>:
+      58: a005         	j	0x78 <.Ltmp4>
+
+0000005a <.Ltmp11>:
+      5a: 4385         	li	t2, 0x1
+      5c: 00761e63     	bne	a2, t2, 0x78 <.Ltmp4>
+      60: 4195         	li	gp, 0x5
+      62: 4625         	li	a2, 0x9
+      64: 517d         	li	sp, -0x1
+      66: 00011377     	bnei	sp, -0x1, 0x6c <.Ltmp13>
+      6a: a011         	j	0x6e <.Ltmp14>
+
+0000006c <.Ltmp13>:
+      6c: a031         	j	0x78 <.Ltmp4>
+
+0000006e <.Ltmp14>:
+      6e: 43a5         	li	t2, 0x9
+      70: 00761463     	bne	a2, t2, 0x78 <.Ltmp4>
+      74: 02760163     	beq	a2, t2, 0x96 <.Ltmp15>
+
+00000078 <.Ltmp4>:
+      78: 0ff0000f     	fence
+      7c: 00018063     	beqz	gp, 0x7c <.Ltmp4+0x4>
+      80: 0186         	slli	gp, gp, 0x1
+      82: 0011e193     	ori	gp, gp, 0x1
+      86: 05d00893     	li	a7, 0x5d
+      8a: 850e         	mv	a0, gp
+      8c: 00000073     	ecall
+      90: 0001         	nop
+      92: 0001         	nop
+      94: b7d5         	j	0x78 <.Ltmp4>
+
+00000096 <.Ltmp15>:
+      96: 0ff0000f     	fence
+      9a: 4185         	li	gp, 0x1
+      9c: 05d00893     	li	a7, 0x5d
+      a0: 4501         	li	a0, 0x0
+      a2: 00000073     	ecall
+      a6: 0001         	nop
+      a8: 0001         	nop
+      aa: b7f5         	j	0x96 <.Ltmp15>
