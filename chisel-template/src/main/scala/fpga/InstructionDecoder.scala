@@ -132,6 +132,12 @@ class InstructionDecoder(enable_pipeline_probe: Boolean) extends Module {
       BGEU       -> List(EXE_JB , JB_BGE    , SOP_UNS , OP1_RS1   , OP2_RS2   , OP3_X     , OPI_IMB     , REN_X, WBA_RD),
       BLT        -> List(EXE_JB , JB_BLT    , SOP_SGN , OP1_RS1   , OP2_RS2   , OP3_X     , OPI_IMB     , REN_X, WBA_RD),
       BLTU       -> List(EXE_JB , JB_BLT    , SOP_UNS , OP1_RS1   , OP2_RS2   , OP3_X     , OPI_IMB     , REN_X, WBA_RD),
+      BEQI       -> List(EXE_JB , JB_BEQ    , SOP_NOP , OP1_RS1   , OP2_I23   , OP3_IEQ   , OPI_IMB     , REN_X, WBA_RD),
+      BNEI       -> List(EXE_JB , JB_BEQ    , SOP_NOT , OP1_RS1   , OP2_I23   , OP3_IEQ   , OPI_IMB     , REN_X, WBA_RD),
+      BGEI       -> List(EXE_JB , JB_BGE    , SOP_SGN , OP1_RS1   , OP2_I23   , OP3_ILG   , OPI_IMB     , REN_X, WBA_RD),
+      BGEIU      -> List(EXE_JB , JB_BGE    , SOP_UNS , OP1_RS1   , OP2_I23   , OP3_ILG   , OPI_IMB     , REN_X, WBA_RD),
+      BLTI       -> List(EXE_JB , JB_BLT    , SOP_SGN , OP1_RS1   , OP2_I23   , OP3_ILG   , OPI_IMB     , REN_X, WBA_RD),
+      BLTIU      -> List(EXE_JB , JB_BLT    , SOP_UNS , OP1_RS1   , OP2_I23   , OP3_ILG   , OPI_IMB     , REN_X, WBA_RD),
       LB         -> List(EXE_LD,  F_MW_B    , SOP_NOP , OP1_RS1   , OP2_IMM   , OP3_X2    , OPI_IMI     , REN_S, WBA_RD),
       LH         -> List(EXE_LD,  F_MW_H    , SOP_NOP , OP1_RS1   , OP2_IMM   , OP3_X2    , OPI_IMI     , REN_S, WBA_RD),
       LW         -> List(EXE_LD,  F_MW_W    , SOP_NOP , OP1_RS1   , OP2_IMM   , OP3_X2    , OPI_IMI     , REN_S, WBA_RD),
@@ -296,6 +302,9 @@ class InstructionDecoder(enable_pipeline_probe: Boolean) extends Module {
   val rs3_addr  = inst(31, 27)
   val rd_addr   = inst(11, 7)
   val rs3f_addr = inst(31, 30) ## inst(14, 12)
+  val ieq_z     = (inst(24, 20) ## inst(14, 13) === 0.U).asUInt
+  val rs3_ieq   = inst(21, 20) ## inst(14, 13) ## ieq_z
+  val rs3_ilg   = inst(21, 20) ## 0.U(1.W) ## (inst(24, 21) === 0.U).asUInt ## ieq_z
 
   val c_rs1_addr  = inst(11, 7)
   val c_rs2_addr  = inst(6, 2)
@@ -348,6 +357,8 @@ class InstructionDecoder(enable_pipeline_probe: Boolean) extends Module {
     (op3_sel === OP3_RS3)    -> rs3_addr,
     (op3_sel === OP3_X3)     -> rs3_addr,
     (op3_sel === OP3_IMF)    -> rs3f_addr,
+    (op3_sel === OP3_IEQ)    -> rs3_ieq,
+    (op3_sel === OP3_ILG)    -> rs3_ilg,
   ))
 
   val imm_sel = opi_sel(6, 5)

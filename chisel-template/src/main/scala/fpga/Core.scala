@@ -592,7 +592,7 @@ class Core(
     (rrd_reg_op2_sel === OP2_SEL_IMM &&
       rrd_reg_rs2_addr(1, 0) === OP2_IMM_I) -> rrd_reg_imm_data.signed_extend(WORD_LEN),
     (rrd_reg_op2_sel === OP2_SEL_IMM &&
-      rrd_reg_rs2_addr(1, 0) === OP2_IMM_B) -> (rrd_reg_imm_data(11) ## rrd_reg_imm_data(0) ## rrd_reg_imm_data(10, 1) ## 0.U(1.W)).signed_extend(WORD_LEN),
+      rrd_reg_rs2_addr(1, 0) === OP2_IMM_B) -> Mux(rrd_reg_rs3_addr(0), Fill(WORD_LEN, 1.U(1.W)), 0.U(25.W) ## rrd_reg_rs3_addr(2, 1) ## rrd_reg_rs2_addr(4, 2) ## rrd_reg_rs3_addr(4, 3)),
     (rrd_reg_op2_sel === OP2_SEL_IMM &&
       rrd_reg_rs2_addr(1, 0) === OP2_IMM_U &&
       !rrd_reg_is_half) -> rrd_reg_imm_data ## rrd_reg_rs1_addr ## rrd_reg_rs3_addr(2, 0) ## 0.U(12.W),

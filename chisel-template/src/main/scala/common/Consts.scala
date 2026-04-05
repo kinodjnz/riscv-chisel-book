@@ -210,6 +210,7 @@ object Consts {
   val OP2_C_IM2P = 26.U(OP2_LEN.W)
   val OP2_C_IM3P = 27.U(OP2_LEN.W)
   val OP2_C_IM2  = 28.U(OP2_LEN.W)
+  val OP2_I23    = 30.U(OP2_LEN.W)
 
   val OP3_LEN    = 5
   val OP3_RS1    =  0.U(OP3_LEN.W)
@@ -228,6 +229,8 @@ object Consts {
   val OP3_C_X2P  = 19.U(OP3_LEN.W)
   val OP3_C_X2   = 20.U(OP3_LEN.W)
   val OP3_IMF    = 21.U(OP3_LEN.W)
+  val OP3_IEQ    = 22.U(OP3_LEN.W)
+  val OP3_ILG    = 23.U(OP3_LEN.W)
   val OP3_C_X2PB = 27.U(OP3_LEN.W)
 
   val IMM_DATA_LEN = 12
