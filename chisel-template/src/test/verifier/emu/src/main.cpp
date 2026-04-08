@@ -1,6 +1,7 @@
 #include <execinfo.h>
 #include <signal.h>
 #include <getopt.h>
+#include <bit>
 #include "processor.h"
 #include "disasm.h"
 #include "simif.h"
@@ -73,6 +74,9 @@ class sched_t {
     size_t iq_retired = 0;
     size_t iq_rest = 0;
     bool clu_occupied_ = false;
+    uint32_t prev_pc = -1;
+    bool prev_jb = false;
+    uint32_t next_pc = -1;
     uint32_t pred_pc = -1;
     uint64_t last_decoded = 0;
     uint32_t decode_rest = 0; // cfg_.decode_ways;
@@ -81,6 +85,10 @@ class sched_t {
     // uint32_t dispatch_rest = cfg.dispatch_ways;
     // uint64_t alu_cycle = 0;
     // uint64_t blu_cycle = 0;
+    static const size_t ZBTB_ENTRIES = 32;
+    static const size_t ZBTB_TAG_LEN = 8;
+    uint32_t zbtb_tag[ZBTB_ENTRIES/4];
+    uint32_t zbtb_target[ZBTB_ENTRIES];
 
 private:
     uint64_t exec_latency(timing_t timing, bool clu_exec, uint32_t pc) {
@@ -210,13 +218,31 @@ public:
     uint64_t cycles() {
         return cycles_;
     }
+    reg_t predict_pc(reg_t pc, reg_t next_pc) {
+        size_t i = (pc >> 1) & (ZBTB_ENTRIES - 1);
+        if (zbtb_tag[i] == ((pc >> (1 + std::bit_width(ZBTB_ENTRIES - 1))) & ((1 << ZBTB_TAG_LEN) - 1))) {
+            return zbtb_target[i];
+        }
+        return next_pc;
+    }
+    void update_predictor(reg_t pc, reg_t actual_next) {
+        size_t i = (pc >> 1) & (ZBTB_ENTRIES - 1);
+        zbtb_tag[i] = ((pc >> (1 + std::bit_width(ZBTB_ENTRIES - 1))) & ((1 << ZBTB_TAG_LEN) - 1));
+        zbtb_target[i] = actual_next;
+    }
     void decoded(reg_t pc, insn_t insn, timing_t timing, reg_mask_t reg_mask) {
         // cycles += 1;
         insn_log[iq_last].pc = pc;
         insn_log[iq_last].timing = timing;
         insn_log[iq_last].reg_mask = reg_mask;
         insn_log[iq_last].flushed = (pred_pc != pc);
-        pred_pc = pc + insn.length();
+        if (prev_jb && pc != next_pc) {
+            update_predictor(prev_pc, pc);
+        }
+        prev_pc = pc;
+        prev_jb = ((timing >> 16) == TC_JB);
+        next_pc = pc + insn.length();
+        pred_pc = predict_pc(pc, pc + insn.length());
         iq_last = (iq_last + 1) & LOG_MASK;
     }
     void timesim() {
