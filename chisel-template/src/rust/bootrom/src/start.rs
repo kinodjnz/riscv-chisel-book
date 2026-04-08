@@ -28,7 +28,6 @@ pub extern "C" fn __start_rust() {
 
 use core::panic::PanicInfo;
 #[panic_handler]
-#[no_mangle]
 fn panic(_info: &PanicInfo) -> ! {
     loop {}
 }

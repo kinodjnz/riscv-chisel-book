@@ -2,7 +2,7 @@ NAME := bootrom
 
 RUST_SRCS := $(wildcard src/*.rs)
 
-TARGET := riscv32imc-unknown-none-elf
+TARGET := riscv32imc-cramp-none-elf
 
 CARGO := cargo
 ADDRESS_COMMENT := ./address_comment.rb
