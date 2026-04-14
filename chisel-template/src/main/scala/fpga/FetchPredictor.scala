@@ -642,7 +642,7 @@ class PHT(index_len: Int, history_len: Int, history_shift: Int) extends Module {
   }
 
   def hash(history: UInt, pc: UInt): UInt = {
-    (((history ^ 0xad.U) << history_shift) ^ pc)(history_len-1, 0)
+    ((history << history_shift) ^ pc)(history_len-1, 0)
   }
 
   io.lmem.ren   := true.B
