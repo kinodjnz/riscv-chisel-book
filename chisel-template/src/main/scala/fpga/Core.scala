@@ -953,10 +953,11 @@ class Core(
     }
   }
 
-  rob.io.redir.en                  := ex1_fetch_pc_en || csr_is_br
+  rob.io.redir.en                  := ex1_en /*&& (!reg_flush && !ex2_reg_stall)*/ || csr_is_br
+  rob.io.redir.redir_en            := ex1_fetch_pc_en || csr_is_br
   rob.io.redir.target_pc           := ex1_csr_fetch_pc
   rob.io.redir.rob_id              := ex1_reg_rob_id
-  rob.io.redir.correction.en       := ex1_en && (!reg_flush && !ex2_reg_stall)
+  rob.io.redir.correction.en       := ex1_en
   // rob.io.redir.correction.pc       := ex1_latter_pc
   // rob.io.redir.correction.bp_entry := ex1_reg_bp.bp_entry
   rob.io.redir.correction.fp_entry := ex1_reg_fp_entry
@@ -968,7 +969,7 @@ class Core(
   rob.io.redir.correction.target   := ex1_fetch_pc
   // rob.io.redir.correction.next_pc  := ex1_next_pc
 
-  rob.io.bp_upd.en              := ex1_fetch_pc_en || csr_is_br || (ex1_en && (ex1_reg_bp.redirected || ex1_is_br))
+  rob.io.bp_upd.en              := ex1_en && (ex1_reg_bp.redirected || ex1_reg_exe_sel === EXE_JB)
   rob.io.bp_upd.rob_id          := ex1_reg_rob_id
   rob.io.bp_upd.entry.latter_pc := ex1_latter_pc
   rob.io.bp_upd.entry.bp_entry  := ex1_reg_bp.bp_entry
@@ -1619,6 +1620,7 @@ class Core(
   printf(cf"ex1_reg_pc       : 0x${Cat(ex1_reg_pc, 0.U(1.W))}%x\n")
   printf(cf"ex1_reg_valid    : ${ex1_reg_valid}%d\n")
   printf(cf"ex1_reg_inst_id  : ${ex1_reg_inst_id.getOrElse(0)}%d\n")
+  printf(cf"ex1_reg_rob_id   : ${ex1_reg_rob_id}%d\n")
   printf(cf"ex1_reg_op1_data : 0x${ex1_reg_op1_data}%x\n")
   printf(cf"ex1_reg_op2_data : 0x${ex1_reg_op2_data}%x\n")
   printf(cf"ex1_reg_op3_data : 0x${ex1_reg_op3_data}%x\n")
@@ -1636,6 +1638,7 @@ class Core(
   printf(cf"ex1_reg_i2_valid    : ${ex1_reg_i2_valid}%d\n")
   printf(cf"ex1_reg_i2_exe_fun  : 0x${ex1_reg_i2_exe_fun}%x\n")
   printf(cf"ex1_reg_i2_inst_id  : ${ex1_reg_i2_inst_id.getOrElse(0)}%d\n")
+  printf(cf"ex1_reg_id2_rob_id  : ${ex1_reg_i2_rob_id}%d\n")
   printf(cf"ex1_reg_i2_op1_data : 0x${ex1_reg_i2_op1_data}%x\n")
   printf(cf"ex1_reg_i2_op2_data : 0x${ex1_reg_i2_op2_data}%x\n")
   printf(cf"ex1_clu_out         : 0x${ex1_clu_out}%x\n")

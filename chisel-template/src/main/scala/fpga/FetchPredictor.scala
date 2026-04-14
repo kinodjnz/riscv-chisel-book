@@ -337,8 +337,8 @@ class FetchPredictor(
     // actual_attr === djump                    => new attr <- djump
     // actual_attr === dcall                    => new attr <- dcall
     // actual_attr === ret                      => new attr <- ret
-    io.btb.up.en := io.cr.upd.en && (
-      ((io.cr.upd.attr === BTB_ATTR_INVAL) && ((io.cr.en && io.cr.fp_hit) || gcnt_is_branch(io.cr.upd.bp_entry.gcnt))) ||
+    io.btb.up.en := io.cr.en && (
+      ((io.cr.upd.attr === BTB_ATTR_INVAL) && (io.cr.fp_hit || gcnt_is_branch(io.cr.upd.bp_entry.gcnt))) ||
       (io.cr.upd.br_taken) ||
       (io.cr.upd.attr === BTB_ATTR_DJUMP) ||
       (io.cr.upd.attr === BTB_ATTR_DCALL) ||
@@ -347,8 +347,33 @@ class FetchPredictor(
     io.btb.up.attr       := io.cr.upd.attr
     io.btb.up.is_ret     := io.cr.upd.is_ret
     io.btb.up.pc         := io.cr.upd.latter_pc
-    io.btb.up.upd_target := io.cr.en
+    io.btb.up.upd_target := io.cr.upd.en && (io.cr.upd.br_taken || (io.cr.upd.attr === BTB_ATTR_DJUMP || io.cr.upd.attr === BTB_ATTR_DCALL))
     io.btb.up.target     := io.cr.target
+    printf(cf"io.cr.en           : ${io.cr.en}\n")
+    printf(cf"io.cr.fp_hit       : ${io.cr.fp_hit}\n")
+    printf(cf"io.cr.fp_e.attr    : ${io.cr.fp_entry.attr}\n")
+    printf(cf"io.cr.target       : 0x${io.cr.target.pc_to_word}%x\n")
+    printf(cf"io.cr.upd.en       : ${io.cr.upd.en}\n")
+    printf(cf"io.cr.gcnt_is_br   : ${gcnt_is_branch(io.cr.upd.bp_entry.gcnt)}\n")
+    printf(cf"io.cr.upd.attr     : ${io.cr.upd.attr}\n")
+    printf(cf"io.cr.upd.br_taken : ${io.cr.upd.br_taken}\n")
+    printf(cf"io.cr.upd.is_ret   : ${io.cr.upd.is_ret}\n")
+    printf(cf"io.cr.upd.latter_pc: 0x${io.cr.upd.latter_pc.pc_to_word}%x\n")
+    when (io.cr.en && io.cr.upd.en && io.cr.fp_entry.attr === BTB_ATTR_BR) {
+      when (io.cr.fp_hit && io.cr.upd.bp_entry.lcnt(0) === 0.U && io.cr.upd.bp_entry.gcnt === 3.U) {
+        when (io.cr.upd.br_taken) {
+          printf(cf"============= gcnt positive prediction success; lcnt:${io.cr.upd.bp_entry.lcnt} gcnt:${io.cr.upd.bp_entry.gcnt}\n")
+        }.otherwise {
+          printf(cf"############# gcnt positive prediction failure; lcnt:${io.cr.upd.bp_entry.lcnt} gcnt:${io.cr.upd.bp_entry.gcnt}\n")
+        }
+      }.elsewhen (!io.cr.fp_hit && io.cr.upd.bp_entry.lcnt(0) === 1.U && io.cr.upd.bp_entry.gcnt === 2.U) {
+        when (!io.cr.upd.br_taken) {
+          printf(cf"============= gcnt negative prediction success; lcnt:${io.cr.upd.bp_entry.lcnt} gcnt:${io.cr.upd.bp_entry.gcnt}\n")
+        }.otherwise {
+          printf(cf"############# gcnt negative prediction failure; lcnt:${io.cr.upd.bp_entry.lcnt} gcnt:${io.cr.upd.bp_entry.gcnt}\n")
+        }
+      }
+    }
 
     // Rollback pattern history if pc redirect prediction fails.
     io.pht.res.en      := io.cr.en && io.cr.mispred
@@ -364,12 +389,12 @@ class FetchPredictor(
     io.pht.up.gcnt    := updated_gcnt
 
     // Update pattern history if the branch is taken unlike the prediction.
-    io.pht.br2.en      := io.cr.en && io.cr.upd.br_taken && (!io.cr.fp_hit || io.cr.fp_entry.attr =/= BTB_ATTR_BR)
+    io.pht.br2.en      := io.cr.upd.en && io.cr.upd.br_taken && (!io.cr.fp_hit || io.cr.fp_entry.attr =/= BTB_ATTR_BR)
     io.pht.br2.history := io.cr.upd.history
     io.pht.br2.pc      := io.cr.upd.latter_pc
 
     // Update zbtb
-    io.zbtb.up.en     := io.cr.en && (io.cr.upd.br_taken || (io.cr.upd.attr === BTB_ATTR_DJUMP || io.cr.upd.attr === BTB_ATTR_DCALL))
+    io.zbtb.up.en     := io.cr.upd.en && (io.cr.upd.br_taken || (io.cr.upd.attr === BTB_ATTR_DJUMP || io.cr.upd.attr === BTB_ATTR_DCALL))
     io.zbtb.up.pc     := io.cr.upd.latter_pc
     io.zbtb.up.target := io.cr.target
 
@@ -547,11 +572,11 @@ class BTB(btb_entries: Int, tag_ignore: Int = BTB_TAG_IGNORE) extends Module {
   for (i <- 0 until 4) {
     when (io.up.en && io.up.pc(1, 0) === i.U(2.W)) {
       btb_mem(i).write(up_pc.index, up_entry)
-      printf(cf"update btb(0x${up_pc.index}%x) := attr:${io.up.attr} is_ret:${io.up.is_ret}\n")
+      printf(cf"update btb(0x${io.up.pc.pc_to_word}%xx) := attr:${io.up.attr} is_ret:${io.up.is_ret}\n")
     }
     when (io.up.upd_target && io.up.pc(1, 0) === i.U(2.W)) {
       btb_target_mem(i).write(up_pc.index, io.up.target)
-      printf(cf"update btb(0x${up_pc.index}%x) := target:0x${io.up.target}%x\n")
+      printf(cf"update btb(0x${io.up.pc.pc_to_word}%x) := target:0x${io.up.target}%x\n")
     }
   }
 }
@@ -613,11 +638,11 @@ class PHT(index_len: Int, history_len: Int, history_shift: Int) extends Module {
   val history = RegInit(0.U(history_len.W))
 
   def merge(history: UInt, pc: UInt): UInt = {
-    ((Reverse(history) << (index_len - history_len)) ^ (pc >> 2))(index_len-1, 0)
+    ((Reverse(history) << (index_len - history_len)) ^ pc)(index_len-1, 0)
   }
 
   def hash(history: UInt, pc: UInt): UInt = {
-    ((history << history_shift) ^ pc)(history_len-1, 0)
+    (((history ^ 0xad.U) << history_shift) ^ pc)(history_len-1, 0)
   }
 
   io.lmem.ren   := true.B
@@ -637,7 +662,7 @@ class PHT(index_len: Int, history_len: Int, history_shift: Int) extends Module {
 
   when (io.br.en) {
     history := hash(history, io.br.pc)(history_len-1, 0)
-    printf(cf"PHT br 0x${hash(history, io.br.pc)(history_len-1, 0)}%x\n")
+    printf(cf"PHT br 0x${hash(history, io.br.pc)(history_len-1, 0)}%x pc=${io.br.pc}%x\n")
   }
 
   when (io.res.en) {
@@ -647,7 +672,7 @@ class PHT(index_len: Int, history_len: Int, history_shift: Int) extends Module {
 
   when (io.br2.en) {
     history := hash(io.br2.history, io.br2.pc)(history_len-1, 0)
-    printf(cf"PHT br2 0x${hash(io.br2.history, io.br2.pc)(history_len-1, 0)}%x\n")
+    printf(cf"PHT br2 0x${hash(io.br2.history, io.br2.pc)(history_len-1, 0)}%x pc=${io.br2.pc}%x\n")
   }
 
   io.lmem.wen   := io.up.en
@@ -658,13 +683,16 @@ class PHT(index_len: Int, history_len: Int, history_shift: Int) extends Module {
   io.gmem.waddr := merge(io.up.history, io.up.pc)(index_len-1, 0)
   io.gmem.wdata := io.up.gcnt
 
-  printf(cf"io.lu.pc         : 0x${io.lu.pc.pc_to_word}%x\n")
+  printf(cf"io.lu.pc rd      : 0x${RegNext(io.lu.pc).pc_to_word}%x\n")
   printf(cf"io.lu.lcnt       : 0x${lcnt}%x\n")
   printf(cf"io.lu.gcnt       : 0x${gcnt}%x\n")
+  printf(cf"io.lu.mhist      : 0x${merge(history, io.lu.pc)(index_len-1, 2) ## 0.U(2.W)}%x\n")
   printf(cf"io.up.en         : ${io.up.en}\n")
   printf(cf"io.up.pc         : 0x${io.up.pc.pc_to_word}%x\n")
   printf(cf"io.up.lcnt       : 0x${io.up.lcnt}%x\n")
   printf(cf"io.up.gcnt       : 0x${io.up.gcnt}%x\n")
+  printf(cf"io.up.mhist      : 0x${merge(io.up.history, io.up.pc)(index_len-1, 0)}%x\n")
+  printf(cf"history          : 0x${history}%x\n")
 }
 
 class RASTop(index_len: Int) extends Bundle {

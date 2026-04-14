@@ -87,7 +87,7 @@ class sched_t {
     // uint64_t blu_cycle = 0;
     static const size_t ZBTB_ENTRIES = 32;
     static const size_t ZBTB_TAG_LEN = 8;
-    uint32_t zbtb_tag[ZBTB_ENTRIES/4];
+    uint32_t zbtb_tag[ZBTB_ENTRIES];
     uint32_t zbtb_target[ZBTB_ENTRIES];
 
 private:
