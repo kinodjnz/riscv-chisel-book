@@ -42,6 +42,38 @@ class InstructionQueueEntryDecoded(enable_pipeline_probe: Boolean) extends Bundl
   val inst_id = Option.when(enable_pipeline_probe)(UInt(INST_ID_LEN.W))
 }
 
+/*
+class InstructionQueueEntryRegRenaming(enable_pipeline_probe: Boolean) extends Bundle {
+  val exe_sel  = UInt(EXE_SEL_LEN.W)
+  val exe_fun  = UInt(EXE_FUN_LEN.W)
+  val rs1_addr = UInt(ADDR_LEN.W)
+  val rs2_addr = UInt(ADDR_LEN.W)
+  val rs3_addr = UInt(ADDR_LEN.W)
+  val rf_wen   = UInt(REN_LEN.W)
+  val wb_addr  = UInt(ADDR_LEN.W)
+  val inst_id = Option.when(enable_pipeline_probe)(UInt(INST_ID_LEN.W))
+}
+
+class InstructionQueueEntryRegRead extends Bundle {
+  val exe_sel  = UInt(EXE_SEL_LEN.W)
+  val exe_fun  = UInt(EXE_FUN_LEN.W)
+  val sop      = UInt(SOP_LEN.W)
+  val op1_sel  = UInt(OP1_SEL_LEN.W)
+  val op2_sel  = UInt(OP2_SEL_LEN.W)
+  val op3_sel  = UInt(OP3_SEL_LEN.W)
+  val rs1_addr = UInt(ADDR_LEN.W)
+  val rs2_addr = UInt(ADDR_LEN.W)
+  val rs3_addr = UInt(ADDR_LEN.W)
+  val imm_data = UInt(IMM_DATA_LEN.W)
+  val rf_wen   = UInt(REN_LEN.W)
+}
+*/
+
+class InstructionQueueEntryRob extends Bundle {
+  val rf_wen   = UInt(REN_LEN.W)
+  val wb_addr  = UInt(ADDR_LEN.W)
+}
+
 class InstructionQueueEntryPhysAddrs extends Bundle {
   val rs1_paddr    = UInt(PHYS_ADDR_LEN.W)
   val rs2_paddr    = UInt(PHYS_ADDR_LEN.W)
@@ -461,6 +493,7 @@ class InstructionDecoderUnit(
     new InstructionQueueEntryInitial(redirect_buffer_size, enable_pipeline_probe),
     new InstructionQueueEntryDecoded(enable_pipeline_probe),
     new InstructionQueueEntryLsq(lsq_id_len),
+    new InstructionQueueEntryRob,
     new InstructionQueueEntryPhysAddrs,
     new InstructionQueueEntryWbPhysAddrs,
   ))
@@ -490,12 +523,12 @@ class InstructionDecoderUnit(
   iq.io.deq2      <> io.rob.deq2
 
   iq.io.read1_all.iq_id  := io.rob.read1.iq_id
-  io.rob.read1.rf_wen    := iq.io.read1_all.decoded.rf_wen
-  io.rob.read1.wb_addr   := iq.io.read1_all.decoded.wb_addr
+  io.rob.read1.rf_wen    := iq.io.read1_all.rob.rf_wen
+  io.rob.read1.wb_addr   := iq.io.read1_all.rob.wb_addr
   io.rob.read1.wb_paddrs := iq.io.read1_all.wb_paddrs
   iq.io.read2_all.iq_id  := io.rob.read2.iq_id
-  io.rob.read2.rf_wen    := iq.io.read2_all.decoded.rf_wen
-  io.rob.read2.wb_addr   := iq.io.read2_all.decoded.wb_addr
+  io.rob.read2.rf_wen    := iq.io.read2_all.rob.rf_wen
+  io.rob.read2.wb_addr   := iq.io.read2_all.rob.wb_addr
   io.rob.read2.wb_paddrs := iq.io.read2_all.wb_paddrs
 
   class Id1Input(iq_id_len: Int) extends Bundle {
@@ -544,13 +577,22 @@ class InstructionDecoderUnit(
     io.debug_signals.id_pc2   := reg_in2.pc
     io.debug_signals.id_inst2 := reg_in2.inst
 
+    val rob1 = Wire(new InstructionQueueEntryRob)
+    val rob2 = Wire(new InstructionQueueEntryRob)
+    rob1.rf_wen  := decoder1.io.decoded.rf_wen
+    rob1.wb_addr := decoder1.io.decoded.wb_addr
+    rob2.rf_wen  := decoder2.io.decoded.rf_wen
+    rob2.wb_addr := decoder2.io.decoded.wb_addr
+
     iq.io.put1.en      := reg_in1.valid
     iq.io.put1.iq_id   := reg_in1.iq_id
     iq.io.put1.decoded := decoder1.io.decoded
+    iq.io.put1.rob     := rob1
     map2(iq.io.put1.decoded.inst_id, reg_in1.inst_id)(_ := _)
     iq.io.put2.en      := reg_in2.valid
     iq.io.put2.iq_id   := reg_in2.iq_id
     iq.io.put2.decoded := decoder2.io.decoded
+    iq.io.put2.rob     := rob2
     map2(iq.io.put2.decoded.inst_id, reg_in2.inst_id)(_ := _)
 
     when (reg_in1.valid) {
