@@ -58,14 +58,14 @@ class FetchSim() extends Module {
   fetcher.io.ft.icache.idata_valid := reg_ft.icache.idata_valid
   fetcher.io.ft.flush_iaddr        := reg_ft.flush_iaddr
   fp.io.cr.en                      := reg_cr.en
-  fp.io.cr.fp_entry                := reg_cr.fp_entry
+  fp.io.cr.fp_attr                 := reg_cr.fp_attr
   fp.io.cr.fp_hit                  := reg_cr.fp_hit
   fp.io.cr.mispred                 := reg_cr.mispred
   fp.io.cr.target                  := reg_cr.target
   fp.io.cr.upd.en                  := reg_cr.upd.en
   fp.io.cr.upd.latter_pc           := reg_cr.upd.latter_pc
   fp.io.cr.upd.bp_entry            := reg_cr.upd.bp_entry
-  fp.io.cr.upd.history             := reg_cr.fp_entry.history
+  fp.io.cr.upd.history             := reg_cr.upd.history
   fp.io.cr.upd.br_taken            := reg_cr.upd.br_taken
   fp.io.cr.upd.attr                := reg_cr.upd.attr
   fp.io.cr.upd.is_ret              := reg_cr.upd.is_ret

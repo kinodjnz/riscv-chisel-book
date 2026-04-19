@@ -144,7 +144,7 @@ class BranchCorrectionPort(pht_history_len: Int) extends Bundle {
   val upd      = new BranchUpdatePort(pht_history_len)
   // val pc       = Input(UInt(PC_LEN.W))
   // val bp_entry = Input(new BranchPredictionEntry())
-  val fp_entry = Input(new FetchPredictionEntry(pht_history_len))
+  val fp_attr  = Input(UInt(BTB_ATTR_LEN.W))
   val fp_hit   = Input(Bool())
   val mispred  = Input(Bool())
   // val br_taken = Input(Bool())
@@ -351,7 +351,7 @@ class FetchPredictor(
     io.btb.up.target     := io.cr.target
     printf(cf"io.cr.en           : ${io.cr.en}\n")
     printf(cf"io.cr.fp_hit       : ${io.cr.fp_hit}\n")
-    printf(cf"io.cr.fp_e.attr    : ${io.cr.fp_entry.attr}\n")
+    printf(cf"io.cr.fp_attr      : ${io.cr.fp_attr}\n")
     printf(cf"io.cr.target       : 0x${io.cr.target.pc_to_word}%x\n")
     printf(cf"io.cr.upd.en       : ${io.cr.upd.en}\n")
     printf(cf"io.cr.gcnt_is_br   : ${gcnt_is_branch(io.cr.upd.bp_entry.gcnt)}\n")
@@ -359,7 +359,7 @@ class FetchPredictor(
     printf(cf"io.cr.upd.br_taken : ${io.cr.upd.br_taken}\n")
     printf(cf"io.cr.upd.is_ret   : ${io.cr.upd.is_ret}\n")
     printf(cf"io.cr.upd.latter_pc: 0x${io.cr.upd.latter_pc.pc_to_word}%x\n")
-    when (io.cr.en && io.cr.upd.en && io.cr.fp_entry.attr === BTB_ATTR_BR) {
+    when (io.cr.en && io.cr.upd.en && io.cr.fp_attr === BTB_ATTR_BR) {
       when (io.cr.fp_hit && io.cr.upd.bp_entry.lcnt(0) === 0.U && io.cr.upd.bp_entry.gcnt === 3.U) {
         when (io.cr.upd.br_taken) {
           printf(cf"============= gcnt positive prediction success; lcnt:${io.cr.upd.bp_entry.lcnt} gcnt:${io.cr.upd.bp_entry.gcnt}\n")
@@ -389,7 +389,7 @@ class FetchPredictor(
     io.pht.up.gcnt    := updated_gcnt
 
     // Update pattern history if the branch is taken unlike the prediction.
-    io.pht.br2.en      := io.cr.upd.en && io.cr.upd.br_taken && (!io.cr.fp_hit || io.cr.fp_entry.attr =/= BTB_ATTR_BR)
+    io.pht.br2.en      := io.cr.upd.en && io.cr.upd.br_taken && (!io.cr.fp_hit || io.cr.fp_attr =/= BTB_ATTR_BR)
     io.pht.br2.history := io.cr.upd.history
     io.pht.br2.pc      := io.cr.upd.latter_pc
 
@@ -436,6 +436,11 @@ class ZeroBranchTargetBuffer(tag_len: Int, target_len: Int) extends Bundle {
   val target = UInt(target_len.W)
 }
 
+class ZeroBranchTargetBufferMem(tag_len: Int, target_len: Int) extends Bundle {
+  val en         = Bool()
+  val tag_target = UInt((tag_len + target_len).W)
+}
+
 class ZBTBIo(target_len: Int) extends Bundle {
   val lu  = new ZBTBLookup(target_len)
   val up  = new ZBTBUpdate(target_len)
@@ -451,9 +456,11 @@ class ZBTB(
 
   val io = IO(new ZBTBIo(target_len))
 
-  val zbtb_mem = List.fill(2)(Mem(zbtb_entries / 2, new ZeroBranchTargetBuffer(tag_len, target_len)))
+  val zbtb_mem = List.fill(2)(Mem(zbtb_entries / 2, new ZeroBranchTargetBufferMem(tag_len, target_len)))
+  // val zbtb_mem = List.fill(2)(Mem(zbtb_entries / 2, UInt(new ZeroBranchTargetBuffer(tag_len, target_len).getWidth.W)))
 
-  val zbtb_entry = Seq.tabulate(4)(i => zbtb_mem(i % 2)(io.lu.pc(index_len - 1, 2) ## (i / 2).U))
+  val zbtb_entry = Seq.tabulate(4)(i => zbtb_mem(i % 2)(io.lu.pc(index_len - 1, 2) ## (i / 2).U).asTypeOf(new ZeroBranchTargetBuffer(tag_len, target_len)))
+  // val zbtb_entry = Seq.tabulate(4)(i => zbtb_mem(i % 2)(io.lu.pc(index_len - 1, 2) ## (i / 2).U).asTypeOf(new ZeroBranchTargetBuffer(tag_len, target_len)))
 
   val matches = zbtb_entry.map(e => e.en && (e.tag === io.lu.pc(tag_len - 1 + index_len, index_len)))
   val target  = zbtb_entry.map(e => e.target)
@@ -471,14 +478,14 @@ class ZBTB(
   for (i <- 0 until 2) {
     when (addr(0) === i.U(1.W)) {
       when (io.inv.en || io.up.en) {
-        zbtb_mem(i)(addr(index_len - 1, 1)).en := io.up.en
+        zbtb_mem(i)(addr(index_len - 1, 1)).en     := io.up.en
         when (io.inv.en && !io.up.en) {
           printf(cf"zbtb(${i})(0x${io.inv.pc.pc_to_word}%x) inv\n")
         }
       }
       when (io.up.en) {
-        zbtb_mem(i)(io.up.pc(index_len - 1, 1)).tag    := entry.tag
-        zbtb_mem(i)(io.up.pc(index_len - 1, 1)).target := entry.target
+        zbtb_mem(i)(io.up.pc(index_len - 1, 1)).tag_target := entry.tag ## entry.target
+        // zbtb_mem(i)(addr(index_len - 1, 1)) := entry.asTypeOf(UInt(new ZeroBranchTargetBuffer(tag_len, target_len).getWidth.W))
         printf(cf"zbtb(${i})(0x${io.up.pc.pc_to_word}%x) := 0x${io.up.target.pc_to_word}%x\n")
       }
     }

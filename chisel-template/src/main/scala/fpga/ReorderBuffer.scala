@@ -24,11 +24,11 @@ class ReorderBufferEnqueue(rob_id_len: Int, enable_pipeline_probe: Boolean) exte
 //   val is_ret   = Bool()
 // }
 
-class BranchCorrection(pht_history_len: Int) extends Bundle {
+class BranchCorrection extends Bundle {
   val en       = Bool()
   // val pc       = UInt(PC_LEN.W)
   // val bp_entry = new BranchPredictionEntry()
-  val fp_entry = new FetchPredictionEntry(pht_history_len)
+  val fp_attr  = UInt(BTB_ATTR_LEN.W)
   val fp_hit   = Bool()
   val mispred  = Bool()
   // val br_taken = Bool()
@@ -83,7 +83,7 @@ class ReorderBufferRedirect(rob_id_len: Int, pht_history_len: Int) extends Bundl
   val redir_en   = Input(Bool())
   val rob_id     = Input(UInt(rob_id_ptr_len.W))
   val target_pc  = Input(UInt(PC_LEN.W))
-  val correction = Input(new BranchCorrection(pht_history_len))
+  val correction = Input(new BranchCorrection)
 }
 
 class ReorderBufferRetire(rob_id_len: Int, enable_pipeline_probe: Boolean) extends Bundle {
@@ -100,13 +100,21 @@ class ReorderBufferRetire(rob_id_len: Int, enable_pipeline_probe: Boolean) exten
   val csr_is_ecall = Option.when(enable_pipeline_probe)(Bool())
 }
 
+class ReorderBufferRedirEntry(rob_id_len: Int, pht_history_len: Int) extends Bundle {
+  val bp_upd_entry = new ReorderBufferBranchUpdateEntry(rob_id_len, pht_history_len)
+  val redir_target_pc = UInt(PC_LEN.W)
+  val redir_correction = new BranchCorrection
+}
+
 class ReorderBufferEntry(rob_id_len: Int, pht_history_len: Int, enable_pipeline_probe: Boolean) extends Bundle {
   val finished     = Bool()
   val redirect     = Bool()
   val bp_updated   = Bool()
-  val bp_upd_entry = new ReorderBufferBranchUpdateEntry(rob_id_len, pht_history_len)
-  val redir_target_pc = UInt(PC_LEN.W)
-  val redir_correction = new BranchCorrection(pht_history_len)
+  val redir_entry  = UInt(new ReorderBufferRedirEntry(rob_id_len, pht_history_len).getWidth.W)
+  // val bp_upd_entry = new ReorderBufferBranchUpdateEntry(rob_id_len, pht_history_len)
+  // val redir_target_pc = UInt(PC_LEN.W)
+  // val redir_correction = new BranchCorrection
+
   val inst_id  = Option.when(enable_pipeline_probe)(UInt(INST_ID_LEN.W))
   // val wb_addr  = Option.when(enable_pipeline_probe)(UInt(ADDR_LEN.W))
   val wb_data  = Option.when(enable_pipeline_probe)(UInt(WORD_LEN.W))
@@ -141,7 +149,7 @@ class ReorderBuffer(start_address: BigInt, rob_entries: Int, pht_history_len: In
     val rf_res     = Flipped(new ResetSpeculativeMapping)
     val flush      = Output(Bool())
     val target_pc  = Output(UInt(PC_LEN.W))
-    val cr_out     = new BranchCorrection(pht_history_len)
+    val cr_out     = new BranchCorrection
     val upd_out    = Flipped(new BranchUpdatePort(pht_history_len))
   })
 
@@ -208,17 +216,20 @@ class ReorderBuffer(start_address: BigInt, rob_entries: Int, pht_history_len: In
     }
     printf(cf"rob bp_upd.en = ${io.bp_upd.en}%d\n")
     when (io.redir.en) {
-      rob_buf(io.bp_upd.rob_id).bp_upd_entry := io.bp_upd.entry
-      rob_buf(io.bp_upd.rob_id).bp_updated   := io.bp_upd.en
+      rob_buf(io.redir.rob_id.take(rob_id_len)).bp_updated  := io.bp_upd.en
+      rob_buf(io.redir.rob_id.take(rob_id_len)).redirect    := io.redir.redir_en
+      val redir_entry = Wire(new ReorderBufferRedirEntry(rob_id_len, pht_history_len))
+      redir_entry.bp_upd_entry     := io.bp_upd.entry
+      redir_entry.redir_target_pc  := io.redir.target_pc
+      redir_entry.redir_correction := io.redir.correction
+      rob_buf(io.redir.rob_id.take(rob_id_len)).redir_entry := redir_entry.asTypeOf(UInt(new ReorderBufferRedirEntry(rob_id_len, pht_history_len).getWidth.W))
+      // rob_buf(io.redir.rob_id.take(rob_id_len)).bp_upd_entry     := io.bp_upd.entry
+      // rob_buf(io.redir.rob_id.take(rob_id_len)).redir_target_pc  := io.redir.target_pc
+      // rob_buf(io.redir.rob_id.take(rob_id_len)).redir_correction := io.redir.correction
       printf(cf"rob_buf(${io.bp_upd.rob_id}).bp_updated = 1\n")
       printf(cf"rob_buf(${io.bp_upd.rob_id}).bp_upd_entry.attr = ${io.bp_upd.entry.attr}%d\n")
       printf(cf"rob_buf(${io.bp_upd.rob_id}).bp_upd_entry.br_taken = ${io.bp_upd.entry.br_taken}%d\n")
       printf(cf"rob_buf(${io.bp_upd.rob_id}).bp_upd_entry.latter_pc := 0x${io.bp_upd.entry.latter_pc.pc_to_word}%x\n")
-    }
-    when (io.redir.en) {
-      rob_buf(io.redir.rob_id.take(rob_id_len)).redirect         := io.redir.redir_en
-      rob_buf(io.redir.rob_id.take(rob_id_len)).redir_target_pc  := io.redir.target_pc
-      rob_buf(io.redir.rob_id.take(rob_id_len)).redir_correction := io.redir.correction
       // printf(cf"io.redir.rob_id=0x${io.redir.rob_id}%x\n")
     }
   }
@@ -230,25 +241,26 @@ class ReorderBuffer(start_address: BigInt, rob_entries: Int, pht_history_len: In
     val rob_id2 = deq_ptr.take(rob_id_len) + 1.U
     val valid1 = ncount(rob_id_len) && rob_buf(rob_id1).finished
     val valid2 = valid1 && !ncount.take(rob_id_len).andR && rob_buf(rob_id2).finished && !flush && !rob_buf(rob_id2).redirect && !rob_buf(rob_id2).bp_updated
-    val bp_upd = rob_buf(rob_id1).bp_upd_entry
+    val redir_entry = rob_buf(rob_id1).redir_entry.asTypeOf(new ReorderBufferRedirEntry(rob_id_len, pht_history_len))
+    val bp_upd = redir_entry.bp_upd_entry
 
     io.iq_read1.iq_id   := rob_id1
     io.iq_read2.iq_id   := rob_id2
     io.rf_st1.en        := valid1 && (io.iq_read1.rf_wen === REN_S)
     io.rf_st1.addr      := io.iq_read1.wb_addr
-    io.rf_st1.paddr     := io.iq_read1.paddrs.wb_paddr
-    io.rf_st1.paddr_rel := io.iq_read1.paddrs.wb_paddr_rel
+    io.rf_st1.paddr     := io.iq_read1.wb_paddrs.wb_paddr
+    io.rf_st1.paddr_rel := io.iq_read1.wb_paddrs.wb_paddr_rel
     io.rf_st2.en        := valid2 && (io.iq_read2.rf_wen === REN_S)
     io.rf_st2.addr      := io.iq_read2.wb_addr
-    io.rf_st2.paddr     := io.iq_read2.paddrs.wb_paddr
-    io.rf_st2.paddr_rel := io.iq_read2.paddrs.wb_paddr_rel
+    io.rf_st2.paddr     := io.iq_read2.wb_paddrs.wb_paddr
+    io.rf_st2.paddr_rel := io.iq_read2.wb_paddrs.wb_paddr_rel
     io.rf_res.en        := RegNext(flush, true.B)
 
     flush                := /*valid1 && redirected && (redir_ptr.take(rob_id_len) === rob_id1)*/ valid1 && rob_buf(rob_id1).redirect
     io.flush             := RegNext(flush, true.B)
-    io.target_pc         := RegNext(rob_buf(rob_id1).redir_target_pc, start_address.U(WORD_LEN.W).word_to_pc)
-    io.cr_out            := rob_buf(rob_id1).redir_correction
-    io.cr_out.en         := rob_buf(rob_id1).redir_correction.en && valid1
+    io.target_pc         := RegNext(redir_entry.redir_target_pc, start_address.U(WORD_LEN.W).word_to_pc)
+    io.cr_out            := redir_entry.redir_correction
+    io.cr_out.en         := redir_entry.redir_correction.en && valid1
     io.upd_out.en        := rob_buf(rob_id1).bp_updated && valid1
     io.upd_out.latter_pc := bp_upd.latter_pc
     io.upd_out.bp_entry  := bp_upd.bp_entry
@@ -295,10 +307,10 @@ class ReorderBuffer(start_address: BigInt, rob_entries: Int, pht_history_len: In
     printf(cf"latter_pc : 0x${bp_upd.latter_pc.pc_to_word}%x\n")
     printf(cf"upd_en    : ${rob_buf(rob_id1).bp_updated}\n")
     when (valid1 && (io.iq_read1.rf_wen === REN_S)) {
-      printf(cf"x${io.iq_read1.wb_addr}%d{0x${io.iq_read1.paddrs.wb_paddr}%x} := 0x${rob_buf(rob_id1).wb_data.getOrElse(0)}%x ; rel {0x${io.iq_read1.paddrs.wb_paddr_rel}%x}\n")
+      printf(cf"x${io.iq_read1.wb_addr}%d{0x${io.iq_read1.wb_paddrs.wb_paddr}%x} := 0x${rob_buf(rob_id1).wb_data.getOrElse(0)}%x ; rel {0x${io.iq_read1.wb_paddrs.wb_paddr_rel}%x}\n")
     }
     when (valid2 && (io.iq_read2.rf_wen === REN_S)) {
-      printf(cf"x${io.iq_read2.wb_addr}%d{0x${io.iq_read2.paddrs.wb_paddr}%x} := 0x${rob_buf(rob_id2).wb_data.getOrElse(0)}%x ; rel {0x${io.iq_read2.paddrs.wb_paddr_rel}%x}\n")
+      printf(cf"x${io.iq_read2.wb_addr}%d{0x${io.iq_read2.wb_paddrs.wb_paddr}%x} := 0x${rob_buf(rob_id2).wb_data.getOrElse(0)}%x ; rel {0x${io.iq_read2.wb_paddrs.wb_paddr_rel}%x}\n")
     }
     // printf(cf"redirected: ${redirected}\n")
     // printf(cf"redir_ptr : 0x${redir_ptr}%x\n")

@@ -960,7 +960,7 @@ class Core(
   rob.io.redir.correction.en       := ex1_en
   // rob.io.redir.correction.pc       := ex1_latter_pc
   // rob.io.redir.correction.bp_entry := ex1_reg_bp.bp_entry
-  rob.io.redir.correction.fp_entry := ex1_reg_fp_entry
+  rob.io.redir.correction.fp_attr  := ex1_reg_fp_entry.attr
   rob.io.redir.correction.fp_hit   := ex1_reg_bp.redirected
   rob.io.redir.correction.mispred  := ex1_bp_failure && (!reg_flush && !ex2_reg_stall)
   // rob.io.redir.correction.br_taken := ex1_is_br_taken
@@ -1455,7 +1455,7 @@ class Core(
   map2(rob.io.fin3.wb_data, lsu.io.pipeline_probe)(_ := _.mem3_wb_data)
 
   fetch_unit.io.cr.en            := rob.io.cr_out.en
-  fetch_unit.io.cr.fp_entry      := rob.io.cr_out.fp_entry
+  fetch_unit.io.cr.fp_attr       := rob.io.cr_out.fp_attr
   fetch_unit.io.cr.fp_hit        := rob.io.cr_out.fp_hit
   fetch_unit.io.cr.mispred       := rob.io.cr_out.mispred
   fetch_unit.io.cr.target        := rob.io.cr_out.target

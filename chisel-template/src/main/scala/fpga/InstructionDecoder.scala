@@ -47,6 +47,10 @@ class InstructionQueueEntryPhysAddrs extends Bundle {
   val rs2_paddr    = UInt(PHYS_ADDR_LEN.W)
   val rs3_paddr    = UInt(PHYS_ADDR_LEN.W)
   val wb_paddr     = UInt(PHYS_ADDR_LEN.W)
+}
+
+class InstructionQueueEntryWbPhysAddrs extends Bundle {
+  val wb_paddr     = UInt(PHYS_ADDR_LEN.W)
   val wb_paddr_rel = UInt(PHYS_ADDR_LEN.W)
 }
 
@@ -80,14 +84,9 @@ class InstructionDecoderInput(redirect_buffer_size: Int, enable_pipeline_probe: 
 
 class InstructionQueueRobRead(iq_id_len: Int, enable_pipeline_probe: Boolean) extends Bundle {
   val iq_id      = Input(UInt(iq_id_len.W))
-  val pc         = Output(UInt(PC_LEN.W))
-  val redirected = Output(Bool())
-  val bpfailed   = Output(Bool())
-  val bp_entry   = Output(new BranchPredictionEntry())
   val rf_wen     = Output(UInt(REN_LEN.W))
   val wb_addr    = Output(UInt(ADDR_LEN.W))
-  val paddrs     = Output(new InstructionQueueEntryPhysAddrs)
-  val inst_id    = Option.when(enable_pipeline_probe)(Output(UInt(INST_ID_LEN.W)))
+  val wb_paddrs  = Output(new InstructionQueueEntryWbPhysAddrs)
 }
 
 class InstructionDecoderDebugSignals extends Bundle {
@@ -463,6 +462,7 @@ class InstructionDecoderUnit(
     new InstructionQueueEntryDecoded(enable_pipeline_probe),
     new InstructionQueueEntryLsq(lsq_id_len),
     new InstructionQueueEntryPhysAddrs,
+    new InstructionQueueEntryWbPhysAddrs,
   ))
 
   io.in1.ready := iq.io.enq1.ready
@@ -490,23 +490,13 @@ class InstructionDecoderUnit(
   iq.io.deq2      <> io.rob.deq2
 
   iq.io.read1_all.iq_id  := io.rob.read1.iq_id
-  io.rob.read1.pc         := iq.io.read1_all.initial.pc
-  io.rob.read1.redirected := iq.io.read1_all.initial.bp.redirected
-  io.rob.read1.bpfailed   := iq.io.read1_all.initial.bp.bpfailed
-  io.rob.read1.bp_entry   := iq.io.read1_all.initial.bp.bp_entry
-  io.rob.read1.rf_wen     := iq.io.read1_all.decoded.rf_wen
-  io.rob.read1.wb_addr    := iq.io.read1_all.decoded.wb_addr
-  io.rob.read1.paddrs     := iq.io.read1_all.paddrs
-  map2(io.rob.read1.inst_id, iq.io.read1_all.initial.inst_id)(_ := _)
+  io.rob.read1.rf_wen    := iq.io.read1_all.decoded.rf_wen
+  io.rob.read1.wb_addr   := iq.io.read1_all.decoded.wb_addr
+  io.rob.read1.wb_paddrs := iq.io.read1_all.wb_paddrs
   iq.io.read2_all.iq_id  := io.rob.read2.iq_id
-  io.rob.read2.pc         := iq.io.read2_all.initial.pc
-  io.rob.read2.redirected := iq.io.read2_all.initial.bp.redirected
-  io.rob.read2.bpfailed   := iq.io.read2_all.initial.bp.bpfailed
-  io.rob.read2.bp_entry   := iq.io.read2_all.initial.bp.bp_entry
-  io.rob.read2.rf_wen     := iq.io.read2_all.decoded.rf_wen
-  io.rob.read2.wb_addr    := iq.io.read2_all.decoded.wb_addr
-  io.rob.read2.paddrs     := iq.io.read2_all.paddrs
-  map2(io.rob.read2.inst_id, iq.io.read2_all.initial.inst_id)(_ := _)
+  io.rob.read2.rf_wen    := iq.io.read2_all.decoded.rf_wen
+  io.rob.read2.wb_addr   := iq.io.read2_all.decoded.wb_addr
+  io.rob.read2.wb_paddrs := iq.io.read2_all.wb_paddrs
 
   class Id1Input(iq_id_len: Int) extends Bundle {
     val iq_id_ptr_len = iq_id_len + 1
@@ -646,18 +636,20 @@ class InstructionDecoderUnit(
     io.rf_sp2.map_rs3.addr := iq.io.read2.decoded.rs3_addr
     io.rf_sp2.assign.addr  := iq.io.read2.decoded.wb_addr
     io.rf_sp2.assign.en    := lsq2_en && (iq.io.read2.decoded.rf_wen === REN_S)
-    iq.io.put_pa1.en                  := lsq1_en
-    iq.io.put_pa1.paddrs.rs1_paddr    := io.rf_sp1.map_rs1.paddr
-    iq.io.put_pa1.paddrs.rs2_paddr    := io.rf_sp1.map_rs2.paddr
-    iq.io.put_pa1.paddrs.rs3_paddr    := io.rf_sp1.map_rs3.paddr
-    iq.io.put_pa1.paddrs.wb_paddr     := io.rf_sp1.assign.paddr
-    iq.io.put_pa1.paddrs.wb_paddr_rel := io.rf_sp1.assign.paddr_rel
-    iq.io.put_pa2.en                  := lsq2_en
-    iq.io.put_pa2.paddrs.rs1_paddr    := io.rf_sp2.map_rs1.paddr
-    iq.io.put_pa2.paddrs.rs2_paddr    := io.rf_sp2.map_rs2.paddr
-    iq.io.put_pa2.paddrs.rs3_paddr    := io.rf_sp2.map_rs3.paddr
-    iq.io.put_pa2.paddrs.wb_paddr     := io.rf_sp2.assign.paddr
-    iq.io.put_pa2.paddrs.wb_paddr_rel := io.rf_sp2.assign.paddr_rel
+    iq.io.put_pa1.en                     := lsq1_en
+    iq.io.put_pa1.paddrs.rs1_paddr       := io.rf_sp1.map_rs1.paddr
+    iq.io.put_pa1.paddrs.rs2_paddr       := io.rf_sp1.map_rs2.paddr
+    iq.io.put_pa1.paddrs.rs3_paddr       := io.rf_sp1.map_rs3.paddr
+    iq.io.put_pa1.paddrs.wb_paddr        := io.rf_sp1.assign.paddr
+    iq.io.put_pa1.wb_paddrs.wb_paddr     := io.rf_sp1.assign.paddr
+    iq.io.put_pa1.wb_paddrs.wb_paddr_rel := io.rf_sp1.assign.paddr_rel
+    iq.io.put_pa2.en                     := lsq2_en
+    iq.io.put_pa2.paddrs.rs1_paddr       := io.rf_sp2.map_rs1.paddr
+    iq.io.put_pa2.paddrs.rs2_paddr       := io.rf_sp2.map_rs2.paddr
+    iq.io.put_pa2.paddrs.rs3_paddr       := io.rf_sp2.map_rs3.paddr
+    iq.io.put_pa2.paddrs.wb_paddr        := io.rf_sp2.assign.paddr
+    iq.io.put_pa2.wb_paddrs.wb_paddr     := io.rf_sp2.assign.paddr
+    iq.io.put_pa2.wb_paddrs.wb_paddr_rel := io.rf_sp2.assign.paddr_rel
 
     io.pipeline_probe.id2a_valid.foreach(_ := iq.io.read1.valid)
     map2(io.pipeline_probe.id2a_inst_id, iq.io.read1.decoded.inst_id)(_ := _)

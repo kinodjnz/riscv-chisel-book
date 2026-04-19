@@ -101,6 +101,7 @@ class Fetcher(
     val idata         = UInt(FETCH_BLOCK_LEN.W)
     val iblock_cont   = Bool()
     val end_of_iblock = UInt(IALIGN_PTR_LEN.W)
+    // val bp_entries    = UInt((4 * new BranchPredictionEntry().getWidth).W)
     val bp_entries    = Vec(4, new BranchPredictionEntry())
     val fp_ptr        = UInt(fp_ptr_len.W)
   }
@@ -278,6 +279,7 @@ class Fetcher(
         fetch_buf(bp_ptr).iblock_cont := false.B
       }
       fetch_buf(bp_ptr).end_of_iblock := Mux(io.pr.bp1_en, io.pr.bp1_pos, 3.U)
+      // fetch_buf(bp_ptr).bp_entries    := io.pr.bp_entries.asTypeOf(UInt((4 * new BranchPredictionEntry().getWidth).W))
       fetch_buf(bp_ptr).bp_entries    := io.pr.bp_entries
       fetch_buf(bp_ptr).fp_ptr        := io.pr.fp_ptr
       printf(cf"fb(${bp_ptr}).end_of_iblock=${Mux(io.pr.bp1_en, io.pr.bp1_pos, 3.U)}\n")
@@ -316,6 +318,8 @@ class Fetcher(
     val idata1 = fetch_buf(read_ptr.take(FETCH_PTR_LEN) + 1.U).idata
     val idatas = (idata1.take(FETCH_BLOCK_LEN - IALIGN_LEN) ## idata0).subdivideInVec(IALIGN_LEN)
     val is_halfs = VecInit(idatas.take(6).map(x => x.take(2) =/= 3.U))
+    // val bpe0 = fetch_buf(read_ptr.take(FETCH_PTR_LEN)).bp_entries.asTypeOf(Vec(4, new BranchPredictionEntry()))
+    // val bpe1 = fetch_buf(read_ptr.take(FETCH_PTR_LEN) + 1.U).bp_entries.asTypeOf(Vec(4, new BranchPredictionEntry()))
     val bpe0 = fetch_buf(read_ptr.take(FETCH_PTR_LEN)).bp_entries
     val bpe1 = fetch_buf(read_ptr.take(FETCH_PTR_LEN) + 1.U).bp_entries
     val bp_entries = VecInit(bpe0 ++ bpe1.take(3))

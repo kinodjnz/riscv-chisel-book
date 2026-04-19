@@ -114,6 +114,7 @@ class LoadStoreUnit(enable_pipeline_probe: Boolean, dram_start: BigInt, dram_len
     val pipeline_probe = Option.when(enable_pipeline_probe)(new LoadStorePipelineProbe)
   })
 
+  // val queue = Mem(lsq_entries, UInt(new LoadStoreQueueEntry(rob_id_len, enable_pipeline_probe).getWidth.W))
   val queue = Mem(lsq_entries, new LoadStoreQueueEntry(rob_id_len, enable_pipeline_probe))
   val enq   = RegInit(0.U(lsq_id_ptr_len.W))
   val deq   = RegInit(0.U(lsq_id_ptr_len.W))
@@ -174,6 +175,7 @@ class LoadStoreUnit(enable_pipeline_probe: Boolean, dram_start: BigInt, dram_len
     entry.rob_id        := io.put.rob_id
     map2(entry.inst_id, io.put.inst_id)(_ := _)
     when (io.put.en) {
+      // queue(io.put.lsq_id.take(lsq_id_len))  := entry.asTypeOf(UInt(new LoadStoreQueueEntry(rob_id_len, enable_pipeline_probe).getWidth.W))
       queue(io.put.lsq_id.take(lsq_id_len))  := entry
       filled(io.put.lsq_id.take(lsq_id_len)) := 1.U(1.W)
     }
@@ -193,6 +195,7 @@ class LoadStoreUnit(enable_pipeline_probe: Boolean, dram_start: BigInt, dram_len
     val mem1_dram_busy = Wire(Bool())
     val mem1_unaligned = Wire(Bool())
 
+    // val entry = queue(deq).asTypeOf(new LoadStoreQueueEntry(rob_id_len, enable_pipeline_probe))
     val entry = queue(deq)
     val valid = (deq - enq)(lsq_id_len) && filled(deq).asBool
 
@@ -250,6 +253,7 @@ class LoadStoreUnit(enable_pipeline_probe: Boolean, dram_start: BigInt, dram_len
     printf(cf"lsq_deq          : ${deq}\n")
     for (i <- 0 until 4) {
       when (i.U < enq - deq) {
+        // val e = queue((deq + i.U).take(lsq_id_len)).asTypeOf(new LoadStoreQueueEntry(rob_id_len, enable_pipeline_probe))
         val e = queue((deq + i.U).take(lsq_id_len))
         printf(cf"q(${deq+i.U}).addr      : 0x${e.addr ## 0.U(2.W)}%x\n")
         printf(cf"q(${deq+i.U}).memw      : 0x${e.data.asTypeOf(new LoadData).unsigned ## e.memwl}%x\n")

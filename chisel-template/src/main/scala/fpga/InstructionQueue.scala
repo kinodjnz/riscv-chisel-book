@@ -50,9 +50,10 @@ class InstructionQueuePutLsq[Lsq <: Data](genLsq: Lsq) extends Bundle {
   val lsq     = Input(genLsq)
 }
 
-class InstructionQueuePutPhysAddrs[PhysAddrs <: Data](genPhysAddrs: PhysAddrs) extends Bundle {
-  val en     = Input(Bool())
-  val paddrs = Input(genPhysAddrs)
+class InstructionQueuePutPhysAddrs[PhysAddrs <: Data, WbPhysAddrs <: Data](genPhysAddrs: PhysAddrs, genWbPhysAddrs: WbPhysAddrs) extends Bundle {
+  val en        = Input(Bool())
+  val paddrs    = Input(genPhysAddrs)
+  val wb_paddrs = Input(genWbPhysAddrs)
 }
 
 class InstructionQueueRobRange(iq_id_len: Int) extends Bundle {
@@ -69,11 +70,10 @@ class InstructionQueueUpdateRobPtr(iq_id_len: Int) extends Bundle {
   val ptr = Input(UInt(iq_id_ptr_len.W))
 }
 
-class InstructionQueueReadAll[Initial <: Data, Decoded <: Data, PhysAddrs <: Data](iq_id_len: Int, genInitial: Initial, genDecoded: Decoded, genPhysAddrs: PhysAddrs) extends Bundle {
-  val iq_id   = Input(UInt(iq_id_len.W))
-  val initial = Output(genInitial)
-  val decoded = Output(genDecoded)
-  val paddrs  = Output(genPhysAddrs)
+class InstructionQueueReadAll[Decoded <: Data, WbPhysAddrs <: Data](iq_id_len: Int, genDecoded: Decoded, genWbPhysAddrs: WbPhysAddrs) extends Bundle {
+  val iq_id     = Input(UInt(iq_id_len.W))
+  val decoded   = Output(genDecoded)
+  val wb_paddrs = Output(genWbPhysAddrs)
 }
 
 class InstructionQueueDequeue extends Bundle {
@@ -97,12 +97,13 @@ class InstructionQueuePeek[Initial <: Data, Decoded <: Data, Lsq <: Data, PhysAd
   val paddrs  = Output(genPhysAddrs)
 }
 
-class InstructionQueue[Initial <: Data, Decoded <: Data, Lsq <: Data, PhysAddrs <: Data](
+class InstructionQueue[Initial <: Data, Decoded <: Data, Lsq <: Data, PhysAddrs <: Data, WbPhysAddrs <: Data](
   iq_buffer_size: Int,
   genInitial: Initial,
   genDecoded: Decoded,
   genLsq: Lsq,
   genPhysAddrs: PhysAddrs,
+  genWbPhysAddrs: WbPhysAddrs,
 ) extends Module {
   val iq_id_len = log2Ceil(iq_buffer_size)
   val iq_id_ptr_len = iq_id_len + 1
@@ -116,29 +117,31 @@ class InstructionQueue[Initial <: Data, Decoded <: Data, Lsq <: Data, PhysAddrs 
     val read2   = new InstructionQueueReadDecoded(genDecoded)
     val lsq1    = new InstructionQueuePutLsq(genLsq)
     val lsq2    = new InstructionQueuePutLsq(genLsq)
-    val put_pa1 = new InstructionQueuePutPhysAddrs(genPhysAddrs)
-    val put_pa2 = new InstructionQueuePutPhysAddrs(genPhysAddrs)
+    val put_pa1 = new InstructionQueuePutPhysAddrs(genPhysAddrs, genWbPhysAddrs)
+    val put_pa2 = new InstructionQueuePutPhysAddrs(genPhysAddrs, genWbPhysAddrs)
     val peek_range = new InstructionQueuePeekRange(iq_id_len)
     val upd_peek   = new InstructionQueueUpdatePeekPtr(iq_id_len)
     val peek1   = new InstructionQueuePeek(iq_id_len, genInitial, genDecoded, genLsq, genPhysAddrs)
     val peek2   = new InstructionQueuePeek(iq_id_len, genInitial, genDecoded, genLsq, genPhysAddrs)
     val rob_range = new InstructionQueueRobRange(iq_id_len)
     val upd_rob   = new InstructionQueueUpdateRobPtr(iq_id_len)
-    val read1_all = new InstructionQueueReadAll(iq_id_len, genInitial, genDecoded, genPhysAddrs)
-    val read2_all = new InstructionQueueReadAll(iq_id_len, genInitial, genDecoded, genPhysAddrs)
+    val read1_all = new InstructionQueueReadAll(iq_id_len, genDecoded, genWbPhysAddrs)
+    val read2_all = new InstructionQueueReadAll(iq_id_len, genDecoded, genWbPhysAddrs)
     val deq1    = new InstructionQueueDequeue
     val deq2    = new InstructionQueueDequeue
     val flush   = Input(Bool())
   })
 
-  val iq_buf_initial_0 = Mem(iq_buffer_size/2, genInitial)
-  val iq_buf_initial_1 = Mem(iq_buffer_size/2, genInitial)
+  val iq_buf_initial_0 = Mem(iq_buffer_size/2, UInt(genInitial.getWidth.W))
+  val iq_buf_initial_1 = Mem(iq_buffer_size/2, UInt(genInitial.getWidth.W))
   val iq_buf_decoded_0 = Mem(iq_buffer_size/2, genDecoded)
   val iq_buf_decoded_1 = Mem(iq_buffer_size/2, genDecoded)
   val iq_buf_lsq_0     = Mem(iq_buffer_size/2, genLsq)
   val iq_buf_lsq_1     = Mem(iq_buffer_size/2, genLsq)
   val iq_buf_paddrs_0  = Mem(iq_buffer_size/2, genPhysAddrs)
   val iq_buf_paddrs_1  = Mem(iq_buffer_size/2, genPhysAddrs)
+  val iq_buf_wb_paddrs_0 = Mem(iq_buffer_size/2, genWbPhysAddrs)
+  val iq_buf_wb_paddrs_1 = Mem(iq_buffer_size/2, genWbPhysAddrs)
   val enq         = RegInit(0.U(iq_id_ptr_len.W))
   val decoded_ptr = RegInit(0.U(iq_id_ptr_len.W))
   val lsq_ptr     = RegInit(0.U(iq_id_ptr_len.W))
@@ -162,10 +165,10 @@ class InstructionQueue[Initial <: Data, Decoded <: Data, Lsq <: Data, PhysAddrs 
     val data0 = Mux(enq(0), io.enq2.initial, io.enq1.initial)
     val data1 = Mux(enq(0), io.enq1.initial, io.enq2.initial)
     when (!enq(0) && ready1 || enq(0) && ready2) {
-      iq_buf_initial_0(addr0) := data0
+      iq_buf_initial_0(addr0) := data0.asTypeOf(UInt(genInitial.getWidth.W))
     }
     when (enq(0) && ready1 || !enq(0) && ready2) {
-      iq_buf_initial_1(addr1) := data1
+      iq_buf_initial_1(addr1) := data1.asTypeOf(UInt(genInitial.getWidth.W))
     }
     when (ready2 && io.enq2.en) {
       enq := enq + 2.U
@@ -232,13 +235,17 @@ class InstructionQueue[Initial <: Data, Decoded <: Data, Lsq <: Data, PhysAddrs 
       lsq_ptr := lsq_ptr + 2.U
     }
 
-    val pa_data0 = Mux(lsq_ptr0(0), io.put_pa2.paddrs, io.put_pa1.paddrs)
-    val pa_data1 = Mux(lsq_ptr0(0), io.put_pa1.paddrs, io.put_pa2.paddrs)
+    val pa_paddr0 = Mux(lsq_ptr0(0), io.put_pa2.paddrs, io.put_pa1.paddrs)
+    val pa_paddr1 = Mux(lsq_ptr0(0), io.put_pa1.paddrs, io.put_pa2.paddrs)
+    val pa_wb_paddr0 = Mux(lsq_ptr0(0), io.put_pa2.wb_paddrs, io.put_pa1.wb_paddrs)
+    val pa_wb_paddr1 = Mux(lsq_ptr0(0), io.put_pa1.wb_paddrs, io.put_pa2.wb_paddrs)
     when (!lsq_ptr0(0) && io.put_pa1.en || lsq_ptr0(0) && io.put_pa2.en) {
-      iq_buf_paddrs_0(addr0) := pa_data0
+      iq_buf_paddrs_0(addr0)    := pa_paddr0
+      iq_buf_wb_paddrs_0(addr0) := pa_wb_paddr0
     }
     when (lsq_ptr0(0) && io.put_pa1.en || !lsq_ptr0(0) && io.put_pa2.en) {
-      iq_buf_paddrs_1(addr1) := pa_data1
+      iq_buf_paddrs_1(addr1)    := pa_paddr1
+      iq_buf_wb_paddrs_1(addr1) := pa_wb_paddr1
     }
   }
 
@@ -259,8 +266,8 @@ class InstructionQueue[Initial <: Data, Decoded <: Data, Lsq <: Data, PhysAddrs 
     val iq_buf_addr_1 = Mux(io.peek1.iq_id(0), io.peek1.iq_id, io.peek2.iq_id).take(iq_id_len) >> 1
     io.peek1.valid   := (io.peek1.iq_id - lsq_ptr)(iq_id_len)
     io.peek2.valid   := (io.peek2.iq_id - lsq_ptr)(iq_id_len)
-    val initial0 = iq_buf_initial_0(iq_buf_addr_0)
-    val initial1 = iq_buf_initial_1(iq_buf_addr_1)
+    val initial0 = iq_buf_initial_0(iq_buf_addr_0).asTypeOf(genInitial)
+    val initial1 = iq_buf_initial_1(iq_buf_addr_1).asTypeOf(genInitial)
     io.peek1.initial := Mux(io.peek1.iq_id(0), initial1, initial0)
     io.peek2.initial := Mux(io.peek1.iq_id(0), initial0, initial1)
     val decoded0 = iq_buf_decoded_0(iq_buf_addr_0)
@@ -290,18 +297,14 @@ class InstructionQueue[Initial <: Data, Decoded <: Data, Lsq <: Data, PhysAddrs 
 
     val iq_buf_addr_0 = Mux(io.read1_all.iq_id(0), io.read2_all.iq_id, io.read1_all.iq_id) >> 1
     val iq_buf_addr_1 = Mux(io.read1_all.iq_id(0), io.read1_all.iq_id, io.read2_all.iq_id) >> 1
-    val initial0 = iq_buf_initial_0(iq_buf_addr_0)
-    val initial1 = iq_buf_initial_1(iq_buf_addr_1)
-    io.read1_all.initial := Mux(io.read1_all.iq_id(0), initial1, initial0)
-    io.read2_all.initial := Mux(io.read1_all.iq_id(0), initial0, initial1)
     val decoded0 = iq_buf_decoded_0(iq_buf_addr_0)
     val decoded1 = iq_buf_decoded_1(iq_buf_addr_1)
     io.read1_all.decoded := Mux(io.read1_all.iq_id(0), decoded1, decoded0)
     io.read2_all.decoded := Mux(io.read1_all.iq_id(0), decoded0, decoded1)
-    val paddrs0 = iq_buf_paddrs_0(iq_buf_addr_0)
-    val paddrs1 = iq_buf_paddrs_1(iq_buf_addr_1)
-    io.read1_all.paddrs := Mux(io.read1_all.iq_id(0), paddrs1, paddrs0)
-    io.read2_all.paddrs := Mux(io.read1_all.iq_id(0), paddrs0, paddrs1)
+    val wb_paddrs0 = iq_buf_wb_paddrs_0(iq_buf_addr_0)
+    val wb_paddrs1 = iq_buf_wb_paddrs_1(iq_buf_addr_1)
+    io.read1_all.wb_paddrs := Mux(io.read1_all.iq_id(0), wb_paddrs1, wb_paddrs0)
+    io.read2_all.wb_paddrs := Mux(io.read1_all.iq_id(0), wb_paddrs0, wb_paddrs1)
   }
 
   def dequeue: Unit = {
