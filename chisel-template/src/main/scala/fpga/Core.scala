@@ -682,12 +682,12 @@ class Core(
 
   fetch_unit.io.redir_read.ptr := rrd_reg_bp.fp_ptr
 
-  rob.io.enq1.en     := rrd_reg_valid && !rrd_stall
-  rob.io.enq1.rob_id := rrd_rob_id
-  map2(rob.io.enq1.inst_id, rrd_reg_inst_id)(_ := _)
-  rob.io.enq2.en     := rrd_i2_valid && rrd_ready2
-  rob.io.enq2.rob_id := rrd_i2_rob_id
-  map2(rob.io.enq2.inst_id, rrd_i2_inst_id)(_ := _)
+  // rob.io.enq1.en     := rrd_reg_valid && !rrd_stall
+  // rob.io.enq1.rob_id := rrd_rob_id
+  // map2(rob.io.enq1.inst_id, rrd_reg_inst_id)(_ := _)
+  // rob.io.enq2.en     := rrd_i2_valid && rrd_ready2
+  // rob.io.enq2.rob_id := rrd_i2_rob_id
+  // map2(rob.io.enq2.inst_id, rrd_i2_inst_id)(_ := _)
 
   io.pipeline_probe.foreach(_.rrd_valid := rrd_reg_valid && !reg_flush)
   io.pipeline_probe.foreach(_.rrd_i2_valid := rrd_i2_valid && !reg_flush)
@@ -808,6 +808,13 @@ class Core(
 
   val ex1_i2_valid = ex1_reg_i2_valid && (!reg_flush && !ex2_reg_stall)
   ex1_reg_is_retired := ex1_i2_valid
+
+  rob.io.enq1.en     := ex1_reg_valid
+  rob.io.enq1.rob_id := ex1_reg_rob_id
+  map2(rob.io.enq1.inst_id, ex1_reg_inst_id)(_ := _)
+  rob.io.enq2.en     := ex1_reg_i2_valid
+  rob.io.enq2.rob_id := ex1_reg_i2_rob_id
+  map2(rob.io.enq2.inst_id, ex1_reg_i2_inst_id)(_ := _)
 
   // rob.io.fin1.en     := ex1_i2_valid || lsu.io.out.is_retired
   // rob.io.fin1.rob_id := Mux(lsu.io.out.is_retired, lsu.io.out.rob_id, ex1_reg_i2_rob_id)

@@ -270,26 +270,34 @@ class InstructionQueue[Initial <: Data, Decoded <: Data, Lsq <: Data, Rob <: Dat
       lsq_ptr     := enq
     }
 
-    val iq_buf_addr_0 = Mux(io.peek1.iq_id(0), io.peek2.iq_id, io.peek1.iq_id).take(iq_id_len) >> 1
-    val iq_buf_addr_1 = Mux(io.peek1.iq_id(0), io.peek1.iq_id, io.peek2.iq_id).take(iq_id_len) >> 1
+    val iq_buf_addr_1 = io.peek1.iq_id.take(iq_id_len) >> 1
+    val iq_buf_addr_2 = io.peek2.iq_id.take(iq_id_len) >> 1
     io.peek1.valid   := (io.peek1.iq_id - lsq_ptr)(iq_id_len)
     io.peek2.valid   := (io.peek2.iq_id - lsq_ptr)(iq_id_len)
-    val initial0 = iq_buf_initial_0(iq_buf_addr_0).asTypeOf(genInitial)
-    val initial1 = iq_buf_initial_1(iq_buf_addr_1).asTypeOf(genInitial)
-    io.peek1.initial := Mux(io.peek1.iq_id(0), initial1, initial0)
-    io.peek2.initial := Mux(io.peek1.iq_id(0), initial0, initial1)
-    val decoded0 = iq_buf_decoded_0(iq_buf_addr_0)
-    val decoded1 = iq_buf_decoded_1(iq_buf_addr_1)
-    io.peek1.decoded := Mux(io.peek1.iq_id(0), decoded1, decoded0)
-    io.peek2.decoded := Mux(io.peek1.iq_id(0), decoded0, decoded1)
-    val lsq0 = iq_buf_lsq_0(iq_buf_addr_0)
-    val lsq1 = iq_buf_lsq_1(iq_buf_addr_1)
-    io.peek1.lsq := Mux(io.peek1.iq_id(0), lsq1, lsq0)
-    io.peek2.lsq := Mux(io.peek1.iq_id(0), lsq0, lsq1)
-    val paddrs0 = iq_buf_paddrs_0(iq_buf_addr_0)
-    val paddrs1 = iq_buf_paddrs_1(iq_buf_addr_1)
-    io.peek1.paddrs := Mux(io.peek1.iq_id(0), paddrs1, paddrs0)
-    io.peek2.paddrs := Mux(io.peek1.iq_id(0), paddrs0, paddrs1)
+    val initial10 = iq_buf_initial_0(iq_buf_addr_1).asTypeOf(genInitial)
+    val initial11 = iq_buf_initial_1(iq_buf_addr_1).asTypeOf(genInitial)
+    val initial20 = iq_buf_initial_0(iq_buf_addr_2).asTypeOf(genInitial)
+    val initial21 = iq_buf_initial_1(iq_buf_addr_2).asTypeOf(genInitial)
+    io.peek1.initial := Mux(io.peek1.iq_id(0), initial11, initial10)
+    io.peek2.initial := Mux(io.peek2.iq_id(0), initial21, initial20)
+    val decoded10 = iq_buf_decoded_0(iq_buf_addr_1)
+    val decoded11 = iq_buf_decoded_1(iq_buf_addr_1)
+    val decoded20 = iq_buf_decoded_0(iq_buf_addr_2)
+    val decoded21 = iq_buf_decoded_1(iq_buf_addr_2)
+    io.peek1.decoded := Mux(io.peek1.iq_id(0), decoded11, decoded10)
+    io.peek2.decoded := Mux(io.peek2.iq_id(0), decoded21, decoded20)
+    val lsq10 = iq_buf_lsq_0(iq_buf_addr_1)
+    val lsq11 = iq_buf_lsq_1(iq_buf_addr_1)
+    val lsq20 = iq_buf_lsq_0(iq_buf_addr_2)
+    val lsq21 = iq_buf_lsq_1(iq_buf_addr_2)
+    io.peek1.lsq := Mux(io.peek1.iq_id(0), lsq11, lsq10)
+    io.peek2.lsq := Mux(io.peek2.iq_id(0), lsq21, lsq20)
+    val paddrs10 = iq_buf_paddrs_0(iq_buf_addr_1)
+    val paddrs11 = iq_buf_paddrs_1(iq_buf_addr_1)
+    val paddrs20 = iq_buf_paddrs_0(iq_buf_addr_2)
+    val paddrs21 = iq_buf_paddrs_1(iq_buf_addr_2)
+    io.peek1.paddrs := Mux(io.peek1.iq_id(0), paddrs11, paddrs10)
+    io.peek2.paddrs := Mux(io.peek2.iq_id(0), paddrs21, paddrs20)
   }
 
   def rob: Unit = {
