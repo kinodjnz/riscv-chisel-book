@@ -664,11 +664,14 @@ class Core(
   val rrd_hazard = (rrd_reg_rf_wen === REN_S) && rrd_reg_valid && !rrd_stall && !reg_flush
   val rrd_fw_en_next = rrd_hazard && (rrd_reg_exe_sel === EXE_ALU)
 
-  val rrd_fw2_en_next = (rrd_i2_rf_wen === REN_S) && rrd_i2_valid && rrd_ready2 && !reg_flush || lsu.io.out.fw_en_next
+  val rrd_i2_read = (rrd_i2_rf_wen === REN_S) && rrd_i2_valid && !reg_flush
+  val rrd_fw2_en_next = (rrd_i2_read && rrd_ready2) || lsu.io.out.fw_en_next
 
   val rrd_mem_use_reg   = WireDefault(false.B)
   val rrd_inst2_use_reg = WireDefault(false.B)
   val rrd_inst3_use_reg = WireDefault(false.B)
+
+  val rrd_i2lsu_wb_paddr = Mux(rrd_i2_read && !lsu.io.out.wb_next, rrd_i2_wb_paddr, lsu.io.out.wb_paddr_next)
 
   when (
     rrd_reg_valid && !rrd_stall && !reg_flush && rrd_reg_rf_wen === REN_S
@@ -678,6 +681,13 @@ class Core(
       rrd_inst2_use_reg := (rrd_reg_exe_sel === EXE_BLU || rrd_reg_exe_sel === EXE_JB)
       rrd_inst3_use_reg := ((rrd_reg_exe_sel === EXE_MD && !PAT_DIVREM.matches(rrd_reg_exe_fun))
                                                         || rrd_reg_exe_sel === EXE_CSR)
+  }
+
+  // lsu.io.out.wb_next && !lsu.io.out.fw_en_next  : do not update scoreboard, updated by lsu.io.out.wb_nofw
+  // !lsu.io.out.wb_next && !lsu.io.out.fw_en_next : update scoreboard(rrd_i2_wb_paddr) to !rrd_ready2
+  // lsu.io.out.wb_next && lsu.io.out.fw_en_next   : reset scoreboard(lsu.io.out.wb_paddr_next)
+  when ((rrd_i2_read && !lsu.io.out.wb_next) || lsu.io.out.fw_en_next) {
+    scoreboard(rrd_i2lsu_wb_paddr) := !rrd_ready2 && !lsu.io.out.fw_en_next
   }
 
   fetch_unit.io.redir_read.ptr := rrd_reg_bp.fp_ptr
@@ -727,7 +737,7 @@ class Core(
   // ex1_reg_i2_sop           := rrd_i2_sop
   ex1_reg_i2_op1_data      := rrd_i2_op1_data
   ex1_reg_i2_op2_data      := rrd_i2_op2_data
-  ex1_reg_i2_wb_paddr      := Mux(rrd_i2_rf_wen === REN_S && rrd_i2_valid && rrd_ready2, rrd_i2_wb_paddr, lsu.io.out.wb_paddr_next)
+  ex1_reg_i2_wb_paddr      := rrd_i2lsu_wb_paddr
   ex1_reg_i2_rf_wen        := Mux(!rrd_i2_valid || !rrd_ready2, REN_X, rrd_i2_rf_wen)
   ex1_reg_fw2_en           := rrd_fw2_en_next
   ex1_reg_i2_valid         := rrd_i2_valid && rrd_ready2
@@ -1443,14 +1453,8 @@ class Core(
   lsu.io.dmem <> io.dmem
   lsu.io.cache <> io.cache
 
-  // mem3_reg_fw_en := lsu.io.out.fw_en_next
-  when (lsu.io.out.fw_en_next) {
-    scoreboard(lsu.io.out.fw_wb_paddr) := false.B
-  }
-  // mem3_fw_wb_addr := lsu.io.out.wb_addr
-  // mem3_fw_data := lsu.io.out.fw_data
-  // when (lsu.io.out.wb_en) {
-  //   regfile(lsu.io.out.wb_addr) := lsu.io.out.wb_data
+  // when (lsu.io.out.fw_en_next) {
+  //   scoreboard(lsu.io.out.fw_wb_paddr) := false.B
   // }
   when (lsu.io.out.wb_nofw) {
     scoreboard(lsu.io.out.wb_paddr) := false.B
