@@ -316,6 +316,7 @@ class Core(
 
   val rrd_stall            = Wire(Bool())
   val rrd_ready2           = Wire(Bool())
+  val rrd_pause2           = Wire(Bool())
   val ex1_reg_fw_en        = RegInit(false.B)
   val ex1_fw_data          = Wire(UInt(WORD_LEN.W))
   val ex1_reg_fw2_en       = RegInit(false.B)
@@ -488,6 +489,8 @@ class Core(
   val id_rrd_flush = reg_flush
   idu.io.out1.ready := id_rrd_ready
   idu.io.out2.ready := rrd_ready2
+  idu.io.out1.pause := false.B
+  idu.io.out2.pause := rrd_pause2
   idu.io.flush      := id_rrd_flush
   idu.io.stall      := ex2_reg_stall
 
@@ -524,9 +527,9 @@ class Core(
   rrd_i2_op1_sel           := idu.io.out2.decoded.op1_sel
   rrd_i2_op2_sel           := idu.io.out2.decoded.op2_sel
   rrd_i2_op3_sel           := idu.io.out2.decoded.op3_sel
-  rrd_i2_rs1_addr         := idu.io.out2.decoded.rs1_addr
-  rrd_i2_rs2_addr         := idu.io.out2.decoded.rs2_addr
-  rrd_i2_rs3_addr         := idu.io.out2.decoded.rs3_addr
+  rrd_i2_rs1_addr          := idu.io.out2.decoded.rs1_addr
+  rrd_i2_rs2_addr          := idu.io.out2.decoded.rs2_addr
+  rrd_i2_rs3_addr          := idu.io.out2.decoded.rs3_addr
   rrd_i2_rs1_paddr         := idu.io.out2.paddrs.rs1_paddr
   rrd_i2_rs2_paddr         := idu.io.out2.paddrs.rs2_paddr
   rrd_i2_imm_data          := idu.io.out2.decoded.imm_data
@@ -545,23 +548,22 @@ class Core(
       ((rrd_reg_op1_sel    === OP1_SEL_RS)    && scoreboard(rrd_reg_rs1_paddr)) ||
       ((rrd_reg_op2_sel(1) === OP2_SEL_RS(1)) && scoreboard(rrd_reg_rs2_paddr)) ||
       ((rrd_reg_op3_sel(1) === OP3_SEL_RS(1)) && scoreboard(rrd_reg_rs3_paddr))
-      // ((rrd_reg_rf_wen     === REN_S)         && scoreboard(rrd_reg_wb_paddr))
     ) || (
       rrd_reg_exe_sel === EXE_MD && PAT_DIVREM.matches(rrd_reg_exe_fun) && div_divrem_in_use
     ) || (
       div_divrem_rrd_wb
     )
   // val rrd_i1_wb_addr = Mux(rrd_reg_rf_wen === REN_S, rrd_reg_wb_paddr, 0.U(ADDR_LEN.W))
-  rrd_ready2 := !rrd_stall &&
+  rrd_ready2 := (reg_flush || !ex2_reg_stall) /*!rrd_stall*/ &&
     rrd_i2_exe_sel === EXE_ALU && PAT_CLU_FUN.matches(rrd_i2_exe_fun) && rrd_i2_sop === SOP_NOP &&
-    !rrd_reg_bp.redirected && rrd_reg_exe_sel =/= EXE_JB && rrd_reg_exe_sel =/= EXE_CSR &&
+    // !rrd_reg_bp.redirected && rrd_reg_exe_sel =/= EXE_JB && rrd_reg_exe_sel =/= EXE_CSR &&
     !rrd_i2_redirected &&
     !lsu.io.out.wb_next &&
     rrd_i2_op3_sel(1) =/= OP3_SEL_RS(1) && !(
-      ((rrd_i2_op1_sel    === OP1_SEL_RS)    && (scoreboard(rrd_i2_rs1_paddr) || (rrd_reg_rf_wen === REN_S && rrd_i2_rs1_paddr === rrd_reg_wb_paddr))) ||
-      ((rrd_i2_op2_sel(1) === OP2_SEL_RS(1)) && (scoreboard(rrd_i2_rs2_paddr) || (rrd_reg_rf_wen === REN_S && rrd_i2_rs2_paddr === rrd_reg_wb_paddr)))
-      // ((rrd_i2_rf_wen     === REN_S)         && (scoreboard(rrd_i2_wb_paddr)  || (rrd_reg_rf_wen === REN_S && rrd_i2_wb_paddr  === rrd_reg_wb_paddr)))
+      ((rrd_i2_op1_sel    === OP1_SEL_RS)    && (scoreboard(rrd_i2_rs1_paddr))) ||
+      ((rrd_i2_op2_sel(1) === OP2_SEL_RS(1)) && (scoreboard(rrd_i2_rs2_paddr)))
     )
+  rrd_pause2 := lsu.io.out.wb_next
 
   def mix(op2_sel: UInt, imm_data: UInt, rs_data: UInt): UInt = {
     // Mux(op2_sel(0) === OP2_SEL_MIX(0), 0.U(1.W) ## imm_data(11, 7) ## rs_data(5, 0), rs_data)
@@ -668,38 +670,34 @@ class Core(
       rrd_i2_is_half)  -> rrd_i2_imm_data.signed_extend(20) ## 0.U(12.W),
   ))
 
-  val rrd_hazard = (rrd_reg_rf_wen === REN_S) && rrd_reg_valid && !rrd_stall && !reg_flush
-  val rrd_fw_en_next = rrd_hazard && (rrd_reg_exe_sel === EXE_ALU)
+  val rrd_wb = (rrd_reg_rf_wen === REN_S) && rrd_reg_valid && !rrd_stall && !reg_flush
+  val rrd_fw_en_next = rrd_wb && (rrd_reg_exe_sel === EXE_ALU)
 
-  val rrd_i2_read = (rrd_i2_rf_wen === REN_S) && rrd_i2_valid && !reg_flush
-  val rrd_fw2_en_next = (rrd_i2_read && rrd_ready2) || lsu.io.out.fw_en_next
+  val rrd_i2_wb = (rrd_i2_rf_wen === REN_S) && rrd_i2_valid && !reg_flush
+  val rrd_fw2_en_next = (rrd_i2_wb && rrd_ready2) || lsu.io.out.fw_en_next
 
   val rrd_mem_use_reg   = WireDefault(false.B)
   val rrd_inst2_use_reg = WireDefault(false.B)
   val rrd_inst3_use_reg = WireDefault(false.B)
 
-  val rrd_i2lsu_wb_paddr = Mux(rrd_i2_read && !lsu.io.out.wb_next, rrd_i2_wb_paddr, lsu.io.out.wb_paddr_next)
+  val rrd_i2lsu_wb_paddr = Mux(rrd_i2_wb && !lsu.io.out.wb_next, rrd_i2_wb_paddr, lsu.io.out.wb_paddr_next)
 
-  when (
-    rrd_reg_valid && !rrd_stall && !reg_flush && rrd_reg_rf_wen === REN_S
-  ) {
-      when (rrd_reg_exe_sel === EXE_ALU) {
-        scoreboard(rrd_reg_wb_paddr) := false.B
-      }
-      // scoreboard(rrd_reg_wb_paddr) := rrd_reg_exe_sel =/= EXE_ALU
-      rrd_mem_use_reg   := (rrd_reg_exe_sel === EXE_LD  || rrd_reg_exe_sel === EXE_ST)
-      rrd_inst2_use_reg := (rrd_reg_exe_sel === EXE_BLU || rrd_reg_exe_sel === EXE_JB)
-      rrd_inst3_use_reg := ((rrd_reg_exe_sel === EXE_MD && !PAT_DIVREM.matches(rrd_reg_exe_fun))
-                                                        || rrd_reg_exe_sel === EXE_CSR)
+  when (rrd_wb) {
+    when (rrd_reg_exe_sel === EXE_ALU) {
+      scoreboard(rrd_reg_wb_paddr) := false.B
+    }
+    // scoreboard(rrd_reg_wb_paddr) := rrd_reg_exe_sel =/= EXE_ALU
+    rrd_mem_use_reg   := (rrd_reg_exe_sel === EXE_LD  || rrd_reg_exe_sel === EXE_ST)
+    rrd_inst2_use_reg := (rrd_reg_exe_sel === EXE_BLU || rrd_reg_exe_sel === EXE_JB)
+    rrd_inst3_use_reg := ((rrd_reg_exe_sel === EXE_MD && !PAT_DIVREM.matches(rrd_reg_exe_fun))
+                                                      || rrd_reg_exe_sel === EXE_CSR)
   }
 
   // lsu.io.out.wb_next && !lsu.io.out.fw_en_next  : do not update scoreboard, updated by lsu.io.out.wb_nofw
   // !lsu.io.out.wb_next && !lsu.io.out.fw_en_next : update scoreboard(rrd_i2_wb_paddr) to !rrd_ready2
   // lsu.io.out.wb_next && lsu.io.out.fw_en_next   : reset scoreboard(lsu.io.out.wb_paddr_next)
-  when ((rrd_i2_read && !lsu.io.out.wb_next) || lsu.io.out.fw_en_next) {
-    when (rrd_ready2 || lsu.io.out.fw_en_next) {
-      scoreboard(rrd_i2lsu_wb_paddr) := false.B
-    }
+  when ((rrd_i2_wb && rrd_ready2 && !lsu.io.out.wb_next) || lsu.io.out.fw_en_next) {
+    scoreboard(rrd_i2lsu_wb_paddr) := false.B
   }
 
   fetch_unit.io.redir_read.ptr := rrd_reg_bp.fp_ptr
@@ -905,7 +903,7 @@ class Core(
     (ex1_reg_exe_fun === BLU_CLZ)   -> PriorityEncoder(Cat(1.U(1.W), Reverse(ex1_reg_op1_data))),
     (ex1_reg_exe_fun === BLU_CTZ)   -> PriorityEncoder(Cat(1.U(1.W), ex1_reg_op1_data)),
     (ex1_reg_exe_fun === BLU_REV8)  -> Cat(ex1_reg_op1_data(7, 0), ex1_reg_op1_data(15, 8), ex1_reg_op1_data(23, 16), ex1_reg_op1_data(31, 24)),
-    (ex1_reg_exe_fun === BLU_BSCTH) -> Cat((0 until 16).reverse.map(bit => scatter_bit(ex1_reg_op1_data, ex1_reg_op2_data, bit))),
+    // (ex1_reg_exe_fun === BLU_BSCTH) -> Cat((0 until 16).reverse.map(bit => scatter_bit(ex1_reg_op1_data, ex1_reg_op2_data, bit))),
     PAT_BFM_BFP.matches(ex1_reg_exe_fun)
                                     -> (ex1_imm_mask << ex1_reg_op2_data(4, 0))(WORD_LEN-1, 0),
     PAT_BFX.matches(ex1_reg_exe_fun)

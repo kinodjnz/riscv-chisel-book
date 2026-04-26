@@ -35,15 +35,18 @@ class InstructionQueueReadDecoded[Decoded <: Data](genDecoded: Decoded) extends 
 class InstructionQueuePeekRange(iq_id_len: Int) extends Bundle {
   val iq_id_ptr_len = iq_id_len + 1
 
-  val first = Output(UInt(iq_id_ptr_len.W))
-  val last  = Output(UInt(iq_id_ptr_len.W))
+  val peek1 = Output(UInt(iq_id_ptr_len.W))
+  val peek2 = Output(UInt(iq_id_ptr_len.W))
+  val last  = Output(UInt(iq_id_len.W))
+  val diff  = Output(UInt(iq_id_len.W))
 }
 
 class InstructionQueueUpdatePeekPtr(iq_id_len: Int) extends Bundle {
    val iq_id_ptr_len = iq_id_len + 1
 
-  val en  = Input(Bool())
-  val ptr = Input(UInt(iq_id_ptr_len.W))
+  // val en  = Input(Bool())
+  val peek1 = Input(UInt(iq_id_ptr_len.W))
+  val peek2 = Input(UInt(iq_id_ptr_len.W))
 }
 
 class InstructionQueuePutLsq[Lsq <: Data](genLsq: Lsq) extends Bundle {
@@ -62,6 +65,7 @@ class InstructionQueueRobRange(iq_id_len: Int) extends Bundle {
 
   val first = Output(UInt(iq_id_ptr_len.W))
   val last  = Output(UInt(iq_id_ptr_len.W))
+  val flush_rob_id = Output(UInt(iq_id_ptr_len.W))
 }
 
 class InstructionQueueUpdateRobPtr(iq_id_len: Int) extends Bundle {
@@ -82,15 +86,11 @@ class InstructionQueueDequeue extends Bundle {
 }
 
 class InstructionQueuePeek[Initial <: Data, Decoded <: Data, Lsq <: Data, PhysAddrs <: Data](
-  iq_id_len: Int,
   genInitial: Initial,
   genDecoded: Decoded,
   genLsq: Lsq,
   genPhysAddrs: PhysAddrs,
 ) extends Bundle {
-  val iq_id_ptr_len = iq_id_len + 1
-
-  val iq_id   = Input(UInt(iq_id_ptr_len.W))
   val valid   = Output(Bool())
   val initial = Output(genInitial)
   val decoded = Output(genDecoded)
@@ -123,8 +123,8 @@ class InstructionQueue[Initial <: Data, Decoded <: Data, Lsq <: Data, Rob <: Dat
     val put_pa2 = new InstructionQueuePutPhysAddrs(genPhysAddrs, genWbPhysAddrs)
     val peek_range = new InstructionQueuePeekRange(iq_id_len)
     val upd_peek   = new InstructionQueueUpdatePeekPtr(iq_id_len)
-    val peek1   = new InstructionQueuePeek(iq_id_len, genInitial, genDecoded, genLsq, genPhysAddrs)
-    val peek2   = new InstructionQueuePeek(iq_id_len, genInitial, genDecoded, genLsq, genPhysAddrs)
+    val peek1   = new InstructionQueuePeek(genInitial, genDecoded, genLsq, genPhysAddrs)
+    val peek2   = new InstructionQueuePeek(genInitial, genDecoded, genLsq, genPhysAddrs)
     val rob_range = new InstructionQueueRobRange(iq_id_len)
     val upd_rob   = new InstructionQueueUpdateRobPtr(iq_id_len)
     val read1_all = new InstructionQueueReadAll(iq_id_len, genRob, genWbPhysAddrs)
@@ -149,7 +149,8 @@ class InstructionQueue[Initial <: Data, Decoded <: Data, Lsq <: Data, Rob <: Dat
   val enq         = RegInit(0.U(iq_id_ptr_len.W))
   val decoded_ptr = RegInit(0.U(iq_id_ptr_len.W))
   val lsq_ptr     = RegInit(0.U(iq_id_ptr_len.W))
-  val peek_ptr    = RegInit(0.U(iq_id_ptr_len.W))
+  val peek1_ptr   = RegInit(0.U(iq_id_ptr_len.W))
+  val peek2_ptr   = RegInit(0.U(iq_id_ptr_len.W))
   val rob_ptr     = RegInit(0.U(iq_id_ptr_len.W))
   val deq         = RegInit(0.U(iq_id_ptr_len.W))
 
@@ -258,51 +259,56 @@ class InstructionQueue[Initial <: Data, Decoded <: Data, Lsq <: Data, Rob <: Dat
   }
 
   def peek: Unit = {
-    io.peek_range.first := peek_ptr
+    io.peek_range.peek1 := peek1_ptr
+    io.peek_range.peek2 := peek2_ptr
     io.peek_range.last  := lsq_ptr
+    io.peek_range.diff  := peek2_ptr.take(iq_id_len) - peek1_ptr.take(iq_id_len)
 
-    when (io.upd_peek.en) {
-      peek_ptr := io.upd_peek.ptr
-    }
+    peek1_ptr := io.upd_peek.peek1
+    peek2_ptr := io.upd_peek.peek2
+
     when (io.flush) {
-      peek_ptr    := enq
-      decoded_ptr := enq
-      lsq_ptr     := enq
+      peek1_ptr          := enq
+      peek2_ptr          := enq + 1.U
+      io.peek_range.diff := 1.U
+      decoded_ptr        := enq
+      lsq_ptr            := enq
     }
 
-    val iq_buf_addr_1 = io.peek1.iq_id.take(iq_id_len) >> 1
-    val iq_buf_addr_2 = io.peek2.iq_id.take(iq_id_len) >> 1
-    io.peek1.valid   := (io.peek1.iq_id - lsq_ptr)(iq_id_len)
-    io.peek2.valid   := (io.peek2.iq_id - lsq_ptr)(iq_id_len)
+    val iq_buf_addr_1 = peek1_ptr.take(iq_id_len) >> 1
+    val iq_buf_addr_2 = peek2_ptr.take(iq_id_len) >> 1
+    io.peek1.valid   := (peek1_ptr - lsq_ptr)(iq_id_len)
+    io.peek2.valid   := (peek2_ptr - lsq_ptr)(iq_id_len)
     val initial10 = iq_buf_initial_0(iq_buf_addr_1).asTypeOf(genInitial)
     val initial11 = iq_buf_initial_1(iq_buf_addr_1).asTypeOf(genInitial)
     val initial20 = iq_buf_initial_0(iq_buf_addr_2).asTypeOf(genInitial)
     val initial21 = iq_buf_initial_1(iq_buf_addr_2).asTypeOf(genInitial)
-    io.peek1.initial := Mux(io.peek1.iq_id(0), initial11, initial10)
-    io.peek2.initial := Mux(io.peek2.iq_id(0), initial21, initial20)
+    io.peek1.initial := Mux(peek1_ptr(0), initial11, initial10)
+    io.peek2.initial := Mux(peek2_ptr(0), initial21, initial20)
     val decoded10 = iq_buf_decoded_0(iq_buf_addr_1)
     val decoded11 = iq_buf_decoded_1(iq_buf_addr_1)
     val decoded20 = iq_buf_decoded_0(iq_buf_addr_2)
     val decoded21 = iq_buf_decoded_1(iq_buf_addr_2)
-    io.peek1.decoded := Mux(io.peek1.iq_id(0), decoded11, decoded10)
-    io.peek2.decoded := Mux(io.peek2.iq_id(0), decoded21, decoded20)
+    io.peek1.decoded := Mux(peek1_ptr(0), decoded11, decoded10)
+    io.peek2.decoded := Mux(peek2_ptr(0), decoded21, decoded20)
     val lsq10 = iq_buf_lsq_0(iq_buf_addr_1)
     val lsq11 = iq_buf_lsq_1(iq_buf_addr_1)
     val lsq20 = iq_buf_lsq_0(iq_buf_addr_2)
     val lsq21 = iq_buf_lsq_1(iq_buf_addr_2)
-    io.peek1.lsq := Mux(io.peek1.iq_id(0), lsq11, lsq10)
-    io.peek2.lsq := Mux(io.peek2.iq_id(0), lsq21, lsq20)
+    io.peek1.lsq := Mux(peek1_ptr(0), lsq11, lsq10)
+    io.peek2.lsq := Mux(peek2_ptr(0), lsq21, lsq20)
     val paddrs10 = iq_buf_paddrs_0(iq_buf_addr_1)
     val paddrs11 = iq_buf_paddrs_1(iq_buf_addr_1)
     val paddrs20 = iq_buf_paddrs_0(iq_buf_addr_2)
     val paddrs21 = iq_buf_paddrs_1(iq_buf_addr_2)
-    io.peek1.paddrs := Mux(io.peek1.iq_id(0), paddrs11, paddrs10)
-    io.peek2.paddrs := Mux(io.peek2.iq_id(0), paddrs21, paddrs20)
+    io.peek1.paddrs := Mux(peek1_ptr(0), paddrs11, paddrs10)
+    io.peek2.paddrs := Mux(peek2_ptr(0), paddrs21, paddrs20)
   }
 
   def rob: Unit = {
     io.rob_range.first := rob_ptr
     io.rob_range.last  := deq
+    io.rob_range.flush_rob_id := enq
 
     when (io.upd_rob.en) {
       rob_ptr := io.upd_rob.ptr
@@ -338,7 +344,8 @@ class InstructionQueue[Initial <: Data, Decoded <: Data, Lsq <: Data, Rob <: Dat
   printf(cf"iq enq         = ${enq}\n")
   printf(cf"iq decoded_ptr = ${decoded_ptr}\n")
   printf(cf"iq lsq_ptr     = ${lsq_ptr}\n")
-  printf(cf"iq peek_ptr    = ${peek_ptr}\n")
+  printf(cf"iq peek1_ptr   = ${peek1_ptr}\n")
+  printf(cf"iq peek2_ptr   = ${peek2_ptr}\n")
   printf(cf"iq rob_ptr     = ${rob_ptr}\n")
   printf(cf"iq deq         = ${deq}\n")
 

@@ -101,6 +101,7 @@ class InstructionDecoderOutput(redirect_buffer_size: Int, enable_pipeline_probe:
   val rob_id_ptr_len = rob_id_len + 1
 
   val ready   = Input(Bool())
+  val pause   = Input(Bool())
   val valid   = Output(Bool())
   val initial = Output(new InstructionQueueEntryInitial(redirect_buffer_size, enable_pipeline_probe))
   val decoded = Output(new InstructionQueueEntryDecoded(enable_pipeline_probe))
@@ -237,7 +238,7 @@ class InstructionDecoder(enable_pipeline_probe: Boolean) extends Module {
       ROL        -> List(EXE_ALU, ALU_FSL   , SOP_NOP , OP1_RS1   , OP2_RS2   , OP3_RS1   , OPI_X       , REN_S, WBA_RD),
       ROR        -> List(EXE_ALU, ALU_FSR   , SOP_NOP , OP1_RS1   , OP2_RS2   , OP3_RS1   , OPI_X       , REN_S, WBA_RD),
       RORI       -> List(EXE_ALU, ALU_FSR   , SOP_NOP , OP1_RS1   , OP2_IMM   , OP3_RS1   , OPI_IMI     , REN_S, WBA_RD),
-      BSCTH      -> List(EXE_BLU, BLU_BSCTH , SOP_NOP , OP1_RS1   , OP2_RS2   , OP3_X     , OPI_X       , REN_S, WBA_RD),
+      // BSCTH      -> List(EXE_BLU, BLU_BSCTH , SOP_NOP , OP1_RS1   , OP2_RS2   , OP3_X     , OPI_X       , REN_S, WBA_RD),
       SH_ADD     -> List(EXE_ALU, ALU_ADD   , SOP_SHAD, OP1_RS1   , OP2_RS2   , OP3_IMF   , OPI_X       , REN_S, WBA_RD),
       X_SHADD    -> List(EXE_ALU, ALU_ADD   , SOP_SHAD, OP1_RS1   , OP2_RS2   , OP3_IMF   , OPI_X       , REN_X, WBA_RD),
       BCLR       -> List(EXE_ALU, ALU_BCLR  , SOP_NOP , OP1_RS1   , OP2_RS2   , OP3_X     , OPI_X       , REN_S, WBA_RD),
@@ -505,6 +506,8 @@ class InstructionDecoderUnit(
     new InstructionQueueEntryWbPhysAddrs,
   ))
 
+  val reg_absent = RegInit(0.U(IQ_ENTRIES.W))
+
   io.in1.ready := iq.io.enq1.ready
   io.in1.flush := io.flush
   io.in2.ready := iq.io.enq2.ready
@@ -601,6 +604,9 @@ class InstructionDecoderUnit(
     iq.io.put2.decoded := decoder2.io.decoded
     iq.io.put2.rob     := rob2
     map2(iq.io.put2.decoded.inst_id, reg_in2.inst_id)(_ := _)
+
+    val addr0 = Mux(reg_in1.iq_id(0), reg_in2.iq_id, reg_in1.iq_id) >> 1
+    val addr1 = Mux(reg_in1.iq_id(0), reg_in1.iq_id, reg_in2.iq_id) >> 1
 
     when (reg_in1.valid) {
       printf(cf"decoder pc      : 0x${reg_in1.pc.pc_to_word}%x\n")
@@ -721,30 +727,66 @@ class InstructionDecoderUnit(
   id2
 
   def id3: Unit = {
-    iq.io.peek1.iq_id := iq.io.peek_range.first
-    iq.io.peek2.iq_id := iq.io.peek_range.first + 1.U
+    val iq_id_ptr_len = iq_id_len + 1
 
-    iq.io.upd_peek.en  := iq.io.peek1.valid && io.out1.ready
-    iq.io.upd_peek.ptr := iq.io.peek_range.first + Mux(iq.io.peek2.valid && io.out2.ready, 2.U, 1.U)
+    val peek1_id = iq.io.peek_range.peek1
+    val peek2_id = iq.io.peek_range.peek2
 
-    io.out1.valid   := iq.io.peek1.valid && (!io.flush && !io.stall)
+    val addr2 = iq.io.peek_range.diff
+    val absent2 = reg_absent(addr2)
+
+    val next_peek1_id = Wire(UInt(iq_id_ptr_len.W))
+    val next_peek2_id = Wire(UInt(iq_id_ptr_len.W))
+    val shift1        = WireDefault(false.B)
+    val shift2        = WireDefault(false.B)
+    when (!reg_absent(0) && !(iq.io.peek1.valid && io.out1.ready)) {
+      next_peek1_id := peek1_id
+      next_peek2_id := peek2_id + Mux(iq.io.peek2.valid && !io.out2.pause, 1.U, 0.U)
+    }.elsewhen (reg_absent(1) || ((addr2 === 1.U) && iq.io.peek2.valid && io.out2.ready)) {
+      next_peek1_id := peek1_id + 2.U
+      next_peek2_id := peek2_id + Mux(addr2 === 1.U, 2.U, Mux((addr2 === 2.U) || (iq.io.peek2.valid && !io.out2.pause), 1.U, 0.U))
+      shift2        := true.B
+    }.otherwise {
+      next_peek1_id := peek1_id + 1.U
+      next_peek2_id := peek2_id + Mux(addr2 === 1.U || (iq.io.peek2.valid && !io.out2.pause), 1.U, 0.U)
+      shift1        := true.B
+    }
+
+    val update_absent2 = !absent2 && iq.io.peek2.valid && io.out2.ready
+
+    iq.io.upd_peek.peek1 := next_peek1_id
+    iq.io.upd_peek.peek2 := next_peek2_id
+
+    reg_absent := Mux(io.flush,
+      0.U,
+      (reg_absent | (update_absent2.asUInt << addr2)) >> MuxCase(0.U, Seq(shift1 -> 1.U, shift2 -> 2.U)),
+    )
+
+    io.out1.valid   := iq.io.peek1.valid && !reg_absent(0) && (!io.flush && !io.stall)
     io.out1.initial := iq.io.peek1.initial
     io.out1.decoded := iq.io.peek1.decoded
     io.out1.lsq     := iq.io.peek1.lsq
     io.out1.paddrs  := iq.io.peek1.paddrs
-    io.out1.rob_id  := iq.io.peek_range.first
-    io.out2.valid   := iq.io.peek2.valid && (!io.flush && !io.stall)
+    io.out1.rob_id  := iq.io.peek_range.peek1
+    io.out2.valid   := iq.io.peek2.valid && !absent2 && (!io.flush && !io.stall)
     io.out2.initial := iq.io.peek2.initial
     io.out2.decoded := iq.io.peek2.decoded
     io.out2.lsq     := iq.io.peek2.lsq
     io.out2.paddrs  := iq.io.peek2.paddrs
-    io.out2.rob_id  := iq.io.peek_range.first + 1.U
+    io.out2.rob_id  := iq.io.peek_range.peek2
 
-    // printf(cf"decoder ready      = ${io.out.ready}\n")
-    // printf(cf"decoder peek valid = ${iq.io.peek.valid}\n")
-    // printf(cf"decoder deq        = 0x${iq.io.peek_range.first + 1.U}%x\n")
-    // printf(cf"decoder deq first  = 0x${iq.io.peek_range.first}%x\n")
-    // printf(cf"decoder deq last   = 0x${iq.io.peek_range.last}%x\n")
+    printf(cf"decoder peek1.valid   = ${iq.io.peek1.valid}\n")
+    printf(cf"decoder peek2.valid   = ${iq.io.peek2.valid}\n")
+    printf(cf"decoder out1.ready    = ${io.out1.ready}\n")
+    printf(cf"decoder out2.ready    = ${io.out2.ready}\n")
+    printf(cf"decoder peek1         = ${iq.io.peek_range.peek1}\n")
+    printf(cf"decoder peek2         = ${iq.io.peek_range.peek2}\n")
+    printf(cf"decoder last          = ${iq.io.peek_range.last}\n")
+    printf(cf"decoder shift1        = ${shift1}\n")
+    printf(cf"decoder shift2        = ${shift2}\n")
+    printf(cf"decoder next_peek1_id = ${next_peek1_id}\n")
+    printf(cf"decoder next_peek2_id = ${next_peek2_id}\n")
+    printf(cf"decoder absents       = ${Reverse(reg_absent)}%b\n")
   }
 
   id3
