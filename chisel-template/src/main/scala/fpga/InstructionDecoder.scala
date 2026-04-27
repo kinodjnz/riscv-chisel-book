@@ -92,6 +92,11 @@ class InstructionQueueEntryLsq(lsq_id_len: Int) extends Bundle {
   val lsq_id = UInt(lsq_id_ptr_len.W)
 }
 
+class InstructionDecoderPhysAssigned extends Bundle {
+  val en       = Output(Bool())
+  val wb_paddr = Output(UInt(PHYS_ADDR_LEN.W))
+}
+
 class InstructionDecoderOutput(redirect_buffer_size: Int, enable_pipeline_probe: Boolean, lsq_id_len: Int, rob_id_len: Int) extends Bundle {
   val rob_id_ptr_len = rob_id_len + 1
 
@@ -470,6 +475,8 @@ class InstructionDecoderUnit(
     val in2   = new InstructionDecoderInput(redirect_buffer_size, enable_pipeline_probe)
     val flush = Input(Bool())
     val stall = Input(Bool())
+    val pasn1 = new InstructionDecoderPhysAssigned
+    val pasn2 = new InstructionDecoderPhysAssigned
     val out1  = new InstructionDecoderOutput(redirect_buffer_size, enable_pipeline_probe, lsq_id_len, iq_id_len)
     val out2  = new InstructionDecoderOutput(redirect_buffer_size, enable_pipeline_probe, lsq_id_len, iq_id_len)
     val lsa1  = Flipped(new LoadStoreQueueAlloc(lsq_id_len))
@@ -692,6 +699,11 @@ class InstructionDecoderUnit(
     iq.io.put_pa2.paddrs.wb_paddr        := io.rf_sp2.assign.paddr
     iq.io.put_pa2.wb_paddrs.wb_paddr     := io.rf_sp2.assign.paddr
     iq.io.put_pa2.wb_paddrs.wb_paddr_rel := io.rf_sp2.assign.paddr_rel
+
+    io.pasn1.en       := lsq1_en && (iq.io.read1.decoded.rf_wen === REN_S)
+    io.pasn1.wb_paddr := io.rf_sp1.assign.paddr
+    io.pasn2.en       := lsq2_en && (iq.io.read2.decoded.rf_wen === REN_S)
+    io.pasn2.wb_paddr := io.rf_sp2.assign.paddr
 
     io.pipeline_probe.id2a_valid.foreach(_ := iq.io.read1.valid)
     map2(io.pipeline_probe.id2a_inst_id, iq.io.read1.decoded.inst_id)(_ := _)

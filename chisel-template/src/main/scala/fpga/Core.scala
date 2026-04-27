@@ -475,6 +475,13 @@ class Core(
   idu.io.lsa1 <> lsu.io.alloc1
   idu.io.lsa2 <> lsu.io.alloc2
 
+  when (idu.io.pasn1.en) {
+    scoreboard(idu.io.pasn1.wb_paddr) := true.B
+  }
+  when (idu.io.pasn2.en) {
+    scoreboard(idu.io.pasn2.wb_paddr) := true.B
+  }
+
   //**********************************
   // ID/RRD register
   val id_rrd_ready = !rrd_stall
@@ -676,7 +683,10 @@ class Core(
   when (
     rrd_reg_valid && !rrd_stall && !reg_flush && rrd_reg_rf_wen === REN_S
   ) {
-      scoreboard(rrd_reg_wb_paddr) := rrd_reg_exe_sel =/= EXE_ALU
+      when (rrd_reg_exe_sel === EXE_ALU) {
+        scoreboard(rrd_reg_wb_paddr) := false.B
+      }
+      // scoreboard(rrd_reg_wb_paddr) := rrd_reg_exe_sel =/= EXE_ALU
       rrd_mem_use_reg   := (rrd_reg_exe_sel === EXE_LD  || rrd_reg_exe_sel === EXE_ST)
       rrd_inst2_use_reg := (rrd_reg_exe_sel === EXE_BLU || rrd_reg_exe_sel === EXE_JB)
       rrd_inst3_use_reg := ((rrd_reg_exe_sel === EXE_MD && !PAT_DIVREM.matches(rrd_reg_exe_fun))
@@ -687,7 +697,9 @@ class Core(
   // !lsu.io.out.wb_next && !lsu.io.out.fw_en_next : update scoreboard(rrd_i2_wb_paddr) to !rrd_ready2
   // lsu.io.out.wb_next && lsu.io.out.fw_en_next   : reset scoreboard(lsu.io.out.wb_paddr_next)
   when ((rrd_i2_read && !lsu.io.out.wb_next) || lsu.io.out.fw_en_next) {
-    scoreboard(rrd_i2lsu_wb_paddr) := !rrd_ready2 && !lsu.io.out.fw_en_next
+    when (rrd_ready2 || lsu.io.out.fw_en_next) {
+      scoreboard(rrd_i2lsu_wb_paddr) := false.B
+    }
   }
 
   fetch_unit.io.redir_read.ptr := rrd_reg_bp.fp_ptr
