@@ -755,7 +755,7 @@ void sim_loop() {
                         } else {
                             pc = inst_traces[index].pc;
                             inst = inst_traces[index].inst;
-                            fprintf(stderr, "retired ex1: pc=0x%08x, inst=0x%08x inst_id=%08x\n", pc, inst, inst_id);
+                            fprintf(stderr, "retired ex1: pc=0x%08x, inst=0x%08x inst_id=%u\n", pc, inst, inst_id);
                         }
                         spike_next(index, inst_id, pc, inst, cycles, top->io_pipeline_probe_retire1_wb_addr, top->io_pipeline_probe_retire1_wb_data);
                     }
@@ -771,7 +771,7 @@ void sim_loop() {
                         } else {
                             pc = inst_traces[index].pc;
                             inst = inst_traces[index].inst;
-                            fprintf(stderr, "retired ex2: pc=0x%08x, inst=0x%08x inst_id=%08x\n", pc, inst, inst_id);
+                            fprintf(stderr, "retired ex2: pc=0x%08x, inst=0x%08x inst_id=%u\n", pc, inst, inst_id);
                         }
                         spike_next(index, inst_id, pc, inst, cycles, top->io_pipeline_probe_retire2_wb_addr, top->io_pipeline_probe_retire2_wb_data);
                     }
