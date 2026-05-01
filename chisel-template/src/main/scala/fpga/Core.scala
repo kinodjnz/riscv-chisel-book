@@ -232,7 +232,6 @@ class Core(
   val rrd_reg_wb_paddr         = Wire(UInt(PHYS_ADDR_LEN.W)) // RegInit(0.U(ADDR_LEN.W))
   val rrd_reg_bp               = Wire(new BranchPrediction(REDIRECT_BUFFER_SIZE)) // RegInit(0.U.asTypeOf(new BranchPrediction(REDIRECT_BUFFER_SIZE)))
   val rrd_reg_is_half          = Wire(Bool()) // RegInit(false.B)
-  val rrd_reg_lsq_id           = Wire(UInt((LSQ_ID_LEN + 1).W))
   val rrd_i2_valid             = Wire(Bool())
   val rrd_i2_pc                = Wire(UInt(PC_LEN.W))
   val rrd_i2_rob_id            = Wire(UInt(rob_id_ptr_len.W))
@@ -267,7 +266,6 @@ class Core(
   val ex1_reg_wb_paddr         = RegInit(0.U(PHYS_ADDR_LEN.W))
   val ex1_reg_bp               = RegInit(0.U.asTypeOf(new BranchPrediction(REDIRECT_BUFFER_SIZE)))
   val ex1_reg_is_half          = RegInit(false.B)
-  val ex1_reg_lsq_id           = RegInit(0.U((LSQ_ID_LEN + 1).W))
   val ex1_reg_valid            = RegInit(false.B)
   val ex1_reg_mem_use_reg      = RegInit(false.B)
   val ex1_reg_inst2_use_reg    = RegInit(false.B)
@@ -275,6 +273,7 @@ class Core(
   val ex1_reg_fp_entry         = RegInit(0.U.asTypeOf(new FetchPredictionEntry(PHT_HISTORY_LEN)))
   val ex1_reg_i2_pc            = RegInit(0.U(PC_LEN.W))
   val ex1_reg_i2_rob_id        = RegInit(0.U(rob_id_ptr_len.W))
+  val ex1_reg_i2_is_alu        = RegInit(false.B)
   val ex1_reg_i2_exe_fun       = RegInit(0.U(EXE_FUN_LEN.W))
   // val ex1_reg_i2_sop           = RegInit(0.U(SOP_LEN.W))
   val ex1_reg_i2_op1_data      = RegInit(0.U(WORD_LEN.W))
@@ -514,7 +513,6 @@ class Core(
   rrd_reg_rf_wen           := idu.io.out1.decoded.rf_wen
   rrd_reg_wb_paddr         := idu.io.out1.paddrs.wb_paddr
   rrd_reg_is_half          := idu.io.out1.initial.is_half
-  rrd_reg_lsq_id           := idu.io.out1.lsq.lsq_id
   rrd_reg_bp               := idu.io.out1.initial.bp
 
   rrd_i2_valid             := idu.io.out2.valid
@@ -555,7 +553,10 @@ class Core(
     )
   // val rrd_i1_wb_addr = Mux(rrd_reg_rf_wen === REN_S, rrd_reg_wb_paddr, 0.U(ADDR_LEN.W))
   rrd_ready2 := (reg_flush || !ex2_reg_stall) /*!rrd_stall*/ &&
-    rrd_i2_exe_sel === EXE_ALU && PAT_CLU_FUN.matches(rrd_i2_exe_fun) && rrd_i2_sop === SOP_NOP &&
+    (
+      (rrd_i2_exe_sel === EXE_ALU && PAT_CLU_FUN.matches(rrd_i2_exe_fun) && rrd_i2_sop === SOP_NOP) ||
+      (rrd_i2_exe_sel === EXE_LD)
+    ) &&
     // !rrd_reg_bp.redirected && rrd_reg_exe_sel =/= EXE_JB && rrd_reg_exe_sel =/= EXE_CSR &&
     !rrd_i2_redirected &&
     !lsu.io.out.wb_next &&
@@ -696,7 +697,7 @@ class Core(
   // lsu.io.out.wb_next && !lsu.io.out.fw_en_next  : do not update scoreboard, updated by lsu.io.out.wb_nofw
   // !lsu.io.out.wb_next && !lsu.io.out.fw_en_next : update scoreboard(rrd_i2_wb_paddr) to !rrd_ready2
   // lsu.io.out.wb_next && lsu.io.out.fw_en_next   : reset scoreboard(lsu.io.out.wb_paddr_next)
-  when ((rrd_i2_wb && rrd_ready2 && !lsu.io.out.wb_next) || lsu.io.out.fw_en_next) {
+  when ((rrd_i2_wb && rrd_ready2 && rrd_i2_exe_sel(2) === EXE_ALU(2) && !lsu.io.out.wb_next) || lsu.io.out.fw_en_next) {
     scoreboard(rrd_i2lsu_wb_paddr) := false.B
   }
 
@@ -729,7 +730,6 @@ class Core(
   ex1_reg_bp               := rrd_reg_bp
   ex1_reg_fp_entry         := fetch_unit.io.redir_read.fp_entry
   ex1_reg_is_half          := rrd_reg_is_half
-  ex1_reg_lsq_id           := rrd_reg_lsq_id
   ex1_reg_mem_use_reg      := rrd_mem_use_reg
   ex1_reg_inst2_use_reg    := rrd_inst2_use_reg
   ex1_reg_inst3_use_reg    := rrd_inst3_use_reg
@@ -743,12 +743,13 @@ class Core(
   div_reg_en               := rrd_reg_valid && !rrd_stall && PAT_DIVREM.matches(rrd_reg_exe_fun) && rrd_reg_exe_sel === EXE_MD
   ex1_reg_i2_pc            := rrd_i2_pc
   ex1_reg_i2_rob_id        := rrd_i2_rob_id
+  ex1_reg_i2_is_alu        := (rrd_i2_exe_sel === EXE_ALU)
   ex1_reg_i2_exe_fun       := rrd_i2_exe_fun
   // ex1_reg_i2_sop           := rrd_i2_sop
   ex1_reg_i2_op1_data      := rrd_i2_op1_data
   ex1_reg_i2_op2_data      := rrd_i2_op2_data
   ex1_reg_i2_wb_paddr      := rrd_i2lsu_wb_paddr
-  ex1_reg_i2_rf_wen        := Mux(!rrd_i2_valid || !rrd_ready2, REN_X, rrd_i2_rf_wen)
+  ex1_reg_i2_rf_wen        := Mux(!rrd_i2_valid || !rrd_ready2 || (rrd_i2_exe_sel(2) =/= EXE_ALU(2)), REN_X, rrd_i2_rf_wen)
   ex1_reg_fw2_en           := rrd_fw2_en_next
   ex1_reg_i2_valid         := rrd_i2_valid && rrd_ready2
   map2(ex1_reg_i2_inst_id, rrd_i2_inst_id)(_ := _)
@@ -805,8 +806,10 @@ class Core(
     (ex1_reg_exe_fun === ALU_BEXT)    -> 0.U((WORD_LEN-1).W) ## (ex1_reg_op1_data >> ex1_reg_op2_data(4, 0))(0),
   ))
 
+  val ex1_i2_add_out = ex1_reg_i2_op1_data + ex1_reg_i2_op2_data
+
   val ex1_clu_out = MuxCase(0.U(WORD_LEN.W), Seq(
-    (ex1_reg_i2_exe_fun(2, 0) === ALU_ADD(2, 0)) -> (ex1_reg_i2_op1_data + ex1_reg_i2_op2_data),
+    (ex1_reg_i2_exe_fun(2, 0) === ALU_ADD(2, 0)) -> ex1_i2_add_out,
     (ex1_reg_i2_exe_fun(2, 0) === ALU_SUB(2, 0)) -> (ex1_reg_i2_op1_data - ex1_reg_i2_op2_data),
     (ex1_reg_i2_exe_fun(2, 0) === ALU_XOR(2, 0)) -> (ex1_reg_i2_op1_data ^ ex1_reg_i2_op2_data),
     (ex1_reg_i2_exe_fun(2, 0) === ALU_AND(2, 0)) -> (ex1_reg_i2_op1_data & ex1_reg_i2_op2_data),
@@ -843,7 +846,7 @@ class Core(
   //   Mux(ex1_reg_i2_rf_wen === REN_S, ex1_reg_i2_wb_paddr, 0.U(ADDR_LEN.W)),
   // ))
   // rob.io.fin1.wb_data.map(_ := Mux(lsu.io.out.is_retired, lsu.io.out.wb_data, ex1_clu_out))
-  rob.io.fin1.en     := ex1_i2_valid
+  rob.io.fin1.en     := ex1_i2_valid && ex1_reg_i2_is_alu
   rob.io.fin1.rob_id := ex1_reg_i2_rob_id
   // rob.io.fin1.wb_addr.map(_ := Mux(ex1_reg_i2_rf_wen === REN_S, ex1_reg_i2_wb_paddr, 0.U(ADDR_LEN.W)))
   rob.io.fin1.wb_data.map(_ := ex1_clu_out)
@@ -1006,15 +1009,9 @@ class Core(
   rob.io.bp_upd.entry.is_ret    := ex1_actual_is_ret
   rob.io.bp_upd.entry.next_pc   := ex1_next_pc
 
-  lsu.io.flush.en     := ex1_fetch_pc_en || csr_is_br
-  lsu.io.flush.lsq_id := ex1_reg_lsq_id + Mux(
-    ex1_reg_exe_sel === EXE_ST || ex1_reg_exe_sel === EXE_LD || (ex1_reg_exe_sel === EXE_CSR && PAT_FENCE.matches(ex1_reg_exe_fun)),
-    1.U((LSQ_ID_LEN + 1).W),
-    0.U((LSQ_ID_LEN + 1).W),
-  )
-  when (ex1_fetch_pc_en || csr_is_br) {
-    printf(cf"lsu.io.flush lsq_id : ${lsu.io.flush.lsq_id}\n")
-  }
+  lsu.io.flush.en       := ex1_fetch_pc_en || csr_is_br
+  lsu.io.flush.preserve := ex1_reg_exe_sel === EXE_ST || ex1_reg_exe_sel === EXE_LD ||
+    (ex1_reg_exe_sel === EXE_CSR && PAT_FENCE.matches(ex1_reg_exe_fun))
 
   val ex1_redir_deq_en = ex1_en && ex1_reg_bp.redirected && (!reg_flush && !ex2_reg_stall)
   fetch_unit.io.redir_deq.en := ex1_redir_deq_en
@@ -1447,19 +1444,26 @@ class Core(
   io.pipeline_probe.foreach(_.ex2_valid := ex2_reg_valid)
   map2(io.pipeline_probe, ex2_reg_inst_id)(_.ex2_inst_id := _)
 
-  lsu.io.put.en     := ex1_en && (
+  lsu.io.put1.en       := ex1_en && (
     (ex1_reg_exe_sel === EXE_LD) ||
     (ex1_reg_exe_sel === EXE_ST) ||
     (ex1_reg_exe_sel === EXE_CSR && PAT_FENCE.matches(ex1_reg_exe_fun))
   )
-  lsu.io.put.lsq_id   := ex1_reg_lsq_id
-  lsu.io.put.memop    := ex1_reg_exe_sel.take(MEM_OP_LEN)
-  lsu.io.put.addr     := ex1_add_out
-  lsu.io.put.memw     := ex1_reg_exe_fun.take(MW_LEN)
-  lsu.io.put.wdata    := ex1_reg_op3_data
-  lsu.io.put.wb_paddr := ex1_reg_wb_paddr
-  lsu.io.put.rob_id   := ex1_reg_rob_id
-  map2(lsu.io.put.inst_id, ex1_reg_inst_id)(_ := _)
+  lsu.io.put1.memop    := ex1_reg_exe_sel.take(MEM_OP_LEN)
+  lsu.io.put1.addr     := ex1_add_out
+  lsu.io.put1.memw     := ex1_reg_exe_fun.take(MW_LEN)
+  lsu.io.put1.wdata    := ex1_reg_op3_data
+  lsu.io.put1.wb_paddr := ex1_reg_wb_paddr
+  lsu.io.put1.rob_id   := ex1_reg_rob_id
+  map2(lsu.io.put1.inst_id, ex1_reg_inst_id)(_ := _)
+
+  lsu.io.put2.en       := ex1_i2_valid && !ex1_reg_i2_is_alu
+  lsu.io.put2.addr     := ex1_i2_add_out
+  lsu.io.put2.memw     := ex1_reg_i2_exe_fun.take(MW_LEN)
+  lsu.io.put2.wb_paddr := ex1_reg_i2_wb_paddr
+  lsu.io.put2.rob_id   := ex1_reg_i2_rob_id
+  map2(lsu.io.put2.inst_id, ex1_reg_i2_inst_id)(_ := _)
+
   lsu.io.dmem <> io.dmem
   lsu.io.cache <> io.cache
 
@@ -1618,7 +1622,6 @@ class Core(
   printf(cf"rrd_reg_rs3_paddr: 0x${rrd_reg_rs3_paddr}%x\n")
   printf(cf"rrd_reg_wb_paddr : 0x${rrd_reg_wb_paddr}%x\n")
   printf(cf"rrd_reg_rf_wen   : 0x${rrd_reg_rf_wen}%x\n")
-  printf(cf"rrd_reg_lsq_id   : ${rrd_reg_lsq_id}\n")
   // printf(cf"rrd_reg_wb_sel   : 0x${rrd_reg_wb_sel}%x\n")
   // printf(cf"rrd_reg_is_br    : 0x${rrd_reg_is_br}%x\n")
   printf(cf"rrd_ready2       : ${rrd_ready2}%d\n")
@@ -1680,7 +1683,6 @@ class Core(
   printf(cf"ex1_reg_is_half  : ${ex1_reg_is_half}\n")
   printf(cf"ex1_reg_actual_at: 0x${ex1_actual_attr}%x\n")
   printf(cf"ex1_redir_deq_en : ${ex1_redir_deq_en}\n")
-  printf(cf"ex1_reg_lsq_id   : ${ex1_reg_lsq_id}\n")
   // printf(cf"ex1_bfx_sext     : 0x${ex1_bfx_sext}%x\n")
   // printf(cf"ex1_bfx_sign_shif: 0x${ex1_bfx_sign_shift}%x\n")
   printf(cf"ex2_reg_fw_en    : ${ex2_reg_fw_en}%d\n")

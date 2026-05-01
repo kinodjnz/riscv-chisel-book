@@ -86,18 +86,12 @@ class InstructionQueueEntryWbPhysAddrs extends Bundle {
   val wb_paddr_rel = UInt(PHYS_ADDR_LEN.W)
 }
 
-class InstructionQueueEntryLsq(lsq_id_len: Int) extends Bundle {
-  val lsq_id_ptr_len = lsq_id_len + 1
-
-  val lsq_id = UInt(lsq_id_ptr_len.W)
-}
-
 class InstructionDecoderPhysAssigned extends Bundle {
   val en       = Output(Bool())
   val wb_paddr = Output(UInt(PHYS_ADDR_LEN.W))
 }
 
-class InstructionDecoderOutput(redirect_buffer_size: Int, enable_pipeline_probe: Boolean, lsq_id_len: Int, rob_id_len: Int) extends Bundle {
+class InstructionDecoderOutput(redirect_buffer_size: Int, enable_pipeline_probe: Boolean, rob_id_len: Int) extends Bundle {
   val rob_id_ptr_len = rob_id_len + 1
 
   val ready   = Input(Bool())
@@ -105,7 +99,6 @@ class InstructionDecoderOutput(redirect_buffer_size: Int, enable_pipeline_probe:
   val valid   = Output(Bool())
   val initial = Output(new InstructionQueueEntryInitial(redirect_buffer_size, enable_pipeline_probe))
   val decoded = Output(new InstructionQueueEntryDecoded(enable_pipeline_probe))
-  val lsq     = Output(new InstructionQueueEntryLsq(lsq_id_len))
   val paddrs  = Output(new InstructionQueueEntryPhysAddrs)
   val rob_id  = Output(UInt(rob_id_ptr_len.W))
 }
@@ -469,7 +462,6 @@ class InstructionDecoderUnit(
 ) extends Module {
   val iq_id_len = log2Ceil(IQ_ENTRIES)
   val iq_id_ptr_len = iq_id_len + 1
-  val lsq_id_len = log2Ceil(LSQ_ENTRIES)
 
   val io = IO(new Bundle {
     val in1   = new InstructionDecoderInput(redirect_buffer_size, enable_pipeline_probe)
@@ -478,10 +470,10 @@ class InstructionDecoderUnit(
     val stall = Input(Bool())
     val pasn1 = new InstructionDecoderPhysAssigned
     val pasn2 = new InstructionDecoderPhysAssigned
-    val out1  = new InstructionDecoderOutput(redirect_buffer_size, enable_pipeline_probe, lsq_id_len, iq_id_len)
-    val out2  = new InstructionDecoderOutput(redirect_buffer_size, enable_pipeline_probe, lsq_id_len, iq_id_len)
-    val lsa1  = Flipped(new LoadStoreQueueAlloc(lsq_id_len))
-    val lsa2  = Flipped(new LoadStoreQueueAlloc(lsq_id_len))
+    val out1  = new InstructionDecoderOutput(redirect_buffer_size, enable_pipeline_probe, iq_id_len)
+    val out2  = new InstructionDecoderOutput(redirect_buffer_size, enable_pipeline_probe, iq_id_len)
+    val lsa1  = Flipped(new LoadStoreQueueAlloc)
+    val lsa2  = Flipped(new LoadStoreQueueAlloc)
     val rf_sp1 = Flipped(new SpeculativeMappingOps)
     val rf_sp2 = Flipped(new SpeculativeMappingOps)
     val rob   = new Bundle {
@@ -500,7 +492,6 @@ class InstructionDecoderUnit(
     IQ_ENTRIES,
     new InstructionQueueEntryInitial(redirect_buffer_size, enable_pipeline_probe),
     new InstructionQueueEntryDecoded(enable_pipeline_probe),
-    new InstructionQueueEntryLsq(lsq_id_len),
     new InstructionQueueEntryRob,
     new InstructionQueueEntryPhysAddrs,
     new InstructionQueueEntryWbPhysAddrs,
@@ -650,7 +641,7 @@ class InstructionDecoderUnit(
       ) {
         io.lsa1.en := (!io.flush && !io.stall)
         when (io.lsa1.valid) {
-          printf(cf"iq lsq alloc1, exe_sel=${iq.io.read1.decoded.exe_sel} exe_fun=${iq.io.read1.decoded.exe_fun} lsq_id=${io.lsa1.lsq_id}\n")
+          printf(cf"iq lsq alloc1, exe_sel=${iq.io.read1.decoded.exe_sel} exe_fun=${iq.io.read1.decoded.exe_fun}\n")
           printf(cf"iq lsq inst_id=${iq.io.read1.decoded.inst_id.getOrElse(0)}\n")
           lsq1_en := true.B
         }
@@ -659,7 +650,6 @@ class InstructionDecoderUnit(
       }
     }
     iq.io.lsq1.en         := lsq1_en
-    iq.io.lsq1.lsq.lsq_id := io.lsa1.lsq_id
 
     io.lsa2.en    := false.B
     // iq.io.lsq2.en := false.B
@@ -670,7 +660,7 @@ class InstructionDecoderUnit(
       ) {
         io.lsa2.en := (!io.flush && !io.stall)
         when (io.lsa2.valid) {
-          printf(cf"iq lsq alloc2, exe_sel=${iq.io.read2.decoded.exe_sel} exe_fun=${iq.io.read2.decoded.exe_fun} lsq_id=${io.lsa2.lsq_id}\n")
+          printf(cf"iq lsq alloc2, exe_sel=${iq.io.read2.decoded.exe_sel} exe_fun=${iq.io.read2.decoded.exe_fun}\n")
           printf(cf"iq lsq inst_id=${iq.io.read2.decoded.inst_id.getOrElse(0)}\n")
           lsq2_en := true.B
         }
@@ -679,7 +669,6 @@ class InstructionDecoderUnit(
       }
     }
     iq.io.lsq2.en         := lsq2_en
-    iq.io.lsq2.lsq.lsq_id := io.lsa2.lsq_id
 
     io.rf_sp1.map_rs1.addr := iq.io.read1.decoded.rs1_addr
     io.rf_sp1.map_rs2.addr := iq.io.read1.decoded.rs2_addr
@@ -765,13 +754,11 @@ class InstructionDecoderUnit(
     io.out1.valid   := iq.io.peek1.valid && !reg_absent(0) && (!io.flush && !io.stall)
     io.out1.initial := iq.io.peek1.initial
     io.out1.decoded := iq.io.peek1.decoded
-    io.out1.lsq     := iq.io.peek1.lsq
     io.out1.paddrs  := iq.io.peek1.paddrs
     io.out1.rob_id  := iq.io.peek_range.peek1
     io.out2.valid   := iq.io.peek2.valid && !absent2 && (!io.flush && !io.stall)
     io.out2.initial := iq.io.peek2.initial
     io.out2.decoded := iq.io.peek2.decoded
-    io.out2.lsq     := iq.io.peek2.lsq
     io.out2.paddrs  := iq.io.peek2.paddrs
     io.out2.rob_id  := iq.io.peek_range.peek2
 

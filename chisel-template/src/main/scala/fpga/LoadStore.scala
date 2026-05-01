@@ -49,31 +49,35 @@ class LoadData extends Bundle {
   val wb_paddr       = UInt(PHYS_ADDR_LEN.W)
 }
 
-class LoadStoreQueueFlush(lsq_id_len: Int) extends Bundle {
-  val lsq_id_ptr_len = lsq_id_len + 1
-
-  val en     = Input(Bool())
-  val lsq_id = Input(UInt(lsq_id_ptr_len.W))
+class LoadStoreQueueFlush extends Bundle {
+  val en       = Input(Bool())
+  val preserve = Input(Bool())
 }
 
-class LoadStoreQueueAlloc(lsq_id_len: Int) extends Bundle {
-  val lsq_id_ptr_len = lsq_id_len + 1
-
+class LoadStoreQueueAlloc extends Bundle {
   val en     = Input(Bool())
   val valid  = Output(Bool())
-  val lsq_id = Output(UInt(lsq_id_ptr_len.W))
 }
 
-class LoadStoreQueuePut(enable_pipeline_probe: Boolean, lsq_id_len: Int, rob_id_len: Int) extends Bundle {
-  val lsq_id_ptr_len = lsq_id_len + 1
+class LoadStoreQueuePut(enable_pipeline_probe: Boolean, rob_id_len: Int) extends Bundle {
   val rob_id_ptr_len = rob_id_len + 1
 
   val en       = Input(Bool())
-  val lsq_id   = Input(UInt(lsq_id_ptr_len.W))
   val memop    = Input(UInt(MEM_OP_LEN.W))
   val addr     = Input(UInt(WORD_LEN.W))
   val memw     = Input(UInt(MW_LEN.W))
   val wdata    = Input(UInt(WORD_LEN.W))
+  val wb_paddr = Input(UInt(PHYS_ADDR_LEN.W))
+  val rob_id   = Input(UInt(rob_id_ptr_len.W))
+  val inst_id  = Option.when(enable_pipeline_probe)(Input(UInt(INST_ID_LEN.W)))
+}
+
+class LoadStoreQueuePutLoad(enable_pipeline_probe: Boolean, rob_id_len: Int) extends Bundle {
+  val rob_id_ptr_len = rob_id_len + 1
+
+  val en       = Input(Bool())
+  val addr     = Input(UInt(WORD_LEN.W))
+  val memw     = Input(UInt(MW_LEN.W))
   val wb_paddr = Input(UInt(PHYS_ADDR_LEN.W))
   val rob_id   = Input(UInt(rob_id_ptr_len.W))
   val inst_id  = Option.when(enable_pipeline_probe)(Input(UInt(INST_ID_LEN.W)))
@@ -104,87 +108,111 @@ class LoadStoreUnit(enable_pipeline_probe: Boolean, dram_start: BigInt, dram_len
 
   val io = IO(new Bundle {
     val out            = new LoadStoreOutput(rob_id_len)
-    val flush          = new LoadStoreQueueFlush(lsq_id_len)
-    val alloc1         = new LoadStoreQueueAlloc(lsq_id_len)
-    val alloc2         = new LoadStoreQueueAlloc(lsq_id_len)
-    val put            = new LoadStoreQueuePut(enable_pipeline_probe, lsq_id_len, rob_id_len)
+    val flush          = new LoadStoreQueueFlush
+    val alloc1         = new LoadStoreQueueAlloc
+    val alloc2         = new LoadStoreQueueAlloc
+    val put1           = new LoadStoreQueuePut(enable_pipeline_probe, rob_id_len)
+    val put2           = new LoadStoreQueuePutLoad(enable_pipeline_probe, rob_id_len)
     val dmem           = Flipped(new DmemPortIo)
     val cache          = Flipped(new CachePort)
     val debug_signals  = new LoadStoreDebugSignals
     val pipeline_probe = Option.when(enable_pipeline_probe)(new LoadStorePipelineProbe)
   })
 
-  val queue = Mem(lsq_entries, UInt(new LoadStoreQueueEntry(rob_id_len, enable_pipeline_probe).getWidth.W))
-  // val queue = Mem(lsq_entries, new LoadStoreQueueEntry(rob_id_len, enable_pipeline_probe))
-  val enq   = RegInit(0.U(lsq_id_ptr_len.W))
-  val deq   = RegInit(0.U(lsq_id_ptr_len.W))
-  val filled = Mem(lsq_entries, UInt(1.W))
+  val queue0 = Mem(lsq_entries, UInt(new LoadStoreQueueEntry(rob_id_len, enable_pipeline_probe).getWidth.W))
+  val queue1 = Mem(lsq_entries, UInt(new LoadStoreQueueEntry(rob_id_len, enable_pipeline_probe).getWidth.W))
+  val q_sel  = Mem(lsq_entries, UInt(1.W))
+  val rsv    = RegInit(0.U(lsq_id_ptr_len.W))
+  val enq    = RegInit(0.U(lsq_id_ptr_len.W))
+  val deq    = RegInit(0.U(lsq_id_ptr_len.W))
 
   val mem2_stall = Wire(Bool())
 
   def alloc = {
-    val space = enq - deq
+    val space = rsv - deq
     val valid1 = !space(lsq_id_len)
     val valid2 = valid1 && !space.take(lsq_id_len).andR
     io.alloc1.valid  := valid1
-    io.alloc1.lsq_id := enq
     io.alloc2.valid  := valid2 || !io.alloc1.en && valid1
-    io.alloc2.lsq_id := enq
     when (io.alloc1.en && valid1 && io.alloc2.en && valid2) {
-      enq := enq + 2.U
-      io.alloc2.lsq_id := enq + 1.U
-      filled(enq.take(lsq_id_len))         := 0.U(1.W)
-      filled((enq + 1.U).take(lsq_id_len)) := 0.U(1.W)
-    }.elsewhen (io.alloc1.en && valid1) {
-      enq := enq + 1.U
-      io.alloc2.lsq_id := enq + 1.U
-      filled(enq.take(lsq_id_len)) := 0.U(1.W)
-    }.elsewhen (io.alloc2.en && valid1) {
-      enq := enq + 1.U
-      filled(enq.take(lsq_id_len)) := 0.U(1.W)
+      rsv := rsv + 2.U
+    }.elsewhen ((io.alloc1.en || io.alloc2.en) && valid1) {
+      rsv := rsv + 1.U
     }
   }
   alloc
 
   def put = {
-    val is_dram = io.put.addr(WORD_LEN-1, dram_addr_bits) === dram_start.U(WORD_LEN-1, dram_addr_bits)
-    val aligned_lw = io.put.addr(1, 0) === "b00".U &&
-      io.put.memw =/= MW_B && io.put.memw =/= MW_BU &&
-      io.put.memw =/= MW_H && io.put.memw =/= MW_HU
-    val entry = Wire(new LoadStoreQueueEntry(rob_id_len, enable_pipeline_probe))
-    entry.addr          := io.put.addr(WORD_LEN-1, 2)
-    entry.wstrb         := (MuxCase("b1111".U, Seq(
-      (io.put.memw === MW_B || io.put.memw === MW_BU) -> "b0001".U,
-      (io.put.memw === MW_H || io.put.memw === MW_HU) -> "b0011".U,
-    )) << (io.put.addr(1, 0)))(6, 0)
-    entry.unaligned     := MuxCase(io.put.addr(1, 0) =/= "b00".U, Seq(
-      (io.put.memw === MW_B || io.put.memw === MW_BU) -> false.B,
-      (io.put.memw === MW_H || io.put.memw === MW_HU) -> (io.put.addr(1, 0) === "b11".U),
-    )) && (io.put.memop === MEM_OP_LD || io.put.memop === MEM_OP_ST)
-    val wdata = ((io.put.wdata ## io.put.wdata(31, 8)) << (8.U * io.put.addr(1, 0)))(WORD_LEN+23, WORD_LEN-8)
-    entry.data          := Mux(io.put.memop === MEM_OP_LD,
-      io.put.memw(2) ## aligned_lw ## io.put.addr(1, 0) ## wdata(27, 6) ## io.put.wb_paddr,
+    val is_dram1 = io.put1.addr(WORD_LEN-1, dram_addr_bits) === dram_start.U(WORD_LEN-1, dram_addr_bits)
+    val aligned_lw1 = io.put1.addr(1, 0) === "b00".U &&
+      io.put1.memw =/= MW_B && io.put1.memw =/= MW_BU &&
+      io.put1.memw =/= MW_H && io.put1.memw =/= MW_HU
+    val entry1 = Wire(new LoadStoreQueueEntry(rob_id_len, enable_pipeline_probe))
+    entry1.addr          := io.put1.addr(WORD_LEN-1, 2)
+    entry1.wstrb         := (MuxCase("b1111".U, Seq(
+      (io.put1.memw === MW_B || io.put1.memw === MW_BU) -> "b0001".U,
+      (io.put1.memw === MW_H || io.put1.memw === MW_HU) -> "b0011".U,
+    )) << (io.put1.addr(1, 0)))(6, 0)
+    entry1.unaligned     := MuxCase(io.put1.addr(1, 0) =/= "b00".U, Seq(
+      (io.put1.memw === MW_B || io.put1.memw === MW_BU) -> false.B,
+      (io.put1.memw === MW_H || io.put1.memw === MW_HU) -> (io.put1.addr(1, 0) === "b11".U),
+    )) && (io.put1.memop === MEM_OP_LD || io.put1.memop === MEM_OP_ST)
+    val wdata = ((io.put1.wdata ## io.put1.wdata(31, 8)) << (8.U * io.put1.addr(1, 0)))(WORD_LEN+23, WORD_LEN-8)
+    entry1.data          := Mux(io.put1.memop === MEM_OP_LD,
+      io.put1.memw(2) ## aligned_lw1 ## io.put1.addr(1, 0) ## wdata(27, 6) ## io.put1.wb_paddr,
       wdata,
     )
-    entry.memwl         := io.put.memw.take(2)
-    entry.is_mem_load   := !is_dram && (io.put.memop === MEM_OP_LD)
-    entry.is_mem_store  := !is_dram && (io.put.memop === MEM_OP_ST)
-    entry.is_dram_load  :=  is_dram && (io.put.memop === MEM_OP_LD)
-    entry.is_dram_store :=  is_dram && (io.put.memop === MEM_OP_ST)
-    entry.is_dram_fence := (io.put.memop === MEM_OP_FENCE)
-    entry.rob_id        := io.put.rob_id
-    map2(entry.inst_id, io.put.inst_id)(_ := _)
-    when (io.put.en) {
-      queue(io.put.lsq_id.take(lsq_id_len))  := entry.asTypeOf(UInt(new LoadStoreQueueEntry(rob_id_len, enable_pipeline_probe).getWidth.W))
-      // queue(io.put.lsq_id.take(lsq_id_len))  := entry
-      filled(io.put.lsq_id.take(lsq_id_len)) := 1.U(1.W)
+    entry1.memwl         := io.put1.memw.take(2)
+    entry1.is_mem_load   := !is_dram1 && (io.put1.memop === MEM_OP_LD)
+    entry1.is_mem_store  := !is_dram1 && (io.put1.memop === MEM_OP_ST)
+    entry1.is_dram_load  :=  is_dram1 && (io.put1.memop === MEM_OP_LD)
+    entry1.is_dram_store :=  is_dram1 && (io.put1.memop === MEM_OP_ST)
+    entry1.is_dram_fence := (io.put1.memop === MEM_OP_FENCE)
+    entry1.rob_id        := io.put1.rob_id
+    map2(entry1.inst_id, io.put1.inst_id)(_ := _)
+
+    val is_dram2 = io.put2.addr(WORD_LEN-1, dram_addr_bits) === dram_start.U(WORD_LEN-1, dram_addr_bits)
+    val aligned_lw2 = io.put2.addr(1, 0) === "b00".U &&
+      io.put2.memw =/= MW_B && io.put2.memw =/= MW_BU &&
+      io.put2.memw =/= MW_H && io.put2.memw =/= MW_HU
+    val entry2 = Wire(new LoadStoreQueueEntry(rob_id_len, enable_pipeline_probe))
+    entry2.addr          := io.put2.addr(WORD_LEN-1, 2)
+    entry2.wstrb         := "b1111".U
+    entry2.unaligned     := MuxCase(io.put2.addr(1, 0) =/= "b00".U, Seq(
+      (io.put2.memw === MW_B || io.put2.memw === MW_BU) -> false.B,
+      (io.put2.memw === MW_H || io.put2.memw === MW_HU) -> (io.put2.addr(1, 0) === "b11".U),
+    ))
+    entry2.data          := io.put2.memw(2) ## aligned_lw2 ## io.put2.addr(1, 0) ## 0.U(22.W) ## io.put2.wb_paddr
+    entry2.memwl         := io.put2.memw.take(2)
+    entry2.is_mem_load   := !is_dram2
+    entry2.is_mem_store  := false.B
+    entry2.is_dram_load  :=  is_dram2
+    entry2.is_dram_store := false.B
+    entry2.is_dram_fence := false.B
+    entry2.rob_id        := io.put2.rob_id
+    map2(entry2.inst_id, io.put2.inst_id)(_ := _)
+
+    when (io.put1.en) {
+      queue0(enq.take(lsq_id_len)) := entry1.asTypeOf(UInt(new LoadStoreQueueEntry(rob_id_len, enable_pipeline_probe).getWidth.W))
+      q_sel(enq.take(lsq_id_len)) := 0.U
+    }
+    when (io.put2.en) {
+      val lsq_id = Mux(io.put1.en, (enq + 1.U).take(lsq_id_len), enq.take(lsq_id_len))
+      queue1(lsq_id) := entry2.asTypeOf(UInt(new LoadStoreQueueEntry(rob_id_len, enable_pipeline_probe).getWidth.W))
+      q_sel(lsq_id) := 1.U
+    }
+    when (io.put1.en && io.put2.en) {
+      enq := enq + 2.U
+    }.elsewhen (io.put1.en || io.put2.en) {
+      enq := enq + 1.U
     }
   }
   put
 
   def flush = {
     when (io.flush.en) {
-      enq := io.flush.lsq_id
+      rsv := enq + Mux(io.put1.en && io.flush.preserve, 1.U, 0.U)
+      enq := enq + Mux(io.put1.en && io.flush.preserve, 1.U, 0.U)
     }
   }
   flush
@@ -195,9 +223,8 @@ class LoadStoreUnit(enable_pipeline_probe: Boolean, dram_start: BigInt, dram_len
     val mem1_dram_busy = Wire(Bool())
     val mem1_unaligned = Wire(Bool())
 
-    val entry = queue(deq).asTypeOf(new LoadStoreQueueEntry(rob_id_len, enable_pipeline_probe))
-    // val entry = queue(deq)
-    val valid = (deq - enq)(lsq_id_len) && filled(deq).asBool
+    val entry = Mux(q_sel(deq) === 0.U, queue0(deq), queue1(deq)).asTypeOf(new LoadStoreQueueEntry(rob_id_len, enable_pipeline_probe))
+    val valid = (deq - enq)(lsq_id_len)
 
     val mem_stall = mem1_mem_busy || mem1_dram_busy || mem1_unaligned || mem2_stall
 
@@ -248,13 +275,13 @@ class LoadStoreUnit(enable_pipeline_probe: Boolean, dram_start: BigInt, dram_len
 
     val loads = entry.data.asTypeOf(new LoadData)
 
-    printf(cf"lsq_filled       : 0x${Cat((0 until LSQ_ENTRIES).map(i => filled(i).asUInt).reverse)}%x\n")
+    printf(cf"lsq_rsv          : ${rsv}\n")
     printf(cf"lsq_enq          : ${enq}\n")
     printf(cf"lsq_deq          : ${deq}\n")
-    for (i <- 0 until 4) {
+    for (i <- 0 until LSQ_ENTRIES) {
       when (i.U < enq - deq) {
-        val e = queue((deq + i.U).take(lsq_id_len)).asTypeOf(new LoadStoreQueueEntry(rob_id_len, enable_pipeline_probe))
-        // val e = queue((deq + i.U).take(lsq_id_len))
+        val lsq_id = (deq + i.U).take(lsq_id_len)
+        val e = Mux(q_sel(lsq_id) === 0.U, queue0(lsq_id), queue1(lsq_id)).asTypeOf(new LoadStoreQueueEntry(rob_id_len, enable_pipeline_probe))
         printf(cf"q(${deq+i.U}).addr      : 0x${e.addr ## 0.U(2.W)}%x\n")
         printf(cf"q(${deq+i.U}).memw      : 0x${e.data.asTypeOf(new LoadData).unsigned ## e.memwl}%x\n")
         printf(cf"q(${deq+i.U}).wdata     : 0x${e.data}%x\n")
