@@ -1088,14 +1088,14 @@ class Core(
   val csr_mstatus_mie_fw_en = WireDefault(false.B)
   val csr_mstatus_mie_fw = WireDefault(false.B)
   val csr_reg_is_meintr = RegNext(
-    ((csr_mstatus_mie_fw_en && csr_mstatus_mie_fw) || (!csr_mstatus_mie_fw_en && csr_reg_mstatus_mie)) &&
+    Mux(csr_mstatus_mie_fw_en, csr_mstatus_mie_fw, csr_reg_mstatus_mie) &&
       io.intr &&
-      ((csr_mie_fw_en && csr_mie_meie_fw) || (!csr_mie_fw_en && csr_reg_mie_meie))
+      Mux(csr_mie_fw_en, csr_mie_meie_fw, csr_reg_mie_meie)
   )
   val csr_reg_is_mtintr = RegNext(
-    ((csr_mstatus_mie_fw_en && csr_mstatus_mie_fw) || (!csr_mstatus_mie_fw_en && csr_reg_mstatus_mie)) &&
+    Mux(csr_mstatus_mie_fw_en, csr_mstatus_mie_fw, csr_reg_mstatus_mie) &&
       mtimer.io.intr &&
-      ((csr_mie_fw_en && csr_mie_mtie_fw) || (!csr_mie_fw_en && csr_reg_mie_mtie))
+      Mux(csr_mie_fw_en, csr_mie_mtie_fw, csr_reg_mie_mtie)
   )
 
   val csr_valid = ex1_reg_valid && (!reg_flush && !ex2_reg_stall)
