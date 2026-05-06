@@ -564,12 +564,12 @@ class Memory() extends Module {
         io.cache_array2.ren := true.B
         io.cache_array2.raddr := req_addr.index
         // reg_dcache_read := true.B
-        when (io.cache.ren || io.cache.wen) {
-          when (io.cache.ren) {
-            dcache_state := DCacheState.LookupForRead
-          }.otherwise {
-            dcache_state := DCacheState.LookupForWrite
-          }
+        when (io.cache.ren) {
+          dcache_state := DCacheState.LookupForRead
+        }.elsewhen (io.cache.wen) {
+          dcache_state := DCacheState.LookupForWrite
+        }.otherwise {
+          dcache_state := DCacheState.Ready
         }
       }
     }
@@ -627,9 +627,9 @@ class Memory() extends Module {
           io.cache_array2.raddr := req_addr.index
           // reg_dcache_read := true.B
           when (io.cache.ren) {
-              dcache_state := DCacheState.LookupForRead
+            dcache_state := DCacheState.LookupForRead
           }.elsewhen (io.cache.wen) {
-              dcache_state := DCacheState.LookupForWrite
+            dcache_state := DCacheState.LookupForWrite
           }.otherwise {
             dcache_state := DCacheState.Ready
           }
@@ -730,9 +730,9 @@ class Memory() extends Module {
           io.cache_array2.raddr := req_addr.index
           // reg_dcache_read := true.B
           when (io.cache.ren) {
-              dcache_state := DCacheState.LookupForRead
+            dcache_state := DCacheState.LookupForRead
           }.elsewhen (io.cache.wen) {
-              dcache_state := DCacheState.LookupForWrite
+            dcache_state := DCacheState.LookupForWrite
           }.otherwise {
             dcache_state := DCacheState.Ready
           }

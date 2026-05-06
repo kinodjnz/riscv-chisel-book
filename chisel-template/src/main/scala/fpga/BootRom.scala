@@ -57,7 +57,7 @@ class BootRom(data_memory_path: String = null, imem_size_in_bytes: Int = 2048, e
     }
   }
   odd_addr := rwaddr(0).asBool
-  when (!io.dmem.wen && io.dmem.ren) {
+  when (/*!io.dmem.wen &&*/ io.dmem.ren) {
     imem_rdata := imem.read(rwaddr(addr_len, 1))
   }
   io.dmem.rdata := Mux(odd_addr, (imem_rdata >> WORD_LEN)(WORD_LEN-1, 0), imem_rdata(WORD_LEN-1, 0))

@@ -110,8 +110,8 @@ class Sdc() extends Module {
   val rx_res = RegInit(0.U(136.W))
   val rx_res_ready = RegInit(false.B)
   val rx_res_intr_en = RegInit(false.B)
-  val rx_res_crc = Reg(Vec(7, Bool()))
-  val rx_res_crc_error = RegInit(false.B)
+  // val rx_res_crc = Reg(Vec(7, Bool()))
+  val rx_res_crc_error = false.B // RegInit(false.B)
   val rx_res_crc_en = RegInit(false.B)
   val rx_res_timer = RegInit(0.U(8.W))
   val rx_res_timeout = RegInit(false.B)
@@ -131,8 +131,8 @@ class Sdc() extends Module {
   val rx_dat_continuous = RegInit(false.B)
   val rx_dat_ready = RegInit(false.B)
   val rx_dat_intr_en = RegInit(false.B)
-  val rx_dat_crc = Reg(Vec(16, UInt(4.W)))
-  val rx_dat_crc_error = RegInit(false.B)
+  // val rx_dat_crc = Reg(Vec(16, UInt(4.W)))
+  val rx_dat_crc_error = false.B // RegInit(false.B)
   val rx_dat_timer = RegInit(0.U(19.W))
   val rx_dat_timeout = RegInit(false.B)
   val rx_dat_overrun = RegInit(false.B)
@@ -184,21 +184,21 @@ class Sdc() extends Module {
         rx_res_bits(0) := rx_res_next
         rx_res_counter := rx_res_counter - 1.U
         rx_res_in_progress := true.B
-        val crc_out = rx_res_crc(6)
-        rx_res_crc(0) := rx_res_next ^ crc_out
-        rx_res_crc(1) := rx_res_crc(0)
-        rx_res_crc(2) := rx_res_crc(1)
-        rx_res_crc(3) := rx_res_crc(2) ^ crc_out
-        rx_res_crc(4) := rx_res_crc(3)
-        rx_res_crc(5) := rx_res_crc(4)
-        rx_res_crc(6) := rx_res_crc(5)
+        // val crc_out = rx_res_crc(6)
+        // rx_res_crc(0) := rx_res_next ^ crc_out
+        // rx_res_crc(1) := rx_res_crc(0)
+        // rx_res_crc(2) := rx_res_crc(1)
+        // rx_res_crc(3) := rx_res_crc(2) ^ crc_out
+        // rx_res_crc(4) := rx_res_crc(3)
+        // rx_res_crc(5) := rx_res_crc(4)
+        // rx_res_crc(6) := rx_res_crc(5)
         //printf(cf"rx_res_crc    : 0x${Cat(rx_res_crc.reverse)}%x\n")
         when (rx_res_counter === 1.U) {
           //printf(cf"final rx_crc  : 0x${Cat(rx_res_crc.reverse)}%x\n")
           rx_res_in_progress := false.B
           rx_res := Cat(Cat(rx_res_bits.reverse), rx_res_next)
           rx_res_ready := true.B
-          rx_res_crc_error := rx_res_crc_en && Cat(rx_res_crc) =/= 0.U
+          // rx_res_crc_error := rx_res_crc_en && Cat(rx_res_crc) =/= 0.U
           when (rx_res_type === RES_TYPE_R1B) {
             rx_busy_timer := rx_busy_timeout.U
           }
@@ -285,23 +285,23 @@ class Sdc() extends Module {
         (0 to 6).foreach(i => rx_dat_bits(i + 1) := rx_dat_bits(i))
         rx_dat_bits(0) := rx_dat_next
         rx_dat_counter := rx_dat_counter - 1.U
-        val crc_out = rx_dat_crc(15)
-        rx_dat_crc(0) := rx_dat_next ^ crc_out
-        rx_dat_crc(1) := rx_dat_crc(0)
-        rx_dat_crc(2) := rx_dat_crc(1)
-        rx_dat_crc(3) := rx_dat_crc(2)
-        rx_dat_crc(4) := rx_dat_crc(3)
-        rx_dat_crc(5) := rx_dat_crc(4) ^ crc_out
-        rx_dat_crc(6) := rx_dat_crc(5)
-        rx_dat_crc(7) := rx_dat_crc(6)
-        rx_dat_crc(8) := rx_dat_crc(7)
-        rx_dat_crc(9) := rx_dat_crc(8)
-        rx_dat_crc(10) := rx_dat_crc(9)
-        rx_dat_crc(11) := rx_dat_crc(10)
-        rx_dat_crc(12) := rx_dat_crc(11) ^ crc_out
-        rx_dat_crc(13) := rx_dat_crc(12)
-        rx_dat_crc(14) := rx_dat_crc(13)
-        rx_dat_crc(15) := rx_dat_crc(14)
+        // val crc_out = rx_dat_crc(15)
+        // rx_dat_crc(0) := rx_dat_next ^ crc_out
+        // rx_dat_crc(1) := rx_dat_crc(0)
+        // rx_dat_crc(2) := rx_dat_crc(1)
+        // rx_dat_crc(3) := rx_dat_crc(2)
+        // rx_dat_crc(4) := rx_dat_crc(3)
+        // rx_dat_crc(5) := rx_dat_crc(4) ^ crc_out
+        // rx_dat_crc(6) := rx_dat_crc(5)
+        // rx_dat_crc(7) := rx_dat_crc(6)
+        // rx_dat_crc(8) := rx_dat_crc(7)
+        // rx_dat_crc(9) := rx_dat_crc(8)
+        // rx_dat_crc(10) := rx_dat_crc(9)
+        // rx_dat_crc(11) := rx_dat_crc(10)
+        // rx_dat_crc(12) := rx_dat_crc(11) ^ crc_out
+        // rx_dat_crc(13) := rx_dat_crc(12)
+        // rx_dat_crc(14) := rx_dat_crc(13)
+        // rx_dat_crc(15) := rx_dat_crc(14)
         when (rx_dat_counter(2, 0) === 1.U && rx_dat_counter(10, 4) =/= 0.U) {
           rx_dat_start_bit := false.B
           when (!rx_dat_start_bit) {
@@ -327,15 +327,15 @@ class Sdc() extends Module {
           io.sdbuf.ren2 := true.B
           rx_dat_buf_read := true.B
           rxtx_dat_counter := rxtx_dat_counter + 1.U
-          val crc_error = Cat(rx_dat_crc) =/= 0.U
-          rx_dat_crc_error := crc_error
+          val crc_error = false.B // Cat(rx_dat_crc) =/= 0.U
+          // rx_dat_crc_error := crc_error
           val overrun = rx_dat_ready
           rx_dat_overrun := overrun
           when (rx_dat_continuous && !crc_error && !overrun) {
             rx_dat_counter := (1024+16+1).U
             rx_dat_timer := 500000.U // 20ms (25MHz)
             rx_dat_start_bit := true.B
-            rx_dat_crc := 0.U(16.W).asBools
+            // rx_dat_crc := 0.U(16.W).asBools
           }
         }
       }
@@ -528,8 +528,8 @@ class Sdc() extends Module {
           rx_res_type := io.mem.wdata(3, 0)
           rx_res_in_progress := false.B
           rx_res_ready := false.B
-          rx_res_crc := 0.U(7.W).asBools
-          rx_res_crc_error := false.B
+          // rx_res_crc := 0.U(7.W).asBools
+          // rx_res_crc_error := false.B
           rx_res_crc_en := true.B
           rx_res_timer := 255.U
           rx_res_timeout := false.B
@@ -550,8 +550,8 @@ class Sdc() extends Module {
             rx_dat_counter := (1024+16+1).U
             rx_dat_start_bit := true.B
             rx_dat_ready := false.B
-            rx_dat_crc := 0.U(16.W).asBools
-            rx_dat_crc_error := false.B
+            // rx_dat_crc := 0.U(16.W).asBools
+            // rx_dat_crc_error := false.B
             rx_dat_timer := 500000.U // 20ms (25MHz)
             rx_dat_timeout := false.B
             rx_dat_continuous := io.mem.wdata(13).asBool

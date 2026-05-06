@@ -342,4 +342,6 @@ object Consts {
   val RAS_ENTRIES       = (1 << RAS_INDEX_LEN)
   val GCNT_NOT_BRANCH   = 1.U(2.W)
   val REDIRECT_BUFFER_SIZE = 4
+  val SPECUL_ENTRIES       = 3
+  val LOAD_ADDR_MATCH_LEN  = 27
 }
