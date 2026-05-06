@@ -87,7 +87,7 @@ Disassembly of section .text:
       c8: 9f55         	mul	a4, a4, a3
       ca: 00e791a3     	sh	a4, 0x3(a5)
       ce: 00008603     	lb	a2, 0x0(ra)
-      d2: 0ba00393     	li	t2, 0xba
+      d2: fba00393     	li	t2, -0x46
       d6: 06761063     	bne	a2, t2, 0x136 <.Ltmp2>
       da: 4199         	li	gp, 0x6
 
@@ -121,7 +121,7 @@ Disassembly of section .text:
      120: 9f55         	mul	a4, a4, a3
      122: 00e790a3     	sh	a4, 0x1(a5)
      126: 00208603     	lb	a2, 0x2(ra)
-     12a: 0ba00393     	li	t2, 0xba
+     12a: fba00393     	li	t2, -0x46
      12e: 00761463     	bne	a2, t2, 0x136 <.Ltmp2>
      132: 02760163     	beq	a2, t2, 0x154 <.Ltmp16>
 
