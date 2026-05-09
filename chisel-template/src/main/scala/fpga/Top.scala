@@ -98,14 +98,14 @@ class RiscV(clockHz: Int) extends Module {
   val config = Module(new Config(clockHz))
 
   val dmem_decoder = Module(new DMemDecoder(Seq(
-    (BigInt(startAddress), BigInt(imemSizeInBytes)),
+    (BigInt(startAddress), BigInt(imemSizeInBytes.max(0x1000))),
     // (BigInt(0x20000000L), BigInt(dmemSizeInBytes)),
-    (BigInt(0x30000000L), BigInt(64)),  // GPIO
-    (BigInt(0x30001000L), BigInt(64)),  // UART
-    (BigInt(0x30002000L), BigInt(64)),  // mtimer
-    (BigInt(0x30003000L), BigInt(64)),  // SD Controller
-    (BigInt(0x30004000L), BigInt(64)),  // Interrupt Controller
-    (BigInt(0x40000000L), BigInt(64)),  // CONFIG
+    (BigInt(0x30000000L), BigInt(0x1000)),  // GPIO
+    (BigInt(0x30001000L), BigInt(0x1000)),  // UART
+    (BigInt(0x30002000L), BigInt(0x1000)),  // mtimer
+    (BigInt(0x30003000L), BigInt(0x1000)),  // SD Controller
+    (BigInt(0x30004000L), BigInt(0x1000)),  // Interrupt Controller
+    (BigInt(0x40000000L), BigInt(0x1000)),  // CONFIG
   )))
   dmem_decoder.io.targets(0) <> boot_rom.io.dmem
   // dmem_decoder.io.targets(1) <> memory.io.dmem

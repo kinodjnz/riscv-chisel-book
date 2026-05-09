@@ -18,18 +18,28 @@ class LongCounter(unitWidth: Int, unitCount: Int) extends Module {
 
   // val counters = RegInit(VecInit((0 to unitCount - 1).map(_ => 0.U(unitWidth.W))))
   // val carries = RegInit(VecInit((0 to unitCount - 1).map(_ => false.B)))
-  // for(i <- 0 to unitCount - 1) {
+  // for (i <- 0 to unitCount - 1) {
   //   carries(i) := counters(i)(unitWidth - 1, 1).andR() && !counters(i)(0) // overflows at the next cycle or not.
-  //   if( i == 0 ) {
+  //   if (i == 0) {
   //     counters(i) := counters(i) + 1.U
   //   } else {
   //     counters(i) := counters(i) + carries(i - 1).asUInt
   //   }
   // }
   // io.value := Cat(counters.reverse)
-  val counter = RegInit(0.U(counterWidth.W))
-  counter := counter + 1.U
-  io.value := counter
+
+  val counters = RegInit(VecInit((0 until 2).map(_ => 0.U(32.W))))
+  val counter0 = RegNext(counters(0))
+  val carry = RegInit(0.U(1.W))
+  val c = counters(0) +& 1.U
+  counters(0) := c(31, 0)
+  carry := c(32)
+  counters(1) := counters(1) + carry
+  io.value := Cat(counters(1), counter0)
+
+  // val counter = RegInit(0.U(counterWidth.W))
+  // counter := counter + 1.U
+  // io.value := counter
 }
 
 class CoreDebugSignals extends Bundle {
@@ -192,7 +202,7 @@ class Core(
   // }
 
   //val csr_regfile = Mem(4096, UInt(WORD_LEN.W)) 
-  val cycle_counter = Module(new LongCounter(8, 8)) // 64-bit cycle counter for CYCLE[H] CSR
+  val cycle_counter = Module(new LongCounter(16, 4)) // 64-bit cycle counter for CYCLE[H] CSR
   val mtimer = Module(new MachineTimer)
 
   val instret = RegInit(0.U(64.W))
@@ -1227,7 +1237,7 @@ class Core(
   ex2_reg_mulh              := ex1_mulh
   ex2_reg_blu_out           := ex1_blu_out
   ex2_reg_csr_rdata         := csr_rdata
-  ex2_reg_csr_addr.foreach(_ :=  ex1_csr_addr)
+  ex2_reg_csr_addr.foreach(_ := ex1_csr_addr)
   ex2_reg_csr_is_ecall.foreach(_ := csr_is_ecall)
   ex2_reg_exe_fun           := Mux(div_divrem_ex1_wb, Mux(div_reg_is_div, MD_DIV, MD_REM), ex1_reg_exe_fun)
   ex2_reg_rf_wen            := Mux(div_divrem_ex1_wb, REN_S, Mux(ex1_en && ex1_no_mem, ex1_reg_rf_wen, REN_X))

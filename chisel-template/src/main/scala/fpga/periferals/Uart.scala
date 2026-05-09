@@ -6,7 +6,7 @@ import common.Consts._
 import fpga._
 
 class UartTx(numberOfBits: Int, baudDivider: Int) extends Module {
-  val io = IO(new Bundle{
+  val io = IO(new Bundle {
     val in = Flipped(Decoupled(UInt(numberOfBits.W)))
     val tx = Output(Bool())
   })
