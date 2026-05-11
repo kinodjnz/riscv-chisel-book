@@ -109,9 +109,9 @@ class LoadStorePipelineProbe extends Bundle {
   val mem2_inst_id  = Output(UInt(INST_ID_LEN.W))
   val mem3_valid    = Output(Bool())
   val mem3_inst_id  = Output(UInt(INST_ID_LEN.W))
-  // val mem3_retired = Output(Bool())
-  // val mem3_wb_paddr = Output(UInt(PHYS_ADDR_LEN.W))
-  val mem3_wb_data  = Output(UInt(WORD_LEN.W))
+  val mem3_is_load  = Output(Bool())
+  val mem3_addr     = Output(UInt(WORD_LEN.W))
+  val mem3_data     = Output(UInt(WORD_LEN.W))
 }
 
 class LoadStoreUnit(
@@ -410,6 +410,8 @@ class LoadStoreUnit(
     out.specul_id       := reg_specul_id
     out.load_order_fail := load_order_fail
     map2(out.inst_id, entry.inst_id)(_ := _)
+    out.addr.foreach(_  := addr)
+    out.wdata.foreach(_ := wdata)
     out
   }
 
@@ -433,6 +435,8 @@ class LoadStoreUnit(
     val specul_id       = UInt(specul_id_len.W)
     val load_order_fail = Bool()
     val inst_id         = Option.when(enable_pipeline_probe)(UInt(INST_ID_LEN.W))
+    val addr            = Option.when(enable_pipeline_probe)(UInt(WORD_LEN.W))
+    val wdata           = Option.when(enable_pipeline_probe)(UInt(WORD_LEN.W))
   }
 
   def mem2(in: Mem2Input): Mem3Input = {
@@ -449,6 +453,8 @@ class LoadStoreUnit(
     val reg_specul_id       = RegInit(0.U(specul_id_len.W))
     val reg_load_order_fail = RegInit(false.B)
     val reg_inst_id         = Option.when(enable_pipeline_probe)(RegInit(0.U(INST_ID_LEN.W)))
+    val reg_addr            = Option.when(enable_pipeline_probe)(RegInit(0.U(WORD_LEN.W)))
+    val reg_wdata           = Option.when(enable_pipeline_probe)(RegInit(0.U(WORD_LEN.W)))
 
     when (!mem2_stall) {
       reg_aligned_lw      := in.aligned_lw
@@ -464,6 +470,8 @@ class LoadStoreUnit(
       reg_specul_id       := in.specul_id
       reg_load_order_fail := in.load_order_fail
       map2(reg_inst_id, in.inst_id)(_ := _)
+      map2(reg_addr, in.addr)(_ := _)
+      map2(reg_wdata, in.wdata)(_ := _)
     }
 
     val mem2_mem_busy = (reg_is_mem_load && !io.dmem.rvalid)
@@ -505,6 +513,8 @@ class LoadStoreUnit(
     out.specul_id       := reg_specul_id
     out.load_order_fail := reg_load_order_fail
     map2(out.inst_id, reg_inst_id)(_ := _)
+    map2(out.addr, reg_addr)(_ := _)
+    map2(out.wdata, reg_wdata)(_ := _)
     out
   }
 
@@ -526,6 +536,8 @@ class LoadStoreUnit(
     val specul_id       = UInt(specul_id_len.W)
     val load_order_fail = Bool()
     val inst_id         = Option.when(enable_pipeline_probe)(UInt(INST_ID_LEN.W))
+    val addr            = Option.when(enable_pipeline_probe)(UInt(WORD_LEN.W))
+    val wdata           = Option.when(enable_pipeline_probe)(UInt(WORD_LEN.W))
   }
 
   def mem3(in: Mem3Input): Unit = {
@@ -543,6 +555,8 @@ class LoadStoreUnit(
     val reg_specul_id       = RegInit(0.U(specul_id_len.W))
     val reg_load_order_fail = RegInit(false.B)
     val reg_inst_id         = Option.when(enable_pipeline_probe)(RegInit(0.U(INST_ID_LEN.W)))
+    val reg_addr            = Option.when(enable_pipeline_probe)(RegInit(0.U(WORD_LEN.W)))
+    val reg_wdata           = Option.when(enable_pipeline_probe)(RegInit(0.U(WORD_LEN.W)))
 
     reg_wb_byte_offset  := in.wb_byte_offset
     reg_memw            := in.memw
@@ -557,6 +571,8 @@ class LoadStoreUnit(
     reg_specul_id       := in.specul_id
     reg_load_order_fail := in.load_order_fail
     map2(reg_inst_id, in.inst_id)(_ := _)
+    map2(reg_addr, in.addr)(_ := _)
+    map2(reg_wdata, in.wdata)(_ := _)
 
     def signExtend(value: UInt, w: Int) = {
         Fill(WORD_LEN - w, value(w - 1)) ## value(w - 1, 0)
@@ -593,7 +609,9 @@ class LoadStoreUnit(
     map2(io.pipeline_probe, reg_inst_id)(_.mem3_inst_id := _)
     // io.pipeline_probe.foreach(_.mem3_retired := reg_valid)
     // io.pipeline_probe.foreach(_.mem3_wb_addr := Mux(reg_is_valid_load, reg_wb_addr, 0.U(ADDR_LEN.W)))
-    io.pipeline_probe.foreach(_.mem3_wb_data := wb_data_load)
+    io.pipeline_probe.foreach(_.mem3_is_load := reg_is_valid_load)
+    map2(io.pipeline_probe, reg_addr)(_.mem3_addr := _)
+    map2(io.pipeline_probe, reg_wdata)(_.mem3_data := Mux(reg_is_valid_load, wb_data_load, _))
 
     printf(cf"mem3_reg_dmem_rda: 0x${reg_dmem_rdata}%x\n")
     printf(cf"mem3_wb_data_load: 0x${wb_data_load}%x\n")
