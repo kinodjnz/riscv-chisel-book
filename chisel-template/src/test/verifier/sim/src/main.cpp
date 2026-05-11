@@ -22,12 +22,48 @@ void handler_crash(int sig) {
   exit(1);
 }
 
+class sim_wrap;
+
+std::string sim_name = "???";
+vluint64_t main_time = 0;
+vluint64_t timeout = -1;
+bool load_bin = false;
+std::string load_bin_name;
+bool trace_fst = false;
+std::string fst_name;
+bool trace_kanata = false;
+std::string kanata_name;
+FILE *kanata_fp = nullptr;
+VerilatedFstC* tfp = nullptr;
+// uint64_t load_bin_address;
+Vriscv *top = nullptr;
+sim_wrap *wrap;
+processor_t *proc;
+state_t *state;
+cfg_t cfg;
+const uint64_t max_uncommitted_cycles = 40;
+// std::deque<inst_log_t> inst_log;
+// const size_t max_inst_log = 10;
+// const uint64_t max_drift_cycles = 30;
+
+class success_exception : public std::exception { };
+#define failure() throw std::exception();
+#define success() throw success_exception();
+
 #define assertEq(message, actual, expected) do { \
     if (actual != expected) { \
     	printf("\n*** %s actual=%x expected=%x ***\n\n", message, actual, expected); \
 	    failure(); \
     } \
 } while (false)
+
+struct mmio_access {
+    bool is_load;
+    reg_t addr;
+    reg_t data;
+};
+
+std::deque<mmio_access> mmio_queue;
 
 class sim_wrap: public simif_t {
 public:
@@ -58,28 +94,26 @@ public:
     virtual bool mmio_load(reg_t addr, size_t len, uint8_t* bytes) override {
 //        printf("mmio_load %lx %ld\n", addr, len);
         if ((addr & 0xffff0000) != 0x30000000) return false;
+        assertEq("missing mmio\n", !mmio_queue.empty(), true);
+        auto acc = mmio_queue.front();
+        assertEq("mmio address\n", acc.addr, addr);
+        assertEq("mmio load\n", acc.is_load, true);
+        assertEq("mmio len\n", 4, len);
+        memcpy(bytes, &acc.data, len);
+        mmio_queue.pop_front();
         return true;
-        // assertTrue("missing mmio\n", !mmioDut.empty());
-        // auto dut = mmioDut.front();
-        // assertEq("mmio write\n", dut.write, false);
-        // assertEq("mmio address\n", dut.addr, addr);
-        // assertEq("mmio len\n", dut.len, len);
-        // memcpy(bytes, dut.data, len);
-        // mmioDut.pop();
-        // return !dut.error;
     }
     virtual bool mmio_store(reg_t addr, size_t len, const uint8_t* bytes) override {
 //        printf("mmio_store %lx %ld\n", addr, len);
         if ((addr & 0xffff0000) != 0x30000000) return false;
+        assertEq("missing mmio\n", !mmio_queue.empty(), true);
+        auto acc = mmio_queue.front();
+        assertEq("mmio address\n", acc.addr, addr);
+        assertEq("mmio data\n", !memcmp(&acc.data, bytes, len), true);
+        assertEq("mmio load\n", acc.is_load, false);
+        assertEq("mmio len\n", 4, len);
+        mmio_queue.pop_front();
         return true;
-        // assertTrue("missing mmio\n", !mmioDut.empty());
-        // auto dut = mmioDut.front();
-        // assertEq("mmio write\n", dut.write, true);
-        // assertEq("mmio address\n", dut.addr, addr);
-        // assertEq("mmio len\n", dut.len, len);
-        // assertTrue("mmio data\n", !memcmp(dut.data, bytes, len));
-        // mmioDut.pop();
-        // return !dut.error;
     }
 
     virtual bool mmio_fetch(reg_t addr, size_t len, uint8_t* bytes) override {
@@ -112,40 +146,6 @@ public:
     virtual void decoded(reg_t pc, insn_t insn, timing_t timing, reg_mask_t reg_mask) override {
     }
 };
-
-// struct inst_log_t {
-//     uint32_t pc;
-//     uint32_t inst;
-//     uint64_t cycles;
-//     uint32_t wb_addr;
-//     uint32_t data;
-// };
-
-std::string sim_name = "???";
-vluint64_t main_time = 0;
-vluint64_t timeout = -1;
-bool load_bin = false;
-std::string load_bin_name;
-bool trace_fst = false;
-std::string fst_name;
-bool trace_kanata = false;
-std::string kanata_name;
-FILE *kanata_fp = nullptr;
-VerilatedFstC* tfp = nullptr;
-// uint64_t load_bin_address;
-Vriscv *top = nullptr;
-sim_wrap *wrap;
-processor_t *proc;
-state_t *state;
-cfg_t cfg;
-const uint64_t max_uncommitted_cycles = 40;
-// std::deque<inst_log_t> inst_log;
-// const size_t max_inst_log = 10;
-// const uint64_t max_drift_cycles = 30;
-
-class success_exception : public std::exception { };
-#define failure() throw std::exception();
-#define success() throw success_exception();
 
 //http://www.mario-konrad.ch/blog/programming/getopt.html
 enum ARG
@@ -262,7 +262,7 @@ void spike_init() {
     isa += "_Zbs";
     isa += "_Zcb";
     isa += "_Zicntr";
-    isa += "_smrnmi";
+    // isa += "_smrnmi";
     priv = "MS";
 
     // Initialization of the config class
@@ -422,7 +422,12 @@ void spike_step() {
 
     //Run spike for one commit or trap
     proc->step(1);
-    // state->mip->unlogged_write_with_mask(-1, 0);
+    uint32_t intr = (top->io_pipeline_probe_intr_mtimer << IRQ_M_TIMER) | (top->io_pipeline_probe_intr_ext << IRQ_M_EXT);
+    if (intr != 0) {
+        state->mip->write_with_mask(MIP_MTIP | MIP_MEIP, intr);
+        proc->step(1);
+        state->mip->write_with_mask(MIP_MTIP | MIP_MEIP, 0);
+    }
 
     if (top->io_pipeline_probe_csr_read) {
         switch (top->io_pipeline_probe_csr_addr) {
@@ -775,23 +780,16 @@ void sim_loop() {
                         }
                         spike_next(index, inst_id, pc, inst, cycles, top->io_pipeline_probe_retire2_wb_addr, top->io_pipeline_probe_retire2_wb_data);
                     }
-                    // if (top->io_pipeline_probe_mem3_retired) {
-                    //     ++retired;
-                    //     uint32_t index = top->io_pipeline_probe_mem3_inst_id % INST_TRACE_SIZE;
-                    //     uint32_t inst_id = inst_traces[index].inst_id;
-                    //     uint32_t pc;
-                    //     uint32_t inst;
-                    //     if (inst_id != top->io_pipeline_probe_mem3_inst_id) {
-                    //         fprintf(stderr, "retired mem: unknown inst_id=%u\n", top->io_pipeline_probe_mem3_inst_id);
-                    //         failure();
-                    //     } else {
-                    //         pc = inst_traces[index].pc;
-                    //         inst = inst_traces[index].inst;
-                    //         printf("retired mem: pc=0x%08x, inst=0x%08x\n", pc, inst);
-                    //         printf("retired cycles=%llu, retired=%llu\n", cycles, retired);
-                    //     }
-                    //     spike_next(index, inst_id, pc, inst, cycles, top->io_pipeline_probe_mem3_wb_addr, top->io_pipeline_probe_mem3_wb_data);
-                    // }
+                    if (top->io_pipeline_probe_mem3_valid) {
+                        auto addr = top->io_pipeline_probe_mem3_addr;
+                        if ((addr & 0xffff0000) == 0x30000000) {
+                            mmio_access acc;
+                            acc.is_load = top->io_pipeline_probe_mem3_is_load;
+                            acc.addr    = top->io_pipeline_probe_mem3_addr;
+                            acc.data    = top->io_pipeline_probe_mem3_data;
+                            mmio_queue.push_back(acc);
+                        }
+                    }
                 }
                 if (uncommitted_cycles > max_uncommitted_cycles) {
                     fprintf(stderr, "no commits during %llu cycles\n", max_uncommitted_cycles);

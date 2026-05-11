@@ -377,6 +377,9 @@ void state_t::csr_init(processor_t* const proc, reg_t max_isa)
     add_csr(CSR_MNEPC, mnepc = std::make_shared<epc_csr_t>(proc, CSR_MNEPC));
     add_csr(CSR_MNCAUSE, std::make_shared<const_csr_t>(proc, CSR_MNCAUSE, (reg_t)1 << (xlen - 1)));
     add_csr(CSR_MNSTATUS, mnstatus = std::make_shared<mnstatus_csr_t>(proc, CSR_MNSTATUS));
+  } else {
+    // dummy entry
+    add_csr(CSR_MNSTATUS, std::make_shared<mnstatus_csr_t>(proc, CSR_MNSTATUS));
   }
 
   if (proc->extension_enabled_const(EXT_SSTC)) {
